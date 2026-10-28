@@ -127,7 +127,7 @@ import LemmingsMobileCore
                 selectedSkill: game.selectedControl, paused: false, speed: 1, endRunArmed: false).first { $0.action == .pause })
             let point = CGPoint(x: target.inputFrame.midX, y: target.inputFrame.midY)
             let button = try #require(game.hud.hitTest(point, with: nil) as? UIControl)
-            #expect(button.accessibilityLabel == L10n.text("Pause, hold for pause menu"))
+            #expect(button.accessibilityLabel == L10n.text("Pause"))
             @MainActor func renderedButton(_ name: String) throws -> Data {
                 game.hud.layer.displayIfNeeded()
                 let image = UIGraphicsImageRenderer(size: target.inputFrame.size).image { context in
@@ -146,7 +146,7 @@ import LemmingsMobileCore
             let snapshot = game.session.snapshot
             button.sendActions(for: .touchDown)
             #expect(game.paused && game.session.snapshot == snapshot)
-            #expect(button.accessibilityLabel == L10n.text("Resume, hold for pause menu"))
+            #expect(button.accessibilityLabel == L10n.text("Resume"))
             let pausedImage = try renderedButton("paused")
             #expect(pausedImage != runningImage)
             #expect(game.hud.hitTest(point, with: nil) === button)
@@ -156,7 +156,7 @@ import LemmingsMobileCore
             #expect(game.paused)
             button.sendActions(for: .touchUpInside)
             #expect(!game.paused && game.session.snapshot == snapshot)
-            #expect(button.accessibilityLabel == L10n.text("Pause, hold for pause menu"))
+            #expect(button.accessibilityLabel == L10n.text("Pause"))
             #expect(try renderedButton("resumed") == runningImage)
         }
     }

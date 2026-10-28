@@ -199,19 +199,22 @@ struct MobilePortraitHUDTests {
         #expect(press.end(at: 1.15) == [.activate])
     }
 
-    @Test func immediatePauseStillOpensMenuOnHoldAndStaysPausedOnCancel() {
-        var press = MobileHUDPress(.pause)
-        #expect(press.begin(at: 0, activateOnBegin: true) == [.activate])
-        #expect(press.update(at: 0.61) == [.hold])
-        #expect(press.end(at: 1).isEmpty)
-        #expect(press.begin(at: 2, activateOnBegin: true) == [.activate])
-        #expect(press.end(at: 2.1, cancelled: true).isEmpty)
-        #expect(press.begin(at: 3).isEmpty)
-        #expect(press.end(at: 4) == [.hold])
+    @Test func delayedPauseAndResumeNeverOpenTheMenu() {
+        for delay in [0.1, 0.61, 2.0, 10.0] {
+            var press = MobileHUDPress(.pause)
+            #expect(press.begin(at: 0, activateOnBegin: true) == [.activate])
+            #expect(press.update(at: delay).isEmpty)
+            #expect(press.end(at: delay).isEmpty)
+            #expect(press.begin(at: 20).isEmpty)
+            #expect(press.update(at: 20 + delay).isEmpty)
+            #expect(press.end(at: 20 + delay) == [.activate])
+            #expect(press.begin(at: 40).isEmpty)
+            #expect(press.end(at: 40 + delay, cancelled: true).isEmpty)
+        }
     }
 
-    @Test func pauseAndNukeHoldNeverAlsoTap() {
-        for kind in [MobileHUDPress.Kind.pause, .nuke] {
+    @Test func nukeHoldNeverAlsoTaps() {
+        for kind in [MobileHUDPress.Kind.nuke] {
             var press = MobileHUDPress(kind)
             #expect(press.begin(at: 0).isEmpty)
             #expect(press.end(at: 0.1) == [.activate])

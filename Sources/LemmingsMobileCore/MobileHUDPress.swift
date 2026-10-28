@@ -49,7 +49,7 @@ public struct MobileHUDPress: Sendable {
             nextRepeat = now + 0.08
             return [.activate]
         }
-        if (kind == .pause || kind == .nuke), !held, now - start >= 0.6 {
+        if kind == .nuke, !held, now - start >= 0.6 {
             held = true
             return [.hold]
         }

@@ -1,6 +1,8 @@
 #if os(macOS)
 import AppKit
 import LemmingsAppCore
+import LemmingsGameArt
+import LemmingsMobileCore
 import LemmingsAudio
 import NxlvKit
 
@@ -311,6 +313,7 @@ import NxlvKit
         canvas.onKey = { [weak self] key in self?.key(key) }
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
+        keyboard.navigationControlHeight = { [weak self] in self?.canvas.skillGroupFrame.height ?? 44 }
         canvas.timeline.enabled = { [weak self] action in
             guard let self, self.screen == .playing, let game = self.game else { return false }
             switch action {
@@ -1479,6 +1482,10 @@ import NxlvKit
             guard identifier > 0, assets.panel.skills.indices.contains(identifier - 1) else { return nil }
             return assets.panel.skills[identifier - 1]
         }()
+        canvas.setSkillIcons(game.configuration.skills.map { skill in
+            let index = skill.rawValue - 1
+            return assets.panel.skills.indices.contains(index) ? assets.panel.skills[index] : nil
+        }, identifiers: game.configuration.skills.map(\.rawValue), palette: palette)
         let hover = canvas.updateSelection(slot: selected, fan: fanSelected, palette: palette, skillFrame: skillFrame)
         var controls: Set<Lemmings2Control> = []
         if paused { controls.insert(.pause) }
@@ -2415,7 +2422,8 @@ import NxlvKit
             let x = slot < 8 ? slot * 32 : 256 + (slot % 2) * 32
             let y = slot < 10 ? 160 : 180
             let height = slot < 8 ? 40 : 20
-            let frame = CGRect(x: panelX + CGFloat(x) * zoom, y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
+            let frame = slot < 8 ? skillFrame(slot) : CGRect(x: panelX + CGFloat(x) * zoom,
+                y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
             let label = game.supplies.indices.contains(slot)
                 ? L10n.text("\(names[slot]), \(game.supplies[slot]) remaining\((slot == selectedSkillSlot ? L10n.text(", selected") : ""))")
                 : names[slot]
@@ -2478,6 +2486,25 @@ import NxlvKit
     private var panelSource: SequelIndexedImage?
     private var panel: NSImage?
     private var panelBackground = NSColor.black
+    private var skillIcons: [NSImage?] = []
+    private var skillIconIdentifiers: [Int] = []
+    func setSkillIcons(_ frames: [Lemmings2SpriteFrame?], identifiers: [Int], palette: [UInt8]) {
+        guard identifiers != skillIconIdentifiers else { return }
+        skillIconIdentifiers = identifiers
+        skillIcons = frames.map { frame in
+            frame.map { image(width: $0.width, height: $0.height, pixels: $0.pixels,
+                palette: palette, opaque: $0.opaque, category: .sprite) }
+        }
+    }
+    var skillGroupFrame: CGRect {
+        let height = GameHUDControlGroup.desktopHeight(forWidth: bounds.width)
+        return CGRect(x: panelX, y: origin.y + 240 * zoom - height, width: 256 * zoom, height: height)
+    }
+    private func skillFrame(_ index: Int) -> CGRect {
+        let group = skillGroupFrame
+        return CGRect(x: group.minX + CGFloat(index) * group.width / 8, y: group.minY,
+            width: group.width / 8, height: group.height)
+    }
     var rewindOriginTick: Int?
     var rewindCurrentTick = 0
     var failureMoodAmount: CGFloat = 0
@@ -2644,6 +2671,7 @@ import NxlvKit
             palette: palette, opaque: opaque ?? Array(repeating: true, count: pixels.count), category: category)
     }
     func refreshArtwork() throws {
+        skillIconIdentifiers.removeAll()
         let previous = game, oldX = cameraX, oldY = cameraY
         let wasFastForward = isFastForward
         try reloadArtwork?()
@@ -3265,7 +3293,35 @@ import NxlvKit
             panel.draw(in: NSRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom),
                        from: .zero, operation: .sourceOver, fraction: readOnlyReplay ? 0.45 : 1, respectFlipped: true,
                        hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            drawSkillGroup()
             if variableSpeedEnabled { SpeedPanelControls.draw(in: speedRect, label: speedLabel, active: isFastForward) }
+        }
+    }
+    private func drawSkillGroup() {
+        guard let context = NSGraphicsContext.current?.cgContext, let game else { return }
+        NSColor.black.setFill()
+        CGRect(x: panelX, y: origin.y + 202.8 * zoom, width: 256 * zoom, height: 37.2 * zoom).fill()
+        for index in 0..<8 {
+            let frame = skillFrame(index)
+            GameControlGroupArt.draw(in: context, frame: frame, group: skillGroupFrame,
+                selected: index == selectedSkillSlot, face: .skill(index))
+            let count = CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 12)
+            GamePixelText.draw(String(game.supplies[index]), in: count, maxScale: 2)
+            if let icon = skillIcons[safe: index] ?? nil {
+                let box = CGRect(x: frame.minX + 4, y: count.maxY + 2,
+                    width: frame.width - 8, height: max(0, frame.maxY - count.maxY - 8))
+                let fit = min(box.width / icon.size.width, box.height / icon.size.height)
+                let scale = fit >= 1 ? floor(fit) : 1 / ceil(1 / fit)
+                let size = CGSize(width: icon.size.width * scale, height: icon.size.height * scale)
+                if let bitmap = icon.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+                    context.saveGState()
+                    context.setAlpha(game.supplies[index] > 0 ? 1 : 0.35)
+                    GameSkillSelectionArt.drawSprite(bitmap, in: CGRect(x: floor(box.midX - size.width / 2),
+                        y: floor(box.midY - size.height / 2), width: size.width, height: size.height),
+                        selected: index == selectedSkillSlot, context: context)
+                    context.restoreGState()
+                }
+            }
         }
     }
     private var speedRect: CGRect { CGRect(x: panelX + 288 * zoom, y: origin.y + 216 * zoom, width: 32 * zoom, height: 24 * zoom) }
@@ -3387,7 +3443,13 @@ import NxlvKit
             if part == 0 { onSpeedPress?(event.timestamp, event.clickCount) }
             else { onSpeedStep?(part, event.timestamp) }
         }
-        else if let slot = Lemmings2Control.slot(x: Int(floor(x - CGFloat(viewport.panelX))), y: Int(y)) { onPanel?(slot, event.clickCount, event.timestamp) }
+        else if skillGroupFrame.contains(p) {
+            let slot = min(7, Int((p.x - skillGroupFrame.minX) / (skillGroupFrame.width / 8)))
+            onPanel?(slot, event.clickCount, event.timestamp)
+        }
+        else if let slot = Lemmings2Control.slot(x: Int(floor(x - CGFloat(viewport.panelX))), y: Int(y)), slot >= 8 {
+            onPanel?(slot, event.clickCount, event.timestamp)
+        }
     }
     private func trackPointer(_ event: NSEvent, held: Bool) {
         controllerPointer = nil

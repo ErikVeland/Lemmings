@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 
 @MainActor enum GameplayMenuLayout {
     /// Passive readouts follow the icon row when their preferred position would be covered.
@@ -84,6 +85,7 @@ import AppKit
 
 /// Gameplay controls keep their input targets while their stone artwork fades out.
 @MainActor final class GameplayMenuButton: GameButton {
+    var groupFrame: CGRect?
     var glyph: PanelGlyph?
     var helpText = "" {
         didSet { if oldValue != helpText { setAccessibilityHelp(helpText) } }
@@ -158,8 +160,10 @@ import AppKit
         context.saveGState()
         context.setAlpha(artworkOpacity)
         context.beginTransparencyLayer(auxiliaryInfo: nil)
+        let selected = (usesToggleState && state == .on) || isHighlighted || isHovered
+        GameControlGroupArt.draw(in: context, frame: bounds, group: groupFrame ?? bounds,
+            selected: selected, face: .hints)
         if let glyph {
-            GameStoneButton.draw(bounds, selected: (usesToggleState && state == .on) || isHighlighted || isHovered, pixel: 1)
             let well = GameStoneButton.well(bounds, pixel: 1).insetBy(dx: 2, dy: 2)
             if let image = glyph.image(fitting: well.size) {
                 image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2),
@@ -168,7 +172,10 @@ import AppKit
                     respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
             }
             GameControlText.focus(self)
-        } else { super.draw(dirtyRect) }
+        } else {
+            GameControlText.draw(title, in: bounds.insetBy(dx: 8, dy: 4), enabled: isEnabled)
+            GameControlText.focus(self)
+        }
         context.endTransparencyLayer()
         context.restoreGState()
     }

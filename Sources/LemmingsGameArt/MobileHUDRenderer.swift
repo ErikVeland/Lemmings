@@ -59,6 +59,9 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let panelImage: CGImage?
     private let typography: GameMenuTypography?
     private let items: [Item]
+    private let controlGroups: [CGRect]
+    private let rateGroup: CGRect?
+    private let rateFrame: CGRect?
     private let statusDetails: StatusDetails?
     private let shape: GameControlShape
     private let replayLevel: MobileLevelSummary?
@@ -78,6 +81,40 @@ public enum MobileHUDAction: Equatable, Sendable {
         self.panelImage = panelImage; self.typography = typography
         items = Self.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                              paused: paused, speed: speed, endRunArmed: endRunArmed)
+        let rates = items.filter { if case .releaseRate = $0.action { return true }; return false }
+        let rate = layout.portrait?.rateValue.map { value in rates.reduce(value) { $0.union($1.frame) } }
+        rateFrame = rate
+        let grouped = Self.groupFrames(for: items, rate: rate)
+        controlGroups = grouped.0
+        rateGroup = grouped.1
+    }
+
+    private static func groupFrames(for items: [Item], rate: CGRect?) -> ([CGRect], CGRect?) {
+        var result = items.map(\.frame)
+        let families = [
+            items.indices.filter { if case .skill = items[$0].action { return true }; return false },
+            items.indices.filter { [.rewind, .stepBackward, .step].contains(items[$0].action) },
+            items.indices.filter { [.pause, .speed].contains(items[$0].action) }
+        ]
+        for family in families {
+            let frames = family.map { items[$0].frame }
+            for group in GameHUDControlGroup.groups(frames, maximumGap: 0.01) {
+                let bounds = group.reduce(CGRect.null) { $0.union(frames[$1]) }
+                for index in group { result[family[index]] = bounds }
+            }
+        }
+        var rateGroup: CGRect?
+        if let rate {
+            let indices = items.indices.filter { [.pause, .speed].contains(items[$0].action) }
+            let frames = [rate] + indices.map { items[$0].frame }
+            for group in GameHUDControlGroup.groups(frames, maximumGap: 0.01) where group.contains(0) {
+                let bounds = group.reduce(CGRect.null) { $0.union(frames[$1]) }
+                rateGroup = bounds
+                for index in group where index > 0 { result[indices[index - 1]] = bounds }
+                for index in items.indices { if case .releaseRate = items[index].action { result[index] = bounds } }
+            }
+        }
+        return (result, rateGroup)
     }
 
     public static func targets(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
@@ -107,8 +144,7 @@ public enum MobileHUDAction: Equatable, Sendable {
 
         if layout.portrait != nil {
             descriptors = descriptors.map { action, cell, label in
-                (action, cell, action == .pause ? L10n.text("\(label), hold for pause menu") :
-                    action == .endRun ? label + (snapshot.isEndingRun ? L10n.text(", tap or hold") : L10n.text(", tap twice or hold")) : label)
+                (action, cell, action == .endRun ? label + (snapshot.isEndingRun ? L10n.text(", tap or hold") : L10n.text(", tap twice or hold")) : label)
             }
         }
         var items = zip(descriptors, layout.interface.controlFrames).map { descriptor, frame in
@@ -382,7 +418,10 @@ public enum MobileHUDAction: Equatable, Sendable {
         let frame = item.frame
         context.saveGState()
         defer { context.restoreGState() }
-        if shape == .rounded {
+        if layout.portrait != nil {
+            context.addPath(GameControlGroupArt.path(in: controlGroup(containing: frame)))
+            context.clip()
+        } else if shape == .rounded {
             context.addPath(shape.path(in: frame, inset: 1))
             context.clip()
         }
@@ -406,22 +445,18 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.clip(to: well)
             if readOnly { context.setAlpha(0.35) }
             if case let .skill(index) = item.action, let icon = skillIcons[safe: index] ?? nil {
-                let art = CGRect(x: well.minX, y: frame.minY + 18, width: well.width, height: max(0, frame.height - 34))
+                let art = CGRect(x: well.minX, y: frame.minY + 20, width: well.width, height: max(0, frame.height - 36))
                 let available = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
                 let fit = layout.isDiorama && available > 0
                     ? (available >= 1 ? floor(available) : 1 / ceil(1 / available)) : available
-                GameStoneArt.drawImage(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: art.maxY - CGFloat(icon.height) * fit, width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), context: context)
+                GameSkillSelectionArt.drawSprite(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: art.maxY - CGFloat(icon.height) * fit, width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), selected: selected, context: context)
             } else if layout.panel?.style != .lemmings3, let cell = item.sourceCell,
                let image = panelImage?.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
-                let art = CGRect(x: frame.midX - 8 * scale, y: frame.minY + (scale == 1 ? 16 : 18), width: 16 * scale, height: 24 * scale)
+                let art = CGRect(x: frame.midX - 8 * scale, y: frame.minY + 20, width: 16 * scale, height: 24 * scale)
                 GameStoneArt.drawImage(image, in: art, context: context)
             }
             context.restoreGState()
             drawCompactCount(item, in: frame, context: context)
-            if selected {
-                SkillPointerBadge.innerGlow(in: well, context: context)
-                outline(frame, context: context)
-            }
         case .pause, .endRun:
             drawGlyphButton(item, context: context, pixel: 1)
         case .speed:
@@ -448,7 +483,8 @@ public enum MobileHUDAction: Equatable, Sendable {
         default:
             return
         }
-        drawGameLabel(value, in: CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 14), context: context)
+        let count = CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 14)
+        drawGameLabel(value, in: count, context: context)
         if case let .skill(index) = item.action, let skill = snapshot.skills[safe: index] {
             let name = Self.shortNames[skill.name.lowercased()] ?? SkillVocabulary.title(skill.name).uppercased()
             let label = CGRect(x: frame.minX + 3, y: frame.maxY - 14, width: frame.width - 6, height: 10)
@@ -461,7 +497,11 @@ public enum MobileHUDAction: Equatable, Sendable {
     private func drawIconButton(_ item: Item, context: CGContext) {
         let enabled = item.action == .step ? paused : (item.action == .stepBackward || item.action == .rewind ? snapshot.tick > 0 : true)
         if item.action == .menu {
-            GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1, shape: shape)
+            if layout.portrait != nil {
+                GameControlGroupArt.draw(in: context, frame: item.frame, group: item.frame, selected: false)
+            } else {
+                GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1, shape: shape)
+            }
         } else {
             let face: GamePlayButtonArt.Face = item.action == .rewind ? .rewind
                 : item.action == .stepBackward ? .stepBackward : .stepForward
@@ -497,9 +537,20 @@ public enum MobileHUDAction: Equatable, Sendable {
         context.restoreGState()
     }
 
+    private func controlGroup(containing frame: CGRect) -> CGRect {
+        if frame == rateFrame { return rateGroup ?? frame }
+        guard let index = items.firstIndex(where: { $0.frame == frame }) else { return frame }
+        return controlGroups[index]
+    }
+
     private func drawStoneSocket(_ frame: CGRect, selected: Bool, pixel: CGFloat,
                                  face: GamePlayButtonArt.Face, context: CGContext) {
-        GamePlayButtonArt.draw(in: context, frame: frame, selected: selected, pixel: pixel, face: face, shape: shape)
+        if layout.portrait != nil {
+            let group = controlGroup(containing: frame)
+            GameControlGroupArt.draw(in: context, frame: frame, group: group, selected: selected, face: face)
+        } else {
+            GamePlayButtonArt.draw(in: context, frame: frame, selected: selected, pixel: pixel, face: face, shape: shape)
+        }
     }
 
     private func drawGlyphButton(_ item: Item, context: CGContext, pixel: CGFloat) {
@@ -529,7 +580,11 @@ public enum MobileHUDAction: Equatable, Sendable {
         if item.action == .step {
             drawStoneSocket(item.frame, selected: false, pixel: 1, face: .stepForward, context: context)
         } else {
-            GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1, shape: shape)
+            if layout.portrait != nil {
+                GameControlGroupArt.draw(in: context, frame: item.frame, group: item.frame, selected: false)
+            } else {
+                GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1, shape: shape)
+            }
         }
         let title = item.action == .step ? L10n.text("STEP") : L10n.text("MENU")
         GamePixelTypography.draw(title, in: item.frame.insetBy(dx: 8, dy: 2), context: context, typography: typography, palette: .blue, alpha: enabled ? 1 : 0.45)

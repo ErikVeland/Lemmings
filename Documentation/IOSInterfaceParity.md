@@ -162,9 +162,9 @@ handovers remain paused until the player acts.
 Tap speed to toggle the chosen fast tier. Its compact HOLD cue identifies the
 pedal: hold to boost temporarily, then release to return to the chosen tier.
 Rate buttons repeat while held. Nuke keeps two-tap confirmation and a 0.6-second
-hold. Its active state shows Undo. Tap pause/play to toggle planning, or hold
-for 0.6 seconds to open the pause menu. VoiceOver retains a separate Pause menu
-action and names the speed pedal's tap and hold behaviour. Leaving a target,
+hold. Its active state shows Undo. Tap pause/play to toggle planning, and use
+Menu to open the pause menu. VoiceOver names the speed pedal's tap and hold
+behaviour. Leaving a target,
 changing layouts, opening a menu or losing the window cancels held input.
 
 Pause on skill selection starts as an iOS tutorial aid. After ten skill selections

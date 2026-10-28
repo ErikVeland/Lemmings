@@ -25,10 +25,60 @@ still required; these rows do not describe an installed release.
 | Saved and online action replays | Conditions select the matching engine and population; shared replay validation checks commands and outcome. Loading native review content uses isolated storage. | New practice recordings preserve ordered skills. Older practice recordings without the panel order cannot be reconstructed safely. |
 | L2 practice | Four original maps, eight distinct skills, isolated progress and exact checkpoint restore. | All four maps pass restore/state checks. The Play route has its required preview loader. |
 | Sequel PC/Mac artwork | L2/L3 terrain, actors, objects and sprite feedback use the shared reconstruction with native input geometry. | Render captures check doubled output dimensions, unchanged state and selection geometry. |
-| Sprite afterimages and rewind echoes | Bounded native-sprite history draws on existing surfaces; rewind retains the previous sprite samples. Reduced effects clear the history. | Budget, expiry and reduced-effects checks pass. Physical CRT presentation remains open. TV gains no extra HDR surface. |
+| Sprite afterimages and rewind echoes | Bounded native-sprite history draws on existing surfaces; rewind retains the previous sprite samples. Reduced effects and constrained devices clear the history to prioritise responsiveness. | Budget, expiry and reduced-effects checks pass. Physical CRT presentation remains open. TV gains no extra HDR surface. |
 | L2 short game | The checked five-level Classic tribe opening carries survivors through an owner-scoped saved queue. | Retry and restored-next-level populations pass. A failed shared save does not advance local carry-over. L3 carried samplers remain a shared limit. |
 | Original sequel media | L2 introduction, ending and gold ending; all five original L3 FLIC movies. Shared bitmap menus provide pause, back and continuation through library and game pause routes. Covered gameplay stays paused. | All eight sources decode and advance. Automatic campaign story triggers remain separate WIP below. |
 | Neo extra-skill rewards | Valid finite charges retain assistance and one-use state across checkpoint/rewind. | Charge and recovery checks pass. Individual naming remains explicitly deferred for clones, preplaced actors and unlimited populations. |
+
+## Joined gameplay controls — 28 October 2026
+
+Duo supplies the shared visual baseline for landscape iPad and Mac. Skills,
+related navigation and playback controls use `GameControlGroupArt` and
+`GameHUDControlGroup`: rounded outer ends, one-pixel borders/dividers and
+separate rectangular activation targets. The mobile layout joins existing
+gaps without moving a group's outside edges. Divided displays retain separate
+banks, and landscape iPad's adaptive conversion retains the prior playfield
+rectangle. Classic, L2 and L3 retain their native icons and stock semantics;
+supported NeoLemmix keeps its configured skill count and scrollable banks.
+
+Mac Classic/Neo and the native L2/L3 skill rows use the shared responsive
+height. `GameplayKeyboard` reads each row's actual height for every top toolbar
+group; Classic CRT converts that height through its displayed source mapping.
+Native L2/L3 keep their engine-specific Fan/tool controls and panel reservations.
+The shared timeline also uses joined dividers. The authored TV panel layout is
+retained; adaptive iPhone/TV decks inherit the shared grouped renderer without
+adding effects or HDR surfaces.
+
+Validation: the Mac frontend builds, and iOS/tvOS SDK modules plus application
+entry points compile; the final shared layout spacing also type-checks for both SDKs.
+The muted windowless HUD check passes 108 captures across
+Classic/L2/L3, nine geometries and four states. It includes two landscape iPads,
+Duo main rail, book/stacked poses, selected first/last skills and Undo. It checks
+complete input rectangles, activation centres, contiguous skill boundaries,
+reserved regions and retained gameplay geometry. Physical touch, VoiceOver,
+Siri Remote focus and composited CRT acceptance remain manual checks. Native Mac view/toolbar capture and native input acceptance remain open: the
+windowless AppKit capture process could not register with the system in this
+sandbox. The shared Core Graphics renderer was inspected in the mobile captures. Engine suites and release audits were skipped for this
+presentation change under the release schedule; no release was packaged.
+
+## Gameplay skill selection follow-up — 28 October 2026
+
+The grouped adaptive HUD removes the selected green inset and underline. It
+brightens the selected segment of the outer contour, draws a white/green sprite
+glow, darkens and recesses the selected face, and reserves two points between
+count and sprite.
+Duo rail and adaptive landscape place End run separately from rate, speed and
+Pause/Play. Mac Classic and NeoLemmix use the same order. L2 has no release-rate
+control; L3 has its own tool actions.
+
+The shared renderer supplies extended-linear colour values, but its current
+UIKit and AppKit bitmap backing does not establish actual HDR light output.
+A headroom-aware HDR presentation for the HUD remains source work, with the TV
+surface budget unchanged. Mac L3's native skill tiles and Classic's fallback
+baked panel icons do not yet expose an isolated alpha sprite for the glow.
+Mac L2/L3 native transport remains in its authored arrangement. These gaps are
+not evidence of physical-device acceptance. Native Mac offscreen capture is
+blocked by AppKit registration in this environment.
 
 ## Remaining source work
 

@@ -12,6 +12,9 @@ extension MenuAudit {
             try Lemmings2MobileLibrary(directory: ports.appendingPathComponent("Lemm2"), storage: storage),
             try Lemmings3MobileLibrary(directory: ports.appendingPathComponent("LEM3CD"), storage: storage)]
         let poses: [(String, MobileSize, MobileInsets, MobileInsets, CGFloat, [MobileReservedRegion])] = [
+            ("ipad-landscape", .init(width: 1024, height: 768), .init(bottom: 20), .init(), 20, []),
+            ("ipad-wide", .init(width: 1366, height: 1024), .init(bottom: 20), .init(), 20, []),
+            ("duo-main", .init(width: 834, height: 1194), .init(left: 64), .init(), 90, []),
             ("landscape", .init(width: 650, height: 465), .init(top: 20, bottom: 20), .init(left: 48, right: 48), 90, []),
             ("portrait", .init(width: 465, height: 650), .init(top: 20, bottom: 20), .init(left: 48, right: 48), 90, []),
             ("book", .init(width: 1194, height: 834), .init(top: 20, bottom: 20), .init(left: 56, right: 56), 110,
@@ -31,7 +34,8 @@ extension MenuAudit {
             let panel = session.panelFrame.flatMap(MobileBitmapRenderer.image)
             let icons = session.snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
             for (pose, size, safe, clearance, radius, regions) in poses {
-                let menuLeading = regions.isEmpty
+                let menuLeading = regions.isEmpty && pose != "duo-main"
+                let rail: MobileRect? = pose == "duo-main" ? .init(x: 0, y: 110, width: 64, height: 974) : nil
                 let bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
                 let screen = CGPath(roundedRect: bounds, cornerWidth: radius, cornerHeight: radius, transform: nil)
                 func fits(_ frame: CGRect) -> Bool {
@@ -52,11 +56,11 @@ extension MenuAudit {
                         isEndingRun: state == "undo", skills: original.skills)
                     let layout = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
-                        engineIdentifier: session.engineIdentifier, topBarInsets: clearance,
+                        engineIdentifier: session.engineIdentifier, topBarInsets: clearance, navigationRail: rail,
                         menuLeading: menuLeading)
                     let baseline = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
-                        engineIdentifier: session.engineIdentifier)
+                        engineIdentifier: session.engineIdentifier, navigationRail: rail)
                     let selected = state == "selected-last" ? snapshot.skills.count - 1 : 0
                     let paused = state == "paused"
                     let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot,
@@ -74,12 +78,29 @@ extension MenuAudit {
                     guard layout.canPlay, layout.interface.playfieldFrame == baseline.interface.playfieldFrame,
                           layout.interface.controlsFrame == baseline.interface.controlsFrame,
                           let menu = targets.first(where: { $0.action == .menu }), fits(menu.inputFrame),
-                          menu.inputFrame.width == 44 && menu.inputFrame.height == 44,
+                          menu.inputFrame.width == (rail?.width ?? 44) && menu.inputFrame.height == 44,
                           (!menuLeading || (menu.frame.maxX + 4 == layout.interface.statusFrame.minX &&
                               layout.interface.statusFrame.maxX == layout.interface.safeFrame.maxX - clearance.right)),
                           targets.first(where: { $0.inputFrame.contains(.init(x: menu.frame.midX, y: menu.frame.midY)) })?.action == .menu,
                           targets.filter({ $0.action != .menu }).allSatisfy({ !$0.inputFrame.intersects(menu.inputFrame) })
                     else { throw invalidTargets(line: #line) }
+                    let skills = targets.filter { if case .skill = $0.action { return true }; return false }
+                    if layout.portrait != nil {
+                        for group in GameHUDControlGroup.groups(skills.map(\.frame), maximumGap: 0.01) {
+                            let frames = group.map { skills[$0].frame }
+                            if frames.allSatisfy({ $0.minY == frames.first?.minY }) {
+                                let ordered = frames.sorted { $0.minX < $1.minX }
+                                for (left, right) in zip(ordered, ordered.dropFirst()) {
+                                    guard abs(left.maxX - right.minX) < 0.01 else { throw invalidTargets(line: #line) }
+                                }
+                            }
+                        }
+                        for skill in visibleTargets where skills.contains(where: { $0.action == skill.action }) {
+                            let centre = CGPoint(x: skill.inputFrame.midX, y: skill.inputFrame.midY)
+                            guard targets.first(where: { $0.inputFrame.contains(centre) })?.action == skill.action
+                            else { throw invalidTargets(line: #line) }
+                        }
+                    }
                     for frame in [identity.player, identity.counters].compactMap({ $0 }) {
                         guard fits(frame), !frame.intersects(menu.inputFrame),
                               regions.allSatisfy({ !frame.intersects(cg($0.frame)) }) else { throw invalidTargets(line: #line) }

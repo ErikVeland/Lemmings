@@ -335,7 +335,7 @@ import AVFAudio
         self.paused = paused; self.speed = speed; self.rewinding = rewinding
         pitch.update(speed: settings.classic.variableSpeedEnabled ? speed : 1, at: ProcessInfo.processInfo.systemUptime)
         applyPitch()
-        if changed { applySettings(); applyOutputState() }
+        if changed { applyOutputState() }
     }
     func update(_ snapshot: MobileGameSnapshot, active: Int? = nil, nukeRemainingTicks: Int? = nil,
                 allNukePopped: Bool? = nil, ticksPerSecond: Double = 17) {

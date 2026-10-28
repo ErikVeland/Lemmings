@@ -34,7 +34,7 @@ import NxlvKit
     func rect(for action: Action) -> CGRect {
         let unit = frame.width / CGFloat(Action.allCases.count)
         return CGRect(x: frame.minX + CGFloat(action.rawValue) * unit, y: frame.minY,
-                      width: unit - 2, height: frame.height)
+                      width: unit, height: frame.height)
     }
     func draw() {
         NSColor.black.setFill(); frame.fill()
@@ -46,8 +46,10 @@ import NxlvKit
             case .backward: face = .stepBackward
             case .forward: face = .stepForward
             }
-            GameStoneButton.draw(box, selected: false, pixel: 1,
-                backdrop: rock?(box.size), monochrome: monochrome, playFace: face)
+            if let context = NSGraphicsContext.current?.cgContext {
+                GameControlGroupArt.draw(in: context, frame: box, group: frame,
+                    selected: false, face: face, monochrome: monochrome)
+            }
             let alpha: CGFloat = monochrome ? 1 : enabled(action) ? 1 : 0.3
             let size = box.insetBy(dx: 4, dy: 4).size
             if let image = monochrome ? action.glyph?.monochromeImage(fitting: size) : action.glyph?.image(fitting: size) {

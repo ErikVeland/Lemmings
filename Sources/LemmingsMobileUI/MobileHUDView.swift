@@ -313,11 +313,6 @@ import UIKit
                     self?.onRateDoubleTap?(self?.snapshot?.releaseRate == 99); return true
                 }]
             }
-            if item.action == .pause {
-                button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: L10n.text("Pause menu")) { [weak self] _ in
-                    self?.onHold?(.pause); return true
-                }]
-            }
             addSubview(button)
             return button
         }
@@ -518,9 +513,11 @@ import UIKit
     var onAccessiblePress: (() -> Void)?
     var activatesOnPress = false
     private var press: MobileHUDPress
+    private let needsRepeatTimer: Bool
     private var timer: Timer?
     init(kind: MobileHUDPress.Kind) {
         press = MobileHUDPress(kind)
+        needsRepeatTimer = kind != .pause && kind != .tap
         super.init(frame: .zero)
         addAction(UIAction { [weak self] _ in self?.beginPress() }, for: .touchDown)
         addAction(UIAction { [weak self] _ in self?.finishPress(cancelled: false) }, for: .touchUpInside)
@@ -537,6 +534,7 @@ import UIKit
     private func beginPress() {
         let effects = press.begin(at: ProcessInfo.processInfo.systemUptime, activateOnBegin: activatesOnPress)
         timer?.invalidate()
+        guard needsRepeatTimer else { deliver(effects); return }
         let timer = Timer(timeInterval: 0.04, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated {
                 guard let self else { return }

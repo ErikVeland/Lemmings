@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import LemmingsAppCore
+import LemmingsMobileCore
 import NxlvKit
 
 @MainActor final class GameSpeedControl {
@@ -132,6 +133,7 @@ import NxlvKit
     var extraSkillTitle: () -> String = { L10n.text("Bonus skill") }
     var extraSkillHelp: () -> String = { "" }
     var extraSkillAvailable: () -> Bool = { false }
+    var navigationControlHeight: () -> CGFloat = { 44 }
     private let navigationAppearance = GameplayMenuAppearance()
     private let navigationHitArea = GameplayMenuHitArea(frame: .zero)
     private let controlHelp = GameplayControlHelp()
@@ -245,13 +247,26 @@ import NxlvKit
         let buttons = navigationButtons
         let wasVisible = buttons.contains { !$0.isHidden && $0.superview === root }
         if !wasVisible { buttons.forEach { $0.resetAppearance() } }
-        navigationButton.frame = CGRect(x: max(root.bounds.minX, root.bounds.maxX - 56),
-            y: root.isFlipped ? root.bounds.minY + 12 : root.bounds.maxY - 56, width: 44, height: 44)
-        var right = navigationButton.frame.minX - (available(settingsButton) ? 8 : 24)
+        let height = max(1, navigationControlHeight())
+        navigationButton.frame = CGRect(x: max(root.bounds.minX, root.bounds.maxX - height - 12),
+            y: root.isFlipped ? root.bounds.minY + 12 : root.bounds.maxY - height - 12,
+            width: height, height: height)
+        var right = navigationButton.frame.minX
         for button in buttons.reversed() where button !== navigationButton && available(button) {
-            let width: CGFloat = button === hintsButton ? max(88, hintsButton.intrinsicContentSize.width) : 44
-            button.frame = CGRect(x: right - width, y: navigationButton.frame.minY, width: width, height: 44)
-            right = button.frame.minX - (button === settingsButton ? 24 : 8)
+            if button !== settingsButton && (right == navigationButton.frame.minX || right == settingsButton.frame.minX) {
+                right -= GameHUDControlGroup.spacing
+            }
+            let width: CGFloat = button === hintsButton ? max(height, 88, hintsButton.intrinsicContentSize.width) : height
+            button.frame = CGRect(x: right - width, y: navigationButton.frame.minY, width: width, height: height)
+            right = button.frame.minX
+        }
+        for family in [[extraSkillButton, ghostsButton, hintsButton], [settingsButton, navigationButton]] {
+            let members = family.filter(available)
+            let frame = members.reduce(CGRect.null) { $0.union($1.frame) }
+            for button in members {
+                button.groupFrame = frame.offsetBy(dx: -button.frame.minX, dy: -button.frame.minY)
+                button.needsDisplay = true
+            }
         }
         extraSkillButton.title = extraSkillTitle()
         extraSkillButton.helpText = extraSkillHelp()

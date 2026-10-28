@@ -970,7 +970,9 @@ padding; L3 uses its original action-panel tiles. Missing artwork falls back to
 the complete action name. Existing iOS None/1x/2x settings remain respected.
 
 The badge stays within the playfield, away from the aim point, and adds no input
-target. Selected HUD skills retain their outlines and add the same inner glow.
+target. Selected grouped HUD skills brighten the existing outer contour and the
+sprite, with a white-to-green sprite glow. Darken and recess the whole selected
+face; leave at least two points between the count and sprite for every skill.
 Offscreen muted checks cover native Classic/L2/L3 icons, stock semantics, invalid
 indices and edge placement. iOS and tvOS SDK source compilation passed; physical
 controller/touch and television readability still require manual validation.
@@ -992,13 +994,29 @@ current result layout uses 20.
 
 ## Tablet gameplay panel and settings grid
 
-Landscape iPad and an unfolded iPhone Duo use the Mac layout for Classic
-gameplay: the original panel at a whole 3× or 4× scale, with the status row
-above the playfield. A hinge across the screen keeps the panel below the hinge.
-A hinge down the screen keeps the divided touch deck, because the panel must
-not cross the hinge. Portrait and phones keep the touch deck. Lemmings 3 keeps
-its own panel. Lemmings 2 and NeoLemmix have no panel artwork on mobile and
-keep the touch deck.
+Duo is the common gameplay-control baseline for Mac and landscape iPad.
+Use contiguous pill groups for skills, playback and related navigation. Only
+outer ends curve; neighbouring controls share one one-pixel divider. Keep Nuke
+separate immediately after the skill bank, followed by the joined release-rate,
+speed and Pause/Play controls where the layout supports them. Retain
+the original bitmap icons, individual counts and individual selection,
+and each control's full rectangular input and accessibility bounds.
+
+Landscape iPad uses the adaptive skill bank, navigation and overview instead
+of the baked Classic/L3 panel. This conversion preserves the existing gameplay
+rectangle exactly. Divided displays retain their unobstructed banks and hinge
+clearance. Short layouts keep at least 44-point touch targets and scrolling
+when a complete skill bank cannot fit. The authored TV panels retain their
+existing arrangement; adaptive phone/TV decks share the joined treatment.
+
+Mac skills and the top action/menu groups use one responsive height. The
+keyboard overlay reads the actual skill-frame height, including the displayed
+CRT transform, rather than estimating a matching size. Every button in each
+row has identical top and bottom edges. Classic, L2, L3 and supported NeoLemmix
+use the shared pill contour and one-pixel border. Separate related groups by
+12 points where the adaptive deck permits it. L2 retains its Fan and L3 its
+five native actions and held-tool details. Panel reservations, world rendering,
+aspect ratios and gameplay pixel scales do not change.
 
 Wide settings, language and button-remap pages pair their rows. A lone last row
 spans both columns. Portrait phones keep one column. Apple TV keeps its paged grid.
@@ -1281,11 +1299,11 @@ CRT output remain device checks.
 Duo's vertical navigation area holds Menu, rewind, tick steps, release rate,
 speed, End run and Pause/Resume. Use the system's preferred bar edge and
 corner clearance. Keep the skills together below the minimap and return the
-former bottom transport row to gameplay. Play/Resume stays at the bottom of
-the side column, with the same height and baseline as the skills. Inset Play
-and Pause artwork inside the stone well while retaining the full button target.
-Align End run with the minimap row. Secondary side buttons share a 44-point height and the
-skill row's two-point gaps, with larger gaps between action groups.
+former bottom transport row to gameplay. End run occupies its own control beside
+the skill row. Group release rate, speed and Pause/Play above it in the side
+column. Inset Play and Pause artwork while retaining the full button target.
+Secondary side buttons share a 44-point height and the
+skill row's joined edges, with larger gaps between action groups.
 Drawing, touch and accessibility share these rectangles.
 Mobile stone backgrounds use a cached 2× reconstruction of the original rock
 tile, with its red-brown palette. Tile the finer grain at a fixed size in both
@@ -1539,8 +1557,9 @@ display axis so short landscape playfields retain their height. Portrait phone l
 first and last content positions clear of system regions and fixed navigation.
 Other outer-display menus keep full width and vertical corner clearance. Keep scenery
 edge to edge and use reserved-region logic for cameras and hinges.
-The original full-width game panel remains authored artwork. Rounded treatment
-applies to adaptive controls and the shared menu surfaces across all engines.
+Original panel artwork supplies bitmap glyphs and textures. The authored TV
+panel retains its arrangement; Duo, landscape iPad and Mac use the grouped
+adaptive treatment described above. Menus retain their shared rounded surfaces.
 
 On Duo's outer display, draw scenery and page backgrounds to every edge.
 Place Main menu at the left of the fixed gameplay header. Let the status strip

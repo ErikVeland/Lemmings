@@ -9115,6 +9115,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
     gameplayKeyboard?.removeNavigationControl()
     let keyboard = GameplayKeyboard(window: window)
     gameplayKeyboard = keyboard
+    keyboard.navigationControlHeight = { [weak self] in
+      guard let self else { return 44 }
+      let frame = self.panel.controlBounds
+      guard frame.height > 0 else { return 44 }
+      if self.panel.isCRTSource,
+         let top = self.crtView.viewPoint(fromSource: CGPoint(x: frame.midX, y: frame.minY + 320)),
+         let bottom = self.crtView.viewPoint(fromSource: CGPoint(x: frame.midX, y: frame.maxY + 320)) {
+        return abs(bottom.y - top.y)
+      }
+      return frame.height
+    }
     keyboard.hints = { [weak self] in self?.showLevelHints() }
     keyboard.openRetainedSolution = { [weak self] in
       guard let self, !GameScreen.shared.isPresented, LevelHintWindow.shared.hasSolution(for: self.arcadeRunID) else { return false }

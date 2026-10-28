@@ -3,6 +3,8 @@ import AppKit
 import AVFoundation
 import CryptoKit
 import LemmingsAppCore
+import LemmingsGameArt
+import LemmingsMobileCore
 import LemmingsAudio
 import NxlvKit
 
@@ -343,6 +345,7 @@ import NxlvKit
         }
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
+        keyboard.navigationControlHeight = { [weak self] in self?.canvas.skillGroupFrame.height ?? 44 }
         canvas.timeline.enabled = { [weak self] action in
             guard let self, self.canvas.menuRows == nil else { return false }
             let game = self.game
@@ -2030,7 +2033,8 @@ import NxlvKit
         for slot in [0, 1, 2, 3, 4, 6, 7, 8] {
             let title = slot == 6 ? (fast ? L10n.text("Return to normal speed") : L10n.text("Start fast-forward")) : slot == 7 ? (paused ? L10n.text("Resume") : L10n.text("Pause")) : Lemmings3Panel.names[slot]
             children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: title,
-                frame: rect(CGRect(x: Lemmings3Panel.edges[slot], y: 172, width: Lemmings3Panel.edges[slot + 1] - Lemmings3Panel.edges[slot], height: 40))) { [weak self] in self?.onPanel?(slot, slot == 8 ? 2 : 1) })
+                frame: slot < 5 ? skillFrame(slot) : rect(CGRect(x: Lemmings3Panel.edges[slot], y: 172,
+                    width: Lemmings3Panel.edges[slot + 1] - Lemmings3Panel.edges[slot], height: 40))) { [weak self] in self?.onPanel?(slot, slot == 8 ? 2 : 1) })
         }
         if variableSpeedEnabled {
             for direction in [-1, 1] {
@@ -2245,6 +2249,16 @@ import NxlvKit
     var gameMenuFrame: CGRect {
         GameplayMenuLayout.readout(CGRect(x: screenOrigin.x + 280 * zoom, y: screenOrigin.y,
             width: 40 * zoom, height: 12 * zoom), in: self, avoiding: [statusReadoutFrame])
+    }
+    var skillGroupFrame: CGRect {
+        let height = GameHUDControlGroup.desktopHeight(forWidth: bounds.width)
+        return CGRect(x: screenOrigin.x, y: screenOrigin.y + 212 * zoom - height,
+            width: 175 * zoom, height: height)
+    }
+    private func skillFrame(_ index: Int) -> CGRect {
+        let group = skillGroupFrame
+        return CGRect(x: group.minX + CGFloat(index) * group.width / 5, y: group.minY,
+            width: group.width / 5, height: group.height)
     }
     var panelRect: CGRect { CGRect(x: origin.x, y: origin.y + 160 * zoom, width: 320 * zoom, height: 40 * zoom) }
     private let artworkRenderer = SequelArtworkRenderer()
@@ -2628,7 +2642,13 @@ import NxlvKit
             else { onSpeedStep?(part, event.timestamp) }
             return
         }
-        if sy >= 172 && sy < 212, let slot = Lemmings3Panel.slot(at: sx) { onPanel?(slot, event.clickCount); return }
+        if skillGroupFrame.contains(point) {
+            let slot = min(4, Int((point.x - skillGroupFrame.minX) / (skillGroupFrame.width / 5)))
+            onPanel?(slot, event.clickCount); return
+        }
+        if sy >= 172 && sy < 212, let slot = Lemmings3Panel.slot(at: sx), slot >= 6 {
+            onPanel?(slot, event.clickCount); return
+        }
         if gameMenuFrame.contains(point) { onMenu?(); return }
         guard playfieldRect.contains(point) else { return }
         let source = precisionLens.source(point)
@@ -2750,11 +2770,47 @@ import NxlvKit
         let seconds = max(0, game.remainingSeconds)
         art.text(String(format: "%02d", seconds / 60), x: 187, y: 183, scale: 0.85)
         art.text(String(format: "%02d", seconds % 60), x: 187, y: 195, scale: 0.85)
-        if let id = hoveredLemming, let lem = game.lemmings.first(where: { $0.id == id }),
-           let tool = lem.tool ?? lem.mobilityTool, let icon = pickupImages[tool.rawValue] {
-            NSColor.black.setFill(); CGRect(x: 108, y: 176, width: 29, height: 32).fill()
-            icon.draw(in: CGRect(x: 114, y: 177, width: 16, height: 16), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-            art.text(String(lem.quantity), x: 116, y: 198, scale: 0.8)
+        if let context = NSGraphicsContext.current?.cgContext,
+           let pixels = bitmapCache.pixels(art.normal) {
+            NSColor.black.setFill(); CGRect(x: 0, y: 172, width: 175, height: 40).fill()
+            for index in 0..<5 {
+                let frame = local(skillFrame(index))
+                context.saveGState()
+                context.translateBy(x: frame.minX, y: frame.minY)
+                context.scaleBy(x: 1 / zoom, y: 1 / zoom)
+                let displayFrame = CGRect(origin: .zero, size: skillFrame(index).size)
+                let displayGroup = CGRect(x: -CGFloat(index) * displayFrame.width, y: 0,
+                    width: skillGroupFrame.width, height: skillGroupFrame.height)
+                GameControlGroupArt.draw(in: context, frame: displayFrame, group: displayGroup,
+                    selected: index == selectedAction, face: .skill(index))
+                context.restoreGState()
+                let source = CGRect(x: CGFloat(Lemmings3Panel.edges[index] + 3) * CGFloat(pixels.width) / 320,
+                    y: 3 * CGFloat(pixels.height) / 40, width: 29 * CGFloat(pixels.width) / 320,
+                    height: 34 * CGFloat(pixels.height) / 40)
+                if let icon = pixels.cropping(to: source) {
+                    let box = frame.insetBy(dx: 4 / zoom, dy: 4 / zoom)
+                    let fit = min(box.width * zoom / CGFloat(icon.width), box.height * zoom / CGFloat(icon.height))
+                    let pixelScale = fit >= 1 ? floor(fit) : 1 / ceil(1 / fit)
+                    let size = CGSize(width: CGFloat(icon.width) * pixelScale / zoom,
+                        height: CGFloat(icon.height) * pixelScale / zoom)
+                    context.saveGState()
+                    context.clip(to: box)
+                    context.setAlpha(readOnlyReplay ? 0.35 : 1)
+                    GameStoneArt.drawImage(icon, in: CGRect(x: box.midX - size.width / 2,
+                        y: box.midY - size.height / 2, width: size.width, height: size.height), context: context)
+                    context.restoreGState()
+                }
+            }
+            if let id = hoveredLemming, let lem = game.lemmings.first(where: { $0.id == id }),
+               let tool = lem.tool ?? lem.mobilityTool, let icon = pickupImages[tool.rawValue] {
+                let frame = local(skillFrame(3)).insetBy(dx: 4 / zoom, dy: 4 / zoom)
+                NSColor.black.setFill(); frame.fill()
+                let height = max(1, min(frame.width, frame.height - 10 / zoom))
+                icon.draw(in: CGRect(x: frame.midX - height / 2, y: frame.minY, width: height, height: height),
+                    from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+                    hints: [.interpolation: NSImageInterpolation.none.rawValue])
+                art.text(String(lem.quantity), x: frame.minX, y: frame.maxY - 8 / zoom, scale: 0.8 / zoom)
+            }
         }
         if directionPoint != nil {
             let rect = directionPickerRect

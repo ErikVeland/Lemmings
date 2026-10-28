@@ -1,14 +1,17 @@
 # 2.3 build 102 release candidate
 
 Status: **Mac 2.3 build 102 published; all seven public assets and the appcast
-are verified. iOS build 36 uploaded to App Store Connect and is processing.
-tvOS build 15 archive succeeded, but export is blocked by malformed local
-provisioning profiles. The public tag still points to build 100. Sideloading
-delivery remains open.**
+are verified. Corrected iOS 2.3 build 37 and tvOS build 16 are assigned to their
+existing private beta groups and show Testing in App Store Connect. The public
+tag still points to build 100. Sideloading delivery remains open.**
 
 Release source: `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` on `main`
 Release base: `v2.2.2`
-Platform build numbers: Mac 102, iPhone/iPad/Duo 36, Apple TV 15
+Platform build numbers: Mac 102, iPhone/iPad/Duo 37, Apple TV 16
+
+Corrected mobile source commit: `f8038d81bded50aafff51853677a2dd411c058ea`
+The mobile menu scrolling changes are recorded in
+[`mobile-submission-2026-10-27.md`](mobile-submission-2026-10-27.md).
 
 Build 102 contains the centered main-menu logo, optical background-corner
 guidance and the Hot Seat progress selector. The release notes are
@@ -21,11 +24,11 @@ guidance and the Hot Seat progress selector. The release notes are
 | Progress page, logo-centre geometry, layouts and selector hit targets | PASS; `LocalLeaderboardPageTests` |
 | iOS SDK module and application-entry compile | PASS |
 | tvOS SDK module and application-entry compile | PASS |
-| iOS build 36 archive | PASS; signed archive created with stable Xcode 27.1 |
-| iOS build 36 App Store export and upload | PASS; stable Xcode 27.1 export passed strict signing verification; App Store Connect accepted upload and reported processing. Public availability is not yet verified. |
+| iOS build 37 archive | PASS; signed archive created from `f8038d81` with stable Xcode 27.1 |
+| iOS build 37 App Store export, upload and TestFlight assignment | PASS; App Store Connect accepted the upload, added the build to Lemmings and iOS Private Beta, and shows Testing. Beta review availability for external testers is pending Apple review. |
 | Universal Mac candidate package | PASS; Developer ID signed, notarisation accepted, stapled, and Gatekeeper validation passed |
 | Mac updater/feed packaging | PASS; five signed deltas cover builds 95–99; public appcast verified |
-| tvOS build 15 archive | PASS; stable Xcode 27.1 archive created. Export failed because Xcode found malformed provisioning profile files in its local cache; no tvOS upload was made. |
+| tvOS build 16 archive, upload and TestFlight assignment | PASS; stable Xcode 27.1 archive exported and uploaded from `f8038d81`; App Store Connect processed it, added it to TV Private Beta, and shows Testing. Existing group audience remains 29 testers. |
 | Release history and input checks | PASS |
 | Release publication | PASS; release 424931561 published with full updater ZIP, slim ZIP and five delta assets; public appcast points to build 102 |
 
@@ -77,11 +80,10 @@ in this session, so the Duo, iPad and Apple TV checks cannot run here.
   release schedule. No audible-clean claim is made for Mac. See
   [`RuntimePerformance.md`](../../RuntimePerformance.md#23-audio-and-performance-blocker--26-october-2026).
 - The `lemmings-beta` profile is usable and the build 102 Mac standard and slim
-  ZIPs are notarised. Stable Xcode 27.1 created a managed Apple Distribution
-  identity for iOS and uploaded build 36 to App Store Connect. Processing and
-  public availability remain unverified. The tvOS archive built, but export
-  failed when Xcode encountered 21 malformed profile files in its local cache.
-  Repair or refresh those cached profiles, then export and upload tvOS build 15.
+  ZIPs are notarised. Corrected iOS build 37 is processed, assigned to the
+  existing Lemmings and iOS Private Beta groups, and submitted for beta review.
+  Corrected tvOS build 16 is processed, assigned to the existing TV Private
+  Beta group, and shows Testing. Its existing 29-person audience is unchanged.
 - Sustained optimized-package performance and physical-device recovery/input
   acceptance remain open as recorded in [`ReleaseScope.md`](../../ReleaseScope.md#23-release-assessment).
 

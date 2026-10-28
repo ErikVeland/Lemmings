@@ -415,8 +415,7 @@ typealias MobileGameControllerBase = UIViewController
         hud.onHold = { [weak self] action in
             guard let self, self.overlay.isHidden, self.playState.canEdit,
                   self.lifecycle.isForeground, !self.lifecycle.isInterrupted else { return }
-            if action == .pause { self.handle(.menu) }
-            else if action == .endRun {
+            if action == .endRun {
                 if !self.session.snapshot.isEndingRun { self.endRunArmedUntil = ProcessInfo.processInfo.systemUptime + 1.5 }
                 self.handle(.endRun)
             }
@@ -1451,13 +1450,14 @@ typealias MobileGameControllerBase = UIViewController
         countdown.cancel()
         countdownLabel.isHidden = true
         guard playState.pauseForPlanning() else { return }
+        let needsSelectionRefresh = highlightedTarget != nil || hoverAimActive
         playfieldView.cancelInteraction()
         // Controller aiming keeps its current position while the game is paused.
         if hoverAimActive { restoreHoverAim() }
         touchLoupe.isHidden = true
         clock.suspend()
         pauseGameplayAudio()
-        renderCurrentFrame(force: true)
+        renderCurrentFrame(force: needsSelectionRefresh)
         updateHUD()
     }
 

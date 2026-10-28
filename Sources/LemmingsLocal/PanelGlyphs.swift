@@ -210,12 +210,16 @@ enum PanelGlyph: String {
     /// panel can match its neighbouring sockets without moving the label or arrows.
     /// `text` draws the speed label. A panel with a game font passes its own; the default is the pixel font.
     static func draw(in rect: CGRect, label: String, active: Bool, bevelPixel: CGFloat? = nil,
-        backdrop: NSImage? = nil, monochrome: Bool = false, text: ((String, CGRect) -> Void)? = nil) {
+        backdrop: NSImage? = nil, monochrome: Bool = false, drawBackground: (() -> Void)? = nil,
+        text: ((String, CGRect) -> Void)? = nil) {
         let text = text ?? { GamePixelText.draw($0, in: $1, maxScale: .greatestFiniteMagnitude) }
         let boxes = SpeedPanelArt.boxes(in: rect)
         let pixel = SpeedPanelArt.pixel(forHeight: rect.height)
-        GameStoneButton.draw(rect, selected: active, pixel: bevelPixel ?? pixel, backdrop: backdrop,
-            monochrome: monochrome, playFace: .speed)
+        if let drawBackground { drawBackground() }
+        else {
+            GameStoneButton.draw(rect, selected: active, pixel: bevelPixel ?? pixel, backdrop: backdrop,
+                monochrome: monochrome, playFace: .speed)
+        }
         for (index, box) in boxes.enumerated() {
             if index == 1 {
                 // The label always names the speed the game is running at now.

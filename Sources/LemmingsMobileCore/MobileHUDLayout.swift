@@ -99,6 +99,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
             }
         }
         layout = topStatusLayout(layout, television: television)
+        if !television { layout = duoTabletLayout(layout) }
+        layout = joiningControls(layout, hasRate: hasRate, skillCount: max(0, skillCount))
         if fillsDisplayWidth {
             layout = MobileHUDLayout(portrait: layout.portrait, interface: layout.interface, panel: layout.panel,
                 compactScale: layout.compactScale, speedArrows: layout.speedArrows,
@@ -129,6 +131,69 @@ public struct MobileHUDLayout: Equatable, Sendable {
             reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
             isDiorama: layout.isDiorama, showsMenuButton: false, television: layout.television)
         return insettingHeader(console, by: headerInsets)
+    }
+
+    /// Reuse Duo's adaptive skill bank and overview inside the existing tablet deck.
+    /// The playfield rectangle stays exactly where the authored-panel layout put it.
+    private static func duoTabletLayout(_ layout: MobileHUDLayout) -> MobileHUDLayout {
+        guard layout.panel != nil, layout.interface.orientation == .landscape,
+              !layout.reservedRegions.contains(where: { $0.kind == .division }) else { return layout }
+        let original = layout.interface
+        let hasRate = layout.panel?.style == .classic
+        let skillCount = hasRate ? 8 : 5
+        let adaptive = landscapeLayout(base: original, hasRate: hasRate, skillCount: skillCount,
+            supportsRewind: layout.supportsRewind, reservedRegions: layout.reservedRegions)
+        guard let portrait = adaptive.portrait else { return layout }
+        let shift = max(0, original.playfieldFrame.maxY - portrait.minimap.minY)
+        guard portrait.skills.height - shift >= 44 else { return layout }
+        var controls = adaptive.interface.controlFrames
+        let transportEnd = (hasRate ? 2 : 0) + skillCount + 3
+        for index in controls.indices where index < controls.count - 1 {
+            controls[index].y += shift
+            if index < transportEnd { controls[index].height -= shift }
+        }
+        let map = CGRect(x: portrait.minimap.minX, y: original.playfieldFrame.maxY,
+            width: portrait.minimap.width, height: portrait.minimap.maxY + shift - original.playfieldFrame.maxY)
+        let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: original.safeFrame,
+            playfieldFrame: original.playfieldFrame, statusFrame: adaptive.interface.statusFrame,
+            controlsFrame: .init(x: original.safeFrame.minX, y: original.playfieldFrame.maxY,
+                width: original.safeFrame.width, height: original.safeFrame.maxY - original.playfieldFrame.maxY),
+            controlFrames: controls)
+        let skills = CGRect(x: portrait.skills.minX, y: portrait.skills.minY + shift,
+            width: portrait.skills.width, height: portrait.skills.height - shift)
+        let rate = portrait.rateValue.map {
+            CGRect(x: $0.minX, y: $0.minY + shift, width: $0.width, height: $0.height - shift)
+        }
+        return MobileHUDLayout(portrait: Portrait(skills: skills,
+            skillContentWidth: portrait.skillContentWidth, rateValue: rate, minimap: map),
+            interface: interface, panel: nil, compactScale: adaptive.compactScale, speedArrows: [],
+            reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind, isDiorama: false)
+    }
+
+    private static func joiningControls(_ layout: MobileHUDLayout, hasRate: Bool, skillCount: Int) -> MobileHUDLayout {
+        guard layout.portrait != nil else { return layout }
+        let original = layout.interface
+        var frames = original.controlFrames
+        let skillStart = hasRate ? 2 : 0
+        let transportStart = skillStart + skillCount
+        let navigationStart = transportStart + 3
+        for range in [skillStart..<transportStart, transportStart..<navigationStart,
+                      navigationStart..<(navigationStart + (layout.supportsRewind ? 3 : 1))] {
+            guard range.upperBound <= frames.count else { continue }
+            let joined = GameHUDControlGroup.joined(range.map {
+                CGRect(x: frames[$0].x, y: frames[$0].y, width: frames[$0].width, height: frames[$0].height)
+            })
+            for (index, frame) in zip(range, joined) {
+                frames[index] = MobileRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height)
+            }
+        }
+        let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: original.safeFrame,
+            playfieldFrame: original.playfieldFrame, statusFrame: original.statusFrame,
+            controlsFrame: original.controlsFrame, controlFrames: frames, controlsPlacement: original.controlsPlacement)
+        return MobileHUDLayout(portrait: layout.portrait, interface: interface, panel: layout.panel,
+            compactScale: layout.compactScale, speedArrows: layout.speedArrows,
+            reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind,
+            isDiorama: layout.isDiorama, showsMenuButton: layout.showsMenuButton, television: layout.television)
     }
 
     /// Scenery reaches behind the outer display's vertical system bar. Controls retain their safe targets.
@@ -241,15 +306,15 @@ public struct MobileHUDLayout: Equatable, Sendable {
         for _ in 0..<(supportsRewind ? 3 : 1) {
             navigation.append(button(nextY)); nextY += height + gap
         }
+        let end = MobileRect(x: safe.maxX - 44, y: skillY, width: 44, height: skillHeight)
         let pause = MobileRect(x: rail.minX, y: skillY, width: rail.width, height: skillHeight)
-        let end = button(map.minY)
-        let speed = button(end.minY - gap - height)
+        let speed = button(pause.minY - height)
         var rate: [MobileRect] = []
         var rateValue: CGRect?
         var transportTop = speed.minY
         if hasRate {
             let valueHeight = 28.0
-            let faster = button(speed.minY - groupGap - height)
+            let faster = button(speed.minY - height)
             let slower = button(faster.minY - valueHeight - height)
             rateValue = CGRect(x: rail.minX, y: slower.maxY, width: rail.width, height: valueHeight)
             rate = [slower, faster]
@@ -258,7 +323,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
         guard nextY + groupGap - gap <= transportTop,
               map.minY - safe.minY - height >= 88 else { return nil }
 
-        let skillWidth = max(44, (safe.width - 2 * Double(max(0, skillCount - 1))) / Double(max(1, skillCount)))
+        let skillBankWidth = safe.width - 44 - groupGap
+        let skillWidth = max(44, (skillBankWidth - 2 * Double(max(0, skillCount - 1))) / Double(max(1, skillCount)))
         let skills = (0..<skillCount).map {
             MobileRect(x: safe.minX + Double($0) * (skillWidth + 2), y: skillY, width: skillWidth, height: skillHeight)
         }
@@ -270,7 +336,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
             controlFrames: rate + skills + [pause, end, speed] + navigation + [menu],
             controlsPlacement: .trailingRail)
         return MobileHUDLayout(portrait: Portrait(
-            skills: CGRect(x: safe.minX, y: skillY, width: safe.width, height: skillHeight),
+            skills: CGRect(x: safe.minX, y: skillY, width: skillBankWidth, height: skillHeight),
             skillContentWidth: Double(skillCount) * (skillWidth + 2) - (skillCount > 0 ? 2 : 0),
             rateValue: rateValue, minimap: map), interface: interface, panel: nil,
             compactScale: 2, speedArrows: [], reservedRegions: reservedRegions,
@@ -637,13 +703,13 @@ public struct MobileHUDLayout: Equatable, Sendable {
     private static func landscapeLayout(base: MobileInterfaceLayout, hasRate: Bool, skillCount: Int,
                                         supportsRewind: Bool, reservedRegions: [MobileReservedRegion]) -> MobileHUDLayout {
         let safe = base.safeFrame
-        let height: CGFloat = 80, gap: CGFloat = 2, groupGap: CGFloat = 4
+        let height: CGFloat = 80, gap: CGFloat = 2, groupGap = GameHUDControlGroup.spacing
         let rowY = safe.maxY - height
         let navigationY = rowY - gap - 44
         let buttonWidth = min(64, max(44, floor(safe.width * 0.08)))
         let speedWidth = max(72, buttonWidth + 20)
         let rateWidth: CGFloat = hasRate ? 116 : 0
-        let transportWidth = rateWidth + speedWidth + 2 * buttonWidth + groupGap * CGFloat(hasRate ? 3 : 2)
+        let transportWidth = rateWidth + speedWidth + 2 * buttonWidth + groupGap
         let transportX = safe.maxX - transportWidth
         let skillBankWidth = transportX - safe.minX - groupGap
         let skillWidth = max(44, (skillBankWidth - gap * CGFloat(max(0, skillCount - 1))) / CGFloat(max(1, skillCount)))
@@ -651,10 +717,10 @@ public struct MobileHUDLayout: Equatable, Sendable {
             MobileRect(x: safe.minX + CGFloat(index) * (skillWidth + gap), y: rowY,
                        width: skillWidth, height: height)
         }
-        let speedX = transportX + rateWidth + (hasRate ? groupGap : 0)
-        let speed = MobileRect(x: speedX, y: rowY, width: speedWidth, height: height)
-        let nuke = MobileRect(x: speed.maxX + groupGap, y: rowY, width: buttonWidth, height: height)
-        let pause = MobileRect(x: nuke.maxX + groupGap, y: rowY, width: safe.maxX - nuke.maxX - groupGap, height: height)
+        let nuke = MobileRect(x: transportX, y: rowY, width: buttonWidth, height: height)
+        let rateX = nuke.maxX + groupGap
+        let speed = MobileRect(x: rateX + rateWidth, y: rowY, width: speedWidth, height: height)
+        let pause = MobileRect(x: speed.maxX, y: rowY, width: safe.maxX - speed.maxX, height: height)
         let navigationCount = supportsRewind ? 3 : 1
         func navigation(_ index: Int) -> MobileRect {
             MobileRect(x: safe.minX + CGFloat(index) * 46, y: navigationY, width: 44, height: 44)
@@ -665,8 +731,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let menu = MobileRect(x: safe.maxX - 44, y: safe.minY, width: 44, height: 44)
         var frames: [MobileRect] = []
         if hasRate {
-            frames += [MobileRect(x: transportX, y: rowY, width: 44, height: height),
-                       MobileRect(x: transportX + 72, y: rowY, width: 44, height: height)]
+            frames += [MobileRect(x: rateX, y: rowY, width: 44, height: height),
+                       MobileRect(x: rateX + 72, y: rowY, width: 44, height: height)]
         }
         frames += skills + [pause, nuke, speed]
         if supportsRewind { frames += [navigation(0), navigation(1)] }
@@ -680,7 +746,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         return MobileHUDLayout(portrait: Portrait(
             skills: CGRect(x: safe.minX, y: rowY, width: skillBankWidth, height: height),
             skillContentWidth: CGFloat(skillCount) * (skillWidth + gap) - (skillCount > 0 ? gap : 0),
-            rateValue: hasRate ? CGRect(x: transportX + 44, y: rowY, width: 28, height: height) : nil,
+            rateValue: hasRate ? CGRect(x: rateX + 44, y: rowY, width: 28, height: height) : nil,
             minimap: map), interface: interface, panel: nil, compactScale: 2, speedArrows: [],
             reservedRegions: reservedRegions, supportsRewind: supportsRewind, isDiorama: false)
     }

@@ -3,8 +3,8 @@
 ## Pause response and resume timing
 
 The touch HUD pauses a running attempt on touch-down. Releasing that press
-keeps it paused. Play activates on release so holding the same control can
-still open the pause menu without advancing the attempt. Fast-speed reset
+keeps it paused. Play activates on release. The separate Menu control opens the pause menu;
+Pause and Play do not interpret a delayed release as a hold. Fast-speed reset
 retains its existing first-press behaviour.
 
 Resume presents the frozen tick before restarting the simulation clock.
@@ -26,6 +26,27 @@ accessibility-label expectations and was stopped after Xcode stalled collecting
 its results. The corrected run completes successfully.
 Physical iPad touch response and Apple TV controller/display timing remain
 device checks.
+
+## Older-device responsiveness — 28 October 2026
+
+Pause no longer treats a delayed touch release as a menu hold. The dedicated
+Menu target remains available. The shared controller avoids a forced playfield
+render when the displayed tick and selection already match, and music state
+changes no longer reload all settings on each pause or resume. Constrained
+devices skip optional sprite afterimage sampling and drawing. Classic, L2, L3
+and supported NeoLemmix use this shared mobile path. TV controllers retain their
+separate pause and menu commands; Mac retains its native controls.
+
+Recent source review found the 2.3 afterimage pass samples actor sprites even at
+normal speed, and rounded HUD drawing adds clipping work. Their device costs and
+contribution to input latency have not been measured. The 26 October audio reset
+work adds recovery observers and logging; source review alone does not establish
+it as the cause. Muted timing checks pass for delayed Pause/Play and cancellation. The broader
+HUD suite reports two layout tests failing against the current checkout. iOS and
+tvOS simulator SDK modules and app entry points compile; the sandbox cannot
+connect to CoreSimulatorService, so native touch and rendered-state checks were
+not run. Physical iPad 8 touch latency, music transitions and visual acceptance
+remain open.
 
 ## Overview
 

@@ -251,6 +251,7 @@ import UIKit
     #endif
     func captureSpriteTrails(session: any MobileGameSession) {
         let enabled = displaySettings.hdEffectsEnabled && !motionReduced && !displaySettings.reduceFlashes
+            && !MobileDevicePerformance.constrained
         guard enabled else { spriteTrails.reset(); return }
         let visible = gameViewport.visibleLevelRect
         var current: [Int: MobileSpriteHighlight] = [:]
