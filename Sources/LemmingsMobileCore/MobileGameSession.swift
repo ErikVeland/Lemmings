@@ -196,6 +196,8 @@ public protocol MobileGameSession: AnyObject {
     var initialCameraOrigin: MobilePoint { get }
     var ticksPerSecond: Double { get }
     var snapshot: MobileGameSnapshot { get }
+    /// A lightweight completion check for simulation catch-up.
+    var isSimulationComplete: Bool { get }
     var panelFrame: MobilePixelFrame? { get }
     var renderScale: Double { get }
     var availableGraphics: [ClassicGraphicsSource] { get }
@@ -272,6 +274,7 @@ public protocol MobileGameSession: AnyObject {
 }
 
 public extension MobileGameSession {
+    var isSimulationComplete: Bool { snapshot.isComplete }
     var bonusSkillID: String? { nil }
     var extraSkillChoices: [MobileExtraSkillChoice] { [] }
     var existingLevelSkills: Set<String> { [] }

@@ -30,6 +30,21 @@ still required; these rows do not describe an installed release.
 | Original sequel media | L2 introduction, ending and gold ending; all five original L3 FLIC movies. Shared bitmap menus provide pause, back and continuation through library and game pause routes. Covered gameplay stays paused. | All eight sources decode and advance. Automatic campaign story triggers remain separate WIP below. |
 | Neo extra-skill rewards | Valid finite charges retain assistance and one-use state across checkpoint/rewind. | Charge and recovery checks pass. Individual naming remains explicitly deferred for clones, preplaced actors and unlimited populations. |
 
+## Mac panel navigation — 29 October 2026
+
+Mac `GameMenuPage` panels retain Back in their existing bottom action row and
+add Main menu beside it, using the regular bitmap stone buttons. Shared Mac
+full-window pages use a fixed bottom navigation row. Classic, L2, L3 and
+supported NeoLemmix use this common presentation; mobile and TV retain their
+fixed header navigation. Return callbacks and paused handovers are unchanged.
+
+Validation: Apple Silicon Mac compilation passes. The existing navigation
+regression now locates the footer controls through the panel hierarchy and
+checks their bottom placement. Test suites and release audits were skipped
+under the UI-only release policy. Native rendered layout, mouse/controller hit
+targets and enlarged-page scrolling remain acceptance checks; no release was
+packaged.
+
 ## Joined gameplay controls — 28 October 2026
 
 Duo supplies the shared visual baseline for landscape iPad and Mac. Skills,
@@ -174,6 +189,14 @@ collections, settings, hints/coaching, records and the main audio system.
 Engine-specific controls remain explicit: L2 fan and L3 tool direction have their
 own controls; L2/L3 expose no release-rate setting and L3 has no nuke.
 
+Mobile and TV fast-forward share the same bounded simulation loop for Classic,
+L2, L3 and NeoLemmix. The loop reserves time for simulation after input work and
+checks completion without rebuilding the HUD snapshot on each native tick. The
+frame path reuses snapshots and panel artwork and avoids duplicate pitch updates.
+Replay recording, rewind and saved-run recovery remain enabled; their cost,
+sustained 10× throughput and touch responsiveness still require profiling and
+acceptance on older physical devices.
+
 Classic supports artwork switching, deterministic review, verified solution
 viewing and the separate solution ghost on mobile and TV. Matching verified
 solution viewers and checked hints for L2/L3 remain a shared engine/content gap,
@@ -292,14 +315,30 @@ Classic, L2, L3 and supported NeoLemmix use the same frontend path. Mac, ordinar
 iPhone/iPad and TV keep their existing square presentation. The original full
 native HUD panel remains authored artwork. Rectangular touch targets, engine
 input and paused handovers remain intact. Duo HUDs retain UIKit's corner-adapted
-safe area along the longer display axis. Outer-display menus use vertical
-corner clearance to retain full width around local camera cutouts. The gameplay adapter no longer discards those insets on the outer
-display. Scenery still extends across that display.
+safe content vertically while drawing their header and bottom surfaces to the
+screen edges. The adaptive deck fills the display width on outer and opened
+screens. Skill rows and interior corners stay square. Only the last bottom
+control receives the outside bottom-right curve. Header Menu stays on the right;
+its curved outer surface reaches the display top while its icon stays safe.
+Extended rectangular input/accessibility targets cover these visible surfaces.
+Short landscape rows shrink to preserve the playfield and 44-point targets.
+Camera and hinge reservations remain active. TV keeps its existing presentation.
 
-The outer-display gameplay header places Main menu at the left of the camera-safe
-span. The rounded status strip fills the remaining width to its right. Its
-contents and the menu keep separate rectangular input and accessibility bounds.
-Split-screen, TV and ordinary phone layouts retain their existing placement.
+Duo and iPad library menus draw a 90%-opaque black backdrop with Overlay blending in the same scrolling surface
+as their content, with equal 12-point margins and an inset corner radius. The
+background and content scroll together; navigation stays fixed. Only the background
+layer uses Overlay; controls and text retain normal compositing. Mobile measurement
+is reused for drawing and input targets, and drawing waits for committed geometry.
+Mac page trees and release-note scroll tiling finish before presentation.
+Windowless renders of What's new and Settings at outer Duo, opened Duo and iPad
+sizes verify the Overlay surface and at least 44-point action targets. Mac frontend
+typechecking and iOS/tvOS SDK compilation pass. Engine test suites were skipped for
+this presentation-only change. Physical first-frame presentation and Core Animation
+blending remain device checks.
+Confirmed hinge capability is retained per device, avoiding a phone-to-Duo layout
+change on subsequent launches. The first-ever hinge callback and real pose/safe-area
+changes still need physical-device acceptance. Identical page assignments do not
+rebuild targets. Mac nested page layout completes synchronously before display.
 
 Muted, windowless rendering checks cover 72 Classic/L2/L3 HUD states and 120
 book Home states, including focus, disabled, selected and busy controls. Their
@@ -329,3 +368,17 @@ The mobile source currently has no About route or About screen to validate.
 The Duo static-heading treatment covers the existing shared reading pages; an
 About screen must adopt the same layout if added. Rendered and physical-device
 acceptance for the new header remains outstanding.
+
+### Duo edge layout validation — 29 October 2026
+
+The updated muted, windowless HUD audit covers 108 Classic/L2/L3 renders,
+including outer portrait, short landscape, opened, book and tabletop fixtures.
+It checks square interior corners, outside-only curves, unchanged action centres,
+44-point safe targets and extended edge targets without overlap. Nine additional
+Home, What’s new and Settings captures exercise the shared scrolling backdrop
+at top, middle and bottom positions, equal margins and 95% opacity. Representative HUD and reading captures were
+inspected. Mac compilation passes; iOS/tvOS SDK validation is recorded separately.
+Native NeoLemmix
+rendering, UIKit hinge delivery, first-launch stability, physical touch and exact
+hardware corner matching remain device/content acceptance gaps. The shared
+NeoLemmix frontend uses the same controls. No simulation code changed.

@@ -65,11 +65,15 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let statusDetails: StatusDetails?
     private let shape: GameControlShape
     private let replayLevel: MobileLevelSummary?
+    private let displayBounds: CGRect?
+    private let displayCornerRadius: CGFloat?
     private let duoCorners: Bool
     private let bottomCornerGroups: (left: CGRect, right: CGRect)?
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil, replayLevel: MobileLevelSummary? = nil, shape: GameControlShape = .square, duoCorners: Bool = false) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil, replayLevel: MobileLevelSummary? = nil, shape: GameControlShape = .square, duoCorners: Bool = false, displayBounds: CGRect? = nil, displayCornerRadius: CGFloat? = nil) {
+        self.displayBounds = duoCorners ? displayBounds : nil
+        self.displayCornerRadius = displayCornerRadius
         self.shape = shape
         self.duoCorners = duoCorners
         self.layout = layout; self.snapshot = snapshot; self.selectedSkill = selectedSkill
@@ -97,7 +101,7 @@ public enum MobileHUDAction: Equatable, Sendable {
                 switch item.action {
                 case .skill:
                     return portrait.skills.contains(CGPoint(x: item.frame.midX, y: item.frame.midY))
-                case .pause, .endRun, .speed: return true
+                case .releaseRate, .pause, .endRun, .speed: return true
                 default: return false
                 }
             }
@@ -212,8 +216,11 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.fill(statusFrame)
             if layout.portrait != nil {
                 context.setFillColor(CGColor(gray: 0.06, alpha: 1))
-                shape.fill(statusFrame, in: context)
-                if shape == .rounded {
+                if duoCorners {
+                    context.addPath(GameControlGroupArt.path(in: headerSurface ?? statusFrame, screenEdges: true, topLeft: true, topRight: headerSurface != nil, screenRadius: screenRadius))
+                    context.fillPath()
+                } else { shape.fill(statusFrame, in: context) }
+                if shape == .rounded && !duoCorners {
                     GameDisplayArt.outline(in: context, frame: statusFrame, color: CGColor(gray: 0.25, alpha: 1), shape: shape)
                 } else {
                     context.setFillColor(CGColor(gray: 0.25, alpha: 1))
@@ -233,7 +240,7 @@ public enum MobileHUDAction: Equatable, Sendable {
                 }
                 if includeSkills { drawSkills(in: context) }
                 if let value = layout.portrait?.rateValue, let rate = snapshot.releaseRate {
-                    drawGameLabel("\(rate)", in: value, context: context)
+                    drawGameLabel("\(rate)", in: contentFrame(value), context: context)
                 }
             } else {
                 for item in items { drawCell(item, context: context) }
@@ -404,6 +411,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     private func drawSpeed(_ frame: CGRect, bevel: CGFloat, context: CGContext) {
         let active = speed > 1
         drawStoneSocket(frame, selected: active, pixel: bevel, face: .speed, context: context)
+        let frame = contentFrame(frame)
         let pixel = SpeedPanelArt.pixel(forHeight: frame.height)
         let boxes: [CGRect]
         if layout.speedArrows.count == 2 {
@@ -440,9 +448,9 @@ public enum MobileHUDAction: Equatable, Sendable {
         context.saveGState()
         defer { context.restoreGState() }
         if layout.portrait != nil {
-            let group = controlGroup(containing: frame)
+            let group = item.action == .menu ? headerSurface ?? controlGroup(containing: frame) : controlGroup(containing: frame)
             let corners = cornerFlags(for: group)
-            context.addPath(GameControlGroupArt.path(in: group, bottomLeft: corners.left, bottomRight: corners.right))
+            context.addPath(GameControlGroupArt.path(in: group, bottomLeft: corners.left, bottomRight: corners.right, screenEdges: duoCorners, topLeft: duoCorners && item.action == .menu, topRight: duoCorners && item.action == .menu, screenRadius: screenRadius))
             context.clip()
         } else if shape == .rounded {
             context.addPath(shape.path(in: frame, inset: 1))
@@ -521,7 +529,10 @@ public enum MobileHUDAction: Equatable, Sendable {
         let enabled = item.action == .step ? paused : (item.action == .stepBackward || item.action == .rewind ? snapshot.tick > 0 : true)
         if item.action == .menu {
             if layout.portrait != nil {
-                GameControlGroupArt.draw(in: context, frame: item.frame, group: item.frame, selected: false)
+                let header = item.action == .menu ? headerSurface : nil
+                let frame = header.map { CGRect(x: item.frame.minX, y: $0.minY, width: item.frame.width, height: $0.height) } ?? item.frame
+                GameControlGroupArt.draw(in: context, frame: frame, group: header ?? item.frame, selected: false,
+                    screenEdges: duoCorners, topLeft: duoCorners, topRight: duoCorners, screenRadius: screenRadius)
             } else {
                 GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1, shape: shape)
             }
@@ -537,7 +548,14 @@ public enum MobileHUDAction: Equatable, Sendable {
         case .stepBackward: glyph = .stepBackward
         default: glyph = .stepForward
         }
-        let well = GameStoneArt.well(item.frame, pixel: 1)
+        let glyphFrame: CGRect
+        if item.action == .menu, let header = headerSurface {
+            glyphFrame = CGRect(x: item.frame.minX, y: header.midY - item.frame.height / 2,
+                                width: item.frame.width, height: item.frame.height)
+        } else {
+            glyphFrame = item.frame
+        }
+        let well = GameStoneArt.well(glyphFrame, pixel: 1)
         guard let image = Self.glyphImage(glyph, fitting: CGSize(width: well.width, height: well.height * 0.85)) else { return }
         context.saveGState()
         context.setAlpha(enabled ? 1 : 0.35)
@@ -556,19 +574,80 @@ public enum MobileHUDAction: Equatable, Sendable {
         }
         context.saveGState()
         context.setAlpha(readOnly ? 0.35 : 1)
-        drawGameLabel(delta < 0 ? "-" : "+", in: GameStoneArt.well(frame, pixel: pixel), context: context)
+        drawGameLabel(delta < 0 ? "-" : "+", in: GameStoneArt.well(contentFrame(frame), pixel: pixel), context: context)
         context.restoreGState()
     }
 
+    public static func edgeInputFrame(for item: Item, layout: MobileHUDLayout, displayBounds: CGRect, screenEdges: Bool) -> CGRect {
+        guard screenEdges, layout.portrait != nil else { return item.inputFrame }
+        var frame = item.inputFrame
+        if item.action == .menu {
+            frame.size.height = frame.maxY - displayBounds.minY
+            frame.origin.y = displayBounds.minY
+        } else if abs(frame.maxY - layout.interface.safeFrame.maxY) < 0.01 {
+            frame.size.height = displayBounds.maxY - frame.minY
+        }
+        return frame
+    }
+
+    private var screenRadius: CGFloat? {
+        guard let displayBounds else { return nil }
+        return max(20, displayCornerRadius ?? 0, layout.interface.safeFrame.minY - displayBounds.minY,
+                   displayBounds.maxY - layout.interface.safeFrame.maxY)
+    }
+
+    private func edgeGroup(_ frame: CGRect) -> CGRect {
+        guard let displayBounds, let bottom = bottomCornerGroups?.right.maxY,
+              abs(frame.maxY - bottom) < 0.01 else { return frame }
+        return CGRect(x: frame.minX, y: frame.minY, width: frame.width,
+                      height: displayBounds.maxY - frame.minY)
+    }
+
+    private func edgeFrame(_ frame: CGRect) -> CGRect { edgeGroup(frame) }
+
+    /// Centre bottom-row artwork within the complete visible surface, including its lower clearance.
+    private func contentFrame(_ frame: CGRect) -> CGRect {
+        let extended = edgeFrame(frame)
+        guard extended != frame else { return frame }
+        var content = extended.insetBy(dx: 0, dy: 2)
+        if let displayBounds, let radius = screenRadius, radius > 0 {
+            let distance = max(0, min(radius, displayBounds.maxY - content.midY))
+            let clearance = max(0, radius - sqrt(max(0, radius * radius - (radius - distance) * (radius - distance)))) + 3
+            if abs(frame.minX - displayBounds.minX) < 0.01 {
+                let inset = min(clearance, content.width - 8)
+                content.origin.x += inset
+                content.size.width -= inset
+            }
+            if abs(frame.maxX - displayBounds.maxX) < 0.01 {
+                content.size.width -= min(clearance, content.width - 8)
+            }
+        }
+        return content
+    }
+
+    private var headerSurface: CGRect? {
+        guard let displayBounds, layout.portrait != nil else { return nil }
+        return CGRect(x: displayBounds.minX, y: displayBounds.minY,
+                      width: displayBounds.width, height: layout.interface.statusFrame.maxY - displayBounds.minY)
+    }
+
     private func controlGroup(containing frame: CGRect) -> CGRect {
-        if frame == rateFrame { return rateGroup ?? frame }
+        if frame == rateFrame { return borderGroup(edgeGroup(rateGroup ?? frame)) }
         guard let index = items.firstIndex(where: { $0.frame == frame }) else { return frame }
-        return controlGroups[index]
+        return borderGroup(edgeGroup(controlGroups[index]))
+    }
+
+    private func borderGroup(_ frame: CGRect) -> CGRect {
+        guard let displayBounds, abs(frame.maxY - displayBounds.maxY) < 0.01 else { return frame }
+        let top = min(frame.minY, displayBounds.maxY - (screenRadius ?? 0) - 2)
+        return CGRect(x: displayBounds.minX, y: top, width: displayBounds.width,
+                      height: displayBounds.maxY - top - 2)
     }
 
     private func cornerFlags(for group: CGRect) -> (left: Bool, right: Bool) {
         guard duoCorners, let corners = bottomCornerGroups else { return (false, false) }
-        return (group == corners.left, group == corners.right)
+        return (group == borderGroup(edgeGroup(corners.left)),
+                group == borderGroup(edgeGroup(corners.right)))
     }
 
     private func drawStoneSocket(_ frame: CGRect, selected: Bool, pixel: CGFloat,
@@ -576,8 +655,8 @@ public enum MobileHUDAction: Equatable, Sendable {
         if layout.portrait != nil {
             let group = controlGroup(containing: frame)
             let corners = cornerFlags(for: group)
-            GameControlGroupArt.draw(in: context, frame: frame, group: group, selected: selected, face: face,
-                bottomLeft: corners.left, bottomRight: corners.right)
+            GameControlGroupArt.draw(in: context, frame: edgeFrame(frame), group: group, selected: selected, face: face,
+                bottomLeft: corners.left, bottomRight: corners.right, screenEdges: duoCorners, screenRadius: screenRadius)
         } else {
             GamePlayButtonArt.draw(in: context, frame: frame, selected: selected, pixel: pixel, face: face, shape: shape)
         }
@@ -593,10 +672,11 @@ public enum MobileHUDAction: Equatable, Sendable {
         else { glyph = snapshot.isEndingRun == true ? .undo : .nuke }
         drawStoneSocket(item.frame, selected: selected, pixel: pixel,
             face: item.action == .pause ? .pause : .endRun, context: context)
-        let well = GameStoneArt.well(item.frame, pixel: pixel)
+        let glyphFrame = contentFrame(item.frame)
+        let well = GameStoneArt.well(glyphFrame, pixel: pixel)
         if let image = Self.glyphImage(glyph,
             fitting: item.action == .pause ? well.insetBy(dx: 4 * pixel, dy: 4 * pixel).size
-                : glyph.isOriginalTile ? item.frame.insetBy(dx: 2, dy: 2).size : well.size,
+                : glyph.isOriginalTile ? glyphFrame.insetBy(dx: 2, dy: 2).size : well.size,
             transparentRock: glyph.isOriginalTile) {
             GameStoneArt.drawImage(image.image, in: CGRect(
                 x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
@@ -611,7 +691,8 @@ public enum MobileHUDAction: Equatable, Sendable {
             drawStoneSocket(item.frame, selected: false, pixel: 1, face: .stepForward, context: context)
         } else {
             if layout.portrait != nil {
-                GameControlGroupArt.draw(in: context, frame: item.frame, group: item.frame, selected: false)
+                GameControlGroupArt.draw(in: context, frame: item.frame, group: item.frame, selected: false,
+                    screenEdges: duoCorners, topRight: duoCorners && item.action == .menu)
             } else {
                 GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1, shape: shape)
             }

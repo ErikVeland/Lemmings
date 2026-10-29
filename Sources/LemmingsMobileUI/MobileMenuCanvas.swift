@@ -17,6 +17,7 @@ import UIKit
 @MainActor final class MobileMenuCanvas: UIView {
     var page = GameFrontEnd.Page(title: L10n.text("Lemmings")) {
         didSet {
+            guard oldValue != page else { return }
             pendingReflowAnchor = nil
             if oldValue.title != page.title { focusedID = nil; televisionPageIndex = 0 }
             globalNavigation?.showsBack = page.backAction != nil
@@ -54,6 +55,14 @@ import UIKit
         }
         #endif
         return result
+    }
+    var usesMenuBackdrop = false {
+        didSet { if oldValue != usesMenuBackdrop { setNeedsDisplay() } }
+    }
+    var menuBackdropGeometry: (frame: CGRect, radius: CGFloat) {
+        guard let measurement else { return (GameMenuBackdropArt.frame(in: bounds), 20) }
+        return GameMenuBackdropArt.geometry(in: bounds, layout: measurement.layout,
+            scale: measurement.scale, shape: MobileSystemRegions.controlShape(in: self))
     }
     var showsStaticHeading = false {
         didSet { if showsStaticHeading != oldValue { setNeedsLayout(); setNeedsDisplay() } }
@@ -106,6 +115,16 @@ import UIKit
     private(set) var hoveredActionID: String?
     var onPageChanged: (() -> Void)?
     private var targets: [UIButton] = []
+    #if os(iOS)
+    private lazy var previewButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.accessibilityLabel = L10n.text("Play")
+        button.accessibilityIdentifier = "menu.preview.play"
+        button.addAction(UIAction { [weak self] _ in self?.dispatch("play") }, for: .touchUpInside)
+        addSubview(button)
+        return button
+    }()
+    #endif
     private var highlighted: String?
     weak var globalNavigation: MobileNavigationView?
     weak var settingsTabs: MobileSettingsTabsView?
@@ -124,6 +143,41 @@ import UIKit
         didSet { globalNavigation?.focusedID = focusedID; listTools?.focusedID = focusedID; settingsTabs?.focusedID = focusedID }
     }
     private var pageLayout: GameFrontEnd.Layout?
+    private struct Measurement {
+        let page: GameFrontEnd.Page
+        let viewport: CGSize
+        let scale: CGFloat
+        let boxesHome: Bool
+        let splitResult: Bool
+        let panes: [CGRect]
+        let layout: GameFrontEnd.Layout
+    }
+    private var measurement: Measurement?
+    private struct PresentationKey: Equatable {
+        let page: GameFrontEnd.Page
+        let bounds: CGRect
+        let viewport: CGSize
+        let scale: CGFloat
+        let boxesHome: Bool
+        let splitResult: Bool
+        let panes: [CGRect]
+        let staticHeading: Bool
+        let footerViewport: CGRect?
+    }
+    private var presentationKey: PresentationKey?
+    private var renderedBounds = CGRect.zero
+    private var renderedScale: CGFloat = 1
+
+    private func measuredLayout(page: GameFrontEnd.Page, viewport: CGSize, scale: CGFloat) -> GameFrontEnd.Layout {
+        if let cached = measurement, cached.page == page, cached.viewport == viewport,
+           cached.scale == scale, cached.boxesHome == boxesHome, cached.splitResult == splitResult,
+           cached.panes == bookHomePanes { return cached.layout }
+        let layout = layoutPage(page, width: viewport.width / scale,
+            minimumHeight: viewport.height / scale, scale: scale)
+        measurement = Measurement(page: page, viewport: viewport, scale: scale,
+            boxesHome: boxesHome, splitResult: splitResult, panes: bookHomePanes, layout: layout)
+        return layout
+    }
     private let pauseShelfShield = UIView()
     var requiresNeutralActivation = false
     private var tvActivation = TVActivationGate()
@@ -242,25 +296,38 @@ import UIKit
         }
         #endif
         let scale = interfaceScale(width: width, viewportHeight: minimumHeight)
-        let size = layoutPage(displayedPage, width: width / scale, minimumHeight: minimumHeight / scale, scale: scale).size
+        let size = measuredLayout(page: displayedPage, viewport: measured, scale: scale).size
         return CGSize(width: size.width * scale, height: size.height * scale)
     }
     override func layoutSubviews() {
         super.layoutSubviews()
+        guard bounds.width > 0, bounds.height > 0 else { pageLayout = nil; return }
         let page = displayedPage
         let scale = interfaceScale(width: bounds.width)
         let transform = CGAffineTransform(scaleX: scale, y: scale)
         let minimumHeight = measuredViewport.height > 0 ? measuredViewport.height
             : (superview as? UIScrollView)?.bounds.height ?? bounds.height
-        var layout = layoutPage(page, width: bounds.width / scale, minimumHeight: minimumHeight / scale, scale: scale)
+        let viewport = CGSize(width: bounds.width, height: minimumHeight)
+        let footerViewport: CGRect?
         if page.pause != nil, let scroll = superview as? UIScrollView {
             let insets = (scroll as? MobileMenuScrollView)?.unobscuredInsets ?? .zero
             let viewportTop = scroll.contentOffset.y + insets.top - frame.minY
             let viewportHeight = max(0, scroll.bounds.height - insets.top - insets.bottom)
-            layout = MobilePauseArt.pinningFooter(layout, viewport: CGRect(x: 0, y: viewportTop / scale,
-                width: scroll.bounds.width / scale, height: viewportHeight / scale), actionIDs: Set(page.footer.map(\.id)))
+            footerViewport = CGRect(x: 0, y: viewportTop / scale,
+                width: scroll.bounds.width / scale, height: viewportHeight / scale)
+        } else { footerViewport = nil }
+        let key = PresentationKey(page: page, bounds: bounds, viewport: viewport, scale: scale,
+            boxesHome: boxesHome, splitResult: splitResult, panes: bookHomePanes,
+            staticHeading: showsStaticHeading, footerViewport: footerViewport)
+        guard presentationKey != key || pageLayout == nil else { return }
+        var layout = measuredLayout(page: page, viewport: viewport, scale: scale)
+        if let footerViewport {
+            layout = MobilePauseArt.pinningFooter(layout, viewport: footerViewport, actionIDs: Set(page.footer.map(\.id)))
         }
+        presentationKey = key
         pageLayout = layout
+        renderedBounds = bounds
+        renderedScale = scale
         let footerIDs = Set(page.footer.map(\.id))
         let shelfTop = page.pause == nil ? nil : layout.targets.first(where: { footerIDs.contains($0.action.id) }).map { $0.frame.minY - 8 }
         let buttons = Dictionary(uniqueKeysWithValues: targets.compactMap { button in
@@ -272,6 +339,12 @@ import UIKit
             button.isHidden = false
             return button
         }
+        #if os(iOS)
+        let playAction = (page.rows + page.orderedFooter).first { $0.id == "play" }
+        previewButton.frame = layout.preview.applying(transform)
+        previewButton.isHidden = layout.preview.isEmpty || playAction == nil
+        previewButton.isEnabled = playAction?.enabled == true
+        #endif
         pauseShelfShield.isHidden = shelfTop == nil
         if let shelfTop, let scroll = superview as? UIScrollView {
             let top = shelfTop * scale
@@ -348,7 +421,13 @@ import UIKit
             accessibilityElements = positioned.sorted {
                 abs($0.frame.minY - $1.frame.minY) < 1 ? $0.frame.minX < $1.frame.minX : $0.frame.minY < $1.frame.minY
             }.map(\.element) + targets.filter { footerIDs.contains($0.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") ?? "") }
-        } else { accessibilityElements = elements + targets }
+        } else {
+            #if os(iOS)
+            accessibilityElements = elements + (previewButton.isHidden ? [] : [previewButton]) + targets
+            #else
+            accessibilityElements = elements + targets
+            #endif
+        }
         setNeedsDisplay()
     }
     private func rebuild() {
@@ -506,14 +585,16 @@ import UIKit
         }
     }
     override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
+        // Never invent a second layout while painting. The completed layout also owns
+        // the touch and accessibility targets, and must exist before anything is drawn.
+        layoutIfNeeded()
+        guard let context = UIGraphicsGetCurrentContext(), let layout = pageLayout,
+              renderedBounds == bounds else { return }
         let page = displayedPage
-        let scale = interfaceScale(width: bounds.width)
+        let scale = renderedScale
         context.saveGState()
         defer { context.restoreGState() }
         context.scaleBy(x: scale, y: scale)
-        let layout = pageLayout ?? layoutPage(page, width: bounds.width / scale, minimumHeight: (measuredViewport.height > 0
-            ? measuredViewport.height : (superview as? UIScrollView)?.bounds.height ?? bounds.height) / scale, scale: scale)
         guard let typography = MobileGameArt.typography else {
             if !showsStaticHeading { MobilePixelText.draw(page.title, in: layout.heading, palette: .green) }
             MobilePixelText.draw(page.subtitle, in: layout.subtitle)
@@ -548,7 +629,7 @@ import UIKit
         var renderedPage = page
         if showsStaticHeading { renderedPage.title = ""; renderedPage.titleRuns = [] }
         GameFrontEnd.draw(renderedPage, layout: layout, typography: typography, preview: preview,
-                         previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, fillsCanvas: !(page.home && boxesHome), shape: MobileSystemRegions.controlShape(in: self), in: context)
+                         previewSource: previewSource, highlighted: highlighted, portraits: Self.portraits, fillsCanvas: !(page.home && boxesHome), shape: MobileSystemRegions.controlShape(in: self), drawsBackdrop: !usesMenuBackdrop, in: context)
         if let resultStars, !layout.preview.isEmpty {
             let preview = layout.preview
             let pixel: CGFloat = preview.width >= 400 ? 3 : 2

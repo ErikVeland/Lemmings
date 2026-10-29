@@ -116,7 +116,7 @@ public struct SolutionGhostPixels: Sendable {
                 pixels[offset] = edge ? UInt8(min(255, Int(r) + 80)) : r
                 pixels[offset + 1] = g
                 pixels[offset + 2] = b
-                pixels[offset + 3] = edge ? 150 : 76
+                pixels[offset + 3] = edge ? 110 : 50
             } }
         }
         rgba = Data(pixels)

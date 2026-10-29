@@ -74,7 +74,8 @@ import os
         scheduleIdleSuspension()
     }
 
-    func update(session: any MobileGameSession, viewport: MobileViewport, rewinding: Bool = false) {
+    func update(session: any MobileGameSession, viewport: MobileViewport, rewinding: Bool = false,
+                snapshot: MobileGameSnapshot? = nil) {
         let cues = session.drainSoundCues()
         let engine = (session as? MobileActionReplaySession)?.engineSession ?? session
         let l2Session = engine as? Lemmings2MobileSession
@@ -82,7 +83,7 @@ import os
         guard !isTestAudioMuted, !suspended, prepared else { return }
         let rect = viewport.visibleLevelRect
         player.setViewport(.init(x: rect.x, y: rect.y, width: rect.width, height: rect.height))
-        player.setNukeActive(session.snapshot.isEndingRun)
+        player.setNukeActive((snapshot ?? session.snapshot).isEndingRun)
         if let neoLemmix = engine as? NeoLemmixMobileSession,
            let soundDirectory = neoLemmix.soundDirectory {
             let identity = [neoLemmix.levelFingerprint, soundDirectory.path,

@@ -737,17 +737,19 @@ typealias MobileGameControllerBase = UIViewController
         guard !resumeFramePending else { return }
         let ticks = clock.advance(at: link.timestamp)
         guard ticks > 0 else { return }
-        let deadline = frameStarted + min(0.012, 0.6 / Double(max(1, appliedFrameRate)))
+        // Reserve simulation time after input and presentation preparation; otherwise
+        // a busy frame can exhaust the budget before its first tick.
+        let deadline = ProcessInfo.processInfo.systemUptime + min(0.020, 0.6 / Double(max(1, appliedFrameRate)))
         var advanced = 0
         for _ in 0..<ticks {
             session.tick(); advanced += 1
-            snapshot = session.snapshot
-            if snapshot.isComplete || ProcessInfo.processInfo.systemUptime >= deadline { break }
+            if session.isSimulationComplete || ProcessInfo.processInfo.systemUptime >= deadline { break }
         }
+        snapshot = session.snapshot
         if !snapshot.isComplete { clock.deferTicks(ticks - advanced) }
         // Catch-up ticks accumulate cues; spatial placement and scheduling run once per frame.
-        effects.update(session: session, viewport: playfieldView.gameViewport)
-        let candidates = renderCurrentFrame(force: true)
+        effects.update(session: session, viewport: playfieldView.gameViewport, snapshot: snapshot)
+        let candidates = renderCurrentFrame(force: true, snapshot: snapshot)
         updateHUD(snapshot: snapshot, candidates: candidates)
         if snapshot.isComplete {
             presentCompletion()
@@ -775,7 +777,7 @@ typealias MobileGameControllerBase = UIViewController
             engineIdentifier: session.engineIdentifier,
             showsMenuButton: showsMenuButton, television: television,
             topBarInsets: MobileSystemRegions.topBarInsets(in: view),
-            navigationRail: MobileSystemRegions.navigationRail(in: view),
+            navigationRail: nil,
             fillsDisplayWidth: MobileSystemRegions.usesFullDisplay(in: view),
             menuLeading: MobileSystemRegions.usesFullDisplay(in: view)
         )
@@ -1083,13 +1085,13 @@ typealias MobileGameControllerBase = UIViewController
         playfieldView.gameViewport = viewport
     }
 
-    @discardableResult func renderCurrentFrame(force: Bool) -> [MobileTargetCandidate]? {
+    @discardableResult func renderCurrentFrame(force: Bool, snapshot suppliedSnapshot: MobileGameSnapshot? = nil) -> [MobileTargetCandidate]? {
         #if os(tvOS)
         ensureTVPointer()
         updateTVPointer()
         #endif
         if pollingController { controllerRenderPending = controllerRenderPending || force; return nil }
-        let snapshot = session.snapshot
+        let snapshot = suppliedSnapshot ?? session.snapshot
         let tick = snapshot.tick
         guard force || tick != lastRenderedTick else { return nil }
         controllerRenderPending = false

@@ -78,6 +78,7 @@ import UIKit
     var skillIcons: [CGImage?] = []
     var counterStyle: ClassicCounterStyle = .game
     private var panelImage: CGImage?
+    private var cachedPanel: MobilePixelFrame?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -170,14 +171,22 @@ import UIKit
         self.paused = paused
         self.speed = speed
         self.endRunArmed = endRunArmed
-        panelImage = panel.flatMap(Self.image)
+        if cachedPanel != panel {
+            cachedPanel = panel
+            panelImage = panel.flatMap(Self.image)
+        }
         minimapView.frame = mapFrame ?? .zero
         minimapView.overlay = layout.portrait != nil || replayMapFrame != nil
         minimapView.isHidden = mapFrame == nil
         skillScroll.isHidden = layout.portrait == nil
+        let screenEdges = MobileSystemRegions.isFoldable(in: self)
         if let portrait = layout.portrait {
-            skillScroll.frame = portrait.skills
-            skillScroll.contentSize = CGSize(width: portrait.skillContentWidth, height: portrait.skills.height)
+            var skills = portrait.skills
+            if screenEdges, abs(skills.maxY - layout.interface.safeFrame.maxY) < 0.01 {
+                skills.size.height = bounds.maxY - skills.minY
+            }
+            skillScroll.frame = skills
+            skillScroll.contentSize = CGSize(width: portrait.skillContentWidth, height: skills.height)
             skillCanvas.frame = CGRect(origin: .zero, size: skillScroll.contentSize)
             let maximumOffset = max(0, skillScroll.contentSize.width - skillScroll.bounds.width)
             let offset = CGPoint(x: min(maximumOffset, max(0, skillScroll.contentOffset.x)), y: 0)
@@ -191,13 +200,14 @@ import UIKit
                                           paused: paused, speed: speed, endRunArmed: endRunArmed)
         if previousActions != items.map(\.action) { rebuildButtons() }
         for (button, item) in zip(buttons, items) {
+            let inputFrame = MobileHUDRenderer.edgeInputFrame(for: item, layout: layout, displayBounds: bounds, screenEdges: screenEdges)
             (button as? MobileHUDButton)?.activatesOnPress = item.action == .pause && !paused
             if case .skill = item.action, let portrait = layout.portrait {
                 if button.superview !== skillCanvas { skillCanvas.addSubview(button) }
-                button.frame = item.inputFrame.offsetBy(dx: -portrait.skills.minX, dy: -portrait.skills.minY)
+                button.frame = inputFrame.offsetBy(dx: -portrait.skills.minX, dy: -portrait.skills.minY)
             } else {
                 if button.superview !== self { addSubview(button) }
-                button.frame = item.inputFrame
+                button.frame = inputFrame
             }
             button.accessibilityLabel = item.accessibilityLabel
             button.accessibilityTraits = item.action == .skill(selectedSkill)
@@ -264,10 +274,12 @@ import UIKit
 
     private func renderer() -> MobileHUDRenderer? {
         guard let layout, let snapshot else { return nil }
+        let cornerInsets = MobileSystemRegions.contentInsets(in: self)
         return MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
                           panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails, replayLevel: replayLevel, shape: MobileSystemRegions.controlShape(in: self),
-                          duoCorners: MobileSystemRegions.isFoldable(in: self))
+                          duoCorners: MobileSystemRegions.isFoldable(in: self), displayBounds: bounds,
+                          displayCornerRadius: max(cornerInsets.top, cornerInsets.bottom))
     }
 
     private func rebuildButtons() {

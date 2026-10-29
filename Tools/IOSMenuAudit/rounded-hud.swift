@@ -14,6 +14,14 @@ extension MenuAudit {
         guard ordinary.contains(leftPoint), ordinary.contains(rightPoint),
               !left.contains(leftPoint), left.contains(rightPoint),
               !right.contains(rightPoint), right.contains(leftPoint) else { throw invalidTargets(line: #line) }
+        let square = GameControlGroupArt.path(in: cornerSample, screenEdges: true)
+        let screenRight = GameControlGroupArt.path(in: cornerSample, bottomRight: true, screenEdges: true)
+        let screenTop = GameControlGroupArt.path(in: cornerSample, screenEdges: true, topRight: true)
+        guard square.contains(CGPoint(x: 1, y: 1)), square.contains(CGPoint(x: 63, y: 79)),
+              screenRight.contains(CGPoint(x: 1, y: 79)), screenRight.contains(CGPoint(x: 63, y: 1)),
+              !screenRight.contains(CGPoint(x: 63, y: 79)),
+              screenTop.contains(CGPoint(x: 63, y: 79)), !screenTop.contains(CGPoint(x: 63, y: 1))
+        else { throw invalidTargets(line: #line) }
         let ports = content.deletingLastPathComponent()
         let storage = MobileStorage(directory: output.appendingPathComponent("isolated-storage"))
         let libraries: [any MobileGameLibrary] = [try ClassicMobileLibrary(directory: content),
@@ -22,7 +30,7 @@ extension MenuAudit {
         let poses: [(String, MobileSize, MobileInsets, MobileInsets, CGFloat, [MobileReservedRegion])] = [
             ("ipad-landscape", .init(width: 1024, height: 768), .init(bottom: 20), .init(), 20, []),
             ("ipad-wide", .init(width: 1366, height: 1024), .init(bottom: 20), .init(), 20, []),
-            ("duo-main", .init(width: 834, height: 1194), .init(left: 64), .init(), 90, []),
+            ("duo-main", .init(width: 834, height: 1194), .init(), .init(), 90, []),
             ("landscape", .init(width: 650, height: 465), .init(top: 20, bottom: 20), .init(left: 48, right: 48), 90, []),
             ("portrait", .init(width: 465, height: 650), .init(top: 20, bottom: 20), .init(left: 48, right: 48), 90, []),
             ("book", .init(width: 1194, height: 834), .init(top: 20, bottom: 20), .init(left: 56, right: 56), 110,
@@ -42,8 +50,9 @@ extension MenuAudit {
             let panel = session.panelFrame.flatMap(MobileBitmapRenderer.image)
             let icons = session.snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
             for (pose, size, safe, clearance, radius, regions) in poses {
-                let menuLeading = regions.isEmpty && pose != "duo-main"
-                let rail: MobileRect? = pose == "duo-main" ? .init(x: 0, y: 110, width: 64, height: 974) : nil
+                let menuLeading = pose == "portrait"
+                let rail: MobileRect? = nil
+                let duo = !pose.hasPrefix("ipad-")
                 let bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
                 let screen = CGPath(roundedRect: bounds, cornerWidth: radius, cornerHeight: radius, transform: nil)
                 func fits(_ frame: CGRect) -> Bool {
@@ -51,11 +60,10 @@ extension MenuAudit {
                     return [CGPoint(x: box.minX, y: box.minY), .init(x: box.maxX, y: box.minY),
                         .init(x: box.minX, y: box.maxY), .init(x: box.maxX, y: box.maxY)].allSatisfy { screen.contains($0) }
                 }
-                // Model corner adaptation on the longer axis without consuming the
-                // short playfield dimension. Every visible control must fit the screen.
-                let cornerSafe = size.width > size.height
-                    ? MobileInsets(top: safe.top, left: max(safe.left, radius), bottom: safe.bottom, right: max(safe.right, radius))
-                    : MobileInsets(top: max(safe.top, radius), left: safe.left, bottom: max(safe.bottom, radius), right: safe.right)
+                // Duo uses vertical corner clearance with full-width fixed rows.
+                let cornerSafe = duo
+                    ? MobileInsets(top: max(safe.top, radius), bottom: max(safe.bottom, radius))
+                    : MobileInsets(top: safe.top, left: max(safe.left, radius), bottom: safe.bottom, right: max(safe.right, radius))
                 for state in ["running", "paused", "selected-last", "undo"] {
                     let original = session.snapshot
                     let snapshot = MobileGameSnapshot(tick: original.tick, released: original.released, total: original.total,
@@ -64,11 +72,11 @@ extension MenuAudit {
                         isEndingRun: state == "undo", skills: original.skills)
                     let layout = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
-                        engineIdentifier: session.engineIdentifier, topBarInsets: clearance, navigationRail: rail,
-                        menuLeading: menuLeading)
+                        engineIdentifier: session.engineIdentifier, topBarInsets: duo ? .init() : clearance, navigationRail: rail,
+                        fillsDisplayWidth: menuLeading, menuLeading: menuLeading)
                     let baseline = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
-                        engineIdentifier: session.engineIdentifier, navigationRail: rail)
+                        engineIdentifier: session.engineIdentifier, navigationRail: rail, fillsDisplayWidth: menuLeading)
                     let selected = state == "selected-last" ? snapshot.skills.count - 1 : 0
                     let paused = state == "paused"
                     let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot,
@@ -77,7 +85,19 @@ extension MenuAudit {
                         guard let portrait = layout.portrait, case .skill = item.action else { return true }
                         return portrait.skills.contains(item.inputFrame)
                     }
-                    guard visibleTargets.allSatisfy({ fits($0.inputFrame) }) else { throw invalidTargets(line: #line) }
+                    guard visibleTargets.allSatisfy({ item in
+                        if menuLeading, item.inputFrame.minY >= layout.interface.controlsFrame.minY {
+                            return bounds.contains(item.inputFrame) && screen.contains(CGPoint(x: item.inputFrame.midX, y: item.inputFrame.midY))
+                        }
+                        return fits(item.inputFrame)
+                    }) else { throw invalidTargets(line: #line) }
+                    let edgeTargets = visibleTargets.map {
+                        MobileHUDRenderer.edgeInputFrame(for: $0, layout: layout, displayBounds: bounds, screenEdges: duo)
+                    }
+                    guard zip(visibleTargets, edgeTargets).allSatisfy({ bounds.contains($0.1) && $0.1.contains($0.0.inputFrame) }),
+                          edgeTargets.enumerated().allSatisfy({ index, frame in
+                              edgeTargets.dropFirst(index + 1).allSatisfy { !frame.intersects($0) }
+                          }) else { throw invalidTargets(line: #line) }
                     let identity = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: true)
                     if menuLeading, let menu = targets.first(where: { $0.action == .menu }),
                        menu.frame.maxX + 4 != layout.interface.statusFrame.minX {
@@ -88,7 +108,7 @@ extension MenuAudit {
                           let menu = targets.first(where: { $0.action == .menu }), fits(menu.inputFrame),
                           menu.inputFrame.width == (rail?.width ?? 44) && menu.inputFrame.height == 44,
                           (!menuLeading || (menu.frame.maxX + 4 == layout.interface.statusFrame.minX &&
-                              layout.interface.statusFrame.maxX == layout.interface.safeFrame.maxX - clearance.right)),
+                              layout.interface.statusFrame.maxX == layout.interface.safeFrame.maxX)),
                           targets.first(where: { $0.inputFrame.contains(.init(x: menu.frame.midX, y: menu.frame.midY)) })?.action == .menu,
                           targets.filter({ $0.action != .menu }).allSatisfy({ !$0.inputFrame.intersects(menu.inputFrame) })
                     else { throw invalidTargets(line: #line) }
@@ -136,13 +156,50 @@ extension MenuAudit {
                     }
                     MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selected, paused: paused, speed: 1,
                         endRunArmed: false, panelImage: panel, typography: typography, skillIcons: icons, playerName: "PLA", shape: .rounded,
-                        duoCorners: !pose.hasPrefix("ipad-"))
+                        duoCorners: !pose.hasPrefix("ipad-"), displayBounds: bounds)
                         .draw(in: context, bounds: bounds)
                     context.restoreGState()
                     for region in regions { context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame)) }
                     try save(context: context, to: output.appendingPathComponent("\(session.engineIdentifier)-\(pose)-\(state).png"))
                     captures += 1
                 }
+            }
+        }
+        let home = MobileHomeArt.page(resume: [.init("resume", "Resume journey")],
+            journey: .init("journey", "Journey map"), families: [
+                .init("classic", "Classic Lemmings"), .init("fan", "Fan Lemmings"),
+                .init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)], initials: "PLA")
+        for (name, page) in [("home", home), ("whats-new", MobileInformationArt.whatsNew(version: "2.3")),
+                             ("settings", MobileSettingsArt.groups())] {
+            let layout = GameFrontEnd.layout(page, width: 495, minimumHeight: 540, boxedHome: page.home)
+            let geometry = GameMenuBackdropArt.geometry(in: CGRect(origin: .zero, size: layout.size),
+                layout: layout, scale: 1, shape: .rounded)
+            let surface = geometry.frame
+            guard GameMenuBackdropArt.opacity == 0.80 else { throw invalidTargets(line: #line) }
+            if let bottom = layout.targets.map(\.frame.maxY).max(),
+               let button = layout.targets.filter({ abs($0.frame.maxY - bottom) < 0.5 }).max(by: { $0.frame.maxX < $1.frame.maxX }),
+               abs(button.frame.maxX - (layout.targets.map(\.frame.maxX).max() ?? 0)) < 0.5,
+               ([layout.heading, layout.subtitle, layout.preview, layout.initials, layout.stars] + layout.details).map(\.maxY).max() ?? 0 <= bottom {
+                let gap = surface.maxX - button.frame.maxX
+                guard abs(surface.maxY - bottom - gap) < 0.01,
+                      abs(geometry.radius - gap - min(20, min(button.frame.width, button.frame.height) / 4)) < 0.01
+                else { throw invalidTargets(line: #line) }
+            }
+            let maximumOffset = max(0, layout.size.height - 540)
+            for (position, offset) in [("top", CGFloat.zero), ("middle", maximumOffset / 2), ("bottom", maximumOffset)] {
+                let context = CGContext(data: nil, width: 495, height: 720, bitsPerComponent: 8, bytesPerRow: 1980,
+                    space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+                context.translateBy(x: 0, y: 720); context.scaleBy(x: 1, y: -1)
+                context.setFillColor(CGColor(srgbRed: 0.3, green: 0.5, blue: 0.2, alpha: 1))
+                context.fill(CGRect(x: 0, y: 0, width: 495, height: 720))
+                context.saveGState()
+                context.clip(to: CGRect(x: 0, y: 90, width: 495, height: 540))
+                context.translateBy(x: 0, y: 90 - offset)
+                GameMenuBackdropArt.draw(in: context, frame: surface, radius: geometry.radius)
+                GameFrontEnd.draw(page, layout: layout, typography: typography, fillsCanvas: false, shape: .rounded,
+                    drawsBackdrop: false, in: context)
+                context.restoreGState()
+                try save(context: context, to: output.appendingPathComponent("menu-overlay-\(name)-\(position).png"))
             }
         }
         print("PASS: \(captures) rounded-screen HUD captures across Classic/L2/L3, both orientations and Duo poses; complete visible control rectangles, bitmap fields, Menu input, reserved regions and unchanged gameplay geometry. Windowless and muted.")

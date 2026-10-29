@@ -73,13 +73,16 @@ public struct MobileHUDLayout: Equatable, Sendable {
                             fillsDisplayWidth: Bool = false, menuLeading: Bool = false) -> MobileHUDLayout {
         let systemRegions = reservedRegions
         let reservedRegions = fillsDisplayWidth ? reservedRegions.filter { $0.kind == .division } : reservedRegions
+        let deckSafeArea = fillsDisplayWidth && container.height > container.width
+            ? MobileInsets(top: safeArea.top, left: safeArea.left, bottom: min(safeArea.bottom, 20), right: safeArea.right)
+            : safeArea
         var layout = navigationRail.flatMap {
-            navigationRailLayout(container: container, safeArea: safeArea, rail: $0,
+            navigationRailLayout(container: container, safeArea: deckSafeArea, rail: $0,
                 hasRate: hasRate, skillCount: max(0, skillCount), supportsRewind: supportsRewind,
                 reservedRegions: reservedRegions)
-        } ?? makeTouchLayout(container: container, safeArea: safeArea, hasRate: hasRate,
+        } ?? makeTouchLayout(container: container, safeArea: deckSafeArea, hasRate: hasRate,
             skillCount: skillCount, reservedRegions: reservedRegions, supportsRewind: supportsRewind,
-            hasPlayer: hasPlayer, engineIdentifier: engineIdentifier)
+            hasPlayer: hasPlayer, engineIdentifier: engineIdentifier, compactOuterDeck: fillsDisplayWidth)
         if fillsDisplayWidth, layout.interface.controlsPlacement != .trailingRail {
             // A rotated front camera can sit at the bottom. Keep the entire fixed deck
             // above it rather than dropping the occlusion or reshaping individual skills.
@@ -95,7 +98,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
                     bottom: max(0, container.height - clear.maxY), right: max(0, container.width - clear.maxX))
                 layout = makeTouchLayout(container: container, safeArea: clearance, hasRate: hasRate,
                     skillCount: skillCount, reservedRegions: reservedRegions, supportsRewind: supportsRewind,
-                    hasPlayer: hasPlayer, engineIdentifier: engineIdentifier)
+                    hasPlayer: hasPlayer, engineIdentifier: engineIdentifier, compactOuterDeck: fillsDisplayWidth)
             }
         }
         layout = topStatusLayout(layout, television: television)
@@ -345,7 +348,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
 
     private static func makeTouchLayout(container: MobileSize, safeArea: MobileInsets, hasRate: Bool, skillCount: Int,
                                        reservedRegions: [MobileReservedRegion], supportsRewind: Bool,
-                                       hasPlayer: Bool, engineIdentifier: String) -> MobileHUDLayout {
+                                       hasPlayer: Bool, engineIdentifier: String, compactOuterDeck: Bool) -> MobileHUDLayout {
         let controlCount = (hasRate ? 2 : 0) + max(0, skillCount) + (supportsRewind ? 7 : 5)
         let base = MobileLayoutEngine.make(container: container, safeArea: safeArea, controlCount: 0)
         let safe = base.safeFrame
@@ -363,7 +366,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
                                             supportsRewind: supportsRewind, skillCount: skillCount) {
             return panel
         }
-        if base.orientation == .landscape, safe.width >= 400, safe.height >= 258 {
+        if base.orientation == .landscape, safe.width >= 400, safe.height >= 222 {
             let landscape = landscapeLayout(base: base, hasRate: hasRate, skillCount: max(0, skillCount),
                                             supportsRewind: supportsRewind, reservedRegions: reservedRegions)
             if let skills = landscape.portrait,
@@ -373,7 +376,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         if safe.width >= 308, safe.height >= 308 {
             let portrait = portraitLayout(base: base, hasRate: hasRate, skillCount: max(0, skillCount),
                                           supportsRewind: supportsRewind,
-                                          reservedRegions: reservedRegions)
+                                          reservedRegions: reservedRegions, compactOuterDeck: compactOuterDeck)
             if portraitControlsFit(portrait, avoiding: reservedRegions) { return portrait }
         }
         return macPanelLayout(base: base, hasRate: hasRate, skillCount: skillCount,
@@ -648,9 +651,10 @@ public struct MobileHUDLayout: Equatable, Sendable {
 
     private static func portraitLayout(base: MobileInterfaceLayout, hasRate: Bool, skillCount: Int,
                                        supportsRewind: Bool,
-                                       reservedRegions: [MobileReservedRegion]) -> MobileHUDLayout {
+                                       reservedRegions: [MobileReservedRegion], compactOuterDeck: Bool) -> MobileHUDLayout {
         let safe = base.safeFrame
-        let gap: CGFloat = 2, skillHeight: CGFloat = 80, transportHeight: CGFloat = 48
+        let gap: CGFloat = compactOuterDeck ? 0 : 2, skillHeight: CGFloat = compactOuterDeck ? 64 : 80
+        let transportHeight: CGFloat = compactOuterDeck ? 44 : 48
         let skillY = safe.maxY - transportHeight - gap - skillHeight
         let navigationY = skillY - gap - 44
         let skillWidth = max(44, (safe.width - gap * CGFloat(max(0, skillCount - 1))) / CGFloat(max(1, skillCount)))
@@ -660,7 +664,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         }
         let transportY = skillY + skillHeight + gap
         let rateWidth: CGFloat = hasRate ? 116 : 0
-        let groupGap: CGFloat = 4
+        let groupGap: CGFloat = compactOuterDeck ? 0 : 4
         let buttonWidth = (safe.width - rateWidth - groupGap * CGFloat(hasRate ? 3 : 2)) / 3
         let start = safe.minX + rateWidth + (hasRate ? groupGap : 0)
         func transport(_ index: Int) -> MobileRect {
@@ -671,9 +675,9 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let menu = MobileRect(x: safe.maxX - 44, y: safe.minY, width: 44, height: 44)
         let navigationCount = supportsRewind ? 3 : 1
         func navigation(_ index: Int) -> MobileRect {
-            MobileRect(x: safe.minX + CGFloat(index) * 46, y: navigationY, width: 44, height: 44)
+            MobileRect(x: safe.minX + CGFloat(index) * (44 + gap), y: navigationY, width: 44, height: 44)
         }
-        let navigationWidth = CGFloat(navigationCount) * 46 - gap
+        let navigationWidth = CGFloat(navigationCount) * (44 + gap) - gap
         let map = CGRect(x: safe.minX + navigationWidth + groupGap, y: navigationY,
                          width: safe.width - navigationWidth - groupGap, height: 44)
         var frames: [MobileRect] = []
@@ -703,7 +707,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
     private static func landscapeLayout(base: MobileInterfaceLayout, hasRate: Bool, skillCount: Int,
                                         supportsRewind: Bool, reservedRegions: [MobileReservedRegion]) -> MobileHUDLayout {
         let safe = base.safeFrame
-        let height: CGFloat = 80, gap: CGFloat = 2, groupGap = GameHUDControlGroup.spacing
+        let height: CGFloat = min(80, max(44, safe.height - 178))
+        let gap: CGFloat = 2, groupGap = GameHUDControlGroup.spacing
         let rowY = safe.maxY - height
         let navigationY = rowY - gap - 44
         let buttonWidth = min(64, max(44, floor(safe.width * 0.08)))

@@ -6,10 +6,15 @@ import UIKit
 @MainActor enum MobileSystemRegions {
     private static let hingedWindows = NSHashTable<UIWindow>.weakObjects()
 
+    private static var deviceHingeKey: String? {
+        UIDevice.current.identifierForVendor.map { "mobile.hingeDevice." + $0.uuidString }
+    }
+
     /// Hinge availability identifies the outer display too, where no division region need be supplied.
     static func noteHinge(in view: UIView) {
         guard let window = (view as? UIWindow) ?? view.window, !hingedWindows.contains(window) else { return }
         hingedWindows.add(window)
+        if let key = deviceHingeKey { UserDefaults.standard.set(true, forKey: key) }
         window.rootViewController?.view.setNeedsLayout()
     }
 
@@ -32,10 +37,10 @@ import UIKit
     /// The display is the canvas. Local occlusions constrain content, rather than reserving a whole edge.
     static func contentInsets(in view: UIView) -> UIEdgeInsets {
         guard isFoldable(in: view) else { return view.safeAreaInsets }
-        // Fit controls along the longer axis. Scenery still extends across the display.
+        // Keep the fixed rows full width; vertical clearance protects their content.
         if #available(iOS 26.0, tvOS 26.0, *) {
-            return view.edgeInsets(for: .safeArea(cornerAdaptation:
-                view.bounds.width > view.bounds.height ? .horizontal : .vertical))
+            let corners = view.edgeInsets(for: .safeArea(cornerAdaptation: .vertical))
+            return UIEdgeInsets(top: corners.top, left: 0, bottom: corners.bottom, right: 0)
         }
         return UIEdgeInsets(top: view.safeAreaInsets.top, left: 0,
                             bottom: view.safeAreaInsets.bottom, right: 0)
@@ -68,6 +73,7 @@ import UIKit
      */
     static func isFoldable(in view: UIView) -> Bool {
         if let window = (view as? UIWindow) ?? view.window, hingedWindows.contains(window) { return true }
+        if let key = deviceHingeKey, UserDefaults.standard.bool(forKey: key) { return true }
         guard let kind = MobileReservedRegionRuntime.kind("divisionRegionKind") else { return false }
         return MobileReservedRegionRuntime.hasRegions(in: view, kind: kind, includeInactive: true)
     }
@@ -82,8 +88,8 @@ import UIKit
     /// Extra horizontal clearance for the header, relative to the ordinary safe area.
     static func topBarInsets(in view: UIView) -> MobileInsets {
         #if os(iOS)
-        if usesFullDisplay(in: view) {
-            let header = MobileRect(x: view.bounds.minX, y: view.bounds.minY,
+        if isFoldable(in: view) {
+            let header = MobileRect(x: view.bounds.minX, y: view.bounds.minY + contentInsets(in: view).top,
                                     width: view.bounds.width, height: MobileHUDLayout.rowHeight)
             let free = MobileDisplayRegions.clearHorizontalFrame(header, avoiding: read(in: view))
             return MobileInsets(left: free.minX - header.minX, right: header.maxX - free.maxX)

@@ -17,15 +17,17 @@ Mac graphics-cycle tile; graphics remains in Settings and on F2. Remove the
 duplicate timeline Hint and keep that group for rewind and stepping. Home uses
 Collections for the page containing favourites, recents and playlists.
 
-On Mac, iOS and tvOS, Main menu stays at the top-right of the safe menu viewport.
-Back and optional tools occupy the remaining header space. Keep the header fixed
-while the page scrolls. Each menu action row fills its available width, including
+On macOS, Back and Main menu use regular stone buttons in the panel’s bottom
+action row, alongside its other actions. Full-window pages keep them in a fixed
+bottom row. On iOS and tvOS, Main menu stays at the top-right of the safe menu
+viewport. Back and optional tools occupy the remaining header space. Keep the
+header fixed while the page scrolls. Each menu action row fills its available width, including
 partial rows. Divide that row equally among its actual buttons. Reflow narrow
 level-browser controls into complete rows with at least 44-point targets.
 Keep paired rank controls together when the browser wraps. Do not repeat its
 Back control when the fixed header supplies the same return.
 
-Pause and replay use the same hierarchy: fixed return and Main menu, related
+Pause and replay use the same hierarchy: visible return and Main menu, related
 tools in labelled groups, then one fixed primary action. Place Level tools
 before previews and statistics so compact panes expose Skip level promptly.
 Let each group choose its columns independently. Focus must reveal scrolling
@@ -1547,29 +1549,47 @@ remain manual checks. The new help and accessibility text use English fallback
 until translated.
 
 
-Duo's controls embrace the rounded display. Shape the bottom-left and
-bottom-right control outlines with a longer curve on the outside lower corner,
-following the display's curved silhouette. Keep joined controls and their full
-rectangular touch and accessibility targets. Use rounded stone sockets, flat
-rounded information panels and matching focus outlines in the shared bitmap
-renderers. Keep crisp pixel edges, shipped textures and bitmap lettering.
-Use smaller curves on controls than on their enclosing panels. Keep the full
-rectangular touch and accessibility targets, including the transparent corners.
-Retain the system's corner-adapted safe area for HUD controls, using the longer
-display axis so short landscape playfields retain their height. Portrait phone library menus scroll across the full display height. Keep the
-first and last content positions clear of system regions and fixed navigation.
-Other outer-display menus keep full width and vertical corner clearance. Keep scenery
-edge to edge and use reserved-region logic for cameras and hinges.
+Duo gameplay uses full-width fixed control rows on its outer and opened displays.
+Menu stays at the right of the top status bar. Extend their drawn surfaces to the
+physical top corners while retaining camera-safe lettering and action centres.
+Skill rows and joined interior edges stay square. The outside bottom controls
+follow the display curves; each display curve meets a square interior corner.
+Extend the bottom row surfaces and rectangular touch/accessibility targets through
+the lower display clearance. Keep the content itself clear of system regions.
+Short landscape decks reduce their row height while retaining 44-point targets
+and at least 88 points of playfield. Cameras and hinges retain reserved regions.
+
+Duo and tablet library menus draw their black background at 80% opacity with Overlay blending in the
+same scrolling surface as their content. Align the bottom margin and corner to
+the last button row's side margin and contour at its rendered scale. Background,
+content and action targets move together; navigation remains fixed. Stable layout
+means no delayed remeasurement, not a separate stationary background. Apply Overlay
+only to the background layer, keeping lettering and controls normally composited.
+TV retains its existing effects budget.
+
+Layout measurements must settle before a page is shown. Reuse one completed
+measurement for sizing, artwork and input targets; drawing must not calculate a
+fallback layout. Identical page updates and layout passes must not rebuild targets
+or request another geometry redraw. Retain confirmed Duo capability on that device so
+later launches do not first show ordinary phone layout while awaiting a hinge
+callback. Real window, pose, interface-size and content changes may reflow.
+Mac pages complete their nested layout during presentation, including What's new.
 Original panel artwork supplies bitmap glyphs and textures. The authored TV
 panel retains its arrangement; Duo, landscape iPad and Mac use the grouped
 adaptive treatment described above. Menus retain their shared rounded surfaces.
 
 On Duo's outer display, draw scenery and page backgrounds to every edge.
-Place Main menu at the left of the fixed gameplay header. Let the status strip
-continue to the right edge of its camera-safe span. Keep the button and strip
-separate for focus and touch, with the same pixel contours as the other controls.
-Choose a fixed content area from the scene's current reserved regions before
-measuring Home, level browsing, Ready, pause, results, recovery or settings.
+The portrait gameplay deck uses compact skill and transport rows, retaining at
+least 44-point targets. Join the tracking controls, minimap, skills and transport
+rows into a continuous grid, with their outer edges aligned. The bottom outline
+follows both display corners and the edge artwork stays inside the visible curve.
+Put Menu at the leading edge of the status header and
+centre its icon vertically in the visible header. Tapping a level preview starts
+that level through the same action as Play; loading and readiness rules still apply.
+Keep Menu and the status strip separate for focus and touch, with square joined
+interior corners and the display curves only on the outside. Choose a fixed content
+area from the scene's current reserved regions before measuring Home, level
+browsing, Ready, pause, results, recovery or settings.
 On portrait Duo menus, place the page title in a fixed bitmap header above the
 navigation buttons. Scrolling starts below those buttons, and the first and
 last content positions retain system clearance. Other portrait phone menus may

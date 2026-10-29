@@ -219,17 +219,19 @@ import LemmingsGameArt
     func reattach() {
         guard let root = gameWindow?.contentView, let current = pages.last else { return }
         let container = current.container
+        container.isHidden = true
+        current.view.isHidden = false
         if container.superview !== root {
             container.removeFromSuperview()
             container.frame = root.bounds
             container.autoresizingMask = [.width, .height]
             root.addSubview(container, positioned: .above, relativeTo: nil)
-            gameWindow?.makeFirstResponder(current.focus)
         }
-        container.isHidden = false
         container.needsLayout = true
         container.layoutSubtreeIfNeeded()
-        current.view.isHidden = false
+        current.view.layoutSubtreeIfNeeded()
+        container.isHidden = false
+        gameWindow?.makeFirstResponder(current.focus)
     }
     /**
      * Rebuild one translated page while retaining the modal stack and the paused game beneath it.
@@ -340,6 +342,9 @@ import LemmingsGameArt
         back.wrapsTitle = true
         back.onPress = { [weak page] in if let page { GameScreen.shared.goBack(from: page) } }
         addSubview(back)
+        if GameScreen.shared.onMainMenu != nil, let menu = page as? GameMenuPage {
+            menu.installNavigationFooter(home: home, back: back)
+        }
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
         setAccessibilitySubrole(.dialog)
@@ -359,13 +364,23 @@ import LemmingsGameArt
         let showsBack = (page as? GameMenuPage)?.controllerBackButton.isHidden != true
         back.title = (page as? GameMenuPage)?.backTitle ?? (page as? SolutionReplayPage)?.navigationBackButton?.title ?? L10n.text("Back")
         back.isHidden = !visible || !showsBack
-        let layout = GameNavigationArt.layout(width: bounds.width, actions: GameNavigationArt.actions(back: showsBack, backTitle: back.title))
-        for target in layout.targets {
-            if target.action.id == "navigation.back" { back.frame = target.frame }
-            else if target.action.id == "navigation.home" { home.frame = target.frame }
+        if home.superview !== self {
+            scroll.frame = bounds
+        } else {
+            let buttons = [back, home].filter { !$0.isHidden }
+            let inset: CGFloat = 24
+            let gap: CGFloat = 12
+            let width = max(1, (bounds.width - inset * 2 - CGFloat(max(0, buttons.count - 1)) * gap) / CGFloat(max(1, buttons.count)))
+            let height = max(48, buttons.map {
+                GameTextLayout.height($0.title, width: max(1, width - 24), font: GameMenuArtwork.renderer()?.font(.small)) + 12
+            }.max() ?? 48)
+            let shelfHeight = visible ? height + inset * 2 : 0
+            for (index, button) in buttons.enumerated() {
+                button.frame = CGRect(x: inset + CGFloat(index) * (width + gap),
+                    y: bounds.height - inset - height, width: width, height: height)
+            }
+            scroll.frame = CGRect(x: 0, y: 0, width: bounds.width, height: max(0, bounds.height - shelfHeight))
         }
-        let height = visible ? layout.size.height : 0
-        scroll.frame = CGRect(x: 0, y: height, width: bounds.width, height: max(0, bounds.height - height))
         scroll.layoutSubtreeIfNeeded()
     }
 }
@@ -404,6 +419,7 @@ import LemmingsGameArt
         hasVerticalScroller = documentSize.height > size.height + 0.5
         page.frame = CGRect(origin: .zero, size: documentSize)
         page.needsLayout = true
+        page.layoutSubtreeIfNeeded()
         if !hasHorizontalScroller && !hasVerticalScroller { contentView.scroll(to: .zero) }
     }
 }
@@ -541,6 +557,17 @@ import LemmingsGameArt
         footerActions.insert(button, at: max(1, footerActions.count - (primaryAction == nil ? 0 : 1)))
         needsLayout = true
         return button
+    }
+    func installNavigationFooter(home: GameActionButton, back: GameActionButton) {
+        for button in footerActions where button.accessibilityIdentifier() == "navigation.home" {
+            button.removeFromSuperview()
+        }
+        footerActions.removeAll { $0.superview !== canvas && $0 !== back }
+        canvas.addSubview(back)
+        canvas.addSubview(home)
+        if !footerActions.contains(where: { $0 === back }) { footerActions.insert(back, at: 0) }
+        footerActions.insert(home, at: min(1, footerActions.count))
+        needsLayout = true
     }
     private func layoutFooterActions() {
         footerActions.removeAll { $0.superview !== canvas }

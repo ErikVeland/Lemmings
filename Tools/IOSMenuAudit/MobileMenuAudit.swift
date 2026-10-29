@@ -19,6 +19,7 @@ import NxlvKit
         let tableResult = ["--table-result", "--book-result"].contains(CommandLine.arguments.last ?? "")
         let extraSkill = CommandLine.arguments.last == "--extra-skill"
         let roundedHUD = CommandLine.arguments.last == "--rounded-hud"
+        let gridHUD = CommandLine.arguments.last == "--grid-hud"
         let bookHome = CommandLine.arguments.last == "--book-home"
         let support = CommandLine.arguments.last == "--support"
         let replayControls = CommandLine.arguments.last == "--replay-controls"
@@ -39,7 +40,7 @@ import NxlvKit
         let navigation = CommandLine.arguments.last == "--navigation"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (replayControls || edgeToEdge || duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (replayControls || edgeToEdge || duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || gridHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -55,6 +56,7 @@ import NxlvKit
         if tableResult { try checkTableResult(typography: typography, content: content, output: output); return }
         if extraSkill { try checkExtraSkill(typography: typography, output: output); return }
         if roundedHUD { try checkRoundedHUD(typography: typography, content: content, output: output); return }
+        if gridHUD { try checkGridHUD(typography: typography, content: content, output: output); return }
         if bookHome { try checkBookHome(typography: typography, content: content, output: output); return }
         if support { try checkSupport(typography: typography, output: output); return }
         if duo { try checkDuo(typography: typography, artwork: artwork, content: content, output: output); return }

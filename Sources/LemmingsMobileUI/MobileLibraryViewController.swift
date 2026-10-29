@@ -38,6 +38,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var menuBackGesture: UIScreenEdgePanGestureRecognizer?
     #endif
     private let homeBackdropView = MobileHomeBackdropView()
+    private let menuBackdropView = UIView()
     private let homeBackdropLoader = MobileHomeBackdropLoader()
     private var homeBackdropTask: Task<Void, Never>?
     private var homeBackdropKey: String?
@@ -45,6 +46,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var topShelfTask: Task<Void, Never>?
     #endif
     private var lastBookPanes: (size: CGSize, panes: [MobileRect]) = (.zero, [])
+    private var usesMenuOverlay: Bool {
+        #if os(iOS)
+        usesHomeBox
+        #else
+        false
+        #endif
+    }
     private var usesHomeBox: Bool {
         #if os(tvOS)
         true
@@ -273,6 +281,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         scrollView.backgroundColor = .black
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.alwaysBounceVertical = false
+        menuBackdropView.backgroundColor = UIColor.black.withAlphaComponent(GameMenuBackdropArt.opacity)
+        menuBackdropView.layer.compositingFilter = "overlayBlendMode"
+        menuBackdropView.isOpaque = false
+        menuBackdropView.isUserInteractionEnabled = false
+        menuBackdropView.isAccessibilityElement = false
+        menuBackdropView.isHidden = true
+        scrollView.addSubview(menuBackdropView)
         scrollView.addSubview(canvas)
         view.addSubview(scrollView)
         canvas.onAction = { [weak self] in self?.handle($0) }
@@ -629,6 +644,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             else { lastBookPanes = (view.bounds.size, book) }
         }
         var menuRegion = book.isEmpty ? MobileSystemRegions.menuFrame(in: view) : safe
+        canvas.usesMenuBackdrop = usesMenuOverlay
         globalNavigation.isHidden = game != nil || route == .home || deskClockShown
         browser.showsBack = globalNavigation.isHidden
         switch route {
@@ -710,11 +726,24 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let contentBottom = max(0, scrollFrame.maxY - menuRegion.maxY)
         scrollView.unobscuredInsets = UIEdgeInsets(top: contentTop, left: 0, bottom: contentBottom, right: 0)
         canvas.frame = CGRect(x: 0, y: contentTop, width: size.width, height: size.height)
-        scrollView.contentSize = CGSize(width: size.width, height: contentTop + size.height + contentBottom)
         #if os(tvOS)
         scrollView.isScrollEnabled = !canvas.page.home && !canvas.page.televisionGrid
         if !scrollView.isScrollEnabled { scrollView.contentOffset = .zero }
         #endif
+        // Commit the background, artwork and targets in this layout transaction.
+        // Overlay belongs only to the background; lettering and controls stay unblended.
+        menuBackdropView.isHidden = !usesMenuOverlay || canvas.isHidden || browserShown
+        let backdrop = canvas.menuBackdropGeometry
+        menuBackdropView.frame = backdrop.frame.offsetBy(dx: canvas.frame.minX, dy: canvas.frame.minY)
+        menuBackdropView.layer.cornerRadius = backdrop.radius
+        let contentHeight = max(contentTop + size.height + contentBottom,
+            menuBackdropView.isHidden ? 0 : menuBackdropView.frame.maxY + contentBottom)
+        let contentSize = CGSize(width: size.width, height: contentHeight)
+        if scrollView.contentSize != contentSize { scrollView.contentSize = contentSize }
+        canvas.layoutIfNeeded()
+        globalNavigation.layoutIfNeeded()
+        settingsTabs.layoutIfNeeded()
+        listTools.layoutIfNeeded()
         game?.view.frame = view.bounds
     }
     private func rememberHomeBackdrop(_ session: any MobileGameSession, at index: Int) {
@@ -728,7 +757,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     private func refreshHomeBackdrop() {
-        let shown = usesHomeBox && route == .home && game == nil
+        let shown = usesHomeBox && (route == .home || usesMenuOverlay) && game == nil
         homeBackdropView.isHidden = !shown
         scrollView.backgroundColor = shown ? .clear : .black
         scrollView.isOpaque = !shown

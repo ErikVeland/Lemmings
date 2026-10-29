@@ -300,7 +300,7 @@ import UIKit
             return LevelCoverArt.coverBounds(for: CGRect(origin: .zero, size: geometry.cardSize)).contains(local)
         }
         guard let hit else { return }
-        if hit == selectedIndex { onActivate?(hit) } else { select(hit, animated: true) }
+        onActivate?(hit)
     }
 }
 #endif

@@ -199,8 +199,8 @@ public final class ClassicMobileSession: MobileGameSession {
     }
     public var rescueSprites: [MobileSpriteHighlight] {
         guard settings?.hdEffectsEnabled == true, settings?.reduceFlashes != true,
-              RescueCelebration.isSecured(saved: snapshot.saved, required: snapshot.required,
-                  isComplete: snapshot.isComplete, didWin: snapshot.didWin) else { return [] }
+              RescueCelebration.isSecured(saved: simulation.savedCount, required: simulation.configuration.requiredToSave,
+                  isComplete: isSimulationComplete, didWin: simulation.didWin) else { return [] }
         return simulation.lemmings.filter(Self.canHighlight).compactMap(spriteHighlight)
     }
     public private(set) var assignmentSprite: MobileSpriteHighlight?
@@ -312,6 +312,10 @@ public final class ClassicMobileSession: MobileGameSession {
             width: Double(renderedLevel?.width ?? simulation.terrain.width),
             height: Double(renderedLevel?.height ?? simulation.terrain.height)
         )
+    }
+
+    public var isSimulationComplete: Bool {
+        simulation.isComplete || (isReadOnly && playbackEndTick.map { simulation.tickCount >= $0 } == true)
     }
 
     public var snapshot: MobileGameSnapshot {

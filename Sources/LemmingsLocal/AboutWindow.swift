@@ -260,6 +260,9 @@ import NxlvKit
         statusLabel.frame = CGRect(x: 16, y: 4, width: max(0, bounds.width - 150), height: 32)
         retry.frame = CGRect(x: max(0, bounds.width - 120), y: 4, width: 104, height: 32)
         scroll.frame = CGRect(x: 0, y: footer, width: bounds.width, height: max(0, bounds.height - footer))
+        // NSScrollView must finish tiling before the reading column is measured.
+        // Otherwise the first visible frame wraps against the previous clip size.
+        scroll.tile()
         let width = max(1, min(680, scroll.contentSize.width - 40))
         let left = floor((scroll.contentSize.width - width) / 2)
         let heights = rows.map { row -> CGFloat in

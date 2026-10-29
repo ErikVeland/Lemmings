@@ -331,6 +331,7 @@ import AVFAudio
 
     /// Pause, speed and reverse scratches use the shared Mac transports.
     func setGameplayState(paused: Bool, speed: Double, rewinding: Bool = false) {
+        guard self.paused != paused || self.speed != speed || self.rewinding != rewinding else { return }
         let changed = self.paused != paused
         self.paused = paused; self.speed = speed; self.rewinding = rewinding
         pitch.update(speed: settings.classic.variableSpeedEnabled ? speed : 1, at: ProcessInfo.processInfo.systemUptime)

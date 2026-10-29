@@ -37,7 +37,10 @@ final class GlobalNavigationTests: XCTestCase {
             let settings = GameMenuPage(title: "Gameplay")
             XCTAssertTrue(screen.present(settings, owner: window))
             let root = try XCTUnwrap(screen.controllerNavigationRoot(in: window))
-            let back = try XCTUnwrap(root.subviews.compactMap { $0 as? NSButton }.first {
+            func descendants(_ view: NSView) -> [NSView] {
+                view.subviews.flatMap { [$0] + descendants($0) }
+            }
+            let back = try XCTUnwrap(descendants(root).compactMap { $0 as? NSButton }.first {
                 $0.accessibilityIdentifier() == "navigation.back"
             })
             back.performClick(nil)
@@ -45,16 +48,19 @@ final class GlobalNavigationTests: XCTestCase {
             XCTAssertEqual(readyPresses, 0)
             XCTAssertTrue(screen.present(settings, owner: window))
             let visibleRoot = try XCTUnwrap(screen.controllerNavigationRoot(in: window))
-            let home = try XCTUnwrap(visibleRoot.subviews.compactMap { $0 as? NSButton }.first {
+            let home = try XCTUnwrap(descendants(visibleRoot).compactMap { $0 as? NSButton }.first {
                 $0.accessibilityIdentifier() == "navigation.home"
             })
             let scroll = try XCTUnwrap(visibleRoot.subviews.compactMap { $0 as? NSScrollView }.first)
             let original = home.frame
+            let canvas = try XCTUnwrap(home.superview)
+            XCTAssertTrue(back.superview === canvas)
+            XCTAssertGreaterThan(home.frame.midY, canvas.bounds.midY)
             scroll.contentView.scroll(to: CGPoint(x: 0, y: 200))
             visibleRoot.layoutSubtreeIfNeeded()
             XCTAssertEqual(home.frame, original)
             XCTAssertGreaterThanOrEqual(home.frame.height, 44)
-            XCTAssertFalse(home.frame.intersects(scroll.frame))
+            XCTAssertFalse(home.frame.intersects(settings.body.frame))
             let point = home.convert(CGPoint(x: home.bounds.midX, y: home.bounds.midY), to: visibleRoot.superview)
             XCTAssertTrue(visibleRoot.hitTest(point) === home)
             scroll.contentView.scroll(to: .zero)

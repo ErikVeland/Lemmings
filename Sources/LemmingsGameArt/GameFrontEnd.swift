@@ -412,15 +412,15 @@ public struct GameFrontEnd {
 
     public static func draw(_ page: Page, layout: Layout, typography: GameMenuTypography,
                             preview: CGImage? = nil, previewSource: CGRect? = nil,
-                            highlighted: String? = nil, portraits: GamePortraitArt? = nil, fillsCanvas: Bool = true, shape: GameControlShape = .square, in context: CGContext) {
+                            highlighted: String? = nil, portraits: GamePortraitArt? = nil, fillsCanvas: Bool = true, shape: GameControlShape = .square, drawsBackdrop: Bool = true, in context: CGContext) {
         context.saveGState()
         defer { context.restoreGState() }
         context.setFillColor(CGColor(gray: 0, alpha: 1))
         let boards = [layout.board] + (layout.secondaryBoard.map { [$0] } ?? [])
-        if fillsCanvas { context.fill(CGRect(origin: .zero, size: layout.size)) }
+        if drawsBackdrop && fillsCanvas { context.fill(CGRect(origin: .zero, size: layout.size)) }
         // Spanned home controls float on the moving scenery, with no panel behind them.
         let floating = page.home && layout.secondaryBoard != nil && !fillsCanvas
-        for board in boards where !floating {
+        for board in boards where drawsBackdrop && !floating {
             if !fillsCanvas { shape.fill(board, in: context) }
             // A drawn frame cannot match a rounded display's hardware corner radius,
             // so the display edge frames full-screen boards and the home menu.

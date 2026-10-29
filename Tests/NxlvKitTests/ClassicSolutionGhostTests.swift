@@ -57,8 +57,8 @@ struct ClassicSolutionGhostTests {
     @Test func silhouetteRetainsTransparentSpaceAndAddsAnOutline() {
         let frame = SolutionGhostPixels(rgba: Data([255, 255, 255, 255]), width: 1, height: 1)
         #expect(frame.width == 3 && frame.height == 3 && frame.padding == 1)
-        #expect(frame.rgba[(1 * 3 + 1) * 4 + 3] == 76)
-        #expect(frame.rgba[(0 * 3 + 1) * 4 + 3] == 150)
+        #expect(frame.rgba[(1 * 3 + 1) * 4 + 3] == 50)
+        #expect(frame.rgba[(0 * 3 + 1) * 4 + 3] == 110)
         #expect(frame.rgba[3] == 0)
         #expect(SolutionGhostPixels(rgba: Data(repeating: 0, count: 16), width: 2, height: 2).rgba.allSatisfy { $0 == 0 })
     }

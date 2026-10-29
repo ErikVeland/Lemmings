@@ -17,7 +17,8 @@ import UIKit
     }
 
     func setViewportFrame(_ frame: CGRect) {
-        if self.frame != frame { cancelInteraction() }
+        guard self.frame != frame else { return }
+        cancelInteraction()
         self.frame = frame
     }
 

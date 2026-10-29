@@ -242,6 +242,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
         inputs.append(.releasePointer(tick: runtime.tick))
     }
 
+    public var isSimulationComplete: Bool { runtime.isComplete }
+
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
             tick: runtime.tick,
@@ -708,6 +710,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public var lostLemmingCount: Int { runtime.lost }
     public var supportsRewind: Bool { true }
 
+    public var isSimulationComplete: Bool { runtime.isComplete }
+
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
             tick: runtime.tick,
@@ -1127,6 +1131,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         levelSize = MobileSize(width: Double(simulation.terrain.width), height: Double(simulation.terrain.height))
     }
 
+    public var isSimulationComplete: Bool { simulation.isComplete }
+
     public var snapshot: MobileGameSnapshot {
         let state = simulation.snapshot()
         let skillStates = controls.map { skill -> MobileSkillState in
@@ -1158,7 +1164,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     public func tick() {
         let events = simulation.tick()
         appendSoundCues(for: events)
-        requestedSpawnInterval = simulation.snapshot().spawnInterval
+        requestedSpawnInterval = simulation.spawnInterval
         if simulation.isComplete, !didNotifyCompletion {
             didNotifyCompletion = true
             onCompletion?(simulation)
