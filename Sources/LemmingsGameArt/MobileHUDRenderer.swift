@@ -19,7 +19,7 @@ public enum MobileHUDAction: Equatable, Sendable {
 /// UIKit and the audit tool draw the same pixels and route the same input rectangles.
 @MainActor public final class MobileHUDRenderer {
     /// The controller supplies the Mac's shared failure decision using live engine counts.
-    public struct StatusDetails {
+    public struct StatusDetails: Equatable {
         public let lost: Int
         public let deathCounter: String
         public let accessibility: String

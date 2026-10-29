@@ -14,16 +14,12 @@
 		100000000000000000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000016 /* Assets.xcassets */; };
 		100000000000000000000006 /* MobileCoreIOSSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000017 /* MobileCoreIOSSmokeTests.swift */; };
 		100000000000000000000007 /* LemmingsMobileCore in Frameworks */ = {isa = PBXBuildFile; productRef = 100000000000000000000082 /* LemmingsMobileCore */; };
-		DC2200000000000000000001 = { isa = PBXBuildFile; fileRef = DC220000000000000000000A; };
-		DC2200000000000000000002 = { isa = PBXBuildFile; productRef = DC2200000000000000000050; };
-		DC2200000000000000000003 = { isa = PBXBuildFile; productRef = DC2200000000000000000051; };
-		DC2200000000000000000004 = { isa = PBXBuildFile; fileRef = DC220000000000000000000B; settings = { ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy,); }; };
-		DC2200000000000000000005 = { isa = PBXBuildFile; fileRef = 100000000000000000000013; };
+		DC2200000000000000000001 /* ../DeskClockWidget/DeskClockWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC220000000000000000000A /* ../DeskClockWidget/DeskClockWidget.swift */; };
+		DC2200000000000000000002 /* LemmingsMobileCore in Frameworks */ = {isa = PBXBuildFile; productRef = DC2200000000000000000050 /* LemmingsMobileCore */; };
+		DC2200000000000000000003 /* LemmingsGameArt in Frameworks */ = {isa = PBXBuildFile; productRef = DC2200000000000000000051 /* LemmingsGameArt */; };
+		DC2200000000000000000004 /* DeskClockWidget.appex in Embed clock widget */ = {isa = PBXBuildFile; fileRef = DC220000000000000000000B /* DeskClockWidget.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DC2200000000000000000005 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000013 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		DC2200000000000000000017 = { isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = ""; dstSubfolderSpec = 13; files = (DC2200000000000000000004,); name = "Embed clock widget"; runOnlyForDeploymentPostprocessing = 0; };
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXContainerItemProxy section */
 		100000000000000000000091 /* PBXContainerItemProxy */ = {
@@ -33,8 +29,28 @@
 			remoteGlobalIDString = 100000000000000000000050;
 			remoteInfo = UltimateLemmingsIOS;
 		};
-		DC220000000000000000005A = { isa = PBXContainerItemProxy; containerPortal = 100000000000000000000060; proxyType = 1; remoteGlobalIDString = DC2200000000000000000032; remoteInfo = DeskClockWidget; };
+		DC220000000000000000005A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 100000000000000000000060 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DC2200000000000000000032;
+			remoteInfo = DeskClockWidget;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DC2200000000000000000017 /* Embed clock widget */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DC2200000000000000000004 /* DeskClockWidget.appex in Embed clock widget */,
+			);
+			name = "Embed clock widget";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		100000000000000000000010 /* UltimateLemmingsIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UltimateLemmingsIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,8 +61,8 @@
 		100000000000000000000015 /* UltimateLemmingsIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UltimateLemmingsIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		100000000000000000000016 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		100000000000000000000017 /* MobileCoreIOSSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreIOSSmokeTests.swift; sourceTree = "<group>"; };
-		DC220000000000000000000A = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../DeskClockWidget/DeskClockWidget.swift; sourceTree = SOURCE_ROOT; };
-		DC220000000000000000000B = { isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DeskClockWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC220000000000000000000A /* ../DeskClockWidget/DeskClockWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../DeskClockWidget/DeskClockWidget.swift; sourceTree = SOURCE_ROOT; };
+		DC220000000000000000000B /* DeskClockWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DeskClockWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +82,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DC2200000000000000000014 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (DC2200000000000000000002, DC2200000000000000000003,); runOnlyForDeploymentPostprocessing = 0; };
+		DC2200000000000000000014 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC2200000000000000000002 /* LemmingsMobileCore in Frameworks */,
+				DC2200000000000000000003 /* LemmingsGameArt in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -86,7 +110,7 @@
 				100000000000000000000016 /* Assets.xcassets */,
 				100000000000000000000012 /* Info.plist */,
 				100000000000000000000013 /* PrivacyInfo.xcprivacy */,
-                DC220000000000000000000A,
+				DC220000000000000000000A /* ../DeskClockWidget/DeskClockWidget.swift */,
 			);
 			path = .;
 			sourceTree = "<group>";
@@ -105,7 +129,7 @@
 			children = (
 				100000000000000000000010 /* UltimateLemmingsIOS.app */,
 				100000000000000000000015 /* UltimateLemmingsIOSUITests.xctest */,
-                DC220000000000000000000B,
+				DC220000000000000000000B /* DeskClockWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -125,12 +149,12 @@
 				100000000000000000000045 /* Mac artwork */,
 				100000000000000000000046 /* Level catalogue */,
 				100000000000000000000047 /* Soundtracks */,
-                DC2200000000000000000017,
+				DC2200000000000000000017 /* Embed clock widget */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-                DC220000000000000000005B,
+				DC220000000000000000005B /* PBXTargetDependency */,
 			);
 			name = UltimateLemmingsIOS;
 			packageProductDependencies = (
@@ -161,7 +185,28 @@
 			productReference = 100000000000000000000015 /* UltimateLemmingsIOSUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		DC2200000000000000000032 = { isa = PBXNativeTarget; buildConfigurationList = DC2200000000000000000046; buildPhases = (DC2200000000000000000015, DC2200000000000000000014, DC2200000000000000000018, DC2200000000000000000016,); buildRules = (); dependencies = (); name = DeskClockWidget; packageProductDependencies = (DC2200000000000000000050, DC2200000000000000000051,); productName = DeskClockWidget; productReference = DC220000000000000000000B; productType = "com.apple.product-type.app-extension"; };
+		DC2200000000000000000032 /* DeskClockWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC2200000000000000000046 /* Build configuration list for PBXNativeTarget "DeskClockWidget" */;
+			buildPhases = (
+				DC2200000000000000000015 /* Sources */,
+				DC2200000000000000000014 /* Frameworks */,
+				DC2200000000000000000018 /* Resources */,
+				DC2200000000000000000016 /* Clock artwork */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DeskClockWidget;
+			packageProductDependencies = (
+				DC2200000000000000000050 /* LemmingsMobileCore */,
+				DC2200000000000000000051 /* LemmingsGameArt */,
+			);
+			productName = DeskClockWidget;
+			productReference = DC220000000000000000000B /* DeskClockWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -207,7 +252,7 @@
 			targets = (
 				100000000000000000000050 /* UltimateLemmingsIOS */,
 				100000000000000000000051 /* UltimateLemmingsIOSUITests */,
-                DC2200000000000000000032,
+				DC2200000000000000000032 /* DeskClockWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -229,22 +274,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DC2200000000000000000018 = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (DC2200000000000000000005,); runOnlyForDeploymentPostprocessing = 0; };
+		DC2200000000000000000018 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC2200000000000000000005 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		B23F3AD7E6F441D68E3A0101 /* Release version history */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = ();
-			inputPaths = ();
-			name = "Release version history";
-			outputPaths = ();
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "zsh \"$SRCROOT/../../Scripts/check-release-history.sh\"\n";
-		};
 		100000000000000000000044 /* Beta content */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -305,7 +345,36 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ \"${IOS_SOURCE_GATE_ONLY:-0}\" = 1 ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ] && [ ! -d \"$SRCROOT/../../Sources/Music\" ]; then\n  echo \"SKIP soundtrack assets in the unsigned source-only gate.\"\nelse\n  python3 \"$SRCROOT/../../Tools/IOSBeta/music.py\" --app \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\nfi\n";
 		};
-		DC2200000000000000000016 = { isa = PBXShellScriptBuildPhase; alwaysOutOfDate = 1; buildActionMask = 2147483647; files = (); inputPaths = (); name = "Clock artwork"; outputPaths = (); runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/sh; shellScript = "artwork_dir=\"${IOS_MAC_ARTWORK_DIR:-$SRCROOT/../../.build/mac-artwork/export/lemmings}\"\nif [ \"${IOS_SOURCE_GATE_ONLY:-0}\" = 1 ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ] && [ ! -f \"$artwork_dir/manifest.json\" ]; then\n  echo \"SKIP clock artwork in the unsigned source-only gate.\"\nelse\n  python3 \"$SRCROOT/../../Tools/DeskClock/prune_artwork.py\" --source \"$artwork_dir\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MacArtwork/lemmings\"\nfi\n"; };
+		B23F3AD7E6F441D68E3A0101 /* Release version history */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Release version history";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "zsh \"$SRCROOT/../../Scripts/check-release-history.sh\"\n";
+		};
+		DC2200000000000000000016 /* Clock artwork */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Clock artwork";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "artwork_dir=\"${IOS_MAC_ARTWORK_DIR:-$SRCROOT/../../.build/mac-artwork/export/lemmings}\"\nif [ \"${IOS_SOURCE_GATE_ONLY:-0}\" = 1 ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ] && [ ! -f \"$artwork_dir/manifest.json\" ]; then\n  echo \"SKIP clock artwork in the unsigned source-only gate.\"\nelse\n  python3 \"$SRCROOT/../../Tools/DeskClock/prune_artwork.py\" --source \"$artwork_dir\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/MacArtwork/lemmings\"\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -326,7 +395,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DC2200000000000000000015 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (DC2200000000000000000001,); runOnlyForDeploymentPostprocessing = 0; };
+		DC2200000000000000000015 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC2200000000000000000001 /* ../DeskClockWidget/DeskClockWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -335,7 +411,11 @@
 			target = 100000000000000000000050 /* UltimateLemmingsIOS */;
 			targetProxy = 100000000000000000000091 /* PBXContainerItemProxy */;
 		};
-		DC220000000000000000005B = { isa = PBXTargetDependency; target = DC2200000000000000000032; targetProxy = DC220000000000000000005A; };
+		DC220000000000000000005B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DC2200000000000000000032 /* DeskClockWidget */;
+			targetProxy = DC220000000000000000005A /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -454,8 +534,58 @@
 			};
 			name = Release;
 		};
-		DC2200000000000000000064 = { isa = XCBuildConfiguration; buildSettings = { APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_STYLE = Automatic; DEVELOPMENT_TEAM = 54WU29TRTY; CURRENT_PROJECT_VERSION = 36; MARKETING_VERSION = 2.3; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = DeskClockWidget/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 16.0; PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.ios.DeskClockWidget; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; ENABLE_USER_SCRIPT_SANDBOXING = NO; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks",); }; name = Debug; };
-		DC2200000000000000000065 = { isa = XCBuildConfiguration; buildSettings = { APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_STYLE = Automatic; DEVELOPMENT_TEAM = 54WU29TRTY; CURRENT_PROJECT_VERSION = 36; MARKETING_VERSION = 2.3; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = DeskClockWidget/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 16.0; PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.ios.DeskClockWidget; PRODUCT_NAME = "$(TARGET_NAME)"; SKIP_INSTALL = YES; SWIFT_VERSION = 6.0; TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; ENABLE_USER_SCRIPT_SANDBOXING = NO; LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", "@executable_path/../../Frameworks",); }; name = Release; };
+		DC2200000000000000000064 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 36;
+				DEVELOPMENT_TEAM = 54WU29TRTY;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DeskClockWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.3;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.ios.DeskClockWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DC2200000000000000000065 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 36;
+				DEVELOPMENT_TEAM = 54WU29TRTY;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DeskClockWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.3;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.lemmings.ios.DeskClockWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -486,7 +616,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DC2200000000000000000046 = { isa = XCConfigurationList; buildConfigurations = (DC2200000000000000000064, DC2200000000000000000065,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		DC2200000000000000000046 /* Build configuration list for PBXNativeTarget "DeskClockWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC2200000000000000000064 /* Debug */,
+				DC2200000000000000000065 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -507,8 +645,16 @@
 			package = 100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */;
 			productName = LemmingsMobileCore;
 		};
-		DC2200000000000000000050 = { isa = XCSwiftPackageProductDependency; package = 100000000000000000000080; productName = LemmingsMobileCore; };
-		DC2200000000000000000051 = { isa = XCSwiftPackageProductDependency; package = 100000000000000000000080; productName = LemmingsGameArt; };
+		DC2200000000000000000050 /* LemmingsMobileCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */;
+			productName = LemmingsMobileCore;
+		};
+		DC2200000000000000000051 /* LemmingsGameArt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */;
+			productName = LemmingsGameArt;
+		};
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 100000000000000000000060 /* Project object */;

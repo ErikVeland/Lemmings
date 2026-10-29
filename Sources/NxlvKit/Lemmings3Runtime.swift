@@ -153,6 +153,12 @@ public struct Lemmings3Runtime: Sendable {
             self.additionalEntrances = additionalEntrances
         }
     }
+    public var rewindStorageBytes: Int {
+        lemmings.count * MemoryLayout<Lemming>.stride + terrainEdits.count * 64
+            + pickups.count * MemoryLayout<Pickup>.stride + explosives.count * MemoryLayout<Explosive>.stride
+            + fireballs.count * MemoryLayout<Fireball>.stride + creatures.count * MemoryLayout<Creature>.stride + 16_384
+    }
+
     public let configuration: Configuration
     public private(set) var lemmings: [Lemming] = []
     public private(set) var tick = 0

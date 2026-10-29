@@ -50,6 +50,7 @@ public final class MobileActionReplaySession: MobileGameSession {
     private var uses: [MobileReplaySkillUse] = []
     private var playbackError: Error?
     private var settings: ClassicSettings?
+    private var cachedMoveNavigation: ReplayMoveNavigation?
     public var availableGraphics: [ClassicGraphicsSource] { native.availableGraphics }
     public var engineSession: any MobileGameSession { native }
     public var hotSeatGhosts: HotSeatGhostPlayback? {
@@ -83,6 +84,7 @@ public final class MobileActionReplaySession: MobileGameSession {
     public var panelFrame: MobilePixelFrame? { native.panelFrame }
     public var spriteActorIDs: [Int] { native.spriteActorIDs }
     public var activeLemmingCount: Int { native.activeLemmingCount }
+    public var minimapActorPoints: [MobilePoint] { native.minimapActorPoints }
     public var lostLemmingCount: Int { native.lostLemmingCount }
     public var explosions: [MobileExplosion] { native.explosions }
     public var bombCountdowns: [MobileBombCountdown] { native.bombCountdowns }
@@ -94,11 +96,15 @@ public final class MobileActionReplaySession: MobileGameSession {
     public var assignedSkillCount: Int { native.assignedSkillCount }
     public var assignedSkills: [String: Int] { native.assignedSkills }
     public var supportsRewind: Bool { true }
+    public var earliestRewindTick: Int { 0 }
     public var isReadOnly: Bool { true }
     public var replayEndTick: Int? { document.endTick }
     public var replaySkillUses: [MobileReplaySkillUse] { Array(uses.suffix(3)) }
     public var replayMoveNavigation: ReplayMoveNavigation {
-        .init(ticks: document.commands.filter { isSkill($0) }.map(\.tick))
+        if let cachedMoveNavigation { return cachedMoveNavigation }
+        let navigation = ReplayMoveNavigation(ticks: document.commands.filter { isSkill($0) }.map(\.tick))
+        cachedMoveNavigation = navigation
+        return navigation
     }
     public var snapshot: MobileGameSnapshot {
         let value = native.snapshot
@@ -121,6 +127,7 @@ public final class MobileActionReplaySession: MobileGameSession {
             let name = command.skill.flatMap { native.snapshot.skills.indices.contains($0) ? native.snapshot.skills[$0].name : nil }
             try apply(command)
             if isSkill(command) { uses.append(.init(tick: command.tick, name: name ?? command.action.capitalized)) }
+            if uses.count > 3 { uses.removeFirst(uses.count - 3) }
             next += 1
         }
         if native.snapshot.tick == document.endTick {
@@ -164,10 +171,77 @@ public final class MobileActionReplaySession: MobileGameSession {
         }
         guard accepted else { throw MobileSessionError.invalidCheckpoint }
     }
+    private init(copying source: MobileActionReplaySession, native: any MobileGameSession) throws {
+        document = source.document; factory = source.factory; self.native = native
+        settings = source.settings
+        if let settings { native.applySettings(settings) }
+        try applyCurrent()
+    }
+
+    private func restoreCommandPosition(at tick: Int) {
+        var lower = 0, upper = document.commands.count
+        while lower < upper {
+            let middle = lower + (upper - lower) / 2
+            if document.commands[middle].tick <= tick { lower = middle + 1 } else { upper = middle }
+        }
+        next = lower
+        uses.removeAll(keepingCapacity: true)
+        for command in document.commands.prefix(next).reversed() where isSkill(command) {
+            let name = command.skill.flatMap { native.snapshot.skills.indices.contains($0) ? native.snapshot.skills[$0].name : nil }
+            uses.append(.init(tick: command.tick, name: name ?? command.action.capitalized))
+            if uses.count == 3 { break }
+        }
+        uses.reverse()
+    }
+
+    public func prepareSeek(to tick: Int, backwardSteps: Int) -> MobileSeekOperation? {
+        guard (0...document.endTick).contains(tick) else { return nil }
+        let originalTick = native.snapshot.tick
+        if tick < originalTick, playbackError == nil, let operation = native.prepareSeek(to: tick, backwardSteps: backwardSteps) {
+            return MobileSeekOperation { [weak self] deadline in
+                guard let self, self.native.snapshot.tick == originalTick else { throw CancellationError() }
+                guard try operation.advance(seconds: max(0, deadline - ProcessInfo.processInfo.systemUptime)) else { return false }
+                self.restoreCommandPosition(at: tick)
+                return true
+            }
+        }
+        guard let copy = factory(), let cursor = try? MobileActionReplaySession(copying: self, native: copy) else { return nil }
+        return MobileSeekOperation { [weak self] deadline in
+            while cursor.native.snapshot.tick < tick, !cursor.snapshot.isComplete {
+                cursor.tick()
+                if ProcessInfo.processInfo.systemUptime >= deadline { return false }
+            }
+            guard let self, self.native.snapshot.tick == originalTick,
+                  cursor.playbackError == nil, cursor.native.snapshot.tick == tick else { throw MobileSessionError.invalidCheckpoint }
+            cursor.native.hotSeatGhosts = self.native.hotSeatGhosts
+            self.native = cursor.native; self.next = cursor.next; self.uses = cursor.uses
+            self.playbackError = nil
+            _ = self.native.drainSoundCues(); _ = self.native.drainLemmings2SoundRequests()
+            return true
+        }
+    }
+
     public func seekReplay(to tick: Int) -> Bool {
         guard (0...document.endTick).contains(tick) else { return false }
         do {
-            if tick < native.snapshot.tick || playbackError != nil {
+            if tick < native.snapshot.tick, playbackError == nil,
+               native.rewind(seconds: Double(native.snapshot.tick - tick) / ticksPerSecond),
+               native.snapshot.tick == tick {
+                // Native history already contains commands applied on the target tick.
+                var lower = 0, upper = document.commands.count
+                while lower < upper {
+                    let middle = lower + (upper - lower) / 2
+                    if document.commands[middle].tick <= tick { lower = middle + 1 } else { upper = middle }
+                }
+                next = lower
+                uses.removeAll(keepingCapacity: true)
+                for command in document.commands.prefix(next).reversed() where isSkill(command) {
+                    let name = command.skill.flatMap { native.snapshot.skills.indices.contains($0) ? native.snapshot.skills[$0].name : nil }
+                    uses.append(.init(tick: command.tick, name: name ?? command.action.capitalized))
+                    if uses.count == 3 { break }
+                }
+                uses.reverse()
+            } else if tick < native.snapshot.tick || playbackError != nil {
                 let ghosts = native.hotSeatGhosts
                 guard let copy = factory() else { return false }
                 native = copy; native.hotSeatGhosts = ghosts

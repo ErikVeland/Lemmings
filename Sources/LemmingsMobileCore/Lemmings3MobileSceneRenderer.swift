@@ -149,6 +149,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         var rgba = terrain.frame(edits: runtime.terrainEdits)
         let scale = macintosh ? 2 : 1
         if macintosh { rgba = [UInt8](try macTerrain.frame(width: width, height: height, rgba: rgba, palette: palette, category: terrainCategory).rgba) }
+        rgba = SceneRasterContext.crop(rgba, width: width * scale, height: height * scale)
         for trap in runtime.configuration.traps {
             guard let object = animatedObjects[trap.id],
                   let frameIndex = Self.animatedFrameIndex(runtime.trapFrame(id: trap.id), count: object.frames.count),
@@ -187,7 +188,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
             Self.compositeFireball(x: fireball.x - 3, y: fireball.y - 2,
                                    width: width, height: height, into: &rgba)
         }
-        for ghost in ghosts {
+        for ghost in ghosts where SceneRasterContext.drawActors.wrappedValue {
             for lemming in ghost.state.lemmings where lemming.active {
                 let animationIndex = lemming.direction > 0 ? 0 : 1
                 guard animations.indices.contains(animationIndex),
@@ -207,7 +208,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
             }
         }
         var crowdShadow = MobileCrowdShadow()
-        for lemming in runtime.lemmings where lemming.active {
+        for lemming in runtime.lemmings where lemming.active && SceneRasterContext.drawActors.wrappedValue {
             let animationIndex = lemming.direction > 0 ? 0 : 1
             guard animations.indices.contains(animationIndex),
                   !animations[animationIndex].frames.isEmpty else { continue }
@@ -322,7 +323,9 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
     }
 
     static func compositeFireball(x: Int, y: Int, width: Int, height: Int, into rgba: inout [UInt8]) {
-        if rgba.count == width * height * 16 {
+        let rasterRegion = SceneRasterContext.region(width: width, height: height)
+        guard rasterRegion.intersects(x: x, y: y, width: 6, height: 4) else { return }
+        if SceneRasterContext.doubled(byteCount: rgba.count, width: width, height: height) {
             var source = [UInt8](repeating: 0, count: 6 * 4 * 4)
             compositeFireball(x: 0, y: 0, width: 6, height: 4, into: &source)
             if let art = try? macFrames.frame(width: 6, height: 4, rgba: source, palette: [], category: .mechanical) {
@@ -333,7 +336,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         let rows = [".boob.", "boywyo", "boyyob", "..bb.."]
         guard width > 0, height > 0, width <= Int.max / height else { return }
         let pixelCount = width * height
-        guard pixelCount <= Int.max / 4, rgba.count == pixelCount * 4 else { return }
+        guard pixelCount <= Int.max / 4, rgba.count == SceneRasterContext.region(width: width, height: height).byteCount else { return }
         for (offsetY, row) in rows.enumerated() {
             let targetY = y + offsetY
             guard (0..<height).contains(targetY) else { continue }
@@ -348,7 +351,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
                 case "w": colour = [255, 255, 238, 255]
                 default: continue
                 }
-                let index = (targetY * width + targetX) * 4
+                guard let index = rasterRegion.offset(x: targetX, y: targetY) else { continue }
                 rgba[index..<index + 4] = colour[...]
             }
         }
@@ -357,9 +360,11 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
     static func composite(_ pixels: [UInt8], opaque: [Bool], frameWidth: Int, frameHeight: Int,
                           palette: [UInt8], x: Int, y: Int,
                           width: Int, height: Int, category: SequelMacCategory = .sprite, into rgba: inout [UInt8]) {
+        let rasterRegion = SceneRasterContext.region(width: width, height: height)
+        guard rasterRegion.intersects(x: x, y: y, width: frameWidth, height: frameHeight) else { return }
         guard pixels.count == frameWidth * frameHeight,
               opaque.count == pixels.count, palette.count == 1024 else { return }
-        if rgba.count == width * height * 16 {
+        if SceneRasterContext.doubled(byteCount: rgba.count, width: width, height: height) {
             var source = [UInt8](repeating: 0, count: frameWidth * frameHeight * 4)
             composite(pixels, opaque: opaque, frameWidth: frameWidth, frameHeight: frameHeight, palette: palette,
                 x: 0, y: 0, width: frameWidth, height: frameHeight, into: &source)
@@ -377,7 +382,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
                 let targetX = x + sourceX
                 guard (0..<width).contains(targetX) else { continue }
                 let colour = Int(pixels[source]) * 4
-                let target = (targetY * width + targetX) * 4
+                guard let target = rasterRegion.offset(x: targetX, y: targetY) else { continue }
                 rgba[target] = palette[colour]
                 rgba[target + 1] = palette[colour + 1]
                 rgba[target + 2] = palette[colour + 2]
@@ -389,8 +394,10 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
     private static func composite(_ pixels: [UInt8], frameWidth: Int, frameHeight: Int,
                                   palette: [UInt8], x: Int, y: Int,
                                   width: Int, height: Int, into rgba: inout [UInt8]) {
+        let rasterRegion = SceneRasterContext.region(width: width, height: height)
+        guard rasterRegion.intersects(x: x, y: y, width: frameWidth, height: frameHeight) else { return }
         guard pixels.count == frameWidth * frameHeight, palette.count == 1024 else { return }
-        if rgba.count == width * height * 16 {
+        if SceneRasterContext.doubled(byteCount: rgba.count, width: width, height: height) {
             composite(pixels, opaque: pixels.map { $0 != 255 }, frameWidth: frameWidth, frameHeight: frameHeight,
                 palette: palette, x: x, y: y, width: width, height: height, category: .mechanical, into: &rgba)
             return
@@ -404,7 +411,7 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
                 let targetX = x + sourceX
                 guard (0..<width).contains(targetX) else { continue }
                 let source = Int(colour) * 4
-                let target = (targetY * width + targetX) * 4
+                guard let target = rasterRegion.offset(x: targetX, y: targetY) else { continue }
                 rgba[target] = palette[source]
                 rgba[target + 1] = palette[source + 1]
                 rgba[target + 2] = palette[source + 2]
@@ -417,9 +424,10 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         for offset in -2...2 {
             for point in [(x + offset, y - 2), (x + offset, y + 2), (x - 2, y + offset), (x + 2, y + offset)] {
                 guard (0..<width).contains(point.0), (0..<height).contains(point.1) else { continue }
-                let scale = rgba.count == width * height * 16 ? 2 : 1
+                let scale = SceneRasterContext.doubled(byteCount: rgba.count, width: width, height: height) ? 2 : 1
+                let scaledRegion = SceneRasterContext.region(width: width * scale, height: height * scale)
                 for dy in 0..<scale { for dx in 0..<scale {
-                    let target = ((point.1 * scale + dy) * width * scale + point.0 * scale + dx) * 4
+                    guard let target = scaledRegion.offset(x: point.0 * scale + dx, y: point.1 * scale + dy) else { continue }
                     rgba[target] = 255; rgba[target + 1] = 220; rgba[target + 2] = 48; rgba[target + 3] = 255
                 } }
             }

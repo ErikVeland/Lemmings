@@ -47,6 +47,32 @@ struct MobileRewindTests {
         #expect(ClassicDOSReplayRecorder.stateHash(of: restored.finalSimulation) == state)
         #expect(restored.stepBackward())
     }
+    @Test func sparseOlderHistoryReconstructsExactLongRunStates() throws {
+        var terrain = try NeoLemmixTerrain(width: 4096, height: 64)
+        for x in 0..<4096 { terrain.setSolid(true, x: x, y: 48) }
+        let initial = try NeoLemmixSimulation(terrain: terrain, configuration: .init(
+            totalLemmings: 1, requiredToSave: 1, spawnInterval: 30, entrances: [],
+            preplacedLemmings: [.init(position: .init(x: 30, y: 48))], skills: [.builder: .infinite]))
+        let game = NeoLemmixMobileSession(simulation: initial, controls: [.builder], engineFingerprint: "history",
+            levelIdentifier: "history", levelIndex: 0, levelFingerprint: "history")
+        var expected: [Int: MobileGameSnapshot] = [:]
+        let targets: Set<Int> = [101, 700, 1400, 1900]
+        for tick in 1...2200 {
+            game.tick()
+            if targets.contains(tick) { expected[tick] = game.snapshot }
+        }
+        #expect(game.snapshot.tick == 2200)
+        for target in targets.sorted(by: >) {
+            let distance = game.snapshot.tick - target
+            #expect(game.rewind(seconds: Double(distance) / game.ticksPerSecond))
+            #expect(game.snapshot == expected[target])
+            let independent = NeoLemmixMobileSession(simulation: initial, controls: [.builder], engineFingerprint: "history",
+                levelIdentifier: "history", levelIndex: 0, levelFingerprint: "history")
+            for _ in 0..<target { independent.tick() }
+            #expect(try game.actionCapture()?.final.hash() == independent.actionCapture()?.final.hash())
+        }
+    }
+
     private struct LegacyCheckpoint: Codable {
         var version = 1
         let initialStateHash: String

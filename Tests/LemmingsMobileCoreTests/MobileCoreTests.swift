@@ -532,6 +532,48 @@ struct MobileCoreTests {
         }
     }
 
+    @Test @MainActor func cachedRewindMatchesSavedReconstructionAcrossEngines() throws {
+        var terrain = try NeoLemmixTerrain(width: 256, height: 64)
+        for x in 0..<256 { terrain.setSolid(true, x: x, y: 48) }
+        let neo = try NeoLemmixSimulation(terrain: terrain, configuration: .init(
+            totalLemmings: 1, requiredToSave: 0, spawnInterval: 30, entrances: [],
+            preplacedLemmings: [.init(position: .init(x: 30, y: 48))], skills: [.builder: .infinite]))
+        func sessions() throws -> [any MobileGameSession] {
+            [Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(), engineFingerprint: "l2",
+                levelIdentifier: "l2", levelIndex: 0, levelFingerprint: "l2"),
+             Lemmings3MobileSession(runtime: try Self.lemmings3Runtime(), engineFingerprint: "l3",
+                levelIdentifier: "l3", levelIndex: 0, levelFingerprint: "l3"),
+             NeoLemmixMobileSession(simulation: neo, controls: [.builder], engineFingerprint: "neo",
+                levelIdentifier: "neo", levelIndex: 0, levelFingerprint: "neo")]
+        }
+        let games = try sessions(), restored = try sessions()
+        for (game, copy) in zip(games, restored) {
+            var states: [MobileGameSnapshot] = [game.snapshot]
+            for _ in 0..<60 {
+                guard !game.snapshot.isComplete else { break }
+                game.tick()
+                if let neoGame = game as? NeoLemmixMobileSession, game.snapshot.tick == 46 {
+                    #expect(neoGame.setSpawnInterval(20))
+                }
+                states.append(game.snapshot)
+            }
+            let target = min(50, states.count - 2)
+            #expect(target > Int(game.ticksPerSecond * 2))
+            let distance = game.snapshot.tick - states[target].tick
+            #expect(game.rewind(seconds: Double(distance) / game.ticksPerSecond))
+            #expect(game.snapshot == states[target])
+            try copy.restoreCheckpointPayload(game.checkpointPayload())
+            #expect(copy.snapshot == game.snapshot)
+            for _ in 0..<10 where !game.snapshot.isComplete && !copy.snapshot.isComplete {
+                game.tick(); copy.tick()
+                #expect(game.snapshot == copy.snapshot)
+            }
+            #expect(game.stepBackward())
+            #expect(copy.stepBackward())
+            #expect(game.snapshot == copy.snapshot)
+        }
+    }
+
     @Test @MainActor func sequelSessionsDeliverSoundEventsWithoutReplayNoise() throws {
         let l2 = Lemmings2MobileSession(runtime: try Self.lemmings2Runtime(),
             engineFingerprint: "l2-audio", levelIdentifier: "l2/audio", levelIndex: 0,

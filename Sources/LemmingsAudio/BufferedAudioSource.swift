@@ -27,6 +27,21 @@ final class BufferedAudioSource: @unchecked Sendable {
   private var startFrame: Int64 = 0
   private var lastPlayedFrame: Int64 = 0
   private var statistics = AudioBufferStatistics()
+  private let positionLock = NSLock()
+  private var publishedFrame: Int64 = 0
+  private var publishedAt = 0.0
+  private var publishedEnd: Int64 = 0
+  private var publishedRunning = false
+
+  private func publishPosition() {
+    let frame = currentPlayedFrame()
+    positionLock.lock()
+    publishedFrame = frame
+    publishedAt = ProcessInfo.processInfo.systemUptime
+    publishedEnd = nextFrame
+    publishedRunning = running
+    positionLock.unlock()
+  }
   private var batches: [Batch] = []
 
   init(label: String, format: AVAudioFormat, count: Int = 1,
@@ -49,6 +64,7 @@ final class BufferedAudioSource: @unchecked Sendable {
       lastPlayedFrame = startFrame
       for batch in batches { schedule(batch, token: generation) }
       for node in nodes { node.play() }
+      publishPosition()
     }
   }
 
@@ -58,11 +74,18 @@ final class BufferedAudioSource: @unchecked Sendable {
       running = false
       generation &+= 1
       for node in nodes { node.stop() }
+      publishPosition()
     }
   }
 
   func drain() { queue.sync {} }
-  var playedFrame: Int64 { queue.sync { currentPlayedFrame() } }
+  // UI reads never wait for synthesis, decoding or AVAudioPlayerNode work.
+  var playedFrame: Int64 {
+    positionLock.lock()
+    defer { positionLock.unlock() }
+    let elapsed = publishedRunning ? max(0, ProcessInfo.processInfo.systemUptime - publishedAt) : 0
+    return min(publishedEnd, publishedFrame + Int64(elapsed * format.sampleRate))
+  }
   private func currentPlayedFrame() -> Int64 {
     guard running, let time = nodes[0].lastRenderTime,
       time.isSampleTimeValid || time.isHostTimeValid,
@@ -97,6 +120,7 @@ final class BufferedAudioSource: @unchecked Sendable {
                let played = self.nodes[0].playerTime(forNodeTime: time) {
               self.statistics.observeReserve(frames: max(0, self.nextFrame - self.startFrame - played.sampleTime))
             }
+            self.publishPosition()
             self.schedule(batch, token: token)
           }
         }

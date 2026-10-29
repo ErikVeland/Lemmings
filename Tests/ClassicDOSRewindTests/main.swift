@@ -243,6 +243,26 @@ private func testCommandBoundariesAndBranches(_ directory: URL) throws {
     print("PASS keyframe boundaries, tick zero, resumed playback, branching, replay prefix and invalid durations")
 }
 
+private func testRecentSeekCache(_ directory: URL) throws {
+    var session = ClassicDOSRewind(simulation: try loadLevelOne(directory))
+    var hashes = [hash(session.simulation)]
+    for tick in 1...150 {
+        session.tick()
+        if tick == 128 { session.setReleaseRate(90) }
+        hashes.append(hash(session.simulation))
+    }
+    try require(session.keyframeCount > 4, "recent seek cache was not populated")
+    for tick in stride(from: 149, through: 120, by: -1) {
+        try require(session.stepBackward(), "recent step back failed at \(tick)")
+        try require(hash(session.simulation) == hashes[tick], "recent seek changed state at \(tick)")
+    }
+    let saved = try JSONEncoder().encode(session)
+    var reopened = try JSONDecoder().decode(ClassicDOSRewind.self, from: saved)
+    try require(reopened.seek(toTick: 100), "reopened history could not seek")
+    try require(hash(reopened.simulation) == hashes[100], "reopened history changed state")
+    print("PASS recent seek cache, repeated steps and reopened history")
+}
+
 let arguments = CommandLine.arguments
 let syntheticOnly = arguments.dropFirst().contains("--synthetic")
 let directory = arguments.count > 1
@@ -253,6 +273,7 @@ do {
     try testResumeBranchesWithoutGameData()
     if !syntheticOnly {
         try testCommandBoundariesAndBranches(directory)
+        try testRecentSeekCache(directory)
         try testRewindIsExact(directory)
         try testCommandsSurviveRewind(directory)
         try testStepping(directory)

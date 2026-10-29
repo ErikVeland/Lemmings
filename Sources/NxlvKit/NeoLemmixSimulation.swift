@@ -1238,6 +1238,14 @@ public struct NeoLemmixSnapshot: Codable, Equatable, Sendable {
 // MARK: - Deterministic simulation
 
 public struct NeoLemmixSimulation: Codable, Equatable, Sendable {
+    public var rewindStorageBytes: Int {
+        let masks = terrain.solidMask.count + terrain.steelMask.count + terrain.oneWayMask.count + terrain.visualOpaqueMask.count
+        let construction = (terrain.constructionShadeMask?.count ?? 0)
+            + (terrain.stonerOwnerMask?.count ?? 0) * MemoryLayout<Int32>.stride
+            + (terrain.stonerSourceMask?.count ?? 0) * MemoryLayout<UInt16>.stride
+        return masks + construction + lemmings.count * MemoryLayout<NeoLemmixLemming>.stride + 32_768
+    }
+
     public let configuration: NeoLemmixConfiguration
     public private(set) var terrain: NeoLemmixTerrain
     public private(set) var lemmings: [NeoLemmixLemming]

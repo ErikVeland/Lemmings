@@ -26,6 +26,15 @@ struct MacArrowWrapTests {
             let artwork = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/" + family))
             let scene = try ClassicMacScene(level: level, rendered: rendered, artwork: artwork, groundSet: ground)
             let initial = [UInt8](scene.terrainFrame(terrain: simulation.terrain))
+            let full = scene.rgba(simulation: simulation)
+            for x in [0, rendered.width / 2, rendered.width - 100] {
+                let request = SceneRasterContext.Viewport(levelWidth: rendered.width, levelHeight: rendered.height,
+                    x: x, y: 8, width: 100, height: 80)
+                SceneRasterContext.request.withValue(request) {
+                    #expect(scene.rgba(simulation: simulation) == SceneRasterContext.crop(full, width: scene.width, height: scene.height))
+                }
+            }
+
             var cut = initial
             for arrow in arrows {
                 for y in arrow.placement.y * 2..<min(scene.height, arrow.placement.y * 2 + 24) {

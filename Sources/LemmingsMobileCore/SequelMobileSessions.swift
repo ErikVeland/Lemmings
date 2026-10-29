@@ -2,6 +2,36 @@ import Foundation
 import LemmingsAppCore
 import NxlvKit
 
+// Mutable storage is charged per snapshot even when copy-on-write currently shares it.
+private func rewindFrameLimit(bytesPerFrame: Int) -> Int {
+    max(0, min(30, RuntimeMemoryBudget.shared.snapshot().historyBytes / max(1, bytesPerFrame)))
+}
+
+// Inputs are ordered by tick, including commands sharing the same tick.
+private func retainedReplayInputs<Input>(_ inputs: [Input], through tick: Int, inputTick: (Input) -> Int) -> [Input] {
+    var lower = 0, upper = inputs.count
+    while lower < upper {
+        let middle = lower + (upper - lower) / 2
+        if inputTick(inputs[middle]) <= tick { lower = middle + 1 } else { upper = middle }
+    }
+    return Array(inputs.prefix(lower))
+}
+
+// Retain recent samples densely and spread the remaining budget across older play.
+// Only cache entries are discarded; the complete input log remains authoritative.
+private func trimRewindFrames<Frame>(_ frames: inout [Frame], limit: Int, tick: (Frame) -> Int) {
+    while frames.count > limit {
+        let olderEnd = max(1, frames.count - max(1, limit / 2))
+        var removal = 0
+        var smallestSpan = Int.max
+        for index in 1..<olderEnd {
+            let span = tick(frames[index + 1]) - tick(frames[index - 1])
+            if span < smallestSpan { smallestSpan = span; removal = index }
+        }
+        frames.remove(at: removal)
+    }
+}
+
 public typealias Lemmings2MobileRenderer = (
     _ runtime: Lemmings2Runtime,
     _ highlight: MobileTargetSelection?
@@ -112,6 +142,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
     }
     private var beforeEndRun: Lemmings2Runtime?
     private var inputs: [Input] = []
+    private var rewindFrames: [(tick: Int, runtime: Lemmings2Runtime, beforeEndRun: Lemmings2Runtime?, inputCount: Int)] = []
     private var pointerAim: (x: Int, y: Int, held: Bool)?
     private let onCompletion: ((Lemmings2Runtime) -> Void)?
     private var didNotifyCompletion = false
@@ -188,6 +219,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public var spriteActorIDs: [Int] { runtime.lemmings.filter(\.active).map(\.id) }
     public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
+    public var minimapActorPoints: [MobilePoint] { runtime.lemmings.filter(\.active).map { .init(x: Double($0.x), y: Double($0.y)) } }
     public var assignedSkillCount: Int {
         inputs.filter { if case .assign = $0 { return true }; return false }.count
     }
@@ -271,6 +303,10 @@ public final class Lemmings2MobileSession: MobileGameSession {
             onCompletion?(runtime)
         }
         if !runtime.isNuking { beforeEndRun = nil }
+        if runtime.tick % max(1, Int(ticksPerSecond * 2)) == 0 {
+            rewindFrames.append((runtime.tick, runtime, beforeEndRun, inputs.count))
+            trimRewindFrames(&rewindFrames, limit: rewindFrameLimit(bytesPerFrame: runtime.rewindStorageBytes * (beforeEndRun == nil ? 1 : 2)), tick: { $0.tick })
+        }
     }
 
     public func targetWallDirection(for target: Int) -> Int? {
@@ -330,6 +366,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
     public func undoEndRun() -> Bool {
         guard let beforeEndRun else { return false }
         runtime = beforeEndRun
+        rewindFrames.removeAll()
         soundRequests.removeAll(keepingCapacity: true)
         explosionTimeline.reset()
         spriteFeedback.reset()
@@ -409,6 +446,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         guard checkpoint.initialFingerprint == levelFingerprint else { throw MobileSessionError.changedLevel }
         let (restored, restoredBeforeEndRun) = try replay(inputs: checkpoint.inputs, through: checkpoint.tick)
         runtime = restored
+        rewindFrames.removeAll()
         soundRequests.removeAll(keepingCapacity: true)
         explosionTimeline.reset()
         spriteFeedback.reset()
@@ -449,12 +487,70 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public func resumeFromCurrentTick() {}
 
+    public func prepareSeek(to tick: Int, backwardSteps: Int) -> MobileSeekOperation? {
+        guard tick >= 0, tick < runtime.tick else { return nil }
+        let retainedInputs = retainedReplayInputs(inputs, through: tick, inputTick: inputTick)
+        let frame = rewindFrames.last { $0.tick <= tick && $0.inputCount <= retainedInputs.count }
+        var restored = frame?.runtime ?? initial
+        var restoredBeforeEndRun = frame?.beforeEndRun
+        var inputIndex = frame?.inputCount ?? 0
+        let originalTick = snapshot.tick
+        return MobileSeekOperation { [weak self] deadline in
+            guard let self, self.snapshot.tick == originalTick else { throw CancellationError() }
+        while restored.tick <= tick {
+            while inputIndex < retainedInputs.count, self.inputTick(retainedInputs[inputIndex]) == restored.tick {
+                switch retainedInputs[inputIndex] {
+                case let .assign(_, control, target):
+                    guard restored.assign(slot: control, to: target) else { throw MobileSessionError.invalidCheckpoint }
+                case .endRun:
+                    guard !restored.isNuking else { throw MobileSessionError.invalidCheckpoint }
+                    restoredBeforeEndRun = restored
+                    restored.nuke()
+                case let .fan(_, x, y, active):
+                    restored.setFan(x: x, y: y, active: active)
+                case let .aim(_, x, y, held): restored.setAim(x: x, y: y, held: held)
+                case let .machine(_, x, y):
+                    guard restored.moveMachine(x: x, y: y) else { throw MobileSessionError.invalidCheckpoint }
+                case let .chain(_, x, y):
+                    guard restored.releaseChain(x: x, y: y) else { throw MobileSessionError.invalidCheckpoint }
+                case .releasePointer: restored.releasePointerInput()
+                case let .bonusSkill(_, control):
+                    guard restored.grantBonusSkill(slot: control) else { throw MobileSessionError.invalidCheckpoint }
+                }
+                inputIndex += 1
+            }
+            if restored.tick == tick { break }
+            guard !restored.isComplete else { throw MobileSessionError.invalidCheckpoint }
+            restored.step()
+            _ = restored.drainSoundEvents()
+            if ProcessInfo.processInfo.systemUptime >= deadline { return false }
+        }
+        guard restored.tick == tick, inputIndex == retainedInputs.count, !restored.isComplete else {
+            throw MobileSessionError.invalidCheckpoint
+        }
+            self.runtime = restored
+            self.rewindFrames.removeAll { $0.tick > tick }
+            self.inputs = retainedInputs
+            self.beforeEndRun = restoredBeforeEndRun
+            self.explosionTimeline.reset()
+            self.spriteFeedback.reset()
+            self.pointerAim = nil
+            self.didNotifyCompletion = false
+            self.usedRewind = true
+            self.rewindCount += max(1, backwardSteps)
+            return true
+        }
+    }
+
     private func move(to tick: Int) -> Bool {
         guard tick >= 0, tick < runtime.tick else { return false }
         do {
-            let retainedInputs = inputs.filter { inputTick($0) <= tick }
-            let (restored, restoredBeforeEndRun) = try replay(inputs: retainedInputs, through: tick)
+            let retainedInputs = retainedReplayInputs(inputs, through: tick, inputTick: inputTick)
+            let frame = rewindFrames.last { $0.tick <= tick && $0.inputCount <= retainedInputs.count }
+            let (restored, restoredBeforeEndRun) = try replay(inputs: retainedInputs, through: tick,
+                base: frame?.runtime, beforeEndRun: frame?.beforeEndRun, inputIndex: frame?.inputCount ?? 0)
             runtime = restored
+            rewindFrames.removeAll { $0.tick > tick }
             inputs = retainedInputs
             beforeEndRun = restoredBeforeEndRun
             explosionTimeline.reset()
@@ -469,10 +565,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
         }
     }
 
-    private func replay(inputs: [Input], through tick: Int) throws -> (Lemmings2Runtime, Lemmings2Runtime?) {
-        var restored = initial
-        var restoredBeforeEndRun: Lemmings2Runtime?
-        var inputIndex = 0
+    private func replay(inputs: [Input], through tick: Int, base: Lemmings2Runtime? = nil,
+                        beforeEndRun: Lemmings2Runtime? = nil, inputIndex startIndex: Int = 0) throws -> (Lemmings2Runtime, Lemmings2Runtime?) {
+        var restored = base ?? initial
+        var restoredBeforeEndRun = beforeEndRun
+        var inputIndex = startIndex
         while restored.tick <= tick {
             while inputIndex < inputs.count, inputTick(inputs[inputIndex]) == restored.tick {
                 switch inputs[inputIndex] {
@@ -512,7 +609,9 @@ public final class Lemmings2MobileSession: MobileGameSession {
         }
     }
 
-    public func releaseTransientResources() {}
+    public func releaseTransientResources() {
+        trimRewindFrames(&rewindFrames, limit: 0, tick: { $0.tick })
+    }
 }
 
 public typealias Lemmings3MobileRenderer = (
@@ -628,6 +727,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         return explosionTimeline.bursts.map { MobileExplosion($0, at: runtime.tick) }
     }
     private var inputs: [Input] = []
+    private var rewindFrames: [(tick: Int, runtime: Lemmings3Runtime, inputCount: Int)] = []
     private let onCompletion: ((Lemmings3Runtime) -> Void)?
     private var didNotifyCompletion = false
     public private(set) var rewindCount = 0
@@ -705,6 +805,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
 
     public var spriteActorIDs: [Int] { runtime.lemmings.filter(\.active).map(\.id) }
     public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
+    public var minimapActorPoints: [MobilePoint] { runtime.lemmings.filter(\.active).map { .init(x: Double($0.x), y: Double($0.y)) } }
     public var assignedSkillCount: Int { assignedSkills.values.reduce(0, +) }
     /// Extras start on the map and are not included in the entrance's released count.
     public var lostLemmingCount: Int { runtime.lost }
@@ -736,6 +837,10 @@ public final class Lemmings3MobileSession: MobileGameSession {
         if runtime.isComplete, !didNotifyCompletion {
             didNotifyCompletion = true
             onCompletion?(runtime)
+        }
+        if runtime.tick % max(1, Int(ticksPerSecond * 2)) == 0 {
+            rewindFrames.append((runtime.tick, runtime, inputs.count))
+            trimRewindFrames(&rewindFrames, limit: rewindFrameLimit(bytesPerFrame: runtime.rewindStorageBytes), tick: { $0.tick })
         }
     }
 
@@ -886,6 +991,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         guard checkpoint.initialFingerprint == levelFingerprint else { throw MobileSessionError.changedLevel }
         let restored = try replay(inputs: checkpoint.inputs, through: checkpoint.tick)
         runtime = restored
+        rewindFrames.removeAll()
         soundCues.removeAll(keepingCapacity: true)
         explosionTimeline.reset()
         spriteFeedback.reset()
@@ -920,12 +1026,67 @@ public final class Lemmings3MobileSession: MobileGameSession {
 
     public func resumeFromCurrentTick() {}
 
+    public func prepareSeek(to tick: Int, backwardSteps: Int) -> MobileSeekOperation? {
+        guard tick >= 0, tick < runtime.tick else { return nil }
+        let retainedInputs = retainedReplayInputs(inputs, through: tick, inputTick: { $0.tick })
+        let frame = rewindFrames.last { $0.tick <= tick && $0.inputCount <= retainedInputs.count }
+        var restored = frame?.runtime ?? initial
+        var inputIndex = frame?.inputCount ?? 0
+        let originalTick = snapshot.tick
+        return MobileSeekOperation { [weak self] deadline in
+            guard let self, self.snapshot.tick == originalTick else { throw CancellationError() }
+        while restored.tick <= tick {
+            while inputIndex < retainedInputs.count, retainedInputs[inputIndex].tick == restored.tick {
+                let input = retainedInputs[inputIndex]
+                if input.action == "abort" {
+                    restored.abort()
+                } else if input.action == "bonusTool", let target = input.target,
+                          restored.lemmings.first(where: { $0.id == target })?.tool?.rawValue == input.tool,
+                          restored.grantBonusTool(to: target) {
+                    // The extra charge belongs to this point in the attempt.
+                } else if input.action == Lemmings3Runtime.Action.use.rawValue,
+                          let target = input.target,
+                          let rawDirection = input.direction,
+                          let direction = Lemmings3Runtime.Direction(rawValue: rawDirection) {
+                    _ = restored.useTool(to: target, direction: direction)
+                } else if let action = Lemmings3Runtime.Action(rawValue: input.action),
+                          let target = input.target,
+                          restored.assign(action, to: target) {
+                    // The input is now part of the reconstructed timeline.
+                } else {
+                    throw MobileSessionError.invalidCheckpoint
+                }
+                inputIndex += 1
+            }
+            if restored.tick == tick { break }
+            guard !restored.isComplete else { throw MobileSessionError.invalidCheckpoint }
+            restored.step()
+            if ProcessInfo.processInfo.systemUptime >= deadline { return false }
+        }
+        guard restored.tick == tick, inputIndex == retainedInputs.count, !restored.isComplete else {
+            throw MobileSessionError.invalidCheckpoint
+        }
+            self.runtime = restored
+            self.rewindFrames.removeAll { $0.tick > tick }
+            self.inputs = retainedInputs
+            self.explosionTimeline.reset()
+            self.spriteFeedback.reset()
+            self.didNotifyCompletion = false
+            self.usedRewind = true
+            self.rewindCount += max(1, backwardSteps)
+            return true
+        }
+    }
+
     private func move(to tick: Int) -> Bool {
         guard tick >= 0, tick < runtime.tick else { return false }
         do {
             let retainedInputs = inputs.filter { $0.tick <= tick }
-            let restored = try replay(inputs: retainedInputs, through: tick)
+            let frame = rewindFrames.last { $0.tick <= tick && $0.inputCount <= retainedInputs.count }
+            let restored = try replay(inputs: retainedInputs, through: tick, base: frame?.runtime,
+                inputIndex: frame?.inputCount ?? 0)
             runtime = restored
+            rewindFrames.removeAll { $0.tick > tick }
             inputs = retainedInputs
             explosionTimeline.reset()
             spriteFeedback.reset()
@@ -938,9 +1099,10 @@ public final class Lemmings3MobileSession: MobileGameSession {
         }
     }
 
-    private func replay(inputs: [Input], through tick: Int) throws -> Lemmings3Runtime {
-        var restored = initial
-        var inputIndex = 0
+    private func replay(inputs: [Input], through tick: Int, base: Lemmings3Runtime? = nil,
+                        inputIndex startIndex: Int = 0) throws -> Lemmings3Runtime {
+        var restored = base ?? initial
+        var inputIndex = startIndex
         while restored.tick <= tick {
             while inputIndex < inputs.count, inputs[inputIndex].tick == restored.tick {
                 let input = inputs[inputIndex]
@@ -974,7 +1136,9 @@ public final class Lemmings3MobileSession: MobileGameSession {
         return restored
     }
 
-    public func releaseTransientResources() {}
+    public func releaseTransientResources() {
+        trimRewindFrames(&rewindFrames, limit: 0, tick: { $0.tick })
+    }
 }
 
 public typealias NeoLemmixMobileRenderer = (
@@ -1046,7 +1210,8 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     }
 
     public var spriteActorIDs: [Int] { simulation.lemmings.filter(\.isActive).map(\.id) }
-    public var activeLemmingCount: Int { simulation.lemmings.filter(\.isActive).count }
+    public var activeLemmingCount: Int { simulation.lemmings.reduce(0) { $0 + ($1.isActive ? 1 : 0) } }
+    public var minimapActorPoints: [MobilePoint] { simulation.lemmings.filter { $0.action != .removed }.map { .init(x: Double($0.position.x), y: Double($0.position.y)) } }
     public var lostLemmingCount: Int { simulation.lostCount }
     public let engineIdentifier = "neolemmix"
     public let engineFingerprint: String
@@ -1072,6 +1237,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     private var simulationBeforeNuke: NeoLemmixSimulation?
     private var requestedSpawnInterval: Int?
     private var inputs: [Input] = []
+    private var rewindFrames: [(tick: Int, simulation: NeoLemmixSimulation, beforeNuke: NeoLemmixSimulation?, requestedInterval: Int?, inputCount: Int)] = []
     private var soundCues: [PositionedSoundCue] = []
     private var didNotifyCompletion = false
     public private(set) var rewindCount = 0
@@ -1165,6 +1331,10 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         let events = simulation.tick()
         appendSoundCues(for: events)
         requestedSpawnInterval = simulation.spawnInterval
+        if simulation.tickCount % max(1, Int(ticksPerSecond * 2)) == 0 {
+            rewindFrames.append((simulation.tickCount, simulation, simulationBeforeNuke, requestedSpawnInterval, inputs.count))
+            trimRewindFrames(&rewindFrames, limit: rewindFrameLimit(bytesPerFrame: simulation.rewindStorageBytes * (simulationBeforeNuke == nil ? 1 : 2)), tick: { $0.tick })
+        }
         if simulation.isComplete, !didNotifyCompletion {
             didNotifyCompletion = true
             onCompletion?(simulation)
@@ -1260,6 +1430,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     @discardableResult
     public func undoEndRun() -> Bool {
         guard let simulationBeforeNuke, !simulation.isComplete else { return false }
+        rewindFrames.removeAll()
         soundCues.removeAll(keepingCapacity: true)
         spriteFeedback.reset()
         let restoredRequestedInterval = inputs.reversed().compactMap { input -> Int? in
@@ -1400,6 +1571,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
             requestedSpawnInterval = checkpoint.requestedSpawnInterval ?? checkpoint.simulation.snapshot().spawnInterval
         }
         didNotifyCompletion = false
+        rewindFrames.removeAll()
         soundCues.removeAll(keepingCapacity: true)
         spriteFeedback.reset()
         rewindCount = checkpoint.rewindCount ?? 0
@@ -1436,18 +1608,78 @@ public final class NeoLemmixMobileSession: MobileGameSession {
 
     public func resumeFromCurrentTick() {}
 
+    public var earliestRewindTick: Int { historyBase.tickCount }
+
+    public func prepareSeek(to tick: Int, backwardSteps: Int) -> MobileSeekOperation? {
+        guard tick >= historyBase.tickCount, tick < simulation.tickCount else { return nil }
+        let retainedInputs = retainedReplayInputs(inputs, through: tick, inputTick: inputTick)
+        let frame = rewindFrames.last { $0.tick <= tick && $0.inputCount <= retainedInputs.count }
+        var restored = frame?.simulation ?? historyBase
+        var restoredBeforeNuke = frame == nil ? historyBaseBeforeNuke : frame!.beforeNuke
+        var requestedInterval = frame?.requestedInterval ?? historyBaseRequestedInterval
+        var inputIndex = frame?.inputCount ?? 0
+        let originalTick = snapshot.tick
+        return MobileSeekOperation { [weak self] deadline in
+            guard let self, self.snapshot.tick == originalTick else { throw CancellationError() }
+        while restored.tickCount <= tick {
+            while inputIndex < retainedInputs.count, self.inputTick(retainedInputs[inputIndex]) == restored.tickCount {
+                switch retainedInputs[inputIndex] {
+                case let .assign(_, skill, target):
+                    guard restored.assign(skill: skill, to: target).wasAssigned else {
+                        throw MobileSessionError.invalidCheckpoint
+                    }
+                case let .spawnInterval(_, value):
+                    guard !restored.configuration.spawnIntervalLocked else {
+                        throw MobileSessionError.invalidCheckpoint
+                    }
+                    restored.enqueue(.setSpawnInterval(value))
+                    requestedInterval = value
+                case let .bonusSkill(_, skill):
+                    guard restored.grantBonusSkill(skill) else { throw MobileSessionError.invalidCheckpoint }
+                case .nuke:
+                    guard !restored.isComplete, !restored.isNuking, restoredBeforeNuke == nil else {
+                        throw MobileSessionError.invalidCheckpoint
+                    }
+                    restoredBeforeNuke = restored
+                    restored.enqueue(.nuke)
+                }
+                inputIndex += 1
+            }
+            if restored.tickCount == tick { break }
+            guard !restored.isComplete else { throw MobileSessionError.invalidCheckpoint }
+            _ = restored.tick()
+            requestedInterval = restored.snapshot().spawnInterval
+            if ProcessInfo.processInfo.systemUptime >= deadline { return false }
+        }
+        guard restored.tickCount == tick, inputIndex == retainedInputs.count, !restored.isComplete else {
+            throw MobileSessionError.invalidCheckpoint
+        }
+            self.simulation = restored
+            self.rewindFrames.removeAll { $0.tick > tick }
+            self.simulationBeforeNuke = restoredBeforeNuke
+            self.requestedSpawnInterval = requestedInterval
+            self.inputs = retainedInputs
+            self.didNotifyCompletion = false
+            self.usedRewind = true
+            self.rewindCount += max(1, backwardSteps)
+            return true
+        }
+    }
+
     private func move(to tick: Int) -> Bool {
         guard tick >= historyBase.tickCount, tick < simulation.snapshot().tickCount else { return false }
         do {
-            let retainedInputs = inputs.filter { inputTick($0) <= tick }
+            let retainedInputs = retainedReplayInputs(inputs, through: tick, inputTick: inputTick)
+            let frame = rewindFrames.last { $0.tick <= tick && $0.inputCount <= retainedInputs.count }
             let (restored, restoredBeforeNuke, restoredRequestedInterval) = try replay(
                 inputs: retainedInputs,
-                from: historyBase,
-                beforeNuke: historyBaseBeforeNuke,
-                requestedInterval: historyBaseRequestedInterval,
-                through: tick
+                from: frame?.simulation ?? historyBase,
+                beforeNuke: frame == nil ? historyBaseBeforeNuke : frame!.beforeNuke,
+                requestedInterval: frame?.requestedInterval ?? historyBaseRequestedInterval,
+                through: tick, inputIndex: frame?.inputCount ?? 0
             )
             simulation = restored
+            rewindFrames.removeAll { $0.tick > tick }
             simulationBeforeNuke = restoredBeforeNuke
             requestedSpawnInterval = restoredRequestedInterval
             inputs = retainedInputs
@@ -1465,12 +1697,13 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         from base: NeoLemmixSimulation,
         beforeNuke initialBeforeNuke: NeoLemmixSimulation?,
         requestedInterval initialRequestedInterval: Int?,
-        through tick: Int
+        through tick: Int,
+        inputIndex startIndex: Int = 0
     ) throws -> (NeoLemmixSimulation, NeoLemmixSimulation?, Int?) {
         var restored = base
         var restoredBeforeNuke = initialBeforeNuke
         var requestedInterval = initialRequestedInterval
-        var inputIndex = 0
+        var inputIndex = startIndex
         while restored.tickCount <= tick {
             while inputIndex < inputs.count, inputTick(inputs[inputIndex]) == restored.tickCount {
                 switch inputs[inputIndex] {
@@ -1512,5 +1745,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         }
     }
 
-    public func releaseTransientResources() {}
+    public func releaseTransientResources() {
+        trimRewindFrames(&rewindFrames, limit: 0, tick: { $0.tick })
+    }
 }

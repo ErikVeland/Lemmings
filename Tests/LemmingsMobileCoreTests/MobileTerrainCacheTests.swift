@@ -42,6 +42,18 @@ struct MobileTerrainCacheTests {
         }
     }
 
+    @Test func editedTerrainCacheSurvivesActorWritesAndReturnsToAnEarlierBranch() {
+        let terrain = MobileEditedTerrain(pixels: [1, 2, 3, 4], background: [4, 3, 2, 1],
+            palette: palette, bricks: [UInt8](repeating: 5, count: 64), width: 2)
+        let expected = terrain.frame(edits: [1: false])
+        var actorFrame = terrain.frame(edits: [1: false])
+        actorFrame[0] = 77
+        #expect(terrain.frame(edits: [1: false]) == expected)
+        _ = terrain.frame(edits: [1: true])
+        #expect(terrain.frame(edits: [1: false]) == expected)
+        #expect(actorFrame[0] == 77)
+    }
+
     @Test func concurrentRendererCopiesKeepIndependentCompositedFrames() async {
         let cache = MobileIndexedTerrainCache()
         let pixels: [UInt8] = [1, 2, 3, 4]

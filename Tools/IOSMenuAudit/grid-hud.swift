@@ -60,6 +60,43 @@ extension MenuAudit {
                 try save(context: context, to: output.appendingPathComponent("\(engine)-\(hasRate ? "rate" : "no-rate").png"))
             }
         }
-        print("PASS: six muted, windowless grid renders; joined rows, minimap and non-overlapping input targets.")
+        for engine in ["classic", "lemmings2", "lemmings3"] {
+            let rate = engine == "classic"
+            let skills = Array(original.skills.prefix(engine == "lemmings3" ? 5 : 8))
+            let snapshot = MobileGameSnapshot(tick: original.tick, released: original.released, total: original.total,
+                saved: original.saved, required: original.required, remainingSeconds: original.remainingSeconds,
+                releaseRate: rate ? 50 : nil, isComplete: false, didWin: false, isEndingRun: false, skills: skills)
+            let size = CGSize(width: 1152, height: 648)
+            let layout = MobileHUDLayout.make(container: .init(width: size.width, height: size.height),
+                safeArea: .init(), hasRate: rate, skillCount: skills.count, supportsRewind: true,
+                hasPlayer: true, engineIdentifier: engine, showsMenuButton: false, television: true)
+            guard layout.television, layout.panel == nil, layout.portrait != nil else { throw invalidTargets(line: #line) }
+            let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: 0,
+                paused: false, speed: 1, endRunArmed: false)
+            guard targets.allSatisfy({ target in
+                CGRect(origin: .zero, size: size).contains(target.frame) && targets.filter { $0.action != target.action }
+                    .allSatisfy { !target.frame.intersects($0.frame) }
+            }) else { throw invalidTargets(line: #line) }
+            let context = try bitmapContext(size: size)
+            MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: 0, paused: false, speed: 1,
+                endRunArmed: false, panelImage: panel, typography: typography, skillIcons: icons,
+                playerName: "PLA").draw(in: context, bounds: CGRect(origin: .zero, size: size))
+            try save(context: context, to: output.appendingPathComponent("tv-\(engine).png"))
+        }
+        let home = TVMenuPresentation.homePage(MobileHomeArt.page(journey: .init("journey", "Journey map"),
+            families: [.init("classic", "Classic"), .init("l2", "Lemmings 2"), .init("l3", "Lemmings 3")], initials: "PLA"))
+        for width: CGFloat in [576, 864, 1152] {
+            let layout = TVMenuPresentation.homeLayout(home, width: width, height: 648)
+            for target in layout.targets where home.footer.contains(where: { $0.id == target.action.id }) {
+                guard target.action.title.split(whereSeparator: \.isWhitespace).allSatisfy({
+                    GameTextLayout.width(of: String($0), font: typography.font(.small)) <= target.frame.width - 24
+                }), layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == target.action.id
+                else { throw invalidTargets(line: #line) }
+            }
+            let context = try bitmapContext(size: layout.size)
+            GameFrontEnd.draw(home, layout: layout, typography: typography, highlighted: "worldwide", in: context)
+            try save(context: context, to: output.appendingPathComponent("tv-home-\(Int(width)).png"))
+        }
+        print("PASS: muted, windowless grid and TV renders; input targets and home label widths.")
     }
 }

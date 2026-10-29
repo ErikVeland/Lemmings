@@ -9,6 +9,7 @@ import UIKit
     var image: CGImage? { didSet { if oldValue !== image { setNeedsDisplay() } } }
     var visible = CGRect.zero { didSet { if oldValue != visible { setNeedsDisplay() } } }
     var levelSize = CGSize.zero { didSet { if oldValue != levelSize { setNeedsDisplay() } } }
+    var actors: [MobilePoint] = [] { didSet { if oldValue != actors { setNeedsDisplay() } } }
     var overlay = false
     var onSeek: ((CGPoint) -> Void)?
     private let thumbnail = GameMinimapThumbnail()
@@ -32,6 +33,15 @@ import UIKit
         guard let context = UIGraphicsGetCurrentContext() else { return }
         GameMinimapArt.draw(in: context, bounds: bounds, image: image, visible: visible, levelSize: levelSize, overlay: overlay,
                             thumbnail: thumbnail)
+        guard levelSize.width > 0, levelSize.height > 0 else { return }
+        context.setShouldAntialias(false)
+        context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.1, alpha: 1))
+        let map = content
+        for actor in actors {
+            let x = map.minX + CGFloat(actor.x) / levelSize.width * map.width
+            let y = map.minY + CGFloat(actor.y) / levelSize.height * map.height
+            context.fill(CGRect(x: floor(x), y: floor(y), width: 1, height: 1))
+        }
     }
     override func accessibilityIncrement() { seek(1) }
     override func accessibilityDecrement() { seek(-1) }
@@ -49,14 +59,15 @@ import UIKit
     var onRewindRepeat: (() -> Void)?
     var onStepBatch: ((MobileHUDAction, Int) -> Void)?
     private var readOnly = false
-    var playerName: String?
-    var playerPortrait: CGImage?
+    var playerName: String? { didSet { if oldValue != playerName { setNeedsDisplay() } } }
+    var playerPortrait: CGImage? { didSet { if oldValue !== playerPortrait { setNeedsDisplay() } } }
     private let playerIdentity = UIView()
     private let statusIdentity = UIView()
-    var replayLevel: MobileLevelSummary?
+    var replayLevel: MobileLevelSummary? { didSet { if oldValue != replayLevel { setNeedsDisplay() } } }
     var replayMapFrame: CGRect?
     private var mapFrame: CGRect? { replayMapFrame ?? layout?.minimapFrame }
     var statusDetails: MobileHUDRenderer.StatusDetails?
+    private var drawnStatusDetails: MobileHUDRenderer.StatusDetails?
     private let toolDirectionPicker = MobileToolDirectionPickerView()
     private let rateValueTap = UITapGestureRecognizer()
     var onAction: ((MobileHUDAction) -> Void)?
@@ -75,8 +86,8 @@ import UIKit
     private var paused = true
     private var speed = 1.0
     private var endRunArmed = false
-    var skillIcons: [CGImage?] = []
-    var counterStyle: ClassicCounterStyle = .game
+    var skillIcons: [CGImage?] = [] { didSet { setNeedsDisplay(); skillCanvas.setNeedsDisplay() } }
+    var counterStyle: ClassicCounterStyle = .game { didSet { if oldValue != counterStyle { setNeedsDisplay() } } }
     private var panelImage: CGImage?
     private var cachedPanel: MobilePixelFrame?
 
@@ -119,9 +130,10 @@ import UIKit
 
     required init?(coder: NSCoder) { nil }
 
-    func updateMinimap(frame: MobilePixelFrame, visible: MobileRect, levelSize: MobileSize, image: CGImage? = nil) {
+    func updateMinimap(frame: MobilePixelFrame, visible: MobileRect, levelSize: MobileSize, image: CGImage? = nil, actors: [MobilePoint]? = nil) {
         minimapView.isHidden = mapFrame == nil
         guard !minimapView.isHidden else { return }
+        if let actors { minimapView.actors = actors }
         minimapView.image = image ?? Self.image(frame)
         minimapView.visible = Self.cgRect(visible)
         minimapView.levelSize = CGSize(width: levelSize.width, height: levelSize.height)
@@ -147,7 +159,21 @@ import UIKit
         panel: MobilePixelFrame?,
         readOnly: Bool = false
     ) {
+        let previousSnapshot = self.snapshot
+        let skillsChanged = self.layout != layout || previousSnapshot?.skills != snapshot.skills
+            || self.selectedSkill != selectedSkill || cachedPanel != panel || self.readOnly != readOnly
+        let presentationChanged = skillsChanged || self.paused != paused || self.speed != speed
+            || self.endRunArmed != endRunArmed || drawnStatusDetails != statusDetails
+            || previousSnapshot?.released != snapshot.released || previousSnapshot?.saved != snapshot.saved
+            || previousSnapshot?.total != snapshot.total || previousSnapshot?.required != snapshot.required
+            || previousSnapshot?.remainingSeconds != snapshot.remainingSeconds
+            || previousSnapshot?.releaseRate != snapshot.releaseRate
+            || previousSnapshot?.isComplete != snapshot.isComplete || previousSnapshot?.didWin != snapshot.didWin
+            || previousSnapshot?.isEndingRun != snapshot.isEndingRun
+            || (previousSnapshot?.tick == 0) != (snapshot.tick == 0)
+        drawnStatusDetails = statusDetails
         self.readOnly = readOnly
+        if !presentationChanged { self.snapshot = snapshot; return }
         let layoutChanged = self.layout != layout
         self.layout = layout
         let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil && replayLevel == nil).player
@@ -217,8 +243,8 @@ import UIKit
         }
         if layoutChanged || previousSkill != selectedSkill, let button = buttons.first(where: { $0.accessibilityTraits.contains(.selected) }),
            button.superview === skillCanvas { skillScroll.scrollRectToVisible(button.frame, animated: false) }
-        setNeedsDisplay()
-        skillCanvas.setNeedsDisplay()
+        if presentationChanged { setNeedsDisplay() }
+        if skillsChanged { skillCanvas.setNeedsDisplay() }
     }
 
     @objc private func toggleRateValue(_ gesture: UITapGestureRecognizer) {

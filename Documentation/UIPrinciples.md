@@ -139,8 +139,10 @@ The user's requirement: icons and states must make sense without explanatory
 sentences. Apply this to new UI and changes to existing UI.
 
 The iOS/tvOS funeral mood desaturates the playfield pixels directly. Flat mode
-draws the bitmap and effect together in one opaque canvas for the entire fade.
-The normal GPU-scaled bitmap layer stays hidden until recovery completes.
+draws the bitmap and effect together in one opaque canvas at native pixel density,
+with a 1,048,576-pixel ceiling, then scales that canvas with nearest filtering.
+The normal bitmap layer stays hidden until recovery completes, when the temporary
+canvas is released.
 Blending into a transparent sibling UIView produces a grey veil because that
 canvas does not contain the scene beneath it. This applies to Classic, L2 and L3.
 CRT uses its existing saturation/brightness uniforms.
@@ -1573,6 +1575,10 @@ fallback layout. Identical page updates and layout passes must not rebuild targe
 or request another geometry redraw. Retain confirmed Duo capability on that device so
 later launches do not first show ordinary phone layout while awaiting a hinge
 callback. Real window, pose, interface-size and content changes may reflow.
+Portrait mobile What's new waits for its initial scenery request before revealing
+the page and fixed navigation in one unanimated layout transaction. Start pose
+observation before appearance. Loading failure still reveals the page; later
+background refreshes must not hide it or reset its scroll position.
 Mac pages complete their nested layout during presentation, including What's new.
 Original panel artwork supplies bitmap glyphs and textures. The authored TV
 panel retains its arrangement; Duo, landscape iPad and Mac use the grouped

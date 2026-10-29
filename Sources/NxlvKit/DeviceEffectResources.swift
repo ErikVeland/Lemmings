@@ -1,4 +1,8 @@
 import Foundation
+#if canImport(Darwin)
+import Darwin
+import os
+#endif
 
 /// Optional effects share memory with the level, decoded art and audio buffers.
 public struct DeviceEffectResources: Sendable {
@@ -100,4 +104,92 @@ public final class DeviceEffectPressure: @unchecked Sendable {
                                   memoryPressure: now < memoryPressureUntil).limitingAudio(toQuality: audioQuality)
         return cached
     }
+}
+
+/// One process budget for retained scene caches and rewind acceleration.
+/// Footprint is measured; retained collection sizes remain conservative estimates.
+public final class RuntimeMemoryBudget: @unchecked Sendable {
+    public static let shared = RuntimeMemoryBudget()
+    public struct Snapshot: Sendable {
+        public let historyBytes: Int
+        public let cacheBytes: Int
+        public let footprintBytes: UInt64
+        public let peakFootprintBytes: UInt64
+        public let availableBytes: UInt64?
+    }
+    private let lock = NSLock()
+    private var lastSample = -Double.infinity
+    private var pressureUntil = -Double.infinity
+    private var peak: UInt64 = 0
+    private var cacheLeases: [UUID: Int] = [:]
+    private var leasedBytes = 0
+    private var cached = Snapshot(historyBytes: 16 * 1_048_576, cacheBytes: 4 * 1_048_576,
+                                  footprintBytes: 0, peakFootprintBytes: 0, availableBytes: nil)
+    public init() {}
+    public var retainedCacheBytes: Int { lock.lock(); defer { lock.unlock() }; return leasedBytes }
+    fileprivate func reserveCache(_ id: UUID, bytes: Int) -> Bool {
+        let limit = snapshot().cacheBytes
+        lock.lock(); defer { lock.unlock() }
+        let previous = cacheLeases[id] ?? 0
+        let requested = max(0, bytes)
+        guard requested == 0 || requested <= limit && leasedBytes - previous <= limit - requested else {
+            leasedBytes -= previous; cacheLeases.removeValue(forKey: id)
+            return false
+        }
+        leasedBytes += requested - previous
+        if requested == 0 { cacheLeases.removeValue(forKey: id) } else { cacheLeases[id] = requested }
+        return true
+    }
+    public func noteMemoryPressure() {
+        lock.lock(); defer { lock.unlock() }
+        pressureUntil = ProcessInfo.processInfo.systemUptime + 60
+        lastSample = -.infinity
+    }
+    public func snapshot() -> Snapshot {
+        lock.lock(); defer { lock.unlock() }
+        let now = ProcessInfo.processInfo.systemUptime
+        guard now - lastSample >= 1 else { return cached }
+        lastSample = now
+        let process = ProcessInfo.processInfo
+        var footprint: UInt64 = 0
+        var available: UInt64?
+        #if canImport(Darwin)
+        var info = task_vm_info_data_t()
+        var count = mach_msg_type_number_t(MemoryLayout<task_vm_info_data_t>.size / MemoryLayout<integer_t>.size)
+        let capacity = Int(count)
+        let result = withUnsafeMutablePointer(to: &info) { pointer in
+            pointer.withMemoryRebound(to: integer_t.self, capacity: capacity) {
+                task_info(mach_task_self_, task_flavor_t(TASK_VM_INFO), $0, &count)
+            }
+        }
+        if result == KERN_SUCCESS { footprint = info.phys_footprint }
+        #if os(iOS) || os(tvOS)
+        available = UInt64(os_proc_available_memory())
+        #endif
+        #endif
+        peak = max(peak, footprint)
+        let tier = process.physicalMemory <= 2 * 1_073_741_824 ? 0 : process.physicalMemory <= 4 * 1_073_741_824 ? 1 : 2
+        var history = [16, 32, 64][tier] * 1_048_576
+        var cache = [4, 8, 16][tier] * 1_048_576
+        if let available {
+            history = min(history, Int(min(UInt64(Int.max), available / 8)))
+            cache = min(cache, Int(min(UInt64(Int.max), available / 16)))
+        }
+        if now < pressureUntil || process.thermalState == .critical {
+            history = min(history, 4 * 1_048_576)
+            cache = 0
+        }
+        cached = .init(historyBytes: max(1, history), cacheBytes: cache,
+                       footprintBytes: footprint, peakFootprintBytes: peak, availableBytes: available)
+        return cached
+    }
+}
+
+/// Heavy optional pixel caches share a single admission ceiling across engines.
+public final class RuntimePixelCacheLease: @unchecked Sendable {
+    private let id = UUID()
+    public init() {}
+    public func reserve(bytes: Int) -> Bool { RuntimeMemoryBudget.shared.reserveCache(id, bytes: bytes) }
+    public func release() { _ = reserve(bytes: 0) }
+    deinit { release() }
 }

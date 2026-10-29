@@ -479,3 +479,57 @@ the reported iPad bottleneck or guarantee a frame rate on physical devices.
 Sustained iPad/Mac/TV frame timing, real memory warnings and thermal transitions
 still need device profiling. Native UIKit/Metal output on iPad and TV was not
 run in a visible test window.
+
+## Input, rewind and presentation follow-up — 29 October 2026
+
+The current source removes the synchronous PCM-worker query from effects rewind.
+The worker publishes a short, locked playback-position snapshot; readers project
+it only as far as scheduled audio. Rewind copies bounded history under the effects
+lock, then resamples, envelopes and normalises outside it. Silence and suspension
+invalidate an in-flight scrub. This reduces refill contention; it is not proof of
+crackle-free hardware playback. Audio queue sizes and user settings are unchanged.
+
+L2/L3/Neo live history keeps recent snapshots densely and spreads older snapshots
+across the existing entry budget. Input-prefix selection uses a binary search.
+Action replay backward seeks first use native history, retaining exact same-tick
+command ownership, and fall back to fresh reconstruction when needed. Replay move
+navigation is cached and displayed skill history retains only three entries.
+
+The mobile/TV HUD skips unchanged presentation updates and redraws the skill
+canvas only when its visible state changes. Accessibility status computes the
+selected actor's ordered rank in one pass without a temporary sorted array and
+updates text only when its value changes. No input targets or assistive actions
+were removed. L3 caches unchanged sparse terrain conversion; Neo caches native
+terrain conversion independently of animated gadgets. Each new terrain-image
+cache is limited to 4 MiB of RGBA pixels; huge imports keep fresh conversion.
+Retained physics arrays can still add copy-on-write memory and the rewind byte
+estimate remains an estimate rather than a measured memory ceiling.
+
+Flat funeral presentation retains opaque scene composition, at native pixel
+density with a 1,048,576-pixel ceiling, and uses nearest GPU scaling. Its temporary
+surface is released on recovery. This avoids full display-resolution CPU scaling
+without adding a Metal/HDR effect pass. CRT still prepares its native viewport on
+the CPU. Whole-level actor composition, movie image composition and expensive
+seeks beyond retained checkpoints remain architectural optimisation opportunities;
+no viewport/tile renderer or asynchronous seek scheduler is claimed here.
+
+Validation: 20 focused mobile terrain/rewind/parity checks passed. Additional
+regressions cover prepared Neo terrain versus fresh PC/Mac scene pixels through
+removal/construction/rewind, actor writes against cached L3 terrain, cached seeks
+versus independent reconstruction and live rewind checkpoint equivalence. Muted,
+offscreen funeral composition checks pass; headless Metal was unavailable. Audio,
+spatial and DJ performance programs compile, but runtime audio-unit creation failed
+in this environment, so mixed playback and audible acceptance remain open. The
+broader mobile-core run reported existing layout assertions outside this change
+and was interrupted after the focused checks were isolated. Final iOS/tvOS SDK
+source checks are recorded separately in the platform parity register.
+
+No sustained 10×, frame-time, tap-latency, thermal, actual peak-memory or crackling
+claim is established. Device profiling with simultaneous production music and
+crowded gameplay remains required on the reported iPad 8, Duo and Apple TV.
+
+The shared mobile controller emits Instruments Points of Interest intervals for
+input polling, simulation batches, scene presentation, and HUD/music work. They
+provide phase attribution on installed iOS/tvOS builds without per-frame strings,
+retained frame logs or render-callback logging. Existing audio reserve/refill
+statistics remain separate from device underrun evidence.

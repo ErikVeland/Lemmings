@@ -111,11 +111,13 @@ public final class ClassicMobileSession: MobileGameSession {
     private let artworkRoot: URL?
     private var nativeArtwork: ClassicMacArtwork?
     private var nativeScene: ClassicMacScene?
+    private let terrainLease = RuntimePixelCacheLease()
     private var terrainFrame: Data?
     private var cachedPanelFrame: MobilePixelFrame?
     public var renderScale: Double { nativeScene == nil ? 1 : 2 }
     public var spriteActorIDs: [Int] { simulation.lemmings.filter { $0.isActive }.map(\.id) }
     public var activeLemmingCount: Int { simulation.activeCount }
+    public var minimapActorPoints: [MobilePoint] { simulation.lemmings.filter(\.isActive).map { .init(x: Double($0.foot.x), y: Double($0.foot.y)) } }
     public var bombCountdowns: [MobileBombCountdown] {
         simulation.lemmings.filter(\.isActive).compactMap { lemming in
             guard let ticks = lemming.bomberCountdown, let assets else { return nil }
@@ -475,7 +477,7 @@ public final class ClassicMobileSession: MobileGameSession {
         let floater: Bool
     }
     private var spriteFrames: [SpriteKey: MobileSpriteHighlight] = [:]
-    private var cachedRender: (selection: MobileTargetSelection?, frame: MobilePixelFrame)?
+    private var cachedRender: (selection: MobileTargetSelection?, region: SceneRasterContext.Viewport?, actors: Bool, frame: MobilePixelFrame)?
     public var ghostSolutionEnabled = false { didSet { cachedRender = nil } }
     public var hasGhostSolution: Bool { solutionGhost != nil }
     public var ghostSolutionTick: Int? { solutionGhost?.simulation.tickCount }
@@ -559,10 +561,11 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
-        if let cachedRender, cachedRender.selection == highlight { return cachedRender.frame }
+        if let cachedRender, cachedRender.selection == highlight, cachedRender.region == SceneRasterContext.viewport, cachedRender.actors == SceneRasterContext.drawActors.wrappedValue { return cachedRender.frame }
         guard let renderedLevel else { throw MobileSessionError.frameUnavailable }
         let scale = nativeScene == nil ? 1 : 2
         let width = renderedLevel.width * scale, height = renderedLevel.height * scale
+        if !terrainLease.reserve(bytes: width * height * 4) { terrainFrame = nil }
         if terrainFrame == nil {
             terrainFrame = nativeScene?.terrainFrame(terrain: simulation.terrain)
                 ?? ClassicSceneFrame.terrainRGBA(renderedLevel, terrain: simulation.terrain)
@@ -580,30 +583,32 @@ public final class ClassicMobileSession: MobileGameSession {
         }
         var pixels = native?.rgba
             ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame)
-        drawSolutionGhost(into: &pixels, width: width, height: height, scale: scale)
-        drawHotSeatGhosts(into: &pixels, width: width, height: height, scale: scale)
-        if assets != nil, palette.count >= 8 {
-            var crowdShadow = MobileCrowdShadow()
-            for lemming in simulation.lemmings where lemming.isActive {
-                if lemming.action == .exploding,
-                   !ExplosionPixelSpray.popIsVisible(age: lemming.animationFrame,
-                       enhanced: settings?.hdEffectsEnabled != false, singleFrameArtwork: true) { continue }
-                if let sprite = spriteHighlight(lemming) {
-                    if lemming.action != .exploding {
-                        pixels.withUnsafeMutableBytes { destination in
-                            sprite.frame.rgba.withUnsafeBytes { (source: UnsafeRawBufferPointer) in
-                                crowdShadow.cast(spriteWidth: sprite.frame.width, spriteHeight: sprite.frame.height,
-                                    x: Int(sprite.rect.x * Double(scale)), y: Int(sprite.rect.y * Double(scale)),
-                                    width: width, height: height, pixels: destination,
-                                    opaque: { sx, sy in source[(sy * sprite.frame.width + sx) * 4 + 3] >= 128 })
+        if SceneRasterContext.drawActors.wrappedValue {
+            drawSolutionGhost(into: &pixels, width: width, height: height, scale: scale)
+            drawHotSeatGhosts(into: &pixels, width: width, height: height, scale: scale)
+            if assets != nil, palette.count >= 8 {
+                var crowdShadow = MobileCrowdShadow()
+                for lemming in simulation.lemmings where lemming.isActive {
+                    if lemming.action == .exploding,
+                       !ExplosionPixelSpray.popIsVisible(age: lemming.animationFrame,
+                           enhanced: settings?.hdEffectsEnabled != false, singleFrameArtwork: true) { continue }
+                    if let sprite = spriteHighlight(lemming) {
+                        if lemming.action != .exploding {
+                            pixels.withUnsafeMutableBytes { destination in
+                                sprite.frame.rgba.withUnsafeBytes { (source: UnsafeRawBufferPointer) in
+                                    crowdShadow.cast(spriteWidth: sprite.frame.width, spriteHeight: sprite.frame.height,
+                                        x: Int(sprite.rect.x * Double(scale)), y: Int(sprite.rect.y * Double(scale)),
+                                        width: width, height: height, pixels: destination,
+                                        opaque: { sx, sy in source[(sy * sprite.frame.width + sx) * 4 + 3] >= 128 })
+                                }
                             }
                         }
+                        Self.composite(sprite.frame.rgba, sourceWidth: sprite.frame.width, sourceHeight: sprite.frame.height,
+                            atX: Int(sprite.rect.x * Double(scale)), y: Int(sprite.rect.y * Double(scale)), into: &pixels, width: width, height: height)
                     }
-                    Self.composite(sprite.frame.rgba, sourceWidth: sprite.frame.width, sourceHeight: sprite.frame.height,
-                        atX: Int(sprite.rect.x * Double(scale)), y: Int(sprite.rect.y * Double(scale)), into: &pixels, width: width, height: height)
                 }
             }
-        }
+            }
         selectionSprite = nil
         if let highlight, settings?.lemmingSelectionStyle == .modern,
            let lemming = simulation.lemmings.first(where: { $0.id == highlight.id && Self.canHighlight($0) }) {
@@ -618,12 +623,13 @@ public final class ClassicMobileSession: MobileGameSession {
         if settings?.colorDepth == .amigaOCS {
             pixels.withUnsafeMutableBytes { (pixels: UnsafeMutableRawBufferPointer) in
                 for offset in stride(from: 0, to: pixels.count, by: 4) {
-                    for channel in 0..<3 { pixels[offset + channel] = UInt8((Int(pixels[offset + channel]) * 15 + 127) / 255 * 17) }
+                    for channel in 0..<3 { pixels[offset + channel] = MobileColourDepth.ocs[Int(pixels[offset + channel])] }
                 }
             }
         }
         let frame = try MobilePixelFrame(width: width, height: height, rgba: pixels, arrowGlints: native?.glints)
-        cachedRender = (highlight, frame)
+        cachedRender = (highlight, SceneRasterContext.viewport, SceneRasterContext.drawActors.wrappedValue, frame)
+        if !terrainLease.reserve(bytes: width * height * 4) { terrainFrame = nil }
         return frame
     }
 
@@ -675,6 +681,54 @@ public final class ClassicMobileSession: MobileGameSession {
         rewindCount = checkpoint.rewindCount ?? 0
         undoCount = checkpoint.undoCount ?? 0
         bonusSkillID = checkpoint.bonusSkillID
+    }
+
+    public var earliestRewindTick: Int { isReadOnly ? replayInitial.tickCount : history.earliestTick }
+
+    public func prepareSeek(to tick: Int, backwardSteps: Int) -> MobileSeekOperation? {
+        if isReadOnly {
+            guard tick >= replayInitial.tickCount, tick <= (playbackEndTick ?? Int.max) else { return nil }
+            let copy = ClassicMobileSession(simulation: replayInitial, renderedLevel: renderedLevel,
+                assets: assets, palette: palette, levelIdentifier: levelIdentifier, levelIndex: levelIndex,
+                startX: Int(initialCameraOrigin.x), authoredLevel: authoredLevel, ground: ground,
+                artworkFamily: artworkFamily, artworkMatch: artworkMatch, artworkRoot: artworkRoot)
+            copy.playbackReplay = playbackReplay; copy.playbackEvents = playbackEvents
+            copy.playbackEndTick = playbackEndTick
+            copy.resetReplay()
+            let originalTick = simulation.tickCount
+            return MobileSeekOperation { [weak self] deadline in
+                while copy.simulation.tickCount < tick, !copy.simulation.isComplete {
+                    copy.tick()
+                    if ProcessInfo.processInfo.systemUptime >= deadline { return false }
+                }
+                guard let self, self.simulation.tickCount == originalTick, copy.simulation.tickCount == tick else {
+                    throw MobileSessionError.invalidCheckpoint
+                }
+                self.history = copy.history
+                self.playbackSkillHistory = copy.playbackSkillHistory
+                self.playbackAssignedSkills = copy.playbackAssignedSkills
+                self.cachedRender = nil; self.terrainFrame = nil; self.beforeEndRun = nil
+                self.soundCues.removeAll(keepingCapacity: true)
+                return true
+            }
+        }
+        guard tick < simulation.tickCount, tick >= history.earliestTick,
+              var cursor = history.preparedSeek(toTick: tick) else { return nil }
+        let originalTick = simulation.tickCount
+        return MobileSeekOperation { [weak self] deadline in
+            while cursor.currentTick < tick {
+                guard cursor.seek(toTick: cursor.currentTick + 1) else { throw MobileSessionError.invalidCheckpoint }
+                if ProcessInfo.processInfo.systemUptime >= deadline { return false }
+            }
+            guard let self, self.simulation.tickCount == originalTick else { throw CancellationError() }
+            self.history = cursor
+            self.cachedRender = nil
+            self.terrainFrame = nil
+            self.beforeEndRun = nil
+            self.soundCues.removeAll(keepingCapacity: true)
+            if !self.isReadOnly { self.usedRewind = true; self.rewindCount += max(1, backwardSteps) }
+            return true
+        }
     }
 
     @discardableResult public func rewind(seconds: Double) -> Bool {
@@ -867,7 +921,7 @@ public final class ClassicMobileSession: MobileGameSession {
         return soundCues
     }
 
-    public func releaseTransientResources() { terrainFrame = nil; cachedPanelFrame = nil; ghostFrames.removeAll(); spriteFrames.removeAll(); cachedRender = nil }
+    public func releaseTransientResources() { terrainLease.release(); terrainFrame = nil; cachedPanelFrame = nil; ghostFrames.removeAll(); spriteFrames.removeAll(); cachedRender = nil }
 
     private func spriteHighlight(_ lemming: ClassicDOSLemming) -> MobileSpriteHighlight? {
         guard let assets else { return nil }
@@ -1041,19 +1095,21 @@ public final class ClassicMobileSession: MobileGameSession {
         width: Int,
         height: Int
     ) {
-        guard source.count == sourceWidth * sourceHeight * 4, destination.count >= width * height * 4 else { return }
-        let rows = max(0, -originY)..<min(sourceHeight, height - originY)
-        let columns = max(0, -originX)..<min(sourceWidth, width - originX)
-        guard !rows.isEmpty, !columns.isEmpty else { return }
+        guard source.count == sourceWidth * sourceHeight * 4, destination.count >= SceneRasterContext.region(width: width, height: height).byteCount else { return }
+        let region = SceneRasterContext.region(width: width, height: height)
+        let top = max(0, region.y - originY), bottom = min(sourceHeight, region.y + region.height - originY)
+        let left = max(0, region.x - originX), right = min(sourceWidth, region.x + region.width - originX)
+        guard top < bottom, left < right else { return }
+        let rows = top..<bottom, columns = left..<right
         source.withUnsafeBytes { (source: UnsafeRawBufferPointer) in
             destination.withUnsafeMutableBytes { (destination: UnsafeMutableRawBufferPointer) in
                 for y in rows {
-                    let sourceRow = y * sourceWidth, destinationRow = (originY + y) * width + originX
+                    let sourceRow = y * sourceWidth
                     for x in columns {
                         let src = (sourceRow + x) * 4
                         let alpha = Int(source[src + 3])
                         guard alpha > 0 else { continue }
-                        let dst = (destinationRow + x) * 4
+                        guard let dst = region.offset(x: originX + x, y: originY + y) else { continue }
                         if alpha == 255 {
                             destination[dst] = source[src]
                             destination[dst + 1] = source[src + 1]
@@ -1098,7 +1154,7 @@ public final class ClassicMobileSession: MobileGameSession {
             ]
         }
         for (x, y) in marks where (0..<width).contains(x) && (0..<height).contains(y) {
-            let offset = (y * width + x) * 4
+            guard let offset = SceneRasterContext.region(width: width, height: height).offset(x: x, y: y) else { continue }
             pixels[offset] = colour.0
             pixels[offset + 1] = colour.1
             pixels[offset + 2] = colour.2

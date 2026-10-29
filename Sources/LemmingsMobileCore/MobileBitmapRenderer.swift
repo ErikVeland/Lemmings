@@ -8,6 +8,8 @@ public final class MobileBitmapSurface {
 
     public init() {}
 
+    public func release() { context = nil }
+
     public func prepare(width: Int, height: Int) -> CGContext? {
         guard width > 0, height > 0 else { return nil }
         if context?.width != width || context?.height != height {
@@ -36,7 +38,7 @@ public enum MobileBitmapRenderer {
     }
 
     /// The context uses view coordinates, with its origin at the top left.
-    public static func draw(_ image: CGImage, viewport: MobileViewport, in context: CGContext) {
+    public static func draw(_ image: CGImage, viewport: MobileViewport, in context: CGContext, renderedRect: MobileRect? = nil) {
         let content = viewport.contentFrame
         guard content.width > 0, content.height > 0 else { return }
         context.saveGState()
@@ -47,10 +49,11 @@ public enum MobileBitmapRenderer {
         // Draw the full image under the camera clip. Fractional pan keeps its pixel alignment.
         let scaleX = viewport.zoom * viewport.pixelAspect
         let scaleY = viewport.zoom
-        let x = content.x - viewport.origin.x * scaleX
-        let y = content.y - viewport.origin.y * scaleY
-        let width = viewport.levelSize.width * scaleX
-        let height = viewport.levelSize.height * scaleY
+        let scene = renderedRect ?? MobileRect(x: 0, y: 0, width: viewport.levelSize.width, height: viewport.levelSize.height)
+        let x = content.x + (scene.x - viewport.origin.x) * scaleX
+        let y = content.y + (scene.y - viewport.origin.y) * scaleY
+        let width = scene.width * scaleX
+        let height = scene.height * scaleY
         context.translateBy(x: x, y: y + height)
         context.scaleBy(x: 1, y: -1)
         context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))

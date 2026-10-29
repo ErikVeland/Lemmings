@@ -55,14 +55,15 @@ public final class MobileGhostSpriteCache: @unchecked Sendable {
     /// Blends a translucent ghost over the frame. `x` and `y` place the unpadded sprite.
     public static func blend(_ ghost: SolutionGhostPixels, atX x: Int, y: Int, into rgba: inout [UInt8], width: Int, height: Int) {
         let originX = x - ghost.padding, originY = y - ghost.padding
-        guard rgba.count >= width * height * 4 else { return }
+        let region = SceneRasterContext.region(width: width, height: height)
+        guard rgba.count >= region.byteCount else { return }
         ghost.rgba.withUnsafeBytes { (source: UnsafeRawBufferPointer) in
             for row in max(0, -originY)..<max(0, min(ghost.height, height - originY)) {
                 for column in max(0, -originX)..<max(0, min(ghost.width, width - originX)) {
                     let src = (row * ghost.width + column) * 4
                     let alpha = Int(source[src + 3])
                     guard alpha > 0 else { continue }
-                    let dst = ((originY + row) * width + originX + column) * 4
+                    guard let dst = region.offset(x: originX + column, y: originY + row) else { continue }
                     for channel in 0..<3 {
                         rgba[dst + channel] = UInt8((Int(source[src + channel]) * alpha
                             + Int(rgba[dst + channel]) * (255 - alpha)) / 255)

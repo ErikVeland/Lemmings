@@ -191,6 +191,14 @@ import Testing
             #expect(!review.beginEndRun())
             #expect(review.seekReplay(to: try #require(review.replayEndTick)))
             #expect(review.snapshot == game.snapshot || review.snapshot.isComplete)
+            for _ in 0..<3 {
+                #expect(review.seekReplay(to: start))
+                let independent = try #require(try game.makeReplaySession(document: partial))
+                #expect(independent.seekReplay(to: start))
+                #expect(review.snapshot == independent.snapshot)
+                #expect(review.replaySkillUses == independent.replaySkillUses)
+                #expect(review.seekReplay(to: try #require(review.replayEndTick)))
+            }
             #expect(review.seekReplay(to: 0))
             try game.restoreCheckpointPayload(checkpoint)
             #expect(game.beginEndRun())

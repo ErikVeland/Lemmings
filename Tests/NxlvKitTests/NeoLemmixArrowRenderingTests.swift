@@ -30,6 +30,39 @@ struct NeoLemmixArrowRenderingTests {
         return (rendered, terrain)
     }
 
+    @Test func viewportCompositesMatchFullFramesAtNativeAndMacResolution() throws {
+        let (rendered, terrain) = try fixture()
+        for mac in [false, true] {
+            let scale = mac ? 2 : 1
+            let full = NeoLemmixSceneFrame.rgba(rendered, terrain: terrain, useMacArtwork: mac)
+            for x in [0, 7, 22] {
+                let request = SceneRasterContext.Viewport(levelWidth: rendered.width, levelHeight: rendered.height,
+                    x: x, y: 7, width: 8, height: 9)
+                SceneRasterContext.request.withValue(request) {
+                    let cropped = NeoLemmixSceneFrame.rgba(rendered, terrain: terrain, useMacArtwork: mac)
+                    let expected = SceneRasterContext.crop(full, width: rendered.width * scale, height: rendered.height * scale)
+                    #expect(cropped == expected)
+                }
+            }
+        }
+    }
+
+    @Test func preparedTerrainMatchesFreshSceneAcrossRemovalConstructionAndRewind() throws {
+        let (rendered, initial) = try fixture()
+        var removed = initial
+        removed.setSolid(false, x: 8, y: 8)
+        var constructed = removed
+        constructed.setSolid(true, x: 2, y: 2)
+        for terrain in [initial, removed, constructed, initial] {
+            let prepared = NeoLemmixSceneFrame.terrainRGBA(rendered, terrain: terrain)
+            for mac in [false, true] {
+                let fresh = NeoLemmixSceneFrame.rgba(rendered, terrain: terrain, useMacArtwork: mac)
+                #expect(NeoLemmixSceneFrame.rgba(rendered, terrain: terrain, useMacArtwork: mac,
+                    preparedTerrainRGBA: prepared) == fresh)
+            }
+        }
+    }
+
     @Test func removedTerrainClipsLiveArrowsAtBothResolutions() throws {
         for effect in [NxlvObjectEffect.oneWayLeft, .oneWayRight, .oneWayUp, .oneWayDown] {
             let (rendered, initial) = try fixture(effect: effect)

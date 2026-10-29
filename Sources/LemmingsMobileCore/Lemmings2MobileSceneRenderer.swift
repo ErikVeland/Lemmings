@@ -55,6 +55,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
             rgba = [UInt8](try macTerrain.frame(width: width, height: height, rgba: rgba,
                 palette: runtime.configuration.palette, category: .lemmings2Terrain(tribe: runtime.configuration.tribe)).rgba)
         }
+        rgba = SceneRasterContext.crop(rgba, width: width * (macintosh ? 2 : 1), height: height * (macintosh ? 2 : 1))
         for part in objects.parts where !part.frames.isEmpty {
             let machine = runtime.machines.first(where: { $0.id == part.objectIndex })
             let movement = machine?.displacement ?? 0
@@ -95,7 +96,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         drawGhosts(ghosts, palette: runtime.configuration.palette, width: width, height: height, into: &rgba)
 
         var crowdShadow = MobileCrowdShadow()
-        for lemming in runtime.lemmings where lemming.active && lemming.state != .trapped {
+        for lemming in runtime.lemmings where SceneRasterContext.drawActors.wrappedValue && lemming.active && lemming.state != .trapped {
             if lemming.state == .exploding, lemming.age >= 17,
                let frames = explosion?.frames, frames.indices.contains(lemming.age - 17) {
                 for point in frames[lemming.age - 17] {
@@ -202,8 +203,8 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
     /// Ghosts show the primary lemming sprite only, as on Mac. Equipment and particles stay live-only.
     private func drawGhosts(_ ghosts: [MobileReplayGhost<Lemmings2Runtime>], palette: [UInt8],
                             width: Int, height: Int, into rgba: inout [UInt8]) {
-        let scale = rgba.count == width * height * 16 ? 2 : 1
-        for ghost in ghosts {
+        let scale = SceneRasterContext.doubled(byteCount: rgba.count, width: width, height: height) ? 2 : 1
+        for ghost in ghosts where SceneRasterContext.drawActors.wrappedValue {
             for lemming in ghost.state.lemmings where lemming.active && lemming.state != .trapped
                 && !(lemming.state == .exploding && lemming.age >= 17) {
                 let frame: Lemmings2SpriteFrame, x: Int, y: Int, mirrored: Bool, key: String
@@ -477,7 +478,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                                    width: Int, height: Int, mirrored: Bool = false,
                                    crowd: inout MobileCrowdShadow, into rgba: inout [UInt8]) {
         guard frame.opaque.count == frame.width * frame.height else { return }
-        let scale = rgba.count == width * height * 16 ? 2 : 1
+        let scale = SceneRasterContext.doubled(byteCount: rgba.count, width: width, height: height) ? 2 : 1
         rgba.withUnsafeMutableBytes { pixels in
             crowd.cast(spriteWidth: frame.width * scale, spriteHeight: frame.height * scale, x: x * scale, y: y * scale,
                 width: width * scale, height: height * scale, pixels: pixels, opaque: { sx, sy in
@@ -490,10 +491,12 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
     static func composite(_ frame: Lemmings2SpriteFrame, palette: [UInt8],
                                   atX x: Int, y: Int, width: Int, height: Int,
                                   mirrored: Bool = false, category: SequelMacCategory = .sprite, into rgba: inout [UInt8]) {
+        let rasterRegion = SceneRasterContext.region(width: width, height: height)
+        guard rasterRegion.intersects(x: x, y: y, width: frame.width, height: frame.height) else { return }
         guard frame.width > 0, frame.height > 0,
               frame.pixels.count == frame.width * frame.height,
               frame.opaque.count == frame.pixels.count else { return }
-        if rgba.count == width * height * 16 {
+        if SceneRasterContext.doubled(byteCount: rgba.count, width: width, height: height) {
             var pixels = [UInt8](repeating: 0, count: frame.width * frame.height * 4)
             composite(frame, palette: palette, atX: 0, y: 0, width: frame.width, height: frame.height, into: &pixels)
             if let art = try? macFrames.frame(width: frame.width, height: frame.height, rgba: pixels, palette: palette, category: category) {
@@ -510,7 +513,7 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                 let source = sy * frame.width + sx
                 guard frame.opaque[source] else { continue }
                 let paletteOffset = Int(frame.pixels[source]) * 4
-                let destination = (dy * width + dx) * 4
+                guard let destination = rasterRegion.offset(x: dx, y: dy) else { continue }
                 rgba[destination] = palette[paletteOffset]
                 rgba[destination + 1] = palette[paletteOffset + 1]
                 rgba[destination + 2] = palette[paletteOffset + 2]
@@ -523,9 +526,10 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                              width: Int, height: Int, into rgba: inout [UInt8]) {
         guard (0..<width).contains(x), (0..<height).contains(y), (0..<128).contains(colour) else { return }
         let source = colour * 4
-        let scale = rgba.count == width * height * 16 ? 2 : 1
+        let scale = SceneRasterContext.doubled(byteCount: rgba.count, width: width, height: height) ? 2 : 1
+        let scaledRegion = SceneRasterContext.region(width: width * scale, height: height * scale)
         for dy in 0..<scale { for dx in 0..<scale {
-            let destination = ((y * scale + dy) * width * scale + x * scale + dx) * 4
+            guard let destination = scaledRegion.offset(x: x * scale + dx, y: y * scale + dy) else { continue }
             rgba[destination] = palette[source]; rgba[destination + 1] = palette[source + 1]
             rgba[destination + 2] = palette[source + 2]; rgba[destination + 3] = 255
         } }
@@ -536,9 +540,10 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
         let colour: (UInt8, UInt8, UInt8) = (255, 255, 0)
         for (px, py) in [(x - 8, y - 12), (x + 7, y - 12), (x - 8, y + 1), (x + 7, y + 1)] {
             guard (0..<width).contains(px), (0..<height).contains(py) else { continue }
-            let scale = rgba.count == width * height * 16 ? 2 : 1
+            let scale = SceneRasterContext.doubled(byteCount: rgba.count, width: width, height: height) ? 2 : 1
+            let scaledRegion = SceneRasterContext.region(width: width * scale, height: height * scale)
             for dy in 0..<scale { for dx in 0..<scale {
-                let offset = ((py * scale + dy) * width * scale + px * scale + dx) * 4
+                guard let offset = scaledRegion.offset(x: px * scale + dx, y: py * scale + dy) else { continue }
                 rgba[offset] = colour.0; rgba[offset + 1] = colour.1; rgba[offset + 2] = colour.2
             } }
         }

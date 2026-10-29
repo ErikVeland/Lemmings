@@ -6,6 +6,7 @@ import NxlvKit
 /// Nodes remain attached during play to avoid graph changes between effects.
 public final class SoundEffectPlayer: @unchecked Sendable {
   private struct RescueLayer {
+    var identity: UInt64 = 0
     var samples: [Float]
     var position: Double = 0
     var increment: Double
@@ -14,6 +15,8 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     var distanceGain: Float
   }
   private struct Voice {
+    var identity: UInt64 = 0
+    var rewindHead = 0.0
     var samples: [Float] = []
     var position: Double = 0
     var increment: Double = 1
@@ -40,7 +43,136 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   private var lastActiveFrame: Int64 = 0
   public var audioDiagnostics: AudioBufferStatistics { bufferedSource?.diagnostics ?? AudioBufferStatistics() }
   private var spatialMixers: [AVAudioMixerNode] = []
-  private let lock = NSLock()
+  private let controlLock = NSLock()
+  private let historyLock = NSLock()
+  private let voiceBridge: VoiceBridge
+  private var workerVoices: [Voice]
+  private var controlBaseline: [Voice] = []
+  private var nextIdentity: UInt64 = 0
+  private var workerBlockStart = -Double.infinity
+  private var workerMuted = false
+  private var workerGain = 1.0
+  private var workerReverseCount = 0
+  private var workerHistoryMix = [Float](repeating: 0, count: 512)
+
+  /// Control work prepares immutable commands; PCM owns all running playheads.
+  /// Only fixed-size command/status transfers take this separate lock.
+  private final class VoiceBridge {
+    final class Slot {
+      var pending: Voice?
+      var identity: UInt64 = 0
+      var position = 0.0
+      var isActive = false
+      var lastSample: Float = 0
+      var layerIDs = [UInt64](repeating: 0, count: 64)
+      var layerPositions = [Double](repeating: 0, count: 64)
+      var layerCount = 0
+    }
+    let lock = NSLock()
+    let slots: [Slot]
+    var muted = false
+    var gain = 1.0
+    init(count: Int) { slots = (0..<count).map { _ in Slot() } }
+
+    func progress(into voices: inout [Voice]) {
+      lock.lock()
+      defer { lock.unlock() }
+      for index in voices.indices {
+        let slot = slots[index]
+        guard slot.pending == nil, voices[index].identity == slot.identity else { continue }
+        voices[index].position = slot.position
+        voices[index].isActive = slot.isActive
+        voices[index].lastSample = slot.lastSample
+        var layers = 0
+        for layer in voices[index].rescueLayers.indices {
+          if let position = (0..<slot.layerCount).first(where: { slot.layerIDs[$0] == voices[index].rescueLayers[layer].identity }) {
+            voices[index].rescueLayers[layer].position = slot.layerPositions[position]
+            if voices[index].rescueLayers[layer].position < Double(voices[index].rescueLayers[layer].samples.count) { layers += 1 }
+          }
+        }
+        // Cleanup happens on the control side, never inside the PCM sample loop.
+        if layers < voices[index].rescueLayers.count {
+          voices[index].rescueLayers.removeAll { $0.position >= Double($0.samples.count) }
+        }
+      }
+    }
+
+    func publish(_ voices: [Voice], previous: [Voice], muted: Bool, gain: Double) {
+      // Equality and preparation stay outside the transfer lock.
+      var changed: [(Int, Voice)] = []
+      for index in voices.indices {
+        let v = voices[index]
+        let old = previous.indices.contains(index) ? previous[index] : nil
+        let equal = old.map { old in
+          old.identity == v.identity && old.isActive == v.isActive && old.gain == v.gain
+            && old.distanceGain == v.distanceGain && (old.position >= Double(old.samples.count)) == (v.position >= Double(v.samples.count))
+            && old.rescueLayers.count == v.rescueLayers.count
+            && zip(old.rescueLayers, v.rescueLayers).allSatisfy { a, b in
+              a.identity == b.identity && a.gain == b.gain && a.distanceGain == b.distanceGain
+            }
+        } ?? false
+        if !equal { changed.append((index, v)) }
+      }
+      lock.lock()
+      for (index, voice) in changed { slots[index].pending = voice }
+      self.muted = muted; self.gain = gain
+      lock.unlock()
+    }
+
+    func consume(_ index: Int, into voice: inout Voice) -> (Bool, Double) {
+      lock.lock()
+      let pending = slots[index].pending
+      slots[index].pending = nil
+      let state = (muted, gain)
+      lock.unlock()
+      if let command = pending {
+        let starts = command.identity != voice.identity
+        if starts {
+          voice.identity = command.identity; voice.samples = command.samples
+          voice.position = command.position; voice.increment = command.increment
+          voice.transitionFrom = command.transitionFrom; voice.transitionRemaining = command.transitionRemaining
+          voice.rewindSequence = command.rewindSequence; voice.rewindHead = command.rewindHead
+          voice.priority = command.priority; voice.isRescue = command.isRescue; voice.isReleaseRate = command.isReleaseRate
+        }
+        if !starts, command.position >= Double(command.samples.count) { voice.position = max(voice.position, command.position) }
+        voice.isActive = command.isActive; voice.gain = command.gain; voice.distanceGain = command.distanceGain
+        voice.rescueLayers.removeAll { layer in !command.rescueLayers.contains { $0.identity == layer.identity } }
+        for layer in command.rescueLayers {
+          if let existing = voice.rescueLayers.firstIndex(where: { $0.identity == layer.identity }) {
+            voice.rescueLayers[existing].gain = layer.gain
+            voice.rescueLayers[existing].distanceGain = layer.distanceGain
+          } else if voice.rescueLayers.count < 64 { voice.rescueLayers.append(layer) }
+        }
+      }
+      return state
+    }
+
+    func report(_ index: Int, voice: Voice) {
+      lock.lock()
+      let slot = slots[index]
+      slot.identity = voice.identity; slot.position = voice.position
+      slot.isActive = voice.isActive; slot.lastSample = voice.lastSample
+      slot.layerCount = min(64, voice.rescueLayers.count)
+      for layer in 0..<slot.layerCount {
+        slot.layerIDs[layer] = voice.rescueLayers[layer].identity
+        slot.layerPositions[layer] = voice.rescueLayers[layer].position
+      }
+      lock.unlock()
+    }
+  }
+
+  private func beginControls() {
+    controlLock.lock()
+    if bufferedSource != nil { voiceBridge.progress(into: &voices) }
+    controlBaseline = voices
+  }
+  private func endControls() {
+    if bufferedSource != nil { voiceBridge.publish(voices, previous: controlBaseline, muted: isMuted, gain: level) }
+    controlBaseline = []
+    controlLock.unlock()
+  }
+  private func identity() -> UInt64 { nextIdentity &+= 1; return nextIdentity }
+
 
   // Guarded by `lock`.
   private var library: [ClassicSoundEffect: [Float]] = [:]
@@ -91,6 +223,12 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     let count = max(1, min(voiceCount, budget.audioVoiceLimit))
     requestedVoiceLimit = count; activeVoiceLimit = count
     activeRescueLimit = min(rescueVoiceLimit ?? budget.rescueVoiceLimit, budget.rescueVoiceLimit)
+    voiceBridge = VoiceBridge(count: count)
+    workerVoices = (0..<count).map { _ in
+      var voice = Voice()
+      voice.rescueLayers.reserveCapacity(64)
+      return voice
+    }
     voices = [Voice](repeating: Voice(), count: count)
     rewindRenderedVoices = [Bool](repeating: false, count: count)
     recentSamples = [Float](repeating: 0, count: recentSampleLimit)
@@ -101,7 +239,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Replays share the selected samples and settings, but own their voices and output.
   public func replayPlayer() -> SoundEffectPlayer {
-    lock.lock(); defer { lock.unlock() }
+    beginControls(); defer { endControls() }
     let copy = SoundEffectPlayer(voiceCount: voices.count, rescueVoiceLimit: rescueVoiceLimit, resources: fixedResources)
     copy.requestedVoiceLimit = requestedVoiceLimit
     copy.refreshResourceBudgetLocked()
@@ -147,11 +285,12 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     engine.mainMixerNode.outputVolume = isMuted || level == 0 ? 0 : 1
     do { try engine.start() }
     catch { source.stop(); detachSources(); throw error }
+    voiceBridge.publish(voices, previous: [], muted: isMuted, gain: level)
     source.start()
     isRunning = true
-   lock.lock()
+   beginControls()
     outputSuspended = false
-    lock.unlock()
+    endControls()
   }
 
   private func detachSources() {
@@ -171,30 +310,33 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     detachSources()
     silence()
     isRunning = false
-    lock.lock()
+    beginControls()
     outputSuspended = false
-    lock.unlock()
+    endControls()
   }
 
   public func suspendOutput() {
     guard isRunning else { return }
-    lock.lock()
+    beginControls()
     outputSuspended = true
+    rewindSequence &+= 1
    for index in voices.indices {
       voices[index].isActive = false
       voices[index].rescueLayers.removeAll()
     }
-    lock.unlock()
+    endControls()
     engine.pause()
     bufferedSource?.stop()
   }
 
   /// Park a silent graph after the last voice finishes. Playback adapters own retries.
   @discardableResult public func suspendOutputIfIdle() -> Bool {
-    lock.lock()
+    beginControls()
     let idle = !voices.contains { $0.isActive }
+    historyLock.lock()
     let tail = lastActiveFrame
-    lock.unlock()
+    historyLock.unlock()
+    endControls()
     guard idle, bufferedSource.map({ $0.playedFrame >= tail }) ?? true else { return false }
     suspendOutput()
     return true
@@ -202,18 +344,43 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   public func resumeOutput() throws {
     guard isRunning else { return }
-    lock.lock()
+    beginControls()
     outputSuspended = false
-    lock.unlock()
+    endControls()
     do { if !engine.isRunning { try engine.start() } }
     catch { suspendOutput(); throw error }
     bufferedSource?.start()
   }
 
   private func fillVoice(_ index: Int, buffers: UnsafeMutableAudioBufferListPointer, frames: Int, sampleTime: Double) {
-    lock.lock()
-    defer { lock.unlock() }
-    var voice = voices[index]
+    if bufferedSource == nil {
+      beginControls()
+      defer { endControls() }
+      var voice = voices[index]
+      renderVoice(index, voice: &voice, renderedVoices: voices, muted: isMuted, gain: level,
+        buffers: buffers, frames: frames, sampleTime: sampleTime)
+      voices[index] = voice
+    } else {
+      // The PCM worker never takes the control/library lock and never copies its voice array.
+      if workerBlockStart != sampleTime || index == 0 {
+        workerBlockStart = sampleTime
+        for slot in workerVoices.indices {
+          let state = voiceBridge.consume(slot, into: &workerVoices[slot])
+          workerMuted = state.0; workerGain = state.1
+        }
+        workerReverseCount = workerVoices.reduce(0) { $0 + ($1.isActive && $1.rewindSequence != nil ? 1 : 0) }
+      }
+      workerVoices.withUnsafeMutableBufferPointer { voices in
+        renderVoice(index, voice: &voices[index], rewindCount: workerReverseCount, muted: workerMuted, gain: workerGain,
+          buffers: buffers, frames: frames, sampleTime: sampleTime)
+        voiceBridge.report(index, voice: voices[index])
+      }
+    }
+  }
+
+  private func renderVoice(_ index: Int, voice: inout Voice, renderedVoices: [Voice] = [], rewindCount: Int? = nil,
+                           muted: Bool, gain: Double, buffers: UnsafeMutableAudioBufferListPointer,
+                           frames: Int, sampleTime: Double) {
     let start = sampleTime.isFinite && sampleTime >= 0
       ? Int64(sampleTime.rounded())
       : (latestRecentSample.map { $0 + 1 } ?? 0)
@@ -223,13 +390,14 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       rewindRenderStart = start
       recentRenderPrepared = false
       rewindRenderFrames = frames
-      rewindRenderCount = voices.reduce(0) { $0 + ($1.isActive && $1.rewindSequence != nil ? 1 : 0) }
+      rewindRenderCount = rewindCount ?? renderedVoices.reduce(0) { $0 + ($1.isActive && $1.rewindSequence != nil ? 1 : 0) }
       for index in rewindRenderedVoices.indices { rewindRenderedVoices[index] = false }
     }
     rewindRenderedVoices[index] = true
    // Clear the history once per block, rather than for every silent spatial source.
     // Scrub-only renders retain their history and never record their own output.
     if rewindRenderCount == 0, voice.rewindSequence == nil, !recentRenderPrepared {
+      historyLock.lock()
       for frame in 0..<frames {
         let position = start + Int64(frame)
         let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
@@ -238,18 +406,23 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       }
       latestRecentSample = max(latestRecentSample ?? start, start + Int64(max(0, frames - 1)))
       recentRenderPrepared = true
+      historyLock.unlock()
    }
-    guard !isMuted, voice.isActive else {
+    guard !muted, voice.isActive else {
       for buffer in buffers { memset(buffer.mData, 0, Int(buffer.mDataByteSize)) }
       return
     }
+    historyLock.lock()
     lastActiveFrame = start + Int64(frames)
+    historyLock.unlock()
+    if workerHistoryMix.count < frames { workerHistoryMix = [Float](repeating: 0, count: frames) }
     let rewindGain: Float = voice.rewindSequence == nil ? 1 : 1 / Float(max(1, rewindRenderCount))
+    var reverseTail: Float?
     for frame in 0..<frames {
       var sample: Float = 0
       var sourceSample: Float = 0
       var historySample: Float = 0
-      if !isMuted && voice.isActive {
+      if !muted && voice.isActive {
         let position = Int(voice.position)
         if position >= voice.samples.count && voice.rescueLayers.isEmpty { voice.isActive = false }
         if position < voice.samples.count {
@@ -259,7 +432,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
           if voice.rewindSequence == nil {
             sourceSample *= Float(min(1, max(0, (Double(voice.samples.count - 1) - voice.position) / (64 * voice.increment))))
           }
-          sample = sourceSample * Float(level) * voice.gain * voice.distanceGain * rewindGain
+          sample = sourceSample * Float(gain) * voice.gain * voice.distanceGain * rewindGain
           historySample = sourceSample * voice.gain * voice.distanceGain
           voice.position += voice.increment
         }
@@ -270,7 +443,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
           let layerSample = voice.rescueLayers[index].samples[position]
             + (voice.rescueLayers[index].samples[next] - voice.rescueLayers[index].samples[position])
             * Float(voice.rescueLayers[index].position - Double(position))
-          sample += layerSample * Float(level) * voice.rescueLayers[index].gain * voice.rescueLayers[index].distanceGain
+          sample += layerSample * Float(gain) * voice.rescueLayers[index].gain * voice.rescueLayers[index].distanceGain
           historySample += layerSample * voice.rescueLayers[index].gain * voice.rescueLayers[index].distanceGain
           voice.rescueLayers[index].position += voice.rescueLayers[index].increment
         }
@@ -279,24 +452,30 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       if voice.transitionRemaining > 0 {
         let weight = Float(voice.transitionRemaining) / 64
         historySample = historySample * (1 - weight) + voice.transitionFrom * weight
-        sample = historySample * Float(level)
+        sample = historySample * Float(gain)
         voice.transitionRemaining -= 1
       }
       voice.lastSample = historySample
       for buffer in buffers { buffer.mData?.assumingMemoryBound(to: Float.self)[frame] = sample }
-      if voice.rewindSequence != nil { lastRewindSample = sourceSample }
+      if voice.rewindSequence != nil { reverseTail = sourceSample }
 
       // Rewind output must never feed the history it will reverse next.
       guard rewindRenderCount == 0, voice.rewindSequence == nil else { continue }
-      let position = start + Int64(frame)
-      let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
-      recentSamples[slot] += historySample
+      workerHistoryMix[frame] = historySample
     }
+    historyLock.lock()
+    if let reverseTail { lastRewindSample = reverseTail }
     if voice.rewindSequence != nil {
-      rewindHistoryHead = rewindSliceHead - VinylBackspin.distance(frames: voice.position, sampleRate: sampleRate)
+      rewindHistoryHead = voice.rewindHead - VinylBackspin.distance(frames: voice.position, sampleRate: sampleRate)
+    } else if rewindRenderCount == 0 {
+      for frame in 0..<frames {
+        let position = start + Int64(frame)
+        let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
+        recentSamples[slot] += workerHistoryMix[frame]
+      }
     }
+    historyLock.unlock()
     voice.rescueLayers.removeAll { $0.position >= Double($0.samples.count) }
-    voices[index] = voice
   }
 
   // MARK: - Library
@@ -323,7 +502,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     let supplement = Self.supplementSounds(supplementDirectory)
     let decoded = byName.mapValues { ($0.floatSamples(), $0.sampleRate) }
     let amiga = amigaFallbackDirectory.flatMap { try? Self.amigaSounds(in: $0) } ?? [:]
-    lock.lock()
+    beginControls()
     library = [:]
     rates = [:]
     gains = [:]; supplementalEffects = []
@@ -343,7 +522,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     fillFromSupplementLocked(supplement)
     installPresentationSoundsLocked()
     let loaded = library.keys.sorted { $0.rawValue < $1.rawValue }
-    lock.unlock()
+    endControls()
 
     loadedEffects = loaded
     return loaded
@@ -385,7 +564,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   /// Original voices supplied by the app take precedence over preview effects.
   public func loadSupplementSounds(directory: URL?) {
     let supplement = Self.supplementSounds(directory)
-    lock.lock(); defer { lock.unlock() }
+    beginControls(); defer { endControls() }
     fillFromSupplementLocked(supplement)
     installPresentationSoundsLocked()
     loadedEffects = library.keys.sorted { $0.rawValue < $1.rawValue }
@@ -428,7 +607,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     let supplement = Self.supplementSounds(supplementDirectory)
     let decoded = macintosh.mapValues { ($0.floatSamples(), $0.sampleRate) }
 
-    lock.lock()
+    beginControls()
     library = [:]
     rates = [:]
     gains = [:]; supplementalEffects = []
@@ -446,7 +625,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     fillFromSupplementLocked(supplement)
     installPresentationSoundsLocked()
     let loaded = library.keys.sorted { $0.rawValue < $1.rawValue }
-    lock.unlock()
+    endControls()
 
     loadedEffects = loaded
     return loaded
@@ -494,7 +673,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
         if let decoded = Self.monoSamples(url) { clips[key] = decoded; break }
       }
     }
-    lock.lock(); defer { lock.unlock() }
+    beginControls(); defer { endControls() }
     namedSounds = clips
   }
 
@@ -503,8 +682,8 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   /// Keep the countdown warning while installing the sequel's named voices.
   public func loadLemmings3Sounds(root: URL) throws {
     let bank = try Lemmings3SoundBank(root: root)
-    lock.lock()
-    defer { lock.unlock() }
+    beginControls()
+    defer { endControls() }
     for (effect, clip) in bank.clips {
       library[effect] = clip.samples
       rates[effect] = clip.sampleRate
@@ -514,22 +693,24 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   public func silence() {
-    lock.lock()
+    beginControls()
+    rewindSequence &+= 1
     for index in voices.indices {
       voices[index].isActive = false
       voices[index].rescueLayers.removeAll()
     }
     recentEffectTimes.removeAll(keepingCapacity: true)
     let restart = isRunning && !outputSuspended && engine.isRunning
-    lock.unlock()
+    endControls()
     bufferedSource?.stop()
     if restart { bufferedSource?.start() }
   }
 
   /// Let the final rescue chorus finish as the result page opens.
   public func silencePreservingRescues() {
-    lock.lock()
-    defer { lock.unlock() }
+    beginControls()
+    rewindSequence &+= 1
+    defer { endControls() }
     for index in voices.indices {
       if voices[index].isActive && voices[index].isRescue { continue }
       if voices[index].isActive && !voices[index].rescueLayers.isEmpty {
@@ -546,21 +727,32 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   /// Repeated requests continue the active groove without stacking voices.
   public func playRewindScrub() {
     let audibleFrame = bufferedSource?.playedFrame
-    lock.lock()
-    defer { deliverPlayNotificationsAndUnlock() }
-    refreshResourceBudgetLocked()
-    guard !isMuted, !outputSuspended else { return }
-    let previous = voices.indices.first { voices[$0].isActive && voices[$0].rewindSequence != nil }
-    guard let captured = latestRecentSample else { return }
+    // Allocate before taking the synthesis lock. Copy only bounded PCM history;
+    // resampling, envelopes and normalisation happen without blocking refills.
+    var history = [Float](repeating: 0, count: recentSampleLimit)
+    var positions = [Int64](repeating: 0, count: recentSampleLimit)
+    beginControls()
+    guard !isMuted, !outputSuspended else { endControls(); return }
+    historyLock.lock()
+    guard let captured = latestRecentSample else { historyLock.unlock(); endControls(); return }
+    history.withUnsafeMutableBufferPointer { destination in
+      recentSamples.withUnsafeBufferPointer { source in destination.baseAddress!.update(from: source.baseAddress!, count: source.count) }
+    }
+    positions.withUnsafeMutableBufferPointer { destination in
+      recentSamplePositions.withUnsafeBufferPointer { source in destination.baseAddress!.update(from: source.baseAddress!, count: source.count) }
+    }
+    let expectedSequence = rewindSequence
+    let carriedSample = lastRewindSample
     let latest = min(captured, audibleFrame.map { $0 - 1 } ?? captured)
-    guard latest >= 0 else { return }
+    guard latest >= 0 else { historyLock.unlock(); endControls(); return }
     let now = ProcessInfo.processInfo.systemUptime
     let continuing = rewindHistoryAnchor == latest && now - lastRewindTrigger <= VinylBackspin.settleSeconds
     let head: Double
     if continuing {
       head = rewindHistoryHead
     } else { head = Double(latest) }
-    for index in voices.indices where voices[index].rewindSequence != nil { voices[index].isActive = false }
+    historyLock.unlock()
+    endControls()
     let count = Int(sampleRate * VinylBackspin.seconds)
     var samples = [Float](repeating: 0, count: count)
     var foundHistory = false
@@ -570,10 +762,10 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       guard cursor >= 0 else { break }
       let position = Int64(cursor)
       let slot = Int((position % Int64(recentSampleLimit) + Int64(recentSampleLimit)) % Int64(recentSampleLimit))
-      guard recentSamplePositions[slot] == position else { break }
+      guard positions[slot] == position else { break }
       let nextSlot = (slot + 1) % recentSampleLimit
-      let next = recentSamplePositions[nextSlot] == position + 1 ? recentSamples[nextSlot] : recentSamples[slot]
-      let value = recentSamples[slot] + (next - recentSamples[slot]) * Float(cursor - Double(position))
+      let next = positions[nextSlot] == position + 1 ? history[nextSlot] : history[slot]
+      let value = history[slot] + (next - history[slot]) * Float(cursor - Double(position))
       peak = max(peak, abs(value))
       samples[offset] = value * VinylBackspin.sample(frame: Double(offset), sampleRate: sampleRate).gain
       foundHistory = foundHistory || samples[offset] != 0
@@ -590,14 +782,25 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       // Carry the last output into the new attack instead of cutting to zero.
       for offset in 0..<min(samples.count, Int(sampleRate * 0.020)) {
         let attack = VinylBackspin.sample(frame: Double(offset), sampleRate: sampleRate).gain
-        samples[offset] += lastRewindSample * (1 - attack)
+        samples[offset] += carriedSample * (1 - attack)
       }
-    } else { lastRewindSample = 0 }
+    }
+    beginControls()
+    defer { deliverPlayNotificationsAndUnlock() }
+    guard !isMuted, !outputSuspended, rewindSequence == expectedSequence else { return }
+    refreshResourceBudgetLocked()
+    let previous = voices.indices.first { voices[$0].isActive && voices[$0].rewindSequence != nil }
+    for index in voices.indices where voices[index].rewindSequence != nil { voices[index].isActive = false }
+    historyLock.lock()
+    if !continuing { lastRewindSample = 0 }
+    historyLock.unlock()
     let index = previous ?? voices.firstIndex { !$0.isActive } ?? voices.startIndex
+    historyLock.lock()
     rewindHistoryHead = head; rewindSliceHead = head; rewindHistoryAnchor = latest
+    historyLock.unlock()
     lastRewindTrigger = now
     rewindSequence &+= 1
-    voices[index] = Voice(samples: samples, position: 0, increment: 1, isActive: true,
+    voices[index] = Voice(identity: identity(), rewindHead: head, samples: samples, position: 0, increment: 1, isActive: true,
       gain: 0.4, rewindSequence: rewindSequence)
     if spatialMixers.indices.contains(index) { spatialMixers[index].position = AVAudio3DPoint(x: 0, y: 0, z: -1) }
     enqueuePlayLocked(samples, rate: sampleRate, gain: Float(level) * 0.4)
@@ -617,12 +820,12 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   private var bottomFallSounds = true
 
   public func setBottomFallSounds(_ enabled: Bool) {
-    lock.lock(); defer { lock.unlock() }; bottomFallSounds = enabled
+    beginControls(); defer { endControls() }; bottomFallSounds = enabled
   }
 
   /// Refresh active one-shots as well as the next event when the camera moves.
   public func setViewport(_ value: GameplaySoundViewport) {
-    lock.lock(); defer { lock.unlock() }
+    beginControls(); defer { endControls() }
     refreshResourceBudgetLocked()
     guard viewport != value else { return }
     viewport = value
@@ -653,7 +856,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   public func setNukeActive(_ active: Bool) {
-    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
+    beginControls(); defer { deliverPlayNotificationsAndUnlock() }
     guard active != nukeActive else { return }
     nukeActive = active
     lastNukeImpact = -Double.infinity
@@ -663,7 +866,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   public func playNukeImpact(at point: GameplaySoundPoint?) {
-    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
+    beginControls(); defer { deliverPlayNotificationsAndUnlock() }
     playNukeImpactLocked(at: point)
   }
 
@@ -675,7 +878,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   public func play(_ effect: ClassicSoundEffect, pan: Float = 0.0, at point: GameplaySoundPoint? = nil) {
-    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
+    beginControls(); defer { deliverPlayNotificationsAndUnlock() }
     guard effect != .fallOut || bottomFallSounds, let samples = library[effect],
           allowsEffectLocked(effect, at: point) else { return }
     playLocked(samples: samples, rate: rates[effect] ?? sampleRate, gain: gains[effect] ?? 0.6,
@@ -685,7 +888,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Held rate controls keep one centred cue, without filling the spatial voice pool.
   public func playReleaseRate(_ rate: Int, time: Double = ProcessInfo.processInfo.systemUptime) {
-    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
+    beginControls(); defer { deliverPlayNotificationsAndUnlock() }
     guard !isMuted, !outputSuspended, time - lastReleaseRateTime >= 0.02,
       let clip = releaseRateSound else { return }
     lastReleaseRateTime = time
@@ -696,7 +899,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   /// Shared spatial voices also play L2's original bank and sample pitches.
   public func play(samples: [Float], rate: Double, gain: Float = 0.5, at point: GameplaySoundPoint? = nil,
             semanticEffect: ClassicSoundEffect? = nil) {
-    lock.lock(); defer { deliverPlayNotificationsAndUnlock() }
+    beginControls(); defer { deliverPlayNotificationsAndUnlock() }
     if let semanticEffect, !allowsEffectLocked(semanticEffect, at: point) { return }
     playLocked(samples: samples, rate: rate, gain: gain, pan: 0, at: point,
       priority: semanticEffect?.presentationPriority ?? 1, rescue: semanticEffect?.isRescue ?? false)
@@ -728,7 +931,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     let callback = onPlay
     let notifications = pendingPlayNotifications
     pendingPlayNotifications = []
-    lock.unlock()
+    endControls()
     for cue in notifications { callback?(cue.samples, cue.rate, cue.gain) }
   }
 
@@ -752,7 +955,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       }
       let index = candidates.min { distance($0) < distance($1) }!
       let distanceGain = point.map { viewport.placement(of: $0).gain } ?? 1
-      voices[index].rescueLayers.append(RescueLayer(samples: samples, increment: rate / sampleRate,
+      voices[index].rescueLayers.append(RescueLayer(identity: identity(), samples: samples, increment: rate / sampleRate,
         gain: gain, worldPoint: point, distanceGain: distanceGain))
       voices[index].priority = max(voices[index].priority, priority)
       enqueuePlayLocked(samples, rate: rate, gain: Float(level) * gain * distanceGain)
@@ -766,12 +969,12 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     guard !voices[index].isActive || voices[index].priority <= priority else { return }
     var retainedRescues = voices[index].isActive ? voices[index].rescueLayers : []
     if voices[index].isActive, voices[index].isRescue, voices[index].position < Double(voices[index].samples.count) {
-      retainedRescues.append(RescueLayer(samples: voices[index].samples, position: voices[index].position,
+      retainedRescues.append(RescueLayer(identity: identity(), samples: voices[index].samples, position: voices[index].position,
         increment: voices[index].increment, gain: voices[index].gain,
         worldPoint: voices[index].worldPoint, distanceGain: voices[index].distanceGain))
     }
     let previousSample = voices[index].isActive ? voices[index].lastSample : 0
-    voices[index] = Voice(samples: samples, position: 0, increment: rate / sampleRate,
+    voices[index] = Voice(identity: identity(), samples: samples, position: 0, increment: rate / sampleRate,
                           isActive: true, worldPoint: point, gain: gain, priority: priority, isRescue: rescue,
                           isReleaseRate: releaseRate,
                           rescueLayers: retainedRescues, transitionFrom: previousSample, transitionRemaining: 64)
@@ -785,7 +988,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Admission changes without rebuilding the audio graph or changing settings.
   public func setVoiceLimit(_ count: Int) {
-    lock.lock(); defer { lock.unlock() }
+    beginControls(); defer { endControls() }
     requestedVoiceLimit = max(1, min(voices.count, count))
     refreshResourceBudgetLocked()
   }
@@ -829,7 +1032,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       let key = cue.sampleName?.lowercased() ?? cue.effect.rawValue
       guard cue.effect.isRescue || seen.insert(key + region).inserted else { continue }
       if let name = cue.sampleName {
-        lock.lock()
+        beginControls()
         let clip = namedSounds[name.lowercased()]
         if let clip, allowsEffectLocked(cue.effect, at: cue.point) {
           playLocked(samples: clip.samples, rate: clip.rate, gain: 0.6, pan: 0, at: cue.point,
@@ -854,7 +1057,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Resolves movie samples on simulation time without starting an audio engine.
   public func movieCues(_ cues: [PositionedSoundCue], viewport: GameplaySoundViewport, time: Double) -> [MovieCue] {
-    lock.lock(); defer { lock.unlock() }
+    beginControls(); defer { endControls() }
     guard !isMuted, !outputSuspended else { return [] }
     var seen = Set<String>()
     var result: [MovieCue] = []
@@ -884,14 +1087,14 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Sets the output level, from silent to full.
   public func setVolume(_ value: Double) {
-    lock.lock()
+    beginControls()
     level = value.isFinite ? min(1, max(0, value)) : 0
     engine.mainMixerNode.outputVolume = isMuted || level == 0 ? 0 : 1
-    lock.unlock()
+    endControls()
   }
 
   public func setMuted(_ muted: Bool) {
-    lock.lock()
+    beginControls()
     isMuted = muted
     engine.mainMixerNode.outputVolume = muted || level == 0 ? 0 : 1
     if muted {
@@ -901,7 +1104,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       }
       recentEffectTimes.removeAll(keepingCapacity: true)
     }
-    lock.unlock()
+    endControls()
     if muted {
       bufferedSource?.stop()
       if isRunning && engine.isRunning { bufferedSource?.start() }
@@ -909,19 +1112,19 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   public var muted: Bool {
-    lock.lock()
-    defer { lock.unlock() }
+    beginControls()
+    defer { endControls() }
     return isMuted
   }
 
   public var volume: Double {
-    lock.lock()
-    defer { lock.unlock() }
+    beginControls()
+    defer { endControls() }
     return level
   }
 
   public var effectiveVolume: Double {
-    lock.lock(); defer { lock.unlock() }
+    beginControls(); defer { endControls() }
     return isMuted || outputSuspended ? 0 : level
   }
 }

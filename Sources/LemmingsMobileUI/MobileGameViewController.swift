@@ -7,6 +7,7 @@ import LemmingsMobileCore
 import LemmingsTVCore
 import UIKit
 import GameController
+import os
 
 @MainActor enum MobileGameExitAction {
     case library
@@ -36,6 +37,7 @@ typealias MobileGameControllerBase = UIViewController
 }
 
 @MainActor final class MobileGameViewController: MobileGameControllerBase, UIScrollViewDelegate {
+    private static let performanceLog = OSLog(subsystem: "com.ultimatelemmings.game", category: .pointsOfInterest)
     lazy var inputAdapter = makeInputAdapter()
     override var canBecomeFirstResponder: Bool { true }
     var onExit: ((MobileGameExitAction) -> Void)?
@@ -152,6 +154,9 @@ typealias MobileGameControllerBase = UIViewController
     let playfieldView: MobilePlayfieldView
     let hud = MobileHUDView()
     private let touchLoupe = MobileTouchLoupe()
+    private let inspectionHover = MobileLemmingInspectionHover()
+    private var hoverInspection: LemmingInspection?
+    private var hoverInspectionTick: Int?
     let overlayBackdrop = UIView()
     let overlay = MobileGameOverlay()
     let overlayCanvas = MobileMenuCanvas()
@@ -162,6 +167,12 @@ typealias MobileGameControllerBase = UIViewController
     private var lastHUDLayout: MobileHUDLayout?
     private var hudArtworkSource: ClassicGraphicsSource?
     private var playfieldAccessibilityActionNames: [String]?
+    private struct AccessibilitySummary: Equatable {
+        let count: Int
+        let selectedIndex: Int?
+        let skill: String
+    }
+    private var accessibilitySummary: AccessibilitySummary?
     private var layoutSuspended = false
     var selectedControl: Int
     var lifecycle = MobileLifecycleState()
@@ -238,6 +249,14 @@ typealias MobileGameControllerBase = UIViewController
         tribes.setFan(at: playfieldView.gameViewport.levelPoint(fromView: aim), active: active)
     }
     private var lastRenderedTick = -1
+    private var nextScenePresentation = 0.0
+    private var minimapFrame: MobilePixelFrame?
+    private var minimapUpdatedAt = -Double.infinity
+    private var lastMemoryObservation = -Double.infinity
+    private var seekTask: Task<Void, Never>?
+    private var seekOperation: MobileSeekOperation?
+    private var seekGeneration = UUID()
+    private var controllerScenePending = false
     var pollingController = false
     private var controllerRenderPending = false
     private var controllerHUDPending = false
@@ -364,6 +383,7 @@ typealias MobileGameControllerBase = UIViewController
         view.addSubview(playfieldView)
         view.addSubview(hud)
         view.addSubview(touchLoupe)
+        view.addSubview(inspectionHover)
         view.addSubview(nowPlaying)
         view.addSubview(replaySkillInfo)
         countdownLabel.palette = .green
@@ -436,10 +456,10 @@ typealias MobileGameControllerBase = UIViewController
         hud.onMinimap = { [weak self] point in self?.scrollToLevelX(point.x) }
         playfieldView.onViewportChanged = { [weak self] viewport in
             guard let self else { return }
-            if let frame = self.latestFrame, !self.pollingController {
+            if let frame = self.minimapFrame, !self.pollingController {
                 self.hud.updateMinimap(frame: frame, visible: viewport.visibleLevelRect, levelSize: self.session.levelSize)
             }
-            self.renderCurrentFrame(force: true)
+            self.renderCurrentFrame(force: true, presentationOnly: true)
         }
         audio.onEvent = { [weak self] event in
             switch event {
@@ -661,17 +681,20 @@ typealias MobileGameControllerBase = UIViewController
         updateTVInputRouting()
         #endif
         let frameStarted = ProcessInfo.processInfo.systemUptime
+        let presentsScene = link.timestamp >= nextScenePresentation || resumeFramePending
         defer {
             #if os(tvOS)
             pollingController = false
             playfieldView.deferFrameUpdates = false
             #endif
             flushControllerFrameUpdates()
-            MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted, source: "frame")
-            framePacing.observe(at: link.timestamp, cpuSeconds: MobileDevicePerformance.cpuFrameCost,
-                gpuSeconds: MobileDevicePerformance.gpuFrameCost,
-                active: !paused && !countdown.isActive && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
-            if framePacing.framesPerSecond != appliedFrameRate { updatePerformanceBudget() }
+            if presentsScene {
+                MobileDevicePerformance.recordCPU(ProcessInfo.processInfo.systemUptime - frameStarted, source: "frame")
+                framePacing.observe(at: link.timestamp, cpuSeconds: MobileDevicePerformance.cpuFrameCost,
+                    gpuSeconds: MobileDevicePerformance.gpuFrameCost,
+                    active: !paused && !countdown.isActive && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
+                if framePacing.framesPerSecond != appliedFrameRate { updatePerformanceBudget() }
+            }
             if resumeFramePending {
                 resumeFramePending = false
                 // Include deferred controller draws and layout before restarting simulation time.
@@ -685,13 +708,24 @@ typealias MobileGameControllerBase = UIViewController
         }
         pollingController = true
         playfieldView.deferFrameUpdates = true
+        os_signpost(.begin, log: Self.performanceLog, name: "Input polling")
         inputAdapter.poll(context: ObjectIdentifier(overlay.isHidden ? playfieldView : overlayCanvas), at: link.timestamp)
+        os_signpost(.end, log: Self.performanceLog, name: "Input polling")
         #if !os(tvOS)
         pollingController = false
         playfieldView.deferFrameUpdates = false
         #endif
         guard !isDisplayLinkPaused, !lifecycle.isInterrupted else { return }
+        playfieldView.advanceTouchInput(at: link.timestamp)
         updateInputSpeed(at: link.timestamp)
+        guard presentsScene else { return }
+        nextScenePresentation = link.timestamp + 0.9 / Double(max(1, appliedFrameRate))
+        if frameStarted - lastMemoryObservation >= 1 {
+            lastMemoryObservation = frameStarted
+            let memory = RuntimeMemoryBudget.shared.snapshot()
+            os_signpost(.event, log: Self.performanceLog, name: "Runtime memory", "footprint=%{public}llu sampled_peak=%{public}llu caches=%{public}ld",
+                memory.footprintBytes, memory.peakFootprintBytes, RuntimeMemoryBudget.shared.retainedCacheBytes)
+        }
         MobileMusic.shared.advance()
         playfieldView.setSpeedEffects(multiplier: speed, active: !paused && overlay.isHidden && lifecycle.isForeground && !lifecycle.isInterrupted)
         if selectionFade.isFading(at: link.timestamp) {
@@ -741,10 +775,12 @@ typealias MobileGameControllerBase = UIViewController
         // a busy frame can exhaust the budget before its first tick.
         let deadline = ProcessInfo.processInfo.systemUptime + min(0.020, 0.6 / Double(max(1, appliedFrameRate)))
         var advanced = 0
+        os_signpost(.begin, log: Self.performanceLog, name: "Simulation batch")
         for _ in 0..<ticks {
             session.tick(); advanced += 1
             if session.isSimulationComplete || ProcessInfo.processInfo.systemUptime >= deadline { break }
         }
+        os_signpost(.end, log: Self.performanceLog, name: "Simulation batch")
         snapshot = session.snapshot
         if !snapshot.isComplete { clock.deferTicks(ticks - advanced) }
         // Catch-up ticks accumulate cues; spatial placement and scheduling run once per frame.
@@ -784,6 +820,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func handle(_ action: MobileHUDAction) {
+        cancelSeek()
         guard overlay.isHidden, playState.canEdit,
               lifecycle.isForeground, !lifecycle.isInterrupted,
               !session.snapshot.isComplete || (session.isReadOnly && [.pause, .rewind, .stepBackward, .menu].contains(action)) else { return }
@@ -931,6 +968,7 @@ typealias MobileGameControllerBase = UIViewController
 
     private func restoreGameplayOverlayOrder() {
         view.bringSubviewToFront(touchLoupe)
+        view.bringSubviewToFront(inspectionHover)
         view.bringSubviewToFront(nowPlaying)
         view.bringSubviewToFront(replaySkillInfo)
         view.bringSubviewToFront(countdownLabel)
@@ -939,6 +977,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func handle(_ touchEffects: [MobileTouchEffect], input: MobileTargetInput? = nil) {
+        if seekOperation != nil { cancelSeek() }
         if touchEffects.contains(.cancelPreview) {
             (session as? Lemmings2MobileSession)?.releasePointerInput()
             touchSelection = nil
@@ -1006,7 +1045,10 @@ typealias MobileGameControllerBase = UIViewController
             }
         }
         if needsFrame {
-            renderCurrentFrame(force: true)
+            let commits = touchEffects.contains { effect in
+                switch effect { case .commit, .commitSelection: return true; default: return false }
+            }
+            renderCurrentFrame(force: true, presentationOnly: !commits)
             updateHUD()
         }
     }
@@ -1076,6 +1118,41 @@ typealias MobileGameControllerBase = UIViewController
         )
     }
 
+    private func updateInspectionHover(tick: Int) {
+        guard overlay.isHidden, playState.phase == .planning,
+              lifecycle.isForeground, !lifecycle.isInterrupted,
+              gameSettings.classic.inspectWhilePaused, !session.isReadOnly,
+              !fanMode, !isChoosingToolDirection,
+              previewInput == .precision, let point = previewPoint,
+              let target = highlightedTarget else {
+            inspectionHover.isHidden = true
+            hoverInspection = nil
+            hoverInspectionTick = nil
+            return
+        }
+        // Inspection reconstructs action history. Never do that while physics is running,
+        // or again for each pointer movement within the same paused state.
+        if hoverInspectionTick != tick {
+            hoverInspection = session.lemmingInspection
+            hoverInspectionTick = tick
+        }
+        guard let individual = hoverInspection?.individuals.first(where: { $0.id == target.id }) else {
+            inspectionHover.isHidden = true
+            return
+        }
+        let pointer = playfieldView.convert(CGPoint(x: point.x, y: point.y), to: view)
+        let field = playfieldView.frame.intersection(view.safeAreaLayoutGuide.layoutFrame)
+        let free = MobileDisplayRegions.freeFrames(
+            in: MobileRect(x: field.minX, y: field.minY, width: field.width, height: field.height),
+            avoiding: lastHUDLayout?.reservedRegions ?? [])
+        guard let area = free.filter({ $0.contains(.init(x: pointer.x, y: pointer.y)) })
+            .max(by: { $0.width * $0.height < $1.width * $1.height }) else {
+            inspectionHover.isHidden = true
+            return
+        }
+        inspectionHover.show(individual, area: Self.cgRect(area), pointer: pointer)
+    }
+
     private func scrollToLevelX(_ x: CGFloat) {
         guard overlay.isHidden else { return }
         var viewport = playfieldView.gameViewport
@@ -1085,16 +1162,31 @@ typealias MobileGameControllerBase = UIViewController
         playfieldView.gameViewport = viewport
     }
 
-    @discardableResult func renderCurrentFrame(force: Bool, snapshot suppliedSnapshot: MobileGameSnapshot? = nil) -> [MobileTargetCandidate]? {
+    @discardableResult func renderCurrentFrame(force: Bool, snapshot suppliedSnapshot: MobileGameSnapshot? = nil, presentationOnly: Bool = false) -> [MobileTargetCandidate]? {
         #if os(tvOS)
         ensureTVPointer()
         updateTVPointer()
         #endif
-        if pollingController { controllerRenderPending = controllerRenderPending || force; return nil }
+        if pollingController {
+            controllerRenderPending = controllerRenderPending || force
+            controllerScenePending = controllerScenePending || !presentationOnly
+            return nil
+        }
         let snapshot = suppliedSnapshot ?? session.snapshot
         let tick = snapshot.tick
+        if !overlay.isHidden || playState.phase != .planning {
+            inspectionHover.isHidden = true
+            hoverInspection = nil
+            hoverInspectionTick = nil
+        }
         guard force || tick != lastRenderedTick else { return nil }
+        os_signpost(.begin, log: Self.performanceLog, name: "Scene presentation")
+        defer { os_signpost(.end, log: Self.performanceLog, name: "Scene presentation") }
         controllerRenderPending = false
+        let visible = playfieldView.gameViewport.visibleLevelRect
+        let coversViewport = latestFrame?.renderedRect.map { $0.minX <= visible.minX && $0.minY <= visible.minY && $0.maxX >= visible.maxX && $0.maxY >= visible.maxY } ?? true
+        let reusesScene = presentationOnly && tick == lastRenderedTick && latestFrame != nil && coversViewport && !controllerScenePending
+        controllerScenePending = false
         var needsCandidates = previewPoint != nil || gameSettings.classic.showReticleCount
         #if os(tvOS)
         needsCandidates = needsCandidates || tvTargetLock.id != nil
@@ -1115,14 +1207,21 @@ typealias MobileGameControllerBase = UIViewController
             else { highlightedTarget = nil }
             #endif
         }
+        updateInspectionHover(tick: tick)
         if tick < lastRenderedTick { selectionFade.reset(); playfieldView.resetTransientEffects(preservingTrails: true) }
         do {
-            let frame = try session.render(highlight: highlightedTarget)
-            latestFrame = frame
+            let frame: MobilePixelFrame
+            if reusesScene, let latestFrame { frame = latestFrame }
+            else {
+                frame = try overlay.isHidden ? session.render(highlight: nil, viewport: visible) : session.render(highlight: nil)
+                latestFrame = frame
+            }
             playfieldView.renderScale = session.renderScale
             playfieldView.explosions = session.explosions
             playfieldView.bombCountdowns = session.bombCountdowns
             playfieldView.selectionPoint = highlightedTarget?.point
+            playfieldView.targetMarker = highlightedTarget
+            playfieldView.markerEngine = session.engineIdentifier
             #if os(tvOS)
             updateTVPointer()
             #endif
@@ -1144,21 +1243,28 @@ typealias MobileGameControllerBase = UIViewController
                 selectionFade.set(highlightedTarget?.id, at: ProcessInfo.processInfo.systemUptime)
             } else { selectionFade.reset() }
             let selection = selectionFade.sample(at: ProcessInfo.processInfo.systemUptime)
-            playfieldView.selectionSprite = session.selectionSprite ?? selection.flatMap { session.spriteHighlight(for: $0.value) }
+            playfieldView.selectionSprite = selection.flatMap { session.spriteHighlight(for: $0.value) }
             playfieldView.selectionOpacity = selection?.opacity ?? 1
             playfieldView.assignmentSprite = session.assignmentSprite
             playfieldView.assignmentProgress = session.assignmentProgress
             playfieldView.setRescueFeedback(saved: snapshot.saved, required: snapshot.required, total: snapshot.total,
                 isComplete: snapshot.isComplete, didWin: snapshot.didWin)
             playfieldView.failed = snapshot.isComplete ? !snapshot.didWin : (snapshot.saved + session.activeLemmingCount + max(0, snapshot.total - snapshot.released) < snapshot.required)
-            playfieldView.captureSpriteTrails(session: session)
-            try playfieldView.update(frame: frame)
+            if !reusesScene {
+                playfieldView.captureSpriteTrails(session: session)
+                try playfieldView.update(frame: frame)
+            } else { playfieldView.updatePresentation() }
             if !overlay.isHidden, overlayCanvas.page.preview {
                 overlayCanvas.preview = playfieldView.bitmap
                 overlayCanvas.previewSource = menuPreviewSource(frame: frame)
             }
-            hud.updateMinimap(frame: frame, visible: playfieldView.gameViewport.visibleLevelRect,
-                              levelSize: session.levelSize, image: playfieldView.bitmap)
+            let now = ProcessInfo.processInfo.systemUptime
+            if minimapFrame == nil || !reusesScene && (now - minimapUpdatedAt >= 0.25 || tick < lastRenderedTick) {
+                // The overview has its own bounded thumbnail; camera/pointer updates never rebuild it.
+                minimapFrame = try session.renderMinimap()
+                minimapUpdatedAt = now
+            }
+            if let minimapFrame { hud.updateMinimap(frame: minimapFrame, visible: visible, levelSize: session.levelSize, actors: session.minimapActorPoints) }
             if previewInput == .touch, let point = previewPoint, let target = highlightedTarget {
                 let finger = playfieldView.convert(CGPoint(x: point.x, y: point.y), to: view)
                 let field = playfieldView.frame
@@ -1167,7 +1273,7 @@ typealias MobileGameControllerBase = UIViewController
                     avoiding: lastHUDLayout?.reservedRegions ?? [])
                 let containing = free.filter { $0.contains(MobilePoint(x: finger.x, y: finger.y)) }
                 let area = (containing.isEmpty ? free : containing).max { $0.width * $0.height < $1.width * $1.height }
-                touchLoupe.update(bitmap: frame, target: .init(x: target.point.x * session.renderScale, y: target.point.y * session.renderScale),
+                touchLoupe.update(bitmap: frame, target: .init(x: (target.point.x - (frame.renderedRect?.x ?? 0)) * session.renderScale, y: (target.point.y - (frame.renderedRect?.y ?? 0)) * session.renderScale),
                                   finger: finger,
                                   bounds: area.map(Self.cgRect) ?? .zero,
                                   pixelAspect: session.engineIdentifier == "classic-dos" ? 1.2 : 1,
@@ -1188,6 +1294,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func suspendAudio() {
+        cancelSeek()
         (session as? Lemmings2MobileSession)?.releasePointerInput()
         playfieldView.suspendVisualEffects()
         hud.cancelHeldControls()
@@ -1222,6 +1329,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func pausePlay(showControls: Bool) {
+        cancelSeek()
         updateFan(at: nil, active: false)
         hud.cancelHeldControls()
         playState.suspend()
@@ -1464,6 +1572,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func resumePlay() {
+        cancelSeek()
         cancelPendingL3ToolDirection()
         let wasReady = playState.phase == .ready
         guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
@@ -1676,6 +1785,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func leaveToLibrary(destination: MobileGameExitAction = .library) {
+        cancelSeek()
         if solutionGame != nil { returnToSolutionGame(); return }
         if session.isReadOnly { dismiss(animated: false); return }
         let returnToPreviousPage = overlayReturnAction()
@@ -1837,9 +1947,11 @@ typealias MobileGameControllerBase = UIViewController
 
     func applyLifecycle(_ event: MobileLifecycleEvent) {
         if event == .memoryWarning {
+            cancelSeek()
             MobileDevicePerformance.memoryWarning()
             updatePerformanceBudget()
             playfieldView.releaseEffectResources()
+            minimapFrame = nil
         }
         inputAdapter.reset()
         applyEffects(lifecycle.handle(event))
@@ -1910,9 +2022,9 @@ typealias MobileGameControllerBase = UIViewController
         appliedFrameRate = framesPerSecond
         MobileDevicePerformance.update(framesPerSecond: framesPerSecond)
         displayLink?.preferredFrameRateRange = CAFrameRateRange(
-            minimum: Float(framesPerSecond),
-            maximum: Float(framesPerSecond),
-            preferred: Float(framesPerSecond)
+            minimum: Float(min(60, view.window?.screen.maximumFramesPerSecond ?? 60)),
+            maximum: Float(min(60, view.window?.screen.maximumFramesPerSecond ?? 60)),
+            preferred: Float(min(60, view.window?.screen.maximumFramesPerSecond ?? 60))
         )
         let speedCatchUp = Int(ceil(
             session.ticksPerSecond * speed / Double(max(1, framesPerSecond)) * 2
@@ -1936,7 +2048,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func flushControllerFrameUpdates() {
-        let candidates = controllerRenderPending ? renderCurrentFrame(force: true) : nil
+        let candidates = controllerRenderPending ? renderCurrentFrame(force: true, presentationOnly: !controllerScenePending) : nil
         if controllerHUDPending {
             controllerHUDPending = false
             updateHUD(candidates: candidates)
@@ -1951,6 +2063,8 @@ typealias MobileGameControllerBase = UIViewController
         #if os(tvOS)
         if pollingController { controllerHUDPending = true; return }
         #endif
+        os_signpost(.begin, log: Self.performanceLog, name: "HUD and music")
+        defer { os_signpost(.end, log: Self.performanceLog, name: "HUD and music") }
         let snapshot = snapshot ?? session.snapshot
         MobileMusic.shared.update(snapshot, active: session.activeLemmingCount, nukeRemainingTicks: session.nukeRemainingTicks, allNukePopped: session.allNukeExplosionsPlayed, ticksPerSecond: session.ticksPerSecond)
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
@@ -1982,30 +2096,36 @@ typealias MobileGameControllerBase = UIViewController
     /** Keeps non-visual target selection and assignment available to assistive input. */
     private func updatePlayfieldAccessibility(snapshot: MobileGameSnapshot? = nil, candidates: [MobileTargetCandidate]? = nil) {
         let snapshot = snapshot ?? session.snapshot
-        let candidates = (candidates ?? session.targetCandidates(for: selectedControl))
-            .filter { $0.assignment == .eligible }
-            .sorted { $0.id < $1.id }
+        let candidates = candidates ?? session.targetCandidates(for: selectedControl)
+        var eligibleCount = 0, precedingCount = 0
+        var selectedEligible = false
+        for candidate in candidates where candidate.assignment == .eligible {
+            eligibleCount += 1
+            if let highlightedTarget {
+                if candidate.id < highlightedTarget.id { precedingCount += 1 }
+                if candidate.id == highlightedTarget.id { selectedEligible = true }
+            }
+        }
         let skillName = snapshot.skills.indices.contains(selectedControl)
             ? SkillVocabulary.title(snapshot.skills[selectedControl].name) : L10n.text("selected skill")
-        let selectedIndex = highlightedTarget.flatMap { selection in
-            candidates.firstIndex { $0.id == selection.id }
+        let selectedIndex: Int? = selectedEligible ? precedingCount : nil
+        let summary = AccessibilitySummary(count: eligibleCount, selectedIndex: selectedIndex, skill: skillName)
+        if accessibilitySummary != summary {
+            accessibilitySummary = summary
+            if let selectedIndex {
+                playfieldView.accessibilityValue = L10n.text("Eligible lemming \(selectedIndex + 1) of \(eligibleCount). Skill: \(skillName).")
+            } else {
+                playfieldView.accessibilityValue = L10n.text("\(eligibleCount) eligible lemmings. Skill: \(skillName).")
+            }
         }
-        if let selectedIndex {
-            playfieldView.accessibilityValue = L10n.text("Eligible lemming \(selectedIndex + 1) of \(candidates.count). Skill: \(skillName).")
-        } else {
-            playfieldView.accessibilityValue = L10n.text("\(candidates.count) eligible lemmings. Skill: \(skillName).")
-        }
-
         let canAssign = !session.isReadOnly && !snapshot.isComplete && playState.canEdit
-            && highlightedTarget.map { selection in
-                selection.state == .eligible && candidates.contains { $0.id == selection.id }
-            } == true
-        var actionNames = candidates.isEmpty ? [] : ["Previous eligible lemming", "Next eligible lemming"]
+            && highlightedTarget?.state == .eligible && selectedEligible
+        var actionNames = (eligibleCount == 0) ? [] : ["Previous eligible lemming", "Next eligible lemming"]
         if canAssign { actionNames.append("Assign \(skillName)") }
         guard actionNames != playfieldAccessibilityActionNames else { return }
         playfieldAccessibilityActionNames = actionNames
         var actions: [UIAccessibilityCustomAction] = []
-        if !candidates.isEmpty {
+        if eligibleCount > 0 {
             actions.append(UIAccessibilityCustomAction(name: L10n.text("Previous eligible lemming")) { [weak self] _ in
                 self?.moveAccessibleTarget(-1) ?? false
             })
@@ -2289,25 +2409,69 @@ typealias MobileGameControllerBase = UIViewController
         #endif
     }
 
+    func cancelSeek() {
+        seekGeneration = UUID()
+        seekTask?.cancel(); seekTask = nil
+        seekOperation?.cancel(); seekOperation = nil
+    }
+
+    @discardableResult private func startSeek(to tick: Int, backwardSteps: Int = 1, completion: @escaping () -> Void) -> Bool {
+        cancelSeek()
+        guard let operation = session.prepareSeek(to: max(session.earliestRewindTick, tick), backwardSteps: backwardSteps) else { return false }
+        seekOperation = operation
+        let generation = seekGeneration
+        do {
+            if try operation.advance() {
+                seekOperation = nil
+                completion()
+                return true
+            }
+        } catch { seekOperation = nil; return false }
+        seekTask = Task { @MainActor [weak self] in
+            while !Task.isCancelled {
+                // Return to the run loop between bounded reconstruction batches.
+                do { try await Task.sleep(nanoseconds: 1_000_000) } catch { return }
+                guard let self, self.seekGeneration == generation, self.lifecycle.isForeground,
+                      !self.lifecycle.isInterrupted else { operation.cancel(); return }
+                do {
+                    if try operation.advance() {
+                        self.seekOperation = nil; self.seekTask = nil
+                        completion()
+                        return
+                    }
+                } catch {
+                    self.seekOperation = nil; self.seekTask = nil
+                    return
+                }
+            }
+        }
+        return true
+    }
+
     func seekSolutionMove(_ direction: Int, showPlayfield: Bool = false) {
         guard session.isReadOnly, let tick = session.replayMoveNavigation.target(from: session.snapshot.tick, direction: direction) else { return }
         pausePlay(showControls: false)
-        guard session.seekReplay(to: tick) else { pausePlay(showControls: true); return }
-        completionPresented = false
-        renderCurrentFrame(force: true)
-        if showPlayfield {
-            overlay.isHidden = true; layoutSolutionSelector(); overlay.accessibilityViewIsModal = false
-            playfieldView.isUserInteractionEnabled = true; hud.isUserInteractionEnabled = true
-            playfieldView.accessibilityElementsHidden = false; hud.accessibilityElementsHidden = false
-            inputAdapter.reset()
-            view.setNeedsLayout()
-        } else { pausePlay(showControls: true) }
+        _ = startSeek(to: tick) { [weak self] in
+            guard let self else { return }
+            self.completionPresented = false
+            self.renderCurrentFrame(force: true)
+            if showPlayfield {
+                self.overlay.isHidden = true; self.layoutSolutionSelector(); self.overlay.accessibilityViewIsModal = false
+                self.playfieldView.isUserInteractionEnabled = true; self.hud.isUserInteractionEnabled = true
+                self.playfieldView.accessibilityElementsHidden = false; self.hud.accessibilityElementsHidden = false
+                self.inputAdapter.reset()
+                self.view.setNeedsLayout()
+            } else { self.pausePlay(showControls: true) }
+        }
     }
 
     func resumeSelectedView() {
         if session.isReadOnly, session.snapshot.isComplete {
-            _ = session.rewind(seconds: Double(session.snapshot.tick) / session.ticksPerSecond)
-            completionPresented = false
+            _ = startSeek(to: 0) { [weak self] in
+                self?.completionPresented = false
+                self?.resumePlay()
+            }
+            return
         }
         resumePlay()
     }
@@ -2326,8 +2490,14 @@ typealias MobileGameControllerBase = UIViewController
             previewPoint = nil
             #endif
             rewindStartedAt = ProcessInfo.processInfo.systemUptime
-            if session.rewind(seconds: MobileHUDPress.rewindSeconds(heldFor: 0)) { MobileMusic.shared.playRewind() }
-            renderCurrentFrame(force: true)
+            let tick = session.snapshot.tick - Int((MobileHUDPress.rewindSeconds(heldFor: 0) * session.ticksPerSecond).rounded())
+            _ = startSeek(to: tick) { [weak self] in
+                guard let self else { return }
+                MobileMusic.shared.playRewind()
+                self.renderCurrentFrame(force: true)
+                self.updateHUD()
+                if !self.rewindHeld { self.saveCheckpoint(reason: .periodic) }
+            }
         }
         rewindHeld = held
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: held)
@@ -2336,15 +2506,18 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func repeatHeldRewind() {
-        guard rewindHeld, session.supportsRewind, overlay.isHidden, playState.canEdit,
+        guard rewindHeld, seekOperation == nil, session.supportsRewind, overlay.isHidden, playState.canEdit,
               lifecycle.isForeground, !lifecycle.isInterrupted else { return }
         let elapsed = ProcessInfo.processInfo.systemUptime - rewindStartedAt
-        if session.rewind(seconds: MobileHUDPress.rewindSeconds(heldFor: elapsed)) {
+        let tick = session.snapshot.tick - Int((MobileHUDPress.rewindSeconds(heldFor: elapsed) * session.ticksPerSecond).rounded())
+        _ = startSeek(to: tick) { [weak self] in
+            guard let self else { return }
             MobileMusic.shared.playRewind()
-            effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
-            clock.suspend()
-            renderCurrentFrame(force: true)
-            updateHUD()
+            self.effects.update(session: self.session, viewport: self.playfieldView.gameViewport, rewinding: true)
+            self.clock.suspend()
+            self.renderCurrentFrame(force: true)
+            self.updateHUD()
+            if !self.rewindHeld { self.saveCheckpoint(reason: .periodic) }
         }
     }
 
@@ -2370,22 +2543,25 @@ typealias MobileGameControllerBase = UIViewController
             if session.isReadOnly { completionPresented = false }
             if !paused { pauseForPlanning() }
             playfieldView.cancelInteraction()
-            var rewound = false
-            for _ in 0..<count { guard session.stepBackward() else { break }; rewound = true }
-            guard rewound else { return }
+            let target = max(session.earliestRewindTick, session.snapshot.tick - count)
+            let steps = session.snapshot.tick - target
+            guard steps > 0 else { return }
+            _ = startSeek(to: target, backwardSteps: steps) { [weak self] in
+                guard let self else { return }
             MobileMusic.shared.playRewind()
-            effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
-            clock.suspend()
-            highlightedTarget = nil
+            self.effects.update(session: self.session, viewport: self.playfieldView.gameViewport, rewinding: true)
+            self.clock.suspend()
+            self.highlightedTarget = nil
             #if os(tvOS)
-            tvTargetLock.clear()
-            ensureTVPointer()
+            self.tvTargetLock.clear()
+            self.ensureTVPointer()
             #else
-            previewPoint = nil
+            self.previewPoint = nil
             #endif
-            renderCurrentFrame(force: true)
-            saveCheckpoint(reason: .periodic)
-            updateHUD()
+            self.renderCurrentFrame(force: true)
+            self.saveCheckpoint(reason: .periodic)
+            self.updateHUD()
+            }
         default: break
         }
     }
@@ -2414,6 +2590,9 @@ typealias MobileGameControllerBase = UIViewController
     func showOverlay(title: String, actions: [(String, () -> Void)], results: Bool = false, pauseOverview: Bool = false) {
         hintRequestID = UUID()
         replayExportRequestID = UUID()
+        inspectionHover.isHidden = true
+        hoverInspection = nil
+        hoverInspectionTick = nil
         replayMoves.isHidden = true
         cancelPendingL3ToolDirection()
         playfieldView.suspendVisualEffects()
@@ -2666,11 +2845,12 @@ typealias MobileGameControllerBase = UIViewController
         #if os(iOS)
         let staticHeading = MobileSystemRegions.isFoldable(in: view)
             && view.bounds.height > view.bounds.width && !horizontalSettings
-        #else
-        let staticHeading = false
-        #endif
         globalNavigation.headingTitle = staticHeading ? overlayCanvas.staticHeadingTitle : nil
         overlayCanvas.showsStaticHeading = staticHeading
+        #else
+        globalNavigation.headingTitle = nil
+        overlayCanvas.showsStaticHeading = false
+        #endif
         let navigationHeight = globalNavigation.height(for: region.width)
         globalNavigation.frame = CGRect(x: region.minX, y: region.minY, width: region.width, height: navigationHeight)
         if horizontalSettings { globalNavigation.frame.origin.y = region.maxY - navigationHeight }

@@ -1,4 +1,5 @@
 import Foundation
+import NxlvKit
 
 /// Casts a one-native-pixel shadow onto previously drawn lemmings only.
 /// Create one pass per frame, then draw each sprite immediately after casting.
@@ -11,6 +12,8 @@ public struct MobileCrowdShadow {
     public mutating func cast(spriteWidth: Int, spriteHeight: Int, x: Int, y: Int,
                        width: Int, height: Int, pixels: UnsafeMutableRawBufferPointer,
                        opaque: (Int, Int) -> Bool) {
+        let region = SceneRasterContext.region(width: width, height: height)
+        let x = x - region.x, y = y - region.y, width = region.width, height = region.height
         guard spriteWidth > 0, spriteHeight > 0, width > 0, height > 0,
               width <= Int.max / height / 4, pixels.count >= width * height * 4 else { return }
         func contains(_ sx: Int, _ sy: Int) -> Bool {

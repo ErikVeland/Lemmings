@@ -316,7 +316,7 @@ public struct ClassicMacScene: Sendable {
     }
 
     public func terrainFrame(terrain: ClassicDOSTerrain) -> Data {
-        Data(terrainPixels(solid: [UInt8](terrain.solidMask)))
+        Data(terrainPixels(solid: terrain.renderingSolidMask))
     }
 
     private func terrainPixels(solid: [UInt8]) -> [UInt8] {
@@ -360,10 +360,10 @@ public struct ClassicMacScene: Sendable {
 
     private func render(simulation: ClassicDOSSimulation, terrain: Data?,
         glints wantsGlints: Bool) -> (rgba: Data, glints: ArrowGlints?) {
-        let solid = [UInt8](simulation.terrain.solidMask)
+        let solid = simulation.terrain.renderingSolidMask
         guard solid.count == level.solidMask.count else { return (terrainRGBA, nil) }
         let visualTerrain = terrain ?? Data(terrainPixels(solid: solid))
-        var pixels = [UInt8](visualTerrain)
+        var pixels = [UInt8](SceneRasterContext.crop(visualTerrain, width: width, height: height))
         var glints: GlintCanvas? = wantsGlints ? arrowGlintCanvas() : nil
         var triggerIndex = 0
         for (position, object) in level.objects.enumerated() {
@@ -565,18 +565,20 @@ public struct ClassicMacScene: Sendable {
         behind: Bool = false, onlyTerrain: Bool = false, solid: [UInt8]? = nil,
         visualTerrain: Data? = nil) {
         let source = [UInt8](frame.rgba)
-        let x0 = max(0, -x), y0 = max(0, -y)
-        let x1 = min(frame.width, width - x), y1 = min(frame.height, height - y)
+        let region = SceneRasterContext.region(width: width, height: height)
+        let x0 = max(0, region.x - x), y0 = max(0, region.y - y)
+        let x1 = min(frame.width, region.x + region.width - x), y1 = min(frame.height, region.y + region.height - y)
         guard x0 < x1, y0 < y1 else { return }
         for row in y0..<y1 {
             let sy = flipped ? frame.height - 1 - row : row
             for col in x0..<x1 {
                 let s = (sy * frame.width + col) * 4
                 guard source[s+3] != 0 else { continue }
-                let d = ((y + row) * width + x + col) * 4
+                guard let d = region.offset(x: x + col, y: y + row) else { continue }
+                let original = ((y + row) * width + x + col) * 4
                 let occupied: Bool
                 if let visualTerrain {
-                    occupied = visualTerrain[d + 3] != 0
+                    occupied = visualTerrain[original + 3] != 0
                 } else if let solid {
                     occupied = solid[((y + row) / 2) * (width / 2) + (x + col) / 2] != 0
                 } else {
@@ -608,8 +610,9 @@ public struct ClassicMacScene: Sendable {
         visualTerrain: [UInt8], shaded: Bool, glints: inout GlintCanvas?,
         underlay: [UInt8]? = nil) {
         let source = [UInt8](frame.rgba)
-        let x0 = max(0, -x), y0 = max(0, -y)
-        let x1 = min(frame.width, width - x), y1 = min(frame.height, height - y)
+        let region = SceneRasterContext.region(width: width, height: height)
+        let x0 = max(0, region.x - x), y0 = max(0, region.y - y)
+        let x1 = min(frame.width, region.x + region.width - x), y1 = min(frame.height, region.y + region.height - y)
         guard x0 < x1, y0 < y1 else { return }
 
         // Chamfer distance to the nearest empty terrain pixel, in half pixels
@@ -665,10 +668,11 @@ public struct ClassicMacScene: Sendable {
                 let d = distance[fi]
                 // Bevel in: leave the outermost terrain pixel bare.
                 guard d > 2 else { continue }
-                let p = ((y + row) * width + x + col) * 4
+                guard let p = region.offset(x: x + col, y: y + row) else { continue }
+                let original = ((y + row) * width + x + col) * 4
                 guard shaded else {
                     pixels[p] = source[s]; pixels[p + 1] = source[s + 1]; pixels[p + 2] = source[s + 2]
-                    if underlay != nil { pixels[p + 3] = visualTerrain[p + 3] }
+                    if underlay != nil { pixels[p + 3] = visualTerrain[original + 3] }
                     continue
                 }
                 var light = 1.0, glint = 0.0
@@ -694,10 +698,10 @@ public struct ClassicMacScene: Sendable {
                 }
                 for c in 0..<3 {
                     let arrow = min(255, Double(source[s + c]) * light + glint)
-                    let ground = Double(pixels[p + 3] == 0 ? (underlay?[p + c] ?? pixels[p + c]) : pixels[p + c])
+                    let ground = Double(pixels[p + 3] == 0 ? (underlay?[original + c] ?? pixels[p + c]) : pixels[p + c])
                     pixels[p + c] = UInt8(ground + (arrow - ground) * arrowOpacity)
                 }
-                if underlay != nil { pixels[p + 3] = visualTerrain[p + 3] }
+                if underlay != nil { pixels[p + 3] = visualTerrain[original + 3] }
             }
         }
     }

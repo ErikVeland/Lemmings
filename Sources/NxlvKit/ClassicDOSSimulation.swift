@@ -341,6 +341,8 @@ public struct ClassicDOSTerrain: Codable, Equatable, Sendable {
     }
 
     public var solidMask: Data { Data(solidPixels) }
+    /// Immutable, copy-on-write storage for scene rendering without materialising Data.
+    public var renderingSolidMask: [UInt8] { solidPixels }
     public var steelMask: Data { Data(steelPixels) }
 
     /// The two masks end to end, for canonical hashing.

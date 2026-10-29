@@ -3,57 +3,13 @@ import Foundation
 /// Rebuilds the visible NeoLemmix scene from retained render layers and the
 /// current physics terrain. Foreground gadgets stay above live terrain edits.
 public enum NeoLemmixSceneFrame {
-    public static func rgba(
-        _ rendered: NxlvRenderedLevel,
-        terrain current: NeoLemmixTerrain,
-        stonerRGBA: [UInt8] = [],
-        stonerWidth: Int = 16,
-        stonerHeight: Int = 11,
-        zones: [NeoLemmixZone] = [],
-        disabledZoneIDs: Set<Int> = [],
-        gadgetAnimationFrames: [Int: Int]? = nil,
-        secondaryAnimationStates: [Int: [NeoLemmixSecondaryAnimationState]]? = nil,
-        tickCount: Int = 0,
-        entranceOpenTick: Int? = nil,
-        splitterDirections: [Int: NeoLemmixDirection]? = nil,
-        useMacArtwork: Bool = false
-    ) -> [UInt8] {
-        frame(rendered, terrain: current, stonerRGBA: stonerRGBA, stonerWidth: stonerWidth,
-            stonerHeight: stonerHeight, zones: zones, disabledZoneIDs: disabledZoneIDs,
-            gadgetAnimationFrames: gadgetAnimationFrames, secondaryAnimationStates: secondaryAnimationStates,
-            tickCount: tickCount, entranceOpenTick: entranceOpenTick, splitterDirections: splitterDirections,
-            useMacArtwork: useMacArtwork).rgba
-    }
-
-    /// Retains terrain-clipped arrow light for the native HDR overlay.
-    public static func frame(
-        _ rendered: NxlvRenderedLevel,
-        terrain current: NeoLemmixTerrain,
-        stonerRGBA: [UInt8] = [],
-        stonerWidth: Int = 16,
-        stonerHeight: Int = 11,
-        zones: [NeoLemmixZone] = [],
-        disabledZoneIDs: Set<Int> = [],
-        gadgetAnimationFrames: [Int: Int]? = nil,
-        secondaryAnimationStates: [Int: [NeoLemmixSecondaryAnimationState]]? = nil,
-        tickCount: Int = 0,
-        entranceOpenTick: Int? = nil,
-        splitterDirections: [Int: NeoLemmixDirection]? = nil,
-        useMacArtwork: Bool = false,
-        includeArrowGlints: Bool = false
-    ) -> (rgba: [UInt8], glints: ClassicMacScene.ArrowGlints?) {
+    /// Convert physics terrain independently of animated scene layers.
+    public static func terrainRGBA(_ rendered: NxlvRenderedLevel, terrain current: NeoLemmixTerrain,
+                                   stonerRGBA: [UInt8] = [], stonerWidth: Int = 16, stonerHeight: Int = 11) -> [UInt8] {
         let pixelCount = rendered.width * rendered.height
-        let byteCount = pixelCount * 4
-        guard current.width == rendered.width,
-              current.height == rendered.height,
-              rendered.backgroundRGBA.count == byteCount,
-              rendered.terrainRGBA.count == byteCount,
-              rendered.foregroundRGBA.count == byteCount,
-              rendered.solidMask.count == pixelCount,
-              current.solidMask.count == pixelCount else {
-            return (rendered.rgba, nil)
-        }
-
+        guard current.width == rendered.width, current.height == rendered.height,
+              current.solidMask.count == pixelCount, rendered.solidMask.count == pixelCount,
+              rendered.terrainRGBA.count == pixelCount * 4 else { return rendered.terrainRGBA }
         let maskColor = rendered.constructiveRGBA.count == 4
             ? rendered.constructiveRGBA : [0xD0, 0xB0, 0x80, 0xFF]
         var terrain = rendered.terrainRGBA
@@ -100,6 +56,66 @@ public enum NeoLemmixSceneFrame {
                 terrain[offset + 3] = maskColor[3]
             }
         }
+        return terrain
+    }
+
+
+    public static func rgba(
+        _ rendered: NxlvRenderedLevel,
+        terrain current: NeoLemmixTerrain,
+        stonerRGBA: [UInt8] = [],
+        stonerWidth: Int = 16,
+        stonerHeight: Int = 11,
+        zones: [NeoLemmixZone] = [],
+        disabledZoneIDs: Set<Int> = [],
+        gadgetAnimationFrames: [Int: Int]? = nil,
+        secondaryAnimationStates: [Int: [NeoLemmixSecondaryAnimationState]]? = nil,
+        tickCount: Int = 0,
+        entranceOpenTick: Int? = nil,
+        splitterDirections: [Int: NeoLemmixDirection]? = nil,
+        useMacArtwork: Bool = false,
+        preparedTerrainRGBA: [UInt8]? = nil
+    ) -> [UInt8] {
+        frame(rendered, terrain: current, stonerRGBA: stonerRGBA, stonerWidth: stonerWidth,
+            stonerHeight: stonerHeight, zones: zones, disabledZoneIDs: disabledZoneIDs,
+            gadgetAnimationFrames: gadgetAnimationFrames, secondaryAnimationStates: secondaryAnimationStates,
+            tickCount: tickCount, entranceOpenTick: entranceOpenTick, splitterDirections: splitterDirections,
+            useMacArtwork: useMacArtwork, preparedTerrainRGBA: preparedTerrainRGBA).rgba
+    }
+
+    /// Retains terrain-clipped arrow light for the native HDR overlay.
+    public static func frame(
+        _ rendered: NxlvRenderedLevel,
+        terrain current: NeoLemmixTerrain,
+        stonerRGBA: [UInt8] = [],
+        stonerWidth: Int = 16,
+        stonerHeight: Int = 11,
+        zones: [NeoLemmixZone] = [],
+        disabledZoneIDs: Set<Int> = [],
+        gadgetAnimationFrames: [Int: Int]? = nil,
+        secondaryAnimationStates: [Int: [NeoLemmixSecondaryAnimationState]]? = nil,
+        tickCount: Int = 0,
+        entranceOpenTick: Int? = nil,
+        splitterDirections: [Int: NeoLemmixDirection]? = nil,
+        useMacArtwork: Bool = false,
+        includeArrowGlints: Bool = false,
+        preparedTerrainRGBA: [UInt8]? = nil
+    ) -> (rgba: [UInt8], glints: ClassicMacScene.ArrowGlints?) {
+        let pixelCount = rendered.width * rendered.height
+        let byteCount = pixelCount * 4
+        guard current.width == rendered.width,
+              current.height == rendered.height,
+              rendered.backgroundRGBA.count == byteCount,
+              rendered.terrainRGBA.count == byteCount,
+              rendered.foregroundRGBA.count == byteCount,
+              rendered.solidMask.count == pixelCount,
+              current.solidMask.count == pixelCount else {
+            return (rendered.rgba, nil)
+        }
+
+        var terrain = preparedTerrainRGBA?.count == byteCount ? preparedTerrainRGBA!
+            : terrainRGBA(rendered, terrain: current, stonerRGBA: stonerRGBA,
+                          stonerWidth: stonerWidth, stonerHeight: stonerHeight)
         let pixelScale = useMacArtwork ? 2 : 1
         func displayPixels(_ pixels: [UInt8]) -> [UInt8] {
             useMacArtwork ? NeoLemmixMacArtwork.doubled(pixels, width: rendered.width, height: rendered.height) : pixels
@@ -118,6 +134,9 @@ public enum NeoLemmixSceneFrame {
             }
             terrain = high
         }
+        let fullTerrain = terrain
+        let region = SceneRasterContext.region(width: rendered.width * pixelScale, height: rendered.height * pixelScale)
+        terrain = SceneRasterContext.crop(terrain, width: rendered.width * pixelScale, height: rendered.height * pixelScale)
         let arrowEffects: [NxlvObjectEffect] = [.oneWayLeft, .oneWayRight, .oneWayUp, .oneWayDown]
         var glints: ClassicMacScene.GlintCanvas?
         if useMacArtwork && includeArrowGlints {
@@ -140,6 +159,7 @@ public enum NeoLemmixSceneFrame {
         }
         var result = useMacArtwork && rendered.macBackgroundRGBA.count == byteCount * 4
             ? rendered.macBackgroundRGBA : displayPixels(rendered.backgroundRGBA)
+        result = SceneRasterContext.crop(result, width: rendered.width * pixelScale, height: rendered.height * pixelScale)
         let hasRetainedGadgets = !rendered.gadgets.isEmpty
             && rendered.gadgets.allSatisfy({ !$0.animationRGBA.isEmpty })
         if hasRetainedGadgets {
@@ -193,7 +213,7 @@ public enum NeoLemmixSceneFrame {
         }
         composite(terrain, over: &result)
         if hasRetainedGadgets {
-            var foreground = Array(repeating: UInt8(0), count: byteCount * pixelScale * pixelScale)
+            var foreground = Array(repeating: UInt8(0), count: region.byteCount)
             let hasButtons = zones.contains { $0.effect == .unlockButton }
             let hasUnpressedButton = zones.contains {
                 $0.effect == .unlockButton && !disabledZoneIDs.contains($0.id)
@@ -273,7 +293,7 @@ public enum NeoLemmixSceneFrame {
                             height: layer.height * 2, rgba: Data(source)), into: &foreground,
                             width: rendered.width * 2, height: rendered.height * 2,
                             x: layer.x * 2, y: layer.y * 2, flipped: false,
-                            visualTerrain: terrain, shaded: true, glints: &glints, underlay: terrain)
+                            visualTerrain: fullTerrain, shaded: true, glints: &glints, underlay: fullTerrain)
                         continue
                     }
                     compositePlaced(
@@ -297,7 +317,7 @@ public enum NeoLemmixSceneFrame {
         } else {
             let foreground = useMacArtwork && rendered.macForegroundRGBA.count == byteCount * 4
                 ? rendered.macForegroundRGBA : displayPixels(rendered.foregroundRGBA)
-            composite(foreground, over: &result)
+            composite(SceneRasterContext.crop(foreground, width: rendered.width * pixelScale, height: rendered.height * pixelScale), over: &result)
         }
         return (result, glints.flatMap { $0.lit ? .init(x: $0.x, y: $0.y,
             width: $0.width, height: $0.height, strength: Data($0.strength)) : nil })
@@ -514,6 +534,8 @@ public enum NeoLemmixSceneFrame {
         pixelScale: Int = 1,
         over destination: inout [UInt8]
     ) {
+        let region = SceneRasterContext.region(width: canvasWidth * pixelScale, height: canvasHeight * pixelScale)
+        guard region.intersects(x: destinationX * pixelScale, y: destinationY * pixelScale, width: width * pixelScale, height: height * pixelScale) else { return }
         let sourceScale = source.count == width * height * 16 ? 2 : 1
         guard width > 0, height > 0, source.count == width * height * 4 * sourceScale * sourceScale else { return }
         for sourceY in 0..<height * pixelScale {
@@ -524,7 +546,7 @@ public enum NeoLemmixSceneFrame {
                 guard canvasX >= 0, canvasX < canvasWidth * pixelScale else { continue }
                 let sourceOffset = ((sourceY * sourceScale / pixelScale) * width * sourceScale + sourceX * sourceScale / pixelScale) * 4
                 guard source[sourceOffset + 3] > 0 else { continue }
-                let destinationOffset = (canvasY * canvasWidth * pixelScale + canvasX) * 4
+                guard let destinationOffset = region.offset(x: canvasX, y: canvasY) else { continue }
                 if let clipToTerrain, clipToTerrain[destinationOffset + 3] == 0 { continue }
                 if noOverwrite {
                     let alphaOffset = destinationOffset + 3

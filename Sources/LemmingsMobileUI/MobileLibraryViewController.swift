@@ -42,6 +42,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private let homeBackdropLoader = MobileHomeBackdropLoader()
     private var homeBackdropTask: Task<Void, Never>?
     private var homeBackdropKey: String?
+    private var welcomePresentationReady = false
     #if os(tvOS)
     private var topShelfTask: Task<Void, Never>?
     #endif
@@ -514,9 +515,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if libraryCloud.enabled { cloudProgress.requestSync(); presentCloudAuthentication() }
         #endif
     }
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        viewIsVisible = true
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        observeLibraryPose()
+    }
+
+    private func observeLibraryPose() {
         #if os(iOS)
         if let window = view.window {
             deskClockWindow = window
@@ -524,8 +528,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             deskClockEntry.observePose(in: window)
         }
         #endif
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewIsVisible = true
+        observeLibraryPose()
         sceneIsActive = view.window?.windowScene?.activationState == .foregroundActive
         syncPages()
+        commitWelcomePresentation()
         if game == nil { becomeFirstResponder() }
         #if os(iOS)
         cloudProgress.requestSync()
@@ -561,6 +572,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     #endif
                     self.libraryInput.reset()
                     self.syncPages()
+                    self.commitWelcomePresentation()
                     #if os(iOS)
                     if name == UIScene.didActivateNotification { self.checkDeskClock() }
                     #endif
@@ -663,12 +675,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let staticHeading = MobileSystemRegions.isFoldable(in: view)
             && view.bounds.height > view.bounds.width && !globalNavigation.isHidden
             && !bottomSettingsNavigation
-        #else
-        let staticHeading = false
-        #endif
         globalNavigation.headingTitle = staticHeading ? (browserShown ? browser.headingText : canvas.staticHeadingTitle) : nil
         canvas.showsStaticHeading = staticHeading && !browserShown
         browser.showsStaticHeading = staticHeading && browserShown
+        #else
+        globalNavigation.headingTitle = nil
+        canvas.showsStaticHeading = false
+        browser.showsStaticHeading = false
+        #endif
         canvas.usesBottomSettingsNavigation = bottomSettingsNavigation
         #if os(iOS)
         menuBackGesture?.isEnabled = !globalNavigation.isHidden
@@ -745,6 +759,35 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         settingsTabs.layoutIfNeeded()
         listTools.layoutIfNeeded()
         game?.view.frame = view.bounds
+        updateWelcomePresentation()
+    }
+
+    private func updateWelcomePresentation() {
+        #if os(iOS)
+        // The first portrait page and its scenery must join the same completed
+        // layout transaction. Once revealed, refreshes must not hide the page
+        // or reset the player's scrolling position.
+        let portraitWelcome = route == .whatsNew && view.bounds.height > view.bounds.width
+        if route == .whatsNew, !welcomePresentationReady, viewIsVisible, sceneIsActive,
+           !portraitWelcome || homeBackdropTask == nil {
+            welcomePresentationReady = true
+        }
+        let waiting = portraitWelcome && !welcomePresentationReady
+        let surfaces: [UIView] = [scrollView, globalNavigation, settingsTabs, listTools]
+        for surface in surfaces {
+            surface.alpha = waiting ? 0 : 1
+            surface.isUserInteractionEnabled = !waiting
+            surface.accessibilityElementsHidden = waiting
+        }
+        #endif
+    }
+
+    private func commitWelcomePresentation() {
+        guard route == .whatsNew else { return }
+        UIView.performWithoutAnimation {
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+        }
     }
     private func rememberHomeBackdrop(_ session: any MobileGameSession, at index: Int) {
         let kind: MobileGameDataKind = session.engineIdentifier == "lemmings2" ? .lemmings2
@@ -796,6 +839,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             self.homeBackdropTask = nil
             self.homeBackdropView.show(scenery)
             self.updateLibraryDisplayLink()
+            self.commitWelcomePresentation()
             #if os(tvOS)
             // Top Shelf picks one of the two Macintosh looks for each newly exported level.
             var shelfSettings = settings
@@ -1112,6 +1156,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         preparingLevel = false
         if route != next { canvas.focusedID = nil }
         globalNavigation.focusedID = nil
+        if route != next { welcomePresentationReady = false }
         route = next; notice = ""
         libraryInput.reset()
         if game == nil { becomeFirstResponder() }

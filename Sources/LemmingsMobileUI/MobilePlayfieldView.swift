@@ -43,9 +43,31 @@ import UIKit
     private var automaticallyFitsViewport: Bool
     private let initialCameraFocus: MobilePoint?
     private(set) var bitmap: CGImage?
+    private var bitmapRect: MobileRect?
     private var arrowGlints: ClassicMacScene.ArrowGlints?
     private var tubeViewport: MobileViewport?
     private let tubeSurface = MobileBitmapSurface()
+    private let tubeSceneSurface = MobileBitmapSurface()
+    private var tubeSceneImage: CGImage?
+    private var tubeSceneBitmap: CGImage?
+    private var tubeSceneViewport: MobileViewport?
+    private var tubeSignature: TubeSignature?
+    private var trailRevision: UInt64 = 0
+    private struct TubeSignature: Equatable {
+        let bitmap: ObjectIdentifier
+        let viewport: MobileViewport
+        let settings: ClassicSettings
+        let cursor: MobilePoint?
+        let cursorIcon: ObjectIdentifier?
+        let cursorCount: Int?
+        let cursorName: String
+        let cursorRemaining: Int?
+        let occupied: Bool, eligible: Bool, unlimited: Bool
+        let target: MobileTargetSelection?
+        let assignment: String?
+        let assignmentProgress: Double?
+        let trails: UInt64
+    }
     private let tube = MobileCRTView(tubeDevice: true)
     private var hdr: MobileHDRView?
     private var attemptedHDR = false
@@ -54,6 +76,8 @@ import UIKit
     private var speedEffectsActive = false
     private var sprites: [String: CGImage] = [:]
     var selectionPoint: MobilePoint?
+    var targetMarker: MobileTargetSelection?
+    var markerEngine = "classic-dos"
     var cursorPoint: MobilePoint?
     var cursorOccupied = false
     var cursorEligible = false
@@ -73,6 +97,8 @@ import UIKit
     private var explosionBirths: [Int: (tick: Int, expires: Double)] = [:]
     private let decoration = MobilePlayfieldDecoration()
     // Core Animation scales the engine bitmap on the GPU. CPU drawing covers only the overlays above it.
+    private let failureLayer = CALayer()
+    private let failureSurface = MobileBitmapSurface()
     private let bitmapClip = CALayer()
     private let bitmapLayer = CALayer()
     private var layerBitmap: CGImage?
@@ -109,6 +135,11 @@ import UIKit
         bitmapLayer.minificationFilter = .nearest
         bitmapClip.addSublayer(bitmapLayer)
         layer.addSublayer(bitmapClip)
+        failureLayer.actions = immediate
+        failureLayer.magnificationFilter = .nearest
+        failureLayer.minificationFilter = .nearest
+        failureLayer.isHidden = true
+        layer.addSublayer(failureLayer)
         overlay.drawContent = { [weak self] context in self?.drawOverlay(in: context) }
         addSubview(overlay)
         #if os(iOS)
@@ -284,13 +315,16 @@ import UIKit
         }
     }
 
+    func advanceTouchInput(at now: Double) {
+        let touchEffects = router.advance(at: now, horizontalRange: 0...max(0, Double(bounds.width)))
+        if !touchEffects.isEmpty { onTouchEffects?(touchEffects) }
+    }
+
     func advanceVisualEffects() {
         let now = ProcessInfo.processInfo.systemUptime
         if !spriteTrails.echoes.isEmpty {
-            spriteTrails.expire(at: now); updateTube(); setNeedsDisplay()
+            spriteTrails.expire(at: now); trailRevision &+= 1; updateTube(); setNeedsDisplay()
         }
-        let touchEffects = router.advance(at: now, horizontalRange: 0...max(0, Double(bounds.width)))
-        if !touchEffects.isEmpty { onTouchEffects?(touchEffects) }
         #if os(iOS)
         completionGlow.advance(at: now)
         #endif
@@ -336,12 +370,38 @@ import UIKit
         hdr?.clear(); explosionBirths.removeAll()
     }
     func releaseEffectResources() {
+        tubeSignature = nil; tubeSceneImage = nil; tubeSceneBitmap = nil; tubeSceneViewport = nil
+        tubeSceneSurface.release(); tubeSurface.release()
         releaseHDR()
         tube?.releaseEffectResources()
     }
     private func releaseHDR() {
         hdr?.clear(); hdr?.removeFromSuperview(); hdr = nil; attemptedHDR = false
     }
+    func updatePresentation() {
+        updateTube()
+        setNeedsDisplay()
+    }
+
+    private func drawTargetMarker(viewport: MobileViewport, context: CGContext) {
+        guard let targetMarker else { return }
+        let marker = MobileTargetMarker.make(targetMarker, engine: markerEngine, scale: renderScale,
+            reducedColour: displaySettings.colorDepth == .amigaOCS)
+        context.saveGState()
+        defer { context.restoreGState() }
+        let clip = viewport.contentFrame
+        context.clip(to: CGRect(x: clip.x, y: clip.y, width: clip.width, height: clip.height))
+        context.setShouldAntialias(false)
+        context.setFillColor(CGColor(srgbRed: Double(marker.colour.0) / 255, green: Double(marker.colour.1) / 255,
+            blue: Double(marker.colour.2) / 255, alpha: 1))
+        for pixel in marker.pixels {
+            guard pixel.x >= 0, pixel.y >= 0, pixel.x < viewport.levelSize.width, pixel.y < viewport.levelSize.height else { continue }
+            let point = viewport.viewPoint(fromLevel: pixel)
+            context.fill(CGRect(x: point.x, y: point.y, width: viewport.zoom * viewport.pixelAspect * marker.pixelSize,
+                height: viewport.zoom * marker.pixelSize))
+        }
+    }
+
     func redrawSelection() {
         if let tube, !tube.isHidden, let tubeViewport {
             tube.selection = selectionEffect(viewport: tubeViewport)
@@ -352,6 +412,8 @@ import UIKit
     func update(frame: MobilePixelFrame) throws {
         guard let image = MobileBitmapRenderer.image(frame) else { throw MobileSessionError.frameUnavailable }
         bitmap = image
+        tubeSignature = nil
+        bitmapRect = frame.renderedRect
         arrowGlints = frame.arrowGlints
         #if os(iOS)
         let now = ProcessInfo.processInfo.systemUptime
@@ -414,8 +476,8 @@ import UIKit
         guard tube?.isHidden != false, let bitmap, bitmapUsesLayer, bitmap.width > 0, bitmap.height > 0 else { return nil }
         let content = gameViewport.contentFrame
         let scaleX = gameViewport.zoom * gameViewport.pixelAspect, scaleY = gameViewport.zoom
-        let pixelX = gameViewport.levelSize.width * scaleX / Double(bitmap.width)
-        let pixelY = gameViewport.levelSize.height * scaleY / Double(bitmap.height)
+        let pixelX = scaleX / max(1, renderScale)
+        let pixelY = scaleY / max(1, renderScale)
         return CGRect(x: content.x - gameViewport.origin.x * scaleX + Double(glints.x) * pixelX,
             y: content.y - gameViewport.origin.y * scaleY + Double(glints.y) * pixelY,
             width: Double(glints.width) * pixelX, height: Double(glints.height) * pixelY)
@@ -425,12 +487,38 @@ import UIKit
     private func layoutBitmap() {
         let content = gameViewport.contentFrame
         let flat = tube?.isHidden != false
+        // Compose the opaque failure scene at native pixel density, then let
+        // Core Animation scale it. Never tint a transparent overlay.
+        if flat, bitmap != nil, failureAmount > 0, bounds.width > 0, bounds.height > 0 {
+            let scale = min(1, renderScale / max(0.1, gameViewport.zoom),
+                sqrt(1_048_576 / Double(bounds.width * bounds.height)))
+            let width = max(1, Int(ceil(bounds.width * scale)))
+            let height = max(1, Int(ceil(bounds.height * scale)))
+            if let context = failureSurface.prepare(width: width, height: height) {
+                context.saveGState()
+                context.translateBy(x: 0, y: CGFloat(height))
+                context.scaleBy(x: CGFloat(width) / bounds.width, y: -CGFloat(height) / bounds.height)
+                drawOverlay(in: context)
+                context.restoreGState()
+                failureLayer.contents = context.makeImage()
+                failureLayer.frame = bounds
+                failureLayer.isHidden = false
+                bitmapClip.isHidden = true
+                bitmapLayer.contents = nil; layerBitmap = nil
+                overlay.isHidden = true
+                return
+            }
+        }
+        failureLayer.contents = nil
+        failureLayer.isHidden = true
+        failureSurface.release()
         if flat, let bitmap, bitmapUsesLayer, content.width > 0, content.height > 0 {
             if layerBitmap !== bitmap { bitmapLayer.contents = bitmap; layerBitmap = bitmap }
             let scaleX = gameViewport.zoom * gameViewport.pixelAspect, scaleY = gameViewport.zoom
             bitmapClip.frame = CGRect(x: content.x, y: content.y, width: content.width, height: content.height)
-            bitmapLayer.frame = CGRect(x: -gameViewport.origin.x * scaleX, y: -gameViewport.origin.y * scaleY,
-                width: gameViewport.levelSize.width * scaleX, height: gameViewport.levelSize.height * scaleY)
+            let scene = bitmapRect ?? MobileRect(x: 0, y: 0, width: gameViewport.levelSize.width, height: gameViewport.levelSize.height)
+            bitmapLayer.frame = CGRect(x: (scene.x - gameViewport.origin.x) * scaleX, y: (scene.y - gameViewport.origin.y) * scaleY,
+                width: scene.width * scaleX, height: scene.height * scaleY)
             bitmapClip.isHidden = false
         } else {
             bitmapClip.isHidden = true
@@ -443,7 +531,7 @@ import UIKit
     }
 
     private var hasOverlayContent: Bool {
-        (displaySettings.lemmingSelectionStyle == .obvious && selectionPoint != nil) || selectionSprite != nil
+        targetMarker != nil || (displaySettings.lemmingSelectionStyle == .obvious && selectionPoint != nil) || selectionSprite != nil
             || (assignmentSprite != nil && assignmentProgress != nil) || !explosions.isEmpty
             || cursorPoint != nil || failureAmount > 0 || !spriteTrails.echoes.isEmpty
     }
@@ -455,9 +543,10 @@ import UIKit
         if !bitmapUsesLayer {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(bounds)
-            MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context)
+            MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context, renderedRect: bitmapRect)
         }
         drawSpriteTrails(viewport: gameViewport, context: context)
+        drawTargetMarker(viewport: gameViewport, context: context)
         drawObviousSelection(viewport: gameViewport, context: context)
         if let effect = selectionEffect(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
@@ -497,17 +586,38 @@ import UIKit
         // Draw at native vertical resolution. The tube supplies the final display scale.
         let width = max(1, Int(ceil(bounds.width / max(0.1, gameViewport.zoom) * renderScale)))
         let height = max(1, Int(ceil(bounds.height / max(0.1, gameViewport.zoom) * renderScale)))
-        guard let context = tubeSurface.prepare(width: width, height: height) else { return }
         var viewport = gameViewport
         viewport.viewSize = MobileSize(width: Double(width), height: Double(height))
         viewport.zoom = renderScale
         tubeViewport = viewport
+        let signature = TubeSignature(bitmap: ObjectIdentifier(bitmap), viewport: viewport, settings: displaySettings,
+            cursor: cursorPoint, cursorIcon: cursorIcon.map(ObjectIdentifier.init), cursorCount: cursorCount,
+            cursorName: cursorSkillName, cursorRemaining: cursorRemaining, occupied: cursorOccupied,
+            eligible: cursorEligible, unlimited: cursorUnlimited, target: targetMarker,
+            assignment: assignmentSprite?.cacheKey, assignmentProgress: assignmentProgress, trails: trailRevision)
+        if signature == tubeSignature {
+            tube.selection = selectionEffect(viewport: viewport)
+            tube.setNeedsDisplay()
+            return
+        }
+        if tubeSceneBitmap !== bitmap || tubeSceneViewport != viewport || tubeSceneImage == nil {
+            guard let scene = tubeSceneSurface.prepare(width: width, height: height) else { return }
+            scene.saveGState()
+            scene.translateBy(x: 0, y: CGFloat(height))
+            scene.scaleBy(x: 1, y: -1)
+            MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: scene, renderedRect: bitmapRect)
+            scene.restoreGState()
+            tubeSceneImage = scene.makeImage()
+            tubeSceneBitmap = bitmap; tubeSceneViewport = viewport
+        }
+        guard let context = tubeSurface.prepare(width: width, height: height), let tubeSceneImage else { return }
+        context.draw(tubeSceneImage, in: CGRect(x: 0, y: 0, width: width, height: height))
         context.saveGState()
         defer { context.restoreGState() }
         context.translateBy(x: 0, y: CGFloat(height))
         context.scaleBy(x: 1, y: -1)
-        MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: context)
         drawSpriteTrails(viewport: viewport, context: context)
+        drawTargetMarker(viewport: viewport, context: context)
         drawObviousSelection(viewport: viewport, context: context)
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
             SpriteAssignmentPulse.draw(sprite: image, in: spriteRect(sprite, viewport: viewport), context: context,
@@ -517,6 +627,7 @@ import UIKit
         drawCursorBadge(viewport: viewport, context: context)
         tube.selection = selectionEffect(viewport: viewport)
         tube.update(context: context, settings: displaySettings, flashes: flashes)
+        tubeSignature = signature
     }
 
     private func updateBombCountdowns() {

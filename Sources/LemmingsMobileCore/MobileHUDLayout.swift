@@ -102,7 +102,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
             }
         }
         layout = topStatusLayout(layout, television: television)
-        if !television { layout = duoTabletLayout(layout) }
+        layout = duoTabletLayout(layout)
         layout = joiningControls(layout, hasRate: hasRate, skillCount: max(0, skillCount))
         if fillsDisplayWidth {
             layout = MobileHUDLayout(portrait: layout.portrait, interface: layout.interface, panel: layout.panel,
@@ -170,7 +170,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
         return MobileHUDLayout(portrait: Portrait(skills: skills,
             skillContentWidth: portrait.skillContentWidth, rateValue: rate, minimap: map),
             interface: interface, panel: nil, compactScale: adaptive.compactScale, speedArrows: [],
-            reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind, isDiorama: false)
+            reservedRegions: layout.reservedRegions, supportsRewind: layout.supportsRewind, isDiorama: false,
+            showsMenuButton: layout.showsMenuButton, television: layout.television)
     }
 
     private static func joiningControls(_ layout: MobileHUDLayout, hasRate: Bool, skillCount: Int) -> MobileHUDLayout {

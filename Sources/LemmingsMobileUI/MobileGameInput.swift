@@ -148,7 +148,7 @@ extension MobileGameViewController {
         #endif
         if !pollingController { highlightedTarget = point.flatMap { self.target(at: $0) } }
         if fanMode, (session as? Lemmings2MobileSession)?.isFanActive == true { updateFan(at: point, active: true) }
-        renderCurrentFrame(force: true)
+        renderCurrentFrame(force: true, presentationOnly: true)
     }
     func restoreHoverAim() {
         l2PrimaryHeld = false
@@ -174,6 +174,7 @@ extension MobileGameViewController {
     }
 
     func performCommand(_ command: GameplayCommand) {
+        cancelSeek()
         guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
         #if os(tvOS)
         if tvCameraMode && [.assign, .pause, .speedReset].contains(command) {

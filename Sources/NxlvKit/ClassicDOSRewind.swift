@@ -128,11 +128,33 @@ public struct ClassicDOSRewind: Codable, Sendable {
     }
 
     private mutating func captureIfNeeded() {
-        guard simulation.tickCount % interval == 0 else { return }
+        // A few recent states make repeated short backward steps cheap without
+        // shortening the existing sparse history or changing checkpoint files.
+        let recentInterval = max(1, ClassicDOSRules.ticksPerSecond / 2)
+        let usesRecentCache = interval == ClassicDOSRules.ticksPerSecond * 3 && maximumKeyframes == 120
+        guard simulation.tickCount % interval == 0 || (usesRecentCache && simulation.tickCount % recentInterval == 0) else { return }
         guard keyframes.last?.tick != simulation.tickCount else { return }
         keyframes.append(Keyframe(
             tick: simulation.tickCount, state: simulation, commandCount: appliedCommandCount))
-        if keyframes.count > maximumKeyframes { keyframes.removeFirst() }
+        if usesRecentCache {
+            let recentCutoff = simulation.tickCount - ClassicDOSRules.ticksPerSecond * 2
+            let oldestTick = keyframes.first?.tick
+            keyframes.removeAll { frame in
+                frame.tick != oldestTick && frame.tick % interval != 0 && frame.tick < recentCutoff
+            }
+        }
+        let stateBytes = max(1, simulation.terrain.width * simulation.terrain.height * 2
+            + simulation.lemmings.count * MemoryLayout<ClassicDOSLemming>.stride + 4_096)
+        let limit = max(1, min(maximumKeyframes + (usesRecentCache ? 5 : 0),
+            RuntimeMemoryBudget.shared.snapshot().historyBytes / stateBytes))
+        while keyframes.count > limit {
+            // Keep the earliest restore point and spread acceleration states across the run.
+            let olderEnd = max(2, keyframes.count - max(1, limit / 2))
+            let removal = (1..<olderEnd).min {
+                keyframes[$0 + 1].tick - keyframes[$0 - 1].tick < keyframes[$1 + 1].tick - keyframes[$1 - 1].tick
+            } ?? 1
+            keyframes.remove(at: removal)
+        }
     }
 
     // MARK: - Going back
@@ -143,6 +165,20 @@ public struct ClassicDOSRewind: Codable, Sendable {
     public var canRewind: Bool { simulation.tickCount > earliestTick }
     /// Commands that belong to the current point, excluding a future kept for scrubbing.
     public var appliedCommands: [LoggedCommand] { Array(commands.prefix(appliedCommandCount)) }
+
+    /// Prepare a private cursor without replaying ticks on the caller's input path.
+    public func preparedSeek(toTick target: Int) -> ClassicDOSRewind? {
+        guard target >= earliestTick else { return nil }
+        var copy = self
+        if target < simulation.tickCount {
+            guard let keyframe = keyframes.last(where: { $0.tick <= target }) else { return nil }
+            copy.simulation = keyframe.state
+            copy.appliedCommandCount = keyframe.commandCount
+            copy.applyPendingCommands()
+            copy.keyframes.removeAll { $0.tick > target }
+        }
+        return copy
+    }
 
     /// Moves to an exact tick, forward or back.
     ///
@@ -236,7 +272,7 @@ public struct ClassicDOSRewind: Codable, Sendable {
     /// Rough memory held by the history, for tuning the interval.
     public var estimatedMemoryBytes: Int {
         let terrain = simulation.terrain.width * simulation.terrain.height * 2
-        return keyframes.count * (terrain + 4_096)
+        return keyframes.reduce(0) { $0 + terrain + $1.state.lemmings.count * MemoryLayout<ClassicDOSLemming>.stride + 4_096 }
     }
 
     public var keyframeCount: Int { keyframes.count }

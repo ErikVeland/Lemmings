@@ -12,6 +12,16 @@ iPhone, iPad and Duo use the same mobile frontend. The normal TV application
 uses that frontend with remote/controller, focus and LAN-transfer adapters.
 The older standalone TV development shell is not the production parity baseline.
 
+## Rewind responsiveness — 29 October 2026
+
+Classic keeps a small recent cache alongside its long history. The mobile and
+TV sessions for Lemmings 2, Lemmings 3 and NeoLemmix retain bounded in-memory
+snapshots and reconstruct older positions from their full input logs. Snapshot
+caches are not written to saved checkpoints. Saved replay playback still
+reconstructs from its start when seeking backwards. Actual memory use,
+responsiveness and Siri Remote interaction on older Apple TV hardware remain
+device checks.
+
 ## 2.3 consolidation and parity work
 
 The `feature/2.3` consolidation retained the crowd-shadow and native-session
@@ -60,9 +70,15 @@ Mac Classic/Neo and the native L2/L3 skill rows use the shared responsive
 height. `GameplayKeyboard` reads each row's actual height for every top toolbar
 group; Classic CRT converts that height through its displayed source mapping.
 Native L2/L3 keep their engine-specific Fan/tool controls and panel reservations.
-The shared timeline also uses joined dividers. The authored TV panel layout is
-retained; adaptive iPhone/TV decks inherit the shared grouped renderer without
-adding effects or HDR surfaces.
+The shared timeline also uses joined dividers. As of 29 October, TV uses the
+same adaptive grouped deck as landscape iPad, retaining its remote menu action
+and TV status presentation without adding effects or HDR surfaces. TV Home
+reflows its footer into wider buttons when a label needs more space.
+
+The muted, windowless grid audit renders the TV deck for Classic, L2 and L3,
+checks non-overlapping input rectangles, and checks TV Home label widths and
+activation centres at three viewport widths. Siri Remote focus and physical
+TV presentation remain device acceptance checks.
 
 Validation: the Mac frontend builds, and iOS/tvOS SDK modules plus application
 entry points compile; the final shared layout spacing also type-checks for both SDKs.
@@ -340,6 +356,24 @@ change on subsequent launches. The first-ever hinge callback and real pose/safe-
 changes still need physical-device acceptance. Identical page assignments do not
 rebuild targets. Mac nested page layout completes synchronously before display.
 
+Portrait iOS What's new now defers its first foreground presentation until the
+initial scenery request completes, then commits page geometry, navigation and
+input targets without animation. A failed or unavailable scenery load still
+reveals the page. Pose observation starts during appearance preparation, with
+a post-attachment fallback. Foreground activation can finish a pending reveal;
+later scenery refreshes retain the visible page and its scroll position.
+This shared library presentation applies to Classic, L2, L3 and supported
+NeoLemmix scenery. Mac and TV do not use the portrait reveal gate. First-frame
+UIKit compositing and physical Duo hinge callback timing remain device checks;
+CoreSimulator service access is unavailable in this environment.
+The iOS SDK module and application-entry compilation pass, as does the shared
+UIKit source check against the tvOS SDK. Nine muted,
+windowless reading fixtures cover phone, Duo and iPad portrait sizes at the
+top, middle and bottom, with fixed navigation hit tests and 44-point targets;
+representative captures were inspected. These artwork fixtures do not exercise
+the asynchronous UIKit reveal lifecycle. Engine suites were skipped for this
+presentation-only change.
+
 Muted, windowless rendering checks cover 72 Classic/L2/L3 HUD states and 120
 book Home states, including focus, disabled, selected and busy controls. Their
 checks cover all visible HUD targets against rounded screen masks, action sets,
@@ -382,3 +416,44 @@ Native NeoLemmix
 rendering, UIKit hinge delivery, first-launch stability, physical touch and exact
 hardware corner matching remain device/content acceptance gaps. The shared
 NeoLemmix frontend uses the same controls. No simulation code changed.
+
+## Paused lemming hover identity — 29 October 2026
+
+The shared UIKit gameplay controller now shows the aimed-at lemming's stable
+name and complete two-line assessment while in a planning pause, with Inspect
+while paused enabled. Classic, L2 and L3 use their existing inspection records.
+TV remote/gamepad precision aim and iOS pointer/controller aim share the card;
+touch retains its existing loupe and full inspection page. The passive bitmap
+card sits opposite the pointer within a free playfield region, outside the HUD,
+and receives no input. Resume, menus, Ready, read-only replay, fan mode and tool
+direction selection hide it. Inspection records are cached for the paused tick;
+running physics never reconstructs inspection history for hover. Neo individual
+identity remains the separately documented source gap.
+
+Both Apple SDK module builds and application entry points pass. The final shared
+card renderer passes 1,280 muted offscreen renders: all 128 frozen stories,
+five phone/tablet/720p/1080p/4K viewports and both pointer sides. Checks cover
+text bounds, viewport containment, separation and pointer clearance; sample phone
+and TV bitmaps were visually reviewed. Source inspection confirms the UIKit
+view disables user interaction. These checks do not establish native UIKit hit
+testing, Siri Remote/controller delivery, VoiceOver or physical TV readability.
+Engine suites and release audits were skipped for this presentation-only change.
+
+## Performance follow-up — 29 October 2026
+
+Shared mobile/TV source now caches unchanged HUD and terrain work, avoids a
+synchronous PCM-worker query during rewind, and uses bounded native-density flat
+funeral composition. L2/L3/Neo live history retains sparse older snapshots within
+its entry limit; saved action replay seeks reuse that history before reconstructing
+from the start. Shared audio changes also apply to Mac. The native Mac rendering
+and movie-composition paths were not replaced. See `RuntimePerformance.md` for
+remaining architectural work and validation limits. Physical input, sustained
+vari-speed, memory, thermal and mixed audible playback acceptance remain open.
+
+Validation for this follow-up: the TV SDK modules and application entry point
+compile; final shared iOS/tvOS UI sources typecheck against their simulator SDKs.
+Focused native terrain/rewind/parity checks pass, including a 2,200-tick sparse
+history comparison with independently reconstructed states. Opaque funeral pixel
+composition passes offscreen and muted; no headless Metal device was available.
+Audio performance programs compile, but runtime audio-unit creation failed, so
+this is source validation and does not close audible playback acceptance.

@@ -190,6 +190,15 @@ public struct Lemmings2Runtime: Sendable {
             self.terrainMasks = terrainMasks
         }
     }
+    public var rewindStorageBytes: Int {
+        pixels.count + solid.count * MemoryLayout<Bool>.stride
+            + lemmings.count * MemoryLayout<Lemming>.stride
+            + lemmings.reduce(0) { $0 + $1.pole.count * MemoryLayout<Lemmings2PoleVault.Point>.stride }
+            + projectiles.count * MemoryLayout<Lemmings2Projectile>.stride
+            + fillStreams.reduce(0) { $0 + $1.particles.count * MemoryLayout<Lemmings2FillParticle>.stride }
+            + machines.count * MemoryLayout<Lemmings2RailMachine>.stride + 16_384
+    }
+
     public let configuration: Configuration
     public private(set) var pixels: [UInt8]
     public private(set) var solid: [Bool]

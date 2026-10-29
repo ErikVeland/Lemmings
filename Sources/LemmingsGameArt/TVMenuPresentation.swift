@@ -64,12 +64,17 @@ public enum TVMenuPresentation {
         let footer = page.orderedFooter
         let icons = footer.filter { ["settings", "whatsNew"].contains($0.id) }
         let captions = footer.filter { !["settings", "whatsNew"].contains($0.id) }
-        let cell = (inner - CGFloat(icons.count) * 52 - CGFloat(max(0, captions.count - 1)) * gap) / CGFloat(max(1, captions.count))
-        let footerHeight = max(44, footer.filter { !["settings", "whatsNew"].contains($0.id) }.map {
+        let minimumCell = captions.flatMap { $0.title.split(whereSeparator: \.isWhitespace) }
+            .map { GameTextLayout.width(of: String($0)) + 24 }.max() ?? 44
+        let columns = max(1, min(footer.count, Int((inner + gap) / (max(44, minimumCell) + gap))))
+        let footerGrid = GameFooterGrid(actions: captions + icons, columns: columns, alignTrailing: false)
+        let cell = (inner - CGFloat(footerGrid.columns - 1) * gap) / CGFloat(footerGrid.columns)
+        let footerHeight = max(44, captions.map {
             GameTextLayout.height($0.title, width: cell - 24) + 8
         }.max() ?? 44)
         let footerY = subtitle.maxY + 8
-        var contentHeight = footerY + footerHeight + 20
+        let footerTotalHeight = CGFloat(footerGrid.rows) * footerHeight + CGFloat(max(0, footerGrid.rows - 1)) * gap
+        var contentHeight = footerY + footerTotalHeight + 20
         let logoGrowth = min(max(0, rightY - leftY) + max(0, height - contentHeight),
             max(0, GameMenuLogo.preferredHeight(width: heading.width) - heading.height))
         let contentGrowth = max(0, leftY + logoGrowth - max(leftY, rightY))
@@ -84,12 +89,10 @@ public enum TVMenuPresentation {
         let actualHeight = max(height, contentHeight)
         let offset = floor((actualHeight - contentHeight) / 2)
         targets = targets.map { .init(action: $0.action, frame: $0.frame.offsetBy(dx: 0, dy: offset)) }
-        var footerX = x + inset
-        for action in captions + icons {
-            let itemWidth: CGFloat = icons.contains(where: { $0.id == action.id }) ? 44 : cell
-            targets.append(.init(action: action, frame: CGRect(x: footerX,
-                y: actualHeight - footerHeight - 20, width: itemWidth, height: footerHeight)))
-            footerX += itemWidth + gap
+        for slot in footerGrid.slots {
+            targets.append(.init(action: slot.action, frame: footerGrid.frame(for: slot,
+                x: x + inset, y: actualHeight - footerTotalHeight - 20, width: inner,
+                height: footerHeight, gap: gap, rowGap: gap)))
         }
         return .init(size: CGSize(width: width, height: actualHeight),
             board: CGRect(x: x, y: offset + 4, width: boardWidth, height: actualHeight - offset - 8),

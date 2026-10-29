@@ -4,7 +4,7 @@ import Foundation
 /// Collision triggers are independent from this visual composition.
 public enum ClassicSceneFrame {
     public static func terrainRGBA(_ level: ClassicRenderedLevel, terrain: ClassicDOSTerrain) -> Data {
-        Data(terrainPixels(level, solid: [UInt8](terrain.solidMask)))
+        Data(terrainPixels(level, solid: terrain.renderingSolidMask))
     }
 
     private static func terrainPixels(_ level: ClassicRenderedLevel, solid: [UInt8]) -> [UInt8] {
@@ -24,10 +24,11 @@ public enum ClassicSceneFrame {
     }
 
     public static func rgba(_ level: ClassicRenderedLevel, simulation: ClassicDOSSimulation, terrain: Data? = nil) -> Data {
-        let solid = [UInt8](simulation.terrain.solidMask)
-        var pixels = terrain.map { [UInt8]($0) } ?? terrainPixels(level, solid: solid)
-        guard solid.count == level.solidMask.count, pixels.count == solid.count * 4 else { return level.rgba }
-        let visualTerrain = pixels
+        let solid = simulation.terrain.renderingSolidMask
+        let visualTerrain = terrain ?? Data(terrainPixels(level, solid: solid))
+        guard solid.count == level.solidMask.count, visualTerrain.count == solid.count * 4 else { return level.rgba }
+        let region = SceneRasterContext.region(width: level.width, height: level.height)
+        var pixels = [UInt8](SceneRasterContext.crop(visualTerrain, width: level.width, height: level.height))
         var triggerIndex = 0
         for object in level.objects {
             let graphic = object.graphic
@@ -65,7 +66,7 @@ public enum ClassicSceneFrame {
                         if placement.draw.noOverwrite && solid[index] != 0 { continue }
                         if placement.draw.onlyOverwrite && solid[index] == 0 { continue }
                     }
-                    let dst = index * 4
+                    guard let dst = region.offset(x: targetX, y: targetY) else { continue }
                     pixels[dst] = source[src]; pixels[dst + 1] = source[src + 1]
                     pixels[dst + 2] = source[src + 2]; pixels[dst + 3] = source[src + 3]
                 }
@@ -122,9 +123,11 @@ enum ClassicLiquidFill {
             if let visualTerrain { return visualTerrain[(row * width + column) * 4 + 3] != 0 }
             return solid[(row / scale) * (width / scale) + column / scale] != 0
         }
-        for column in left..<right {
+        let region = SceneRasterContext.region(width: width, height: height)
+        let clippedLeft = max(left, region.x), clippedRight = min(right, region.x + region.width)
+        guard clippedLeft < clippedRight else { return }
+        for column in clippedLeft..<clippedRight {
             for row in max(0, y)..<height {
-                let p = (row * width + column) * 4
                 let terrain = occupied(row, column)
                 // Short Macintosh wave sprites still represent the entire authored liquid tile.
                 // A bridge inside that tile masks water; it must not truncate the body below it.
@@ -135,12 +138,90 @@ enum ClassicLiquidFill {
                 // Beyond the authored tile, a floor still seals cavities underneath the pool.
                 if let minimumBottom, row == minimumBottom, row > 0,
                    occupied(row - 1, column) { break }
-                guard row >= top, pixels[p + 3] == 0 else { continue }
+                guard row >= top, let p = region.offset(x: column, y: row), pixels[p + 3] == 0 else { continue }
                 pixels[p] = UInt8((colour >> 16) & 255)
                 pixels[p + 1] = UInt8((colour >> 8) & 255)
                 pixels[p + 2] = UInt8(colour & 255)
                 pixels[p + 3] = 255
             }
         }
+    }
+}
+
+/// A synchronous raster request, inherited only by work inside the scoped render.
+/// Coordinates remain in authored level pixels; sprite-cache renders keep their own canvas.
+public enum SceneRasterContext {
+    public struct Viewport: Equatable, Sendable {
+        public let levelWidth: Int
+        public let levelHeight: Int
+        public let x: Int
+        public let y: Int
+        public let width: Int
+        public let height: Int
+        public init(levelWidth: Int, levelHeight: Int, x: Int, y: Int, width: Int, height: Int) {
+            self.levelWidth = levelWidth; self.levelHeight = levelHeight
+            self.x = max(0, min(levelWidth - 1, x)); self.y = max(0, min(levelHeight - 1, y))
+            self.width = max(1, min(levelWidth - self.x, width)); self.height = max(1, min(levelHeight - self.y, height))
+        }
+    }
+    public struct Region: Sendable {
+        public let x: Int, y: Int, width: Int, height: Int
+        public var byteCount: Int { width * height * 4 }
+        public func intersects(x: Int, y: Int, width: Int, height: Int) -> Bool {
+            x < self.x + self.width && y < self.y + self.height && x + width > self.x && y + height > self.y
+        }
+        public func offset(x: Int, y: Int) -> Int? {
+            guard x >= self.x, y >= self.y, x < self.x + width, y < self.y + height else { return nil }
+            return ((y - self.y) * width + x - self.x) * 4
+        }
+    }
+    public static let drawActors = TaskLocal<Bool>(wrappedValue: true)
+    public static let request = TaskLocal<Viewport?>(wrappedValue: nil)
+    public static var viewport: Viewport? { request.wrappedValue }
+    public static func region(width: Int, height: Int) -> Region {
+        if let viewport, viewport.levelWidth > 0, viewport.levelHeight > 0,
+           width % viewport.levelWidth == 0, height % viewport.levelHeight == 0,
+           width / viewport.levelWidth == height / viewport.levelHeight {
+            let scale = width / viewport.levelWidth
+            if scale == 1 || scale == 2 {
+                return Region(x: viewport.x * scale, y: viewport.y * scale,
+                    width: viewport.width * scale, height: viewport.height * scale)
+            }
+        }
+        return Region(x: 0, y: 0, width: width, height: height)
+    }
+    public static func doubled(byteCount: Int, width: Int, height: Int) -> Bool {
+        byteCount == region(width: width * 2, height: height * 2).byteCount
+    }
+    public static func crop(_ rgba: Data, width: Int, height: Int) -> Data {
+        let region = region(width: width, height: height)
+        guard region.width != width || region.height != height else { return rgba }
+        guard rgba.count == width * height * 4 else { return rgba }
+        var result = Data(count: region.byteCount)
+        result.withUnsafeMutableBytes { destination in
+            rgba.withUnsafeBytes { source in
+                for y in 0..<region.height {
+                    destination.baseAddress!.advanced(by: y * region.width * 4).copyMemory(
+                        from: source.baseAddress!.advanced(by: ((region.y + y) * width + region.x) * 4),
+                        byteCount: region.width * 4)
+                }
+            }
+        }
+        return result
+    }
+    public static func crop(_ rgba: [UInt8], width: Int, height: Int) -> [UInt8] {
+        let region = region(width: width, height: height)
+        guard region.width != width || region.height != height else { return rgba }
+        guard rgba.count == width * height * 4 else { return rgba }
+        var result = [UInt8](repeating: 0, count: region.byteCount)
+        result.withUnsafeMutableBufferPointer { destination in
+            rgba.withUnsafeBufferPointer { source in
+                for y in 0..<region.height {
+                    destination.baseAddress!.advanced(by: y * region.width * 4).update(
+                        from: source.baseAddress!.advanced(by: ((region.y + y) * width + region.x) * 4), count: region.width * 4)
+                }
+            }
+        }
+        return result
     }
 }

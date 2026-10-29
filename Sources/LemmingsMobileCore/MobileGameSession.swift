@@ -6,20 +6,46 @@ public struct MobilePixelFrame: Equatable, Sendable {
     public let width: Int
     public let height: Int
     public let rgba: Data
+    public let renderedRect: MobileRect?
     /// HDR light on lit Mac arrow edges, in frame pixels. SDR screens ignore it.
     public let arrowGlints: ClassicMacScene.ArrowGlints?
 
     public init(width: Int, height: Int, rgba: Data, arrowGlints: ClassicMacScene.ArrowGlints? = nil) throws {
-        guard width > 0,
-              height > 0,
-              width <= Int.max / height,
-              rgba.count == width * height * 4 else {
+        guard width > 0, height > 0, width <= Int.max / height / 4 else { throw MobileSessionError.invalidFrame }
+        let region = SceneRasterContext.region(width: width, height: height)
+        let isRegion = rgba.count == region.byteCount && (region.width != width || region.height != height)
+        let frameWidth = isRegion ? region.width : width
+        let frameHeight = isRegion ? region.height : height
+        guard frameWidth > 0,
+              frameHeight > 0,
+              frameWidth <= Int.max / frameHeight / 4,
+              rgba.count == frameWidth * frameHeight * 4 else {
             throw MobileSessionError.invalidFrame
         }
-        self.width = width
-        self.height = height
+        self.width = frameWidth
+        self.height = frameHeight
+        if isRegion, let viewport = SceneRasterContext.viewport {
+            renderedRect = .init(x: Double(viewport.x), y: Double(viewport.y), width: Double(viewport.width), height: Double(viewport.height))
+        } else { renderedRect = nil }
         self.rgba = rgba
         self.arrowGlints = arrowGlints
+    }
+
+    /// Bounds retained minimap pixels independently of the imported level size.
+    public func sampled(maximumWidth: Int = 256, maximumHeight: Int = 128) throws -> MobilePixelFrame {
+        let factor = min(1, Double(maximumWidth) / Double(width), Double(maximumHeight) / Double(height))
+        let targetWidth = max(1, Int(Double(width) * factor)), targetHeight = max(1, Int(Double(height) * factor))
+        var result = Data(count: targetWidth * targetHeight * 4)
+        result.withUnsafeMutableBytes { destination in
+            rgba.withUnsafeBytes { source in
+                for y in 0..<targetHeight { for x in 0..<targetWidth {
+                    let s = ((y * height / targetHeight) * width + x * width / targetWidth) * 4
+                    let d = (y * targetWidth + x) * 4
+                    destination.baseAddress!.advanced(by: d).copyMemory(from: source.baseAddress!.advanced(by: s), byteCount: 4)
+                } }
+            }
+        }
+        return try MobilePixelFrame(width: targetWidth, height: targetHeight, rgba: result)
     }
 
     /// Keeps the original pixels and clips the loupe to the level boundary.
@@ -203,6 +229,7 @@ public protocol MobileGameSession: AnyObject {
     var availableGraphics: [ClassicGraphicsSource] { get }
     var spriteActorIDs: [Int] { get }
     var activeLemmingCount: Int { get }
+    var minimapActorPoints: [MobilePoint] { get }
     var lostLemmingCount: Int { get }
     var nukeRemainingTicks: Int? { get }
     var allNukeExplosionsPlayed: Bool { get }
@@ -217,6 +244,8 @@ public protocol MobileGameSession: AnyObject {
     var replayMoveNavigation: ReplayMoveNavigation { get }
     var replayEndTick: Int? { get }
     @discardableResult func seekReplay(to tick: Int) -> Bool
+    func prepareSeek(to tick: Int, backwardSteps: Int) -> MobileSeekOperation?
+    var earliestRewindTick: Int { get }
 
     var entrancePoint: MobilePoint { get }
     var goalPoint: MobilePoint { get }
@@ -274,7 +303,26 @@ public protocol MobileGameSession: AnyObject {
 }
 
 public extension MobileGameSession {
+    var minimapActorPoints: [MobilePoint] { [] }
+    func renderMinimap() throws -> MobilePixelFrame {
+        try SceneRasterContext.drawActors.withValue(false) { try render(highlight: nil).sampled() }
+    }
+    func render(highlight: MobileTargetSelection?, viewport: MobileRect) throws -> MobilePixelFrame {
+        let levelWidth = Int(levelSize.width), levelHeight = Int(levelSize.height)
+        guard levelWidth > 0, levelHeight > 0, viewport.width > 0, viewport.height > 0 else { return try render(highlight: highlight) }
+        // A tile-aligned guard band allows pointer updates and short pans to reuse the image.
+        let x = max(0, Int(floor(viewport.x / 32)) * 32 - 32)
+        let y = max(0, Int(floor(viewport.y / 32)) * 32 - 32)
+        let right = min(levelWidth, Int(ceil((viewport.x + viewport.width) / 32)) * 32 + 32)
+        let bottom = min(levelHeight, Int(ceil((viewport.y + viewport.height) / 32)) * 32 + 32)
+        let request = SceneRasterContext.Viewport(levelWidth: levelWidth, levelHeight: levelHeight,
+            x: x, y: y, width: max(1, right - x), height: max(1, bottom - y))
+        return try SceneRasterContext.request.withValue(request) { try render(highlight: highlight) }
+    }
     var isSimulationComplete: Bool { snapshot.isComplete }
+    var earliestRewindTick: Int { 0 }
+    func prepareSeek(to tick: Int) -> MobileSeekOperation? { prepareSeek(to: tick, backwardSteps: 1) }
+    func prepareSeek(to tick: Int, backwardSteps: Int) -> MobileSeekOperation? { nil }
     var bonusSkillID: String? { nil }
     var extraSkillChoices: [MobileExtraSkillChoice] { [] }
     var existingLevelSkills: Set<String> { [] }
@@ -344,4 +392,74 @@ public extension MobileGameSession {
     var hotSeatGhosts: HotSeatGhostPlayback? { get { nil } set {} }
     var actionReplayInitial: ActionReplayState? { nil }
     func actionCapture() throws -> MobileActionCapture? { nil }
+}
+
+/// The authored target pixels live above the scene so pointing never recomposes terrain.
+public struct MobileTargetMarker {
+    public let pixels: [MobilePoint]
+    public let colour: (UInt8, UInt8, UInt8)
+    public let pixelSize: Double
+
+    public static func make(_ selection: MobileTargetSelection, engine: String, scale: Double,
+                            reducedColour: Bool = false) -> MobileTargetMarker {
+        var pixels: [MobilePoint] = []
+        var colour: (UInt8, UInt8, UInt8)
+        let point = selection.point
+        let pixelSize: Double
+        if engine == "classic-dos" {
+            let scale = max(1, Int(scale))
+            let x = Int((point.x * Double(scale)).rounded()), y = Int((point.y * Double(scale)).rounded())
+            let radius = 8 * scale
+            for offset in -radius...radius where abs(offset) >= radius - 2 * scale {
+                for (px, py) in [(x + offset, y - radius), (x + offset, y + radius),
+                                 (x - radius, y + offset), (x + radius, y + offset)] {
+                    pixels.append(.init(x: Double(px) / Double(scale), y: Double(py) / Double(scale)))
+                }
+            }
+            switch selection.state {
+            case .eligible: colour = (116, 255, 26)
+            case .alreadyAssigned: colour = (255, 151, 32)
+            case .unavailable: colour = (140, 140, 140)
+            }
+            if reducedColour { colour = (MobileColourDepth.ocs[Int(colour.0)], MobileColourDepth.ocs[Int(colour.1)], MobileColourDepth.ocs[Int(colour.2)]) }
+            pixelSize = 1 / Double(scale)
+        } else if engine == "lemmings2" {
+            for (dx, dy) in [(-8.0, -7.0), (7, -7), (-8, 6), (7, 6)] {
+                pixels.append(.init(x: point.x + dx, y: point.y + dy))
+            }
+            colour = (255, 255, 0)
+            pixelSize = 1
+        } else {
+            let y = point.y - (engine == "lemmings3" ? 4 : 7)
+            for offset in -2...2 {
+                for (px, py) in [(point.x + Double(offset), y - 2), (point.x + Double(offset), y + 2),
+                                 (point.x - 2, y + Double(offset)), (point.x + 2, y + Double(offset))] {
+                    pixels.append(.init(x: px, y: py))
+                }
+            }
+            colour = (255, 220, 48)
+            pixelSize = 1
+        }
+        return .init(pixels: pixels, colour: colour, pixelSize: pixelSize)
+    }
+}
+
+public enum MobileColourDepth {
+    public static let ocs: [UInt8] = (0...255).map { UInt8(($0 * 15 + 127) / 255 * 17) }
+}
+
+/// Work stays private until a complete, exact reconstruction can be committed.
+/// Each slice yields to input; cancelling never changes the session being displayed.
+public final class MobileSeekOperation {
+    private var work: ((Double) throws -> Bool)?
+    public private(set) var isComplete = false
+    public init(_ work: @escaping (Double) throws -> Bool) { self.work = work }
+    public func advance(seconds: Double = 0.002) throws -> Bool {
+        if isComplete { return true }
+        guard let work else { throw CancellationError() }
+        isComplete = try work(ProcessInfo.processInfo.systemUptime + max(0, seconds))
+        if isComplete { self.work = nil }
+        return isComplete
+    }
+    public func cancel() { work = nil }
 }
