@@ -1547,7 +1547,10 @@ remain manual checks. The new help and accessibility text use English fallback
 until translated.
 
 
-Duo's controls embrace the rounded display. Use rounded stone sockets, flat
+Duo's controls embrace the rounded display. Shape the bottom-left and
+bottom-right control outlines with a longer curve on the outside lower corner,
+following the display's curved silhouette. Keep joined controls and their full
+rectangular touch and accessibility targets. Use rounded stone sockets, flat
 rounded information panels and matching focus outlines in the shared bitmap
 renderers. Keep crisp pixel edges, shipped textures and bitmap lettering.
 Use smaller curves on controls than on their enclosing panels. Keep the full

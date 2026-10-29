@@ -80,6 +80,15 @@ Mac L2/L3 native transport remains in its authored arrangement. These gaps are
 not evidence of physical-device acceptance. Native Mac offscreen capture is
 blocked by AppKit registration in this environment.
 
+## Duo bottom-corner controls — 28 October 2026
+
+The shared HUD renderer identifies the outermost controls on Duo's lowest
+visible row and extends their outside lower curves. All segments of each joined
+group use the same contour, including selected borders; input and accessibility
+rectangles, viewport geometry and other platforms retain their existing bounds.
+The shape adapts to available group dimensions. Actual display curvature and
+physical touch acceptance remain device checks.
+
 ## Remaining source work
 
 - Automatic sequel campaign story triggers still need mobile/TV integration.

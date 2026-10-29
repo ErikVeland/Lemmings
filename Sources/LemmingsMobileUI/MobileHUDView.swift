@@ -266,7 +266,8 @@ import UIKit
         guard let layout, let snapshot else { return nil }
         return MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
-                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails, replayLevel: replayLevel, shape: MobileSystemRegions.controlShape(in: self))
+                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails, replayLevel: replayLevel, shape: MobileSystemRegions.controlShape(in: self),
+                          duoCorners: MobileSystemRegions.isFoldable(in: self))
     }
 
     private func rebuildButtons() {

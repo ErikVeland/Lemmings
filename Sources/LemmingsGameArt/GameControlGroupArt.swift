@@ -3,15 +3,41 @@ import LemmingsMobileCore
 
 /// One pixel outline, rounded ends and a single divider per joined control.
 public enum GameControlGroupArt {
-    public static func path(in frame: CGRect, inset: CGFloat = 0) -> CGPath {
+    public static func path(in frame: CGRect, inset: CGFloat = 0,
+                            bottomLeft: Bool = false, bottomRight: Bool = false) -> CGPath {
+        let box = frame.insetBy(dx: inset, dy: inset)
+        guard box.width > 0, box.height > 0 else { return CGMutablePath() }
         let radius = max(0, min(frame.width, frame.height) / 2 - inset)
-        return CGPath(roundedRect: frame.insetBy(dx: inset, dy: inset),
-            cornerWidth: radius, cornerHeight: radius, transform: nil)
+        guard bottomLeft || bottomRight else {
+            return CGPath(roundedRect: box, cornerWidth: radius, cornerHeight: radius, transform: nil)
+        }
+        let bottomY = min(box.height - 1, radius * 1.8)
+        let leftBottom = bottomLeft ? bottomY : radius
+        let rightBottom = bottomRight ? bottomY : radius
+        let leftTop = min(radius, box.height - leftBottom)
+        let rightTop = min(radius, box.height - rightBottom)
+        let path = CGMutablePath()
+        path.move(to: CGPoint(x: box.minX + radius, y: box.minY))
+        path.addLine(to: CGPoint(x: box.maxX - radius, y: box.minY))
+        path.addQuadCurve(to: CGPoint(x: box.maxX, y: box.minY + rightTop),
+                          control: CGPoint(x: box.maxX, y: box.minY))
+        path.addLine(to: CGPoint(x: box.maxX, y: box.maxY - rightBottom))
+        path.addQuadCurve(to: CGPoint(x: box.maxX - radius, y: box.maxY),
+                          control: CGPoint(x: box.maxX, y: box.maxY))
+        path.addLine(to: CGPoint(x: box.minX + radius, y: box.maxY))
+        path.addQuadCurve(to: CGPoint(x: box.minX, y: box.maxY - leftBottom),
+                          control: CGPoint(x: box.minX, y: box.maxY))
+        path.addLine(to: CGPoint(x: box.minX, y: box.minY + leftTop))
+        path.addQuadCurve(to: CGPoint(x: box.minX + radius, y: box.minY),
+                          control: CGPoint(x: box.minX, y: box.minY))
+        path.closeSubpath()
+        return path
     }
 
     public static func draw(in context: CGContext, frame: CGRect, group: CGRect,
                             selected: Bool, face: GamePlayButtonArt.Face? = nil,
-                            monochrome: Bool = false) {
+                            monochrome: Bool = false,
+                            bottomLeft: Bool = false, bottomRight: Bool = false) {
         let pixel = GameHUDControlGroup.border
         context.saveGState()
         defer { context.restoreGState() }
@@ -23,8 +49,8 @@ public enum GameControlGroupArt {
         let bright = CGColor(colorSpace: brightSpace, components: [1.6, 2.0, 1.4, 1])!
         context.setFillColor(monochrome ? CGColor(gray: 1, alpha: 1)
             : skillSelected ? bright : CGColor(srgbRed: 0.56, green: 0.59, blue: 0.49, alpha: 1))
-        context.addPath(path(in: group)); context.fillPath()
-        context.addPath(path(in: group, inset: pixel)); context.clip()
+        context.addPath(path(in: group, bottomLeft: bottomLeft, bottomRight: bottomRight)); context.fillPath()
+        context.addPath(path(in: group, inset: pixel, bottomLeft: bottomLeft, bottomRight: bottomRight)); context.clip()
         context.setFillColor(monochrome ? CGColor(gray: 0, alpha: 1)
             : CGColor(srgbRed: 0.09, green: 0.12, blue: 0.07, alpha: 1))
         context.fill(group)

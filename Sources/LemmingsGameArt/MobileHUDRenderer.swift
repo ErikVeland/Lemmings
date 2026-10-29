@@ -65,10 +65,13 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let statusDetails: StatusDetails?
     private let shape: GameControlShape
     private let replayLevel: MobileLevelSummary?
+    private let duoCorners: Bool
+    private let bottomCornerGroups: (left: CGRect, right: CGRect)?
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil, replayLevel: MobileLevelSummary? = nil, shape: GameControlShape = .square) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil, replayLevel: MobileLevelSummary? = nil, shape: GameControlShape = .square, duoCorners: Bool = false) {
         self.shape = shape
+        self.duoCorners = duoCorners
         self.layout = layout; self.snapshot = snapshot; self.selectedSkill = selectedSkill
         self.paused = paused; self.speed = speed; self.endRunArmed = endRunArmed
         self.skillIcons = skillIcons
@@ -87,6 +90,24 @@ public enum MobileHUDAction: Equatable, Sendable {
         let grouped = Self.groupFrames(for: items, rate: rate)
         controlGroups = grouped.0
         rateGroup = grouped.1
+        let currentItems = items
+        if duoCorners, let portrait = layout.portrait {
+            let candidates = currentItems.indices.filter { index in
+                let item = currentItems[index]
+                switch item.action {
+                case .skill:
+                    return portrait.skills.contains(CGPoint(x: item.frame.midX, y: item.frame.midY))
+                case .pause, .endRun, .speed: return true
+                default: return false
+                }
+            }
+            let bottom = candidates.map { currentItems[$0].frame.maxY }.max() ?? 0
+            let row = candidates.filter { abs(currentItems[$0].frame.maxY - bottom) < 0.01 }
+            if let left = row.min(by: { currentItems[$0].frame.minX < currentItems[$1].frame.minX }),
+               let right = row.max(by: { currentItems[$0].frame.maxX < currentItems[$1].frame.maxX }) {
+                bottomCornerGroups = (grouped.0[left], grouped.0[right])
+            } else { bottomCornerGroups = nil }
+        } else { bottomCornerGroups = nil }
     }
 
     private static func groupFrames(for items: [Item], rate: CGRect?) -> ([CGRect], CGRect?) {
@@ -419,7 +440,9 @@ public enum MobileHUDAction: Equatable, Sendable {
         context.saveGState()
         defer { context.restoreGState() }
         if layout.portrait != nil {
-            context.addPath(GameControlGroupArt.path(in: controlGroup(containing: frame)))
+            let group = controlGroup(containing: frame)
+            let corners = cornerFlags(for: group)
+            context.addPath(GameControlGroupArt.path(in: group, bottomLeft: corners.left, bottomRight: corners.right))
             context.clip()
         } else if shape == .rounded {
             context.addPath(shape.path(in: frame, inset: 1))
@@ -543,11 +566,18 @@ public enum MobileHUDAction: Equatable, Sendable {
         return controlGroups[index]
     }
 
+    private func cornerFlags(for group: CGRect) -> (left: Bool, right: Bool) {
+        guard duoCorners, let corners = bottomCornerGroups else { return (false, false) }
+        return (group == corners.left, group == corners.right)
+    }
+
     private func drawStoneSocket(_ frame: CGRect, selected: Bool, pixel: CGFloat,
                                  face: GamePlayButtonArt.Face, context: CGContext) {
         if layout.portrait != nil {
             let group = controlGroup(containing: frame)
-            GameControlGroupArt.draw(in: context, frame: frame, group: group, selected: selected, face: face)
+            let corners = cornerFlags(for: group)
+            GameControlGroupArt.draw(in: context, frame: frame, group: group, selected: selected, face: face,
+                bottomLeft: corners.left, bottomRight: corners.right)
         } else {
             GamePlayButtonArt.draw(in: context, frame: frame, selected: selected, pixel: pixel, face: face, shape: shape)
         }

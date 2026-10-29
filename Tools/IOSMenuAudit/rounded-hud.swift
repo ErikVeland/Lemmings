@@ -6,6 +6,14 @@ import NxlvKit
 
 extension MenuAudit {
     @MainActor static func checkRoundedHUD(typography: GameMenuTypography, content: URL, output: URL) throws {
+        let cornerSample = CGRect(x: 0, y: 0, width: 64, height: 80)
+        let ordinary = GameControlGroupArt.path(in: cornerSample)
+        let left = GameControlGroupArt.path(in: cornerSample, bottomLeft: true)
+        let right = GameControlGroupArt.path(in: cornerSample, bottomRight: true)
+        let leftPoint = CGPoint(x: 1, y: 52), rightPoint = CGPoint(x: 63, y: 52)
+        guard ordinary.contains(leftPoint), ordinary.contains(rightPoint),
+              !left.contains(leftPoint), left.contains(rightPoint),
+              !right.contains(rightPoint), right.contains(leftPoint) else { throw invalidTargets(line: #line) }
         let ports = content.deletingLastPathComponent()
         let storage = MobileStorage(directory: output.appendingPathComponent("isolated-storage"))
         let libraries: [any MobileGameLibrary] = [try ClassicMobileLibrary(directory: content),
@@ -84,6 +92,11 @@ extension MenuAudit {
                           targets.first(where: { $0.inputFrame.contains(.init(x: menu.frame.midX, y: menu.frame.midY)) })?.action == .menu,
                           targets.filter({ $0.action != .menu }).allSatisfy({ !$0.inputFrame.intersects(menu.inputFrame) })
                     else { throw invalidTargets(line: #line) }
+                    for item in targets where item.action == .pause || item.action == .endRun {
+                        let centre = CGPoint(x: item.inputFrame.midX, y: item.inputFrame.midY)
+                        guard targets.first(where: { $0.inputFrame.contains(centre) })?.action == item.action
+                        else { throw invalidTargets(line: #line) }
+                    }
                     let skills = targets.filter { if case .skill = $0.action { return true }; return false }
                     if layout.portrait != nil {
                         for group in GameHUDControlGroup.groups(skills.map(\.frame), maximumGap: 0.01) {
@@ -122,7 +135,8 @@ extension MenuAudit {
                         MobileBitmapRenderer.draw(image, viewport: viewport, in: context); context.restoreGState()
                     }
                     MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selected, paused: paused, speed: 1,
-                        endRunArmed: false, panelImage: panel, typography: typography, skillIcons: icons, playerName: "PLA", shape: .rounded)
+                        endRunArmed: false, panelImage: panel, typography: typography, skillIcons: icons, playerName: "PLA", shape: .rounded,
+                        duoCorners: !pose.hasPrefix("ipad-"))
                         .draw(in: context, bounds: bounds)
                     context.restoreGState()
                     for region in regions { context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame)) }
