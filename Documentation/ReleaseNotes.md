@@ -2,31 +2,28 @@
 
 ## Current build candidate
 
-The current source version is **2.3** (Mac build 102, iOS build 36, tvOS build 15). Read the
-[complete 2.3 candidate notes](ReleaseNotes-2.3-build102.md). These notes cover
+The current source version is **2.3.1** (Mac build 103, iOS build 38, tvOS build 17). Read the
+[complete 2.3.1 candidate notes](ReleaseNotes-2.3.1-build103.md). These notes cover
 the current main source and must stay current with the source selected for a build.
 
 ## Latest published release
 
-Version 2.2.2 is the latest published app release. Its Mac build 99 and
-AltStore Classic IPA are available. iPhone/iPad/Duo build 33 and Apple TV
-build 12 were submitted to TestFlight; their last recorded state was Waiting
-for Review. See the
-[2.2.2 release record](ReleaseReadiness/2.2.2-build99/README.md).
+Mac 2.3 build 102 is the latest published app release. Its full and slim
+downloads and five signed deltas are verified. iOS 2.3 build 37 and tvOS 2.3
+build 16 were assigned to their existing TestFlight groups; store availability
+and 2.3.1 delivery are separate. See the
+[2.3 release record](ReleaseReadiness/2.3-build102/README.md).
 
-The 2.3 build 100 tag has no published GitHub release and no platform delivery
-receipt. It is superseded by the current build 102 candidate. Build 101 was
-archived without a completed Mac package or mobile submission. See the
-[build 100 candidate record](ReleaseReadiness/2.3-build100/README.md).
+The public 2.3 tag still points to the earlier build 100 source; the build 102
+release record keeps its package and feed provenance. The 2.3.1 candidate uses
+the published Mac build 102 source commit as its release base.
 
 ## Previous release
 
-Mac 2.2.2 build 99 is available. Its
-[release record](ReleaseReadiness/2.2.2-build99/README.md) records the notarised
-full/slim universal packages, five direct updates, public asset/feed verification
-and delivery state. iPhone/iPad/Duo build 33 and Apple TV build 12 were submitted
-to TestFlight and were Waiting for Review in the last recorded check. See the
-[published notes](ReleaseNotes-2.2.2-build99.md) and
+Mac 2.3 build 102 is available. Its
+[release record](ReleaseReadiness/2.3-build102/README.md) records the notarised
+universal packages, five direct updates, public asset and feed verification.
+See the [published notes](ReleaseNotes-2.3-build102.md) and
 [release scope](ReleaseScope.md).
 
 The same iOS build 33 export is published through the

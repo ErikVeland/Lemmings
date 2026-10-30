@@ -51,7 +51,7 @@ import NxlvKit
                     selected: false, face: face, monochrome: monochrome)
             }
             let alpha: CGFloat = monochrome ? 1 : enabled(action) ? 1 : 0.3
-            let size = box.insetBy(dx: 4, dy: 4).size
+            let size = box.insetBy(dx: 10, dy: 8).size
             if let image = monochrome ? action.glyph?.monochromeImage(fitting: size) : action.glyph?.image(fitting: size) {
                 image.draw(in: CGRect(x: box.midX - image.size.width / 2, y: box.midY - image.size.height / 2,
                     width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,

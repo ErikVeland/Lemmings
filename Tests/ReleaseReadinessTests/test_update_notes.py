@@ -25,10 +25,11 @@ class UpdateNotesTests(unittest.TestCase):
         self.assertIn("<li>One <b>bold</b> fix with <code>code</code> that wraps.</li>", html)
         self.assertIn("Plain &lt;text&gt; &amp; more.", html)
 
-    def test_keeps_the_release_commit_for_the_publication_check(self):
+    def test_hides_metadata_but_keeps_source_identity_for_publication(self):
         html = render_update_notes(self.NOTES)
-        self.assertIn("Release commit: " + "a" * 40, html)
-        self.assertLess(html.index("A second fix"), html.index("Release commit"))
+        self.assertIn("<!-- Release commit: " + "a" * 40 + " -->", html)
+        self.assertNotIn("<p>Build:", html)
+        self.assertNotIn("<p>Release base:", html)
 
 
 if __name__ == "__main__":

@@ -10,11 +10,15 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.3"
-    static var subtitle: String { GameReleaseCopy.invitation }
+    static let notesVersion = "2.3.1"
+    static var subtitle: String { L10n.text("Your next level is ready.") }
     static var sections: [(String, String)] {
-        GameReleaseCopy.sections + [(L10n.text("Compatibility"),
-            L10n.text("macOS 12.3 or later, on Apple silicon and Intel.") + " " + GameReleaseCopy.compatibility)]
+        [
+            (L10n.text("Find your way back"), L10n.text("Start or resume your Journey from Home. Saved Hot Seats keep their players and turns, and a level preview opens the level you chose.")),
+            (L10n.text("Play with clearer controls"), L10n.text("Joined stone controls bring skills, pause and replay into clearer groups. Back and Main menu stay in the bottom action row.")),
+            (L10n.text("Keep the moment"), L10n.text("Classic rewind keeps recent moments close for shorter steps. Level scenes use less work outside the view while you play.")),
+            (L10n.text("Compatibility"), L10n.text("macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete; Chronicles and NeoLemmix remain Beta."))
+        ]
     }
     private let defaults: UserDefaults
     private let build: Int

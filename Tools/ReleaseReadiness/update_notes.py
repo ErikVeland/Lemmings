@@ -6,7 +6,7 @@ from html import escape
 from pathlib import Path
 import re
 
-METADATA = ("Build:", "Release commit:", "Release base:")
+METADATA = ("Build:", "Release commit:", "Release base:", "Platform builds:")
 
 
 def _inline(text: str) -> str:
@@ -17,8 +17,9 @@ def _inline(text: str) -> str:
 
 
 def render_update_notes(markdown: str) -> str:
-    """Return player-facing HTML. Build metadata moves to a small footer."""
-    blocks, metadata, paragraph, items = [], [], [], []
+    """Return player-facing HTML with a hidden source identity for publication."""
+    blocks, paragraph, items = [], [], []
+    release_commit = None
 
     def flush():
         if paragraph:
@@ -32,7 +33,8 @@ def render_update_notes(markdown: str) -> str:
         stripped = line.strip()
         if stripped.startswith(METADATA):
             flush()
-            metadata.append(stripped)
+            if stripped.startswith("Release commit:"):
+                release_commit = stripped.removeprefix("Release commit:").strip()
         elif not stripped:
             flush()
         elif heading := re.match(r"(#{1,4})\s+(.*)", stripped):
@@ -53,12 +55,10 @@ def render_update_notes(markdown: str) -> str:
         else:
             paragraph.append(stripped)
     flush()
-    if metadata:
-        blocks.append(f'<p class="meta">{"<br>".join(escape(m) for m in metadata)}</p>')
     style = ("<style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}"
-             "h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}"
-             ".meta{color:#888;font-size:11px}</style>")
-    return f"<html><head><meta charset=\"utf-8\">{style}</head><body>" + "\n".join(blocks) + "</body></html>\n"
+             "h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}</style>")
+    identity = f"<!-- Release commit: {escape(release_commit)} -->\n" if release_commit else ""
+    return f"<html><head><meta charset=\"utf-8\">{style}</head><body>" + identity + "\n".join(blocks) + "</body></html>\n"
 
 
 def main() -> None:
