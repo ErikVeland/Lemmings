@@ -6,14 +6,14 @@ import LemmingsMobileCore
 import NxlvKit
 
 extension MenuAudit {
-    @MainActor static func checkNavigation(typography: GameMenuTypography, output: URL) throws {
+    @MainActor static func checkNavigation(typography: GameMenuTypography, output: URL, journeyHomeOnly: Bool = false) throws {
         typealias Action = GameFrontEnd.Action
         let families: [Action] = [.init("classic", "Classic"), .init("l2", "Lemmings 2", gameLogo: .lemmings2),
             .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
         var pages: [(String, GameFrontEnd.Page)] = [
-            ("home", MobileHomeArt.page(journey: .init("journey", "Journey map"), families: families, initials: "LEM")),
-            ("home-saves", MobileHomeArt.page(resume: [.init("resume", "Resume journey - LEM v PAL")],
-                journey: MobileHomeArt.journeyMap(completed: 812), families: families, initials: "LEM v PAL")),
+            ("home", MobileHomeArt.page(journey: MobileHomeArt.journeyAction(run: nil), families: families, initials: "LEM")),
+            ("home-saves", MobileHomeArt.page(resume: [.init("resume", "Resume level - LEM")],
+                journey: MobileHomeArt.journeyAction(run: nil), families: families, initials: "LEM v PAL")),
             ("journey-progress", MobileHomeArt.journeyPage(title: "Journey", completed: 812,
                 solved: 12, total: 227, revisit: 2, resume: nil, canContinue: true)),
             ("journey-resume", MobileHomeArt.journeyPage(title: "Journey", completed: 812,
@@ -41,6 +41,21 @@ extension MenuAudit {
                 subtitle: "Matching Classic game data unavailable")),
             ("short-games-loading", ShortGamesArt.page(classicAvailable: false, loading: true)),
         ]
+        let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fixture", levelID: "one"),
+            catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+            levelNameSnapshot: "Saved level", levelNumberSnapshot: 1)
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: [entry])
+        for (name, saved, initials) in [("home-solo-resume", Optional(run), "EKV"),
+                                      ("home-seat-start", nil, "EKV v UVA"),
+                                      ("home-seat-resume", Optional(run), "EKV v UVA")] {
+            let page = MobileHomeArt.page(resume: [.init("resume", "Resume level - EKV")],
+                journey: MobileHomeArt.journeyAction(run: saved), families: families, initials: initials)
+            guard page.rows.first?.id == "journey", page.rows.first?.primary == true,
+                  page.rows.first?.title == (saved == nil ? "Start journey" : "Resume journey (1/1)"),
+                  page.rows.filter({ $0.id == "journey" }).count == 1 else { throw invalidTargets(line: #line) }
+            pages.append((name, page))
+        }
         let shortGames = ShortGamesArt.page(classicAvailable: true)
         let completedJourney = MobileHomeArt.journeyPage(title: "Journey", completed: 1234,
             solved: 227, total: 227, revisit: 0, resume: nil, canContinue: false)
@@ -62,7 +77,7 @@ extension MenuAudit {
                 pages.append(("settings-\(group.rawValue)-\(inGame)", page))
             }
         }
-        pages += try careerPages()
+        if !journeyHomeOnly { pages += try careerPages() }
         for busy in [false, true] {
             for enabled in [false, true] {
                 let page = CloudSyncArt.page(testerEnabled: enabled, busy: busy)
@@ -83,7 +98,8 @@ extension MenuAudit {
                 pages.append(("\(game)-result-\(won)", result))
             }
         }
-        let noBackNeeded: Set<String> = ["home", "home-saves", "migration-error", "migration-long-error"]
+        if journeyHomeOnly { pages = pages.filter { $0.0.hasPrefix("home") } }
+        let noBackNeeded: Set<String> = ["home", "home-saves", "home-solo-resume", "home-seat-start", "home-seat-resume", "migration-error", "migration-long-error"]
         let devices: [(String, CGSize, Bool)] = [("phone-narrow", .init(width: 320, height: 548), false),
             ("phone", .init(width: 390, height: 763), false), ("phone-landscape", .init(width: 568, height: 300), false),
             ("tablet", .init(width: 1194, height: 834), false), ("mac", .init(width: 1120, height: 720), false),

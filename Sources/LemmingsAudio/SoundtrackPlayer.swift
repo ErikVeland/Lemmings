@@ -242,7 +242,7 @@ import NxlvKit
     player = nil
   }
 
-  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false, spinDownDuration: Double? = nil) {
     if immediately {
       vinylRamp.cancel()
       vinylStopping = false; vinylHeld = false
@@ -254,7 +254,7 @@ import NxlvKit
     if !outputSuspended { resumeAfterSleep = isPlaying }
     outputSuspended = true
     pauseUsesRhythm = rhythmOnly
-    player?.suspendOutput(rhythmOnly: rhythmOnly, immediately: immediately)
+    player?.suspendOutput(rhythmOnly: rhythmOnly, immediately: immediately, spinDownDuration: spinDownDuration)
   }
 
   public func resumeOutput() {

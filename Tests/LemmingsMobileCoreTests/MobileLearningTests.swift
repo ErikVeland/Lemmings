@@ -5,6 +5,59 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileLearningTests {
+    @Test func selectedSyncedJourneyResolvesBeforeAnyLocalLearningFileExists() throws {
+        let temporary = try AppStorage.temporary(named: "cloud-only-journey")
+        defer { temporary.removeTemporaryFiles() }
+        func files(_ scope: String) -> MobileStorage {
+            .init(directory: temporary.applicationSupport.appendingPathComponent(scope))
+        }
+        for engine in [LevelSourceEngine.classic, .lemmings2, .lemmings3, .neolemmix] {
+            let entry = try LevelPlaylistEntry(identity: .init(engine: engine, packID: "fixture", levelID: "saved"),
+                catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+                levelNameSnapshot: "Saved level", levelNumberSnapshot: 1)
+            let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+                pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: [entry])
+            let snapshot = JourneySessionSnapshot(run: run)
+            var seats = MobileHotSeatStore()
+            let started = seats.start(roster: .init(host: "ekv", players: ["uva"]))
+            var seat = try #require(started)
+            seat.pass(to: "uva"); seats.update(seat)
+            try seats.save(to: files("_players"))
+            let reopened = MobileHotSeatStore.load(from: files("_players"))
+            let found = try #require(MobileLearningResume.find(owner: "uva", seats: reopened, storage: files,
+                snapshot: { $0 == seat.id ? snapshot : nil }))
+            #expect(found.state.run == run)
+            #expect(found.seat?.id == seat.id && found.seat?.turn == "uva")
+            #expect(files(seat.scope).load(MobileLearningState.self, name: "learning") == nil)
+            #expect(reopened == seats)
+            let completed = JourneySessionSnapshot(run: nil, updatedAt: snapshot.updatedAt.addingTimeInterval(1))
+            #expect(MobileLearningResume.find(owner: "uva", seats: reopened, storage: files,
+                snapshot: { $0 == seat.id ? completed : nil }) == nil)
+            seats.endSession()
+            #expect(MobileLearningResume.find(owner: "ekv", seats: seats, storage: files,
+                snapshot: { $0 == seat.id ? snapshot : nil }) == nil)
+        }
+    }
+
+    @Test func legacyArchivedQueueResumesWithoutRevivingACompletedJourney() throws {
+        let journey = try #require(LearningJourneyLibrary.journey(storage: AppStorage(applicationSupport: root,
+            resources: root.appendingPathComponent("Resources"), defaults: .standard)))
+        var state = MobileLearningState()
+        try state.start(Array(journey.lessons.prefix(3).map(\.entry)), name: LearningJourney.title, poolID: journey.version)
+        state.advance()
+        let saved = try #require(state.run)
+        try state.start(Array(journey.lessons.prefix(2).map(\.entry)), name: "Other", poolID: "other", playlistID: UUID())
+        let other = state.run
+        var json = try #require(JSONSerialization.jsonObject(with: JSONEncoder().encode(state)) as? [String: Any])
+        json.removeValue(forKey: "journeySession")
+        let legacy = try JSONDecoder().decode(MobileLearningState.self, from: JSONSerialization.data(withJSONObject: json))
+        state = legacy; state.resumeJourney()
+        #expect(state.run == saved)
+        #expect(state.savedRuns.contains { $0 == other })
+        state = legacy; state.journeySession = .init(run: nil); state.resumeJourney()
+        #expect(state.run == other)
+    }
+
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent() }
     private var ports: URL {
         ProcessInfo.processInfo.environment["LEMMINGS_TEST_BUNDLED_RESOURCES"].map {

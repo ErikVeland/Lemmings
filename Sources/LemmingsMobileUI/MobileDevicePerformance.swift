@@ -54,7 +54,6 @@ import NxlvKit
     }
     static func memoryWarning() {
         DeviceEffectPressure.shared.noteMemoryPressure()
-        RuntimeMemoryBudget.shared.noteMemoryPressure()
         refreshPressure(force: true)
     }
     static func recordCPU(_ seconds: Double, source: String) {

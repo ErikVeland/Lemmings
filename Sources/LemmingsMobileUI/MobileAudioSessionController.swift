@@ -3,6 +3,7 @@ import AVFAudio
 import Foundation
 import os
 import LemmingsMobileCore
+import UIKit
 
 /// Blocking audio-session configuration runs on this actor's executor.
 private actor MobileAudioSessionWorker {
@@ -64,6 +65,23 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
 }
 
 @MainActor final class MobileAudioSessionController {
+    private static let applicationObservers: MobileNotificationObserverBag = {
+        let observers = MobileNotificationObserverBag()
+        let centre = NotificationCenter.default
+        MobileAudioSessionWorkQueue.shared.setPlaybackAllowed(UIApplication.shared.applicationState != .background)
+        observers.append(centre.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main
+        ) { _ in
+            MainActor.assumeIsolated { MobileAudioSessionWorkQueue.shared.setPlaybackAllowed(false) }
+        })
+        observers.append(centre.addObserver(
+            forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main
+        ) { _ in
+            MainActor.assumeIsolated { MobileAudioSessionWorkQueue.shared.setPlaybackAllowed(true) }
+        })
+        return observers
+    }()
+
     enum Event {
         case interruptionBegan
         case interruptionEnded
@@ -75,6 +93,7 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
     private let requests: MobileAudioSessionRequests
 
     init() {
+        _ = Self.applicationObservers
         requests = MobileAudioSessionRequests(queue: .shared) {
             try await MobileAudioSessionWorker.shared.perform($0)
         }
@@ -110,6 +129,7 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
 
     static func applySettings() {
         _ = MobileAudioSessionWorkQueue.shared.enqueue({
+            guard MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
             try await MobileAudioSessionWorker.shared.perform(.prepare)
         }, completion: { _ in })
     }

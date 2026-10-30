@@ -6,6 +6,7 @@ import LemmingsTVCore
 import UIKit
 
 @MainActor final class MobileTVBootstrap: UIViewController {
+    var catalogue: MobileCatalogue?
     private let canvas = MobileMenuCanvas()
     private let scrollView = UIScrollView()
     private var content: UIViewController?
@@ -63,6 +64,7 @@ import UIKit
     private func openLibrary() {
         guard content == nil else { return }
         let library = MobileLibraryViewController()
+        library.catalogue = catalogue
         addChild(library)
         library.view.frame = view.bounds
         view.addSubview(library.view)

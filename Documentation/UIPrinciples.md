@@ -1,5 +1,12 @@
 # UI clarity
 
+Mobile startup uses an opaque black launch surface, the shipped pixel logo and
+the shared pixel hourglass before disk-backed menu setup. Keep this surface
+independent of engine, font-bank and player loading. Respect Reduce Motion,
+screen divisions and safe regions; add no input targets or explanatory copy.
+Catalogue discovery stays off the main thread. Startup must retain incoming
+Desk Clock links until their destination is ready.
+
 Rounded background corners use a consistent optical radius throughout the app.
 Reuse the same radius for backgrounds at the same visual level across screens
 and platforms. When their sizes or render scales differ, adjust the numeric
@@ -16,6 +23,20 @@ Hints and controls help leave gameplay paused until Resume. Hints replaces the
 Mac graphics-cycle tile; graphics remains in Settings and on F2. Remove the
 duplicate timeline Hint and keep that group for rewind and stepping. Home uses
 Collections for the page containing favourites, recents and playlists.
+
+Home always keeps one Journey action for the selected solo or Hot Seat session.
+Use Start Journey before that session has a saved route, then Resume Journey
+(current level/total). Keep it first and primary. Independent levels and other
+playlists retain their separate resume actions; they cannot replace, rename or
+hide the Journey action. Activating it starts or restores that session's route
+through the existing level/Ready flow, without an intermediate Journey Map.
+
+Level previews activate their existing forward action on click, tap or explicit
+remote/accessibility activation. In the browser this is Play; Ready, pause and
+results use their current primary action. Preserve disabled/loading states and
+the paused Hot Seat handover until activation. Mac carousel previews select and
+start the clicked level; unavailable entries remain blocked. Full-image QR
+codes and original movies keep their own controls.
 
 On macOS, Back and Main menu use regular stone buttons in the panel’s bottom
 action row, alongside its other actions. Full-window pages keep them in a fixed
@@ -1000,9 +1021,10 @@ current result layout uses 20.
 
 Duo is the common gameplay-control baseline for Mac and landscape iPad.
 Use contiguous pill groups for skills, playback and related navigation. Only
-outer ends curve; neighbouring controls share one one-pixel divider. Keep Nuke
-separate immediately after the skill bank, followed by the joined release-rate,
-speed and Pause/Play controls where the layout supports them. Retain
+outer ends curve; neighbouring controls share one one-pixel divider. Place Nuke
+immediately after the skill bank, followed by release-rate, speed and Pause/Play
+where the layout supports them. Mobile tracking, minimap, skills and Nuke form
+one continuous grid without separate gaps around tracking or Nuke. Retain
 the original bitmap icons, individual counts and individual selection,
 and each control's full rectangular input and accessibility bounds.
 
@@ -1552,7 +1574,8 @@ until translated.
 
 
 Duo gameplay uses full-width fixed control rows on its outer and opened displays.
-Menu stays at the right of the top status bar. Extend their drawn surfaces to the
+Menu stays at the leading edge of the top status bar in both displays and both
+rotations. Extend their drawn surfaces to the
 physical top corners while retaining camera-safe lettering and action centres.
 Skill rows and joined interior edges stay square. The outside bottom controls
 follow the display curves; each display curve meets a square interior corner.
@@ -1575,10 +1598,10 @@ fallback layout. Identical page updates and layout passes must not rebuild targe
 or request another geometry redraw. Retain confirmed Duo capability on that device so
 later launches do not first show ordinary phone layout while awaiting a hinge
 callback. Real window, pose, interface-size and content changes may reflow.
-Portrait mobile What's new waits for its initial scenery request before revealing
-the page and fixed navigation in one unanimated layout transaction. Start pose
-observation before appearance. Loading failure still reveals the page; later
-background refreshes must not hide it or reset its scroll position.
+Portrait mobile What's new presents its completed page and fixed navigation
+without waiting for scenery or scene-activation callbacks. Start pose observation
+before appearance. Optional scenery loads behind the visible, interactive page;
+its completion must not force another page layout or reset the scroll position.
 Mac pages complete their nested layout during presentation, including What's new.
 Original panel artwork supplies bitmap glyphs and textures. The authored TV
 panel retains its arrangement; Duo, landscape iPad and Mac use the grouped
@@ -1588,7 +1611,13 @@ On Duo's outer display, draw scenery and page backgrounds to every edge.
 The portrait gameplay deck uses compact skill and transport rows, retaining at
 least 44-point targets. Join the tracking controls, minimap, skills and transport
 rows into a continuous grid, with their outer edges aligned. The bottom outline
-follows both display corners and the edge artwork stays inside the visible curve.
+uses the native continuous display contour, with each corner resolved independently.
+The opened inner screen is one continuous display; do not infer hinge-side
+corners from its fold. Use one inset contour across the complete deck;
+a large corner may begin in the skill row above transport. Keep the minimap's
+outside edge on that same inset. Centre status information and Menu within the
+same full visible header. Compact transport dividers use the skill column edges
+when space permits, with the same rounded boundaries for drawing and input.
 Put Menu at the leading edge of the status header and
 centre its icon vertically in the visible header. Tapping a level preview starts
 that level through the same action as Play; loading and readiness rules still apply.

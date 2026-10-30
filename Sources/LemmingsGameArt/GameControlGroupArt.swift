@@ -1,44 +1,64 @@
 import CoreGraphics
 import LemmingsMobileCore
 
+/// Independent display corners, including a foldable's tighter hinge-side corners.
+public struct GameControlCornerRadii: Equatable {
+    public let topLeft: CGFloat
+    public let topRight: CGFloat
+    public let bottomLeft: CGFloat
+    public let bottomRight: CGFloat
+
+    public init(topLeft: CGFloat, topRight: CGFloat, bottomLeft: CGFloat, bottomRight: CGFloat) {
+        self.topLeft = max(0, topLeft)
+        self.topRight = max(0, topRight)
+        self.bottomLeft = max(0, bottomLeft)
+        self.bottomRight = max(0, bottomRight)
+    }
+
+    public func inset(by amount: CGFloat) -> Self {
+        Self(topLeft: topLeft - amount, topRight: topRight - amount,
+             bottomLeft: bottomLeft - amount, bottomRight: bottomRight - amount)
+    }
+}
+
 /// One pixel outline, rounded ends and a single divider per joined control.
 public enum GameControlGroupArt {
     public static func path(in frame: CGRect, inset: CGFloat = 0,
                             bottomLeft: Bool = false, bottomRight: Bool = false,
-                            screenEdges: Bool = false, topLeft: Bool = false, topRight: Bool = false, screenRadius: CGFloat? = nil) -> CGPath {
+                            screenEdges: Bool = false, topLeft: Bool = false, topRight: Bool = false, screenRadius: CGFloat? = nil, cornerRadii: GameControlCornerRadii? = nil) -> CGPath {
         let box = frame.insetBy(dx: inset, dy: inset)
         guard box.width > 0, box.height > 0 else { return CGMutablePath() }
         if screenEdges {
-            let horizontalLimit = (topLeft && topRight) || (bottomLeft && bottomRight) ? frame.width / 2 : frame.width
-            let radius = max(0, min(horizontalLimit, screenRadius ?? min(frame.width, frame.height) / 2) - inset)
-            let vertical = min(box.height, screenRadius == nil ? radius * 1.8 : radius)
+            let fallback = screenRadius ?? min(frame.width, frame.height) / 2
+            let corners = cornerRadii ?? GameControlCornerRadii(topLeft: fallback, topRight: fallback,
+                bottomLeft: fallback, bottomRight: fallback)
+            let topL = topLeft ? max(0, corners.topLeft - inset) : 0
+            let topR = topRight ? max(0, corners.topRight - inset) : 0
+            let bottomL = bottomLeft ? max(0, corners.bottomLeft - inset) : 0
+            let bottomR = bottomRight ? max(0, corners.bottomRight - inset) : 0
+            let factor = min(1, box.width / max(1, topL + topR), box.width / max(1, bottomL + bottomR),
+                             box.height / max(1, topL + bottomL), box.height / max(1, topR + bottomR))
+            let tl = topL * factor, tr = topR * factor
+            let bl = bottomL * factor, br = bottomR * factor
             let curve: CGFloat = 0.5522847498
             let path = CGMutablePath()
-            path.move(to: CGPoint(x: box.minX + (topLeft ? radius : 0), y: box.minY))
-            path.addLine(to: CGPoint(x: box.maxX - (topRight ? radius : 0), y: box.minY))
-            if topRight {
-                path.addCurve(to: CGPoint(x: box.maxX, y: box.minY + vertical),
-                              control1: CGPoint(x: box.maxX - radius * (1 - curve), y: box.minY),
-                              control2: CGPoint(x: box.maxX, y: box.minY + vertical * (1 - curve)))
-            }
-            path.addLine(to: CGPoint(x: box.maxX, y: box.maxY - (bottomRight ? vertical : 0)))
-            if bottomRight {
-                path.addCurve(to: CGPoint(x: box.maxX - radius, y: box.maxY),
-                              control1: CGPoint(x: box.maxX, y: box.maxY - vertical * (1 - curve)),
-                              control2: CGPoint(x: box.maxX - radius * (1 - curve), y: box.maxY))
-            }
-            path.addLine(to: CGPoint(x: box.minX + (bottomLeft ? radius : 0), y: box.maxY))
-            if bottomLeft {
-                path.addCurve(to: CGPoint(x: box.minX, y: box.maxY - vertical),
-                              control1: CGPoint(x: box.minX + radius * (1 - curve), y: box.maxY),
-                              control2: CGPoint(x: box.minX, y: box.maxY - vertical * (1 - curve)))
-            }
-            path.addLine(to: CGPoint(x: box.minX, y: box.minY + (topLeft ? vertical : 0)))
-            if topLeft {
-                path.addCurve(to: CGPoint(x: box.minX + radius, y: box.minY),
-                              control1: CGPoint(x: box.minX, y: box.minY + vertical * (1 - curve)),
-                              control2: CGPoint(x: box.minX + radius * (1 - curve), y: box.minY))
-            }
+            path.move(to: CGPoint(x: box.minX + tl, y: box.minY))
+            path.addLine(to: CGPoint(x: box.maxX - tr, y: box.minY))
+            path.addCurve(to: CGPoint(x: box.maxX, y: box.minY + tr),
+                          control1: CGPoint(x: box.maxX - tr * (1 - curve), y: box.minY),
+                          control2: CGPoint(x: box.maxX, y: box.minY + tr * (1 - curve)))
+            path.addLine(to: CGPoint(x: box.maxX, y: box.maxY - br))
+            path.addCurve(to: CGPoint(x: box.maxX - br, y: box.maxY),
+                          control1: CGPoint(x: box.maxX, y: box.maxY - br * (1 - curve)),
+                          control2: CGPoint(x: box.maxX - br * (1 - curve), y: box.maxY))
+            path.addLine(to: CGPoint(x: box.minX + bl, y: box.maxY))
+            path.addCurve(to: CGPoint(x: box.minX, y: box.maxY - bl),
+                          control1: CGPoint(x: box.minX + bl * (1 - curve), y: box.maxY),
+                          control2: CGPoint(x: box.minX, y: box.maxY - bl * (1 - curve)))
+            path.addLine(to: CGPoint(x: box.minX, y: box.minY + tl))
+            path.addCurve(to: CGPoint(x: box.minX + tl, y: box.minY),
+                          control1: CGPoint(x: box.minX, y: box.minY + tl * (1 - curve)),
+                          control2: CGPoint(x: box.minX + tl * (1 - curve), y: box.minY))
             path.closeSubpath()
             return path
         }
@@ -73,7 +93,7 @@ public enum GameControlGroupArt {
                             selected: Bool, face: GamePlayButtonArt.Face? = nil,
                             monochrome: Bool = false,
                             bottomLeft: Bool = false, bottomRight: Bool = false,
-                            screenEdges: Bool = false, topLeft: Bool = false, topRight: Bool = false, screenRadius: CGFloat? = nil) {
+                            screenEdges: Bool = false, topLeft: Bool = false, topRight: Bool = false, screenRadius: CGFloat? = nil, cornerRadii: GameControlCornerRadii? = nil) {
         let pixel = GameHUDControlGroup.border
         context.saveGState()
         defer { context.restoreGState() }
@@ -83,8 +103,8 @@ public enum GameControlGroupArt {
         let bright = CGColor(colorSpace: brightSpace, components: [1.6, 2.0, 1.4, 1])!
         context.setFillColor(monochrome ? CGColor(gray: 1, alpha: 1)
             : selected ? bright : CGColor(srgbRed: 0.56, green: 0.59, blue: 0.49, alpha: 1))
-        context.addPath(path(in: group, bottomLeft: bottomLeft, bottomRight: bottomRight, screenEdges: screenEdges, topLeft: topLeft, topRight: topRight, screenRadius: screenRadius)); context.fillPath()
-        context.addPath(path(in: group, inset: pixel, bottomLeft: bottomLeft, bottomRight: bottomRight, screenEdges: screenEdges, topLeft: topLeft, topRight: topRight, screenRadius: screenRadius)); context.clip()
+        context.addPath(path(in: group, bottomLeft: bottomLeft, bottomRight: bottomRight, screenEdges: screenEdges, topLeft: topLeft, topRight: topRight, screenRadius: screenRadius, cornerRadii: cornerRadii)); context.fillPath()
+        context.addPath(path(in: group, inset: pixel, bottomLeft: bottomLeft, bottomRight: bottomRight, screenEdges: screenEdges, topLeft: topLeft, topRight: topRight, screenRadius: screenRadius, cornerRadii: cornerRadii)); context.clip()
         context.setFillColor(monochrome ? CGColor(gray: 0, alpha: 1)
             : CGColor(srgbRed: 0.09, green: 0.12, blue: 0.07, alpha: 1))
         context.fill(group)

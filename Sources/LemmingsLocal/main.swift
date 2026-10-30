@@ -2938,7 +2938,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       levelBrowserDiscoveryTask = nil
       if discovery.classic.allSatisfy(\.isVerified) { preparedLevelBrowserDiscovery = discovery }
       rebuildLevelCatalogue(discovery)
-      if showsJourney { presentLearningJourney(); return }
+      if showsJourney { presentLearningJourney(start: true); return }
       if showsPlaylists {
         presentPlaylistLibrary()
         return
@@ -3114,7 +3114,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func presentPreparedLevelBrowser(_ discovery: LevelBrowserDiscovery, family: HomeContentFamily?,
     showsPlaylists: Bool = false, showsJourney: Bool = false) {
     rebuildLevelCatalogue(discovery)
-    if showsJourney { presentLearningJourney(); return }
+    if showsJourney { presentLearningJourney(start: true); return }
     if showsPlaylists {
       presentPlaylistLibrary()
       return
@@ -3951,12 +3951,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     store.onChange = nil
     if store.file == LevelPlaylistStore.fileURL(profileID: profileID) {
+      var importedJourney = false
       let sessions: [String?] = [nil] + ArcadeStore.shared.libraryHotSeats.map { Optional($0.id) }
       for sessionID in sessions {
         try store.mergeLearningProgress(GameProgressPreferences.learning(profileID: profileID, sessionID: sessionID), hotSeatID: sessionID)
         if let snapshot = GameProgressPreferences.journeySession(profileID: profileID, sessionID: sessionID) {
+          importedJourney = importedJourney || snapshot.updatedAt > (store.journeySessions[sessionID ?? "solo"]?.updatedAt ?? .distantPast)
           try store.importJourneySession(snapshot, hotSeatID: sessionID)
         }
+      }
+      if importedJourney, let journey = LearningJourneyLibrary.journey {
+        try store.migrateLearningJourney(journey, won: learningWins(profileID: profileID))
       }
     }
     try store.ensureJourneySnapshots()
@@ -4837,7 +4842,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  private func presentLearningJourney() {
+  private func presentLearningJourney(start: Bool = false) {
     guard let journey = LearningJourneyLibrary.journey else {
       GameScreen.shared.message(Self.allLemmingsMenuTitle, detail: L10n.text("The learning path is missing from this build."))
       return
@@ -4851,9 +4856,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let savedJourney = store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)
       let sessionID = ArcadeStore.shared.hotSeatID
       let owner = ArcadeStore.shared.records.activeProfileID
-      guard savedJourney != nil || (!ArcadeStore.shared.hotSeatIsActive && store.activeRun == nil && menuRecovery == nil) else { return }
       let progress = store.learningProgress(hotSeatID: sessionID)
       let pending = journey.lessons.map(\.entry)
+      if start {
+        if let savedJourney {
+          if store.activeRun?.id != savedJourney.run.id { try store.resumeRun(id: savedJourney.run.id) }
+          sequencePlaylistStore = store
+          startActiveSequence()
+        } else { startLearningEntries(pending, in: store) }
+        return
+      }
       let next = savedJourney?.run.currentEntry ?? pending.first
       let lesson = journey.lessons.first { $0.entry.identity == next?.identity }
       let page = LearningJourneyMenu.hub(next: lesson, solved: progress.solvedCount(in: journey),
@@ -4997,8 +5009,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       && store.resumableLearningJourney(hotSeatID: originalHotSeatID) != nil
     // The Golden Path joins the current Hot Seat. A new session ID would split one
     // roster into a Classic session and a Journey session.
-    let continuesHotSeat = run.source == .playlist(LearningJourney.playlistID) && !reusesJourneySession
-      && arcade.hotSeatIsActive
+    let continuesSelectedSession = run.source == .playlist(LearningJourney.playlistID) && !reusesJourneySession
     let begin: (Bool, LevelSequenceRun) -> Void = { [weak self] hotSeat, run in
       guard let self else { return }
       let required = run.source == .playlist(LearningJourney.playlistID) ? [run.currentEntry] : run.entries
@@ -5044,7 +5055,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           try self.saveBeforeSessionChange()
           self.prepareLibrary(preservingMusic: run.source == .playlist(LearningJourney.playlistID),
             resumeMusic: false)
-          if reusesJourneySession || continuesHotSeat {
+          if reusesJourneySession || continuesSelectedSession {
             // Map and revisit actions retain this roster, turn and session identity.
           } else if hotSeat {
             arcade.prepareHotSeat()
@@ -5069,7 +5080,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
     if reusesJourneySession { begin(arcade.hotSeatIsActive, run); return }
-    if continuesHotSeat { begin(true, run); return }
+    if continuesSelectedSession { begin(arcade.hotSeatIsActive, run); return }
     guard arcade.hotSeatIsActive || store.activeRun != nil else { begin(false, run); return }
     let page = GameMenuPage(title: L10n.text("Start a new session?"))
     page.setDetail(L10n.text("Your current session will stay saved."))
@@ -5616,13 +5627,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  private func resumeHomeSequence() {
+  private func resumeHomeSequence(journeyOnly: Bool = false) {
     guard allowNavigationAwayFromSequence() else { return }
     let store: LevelPlaylistStore
     let run: LevelSequenceRun
     do {
       store = try playlistStore()
-      guard let saved = store.resumableRun(hotSeatID: ArcadeStore.shared.hotSeatID) else { return }
+      guard let saved = journeyOnly ? store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)
+        : store.resumableRun(hotSeatID: ArcadeStore.shared.hotSeatID) else { return }
       if store.activeRun?.id != saved.run.id { try store.resumeRun(id: saved.run.id) }
       run = saved.run
     } catch {
@@ -6463,34 +6475,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func homeMenuItems() -> [HomeMenuItem] {
-    var items: [HomeMenuItem] = []
-    let savedSequence = (try? playlistStore()).flatMap { store in
-      store.resumableRun(hotSeatID: ArcadeStore.shared.hotSeatID)?.run
-    }
+    let store = try? playlistStore()
+    let journey = store?.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)?.run
+    var items = [HomeMenuItem(title: MobileHomeArt.journeyAction(run: journey).title.uppercased(), action: .fullQuest)]
+    let savedSequence = store?.resumableRun(hotSeatID: ArcadeStore.shared.hotSeatID)?.run
     let recovery = menuRecovery.flatMap {
       $0.hotSeatID == ArcadeStore.shared.hotSeatID && $0.profileID == ArcadeStore.shared.playingProfileID ? $0 : nil
     }
-    if savedSequence != nil {
-      let players = homeResumePlayers(hotSeatID: ArcadeStore.shared.hotSeatID,
-        profileID: ArcadeStore.shared.records.activeProfileID)
-      items.append(HomeMenuItem(title: L10n.text("RESUME JOURNEY - \(players)"),
+    if let savedSequence, savedSequence.source != .playlist(LearningJourney.playlistID) {
+      items.append(HomeMenuItem(title: L10n.text("Resume \(savedSequence.pool.summary) (\(savedSequence.currentIndex + 1)/\(savedSequence.entries.count))").uppercased(),
         action: .resumeSequence))
     }
-    if let recovery, savedSequence == nil || recovery.sequence?.runID != savedSequence?.id {
+    if let recovery,
+       journey == nil || recovery.sequence?.runID != journey?.id,
+       savedSequence == nil || recovery.sequence?.runID != savedSequence?.id {
       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
       items.append(HomeMenuItem(title: L10n.text("RESUME LEVEL - \(players)"), action: .resume))
-    }
-    if let store = try? playlistStore(),
-       store.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID) != nil || recovery != nil {
-      let progress = store.learningProgress(hotSeatID: ArcadeStore.shared.hotSeatID)
-      let solved = JourneyCompletionSummary.count(profileID: ArcadeStore.shared.records.activeProfileID,
-        hotSeatID: ArcadeStore.shared.hotSeatID, learning: progress,
-        entries: store.completedLearningEntries(hotSeatID: ArcadeStore.shared.hotSeatID),
-        profileIDs: ArcadeStore.shared.records.profiles.map(\.id))
-      items.append(HomeMenuItem(title: L10n.text("JOURNEY MAP  \(solved) SOLVED"), action: .fullQuest))
-    } else if !ArcadeStore.shared.hotSeatIsActive, savedSequence == nil, menuRecovery == nil,
-              (try? playlistStore().activeRun) == nil {
-      items.append(HomeMenuItem(title: L10n.text("START JOURNEY"), action: .fullQuest))
     }
     items += HomeContentFamily.allCases.map {
       HomeMenuItem(title: [.lemmings2, .lemmings3].contains($0) ? $0.displayName : homeContentRow($0), action: .browse($0))
@@ -7559,8 +7559,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .resume:
         if let checkpoint = menuRecovery { restoreRun(checkpoint) }
       case .fullQuest:
-        let hasRoute = (try? playlistStore().resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)) != nil
-        openLevelBrowser(family: nil, showsJourney: hasRoute || (!ArcadeStore.shared.hotSeatIsActive && menuRecovery == nil))
+        if (try? playlistStore().resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)) != nil {
+          resumeHomeSequence(journeyOnly: true)
+        } else { openLevelBrowser(family: nil, showsJourney: true) }
       case .collections:
         presentLevelCollections()
       case let .browse(family):

@@ -50,8 +50,11 @@
           let guest = arcade.addProfile(initials: "PAL", portrait: 2, select: false) else {
       throw IntegrationFailure(message: "Home progress fixtures are unavailable")
     }
+    menuRecovery = nil
+    try check(homeMenuItems().first?.title == "START JOURNEY", "Fresh Solo lost Start Journey")
     arcade.toggleSessionProfile(guest.id)
     guard let seat = arcade.hotSeatID else { throw IntegrationFailure(message: "Missing shared owner") }
+    try check(homeMenuItems().first?.title == "START JOURNEY", "Fresh Hot Seat lost Start Journey")
     try store.add(journey.playlist())
     var wins = LearningJourneyProgress()
     for identity in [classic.identity, fan.identity, l2, l3] { wins.record(identity, won: true) }
@@ -63,15 +66,15 @@
       levelIndex: 0, levelFingerprint: "test", initialStateHash: "test", tick: 0, events: [], stateHash: "test",
       usedRewind: false, nukeCount: 0, rewindCount: 0, undoCount: 0, selectedSkill: 0, scrollX: 0, scrollY: 0)
     menuRecovery?.hotSeatID = seat
-    var resumes = homeMenuItems().filter { [.resume, .resumeSequence].contains($0.action) }
-    try check(resumes.count == 1 && resumes[0].action == .resume,
-      "Home did not select the latest standalone level over the older queue")
+    var resumes = homeMenuItems().filter { [.resume, .resumeSequence, .fullQuest].contains($0.action) }
+    try check(resumes.count == 2 && resumes[0].action == .fullQuest && resumes[1].action == .resume,
+      "An independent checkpoint replaced the session's Journey button")
     menuRecovery?.sequence = .init(runID: run.id, entry: run.currentEntry)
-    resumes = homeMenuItems().filter { [.resume, .resumeSequence].contains($0.action) }
-    try check(resumes.count == 1 && resumes[0].action == .resumeSequence,
+    resumes = homeMenuItems().filter { [.resume, .resumeSequence, .fullQuest].contains($0.action) }
+    try check(resumes.count == 1 && resumes[0].action == .fullQuest,
       "A checkpoint in the current route produced duplicate Resume actions")
-    try check(homeMenuItems().contains { $0.title == L10n.text("JOURNEY MAP  \(4) SOLVED") },
-      "Home hid wins outside the current curriculum")
+    try check(homeMenuItems().first?.title == "RESUME JOURNEY (1/\(run.entries.count))",
+      "Home omitted the saved Journey position")
     let originalCampaign = UserDefaults.standard.dictionaryRepresentation().filter { $0.key.hasPrefix("HotSeat.\(seat).") }
     rebuildLibrary()
     let classicTitle = homeContentRow(.classic)
@@ -95,8 +98,8 @@
       playfield.cacheDisplay(in: playfield.bounds, to: image)
       try image.representation(using: .png, properties: [:])!.write(to: captureDirectory.appendingPathComponent("hotseat-\(Int(size.width)).png"))
       let controls = playfield.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
-      let rows = controls.filter { ($0.accessibilityLabel() ?? "").contains("1/120") || ($0.accessibilityLabel() ?? "").hasPrefix("FAN LEMMINGS") }
-      try check(rows.count == 2 && rows.allSatisfy { playfield.bounds.contains($0.localFrame) && $0.localFrame.height >= 28 },
+      let rows = controls.filter { ($0.accessibilityLabel() ?? "").contains("1/120") || ($0.accessibilityLabel() ?? "").hasPrefix("FAN LEMMINGS") || ($0.accessibilityLabel() ?? "").hasPrefix("RESUME JOURNEY (") }
+      try check(rows.count == 3 && rows.allSatisfy { playfield.bounds.contains($0.localFrame) && $0.localFrame.height >= 28 },
         "Corrected counts lost their visible targets")
       let priorAction = playfield.onSelectOverlayLine
       var selected: Int?
@@ -116,7 +119,16 @@
       "Counting Journey wins changed the session or turn")
     try check(NSDictionary(dictionary: originalCampaign).isEqual(to: UserDefaults.standard.dictionaryRepresentation().filter { $0.key.hasPrefix("HotSeat.\(seat).") }),
       "Displaying Journey counts wrote campaign progress")
+    try check(try store.advanceActiveRun(), "Journey did not advance")
+    let other = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+      pool: .init(id: LearningJourney.version, summary: "Other session"), entries: Array(run.entries.prefix(2)))
+    try store.startRun(other, hotSeatID: "another-session")
+    try check(homeMenuItems().first?.title == "RESUME JOURNEY (2/\(run.entries.count))",
+      "Another session's active slot hid the selected Hot Seat's archived queue")
+    try check(arcade.hotSeatID == seat && arcade.playingProfileID == owner,
+      "Resolving an archived queue changed its roster or next turn")
     arcade.endHotSeat()
+    try check(homeMenuItems().first?.title == "START JOURNEY", "An archived Hot Seat replaced Solo's Journey action")
     try check(!homeContentRow(.classic).contains("1/120"), "Solo inherited the Hot Seat Home count")
     print("PASS historical Journey counts, unique Resume, Solo/Hot Seat isolation, Classic/L2/L3 records, two renders and input targets")
   }

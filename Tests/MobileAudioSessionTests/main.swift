@@ -50,7 +50,13 @@ private actor SessionProbe {
         await checkSupersededResume()
         await checkActivationFailure()
         await checkReleasedController()
-        print("PASS audio session ordering, stale activation, failure and controller lifetime (silent, headless)")
+        await checkHomeOwnership()
+        await checkAbandonedOwner()
+        await checkBackgroundDuringActivation()
+        await checkBackgroundBlocksPlayback()
+        await checkBackgroundReleasesEveryOwner()
+        await checkRapidFoldReactivation()
+        print("PASS audio session ordering, Home ownership, phone background/foreground, stale activation, failure and controller lifetime (silent, headless)")
     }
 
     @MainActor private static func checkLevelTransitionOrder() async {
@@ -76,7 +82,7 @@ private actor SessionProbe {
         await finished.value
         let log = await probe.log()
         precondition(log == ["prepare:start", "prepare:end", "resume:start", "resume:end",
-                             "suspend:start", "suspend:end", "prepare:start", "prepare:end",
+                             "prepare:start", "prepare:end",
                              "resume:start", "resume:end"])
         precondition(callbacks == ["next level"], "A departed level restarted its audio")
     }
@@ -100,13 +106,15 @@ private actor SessionProbe {
 
     @MainActor private static func checkActivationFailure() async {
         let probe = SessionProbe(failResume: true)
-        let requests = MobileAudioSessionRequests(queue: MobileAudioSessionWorkQueue()) {
+        let queue = MobileAudioSessionWorkQueue()
+        let requests = MobileAudioSessionRequests(queue: queue) {
             try await probe.perform($0)
         }
         var succeeded: Bool?
         await requests.resume { succeeded = $0 }.value
         precondition(succeeded == false, "Failed activation was reported as ready for playback")
-        await requests.suspend().value
+        let next = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        await next.suspend().value
         let log = await probe.log()
         precondition(log.suffix(2) == ["suspend:start", "suspend:end"],
                      "Activation failure blocked later session work")
@@ -126,5 +134,127 @@ private actor SessionProbe {
         await probe.releaseResume()
         await finished.value
         precondition(!callbackRan, "A released controller received an activation callback")
+    }
+
+    @MainActor private static func checkHomeOwnership() async {
+        let queue = MobileAudioSessionWorkQueue()
+        let probe = SessionProbe()
+        let level = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        let home = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        await level.resume { precondition($0) }.value
+        let departure = level.suspend()
+        let activation = home.resume { precondition($0) }
+        await departure.value
+        await activation.value
+        // UIKit may deliver both disappearance callbacks after Home has appeared.
+        await level.suspend().value
+        await level.suspend().value
+        let homeLog = await probe.log()
+        precondition(!homeLog.contains("suspend:start"), "Departing level deactivated Home music")
+        await home.suspend().value
+        let finalLog = await probe.log()
+        precondition(finalLog.suffix(2) == ["suspend:start", "suspend:end"],
+                     "Final audio owner failed to release the session")
+    }
+
+    @MainActor private static func checkAbandonedOwner() async {
+        let queue = MobileAudioSessionWorkQueue()
+        let probe = SessionProbe()
+        var abandoned: MobileAudioSessionRequests? = MobileAudioSessionRequests(queue: queue) {
+            try await probe.perform($0)
+        }
+        await abandoned!.resume { precondition($0) }.value
+        abandoned = nil
+        let home = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        await home.resume { precondition($0) }.value
+        await home.suspend().value
+        let log = await probe.log()
+        precondition(log.suffix(2) == ["suspend:start", "suspend:end"],
+                     "A released controller left the audio session permanently claimed")
+    }
+
+    @MainActor private static func checkBackgroundDuringActivation() async {
+        let queue = MobileAudioSessionWorkQueue()
+        let probe = SessionProbe(holdResume: true)
+        let level = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        let menu = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        var staleCallbacks = 0
+        level.resume { _ in staleCallbacks += 1 }
+        await probe.waitForResume()
+        let queued = menu.resume { _ in staleCallbacks += 1 }
+        queue.setPlaybackAllowed(false)
+        precondition(!queue.hasActiveOwners, "Phone background left live audio owners")
+        await probe.releaseResume()
+        await queued.value
+        await menu.suspend().value
+        let log = await probe.log()
+        precondition(log.filter { $0 == "resume:start" }.count == 1,
+                     "A queued activation ran after the phone returned to its Home Screen")
+        precondition(log.suffix(2) == ["suspend:start", "suspend:end"])
+        precondition(staleCallbacks == 0, "An in-flight activation restarted background music")
+        // Returning to the foreground grants permission, but never resumes a level itself.
+        queue.setPlaybackAllowed(true)
+        precondition(!queue.hasActiveOwners && staleCallbacks == 0)
+        var ready = false
+        await menu.resume { ready = $0 }.value
+        precondition(ready, "Foreground menu could not reactivate audio")
+        await menu.suspend().value
+    }
+
+    @MainActor private static func checkBackgroundBlocksPlayback() async {
+        let queue = MobileAudioSessionWorkQueue()
+        let probe = SessionProbe()
+        let menu = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        queue.setPlaybackAllowed(false)
+        await menu.prepare().value
+        var ready: Bool?
+        await menu.resume { ready = $0 }.value
+        let log = await probe.log()
+        precondition(log.isEmpty && ready == false && !queue.hasActiveOwners,
+                     "A delayed menu update activated audio while the app was backgrounded")
+        queue.setPlaybackAllowed(true)
+        await menu.prepare().value
+        await menu.resume { ready = $0 }.value
+        precondition(ready == true && queue.hasActiveOwners)
+        await menu.suspend().value
+    }
+
+    @MainActor private static func checkBackgroundReleasesEveryOwner() async {
+        let queue = MobileAudioSessionWorkQueue()
+        let probe = SessionProbe()
+        let level = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        let menu = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        await level.resume { precondition($0) }.value
+        await menu.resume { precondition($0) }.value
+        queue.setPlaybackAllowed(false)
+        await menu.suspend().value
+        let log = await probe.log()
+        precondition(!queue.hasActiveOwners && log.suffix(2) == ["suspend:start", "suspend:end"],
+                     "An overlapping owner prevented background session deactivation")
+    }
+
+    @MainActor private static func checkRapidFoldReactivation() async {
+        let queue = MobileAudioSessionWorkQueue()
+        let probe = SessionProbe(holdResume: true)
+        let menu = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        var callbacks: [String] = []
+        menu.resume { _ in callbacks.append("before fold") }
+        await probe.waitForResume()
+        menu.suspend()
+        menu.resume { _ in callbacks.append("unfold") }
+        menu.suspend()
+        let ready = menu.resume { succeeded in
+            precondition(succeeded)
+            callbacks.append("active")
+        }
+        await probe.releaseResume()
+        await ready.value
+        let log = await probe.log()
+        precondition(callbacks == ["active"], "A fold/unfold restarted a superseded transport")
+        precondition(log.filter { $0 == "resume:start" }.count == 2,
+                     "A superseded fold activation reconfigured the audio session")
+        precondition(!log.contains("suspend:start"),
+                     "A transient fold deactivated the session after reactivation")
+        await menu.suspend().value
     }
 }

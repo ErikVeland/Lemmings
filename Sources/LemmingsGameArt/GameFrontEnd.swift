@@ -100,6 +100,12 @@ public struct GameFrontEnd {
         public var preview: Bool
         /// Codes and other complete images fit inside the pane; level scenery fills it.
         public var previewFitsImage = false
+        public var previewAction: Action? {
+            guard preview, !previewFitsImage else { return nil }
+            let actions = rows + orderedFooter
+            return actions.first { $0.id == "play" }
+                ?? actions.first { $0.primary && !$0.isBackNavigation }
+        }
         public var pause: MobilePauseSummary? = nil
         public var televisionGrid = false
         public var televisionPageIndex = 0

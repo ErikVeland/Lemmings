@@ -24,6 +24,7 @@ import UIKit
     var onMenuScroll: ((Double) -> Void)?
     var onBoost: ((Bool) -> Void)?
     var onRewindHeld: ((Bool) -> Void)?
+    var onRewindTap: (() -> Void)?
     var onMenuPause: (() -> Void)?
     var onForcedPause: (() -> Void)?
     var onTimelinePark: (() -> Void)?

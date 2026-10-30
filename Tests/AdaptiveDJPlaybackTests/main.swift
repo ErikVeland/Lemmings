@@ -84,6 +84,25 @@ extension MusicFileDeck {
     RunLoop.current.run(until: Date().addingTimeInterval(1.9))
     try require(!deck.engine.isRunning && !deck.player.isPlaying && deck.sourceMixer.outputVolume == 0,
       "Vinyl stop did not reach silence")
+    deck.resumeOutput()
+    RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+    deck.suspendOutput(spinDownDuration: 0.12)
+    RunLoop.current.run(until: Date().addingTimeInterval(0.07))
+    try require(deck.varispeed.rate < 1 && deck.sourceMixer.outputVolume < 1,
+      "Short scene brake did not lower rate and gain")
+    deck.resumeOutput()
+    RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+    try require(deck.engine.isRunning && deck.player.isPlaying && deck.varispeed.rate == 1,
+      "Rapid fold reactivation left a pending recording stop")
+    deck.suspendOutput(spinDownDuration: 0.12)
+    RunLoop.current.run(until: Date().addingTimeInterval(0.25))
+    try require(!deck.engine.isRunning && !deck.player.isPlaying && deck.sourceMixer.outputVolume == 0,
+      "Short scene brake retained the 1.2-second reverb tail")
+    deck.resumeOutput()
+    deck.suspendOutput(spinDownDuration: 0.12)
+    deck.suspendOutput(immediately: true)
+    try require(!deck.engine.isRunning && !deck.player.isPlaying && deck.fadeTask == nil,
+      "Backgrounding did not immediately override the recording brake")
     deck.stop()
   }
   print("PASS isolated recording rhythm, vinyl rate/gain ramp, silence and rapid resume")

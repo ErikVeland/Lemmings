@@ -68,16 +68,13 @@ extension MobileLibraryViewController {
     func hotSeatPage(subtitle: String) -> GameFrontEnd.Page {
         let roster = hotSeatRoster ?? MobileHotSeatRoster(host: profiles.activeID, players: defaultHotSeatPlayers)
         return MobileCareerArt.hotSeat(profiles, subtitle: subtitle, roster: roster, policy: hotSeats.policy,
-            active: hotSeat != nil, hasSaved: !hotSeats.sharedSessions(player: profiles.activeID).isEmpty,
+            active: hotSeat != nil, hasSaved: !hotSeats.savedSessions.isEmpty,
             confirmingRestart: confirmingRestart, ghostsVisible: arcadeStore.hotSeatGhostsVisible)
     }
 
     func savedHotSeatsPage(subtitle: String) -> GameFrontEnd.Page {
-        let rows = hotSeats.sharedSessions(player: profiles.activeID).map { seat -> GameFrontEnd.Action in
-            let names = seat.players.map { String(playerName($0).prefix(6)) }.joined(separator: " ")
-            return .init("seatResume." + seat.id, names)
-        }
-        return .init(title: L10n.text("Saved Hot Seats"), subtitle: subtitle, rows: rows, footer: [.init(savedSeatsBackID, L10n.text("Back"))])
+        MobileCareerArt.savedHotSeats(profiles, sessions: hotSeats.savedSessions,
+            subtitle: subtitle, backID: savedSeatsBackID)
     }
 
     // MARK: - Actions

@@ -45,7 +45,7 @@ extension MobileGameViewController {
         tvTargetLock.clear(); highlightedTarget = nil
         playfieldView.gameViewport = viewport
         ensureTVPointer()
-        renderCurrentFrame(force: true)
+        renderCurrentFrame(force: true, presentationOnly: true)
     }
 
     func ensureTVPointer() {
@@ -76,7 +76,7 @@ extension MobileGameViewController {
                 displayed: displayed, candidates: session.targetCandidates(for: selectedControl),
                 viewport: playfieldView.gameViewport, granular: true)
         } else { tvTargetLock.clear(); highlightedTarget = previewPoint == nil ? nil : displayed }
-        renderCurrentFrame(force: true)
+        renderCurrentFrame(force: true, presentationOnly: true)
     }
 
     func updateTVPointer() {

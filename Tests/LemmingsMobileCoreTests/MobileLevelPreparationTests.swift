@@ -8,6 +8,7 @@ import Testing
         let loader = MobileLibraryLoader()
         let opened = try await loader.open {
             #expect(!Thread.isMainThread)
+            #expect(Thread.current.stackSize >= 8 * 1024 * 1024)
             return PreparationLibrary()
         }
         #expect(opened.library?.levels.count == 4)

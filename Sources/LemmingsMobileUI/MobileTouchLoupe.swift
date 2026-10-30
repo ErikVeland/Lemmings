@@ -56,7 +56,14 @@ import UIKit
             zoom: scaleY * sourceScale, pixelAspect: scaleX / scaleY,
             maximumZoom: max(12, scaleY * sourceScale))
         countdownView.frame = imageView.frame
-        countdownView.update(countdowns, viewport: viewport, project: nil)
+        let localCountdowns: [MobileBombCountdown]
+        if let region = bitmap.renderedRect {
+            localCountdowns = countdowns.map {
+                MobileBombCountdown(id: $0.id, seconds: $0.seconds,
+                    anchor: .init(x: $0.anchor.x - region.x, y: $0.anchor.y - region.y))
+            }
+        } else { localCountdowns = countdowns }
+        countdownView.update(localCountdowns, viewport: viewport, project: nil)
         isHidden = false
     }
 }

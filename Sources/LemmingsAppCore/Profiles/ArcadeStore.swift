@@ -126,24 +126,37 @@ import NxlvKit
         guard let id = hotSeatID, let host = hotSeatHostID else { return }
         let saved = SavedHotSeat(id: id, host: host, players: sessionProfileIDs, turn: sessionTurnID,
             active: active, savedAt: Date(), policy: turnPolicy)
-        if let data = try? JSONEncoder().encode(saved) { defaults.set(data, forKey: sessionKey(host: host)) }
         var history = savedSessionHistory(host: host).filter { $0.id != id }
         history.insert(saved, at: 0)
+        if let data = try? JSONEncoder().encode(saved) { defaults.set(data, forKey: sessionKey(host: host)) }
         if let data = try? JSONEncoder().encode(history) {
             defaults.set(data, forKey: sessionKey(host: host) + ".history")
         }
         notifyProgressChanged()
     }
     private func savedSessionHistory(host: String) -> [SavedHotSeat] {
-        guard let data = defaults.data(forKey: sessionKey(host: host) + ".history") else { return [] }
-        return (try? JSONDecoder().decode([SavedHotSeat].self, from: data)) ?? []
+        let key = sessionKey(host: host)
+        var history = defaults.data(forKey: key + ".history")
+            .flatMap { try? JSONDecoder().decode([SavedHotSeat].self, from: $0) } ?? []
+        // Early saves kept only this pointer. Include it before a new campaign
+        // replaces it, so its roster remains available locally and to sync.
+        if let data = defaults.data(forKey: key),
+           let seat = try? JSONDecoder().decode(SavedHotSeat.self, from: data),
+           seat.host == host,
+           !history.contains(where: { $0.id == seat.id }) {
+            history.append(seat)
+        }
+        return history
     }
     public var savedHotSeats: [SavedHotSeat] {
         libraryHotSeats.filter {
-            $0.id != hotSeatID && $0.players.contains(records.activeProfileID)
+            $0.id != hotSeatID
                 && $0.players.count >= 2 && Set($0.players).count == $0.players.count
                 && $0.players.contains($0.host) && $0.players.allSatisfy { records.profile($0) != nil }
-        }.sorted { ($0.savedAt ?? .distantPast) > ($1.savedAt ?? .distantPast) }
+        }.sorted {
+            let left = $0.savedAt ?? .distantPast, right = $1.savedAt ?? .distantPast
+            return left == right ? $0.id < $1.id : left > right
+        }
     }
     /// Includes the current campaign without transferring the device's selected mode.
     public var libraryHotSeats: [SavedHotSeat] {

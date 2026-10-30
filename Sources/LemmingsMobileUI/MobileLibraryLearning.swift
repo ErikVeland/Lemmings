@@ -77,23 +77,25 @@ extension MobileLibraryViewController {
             additionalProgress: extra)
     }
     var canStartJourney: Bool {
-        hotSeat == nil && learning.run == nil && activeRun == nil && pendingCheckpoint == nil
+        bundledJourney != nil
     }
     var resumableLearningJourney: MobileLearningResume? {
         _ = learning
-        return MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard)
+        return MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard,
+            snapshot: { GameProgressPreferences.journeySession(profileID: profiles.activeID, sessionID: $0) })
     }
 
     var resumableLearningRun: MobileLearningResume? {
         _ = learning
         return MobileLearningResume.find(owner: profiles.activeID, seats: hotSeats, storage: MobileStorage.standard,
-                                  journeyOnly: false, currentSessionOnly: true)
+            journeyOnly: false, currentSessionOnly: true,
+            snapshot: { GameProgressPreferences.journeySession(profileID: profiles.activeID, sessionID: $0) })
     }
 
     /// All engines compare the saved level identity before resuming a route.
-    func checkpointResumesLearningRun(_ checkpoint: MobileCheckpointEnvelope) -> Bool {
+    func checkpointResumesLearningRun(_ checkpoint: MobileCheckpointEnvelope, journeyOnly: Bool = false) -> Bool {
         guard checkpointMatchesSession(checkpoint),
-              let saved = resumableLearningRun, let run = saved.state.run,
+              let saved = journeyOnly ? resumableLearningJourney : resumableLearningRun, let run = saved.state.run,
               let catalogue else { return false }
         let queue = MobileJourneyLibrary(entries: run.entries, name: run.pool.summary, catalogue: catalogue)
         guard let identifier = try? queue.checkpointLevelIdentifier(at: run.currentIndex) else { return false }
@@ -124,11 +126,9 @@ extension MobileLibraryViewController {
     func handleLearning(_ id: String) -> Bool {
         switch id {
         case "journey":
-            if let checkpoint = pendingCheckpoint, checkpointMatchesSession(checkpoint),
-               !checkpointResumesLearningRun(checkpoint) { browseSavedRun(); return true }
-            if resumableLearningJourney == nil, !canStartJourney { browseSavedRun(); return true }
             guard resumableLearningJourney != nil || canStartJourney else { return true }
-            navigate(.journey)
+            if resumableLearningJourney != nil { resumeLearningJourney() }
+            else { return handleLearning("learningStart") }
         case "learningResume": resumeLearningJourney()
         case "learningBrowse": resumeLearningJourney(browse: true)
         case "learningRunResume": resumeLearningJourney(journeyOnly: false)
@@ -136,9 +136,10 @@ extension MobileLibraryViewController {
             guard resumableLearningJourney != nil || canStartJourney else { return true }
             if id == "learningStart", resumableLearningJourney != nil { resumeLearningJourney(browse: true); return true }
             guard let journey = bundledJourney else { return true }
-            let entries = id == "learningStart"
+            var entries = id == "learningStart"
                 ? (MobileSettings.current(from: .standard).classic.unlockAllClassicLevels ? journey.lessons.map(\.entry) : learning.progress.unseen(in: journey))
                 : learning.progress.revisit(in: journey)
+            if id == "learningStart", entries.isEmpty { entries = journey.lessons.map(\.entry) }
             do {
                 var saved = learning
                 try saved.start(entries, name: LearningJourney.title, poolID: journey.version)
@@ -201,7 +202,7 @@ extension MobileLibraryViewController {
         }
         selectedIndex = run.currentIndex; selectedPreview = nil; browserShown = false
         levelsBackRoute = .journey
-        if let checkpoint { startLevel(run.currentIndex, checkpoint: checkpoint) }
+        if let checkpoint { navigate(.levels); startLevel(run.currentIndex, checkpoint: checkpoint) }
         else { navigate(.levels); selectLevel(run.currentIndex) }
     }
     func recordLearningResult(_ snapshot: MobileGameSnapshot) throws {

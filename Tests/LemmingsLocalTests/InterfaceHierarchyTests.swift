@@ -6,6 +6,27 @@ import XCTest
 @testable import LemmingsLocal
 
 final class InterfaceHierarchyTests: XCTestCase {
+    @MainActor func testPreviewPressStartsItsLevelAndKeepsUnavailableLevelsBlocked() throws {
+        _ = NSApplication.shared
+        let carousel = LevelCoverFlowView(frame: CGRect(x: 0, y: 0, width: 992, height: 520))
+        let items = [LevelCoverFlowItem(id: "first", title: "First", subtitle: "Classic", detail: "1"),
+                     LevelCoverFlowItem(id: "second", title: "Second", subtitle: "Lemmings 2", detail: "2"),
+                     LevelCoverFlowItem(id: "locked", title: "Locked", subtitle: "Lemmings 3", detail: "3", isAvailable: false)]
+        var started: [String] = []
+        carousel.onStart = { started.append($0.id) }
+        for reduced in [false, true] {
+            carousel.configure(items: items, selectedID: "first", reduceMotion: reduced)
+            carousel.layoutSubtreeIfNeeded()
+            for index in items.indices {
+                let card = try XCTUnwrap(carousel.subviews.compactMap { $0 as? NSButton }.first { $0.tag == index })
+                XCTAssertTrue(card.accessibilityPerformPress())
+                XCTAssertEqual(carousel.selectedItem?.id, items[index].id)
+                XCTAssertEqual(started.last, index == 2 ? "second" : items[index].id)
+            }
+        }
+        XCTAssertEqual(started, ["first", "second", "first", "second"])
+    }
+
     @MainActor func testWrappedBrowserStatesAndNativeTargets() throws {
         _ = NSApplication.shared
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()

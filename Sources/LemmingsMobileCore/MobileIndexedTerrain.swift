@@ -17,10 +17,24 @@ final class MobileIndexedTerrainCache: @unchecked Sendable {
             let retains = lease.reserve(bytes: pixels.count * 4)
             // Compare content as well as revisions: rewind can revisit a different terrain branch.
             if self.pixels != pixels || self.palette != palette || rgba.isEmpty {
-                let expanded = Self.expand(pixels, palette: palette)
                 builds += 1
-                if !retains { self.pixels = []; self.palette = []; rgba = []; return expanded }
-                self.pixels = pixels; self.palette = palette; rgba = expanded
+                if self.palette == palette, self.pixels.count == pixels.count, rgba.count == pixels.count * 4 {
+                    // Actor composition uses a cropped copy. Update the retained
+                    // terrain in place and convert only pixels changed by play
+                    // or rewind; palette changes still rebuild every colour.
+                    for index in pixels.indices where self.pixels[index] != pixels[index] {
+                        let source = Int(pixels[index]) * 4, target = index * 4
+                        rgba[target] = palette[source]
+                        rgba[target + 1] = palette[source + 1]
+                        rgba[target + 2] = palette[source + 2]
+                    }
+                } else { rgba = Self.expand(pixels, palette: palette) }
+                if !retains {
+                    let result = rgba
+                    self.pixels = []; self.palette = []; rgba = []
+                    return result
+                }
+                self.pixels = pixels; self.palette = palette
             } else if !retains {
                 let result = rgba
                 self.pixels = []; self.palette = []; rgba = []

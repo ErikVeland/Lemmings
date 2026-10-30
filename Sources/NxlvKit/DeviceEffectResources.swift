@@ -73,6 +73,7 @@ public final class DeviceEffectPressure: @unchecked Sendable {
 
     /// Hold the smaller budget for a minute to avoid repeated allocation cycles.
     public func noteMemoryPressure() {
+        RuntimeMemoryBudget.shared.noteMemoryPressure()
         lock.lock(); defer { lock.unlock() }
         memoryPressureUntil = ProcessInfo.processInfo.systemUptime + 60
         lastPoll = -.infinity

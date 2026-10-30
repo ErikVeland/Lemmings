@@ -62,6 +62,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private var outputSuspended = false
   private var rewindBufferedFrames = 0
   private var pauseFadeFrames = 0
+  private var pauseFadeTotalFrames = 0
   private var rhythmAmount = 0.0
   private var rhythmTarget = 0.0
   private let vinylStopSeconds = 0.5
@@ -235,7 +236,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   }
 
   /// Keep native percussion, or slow the source into a short vinyl stop.
-  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false) {
+  /// A bounded spin-down omits the decorative reverb tail for scene transitions.
+  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false, spinDownDuration: Double? = nil) {
     cancelRewind()
     guard isRunning else { return }
     if immediately {
@@ -265,13 +267,15 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
       return
     }
     guard !outputSuspended else { lock.unlock(); return }
+    let brakeSeconds = spinDownDuration.flatMap { $0.isFinite ? min(0.5, max(0.02, $0)) : nil } ?? vinylStopSeconds
     pauseWorkItem?.cancel()
     outputSuspended = true
     rewindBufferedFrames = queuedFrames
-    pauseFadeFrames = Int(sampleRate * vinylStopSeconds)
+    pauseFadeTotalFrames = Int(sampleRate * brakeSeconds)
+    pauseFadeFrames = pauseFadeTotalFrames
     spinUpFrames = 0
     lock.unlock()
-    reverb.wetDryMix = vinylTailWet
+    reverb.wetDryMix = spinDownDuration == nil ? vinylTailWet : 0
     pauseWorkItem?.cancel()
     let work = DispatchWorkItem { [weak self] in
       guard let self else { return }
@@ -281,7 +285,10 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
       if shouldPause && !self.rewindAudio.isRewinding { self.engine.pause(); self.reverb.wetDryMix = 0 }
     }
     pauseWorkItem = work
-    DispatchQueue.main.asyncAfter(deadline: .now() + vinylStopSeconds + vinylTailSeconds, execute: work)
+    // Tracker PCM already queued ahead of the brake must reach the output first.
+    let parkDelay = spinDownDuration == nil ? vinylStopSeconds + vinylTailSeconds
+      : Double(queuedFrames) / sampleRate + brakeSeconds
+    DispatchQueue.main.asyncAfter(deadline: .now() + parkDelay, execute: work)
   }
 
   public func resumeOutput() throws {
@@ -336,7 +343,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
       let canAdvance = pauseFadeFrames > 0 || !outputSuspended
       if outputSuspended && pauseFadeFrames > 0 { pauseFadeFrames -= 1 }
       let gain = outputSuspended
-        ? Float(pauseFadeFrames) / Float(max(1, Int(sampleRate * vinylStopSeconds)))
+        ? Float(pauseFadeFrames) / Float(max(1, pauseFadeTotalFrames))
         : startFadeGainLocked()
 
       let frame: (left: Float, right: Float)

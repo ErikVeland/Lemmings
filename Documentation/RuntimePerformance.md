@@ -9,6 +9,57 @@ those platforms. Its cause is not yet proved. Clean compilation and muted UI
 checks do not close it. The requirement applies throughout launch, menus,
 loading, gameplay, pause, results, replay and transitions.
 
+### Phone Home Screen, Duo folding and menu handover — 30 October 2026
+
+The owner clarified that reported crackling follows leaving the app for the
+phone's Home Screen, and suspects the previous inactivity delay during Duo
+folding as well. These physical-device triggers remain unverified locally.
+Earlier source inspection also found
+that game disappearance queues audio-session deactivation while Home starts its
+theme without waiting for activation. Repeated disappearance callbacks also
+suspend the shared music transport after ownership has moved to Home.
+
+The shared iOS/tvOS session queue now tracks live owners and skips deactivation
+while Home or another level owns audio. Home waits for activation before starting
+or resuming its theme. Gameplay pause/suspend callbacks carry the attempt ID and
+cannot change Home's transport, including activation in flight. Home resets the
+gameplay pitch; late gameplay telemetry cannot restore failure/nuke processing.
+Soundtrack names are cached instead of recursively scanning recordings during
+every music-state query; download completion and library removal invalidate them.
+
+The former 400 ms full-volume inactivity grace is removed. Menu music now begins
+a 120 ms spin-down before inactive-scene layout work, omits the decorative
+1.2-second reverb tail, and preserves the loaded track. Tracker output accounts
+for up to 186 ms of already queued PCM before parking; a menu cleanup scheduled
+after 350 ms releases its session. Reactivation cancels that cleanup and uses the
+existing spin-up. Recording rate/gain ramps still run on the main actor, so this
+does not establish continuity under a blocked UI thread or make spinning cheaper
+than immediate suspension. Gameplay keeps its immediate suspension and explicit
+player Resume behaviour.
+
+Application background entry overrides any spin-down immediately, parks every
+music transport and revokes session ownership. Pending activations are
+invalidated; new preparation/activation requests cannot run in the background.
+Foreground entry permits new requests without automatically resuming gameplay.
+The short-brake option is shared by MOD, recording and Adaptive DJ transports;
+desktop callers retain the existing pause timings through default arguments.
+
+Silent, headless session checks cover overlapping level activation, repeated
+outgoing-game suspends after Home activation, last-owner release, activation
+failure, superseded requests, released controllers, backgrounding during an
+in-flight activation, blocked background requests, overlapping-owner release,
+foreground recovery and rapid fold reactivation; these checks pass. iOS/tvOS SDK
+modules and application entry points compile. The native audio performance and
+DJ programs compile, including new short-brake cancellation, omitted-tail and
+background-override checks. The muted, offscreen offline-audio run aborts while
+creating `AVAudioUnitEQ` (`comp != nullptr`), before those transport checks can
+execute. Their runtime result is unverified. Logs are
+`.build/phone-background-audio-{ios-final,tvos-final,native-compile,offline}.log`.
+Simulation and broad engine/release suites were skipped
+for this audio-lifecycle change. Installed-device listening,
+route changes and sustained playback remain unverified; this fixes source-level
+transition faults and does not close the physical-device crackling gate.
+
 ### Invalid player time during stop — 27 October 2026
 
 The muted offline spatial-audio suite reproduced a Core Audio exception during
@@ -511,7 +562,7 @@ surface is released on recovery. This avoids full display-resolution CPU scaling
 without adding a Metal/HDR effect pass. CRT still prepares its native viewport on
 the CPU. Whole-level actor composition, movie image composition and expensive
 seeks beyond retained checkpoints remain architectural optimisation opportunities;
-no viewport/tile renderer or asynchronous seek scheduler is claimed here.
+the continuation below supersedes those initial source gaps for mobile/TV.
 
 Validation: 20 focused mobile terrain/rewind/parity checks passed. Additional
 regressions cover prepared Neo terrain versus fresh PC/Mac scene pixels through
@@ -533,3 +584,228 @@ input polling, simulation batches, scene presentation, and HUD/music work. They
 provide phase attribution on installed iOS/tvOS builds without per-frame strings,
 retained frame logs or render-callback logging. Existing audio reserve/refill
 statistics remain separate from device underrun evidence.
+
+## Viewport, input and PCM continuation — 29 October 2026
+
+The shared mobile/TV controller separates its input clock (up to 60 Hz) from its
+adaptive scene clock (including 30/20 Hz). Controller requests coalesce. Pointer,
+touch preview, skill selection and TV target cycling reuse the rendered scene
+when its tick and camera coverage are unchanged. Gameplay commands still update
+the engine before presenting feedback. Reusing a frame does not change hit
+targets, pause ownership, Hot Seat readiness or replay command order.
+
+Classic, L2, L3 and supported NeoLemmix mobile rendering now scopes composition
+to a tile-aligned viewport with a 32-pixel guard band. Native and Macintosh
+artwork retain their source resolution and nearest scaling. Terrain-only minimap
+thumbnails refresh separately from actor points. Full-level terrain conversion,
+source artwork and some actor traversal remain; this is not a fully incremental
+GPU terrain renderer. L2 updates changed palette pixels in its retained RGBA
+terrain; palette changes rebuild it and rewind detects earlier terrain content.
+The pixel comparison still scans indexed terrain. Classic reduced-colour
+conversion uses a 256-entry lookup over the composed viewport.
+
+CRT preparation retains a camera-scene image independently of cursor, marker,
+assignment and trail overlays. Overlay changes copy that image rather than
+rescaling the terrain again. Reusable bitmap contexts retain their allocation.
+Explosion expiry and transient-effect reset invalidate the overlay signature.
+Menu previews and the touch loupe account for the viewport origin, including
+countdown anchors. Mac rendering and movie composition retain their existing
+paths; no full-scene Mac rendering replacement is claimed.
+
+Production effects PCM runs without the control/library lock. The serial worker
+owns its voices and reserved rescue-layer arrays; each voice has one bounded
+pending command and fixed-size progress storage. Status transfers happen under a
+separate handoff lock. Mutable-array reconciliation and destruction of replaced
+commands run outside it. Completed rescue layers cannot reappear when a later
+camera/gain update arrives. The worker still reconciles layers between blocks,
+and rewind copies at most one second of history under its separate history lock.
+This is reduced contention, not a lock-free mixer or proof of the crackling cause.
+
+All shared mobile/TV rewind entry points, backward steps and replay navigation
+use cancellable seek operations, targeting 2 ms of reconstruction per slice.
+The controller yields to the run loop between slices. Live state remains intact
+until the exact result commits; cancellation drops the private reconstruction.
+Releasing held rewind now stops new distance requests and lets accepted work finish
+(see the stacked-rewind follow-up below).
+Commands at the target tick keep their order, and assistance counts update only
+at commit. A single tick, initial factory/checkpoint preparation and commit can
+still exceed the slice target. Sparse checkpoints accelerate history without
+discarding its recorded commands. Custom Classic rolling-history configurations
+retain their original oldest-frame eviction contract.
+
+Shared cache leases bound admitted optional terrain RGBA across engines. History
+density uses a separate estimated-byte allowance, reduced by available memory
+and pressure. Pressure originates in the shared effects monitor, including on
+Mac. Once per second of mobile/TV presentation, Points of Interest report actual
+process footprint, sampled peak and leased cache bytes. Sampled peak can miss
+short spikes; neither it nor cache leases bound all process memory. Current
+frames, immutable artwork, GPU surfaces and copy-on-write snapshots remain
+outside that accounting. Physical peak-memory profiling is still required.
+
+Validation is headless and muted. The focused core run passes 22 tests covering
+native/Macintosh viewport pixels and fractional camera placement, cached terrain
+versus fresh conversion, cancelled seeks, same-tick Classic live/replay commands,
+L2/L3 seek state and assistance counts, Neo sparse history and scoped raster
+requests. Eleven scene/arrow/liquid checks and the Classic DOS rewind program
+also pass. A separate production NeoLemmix actor/terrain viewport check passes
+without changing simulation state. A separate PCM bridge check passes completed-rescue cleanup, pending
+replacement protection, camera/gain updates, 10,000 coalesced commands and silence.
+The current-architecture Mac development build passes. Platform SDK and audio
+compilation receipts are retained in `.build/resume-*-sdk.log` and
+`.build/resume-audio-compile.log`; final controller source checks are in
+`.build/resume-ui-final/`. The mixed offline audio run aborts while creating a
+Core Audio EQ unit (`comp != nullptr`), before exercising the mixer. Bridge
+checks do not close that environment gap. These are local verification, not release
+packages. Full release audits, universal packaging, signing and notarisation were
+not requested. No foreground windows, production saves or audible tests were used.
+
+Sustained 10×, physical tap latency, thermal frame delivery and crackle-free mixed
+playback remain unverified on iPad 8, Duo and Apple TV. Existing TV effects limits
+and native artwork remain intact. This work does not close the audio release gate.
+
+## Viewport, input and audio worker optimisation — 29 October 2026
+
+This follow-up supersedes the architectural limits recorded in the earlier
+29 October entry for the shared UIKit playfield. Classic, L2, L3 and supported
+NeoLemmix now rasterise the visible level rectangle with a tile-aligned guard
+band. Objects, actors, ghosts and crowd shadows retain world coordinates and
+clip into the smaller destination. Native and reconstructed Macintosh pixels
+keep their original resolution. Full-scene rendering remains available to
+previews, exports and other callers. The minimap retains a bounded thumbnail:
+scenery refreshes at most four times per second, while live lemming positions
+follow presented game ticks without assignment probes or sprite decoding.
+
+Pointer and selection updates reuse the existing scene whenever its tick and
+covered viewport remain valid. Authored target marks now draw in the overlay;
+their states, colours and native pixel sizes remain engine-specific. The display
+link requests up to 60 Hz for controller polling and held-touch recognition even
+when scene presentation adapts to 30 or 20 Hz. OS limits still determine actual
+callback delivery, and a synchronous engine tick can still delay the main thread.
+Touch loupe countdowns and pause previews translate cropped image coordinates
+back to the same level and input coordinates. No input targets were removed.
+
+CRT presentation caches its native scene separately from cursor and assignment
+composition. An unchanged presentation reuses the uploaded source and bloom.
+Scene or camera changes rebuild the native base; cursor changes reuse that base.
+Trail reset and flash expiry invalidate the composite. The additional CPU surface
+is released under memory pressure. This does not claim that every CRT overlay is
+a separate GPU layer. TV retains its existing effects and HDR exclusions.
+
+Effects PCM generation owns its running voice playheads and preallocated rescue
+layer storage. Controls prepare bounded, replaceable commands per spatial source.
+A separate mailbox transfers commands and scalar progress; decoding, admission,
+mutable-array cleanup and retired sample destruction stay outside its lock. PCM
+never takes the effects control/library lock. Completed rescue layers cannot be
+reintroduced by an older camera update. Rewind history still uses a separate
+bounded-copy lock, and device callbacks still consume queued PCM. This removes
+one contention path; it is not a hardware crackling diagnosis or acceptance result.
+
+Mobile/TV rewind, backward stepping, replay move navigation and replay restart use
+private reconstruction cursors with a cooperative two-millisecond slice and a
+run-loop yield between slices. Only a completed exact state is committed. Input,
+Resume, navigation, interruption and memory pressure cancel obsolete work; additional
+rewind/backward-step inputs accumulate instead. Same-tick
+commands and assistance counts survive reconstruction. One engine tick, initial
+cursor preparation or final replay verification may exceed the slice budget.
+Native Mac callers retain their synchronous seek APIs.
+
+Terrain and reconstructed sequel-art caches share process-wide pixel admission.
+RAM and available process memory set the ceiling; memory pressure disables optional
+pixel retention. Rewind acceleration accounts for mutable terrain masks, actor
+storage and relevant runtime collections rather than level area alone. Sparse
+sequel caches may be removed entirely while the authoritative input history remains.
+Default Classic history retains its oldest reconstruction anchor while thinning
+intermediate states; explicitly configured bounded histories retain their existing
+reach contract. These are conservative storage estimates, not an RSS guarantee.
+A sampled process footprint, sampled peak and retained cache byte count are exposed
+in Instruments once per second. L2 palette conversion and L3 sparse edits update
+changed pixels; Classic reduced-colour conversion uses an equivalent 256-entry
+lookup table. Large uncached terrain conversion and full minimap scenery work
+remain possible costs.
+
+Validation: 33 focused tests pass across six suites, covering native/Mac viewport
+pixel equivalence, Neo layers, Mac arrow bevels, liquid masking, fractional camera
+placement, cached CRT base copying, rewind cancellation and same-tick commands.
+The standalone Classic rewind suite passes against original DOS data, including
+bounded history, reopen and replay verification. The muted offscreen worker check
+passes 10,000 pending updates, playhead preservation, completed rescue cleanup and
+silence. Representative Classic and L3 native-art captures were inspected.
+
+The full audio program compiles, but its offline run cannot create the required
+`AVAudioUnitEQ` in this environment (`comp != nullptr`). Mixed audio, actual refill
+continuity and audible acceptance remain unverified. No audible or foreground test
+was run. Physical iPad 8, Duo and Apple TV testing must still establish sustained
+frame timing, input latency, achieved fast-forward speed, memory and thermal
+behaviour. No percentage improvement or crackle-free playback is claimed.
+
+The final iOS and tvOS SDK module builds pass from a frozen source snapshot;
+additional primary-file checks pass for the final controller release-cancellation
+change on both SDKs. Evidence is in `.build/runtime-sdk-final.log`,
+`.build/runtime-sdk-ios-controller-final.log`,
+`.build/runtime-sdk-tvos-controller-final.log`, `.build/runtime-final-tests.log`,
+`.build/runtime-classic-tests/run.log` and `.build/runtime-worker-tests/run.log`.
+The failed full audio execution is retained in `.build/runtime-audio-final/run.log`.
+These checks do not constitute an installed app, App Store or physical-device run.
+
+
+## Stacked mobile and TV rewind — 29 October 2026
+
+The TV controller previously emitted only the initial held-rewind request: the
+repeat callback belonged to the touch HUD. The shared game frame loop now drives
+held rewind too, with a common 80 ms repeat gate so touch and frame callbacks do
+not double the rate. TV starts repeating after its existing trigger hold threshold;
+touch keeps its initial 350 ms repeat delay. The existing 0.4 / 0.8 / 1.6-second
+rewind distances accelerate after one and two seconds of holding.
+
+`MobileRewindQueue` bases subsequent requests on the requested destination rather
+than the still-displayed tick. One private seek finishes while additional rewind
+presses or backward steps accumulate into one next destination. Repeated inputs
+no longer cancel reconstruction or discard distance while it is busy. A quick L2
+tap retains one-frame precision; held L2 repeats continuously. Rapid L2 taps
+within 650 ms grow from one frame to 0.4, 0.8, 1.6 and 3.2 seconds per tap.
+Discrete Rewind grows from 2 to 4, 8 and 16 seconds per press. Both cap their
+per-press distance, stack against the requested destination and retain their burst
+across completed seeks. A longer gap, Resume, other cancelling input or starting
+held rewind resets the burst. Dedicated backward-step controls stay precise. Accepted movement
+finishes after release and leaves gameplay paused. Resume, edits, menus, navigation,
+interruption and memory pressure still cancel pending work. Assistance counts
+commit with each accepted batch, and checkpoint requests wait for the queue to
+finish after release.
+
+The production shared frontend covers Classic, Lemmings 2, Lemmings 3, supported
+NeoLemmix and their replay sessions on iPhone, iPad, Duo and TV. Mac retains its
+existing synchronous transport. No artwork, input bounds or TV effect surfaces
+change. Physical TV timing and audible rewind continuity remain acceptance checks.
+
+Validation: 30 focused, muted checks pass, covering queue accumulation and
+cancellation, exact state hashes and counts in all four live engines, existing
+Classic/replay rewind regressions, held-rewind timing and TV trigger transport.
+iOS and tvOS SDK modules and application entry points compile; the final shared
+frontend was recompiled for both SDKs after the last input-cancellation fix.
+An empty touch-router cancellation no longer cancels an active rewind.
+The broader portrait-HUD run reports 20 assertions in two unrelated layout tests
+(`twoRowsKeepHeightAndMapAcrossEngines` and `originalIPadProUsesMacPanelInLandscape`);
+no layout source was changed by this rewind fix. Device input feel, rendered
+transport feedback and audible continuity remain unverified. No release or local
+app package was produced; broad release audits were skipped.
+
+Rapid-press follow-up validation: 34 focused muted checks pass. These add burst
+acceleration after completed seeks, increased TV trigger-tap distances, inactivity
+and cancellation resets, and accelerated accumulation during reconstruction at
+17/20/30 ticks per second. Updated core and frontend SDK modules compile for iOS
+and tvOS. Physical TV feel and audible continuity remain acceptance checks.
+
+
+## Rewind helper source integration — 30 October 2026
+
+`MobileRewindQueue` and `MobileRewindPressAcceleration` now live beside the
+existing touch/hold timing code in `MobileHUDPress.swift`. Their declarations and
+behaviour are unchanged. This avoids depending on Xcode discovering newly added
+source files in an already loaded local package. A retained Apple TV source list
+included `MobileHUDPress.swift` but neither standalone rewind helper.
+
+All six queue/press-acceleration checks pass. iOS and tvOS core/frontend SDK module
+compilation passes without the standalone helper sources. Full Xcode project
+verification did not complete: the first attempt hit a protected SwiftPM cache;
+a retry with project-local caches omitted the local package and reported missing
+`LemmingsTVUI`. These attempts do not establish a successful app package build.

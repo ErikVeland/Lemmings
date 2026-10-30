@@ -17,6 +17,12 @@ the body, with complete rows that divide their width among the actual buttons.
 Pause and replay share this structure. Mac solution replay groups Replay,
 Speed and Camera tools above its fixed Play/Pause action.
 
+Activating a level preview follows its existing forward action. Browser previews
+choose Play; Ready, pause and result previews use their current primary action,
+including disabled/loading rules. Mac carousel clicks select and start the
+clicked level. Preview activation does not add a separate launcher or bypass a
+paused Ready handover.
+
 | Player task | Route and return behaviour |
 | --- | --- |
 | Start or resume | Home keeps the saved run and current player visible. Start/Ready remains the deliberate forward action. Resume restores the saved attempt before play. |
@@ -24,7 +30,7 @@ Speed and Camera tools above its fixed Play/Pause action.
 | Search a large catalogue | Search, sorting and filtering remain above the entries. Back and Main menu remain outside the scrolling content. Search results, selected entries and parent groups survive nested visits. |
 | Find saved levels | Home → Collections → Favourites, Recently played or Playlists. The Home caption matches Collections; Playlists names only the playlist list. |
 | Play a playlist or short game | Existing collection/setup pages lead to the existing level/Ready flow. Retry and Next retain the run's ownership and progression rules. No additional launcher is introduced. |
-| Follow the Journey | Home → Journey map → Continue, Resume, Choose level or Revisit. Progression playlists retain the Journey/Collections caller. Technique selection returns to its progression page. |
+| Follow the Journey | Home always shows Start Journey or Resume Journey (current level/total) for the selected solo or Hot Seat session. It opens that route directly through the existing level/Ready flow. Independent saves cannot replace this action. The Journey hub retains Choose level and Revisit on return from the route. Progression playlists retain the Journey/Collections caller. Technique selection returns to its progression page. |
 | Pause or skip | Mac Menu/Escape and mobile gameplay Pause open their pause pages. Resume continues the same attempt. Eligible campaign and Learning levels show Skip with the owner’s balance, disabled at zero. Q and Back to library save the attempt and restore browsing. Failed results keep the same Skip action. |
 | Get hints | Mac: the labelled Hints control opens the current level's hints directly. It replaces the graphics-cycle tile; graphics remains in Settings and on F2. Mobile/TV: Pause → Hint. Hint Back restores the caller; moving between hint stages does not replace it. Reading hints after a failed Journey attempt retains the result and does not start a retry. |
 | Read controls | The existing controls guide stays underneath nested Mac hints. Back returns to the guide, then to paused gameplay. Mobile help retains the caller's page, actions, focus and scroll position. |

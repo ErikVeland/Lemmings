@@ -3,6 +3,14 @@ import Foundation
 
 /// The Mac panel's map with its current camera window. Coordinates start at the top left.
 public enum GameMinimapArt {
+    /// Match the joined HUD outline while retaining the map's full input target.
+    public static func drawingFrame(in bounds: CGRect, displayBounds: CGRect?) -> CGRect {
+        guard let displayBounds else { return bounds }
+        let left: CGFloat = abs(bounds.minX - displayBounds.minX) < 0.01 ? 2 : 0
+        let right: CGFloat = abs(bounds.maxX - displayBounds.maxX) < 0.01 ? 2 : 0
+        return CGRect(x: bounds.minX + left, y: bounds.minY, width: bounds.width - left - right, height: bounds.height)
+    }
+
     public static func content(in bounds: CGRect, levelSize: CGSize) -> CGRect {
         guard levelSize.width > 0, levelSize.height > 0 else { return .zero }
         let scale = min(bounds.width / levelSize.width, bounds.height / levelSize.height)
@@ -11,7 +19,8 @@ public enum GameMinimapArt {
     }
 
     public static func draw(in context: CGContext, bounds: CGRect, image: CGImage?, visible: CGRect, levelSize: CGSize, overlay: Bool = false,
-                            thumbnail: GameMinimapThumbnail? = nil) {
+                            thumbnail: GameMinimapThumbnail? = nil, displayBounds: CGRect? = nil) {
+        let bounds = drawingFrame(in: bounds, displayBounds: displayBounds)
         if overlay { GameDisplayArt.draw(in: context, frame: bounds) }
         let map = content(in: overlay ? bounds.insetBy(dx: 4, dy: 4) : bounds, levelSize: levelSize)
         guard !map.isEmpty else { return }

@@ -416,6 +416,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
             card.onPress = { [weak self, weak card] in
                 guard let self, let card else { return }
                 self.selectItem(at: card.tag)
+                self.startSelectedItem()
             }
             card.onMove = { [weak self] delta in _ = self?.moveSelection(delta) }
             card.onStart = { [weak self] in self?.startSelectedItem() }
@@ -725,7 +726,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         action = #selector(invoke)
         setButtonType(.momentaryPushIn)
         setAccessibilityLabel(item.accessibilityName)
-        setAccessibilityHelp(selected ? L10n.text("Selected item") : L10n.text("Select this item"))
+        setAccessibilityHelp(item.isAvailable ? L10n.text("Play") : item.availability.displayName)
         setAccessibilitySelected(selected)
     }
 
@@ -900,7 +901,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         setAccessibilityLabel(item.accessibilityName)
         setAccessibilitySelected(selected)
         setAccessibilityHelp(item.isAvailable
-            ? selected ? L10n.text("Selected item") : L10n.text("Select this item")
+            ? L10n.text("Play")
             : item.availability == .locked ? L10n.text("Locked item") : L10n.text("Unavailable item"))
         if selectionChanged, selected, window != nil {
             NSAccessibility.post(element: self, notification: .valueChanged)

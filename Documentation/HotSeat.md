@@ -23,6 +23,12 @@ returns to the library. The home screen refreshes the player badge and Resume
 action for the selected session. A new session cannot resume the previous one's attempt.
 The previous campaign stays in **Saved Hot Seats**, with its roster, next turn
 and house rule. Resume it there, then choose a game or its saved attempt.
+Saved Hot Seats lists every retained shared campaign on the device, including
+synced campaigns whose roster does not include the selected solo player.
+Resuming selects that campaign's host and restores its existing turn. Separate
+campaigns with the same players remain separate; mobile and TV rows include
+their saved dates. Older Mac saves that retain only a session pointer remain
+available when another campaign starts.
 
 Changing players during a level first offers **Save and return to library**.
 The current attempt keeps its owner. Player changes take effect from the library,

@@ -442,7 +442,8 @@ public final class MusicFileDeck {
   }
 
   /// A vinyl stop slows the source, lets the reverb ring out, then parks the engine.
-  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false) {
+  /// A bounded spin-down omits the decorative reverb tail for scene transitions.
+  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false, spinDownDuration: Double? = nil) {
     cancelRewind()
     if immediately {
       guard started else { return }
@@ -469,6 +470,8 @@ public final class MusicFileDeck {
     outputSuspended = true
     resumeAfterSuspend = player.isPlaying
     fadeTask?.cancel()
+    let brakeSeconds = spinDownDuration.flatMap { $0.isFinite ? min(0.5, max(0.02, $0)) : nil } ?? Turntable.brakeSeconds
+    let tailSeconds = spinDownDuration == nil ? Turntable.tailSeconds : 0
     fadeTask = Task { @MainActor [weak self] in
       guard let self else { return }
       let start = self.sourceMixer.outputVolume
@@ -477,16 +480,20 @@ public final class MusicFileDeck {
         guard !Task.isCancelled else { return }
         do { try await Task.sleep(nanoseconds: 8_000_000) } catch { return }
         guard !Task.isCancelled, self.outputSuspended else { return }
-        let remaining = Float(max(0, 1 - (ProcessInfo.processInfo.systemUptime - began) / Turntable.brakeSeconds))
+        let remaining = Float(max(0, 1 - (ProcessInfo.processInfo.systemUptime - began) / brakeSeconds))
         // Varispeed stops at a quarter speed, so the level carries the end of the brake.
         self.varispeed.rate = max(0.25, self.requestedRate * self.vinyl.rate * remaining * remaining)
         self.sourceMixer.outputVolume = start * remaining.squareRoot()
-        self.reverb.wetDryMix = self.restingWet + (Turntable.tailWet - self.restingWet) * (1 - remaining)
+        self.reverb.wetDryMix = spinDownDuration == nil
+          ? self.restingWet + (Turntable.tailWet - self.restingWet) * (1 - remaining)
+          : self.restingWet * remaining
         if remaining == 0 { break }
       }
       guard !Task.isCancelled, self.outputSuspended else { return }
       if self.resumeAfterSuspend { self.player.pause() }
-      do { try await Task.sleep(nanoseconds: UInt64(Turntable.tailSeconds * 1_000_000_000)) } catch { return }
+      if tailSeconds > 0 {
+        do { try await Task.sleep(nanoseconds: UInt64(tailSeconds * 1_000_000_000)) } catch { return }
+      }
       guard !Task.isCancelled, self.outputSuspended else { return }
       while self.rewindAudio.isRewinding {
         do { try await Task.sleep(nanoseconds: 20_000_000) } catch { return }

@@ -303,3 +303,39 @@ public enum PanelGlyphArt: String, Sendable {
       provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
   }
 }
+
+/// First-frame artwork needs no campaign, font bank, profile or rendering engine.
+public enum GameStartupArt {
+    public struct Layout {
+        public let logo: CGRect
+        public let hourglass: CGRect
+    }
+
+    public static func layout(in safe: CGRect) -> Layout {
+        let width = min(640, max(0, safe.width - 48))
+        let height = min(width * 380 / 1440, max(0, safe.height - 100))
+        let logo = CGRect(x: floor(safe.midX - width / 2), y: floor(safe.midY - height / 2 - 28),
+                          width: width, height: height)
+        return Layout(logo: logo, hourglass: CGRect(x: floor(safe.midX - 24),
+            y: logo.maxY + 24, width: 48, height: 48))
+    }
+
+    public static func drawHourglass(in bounds: CGRect, context: CGContext) {
+        let glyph = PanelGlyphArt.hourglass
+        let rows = glyph.rows
+        let width = rows.map(\.count).max() ?? 1
+        let pixel = max(1, floor(min(bounds.width / CGFloat(width), bounds.height / CGFloat(rows.count))))
+        let x = floor(bounds.midX - CGFloat(width) * pixel / 2)
+        let y = floor(bounds.midY - CGFloat(rows.count) * pixel / 2)
+        context.setShouldAntialias(false)
+        for (row, marks) in rows.enumerated() {
+            for (column, mark) in marks.enumerated() {
+                guard let colour = glyph.palette[mark] else { continue }
+                context.setFillColor(CGColor(srgbRed: CGFloat(colour.0) / 255,
+                    green: CGFloat(colour.1) / 255, blue: CGFloat(colour.2) / 255, alpha: 1))
+                context.fill(CGRect(x: x + CGFloat(column) * pixel, y: y + CGFloat(row) * pixel,
+                                    width: pixel, height: pixel))
+            }
+        }
+    }
+}

@@ -24,7 +24,7 @@ struct MobileRuntimeOptimisationTests {
         let rendered = try ClassicLevelRenderer.render(level, groundSet: ground)
         let native = ClassicMobileSession(simulation: try ClassicDOSSimulation(level: level, renderedLevel: rendered, mainDATAssets: assets),
             renderedLevel: rendered, assets: assets, palette: try ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette),
-            levelIdentifier: "viewport", levelIndex: 0, authoredLevel: level, ground: ground,
+            levelIdentifier: "viewport", levelIndex: 0, startX: level.startX, authoredLevel: level, ground: ground,
             artworkFamily: "lemmings", artworkRoot: assetRoot)
         let l2 = try Lemmings2MobileLibrary(directory: root.appendingPathComponent("Sources/Ports/Lemm2"), storage: storage)
         let l3 = try Lemmings3MobileLibrary(directory: root.appendingPathComponent("Sources/Ports/LEM3CD"), storage: storage)
@@ -35,7 +35,7 @@ struct MobileRuntimeOptimisationTests {
                 if graphics == .macintosh { #expect(game.renderScale == 2) }
                 for _ in 0..<100 { game.tick() }
                 let full = try game.render(highlight: nil)
-                for x in [0.0, game.levelSize.width / 2, max(0, game.levelSize.width - 100)] {
+                for x in [game.initialCameraOrigin.x, game.levelSize.width / 2, max(0, game.levelSize.width - 100)] {
                     let cropped = try game.render(highlight: nil, viewport: .init(x: x, y: 20, width: 80, height: 60))
                     if let rect = cropped.renderedRect {
                         let scale = Int(game.renderScale)
@@ -47,12 +47,13 @@ struct MobileRuntimeOptimisationTests {
                         #expect(cropped.rgba == expected, "\(game.engineIdentifier) \(graphics) at \(x)")
                         #expect(cropped.width == Int(rect.width) * scale)
                         #expect(cropped.height == Int(rect.height) * scale)
-                        if x == 0 {
+                        if x == game.initialCameraOrigin.x {
                             let camera = MobileViewport(levelSize: game.levelSize, viewSize: .init(width: 390, height: 240),
-                                origin: .init(x: 2.25, y: 21.5), zoom: 3, pixelAspect: 1.2)
-                            let surface = MobileBitmapSurface(), copySurface = MobileBitmapSurface()
+                                origin: .init(x: game.entrancePoint.x - 40.25, y: game.entrancePoint.y - 20.5), zoom: 3, pixelAspect: 1.2)
+                            let surface = MobileBitmapSurface(), copySurface = MobileBitmapSurface(), viewportSurface = MobileBitmapSurface()
                             let direct = try #require(surface.prepare(width: 390, height: 240))
                             let copied = try #require(copySurface.prepare(width: 390, height: 240))
+                            let clipped = try #require(viewportSurface.prepare(width: 390, height: 240))
                             direct.saveGState()
                             direct.translateBy(x: 0, y: 240); direct.scaleBy(x: 1, y: -1)
                             MobileBitmapRenderer.draw(try #require(MobileBitmapRenderer.image(full)), viewport: camera, in: direct)
@@ -60,9 +61,17 @@ struct MobileRuntimeOptimisationTests {
                             let scene = try #require(direct.makeImage())
                             copied.draw(scene, in: CGRect(x: 0, y: 0, width: 390, height: 240))
                             #expect(Data(bytes: direct.data!, count: 390 * 240 * 4) == Data(bytes: copied.data!, count: 390 * 240 * 4))
+                            let cameraFrame = try game.render(highlight: nil, viewport: camera.visibleLevelRect)
+                            clipped.saveGState()
+                            clipped.translateBy(x: 0, y: 240); clipped.scaleBy(x: 1, y: -1)
+                            MobileBitmapRenderer.draw(try #require(MobileBitmapRenderer.image(cameraFrame)), viewport: camera,
+                                in: clipped, renderedRect: cameraFrame.renderedRect)
+                            clipped.restoreGState()
+                            #expect(Data(bytes: direct.data!, count: 390 * 240 * 4) == Data(bytes: clipped.data!, count: 390 * 240 * 4),
+                                "Viewport placement at fractional camera origin: \(game.engineIdentifier) \(graphics)")
                             let path = root.appendingPathComponent(".build/runtime-renders")
                             try FileManager.default.createDirectory(at: path, withIntermediateDirectories: true)
-                            let url = path.appendingPathComponent("\(game.engineIdentifier)-\(graphics.rawValue).png")
+                            let url = path.appendingPathComponent("\(game.engineIdentifier)-\(graphics == .macintosh ? "mac" : "dos").png")
                             let destination = try #require(CGImageDestinationCreateWithURL(url as CFURL, "public.png" as CFString, 1, nil))
                             CGImageDestinationAddImage(destination, scene, nil)
                             #expect(CGImageDestinationFinalize(destination))

@@ -11,12 +11,14 @@ import UIKit
     var levelSize = CGSize.zero { didSet { if oldValue != levelSize { setNeedsDisplay() } } }
     var actors: [MobilePoint] = [] { didSet { if oldValue != actors { setNeedsDisplay() } } }
     var overlay = false
+    var displayBounds: CGRect? { didSet { if oldValue != displayBounds { setNeedsDisplay() } } }
     var onSeek: ((CGPoint) -> Void)?
     private let thumbnail = GameMinimapThumbnail()
 
     /// The level, fitted whole inside the touch area.
     var content: CGRect {
-        GameMinimapArt.content(in: overlay ? bounds.insetBy(dx: 4, dy: 4) : bounds, levelSize: levelSize)
+        let art = GameMinimapArt.drawingFrame(in: bounds, displayBounds: displayBounds)
+        return GameMinimapArt.content(in: overlay ? art.insetBy(dx: 4, dy: 4) : art, levelSize: levelSize)
     }
 
     override init(frame: CGRect) {
@@ -32,7 +34,7 @@ import UIKit
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         GameMinimapArt.draw(in: context, bounds: bounds, image: image, visible: visible, levelSize: levelSize, overlay: overlay,
-                            thumbnail: thumbnail)
+                            thumbnail: thumbnail, displayBounds: displayBounds)
         guard levelSize.width > 0, levelSize.height > 0 else { return }
         context.setShouldAntialias(false)
         context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.1, alpha: 1))
@@ -47,6 +49,24 @@ import UIKit
     override func accessibilityDecrement() { seek(-1) }
     private func seek(_ direction: CGFloat) {
         onSeek?(CGPoint(x: min(levelSize.width, max(0, visible.midX + direction * visible.width / 2)), y: visible.midY))
+    }
+}
+
+@MainActor private final class MobileHUDContourOutline: UIView {
+    var onGeometryChange: (() -> Void)?
+    private var lastRadii: GameControlCornerRadii?
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if #available(iOS 26.0, tvOS 26.0, *) {
+            let radii = GameControlCornerRadii(topLeft: effectiveRadius(corner: .topLeft),
+                topRight: effectiveRadius(corner: .topRight), bottomLeft: effectiveRadius(corner: .bottomLeft),
+                bottomRight: effectiveRadius(corner: .bottomRight))
+            if radii != lastRadii {
+                lastRadii = radii
+                onGeometryChange?()
+            }
+        }
     }
 }
 
@@ -90,6 +110,17 @@ import UIKit
     var counterStyle: ClassicCounterStyle = .game { didSet { if oldValue != counterStyle { setNeedsDisplay() } } }
     private var panelImage: CGImage?
     private var cachedPanel: MobilePixelFrame?
+    private var displayCorners: GameControlCornerRadii?
+    private let contourOutline = MobileHUDContourOutline()
+    private let contourMask = UIView()
+    private struct ContourGeometry: Equatable {
+        let frame: CGRect
+        let header: CGRect
+        let deck: CGRect
+        let radii: GameControlCornerRadii
+    }
+    private var contourGeometry: ContourGeometry?
+    private var nativeContours = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -129,6 +160,70 @@ import UIKit
     }
 
     required init?(coder: NSCoder) { nil }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateScreenContours()
+    }
+
+    /// The opened inner display is one surface. UIKit retains its continuous
+    /// corner shape; a circular bitmap approximation does not.
+    private func updateScreenContours() {
+        #if os(iOS)
+        guard #available(iOS 26.0, *), MobileSystemRegions.isFoldable(in: self), let layout else {
+            mask = nil
+            contourOutline.removeFromSuperview()
+            contourGeometry = nil
+            nativeContours = false
+            return
+        }
+        if contourOutline.superview == nil {
+            contourOutline.isUserInteractionEnabled = false
+            contourOutline.isAccessibilityElement = false
+            contourOutline.backgroundColor = .clear
+            contourOutline.cornerConfiguration = .corners(radius: .containerConcentric())
+            contourOutline.layer.cornerCurve = .continuous
+            contourOutline.layer.borderWidth = 1
+            contourOutline.layer.borderColor = CGColor(srgbRed: 0.56, green: 0.59, blue: 0.49, alpha: 1)
+            contourOutline.onGeometryChange = { [weak self] in self?.setNeedsLayout() }
+            addSubview(contourOutline)
+        }
+        contourOutline.frame = bounds.insetBy(dx: 2, dy: 2)
+        if subviews.last !== contourOutline { bringSubviewToFront(contourOutline) }
+        let header = CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width,
+            height: layout.interface.statusFrame.maxY - bounds.minY)
+        let deck = CGRect(x: bounds.minX, y: layout.interface.controlsFrame.minY, width: bounds.width,
+            height: bounds.maxY - layout.interface.controlsFrame.minY)
+        let radii = GameControlCornerRadii(topLeft: contourOutline.effectiveRadius(corner: .topLeft),
+            topRight: contourOutline.effectiveRadius(corner: .topRight), bottomLeft: contourOutline.effectiveRadius(corner: .bottomLeft),
+            bottomRight: contourOutline.effectiveRadius(corner: .bottomRight))
+        let geometry = ContourGeometry(frame: contourOutline.frame, header: header, deck: deck, radii: radii)
+        guard geometry != contourGeometry || !nativeContours else { return }
+        contourGeometry = geometry
+        let rows = CGMutablePath()
+        for row in [header, deck] {
+            let visible = row.intersection(contourOutline.frame)
+            if !visible.isNull { rows.addRect(visible.offsetBy(dx: -contourOutline.frame.minX, dy: -contourOutline.frame.minY)) }
+        }
+        let rowMask = CAShapeLayer()
+        rowMask.frame = contourOutline.bounds
+        rowMask.path = rows
+        rowMask.fillColor = UIColor.white.cgColor
+        contourOutline.layer.mask = rowMask
+        contourMask.frame = contourOutline.frame
+        contourMask.backgroundColor = .white
+        contourMask.cornerConfiguration = .corners(topLeftRadius: .fixed(Double(radii.topLeft)),
+            topRightRadius: .fixed(Double(radii.topRight)), bottomLeftRadius: .fixed(Double(radii.bottomLeft)),
+            bottomRightRadius: .fixed(Double(radii.bottomRight)))
+        contourMask.layer.cornerCurve = .continuous
+        contourMask.clipsToBounds = true
+        mask = contourMask
+        nativeContours = true
+        displayCorners = GameControlCornerRadii(topLeft: 0, topRight: 0, bottomLeft: 0, bottomRight: 0)
+        setNeedsDisplay()
+        skillCanvas.setNeedsDisplay()
+        #endif
+    }
 
     func updateMinimap(frame: MobilePixelFrame, visible: MobileRect, levelSize: MobileSize, image: CGImage? = nil, actors: [MobilePoint]? = nil) {
         minimapView.isHidden = mapFrame == nil
@@ -176,12 +271,14 @@ import UIKit
         if !presentationChanged { self.snapshot = snapshot; return }
         let layoutChanged = self.layout != layout
         self.layout = layout
-        let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil && replayLevel == nil).player
+        let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil && replayLevel == nil,
+            displayBounds: MobileSystemRegions.isFoldable(in: self) ? bounds : nil).player
         playerIdentity.frame = identityFrame ?? .zero
         playerIdentity.isHidden = identityFrame == nil
         playerIdentity.accessibilityLabel = playerName.map { L10n.text("Current turn: \($0)") }
         statusIdentity.isHidden = false
-        statusIdentity.frame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil && replayLevel == nil).counters
+        statusIdentity.frame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil && replayLevel == nil,
+            displayBounds: MobileSystemRegions.isFoldable(in: self) ? bounds : nil).counters
         let lines = MobileHUDRenderer.televisionStatusLines(snapshot: snapshot, details: statusDetails,
             engineIdentifier: statusDetails?.engineIdentifier ?? (layout.panel?.style == .lemmings3 ? "lemmings3" : "classic"),
             paused: paused, speed: speed)
@@ -206,6 +303,8 @@ import UIKit
         minimapView.isHidden = mapFrame == nil
         skillScroll.isHidden = layout.portrait == nil
         let screenEdges = MobileSystemRegions.isFoldable(in: self)
+        minimapView.displayBounds = screenEdges
+            ? bounds.offsetBy(dx: -minimapView.frame.minX, dy: -minimapView.frame.minY) : nil
         if let portrait = layout.portrait {
             var skills = portrait.skills
             if screenEdges, abs(skills.maxY - layout.interface.safeFrame.maxY) < 0.01 {
@@ -244,6 +343,7 @@ import UIKit
         if layoutChanged || previousSkill != selectedSkill, let button = buttons.first(where: { $0.accessibilityTraits.contains(.selected) }),
            button.superview === skillCanvas { skillScroll.scrollRectToVisible(button.frame, animated: false) }
         if presentationChanged { setNeedsDisplay() }
+        if layoutChanged { setNeedsLayout() }
         if skillsChanged { skillCanvas.setNeedsDisplay() }
     }
 
@@ -305,7 +405,7 @@ import UIKit
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
                           panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails, replayLevel: replayLevel, shape: MobileSystemRegions.controlShape(in: self),
                           duoCorners: MobileSystemRegions.isFoldable(in: self), displayBounds: bounds,
-                          displayCornerRadius: max(cornerInsets.top, cornerInsets.bottom))
+                          displayCornerRadius: max(cornerInsets.top, cornerInsets.bottom), displayCornerRadii: displayCorners)
     }
 
     private func rebuildButtons() {

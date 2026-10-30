@@ -32,6 +32,23 @@ extension SoundEffectPlayer {
         _ = bridge.consume(0, into: &worker)
         precondition(worker.position == 2 && worker.rescueLayers[0].position == 1)
         precondition(worker.rescueLayers[0].distanceGain == 0.2)
+        // A layer completed and removed by PCM must not be resurrected by a
+        // later camera command using the control side's older layer list.
+        worker.rescueLayers.removeAll(keepingCapacity: true)
+        bridge.report(0, voice: worker)
+        bridge.progress(into: &controls)
+        precondition(controls[0].rescueLayers.isEmpty)
+        let completed = controls
+        controls[0].distanceGain = 0.4
+        bridge.publish(controls, previous: completed, muted: false, gain: 1)
+        _ = bridge.consume(0, into: &worker)
+        precondition(worker.rescueLayers.isEmpty && worker.position == 2)
+        // Progress from the previous worker voice cannot overwrite an
+        // unconsumed replacement command.
+        controls[0] = Voice(identity: 3, samples: samples, isActive: true)
+        bridge.publish(controls, previous: [], muted: false, gain: 1)
+        bridge.progress(into: &controls)
+        precondition(controls[0].identity == 3 && controls[0].position == 0)
         // Latest commands replace pending commands within one fixed slot.
         for identity in 3...10_000 {
             controls[0] = Voice(identity: UInt64(identity), samples: samples, isActive: true)
@@ -44,7 +61,7 @@ extension SoundEffectPlayer {
         bridge.publish(controls, previous: beforeSilence, muted: true, gain: 0)
         let silent = bridge.consume(0, into: &worker)
         precondition(silent.0 && silent.1 == 0 && !worker.isActive)
-        print("PASS worker-owned playheads, camera/gain updates, rescue merging, 10,000 bounded commands and silence")
+        print("PASS worker-owned playheads, camera/gain updates, rescue completion, pending replacement, 10,000 bounded commands and silence")
     }
 }
 

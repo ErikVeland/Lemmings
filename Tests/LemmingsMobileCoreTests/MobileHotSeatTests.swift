@@ -130,4 +130,30 @@ struct MobileHotSeatTests {
         let decoded = try JSONDecoder().decode(MobileCheckpointEnvelope.self, from: JSONSerialization.data(withJSONObject: object))
         #expect(decoded.scope == nil && decoded.owner == nil)
     }
+
+    @Test func savedLibraryKeepsPreviousSyncedSessionsOutsideTheSelectedRoster() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let storage = MobileStorage(directory: directory)
+        var store = MobileHotSeatStore()
+        var previous = try #require(MobileHotSeat(host: "ekv", players: ["uva"],
+            policy: .atFirstFail, id: "previous", savedAt: Date(timeIntervalSince1970: 100)))
+        previous.pass(to: "uva"); previous.savedAt = Date(timeIntervalSince1970: 100)
+        let recent = try #require(MobileHotSeat(host: "ekv", players: ["uva"],
+            id: "recent", savedAt: Date(timeIntervalSince1970: 200)))
+        _ = store.start(roster: MobileHotSeatRoster(host: "other", players: ["guest"]))
+        store.importCloudSessions([recent, previous])
+        store.importCloudSessions([previous, recent])
+        #expect(store.sharedSessions(player: "other").isEmpty)
+        #expect(store.savedSessions.map(\.id) == [recent.id, previous.id])
+        try store.save(to: storage)
+        var reopened = MobileHotSeatStore.load(from: storage)
+        let current = try #require(reopened.current)
+        #expect(reopened.savedSessions.map(\.id) == [recent.id, previous.id])
+        #expect(reopened.resume(id: previous.id) == previous)
+        #expect(reopened.current?.turn == "uva" && reopened.policy == .atFirstFail)
+        #expect(Set(reopened.savedSessions.map(\.id)) == [current.id, recent.id])
+        try reopened.save(to: storage)
+        #expect(MobileHotSeatStore.load(from: storage).current == previous)
+    }
 }

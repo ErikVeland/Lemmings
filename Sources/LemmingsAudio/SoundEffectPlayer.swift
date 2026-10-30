@@ -58,8 +58,8 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   /// Control work prepares immutable commands; PCM owns all running playheads.
   /// Only fixed-size command/status transfers take this separate lock.
   private final class VoiceBridge {
-    final class Slot {
-      var pending: Voice?
+    class Progress {
+      var readable = false
       var identity: UInt64 = 0
       var position = 0.0
       var isActive = false
@@ -68,32 +68,52 @@ public final class SoundEffectPlayer: @unchecked Sendable {
       var layerPositions = [Double](repeating: 0, count: 64)
       var layerCount = 0
     }
+    final class Slot: Progress {
+      var pending: Voice?
+    }
     let lock = NSLock()
     let slots: [Slot]
+    // Only the serial control side uses these snapshots. Copy scalar progress
+    // under the bridge lock, then reconcile mutable arrays after releasing it.
+    let controlProgress: [Progress]
     var muted = false
     var gain = 1.0
-    init(count: Int) { slots = (0..<count).map { _ in Slot() } }
+    init(count: Int) {
+      slots = (0..<count).map { _ in Slot() }
+      controlProgress = (0..<count).map { _ in Progress() }
+    }
 
     func progress(into voices: inout [Voice]) {
       lock.lock()
-      defer { lock.unlock() }
       for index in voices.indices {
         let slot = slots[index]
-        guard slot.pending == nil, voices[index].identity == slot.identity else { continue }
-        voices[index].position = slot.position
-        voices[index].isActive = slot.isActive
-        voices[index].lastSample = slot.lastSample
-        var layers = 0
+        let progress = controlProgress[index]
+        progress.readable = slot.pending == nil && voices[index].identity == slot.identity
+        guard progress.readable else { continue }
+        progress.position = slot.position
+        progress.isActive = slot.isActive
+        progress.lastSample = slot.lastSample
+        progress.layerCount = slot.layerCount
+        for layer in 0..<slot.layerCount {
+          progress.layerIDs[layer] = slot.layerIDs[layer]
+          progress.layerPositions[layer] = slot.layerPositions[layer]
+        }
+      }
+      lock.unlock()
+      for index in voices.indices {
+        let progress = controlProgress[index]
+        guard progress.readable else { continue }
+        voices[index].position = progress.position
+        voices[index].isActive = progress.isActive
+        voices[index].lastSample = progress.lastSample
         for layer in voices[index].rescueLayers.indices {
-          if let position = (0..<slot.layerCount).first(where: { slot.layerIDs[$0] == voices[index].rescueLayers[layer].identity }) {
-            voices[index].rescueLayers[layer].position = slot.layerPositions[position]
-            if voices[index].rescueLayers[layer].position < Double(voices[index].rescueLayers[layer].samples.count) { layers += 1 }
+          if let position = (0..<progress.layerCount).first(where: { progress.layerIDs[$0] == voices[index].rescueLayers[layer].identity }) {
+            voices[index].rescueLayers[layer].position = progress.layerPositions[position]
+          } else {
+            voices[index].rescueLayers[layer].position = Double(voices[index].rescueLayers[layer].samples.count)
           }
         }
-        // Cleanup happens on the control side, never inside the PCM sample loop.
-        if layers < voices[index].rescueLayers.count {
-          voices[index].rescueLayers.removeAll { $0.position >= Double($0.samples.count) }
-        }
+        voices[index].rescueLayers.removeAll { $0.position >= Double($0.samples.count) }
       }
     }
 
@@ -113,10 +133,17 @@ public final class SoundEffectPlayer: @unchecked Sendable {
         } ?? false
         if !equal { changed.append((index, v)) }
       }
+      var retired = [Voice?](repeating: nil, count: changed.count)
       lock.lock()
-      for (index, voice) in changed { slots[index].pending = voice }
+      for (offset, change) in changed.enumerated() {
+        retired[offset] = slots[change.0].pending
+        slots[change.0].pending = change.1
+      }
       self.muted = muted; self.gain = gain
       lock.unlock()
+      // Replacing a pending command can release a large clip. Keep destruction
+      // off the handoff lock as well as sample generation and voice cleanup.
+      withExtendedLifetime(retired) {}
     }
 
     func consume(_ index: Int, into voice: inout Voice) -> (Bool, Double) {

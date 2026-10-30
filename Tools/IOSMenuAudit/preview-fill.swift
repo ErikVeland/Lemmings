@@ -15,6 +15,10 @@ extension MenuAudit {
             let level = try library.loadLevel(at: 0)
             return (level.session.engineIdentifier, level)
         }
+        guard let beach = libraries[1].levels.first(where: { $0.title == "Quad Quirks on the Quay!" }) else {
+            throw Failure.missingArtwork
+        }
+        levels.append(("beach-resume", try libraries[1].loadLevel(at: beach.index)))
         let catalogue = MobileCatalogue(portsRoot: ports, fanFolders: [ports.deletingLastPathComponent().appendingPathComponent("LevelPacks")])
         if let pack = catalogue.pack(id: "lldb-547") {
             let library = try catalogue.library(for: pack)
@@ -43,6 +47,7 @@ extension MenuAudit {
                         footer: [.init("library", "Library"), .init("start", "Start", primary: true)], preview: true)
                     let scale = MobileSettingsArt.interfaceScale(setting, width: size.width, television: pose == "tv")
                     let layout = GameFrontEnd.layout(page, width: size.width / scale, minimumHeight: size.height / scale)
+                    guard page.previewAction?.id == "start" else { throw invalidTargets(line: #line) }
                     for target in layout.targets {
                         guard target.frame.width * scale >= 44, target.frame.height * scale >= 44,
                               layout.action(at: .init(x: target.frame.midX, y: target.frame.midY)) == target.action.id,

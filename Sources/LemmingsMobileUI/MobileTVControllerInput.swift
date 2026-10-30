@@ -152,7 +152,8 @@ import UIKit
             case .resetSpeed: adapter?.onCommand?(.speedReset)
             case .park: adapter?.onTimelinePark?()
             case .step(let direction):
-                adapter?.onCommand?(.step(direction))
+                if direction < 0 { adapter?.onRewindTap?() }
+                else { adapter?.onCommand?(.step(direction)) }
                 adapter?.stepFeedback.tick(direction, on: owner)
             case .scrub(let direction, let held):
                 if direction < 0 { rewindHeld = held; adapter?.onRewindHeld?(held) }

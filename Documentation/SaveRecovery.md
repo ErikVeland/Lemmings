@@ -16,18 +16,25 @@ A temporary save failure offers **Retry save** on arcade pages. Failed profile e
 
 ## Journey completion
 
-Mac Home has one **Resume journey** action for the selected solo or Hot Seat
-session. It restores the latest matching level checkpoint, including play outside
-the curated route. When that checkpoint belongs to the active route, the shared
-sequence flow retains its queue and paused Ready handover. Other saved routes
-remain in Playlists.
+Home always has one **Start Journey** or **Resume Journey (current level/total)**
+action for the selected solo or Hot Seat session on Mac, iPhone, iPad, Duo and TV.
+It resolves that session's curated route, including an archived queue, and restores
+its compatible checkpoint through the existing paused level/Ready flow. A fresh
+Hot Seat joins its existing roster, turn and session ID when starting the route.
+Independent checkpoints and other playlists retain separate resume actions.
+Starting or resuming another route cannot hide or replace the Journey action.
 
-The Home Journey Map count includes recorded Classic, Lemmings 2 and Lemmings 3
+Mobile/TV lookup can use the synced Journey snapshot before a local learning file
+exists. Legacy archived queues without a snapshot remain resumable; an explicit
+completion snapshot prevents them being revived. Mac migrates newly imported
+older Journey revisions before resolving Home. None of these lookups selects a
+different Hot Seat automatically.
+
+The Journey completed-level count includes recorded Classic, Lemmings 2 and Lemmings 3
 campaign wins and retained journey wins. Imported Classic sources keep separate
 identities. Campaign and route records for the same level count once. Visits,
 Try Later entries and skipped levels do not become wins. The route hub labels its
 current curriculum fraction separately from the full completed-level count.
-Opening a map without a saved curated route opens the level library.
 
 The completion summary reads saved progress without changing records, campaign
 positions or turn ownership. Earlier NeoLemmix records lack a Hot Seat session
@@ -38,7 +45,7 @@ copies and Journey wins count once. Imported source namespaces remain separate.
 The mobile route hub labels its current curriculum fraction separately.
 When the route is complete and no saved attempt remains, Back is primary.
 The unavailable Continue action is omitted.
-The Home resume flow offers one action for the selected session.
+The Home Journey action belongs only to the selected session.
 
 New mobile/TV Journey checkpoints retain the queue ID and position as well as
 the exact level identity. A standalone checkpoint cannot borrow a Journey that

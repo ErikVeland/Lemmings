@@ -138,6 +138,9 @@ typealias MobileGameControllerBase = UIViewController
     }
     private var rewindHeld = false
     private var rewindStartedAt = 0.0
+    private var nextHeldRewindAt = 0.0
+    private var rewindQueue = MobileRewindQueue()
+    private var rewindPressAcceleration = MobileRewindPressAcceleration()
     var onCompleted: ((MobileGameSnapshot) -> Void)?
 
     let summary: MobileLevelSummary
@@ -751,7 +754,7 @@ typealias MobileGameControllerBase = UIViewController
             clock.suspend()
             if countdown.isActive { return }
         }
-        MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
+        MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld, attemptID: runID)
         var snapshot = session.snapshot
         if session.isReadOnly {
             replaySkillInfo.update(session.replaySkillUses, tick: snapshot.tick, visible: overlay.isHidden)
@@ -759,7 +762,10 @@ typealias MobileGameControllerBase = UIViewController
                 next: session.replayMoveNavigation.target(from: snapshot.tick, direction: 1) != nil)
         }
         if rewindHeld {
-            guard lifecycle.isForeground, !lifecycle.isInterrupted, overlay.isHidden else { setRewindHeld(false); return }
+            guard lifecycle.isForeground, !lifecycle.isInterrupted, overlay.isHidden else {
+                cancelSeek(); setRewindHeld(false); return
+            }
+            repeatHeldRewind()
             return
         }
         if endRunArmedUntil > 0, link.timestamp > endRunArmedUntil {
@@ -815,12 +821,12 @@ typealias MobileGameControllerBase = UIViewController
             topBarInsets: MobileSystemRegions.topBarInsets(in: view),
             navigationRail: nil,
             fillsDisplayWidth: MobileSystemRegions.usesFullDisplay(in: view),
-            menuLeading: MobileSystemRegions.usesFullDisplay(in: view)
+            menuLeading: MobileSystemRegions.isFoldable(in: view)
         )
     }
 
     func handle(_ action: MobileHUDAction) {
-        cancelSeek()
+        if action != .rewind && action != .stepBackward { cancelSeek() }
         guard overlay.isHidden, playState.canEdit,
               lifecycle.isForeground, !lifecycle.isInterrupted,
               !session.snapshot.isComplete || (session.isReadOnly && [.pause, .rewind, .stepBackward, .menu].contains(action)) else { return }
@@ -843,9 +849,7 @@ typealias MobileGameControllerBase = UIViewController
             }
             highlightedTarget = previewPoint.flatMap(target)
             saveCheckpoint(reason: .periodic)
-            #if os(tvOS)
-            renderCurrentFrame(force: true)
-            #endif
+            renderCurrentFrame(force: true, presentationOnly: true)
         case .pause:
             if speed > 1 || inputSpeed.isHeld {
                 inputSpeed.reset(at: ProcessInfo.processInfo.systemUptime)
@@ -854,10 +858,7 @@ typealias MobileGameControllerBase = UIViewController
                 return
                 #endif
             }
-            if session.isReadOnly, session.snapshot.isComplete {
-                _ = session.rewind(seconds: Double(session.snapshot.tick) / session.ticksPerSecond)
-                completionPresented = false
-            }
+            if session.isReadOnly, session.snapshot.isComplete { resumeSelectedView(); return }
             paused ? resumePlay() : pauseForPlanning()
         case .step:
             handleSteps(.step, count: 1)
@@ -866,24 +867,8 @@ typealias MobileGameControllerBase = UIViewController
             handleSteps(.stepBackward, count: 1)
             return
         case .rewind:
-            if session.isReadOnly { completionPresented = false }
-            pauseForPlanning()
-            playfieldView.cancelInteraction()
-            let rewound = session.rewind(seconds: 2)
-            if rewound {
-                MobileMusic.shared.playRewind()
-                effects.update(session: session, viewport: playfieldView.gameViewport, rewinding: true)
-            }
-            clock.suspend()
-            highlightedTarget = nil
-            #if os(tvOS)
-            tvTargetLock.clear()
-            ensureTVPointer()
-            #else
-            previewPoint = nil
-            #endif
-            renderCurrentFrame(force: true)
-            saveCheckpoint(reason: .periodic)
+            rewindFromPress()
+            return
         case .menu:
             pausePlay(showControls: true)
         case .endRun:
@@ -977,6 +962,7 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func handle(_ touchEffects: [MobileTouchEffect], input: MobileTargetInput? = nil) {
+        guard !touchEffects.isEmpty else { return }
         if seekOperation != nil { cancelSeek() }
         if touchEffects.contains(.cancelPreview) {
             (session as? Lemmings2MobileSession)?.releasePointerInput()
@@ -1300,14 +1286,14 @@ typealias MobileGameControllerBase = UIViewController
         hud.cancelHeldControls()
         setRewindHeld(false)
         effects.suspend()
-        MobileMusic.shared.suspend()
+        MobileMusic.shared.suspend(attemptID: runID)
         audio.suspend()
     }
 
     private func pauseGameplayAudio() {
         setRewindHeld(false)
         effects.pause()
-        MobileMusic.shared.setGameplayState(paused: true, speed: speed)
+        MobileMusic.shared.setGameplayState(paused: true, speed: speed, attemptID: runID)
     }
 
     /// Reactivates the session, then starts this level's tune or lifts its pause.
@@ -2067,7 +2053,7 @@ typealias MobileGameControllerBase = UIViewController
         defer { os_signpost(.end, log: Self.performanceLog, name: "HUD and music") }
         let snapshot = snapshot ?? session.snapshot
         MobileMusic.shared.update(snapshot, active: session.activeLemmingCount, nukeRemainingTicks: session.nukeRemainingTicks, allNukePopped: session.allNukeExplosionsPlayed, ticksPerSecond: session.ticksPerSecond)
-        MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld)
+        MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld, attemptID: runID)
         let resolved = layout ?? lastHUDLayout ?? hudLayout(insets: view.safeAreaInsets)
         if hudArtworkSource != gameSettings.classic.graphics {
             hud.skillIcons = snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
@@ -2409,14 +2395,18 @@ typealias MobileGameControllerBase = UIViewController
         #endif
     }
 
-    func cancelSeek() {
+    func cancelSeek(clearRewindQueue: Bool = true) {
+        if clearRewindQueue {
+            rewindQueue.cancel()
+            rewindPressAcceleration.reset()
+        }
         seekGeneration = UUID()
         seekTask?.cancel(); seekTask = nil
         seekOperation?.cancel(); seekOperation = nil
     }
 
-    @discardableResult private func startSeek(to tick: Int, backwardSteps: Int = 1, completion: @escaping () -> Void) -> Bool {
-        cancelSeek()
+    @discardableResult private func startSeek(to tick: Int, backwardSteps: Int = 1, isQueuedRewind: Bool = false, completion: @escaping () -> Void) -> Bool {
+        cancelSeek(clearRewindQueue: !isQueuedRewind)
         guard let operation = session.prepareSeek(to: max(session.earliestRewindTick, tick), backwardSteps: backwardSteps) else { return false }
         seekOperation = operation
         let generation = seekGeneration
@@ -2426,7 +2416,7 @@ typealias MobileGameControllerBase = UIViewController
                 completion()
                 return true
             }
-        } catch { seekOperation = nil; return false }
+        } catch { seekOperation = nil; rewindQueue.cancel(); return false }
         seekTask = Task { @MainActor [weak self] in
             while !Task.isCancelled {
                 // Return to the run loop between bounded reconstruction batches.
@@ -2441,6 +2431,7 @@ typealias MobileGameControllerBase = UIViewController
                     }
                 } catch {
                     self.seekOperation = nil; self.seekTask = nil
+                    self.rewindQueue.cancel()
                     return
                 }
             }
@@ -2476,49 +2467,94 @@ typealias MobileGameControllerBase = UIViewController
         resumePlay()
     }
 
+    func rewindFromPress(preciseFirstTap: Bool = false) {
+        guard session.supportsRewind, overlay.isHidden, playState.canEdit,
+              lifecycle.isForeground, !lifecycle.isInterrupted,
+              !session.snapshot.isComplete || session.isReadOnly else { return }
+        cancelPendingL3ToolDirection()
+        if session.isReadOnly { completionPresented = false }
+        pauseForPlanning()
+        playfieldView.cancelInteraction()
+        let ticks = rewindPressAcceleration.ticks(at: ProcessInfo.processInfo.systemUptime,
+            ticksPerSecond: session.ticksPerSecond, preciseFirstTap: preciseFirstTap)
+        queueRewind(ticks: ticks)
+    }
+
+    private func queueRewind(ticks: Int, backwardSteps: Int = 1) {
+        if rewindQueue.targetTick == nil { cancelSeek(clearRewindQueue: false) }
+        guard rewindQueue.append(ticks: ticks, from: session.snapshot.tick,
+                                 earliestTick: session.earliestRewindTick, backwardSteps: backwardSteps) else { return }
+        // Do not throw away reconstruction progress when another press arrives.
+        if seekOperation == nil { drainRewindQueue() }
+    }
+
+    private func drainRewindQueue() {
+        guard let request = rewindQueue.takePending() else { return }
+        let started = startSeek(to: request.tick, backwardSteps: request.backwardSteps, isQueuedRewind: true) { [weak self] in
+            guard let self else { return }
+            self.rewindQueue.didCommit()
+            MobileMusic.shared.playRewind()
+            self.effects.update(session: self.session, viewport: self.playfieldView.gameViewport, rewinding: true)
+            self.clock.suspend()
+            self.highlightedTarget = nil
+            #if os(tvOS)
+            self.tvTargetLock.clear()
+            self.ensureTVPointer()
+            #else
+            self.previewPoint = nil
+            #endif
+            self.renderCurrentFrame(force: true)
+            self.updateHUD()
+            if self.rewindQueue.targetTick != nil {
+                self.drainRewindQueue()
+            } else if !self.rewindHeld {
+                self.saveCheckpoint(reason: .periodic)
+            }
+        }
+        if !started { rewindQueue.cancel() }
+    }
+
     func setRewindHeld(_ held: Bool) {
         guard held != rewindHeld else { return }
         if held {
             guard session.supportsRewind, overlay.isHidden, playState.canEdit,
                   lifecycle.isForeground, !lifecycle.isInterrupted else { return }
             pauseForPlanning()
+            playfieldView.cancelInteraction()
+            if session.isReadOnly { completionPresented = false }
+            highlightedTarget = nil
             #if os(tvOS)
             tvTargetLock.clear()
-            #endif
-            highlightedTarget = nil
-            #if !os(tvOS)
+            #else
             previewPoint = nil
             #endif
             rewindStartedAt = ProcessInfo.processInfo.systemUptime
-            let tick = session.snapshot.tick - Int((MobileHUDPress.rewindSeconds(heldFor: 0) * session.ticksPerSecond).rounded())
-            _ = startSeek(to: tick) { [weak self] in
-                guard let self else { return }
-                MobileMusic.shared.playRewind()
-                self.renderCurrentFrame(force: true)
-                self.updateHUD()
-                if !self.rewindHeld { self.saveCheckpoint(reason: .periodic) }
-            }
+            rewindPressAcceleration.reset()
+            // The TV trigger has already crossed its hold threshold. Touch begins immediately.
+            #if os(tvOS)
+            nextHeldRewindAt = rewindStartedAt + 0.08
+            #else
+            nextHeldRewindAt = rewindStartedAt + 0.35
+            #endif
         }
         rewindHeld = held
-        MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: held)
-        if !held { saveCheckpoint(reason: .periodic) }
+        MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: held, attemptID: runID)
+        if held {
+            queueRewind(ticks: Int((MobileHUDPress.rewindSeconds(heldFor: 0) * session.ticksPerSecond).rounded()))
+        } else if rewindQueue.targetTick == nil {
+            saveCheckpoint(reason: .periodic)
+        }
+        // Release stops adding distance; accepted seeks finish unless another action cancels them.
         updateHUD()
     }
 
     private func repeatHeldRewind() {
-        guard rewindHeld, seekOperation == nil, session.supportsRewind, overlay.isHidden, playState.canEdit,
+        let now = ProcessInfo.processInfo.systemUptime
+        guard rewindHeld, now >= nextHeldRewindAt, session.supportsRewind, overlay.isHidden, playState.canEdit,
               lifecycle.isForeground, !lifecycle.isInterrupted else { return }
-        let elapsed = ProcessInfo.processInfo.systemUptime - rewindStartedAt
-        let tick = session.snapshot.tick - Int((MobileHUDPress.rewindSeconds(heldFor: elapsed) * session.ticksPerSecond).rounded())
-        _ = startSeek(to: tick) { [weak self] in
-            guard let self else { return }
-            MobileMusic.shared.playRewind()
-            self.effects.update(session: self.session, viewport: self.playfieldView.gameViewport, rewinding: true)
-            self.clock.suspend()
-            self.renderCurrentFrame(force: true)
-            self.updateHUD()
-            if !self.rewindHeld { self.saveCheckpoint(reason: .periodic) }
-        }
+        nextHeldRewindAt = now + 0.08
+        let elapsed = now - rewindStartedAt
+        queueRewind(ticks: Int((MobileHUDPress.rewindSeconds(heldFor: elapsed) * session.ticksPerSecond).rounded()))
     }
 
     private func handleSteps(_ action: MobileHUDAction, count: Int) {
@@ -2529,6 +2565,7 @@ typealias MobileGameControllerBase = UIViewController
         switch action {
         case .step:
             guard playState.canStep else { return }
+            cancelSeek()
             playfieldView.cancelInteraction()
             var advanced = false
             for _ in 0..<count { guard session.stepForward() else { break }; advanced = true }
@@ -2543,25 +2580,7 @@ typealias MobileGameControllerBase = UIViewController
             if session.isReadOnly { completionPresented = false }
             if !paused { pauseForPlanning() }
             playfieldView.cancelInteraction()
-            let target = max(session.earliestRewindTick, session.snapshot.tick - count)
-            let steps = session.snapshot.tick - target
-            guard steps > 0 else { return }
-            _ = startSeek(to: target, backwardSteps: steps) { [weak self] in
-                guard let self else { return }
-            MobileMusic.shared.playRewind()
-            self.effects.update(session: self.session, viewport: self.playfieldView.gameViewport, rewinding: true)
-            self.clock.suspend()
-            self.highlightedTarget = nil
-            #if os(tvOS)
-            self.tvTargetLock.clear()
-            self.ensureTVPointer()
-            #else
-            self.previewPoint = nil
-            #endif
-            self.renderCurrentFrame(force: true)
-            self.saveCheckpoint(reason: .periodic)
-            self.updateHUD()
-            }
+            queueRewind(ticks: count, backwardSteps: count)
         default: break
         }
     }
@@ -2699,7 +2718,8 @@ typealias MobileGameControllerBase = UIViewController
             return CGRect(x: source.x, y: source.y, width: source.width, height: source.height)
         }
         let visible = playfieldView.gameViewport.visibleLevelRect
-        return CGRect(x: visible.x * session.renderScale, y: visible.y * session.renderScale,
+        return CGRect(x: (visible.x - (frame.renderedRect?.x ?? 0)) * session.renderScale,
+                      y: (visible.y - (frame.renderedRect?.y ?? 0)) * session.renderScale,
                       width: visible.width * session.renderScale, height: visible.height * session.renderScale)
     }
 

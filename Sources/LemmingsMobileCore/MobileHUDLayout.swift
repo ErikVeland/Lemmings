@@ -157,6 +157,10 @@ public struct MobileHUDLayout: Equatable, Sendable {
         }
         let map = CGRect(x: portrait.minimap.minX, y: original.playfieldFrame.maxY,
             width: portrait.minimap.width, height: portrait.minimap.maxY + shift - original.playfieldFrame.maxY)
+        for index in transportEnd..<(controls.count - 1) {
+            controls[index].y = map.minY
+            controls[index].height = map.height
+        }
         let interface = MobileInterfaceLayout(orientation: original.orientation, safeFrame: original.safeFrame,
             playfieldFrame: original.playfieldFrame, statusFrame: adaptive.interface.statusFrame,
             controlsFrame: .init(x: original.safeFrame.minX, y: original.playfieldFrame.maxY,
@@ -659,19 +663,33 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let skillY = safe.maxY - transportHeight - gap - skillHeight
         let navigationY = skillY - gap - 44
         let skillWidth = max(44, (safe.width - gap * CGFloat(max(0, skillCount - 1))) / CGFloat(max(1, skillCount)))
+        func skillEdge(_ index: Int) -> CGFloat {
+            floor(safe.minX + CGFloat(index) * (skillWidth + gap))
+        }
         let skills = (0..<skillCount).map { index in
-            MobileRect(x: safe.minX + CGFloat(index) * (skillWidth + gap), y: skillY,
-                       width: skillWidth, height: skillHeight)
+            let x = compactOuterDeck ? skillEdge(index) : safe.minX + CGFloat(index) * (skillWidth + gap)
+            let right = compactOuterDeck ? skillEdge(index + 1) : x + skillWidth
+            return MobileRect(x: x, y: skillY, width: right - x, height: skillHeight)
         }
         let transportY = skillY + skillHeight + gap
-        let rateWidth: CGFloat = hasRate ? 116 : 0
         let groupGap: CGFloat = compactOuterDeck ? 0 : 4
+        let rateColumns = hasRate ? Int(ceil(116 / skillWidth)) : 0
+        let sharesGrid = compactOuterDeck && skillCount - rateColumns >= 3
+            && skillWidth * CGFloat(skillCount) <= safe.width + 0.01
+        let rateWidth: CGFloat = hasRate ? (sharesGrid ? skillEdge(rateColumns) - safe.minX : 116) : 0
         let buttonWidth = (safe.width - rateWidth - groupGap * CGFloat(hasRate ? 3 : 2)) / 3
         let start = safe.minX + rateWidth + (hasRate ? groupGap : 0)
+        func transportEdge(_ index: Int) -> CGFloat {
+            if sharesGrid {
+                let column = rateColumns + Int((Double(skillCount - rateColumns) * Double(index) / 3).rounded())
+                return index == 3 ? safe.maxX : skillEdge(column)
+            }
+            return index == 3 ? safe.maxX : start + CGFloat(index) * (buttonWidth + groupGap)
+        }
         func transport(_ index: Int) -> MobileRect {
-            let x = start + CGFloat(index) * (buttonWidth + groupGap)
+            let x = transportEdge(index)
             return MobileRect(x: x, y: transportY,
-                              width: index == 2 ? safe.maxX - x : buttonWidth, height: transportHeight)
+                              width: transportEdge(index + 1) - x - (index == 2 ? 0 : groupGap), height: transportHeight)
         }
         let menu = MobileRect(x: safe.maxX - 44, y: safe.minY, width: 44, height: 44)
         let navigationCount = supportsRewind ? 3 : 1
@@ -682,9 +700,11 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let map = CGRect(x: safe.minX + navigationWidth + groupGap, y: navigationY,
                          width: safe.width - navigationWidth - groupGap, height: 44)
         var frames: [MobileRect] = []
-        if hasRate {
-            frames += [MobileRect(x: safe.minX, y: transportY, width: 44, height: transportHeight),
-                       MobileRect(x: safe.minX + 72, y: transportY, width: 44, height: transportHeight)]
+        let rateValue = hasRate ? CGRect(x: safe.minX + floor((rateWidth - 28) / 2), y: transportY,
+                                        width: 28, height: transportHeight) : nil
+        if let rateValue {
+            frames += [MobileRect(x: safe.minX, y: transportY, width: rateValue.minX - safe.minX, height: transportHeight),
+                       MobileRect(x: rateValue.maxX, y: transportY, width: safe.minX + rateWidth - rateValue.maxX, height: transportHeight)]
         }
         frames += skills + [transport(2), transport(1), transport(0)]
         if supportsRewind { frames += [navigation(0), navigation(1)] }
@@ -698,7 +718,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         return MobileHUDLayout(portrait: Portrait(
             skills: CGRect(x: safe.minX, y: skillY, width: safe.width, height: skillHeight),
             skillContentWidth: CGFloat(skillCount) * (skillWidth + gap) - (skillCount > 0 ? gap : 0),
-            rateValue: hasRate ? CGRect(x: safe.minX + 44, y: transportY, width: 28, height: transportHeight) : nil,
+            rateValue: rateValue,
             minimap: map),
             interface: interface, panel: nil, compactScale: 2, speedArrows: [],
             reservedRegions: reservedRegions, supportsRewind: supportsRewind, isDiorama: false)
@@ -709,7 +729,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
                                         supportsRewind: Bool, reservedRegions: [MobileReservedRegion]) -> MobileHUDLayout {
         let safe = base.safeFrame
         let height: CGFloat = min(80, max(44, safe.height - 178))
-        let gap: CGFloat = 2, groupGap = GameHUDControlGroup.spacing
+        let gap: CGFloat = 0, groupGap: CGFloat = 0
         let rowY = safe.maxY - height
         let navigationY = rowY - gap - 44
         let buttonWidth = min(64, max(44, floor(safe.width * 0.08)))
@@ -729,9 +749,9 @@ public struct MobileHUDLayout: Equatable, Sendable {
         let pause = MobileRect(x: speed.maxX, y: rowY, width: safe.maxX - speed.maxX, height: height)
         let navigationCount = supportsRewind ? 3 : 1
         func navigation(_ index: Int) -> MobileRect {
-            MobileRect(x: safe.minX + CGFloat(index) * 46, y: navigationY, width: 44, height: 44)
+            MobileRect(x: safe.minX + CGFloat(index) * (44 + gap), y: navigationY, width: 44, height: 44)
         }
-        let navigationWidth = CGFloat(navigationCount) * 46 - gap
+        let navigationWidth = CGFloat(navigationCount) * (44 + gap) - gap
         let map = CGRect(x: safe.minX + navigationWidth + groupGap, y: navigationY,
                          width: safe.width - navigationWidth - groupGap, height: 44)
         let menu = MobileRect(x: safe.maxX - 44, y: safe.minY, width: 44, height: 44)

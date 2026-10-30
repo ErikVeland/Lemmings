@@ -7,6 +7,10 @@ import UIKit
 public enum LemmingsMobileApplication {
     #if os(iOS)
     @MainActor public static func openDeskClock(in root: UIViewController?) {
+        if let startup = root as? MobileStartupViewController {
+            startup.openDeskClock()
+            return
+        }
         guard let library = root as? MobileLibraryViewController else { return }
         library.loadViewIfNeeded()
         library.presentDeskClock(reason: .widget)
@@ -20,11 +24,7 @@ public enum LemmingsMobileApplication {
             return MobileInteractionUITestHarness.make()
         }
 #endif
-        #if os(tvOS)
-        return MobileTVBootstrap()
-        #else
-        return MobileLibraryViewController()
-        #endif
+        return MobileStartupViewController()
     }
 }
 

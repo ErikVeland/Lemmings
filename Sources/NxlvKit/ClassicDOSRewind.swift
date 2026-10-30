@@ -148,6 +148,7 @@ public struct ClassicDOSRewind: Codable, Sendable {
         let limit = max(1, min(maximumKeyframes + (usesRecentCache ? 5 : 0),
             RuntimeMemoryBudget.shared.snapshot().historyBytes / stateBytes))
         while keyframes.count > limit {
+            if !usesRecentCache { keyframes.removeFirst(); continue }
             // Keep the earliest restore point and spread acceleration states across the run.
             let olderEnd = max(2, keyframes.count - max(1, limit / 2))
             let removal = (1..<olderEnd).min {

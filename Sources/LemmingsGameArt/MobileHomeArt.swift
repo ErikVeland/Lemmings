@@ -2,6 +2,10 @@ import NxlvKit
 
 /// The Mac home order and action groups, shared with the mobile render audit.
 public enum MobileHomeArt {
+    public static func journeyAction(run: LevelSequenceRun?, enabled: Bool = true) -> GameFrontEnd.Action {
+        .init("journey", run.map { L10n.text("Resume journey (\($0.currentIndex + 1)/\($0.entries.count))") }
+            ?? L10n.text("Start journey"), enabled: enabled)
+    }
     public static func journeyMap(completed: Int, enabled: Bool = true) -> GameFrontEnd.Action {
         .init("journey", L10n.text("JOURNEY MAP  \(completed) SOLVED"), enabled: enabled)
     }
@@ -14,7 +18,7 @@ public enum MobileHomeArt {
             footer.append(.init("learningResume", L10n.text("Resume  \(resume.position)/\(resume.count)"), primary: true))
         }
         if canContinue {
-            footer.append(.init("learningStart", L10n.text("Continue journey"), primary: resume == nil))
+            footer.append(.init("learningStart", solved == 0 && resume == nil ? L10n.text("Start journey") : L10n.text("Continue journey"), primary: resume == nil))
         } else if resume == nil {
             footer[0].primary = true
         }
@@ -30,7 +34,7 @@ public enum MobileHomeArt {
                             families: [GameFrontEnd.Action], initials: String, nextPlayerIndex: Int? = nil,
                             subtitle: String = "", collectionsAvailable: Bool = true,
                             deskClock: Bool = false) -> GameFrontEnd.Page {
-        var rows = resume + [journey].compactMap { $0 } + families
+        var rows = [journey].compactMap { $0 } + resume + families
         for index in rows.indices {
             rows[index].title = rows[index].title.replacingOccurrences(
                 of: #"[ \t]+(?=\d+/\d+(?:\s|$))"#, with: "\n", options: .regularExpression)

@@ -115,16 +115,23 @@ import UIKit
     private(set) var hoveredActionID: String?
     var onPageChanged: (() -> Void)?
     private var targets: [UIButton] = []
-    #if os(iOS)
     private lazy var previewButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.accessibilityLabel = L10n.text("Play")
+        let button = MobileFocusButton(type: .custom)
         button.accessibilityIdentifier = "menu.preview.play"
-        button.addAction(UIAction { [weak self] _ in self?.dispatch("play") }, for: .touchUpInside)
+        button.onAccessibilityFocus = { [weak self] in self?.revealAction($0) }
+        #if os(tvOS)
+        button.onSelectBegan = { [weak self] in self?.tvActivation.observeSelectBegan() }
+        #endif
+        button.addAction(UIAction { [weak self] _ in
+            guard let self, let action = self.displayedPage.previewAction, action.enabled else { return }
+            #if os(tvOS)
+            guard !self.requiresNeutralActivation || self.tvActivation.consume() else { return }
+            #endif
+            self.dispatch(action.id)
+        }, for: .gameActivation)
         addSubview(button)
         return button
     }()
-    #endif
     private var highlighted: String?
     weak var globalNavigation: MobileNavigationView?
     weak var settingsTabs: MobileSettingsTabsView?
@@ -220,8 +227,10 @@ import UIKit
 
     override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
         super.didUpdateFocus(in: context, with: coordinator)
-        guard let button = context.nextFocusedView as? UIButton, targets.contains(button) else { return }
-        focusedID = button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
+        guard let button = context.nextFocusedView as? UIButton,
+              targets.contains(button) || button === previewButton else { return }
+        focusedID = button === previewButton ? displayedPage.previewAction?.id
+            : button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
         highlighted = focusedID
         revealAction(button)
         setNeedsDisplay()
@@ -339,12 +348,11 @@ import UIKit
             button.isHidden = false
             return button
         }
-        #if os(iOS)
-        let playAction = (page.rows + page.orderedFooter).first { $0.id == "play" }
+        let playAction = page.previewAction
         previewButton.frame = layout.preview.applying(transform)
         previewButton.isHidden = layout.preview.isEmpty || playAction == nil
         previewButton.isEnabled = playAction?.enabled == true
-        #endif
+        previewButton.accessibilityLabel = playAction?.title
         pauseShelfShield.isHidden = shelfTop == nil
         if let shelfTop, let scroll = superview as? UIScrollView {
             let top = shelfTop * scale
@@ -416,17 +424,14 @@ import UIKit
             let positioned = elements.compactMap { element -> (element: Any, frame: CGRect)? in
                 guard let item = element as? UIAccessibilityElement else { return nil }
                 return (item, item.accessibilityFrameInContainerSpace)
-            } + targets.filter { !footerIDs.contains($0.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") ?? "") }
+            } + (previewButton.isHidden ? [] : [(element: previewButton as Any, frame: previewButton.frame)])
+                + targets.filter { !footerIDs.contains($0.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") ?? "") }
                 .map { (element: $0 as Any, frame: $0.frame) }
             accessibilityElements = positioned.sorted {
                 abs($0.frame.minY - $1.frame.minY) < 1 ? $0.frame.minX < $1.frame.minX : $0.frame.minY < $1.frame.minY
             }.map(\.element) + targets.filter { footerIDs.contains($0.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "") ?? "") }
         } else {
-            #if os(iOS)
             accessibilityElements = elements + (previewButton.isHidden ? [] : [previewButton]) + targets
-            #else
-            accessibilityElements = elements + targets
-            #endif
         }
         setNeedsDisplay()
     }

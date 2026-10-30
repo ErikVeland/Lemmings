@@ -79,6 +79,17 @@ extension ModuleMusicPlayer {
         synthesisQueue.sync {}
         precondition(scheduledFrames == Int64(bufferedFrameCount * bufferCount) && sourceNode?.isPlaying == true)
         precondition(spatialMixer.outputVolume == 0)
+        suspendOutput(spinDownDuration: 0.12)
+        precondition(lock.withLock { pauseFadeTotalFrames == Int(sampleRate * 0.12) && outputSuspended })
+        precondition(reverb.wetDryMix == 0 && engine.isRunning,
+                     "Scene brake retained its long reverb tail or cut before queued PCM could fade")
+        try resumeOutput()
+        precondition(pauseWorkItem == nil && engine.isRunning,
+                     "Rapid fold reactivation left a pending tracker engine stop")
+        suspendOutput(spinDownDuration: 0.12)
+        suspendOutput(immediately: true)
+        precondition(!engine.isRunning && pauseWorkItem == nil && lock.withLock { pauseFadeFrames == 0 },
+                     "Backgrounding did not immediately override the tracker brake")
         print("PASS queued MOD playback, finite signal, source clock, refill, loop crossfade, immediate mute and restart; render with synthesis lock held: \(elapsed) ms")
     }
 }
@@ -203,10 +214,10 @@ extension SoundEffectPlayer {
             precondition(status == .success)
             bufferedSource?.drain()
         }
-        lock.lock()
+        controlLock.lock()
         let began = ProcessInfo.processInfo.systemUptime
         var energy = 0.0
-        for _ in 0..<2 {
+        for _ in 0..<16 {
             let status = try engine.renderOffline(512, to: output)
             precondition(status == .success)
             for frame in 0..<512 {
@@ -214,9 +225,10 @@ extension SoundEffectPlayer {
                 precondition(sample.isFinite && abs(sample) <= 1.001, "Effect chorus clipped")
                 energy += Double(sample * sample)
             }
+            bufferedSource?.drain()
         }
         let elapsed = ProcessInfo.processInfo.systemUptime - began
-        lock.unlock()
+        controlLock.unlock()
         precondition(energy > 1 && elapsed < 0.1, "Effect output waited for a control lock")
         bufferedSource?.drain()
         setMuted(true)

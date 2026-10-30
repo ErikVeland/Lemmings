@@ -38,9 +38,10 @@ import NxlvKit
         let bundledGames = CommandLine.arguments.last == "--bundled-games"
         let buildChanges = CommandLine.arguments.last == "--build-changes"
         let navigation = CommandLine.arguments.last == "--navigation"
+        let journeyHome = CommandLine.arguments.last == "--journey-home"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (replayControls || edgeToEdge || duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || gridHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (replayControls || edgeToEdge || duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || gridHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || journeyHome || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -65,6 +66,7 @@ import NxlvKit
         if homeScenery { try await checkHomeScenery(typography: typography, content: content, output: output); return }
         if buildChanges { try checkBuildChanges(typography: typography, manifest: content, output: output); return }
         if navigation { try checkNavigation(typography: typography, output: output); return }
+        if journeyHome { try checkNavigation(typography: typography, output: output, journeyHomeOnly: true); return }
         if skillPause { try checkSkillPause(typography: typography, output: output); return }
         let library = try ClassicMobileLibrary(directory: content)
         guard try library.checkpointLevelIdentifier(at: 0) == library.loadLevel(at: 0).session.levelIdentifier

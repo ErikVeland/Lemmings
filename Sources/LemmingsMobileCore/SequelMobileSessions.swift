@@ -571,6 +571,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
         var restoredBeforeEndRun = beforeEndRun
         var inputIndex = startIndex
         while restored.tick <= tick {
+            try Task.checkCancellation()
             while inputIndex < inputs.count, inputTick(inputs[inputIndex]) == restored.tick {
                 switch inputs[inputIndex] {
                 case let .assign(_, control, target):
@@ -1104,6 +1105,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         var restored = base ?? initial
         var inputIndex = startIndex
         while restored.tick <= tick {
+            try Task.checkCancellation()
             while inputIndex < inputs.count, inputs[inputIndex].tick == restored.tick {
                 let input = inputs[inputIndex]
                 if input.action == "abort" {
@@ -1705,6 +1707,7 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         var requestedInterval = initialRequestedInterval
         var inputIndex = startIndex
         while restored.tickCount <= tick {
+            try Task.checkCancellation()
             while inputIndex < inputs.count, inputTick(inputs[inputIndex]) == restored.tickCount {
                 switch inputs[inputIndex] {
                 case let .assign(_, skill, target):

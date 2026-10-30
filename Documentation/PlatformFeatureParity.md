@@ -12,15 +12,71 @@ iPhone, iPad and Duo use the same mobile frontend. The normal TV application
 uses that frontend with remote/controller, focus and LAN-transfer adapters.
 The older standalone TV development shell is not the production parity baseline.
 
+## Saved-level loading and preview activation — 30 October 2026
+
+The shared iPhone/iPad/Duo/TV preparation actors use one serial worker with an
+8 MiB stack. This removes the cooperative-worker stack exhaustion reproduced
+while stepping L2 in the Beach resume regression. It keeps Classic, L2, L3 and
+supported Neo preparation off the UI thread. L2/L3/Neo checkpoint reconstruction
+checks cancellation between ticks. Wide layouts show the level detail page and
+its opening preview during restoration instead of a carousel whose artwork has
+already been suspended. Compatible saves retain their existing format and
+identity. Mobile Journey playback remains Classic-only.
+
+Level previews dispatch the page's existing forward action: Play, Ready,
+Resume, Next or Retry, with the same availability and loading guards. The shared
+mobile/TV canvas exposes the preview to touch, focus and accessibility; TV keeps
+its neutral-activation guard. Full-image QR codes and original movies retain
+their separate controls. Mac carousel clicks and accessibility presses select
+and start the clicked level through the existing launch callback. Locked and
+unavailable cards remain blocked. Native L2's briefing already starts from its
+preview region.
+
+Validation: 30 focused preparation/checkpoint/rewind checks, two shared preview
+action/layout checks and two native Mac input/layout checks pass with isolated
+saves, muted audio and offscreen windows. The Beach regression reopens a
+2,000-tick save, matches the restored state hash, rewinds and returns to the same
+state. Forty-eight native preview renders cover Classic, L2, L3 and Beach at
+phone, landscape, tablet and TV sizes; representative captures were inspected.
+The optional Cellbash fan fixture is unavailable and was skipped. iOS/tvOS SDK
+modules and app entry points compile; the final frontend and UIKit preview input
+tests typecheck for both SDKs. UIKit test execution, physical Duo touch/resume
+timing, Siri Remote/VoiceOver delivery, the user's exact save and hosted sync
+remain separate acceptance checks.
+
 ## Rewind responsiveness — 29 October 2026
 
 Classic keeps a small recent cache alongside its long history. The mobile and
 TV sessions for Lemmings 2, Lemmings 3 and NeoLemmix retain bounded in-memory
 snapshots and reconstruct older positions from their full input logs. Snapshot
-caches are not written to saved checkpoints. Saved replay playback still
-reconstructs from its start when seeking backwards. Actual memory use,
+caches are not written to saved checkpoints. Saved action replay playback uses
+native history where compatible and reconstructs in cancellable batches otherwise.
+Classic replay reconstruction also yields between bounded batches. Actual memory use,
 responsiveness and Siri Remote interaction on older Apple TV hardware remain
 device checks.
+
+The shared frontend now schedules held rewind from its game frame loop as well
+as touch callbacks. Isolated TV L2 taps remain single-frame steps; rapid taps
+within 650 ms increase the jump to 0.4, 0.8, 1.6 and 3.2 seconds. Holding repeats
+and accelerates. Discrete Rewind presses similarly increase from 2 to 4, 8 and
+16 seconds, even when each preceding seek has already completed. A longer gap or
+cancelling action resets the burst. Dedicated backward-step controls stay precise. Rapid Rewind presses and backward steps accumulate against the
+requested destination while one seek finishes, then reconstruct one combined next
+destination. Trigger release stops adding distance and lets accepted movement
+finish paused. Resume, other editing actions, menus, interruption and memory
+pressure cancel the queue. This route covers Classic, L2, L3 and supported Neo,
+including action replays, on iPhone, iPad, Duo and TV. Mac's existing synchronous
+transport is unchanged. Physical Siri Remote/controller feel and audible continuity
+remain unverified; no new TV rendering surface or input geometry is introduced.
+
+Validation: 30 focused muted rewind/controller checks pass, including exact live
+state hashes and assistance counts in Classic, L2, L3 and Neo. iOS/tvOS SDK
+compilation passes. The broader portrait-HUD run still has two unrelated layout
+test failures (20 assertions); the rewind change does not modify layout source.
+The rapid-press follow-up passes 34 focused muted checks, including burst
+acceleration across completed seeks and queued work; updated iOS/tvOS core and
+frontend SDK modules compile. Physical-device timing, transport feedback and audio
+acceptance remain open.
 
 ## 2.3 consolidation and parity work
 
@@ -117,8 +173,53 @@ The shared HUD renderer identifies the outermost controls on Duo's lowest
 visible row and extends their outside lower curves. All segments of each joined
 group use the same contour, including selected borders; input and accessibility
 rectangles, viewport geometry and other platforms retain their existing bounds.
-The shape adapts to available group dimensions. Actual display curvature and
-physical touch acceptance remain device checks.
+The shape adapts to available group dimensions.
+
+30 October correction: UIKit supplies each effective corner radius independently
+through a concentric HUD corner configuration. The complete mobile deck shares
+one inset contour, including the upper portion of a corner that crosses into
+the skill row; the minimap uses the same outside inset. Player identity, counters
+and Menu share the visible header's vertical centre, including accessibility
+frames. The compact transport row uses existing skill-column boundaries where
+its minimum input sizes permit, removing fractional Block/Build versus
+speed/End run divider drift. Classic, L2 and L3 share this source; supported
+NeoLemmix uses the Classic shell. Ordinary Mac and TV layouts retain their
+existing treatment and TV effects policy.
+
+Muted, windowless verification passes 36 Duo fixtures at two widths with
+uniform and asymmetric corners, plus three TV HUD and three TV Home fixtures.
+The wider rounded-HUD audit passes 108 captures using native Classic/L2/L3
+content. Checks include shared divider coordinates, header centring, separated
+input targets, reserved regions and pixel containment of the complete deck
+outline across row boundaries. Representative asymmetric captures were
+inspected. Final artwork and UIKit modules compile for iOS and tvOS; this is
+SDK/source validation, not a signed app build. Native audit dependencies come
+from the current host's debug products, without an older-macOS runtime claim.
+Physical Duo corner values, pose transitions, touch and composited output
+remain device checks. Engine suites and release audits were skipped because
+this change is HUD presentation and target geometry only. Local evidence:
+`.build/duo-hud-native/` and `.build/duo-hud-geometry-*-final.log`.
+
+Inner-display follow-up, 30 October: `IMG_7966.jpg` and `IMG_7967.jpg` show
+one continuous opened screen in portrait and landscape. The earlier synthetic
+bitmap checks did not establish a physical corner match. The live iOS 26+ Duo
+HUD now uses a native concentric outline and continuous UIKit mask over that
+whole screen. It no longer redraws system radii as circular bitmap arcs. Actual
+corner changes invalidate the cached mask, while identical geometry reuses it.
+Native outline drawing is restricted to the header and deck; it adds no action
+and does not frame the playfield. TV and ordinary phone/iPad rendering retain
+their existing path, with no new TV effects.
+
+The adaptive landscape deck removes gaps around tracking and Nuke. Tracking
+fills the minimap's complete row height; Menu uses the same leading position
+on inner and outer Duo displays. Six larger inner-screen fixtures across
+Classic/L2/L3 supplement the compact grid checks, including shared row bounds,
+Nuke adjacency and individually retained action targets. Bitmap fixtures check
+layout; they cannot validate UIKit's device-resolved continuous mask. The
+physical inner display, both rotations and cold-launch snapshot remain device
+acceptance checks. Supported NeoLemmix retains the shared shell; its content
+was not separately replayed. See [loading performance](LoadingPerformance.md)
+for the explicit iOS launch storyboard and full-package build blocker.
 
 ## Remaining source work
 
@@ -152,6 +253,35 @@ physical touch acceptance remain device checks.
   Hiding them leaves their archive intact. Handovers retain the existing Ready
   boundary.
 
+## Saved Hot Seat discovery — 30 October 2026
+
+Mac, iPhone, iPad, Duo and Apple TV list retained Hot Seats independently of
+the selected solo player. Opening the saved-session list does not select a
+different campaign; Resume restores the chosen session's host, roster, rule
+and next turn. Mobile/TV rows include saved dates to distinguish campaigns
+with the same players. Participant-scoped automatic Hot Seat selection and
+journey lookup remain separate from this library-wide browser.
+
+Mac also captures a legacy single-session pointer when its history entry is
+missing, before another campaign replaces that pointer. This keeps the roster
+available to the shared sync coordinator. Production saves were inspected
+read-only during this correction; no recovery repair or service write ran.
+
+Forty-five muted, offscreen checks pass: 32 cloud-library checks, one legacy
+pointer regression, 11 mobile Hot Seat checks and one shared page render check.
+Isolated saves cover cross-device import, an unrelated selected player, two
+campaigns with the same roster, switching, next-turn retention, reopen and
+offline/reconnect. The journey fixture retains Classic/L2/L3/NeoLemmix queue
+identities and position; it does not run those engines or extend the separately
+documented mobile journey loader. Five windowless page renders check the two
+resume targets and Back at phone, Duo, iPad and TV sizes; representative images
+were inspected. All eight shared modules and both application entry points
+compile against the iOS and tvOS simulator SDKs; the recorded inputs match
+the changed saved-session sources. Evidence: `.build/saved-hot-seat-tests.log`,
+`.build/saved-hot-seat-ios-sdk.log`, `.build/saved-hot-seat-tvos-sdk.log` and
+`.build/saved-hot-seats/renders/`. Physical touch, Siri Remote focus and live
+provider delivery remain acceptance checks. Mid-level checkpoints remain local.
+
 ## Tester sync lifecycle — 26 October 2026
 
 The shared `CloudLibrarySync` coordinator requests sync at startup. Both native
@@ -178,6 +308,34 @@ These checks launched no app or Simulator windows.
 ## Shared coverage and intentional adaptations
 
 ### Journey resume integrity — 26 October 2026
+
+Home entry updated 30 October: Mac and the shared iPhone/iPad/Duo/TV frontend
+always show one primary Start Journey / Resume Journey (current level/total)
+action for the selected session. Hot Seat, unrelated checkpoints, other playlists
+and another session's active queue no longer suppress it. Journey activation uses
+the existing level/paused Ready flow directly. Separate ordinary saves retain
+their own resume controls. Starting the route retains the selected solo or Hot
+Seat identity; viewing Home does not switch sessions.
+
+Mobile/TV can resolve a cloud Journey snapshot without a local learning file and
+recover legacy archived queues without reviving completed journeys. Mac migrates
+an older snapshot imported after store initialisation before looking up the route.
+This retains the existing Classic-only mobile Journey loader: identity tests for
+L2, L3 and NeoLemmix do not establish route playback support for those engines.
+Live EKV v UVA service propagation and physical-device acceptance remain open.
+
+Validation for this update: five focused mobile persistence checks and 34 shared
+Journey/cloud checks pass with isolated saves and muted audio. The source checks
+include reopen, archived queues, cloud-only queues, turn retention, completion
+markers, unrelated-route retention and offline/reconnect merges. The shared Home
+renderer passes 120 layouts and 40 bitmap renders, including input bounds and one
+primary Journey action. iOS and tvOS SDK modules and app entry points compile.
+The Mac Journey integration executable compiles, but its offscreen run aborts
+inside macOS `_RegisterApplication` during `NSApplication` initialisation, before
+test execution. Native AppKit event delivery and runtime acceptance are therefore
+blocked in this environment; no foreground fallback was used. The broader mobile
+navigation audit also stops on an existing career-page target assertion before
+rendering; the focused `--journey-home` check passes independently.
 
 Mac Home resolves the selected session's saved queue even when another session
 occupies the active slot. Activating Resume restores that queue and retains the
@@ -356,16 +514,41 @@ change on subsequent launches. The first-ever hinge callback and real pose/safe-
 changes still need physical-device acceptance. Identical page assignments do not
 rebuild targets. Mac nested page layout completes synchronously before display.
 
-Portrait iOS What's new now defers its first foreground presentation until the
-initial scenery request completes, then commits page geometry, navigation and
-input targets without animation. A failed or unavailable scenery load still
-reveals the page. Pose observation starts during appearance preparation, with
-a post-attachment fallback. Foreground activation can finish a pending reveal;
-later scenery refreshes retain the visible page and its scroll position.
-This shared library presentation applies to Classic, L2, L3 and supported
-NeoLemmix scenery. Mac and TV do not use the portrait reveal gate. First-frame
+Portrait iOS What's new presents its measured page, navigation and input targets
+without waiting for background scenery or foreground-activation callbacks.
+The previous unbounded reveal gate could leave all portrait menu controls
+invisible and disabled while scenery was pending. Scenery completion no longer
+forces a page layout. Pose observation starts during appearance preparation,
+with a post-attachment fallback; later scenery refreshes retain the visible
+page and its scroll position. This shared library presentation applies to
+Classic, L2, L3 and supported NeoLemmix scenery. Mac and TV had no portrait reveal
+gate. The reported Duo launch white screen has not been reproduced here. First-frame
 UIKit compositing and physical Duo hinge callback timing remain device checks;
 CoreSimulator service access is unavailable in this environment.
+After removing the gate, the shared UI module compiles against both the iOS and
+tvOS simulator SDKs, and the iOS application entry point type-checks. Evidence:
+`.build/duo-launch-fix/ios/compile.log`,
+`.build/duo-launch-fix/tvos/compile.log` and
+`.build/duo-launch-fix/ios/entrypoint.log`. Device diagnostics could not be read:
+CoreDeviceService initialization timed out. No app was installed or launched,
+and native rendered/input acceptance remains open. Engine suites and release
+audits were skipped for this presentation-only correction.
+
+The 30 October startup change supplies a black iOS system launch surface with
+the shipped logo and black iOS/TV windows. Shared iPhone, iPad, Duo and TV
+startup shows a lightweight pixel logo/hourglass before constructing the
+disk-backed library controller. Catalogue discovery transfers from the shared
+background preparation worker. The normal TV path keeps its save migration;
+iOS queues widget Desk Clock links until the library exists. Classic, L2, L3
+and supported NeoLemmix share this app-level path. Mac and the explicit-source
+TV diagnostic shell retain their existing startup. Final iOS/tvOS SDK modules
+and application entry points compile. Seven windowless bitmap fixtures check
+safe panes and separated artwork, including opened/folded Duo, with no action
+targets. The off-main worker probe retains the archived app's 535 fan packs.
+These are source and bitmap checks: physical cold-launch timing, native launch
+composition, animation and widget delivery remain open. See
+[loading performance](LoadingPerformance.md#first-visible-screen--30-october-2026).
+
 The iOS SDK module and application-entry compilation pass, as does the shared
 UIKit source check against the tvOS SDK. Nine muted,
 windowless reading fixtures cover phone, Duo and iPad portrait sizes at the
@@ -457,3 +640,110 @@ history comparison with independently reconstructed states. Opaque funeral pixel
 composition passes offscreen and muted; no headless Metal device was available.
 Audio performance programs compile, but runtime audio-unit creation failed, so
 this is source validation and does not close audible playback acceptance.
+
+### Viewport, input and PCM continuation — 29 October 2026
+
+The shared iPhone/iPad/Duo/TV controller polls input at up to 60 Hz independently
+of its 30/20 Hz scene budget. Pointer, touch selection and skill changes reuse
+the current scene while its tick and camera coverage remain valid; controller
+render requests coalesce. TV pointer movement and target cycling use that path.
+Button event callbacks and existing targets remain intact.
+
+Classic/L2/L3 and supported NeoLemmix scenes compose a tile-aligned viewport with
+a guard band at their native artwork scale. The minimap uses a separate bounded
+terrain thumbnail and live actor points. CRT preparation caches the camera scene
+separately from overlays. L2 converts changed terrain colours incrementally;
+dirty detection still scans its indexed terrain. Classic reduced-colour output
+uses a lookup table over the composed viewport. Mac continues to use its current
+full-scene presentation; it shares the audio and memory policy changes.
+
+Rewind, held rewind, backward steps, replay move navigation and completed-replay
+restart use private seek work with a 2 ms slice target. Cancellation discards that
+work; only a complete reconstruction updates the session. One tick, initial
+checkpoint/factory preparation or commit can exceed that target. Rewind and step
+history are retained through command reconstruction and sparse acceleration.
+
+The effects worker owns playback positions and reserved rescue-layer storage.
+Bounded per-voice commands/status replace the shared control/library lock in the
+production PCM path. Control-side voice reconciliation and retired-command cleanup
+occur outside the handoff lock. The rewind history copy still has its own bounded
+lock. This reduces contention without establishing the crackling cause or cure.
+
+Optional terrain caches share an admission limit; checkpoint density responds to
+memory availability and pressure. Sampled process footprint and sampled peak are
+available through Points of Interest. These are not a hard process-memory ceiling:
+native artwork, current images, GPU surfaces and snapshot copy-on-write still add
+memory. TV retains its existing effects limits and gains no extra HDR surface.
+
+Focused validation and remaining hardware acceptance are recorded in
+`RuntimePerformance.md`. Physical input latency, sustained speed/frame delivery,
+thermal behaviour, peak memory and audible mixed playback remain device checks.
+
+## Viewport and input performance — 29 October 2026
+
+The shared UIKit controller now separates input cadence from adaptive scene
+presentation, reuses scene pixels for pointer/selection updates, and requests
+viewport composition for Classic, L2, L3 and supported NeoLemmix. Sharp native/Mac
+artwork, target states, world-space input mapping, ghosts and TV's effects budget
+remain intact. Minimap scenery is sampled independently of current lemming positions.
+CRT native scene caching, cropped pause previews and cropped loupe countdowns use
+the same camera coordinates. Rewind and replay navigation reconstruct privately
+in cancellable slices, including exact same-tick commands and assistance counts.
+
+Shared effects PCM ownership and heavy pixel-cache budgets also apply to Mac.
+Native Mac scene composition and synchronous seek callers remain separate paths.
+No saved-run format, player ownership, Hot Seat handover or production save location
+changed. Focused checks use isolated temporary saves. The current evidence and
+remaining source/measurement limits are in `RuntimePerformance.md` under
+“Viewport, input and audio worker optimisation”. Physical touch, Siri Remote,
+VoiceOver, sustained thermal performance and audible playback remain device
+acceptance; source compilation and headless pixel checks do not close them.
+
+Source validation for this follow-up: all eight shared/application UI modules
+compile against both simulator SDKs, with final controller primary-file checks
+on each platform. Thirty-three focused engine/render tests, the standalone Classic
+rewind suite and the engine-free audio worker-state checks pass. Full offline audio
+execution remains blocked by audio-unit creation in this environment. No hosted
+service, physical-device or audible acceptance is inferred from these results.
+
+### Home audio ownership — 30 October 2026
+
+The shared iPhone/iPad/Duo/Apple TV frontend now activates the Home music session
+before playback and prevents outgoing game controllers from deactivating it or
+applying stale pause/pitch state. This shared handover covers Classic, L2, L3 and
+supported NeoLemmix routes. Soundtrack-name caching is invalidated on optional
+library download/removal. Mac uses its existing desktop audio lifecycle and does
+not use `AVAudioSession`; it is unchanged by this mobile session fix.
+
+Silent, headless session ownership/order checks pass. iOS/tvOS SDK modules and
+application entry points compile, including a final pass over the changed audio
+frontend sources. Physical-device listening, Duo folding, interruptions,
+output-route changes and sustained music acceptance
+remain open. See `RuntimePerformance.md`, “Phone Home Screen, Duo folding and
+menu handover”.
+
+### Phone background audio and Duo folding — 30 October 2026
+
+The shared iPhone/iPad/Duo/Apple TV frontend overrides menu spin-down when the
+application enters the background, immediately parks music graphs and invalidates
+pending session activations. Background requests cannot activate or configure the
+session. Foreground entry grants permission without resuming a game itself.
+
+The previous menu inactivity grace becomes a 120 ms spin-down without a reverb
+tail, followed by existing spin-up on reactivation. Tracker playback includes its
+existing PCM reserve before the short brake reaches the output. Pending cleanup
+is cancelled on rapid fold/unfold. Menu suspension precedes scene layout work.
+This menu path is shared across Classic, L2, L3 and supported NeoLemmix routes;
+gameplay retains immediate suspension and player-driven Resume. Mac uses the
+existing desktop lifecycle and default pause timing; the new short-brake API is
+optional. The TV effects budget is unchanged.
+
+Silent, headless session checks pass for background/foreground, activation races,
+overlapping owners and rapid fold reactivation. iOS/tvOS SDK modules and app entry
+points compile, as do the native audio performance and DJ programs. The muted,
+offscreen offline run aborts during `AVAudioUnitEQ` creation (`comp != nullptr`),
+before transport assertions execute. Installed-device listening,
+actual background timing and Duo folding acceptance remain open. Recording
+brakes still use main-actor rate/gain updates; this is not evidence that a blocked
+UI thread can sustain the ramp. See `RuntimePerformance.md`, “Phone Home Screen,
+Duo folding and menu handover”.

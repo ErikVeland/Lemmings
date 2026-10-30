@@ -79,3 +79,63 @@ public struct MobileHUDPress: Sendable {
         duration >= 2 ? 1.6 : duration >= 1 ? 0.8 : 0.4
     }
 }
+
+/// Accumulates rewind distance while an exact seek is still being reconstructed.
+/// Only one seek runs at a time; further input becomes one subsequent destination.
+public struct MobileRewindQueue: Sendable {
+    public struct Request: Equatable, Sendable {
+        public let tick: Int
+        public let backwardSteps: Int
+    }
+
+    public private(set) var targetTick: Int?
+    private var pendingSteps = 0
+
+    public init() {}
+
+    @discardableResult public mutating func append(ticks: Int, from currentTick: Int,
+                                                  earliestTick: Int, backwardSteps: Int = 1) -> Bool {
+        let origin = targetTick ?? currentTick
+        let distance = min(max(0, ticks), max(0, origin - earliestTick))
+        guard distance > 0 else { return false }
+        targetTick = origin - distance
+        pendingSteps += min(distance, max(1, backwardSteps))
+        return true
+    }
+
+    public mutating func takePending() -> Request? {
+        guard let targetTick, pendingSteps > 0 else { return nil }
+        let request = Request(tick: targetTick, backwardSteps: pendingSteps)
+        pendingSteps = 0
+        return request
+    }
+
+    /// Keep the accumulated destination until every accepted input has committed.
+    public mutating func didCommit() {
+        if pendingSteps == 0 { targetTick = nil }
+    }
+
+    public mutating func cancel() { self = .init() }
+}
+
+/// Rapid rewind presses cover progressively more game time, even after a seek commits.
+public struct MobileRewindPressAcceleration: Sendable {
+    private var lastPress: Double?
+    private var burstIndex = 0
+
+    public init() {}
+
+    public mutating func ticks(at time: Double, ticksPerSecond: Double, preciseFirstTap: Bool = false) -> Int {
+        if let lastPress, time >= lastPress, time - lastPress <= 0.65 {
+            burstIndex = min(4, burstIndex + 1)
+        } else {
+            burstIndex = 0
+        }
+        lastPress = time
+        if preciseFirstTap && burstIndex == 0 { return 1 }
+        let seconds = preciseFirstTap ? 0.4 * Double(1 << (burstIndex - 1)) : min(16, 2 * Double(1 << burstIndex))
+        return max(1, Int((seconds * ticksPerSecond).rounded()))
+    }
+
+    public mutating func reset() { self = .init() }
+}

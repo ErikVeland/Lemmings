@@ -30,6 +30,99 @@ Cold work still exists: initial Classic content preparation measured 0.85–0.93
 
 ## iPad loading
 
+### First visible screen — 30 October 2026
+
+iOS uses a bundled `LaunchScreen.storyboard` with a literal opaque black
+background and the small, pre-exported Ultimate Lemmings logo. Its launch
+configuration also requests Dark appearance so system-background fallback is
+black. Both mobile application windows start black. The shared iOS/tvOS root first presents that logo and the existing pixel
+hourglass; its pulse honours Reduce Motion and adds no input targets or sound.
+It does not decode the Macintosh artwork banks to draw this surface.
+
+Disk-backed library controller construction waits until the loading surface
+has submitted a frame. Catalogue discovery, including bundled exclusion archive
+fingerprints, then runs on the existing serial preparation worker and transfers
+the new catalogue once to the menu. It no longer runs in the library's
+`viewDidLoad`. Player, save, sync and authentication setup follows the visible
+loading surface. Widget Desk Clock links received during startup remain queued
+until the library is attached. TV retains its existing save migration before
+opening the library. No artificial minimum loading duration was added.
+
+Both simulator-SDK module compilations and application entry points pass.
+Seven windowless captures cover phone portrait/landscape, folded/opened/tabletop
+Duo, iPad and TV; artwork stays inside the supplied safe pane and adds no action
+targets. Folded and opened Duo captures were inspected. An isolated native
+probe confirms catalogue discovery uses the off-main, 8 MiB-stack worker and
+retains 535 fan packs from an existing archived iOS bundle. This does not measure
+full startup or demonstrate a physical-Duo speed-up. The iOS asset catalogue
+compiles; its tool reports unavailable CoreSimulator services. Native launch
+composition, animation, system launch-image sizing, widget delivery and actual
+cold-launch timing remain device checks. Mac startup is unchanged. Engine
+suites and release audits were skipped for this startup/presentation change.
+Local evidence is under `.build/startup-loading/`.
+
+Inner-screen follow-up: the prior packaged device app contained both named
+launch assets and the launch dictionary, but the user still observed a long
+white pre-loading interval. The explicit storyboard replaces that dictionary
+on iOS and is registered in the app resource build phase. The first app-frame
+layout now uses UIKit's safe-area frame directly, and localisation of the
+hourglass accessibility label waits until the first submitted frame. This
+removes custom reserved-region discovery and localisation storage from that
+first-frame path. These changes do not measure or promise a shorter debugger
+or pre-main launch interval.
+
+`ibtool` compiles the storyboard without warnings, notices or errors. The final
+shared core, artwork, UIKit and app-entry SDK checks pass for iOS and tvOS.
+A full unsigned iOS Xcode build could not resolve the local package in this
+sandbox: the first attempt required a blocked remote fetch, the cached retry
+hit protected manifest diagnostics, and the local-cache retry reported missing
+local package products. These are build-environment limits, not a completed app
+package. Physical cold launch and system launch-snapshot behaviour remain open.
+TV retains its existing black launch dictionary; it uses the shared first-frame
+controller changes. No save was deleted or reset. Follow-up evidence is under
+`.build/duo-correction/`.
+
+Startup artwork source integration: `GameStartupArt` lives beside its hourglass
+pixels in the established `PanelGlyphArt.swift` source. A retained iOS Simulator
+package source list omitted the new `GameStartupArt.swift` file, causing the
+startup controller's unresolved-name error. The original path remains as a
+comment-only compatibility file for source lists that already include it. This
+changes source discovery only; startup artwork and behaviour are unchanged.
+
+An isolated public-interface compilation passes for iOS and tvOS using only
+`PanelGlyphArt.swift`, with the standalone startup source deliberately omitted.
+This verifies both startup layout and hourglass calls under retained source
+lists. All eight shared SDK modules and both application entry points also
+compile for iOS and tvOS. This is compiler validation, not a signed app-package
+build or a physical-device check. The current version-history gate passes. Engine suites, UI tests and
+release audits were skipped for this source-integration fix.
+
+### Saved-level preparation — 30 October 2026
+
+Library opening, level previews and checkpoint preparation use one serial actor
+executor backed by an 8 MiB-stack thread. Native L2 stepping exhausted the
+cooperative pool's smaller stack in the isolated Beach resume regression
+(`Lemmings2Runtime.step`, stack-guard SIGBUS). The larger worker preserves actor
+isolation, cancellation and off-main preparation without reserving a new stack
+for every preview. Classic, L2, L3 and supported NeoLemmix share this worker.
+
+Resume shows the level detail page while preparing, including on wide Duo
+layouts whose carousel artwork is suspended during preparation. It renders the
+opening preview before reconstructing the checkpoint. Optional preview failure
+does not discard or block a compatible saved attempt. Leaving cancels the
+request; L2, L3 and Neo reconstruction check cancellation between ticks. Results
+from obsolete requests cannot replace the current screen. L2/L3 locate saved
+levels by identity before relying on their old catalogue position. Saved queues
+are resolved before standalone engine routes. Save formats and identities stay
+unchanged.
+
+The muted offscreen regression reopens a 2,000-tick save of **Quad Quirks on the
+Quay!**, renders its preview, restores its exact state hash, then rewinds and
+returns to that state. It checks retained attempt ID, owner, scope, camera and
+selected control using isolated files. Native sequel cancellation and existing
+Classic/L2/L3/Neo checkpoint and rewind checks pass. This is local source
+validation; physical Duo timing and the user's exact save remain device checks.
+
 The mobile shell opens Classic packs, Lemmings 2, Lemmings 3, NeoLemmix and collection libraries on a content actor. Library construction includes file reads, campaign decoding and imported-content fingerprints. Results transfer to the menu only if the request is still current. Saved runs start after their library has opened.
 
 The wide carousel requests the selected preview before its two neighbours. Its three requests fit the prepared-session cache, so neighbouring covers do not evict the selected session before Play. Leaving the browser, changing its library or starting a level cancels its artwork tasks and stops its animation clock. Gameplay never requests menu previews.

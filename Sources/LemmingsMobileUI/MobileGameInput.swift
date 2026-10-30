@@ -74,6 +74,7 @@ extension MobileGameViewController {
         adapter.triggerFeedbackEnabled = { [weak self] in self?.playState.phase == .running && self?.gameSettings.classic.reduceMotion != true }
         adapter.onForcedPause = { [weak self] in self?.pauseForPlanning() }
         adapter.onRewindHeld = { [weak self] in self?.setRewindHeld($0) }
+        adapter.onRewindTap = { [weak self] in self?.rewindFromPress(preciseFirstTap: true) }
         #if os(tvOS)
         adapter.onControllerButtonEvent = { [weak self] process in self?.processTVControllerButtonEvent(process) }
         adapter.onTimelinePark = { [weak self] in self?.pauseForPlanning() }
@@ -174,7 +175,7 @@ extension MobileGameViewController {
     }
 
     func performCommand(_ command: GameplayCommand) {
-        cancelSeek()
+        if command != .rewind && command != .step(-1) { cancelSeek() }
         guard overlay.isHidden, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
         #if os(tvOS)
         if tvCameraMode && [.assign, .pause, .speedReset].contains(command) {
@@ -234,14 +235,14 @@ extension MobileGameViewController {
             aim(at: point)
             #if os(tvOS)
             tvTargetLock.select(candidate.id)
-            renderCurrentFrame(force: true)
+            renderCurrentFrame(force: true, presentationOnly: true)
             #endif
         case .focusLast:
             if let previous = lastInputAssignment {
                 aim(at: playfieldView.gameViewport.viewPoint(fromLevel: previous.point))
                 #if os(tvOS)
                 tvTargetLock.select(previous.id)
-                renderCurrentFrame(force: true)
+                renderCurrentFrame(force: true, presentationOnly: true)
                 #endif
             }
         case .assign, .repeatAssignment:

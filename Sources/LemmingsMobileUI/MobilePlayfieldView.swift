@@ -330,6 +330,7 @@ import UIKit
         #endif
         if explosionBirths.values.contains(where: { $0.expires > 0 && $0.expires <= now }) {
             for (id, value) in explosionBirths where value.expires > 0 && value.expires <= now { explosionBirths[id] = (value.tick, 0) }
+            tubeSignature = nil
             updateTube(); setNeedsDisplay()
         }
         guard enhancedEffects else { releaseHDR(); return }
@@ -364,10 +365,15 @@ import UIKit
         insertSubview(view, belowSubview: bombCountdownView)
         hdr = view
     }
-    func suspendVisualEffects() { spriteTrails.reset(); hdr?.clear(); speedEffectsActive = false; failureMood.finish() }
+    func suspendVisualEffects() {
+        spriteTrails.reset(); trailRevision &+= 1
+        hdr?.clear(); speedEffectsActive = false; failureMood.finish()
+        tubeSignature = nil
+    }
     func resetTransientEffects(preservingTrails: Bool = false) {
         if !preservingTrails { spriteTrails.reset() }
         hdr?.clear(); explosionBirths.removeAll()
+        trailRevision &+= 1; tubeSignature = nil
     }
     func releaseEffectResources() {
         tubeSignature = nil; tubeSceneImage = nil; tubeSceneBitmap = nil; tubeSceneViewport = nil

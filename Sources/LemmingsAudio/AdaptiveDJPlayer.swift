@@ -73,9 +73,9 @@ import NxlvKit
   }
   func cancelRewind() { recording?.cancelRewind(); module?.cancelRewind() }
   func playRewind() { recording?.playRewind(); module?.playRewind() }
-  func pause(rhythmOnly: Bool = false, immediately: Bool = false) {
-    recording?.suspendOutput(rhythmOnly: rhythmOnly, immediately: immediately)
-    module?.suspendOutput(rhythmOnly: rhythmOnly, immediately: immediately)
+  func pause(rhythmOnly: Bool = false, immediately: Bool = false, spinDownDuration: Double? = nil) {
+    recording?.suspendOutput(rhythmOnly: rhythmOnly, immediately: immediately, spinDownDuration: spinDownDuration)
+    module?.suspendOutput(rhythmOnly: rhythmOnly, immediately: immediately, spinDownDuration: spinDownDuration)
   }
   func stop() { recording?.stop(); module?.stop() }
 }
@@ -825,7 +825,7 @@ import NxlvKit
     fadeBass = true
   }
 
-  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false) {
+  public func suspendOutput(rhythmOnly: Bool = false, immediately: Bool = false, spinDownDuration: Double? = nil) {
     if immediately {
       resetVinyl()
       allDecks.forEach { $0.setVinyl(rate: 1, gain: 1) }
@@ -847,9 +847,9 @@ import NxlvKit
     if immediately {
       allDecks.forEach { $0.pause(immediately: true) }
     } else {
-      if resumeDeckA { deckA?.pause(rhythmOnly: rhythmOnly) }
-      if resumeDeckB { deckB?.pause(rhythmOnly: rhythmOnly) }
-      resumeCarry.forEach { $0.pause(rhythmOnly: rhythmOnly) }
+      if resumeDeckA { deckA?.pause(rhythmOnly: rhythmOnly, spinDownDuration: spinDownDuration) }
+      if resumeDeckB { deckB?.pause(rhythmOnly: rhythmOnly, spinDownDuration: spinDownDuration) }
+      resumeCarry.forEach { $0.pause(rhythmOnly: rhythmOnly, spinDownDuration: spinDownDuration) }
     }
   }
 

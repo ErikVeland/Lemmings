@@ -2543,8 +2543,12 @@ extension AppDelegate {
     let sharedRun = arcadeRunID, sharedID = store.hotSeatID
     returnToLibrary()
     try check(menuRecovery?.runID == sharedRun && menuRecovery?.tick == 0
-      && playfield.overlayLines.first == L10n.text("RESUME JOURNEY - \(store.sessionProfiles.map(\.initials).joined(separator: " v "))"),
-      "Fresh Hot Seat attempt was lost or Resume omitted its roster")
+      && playfield.overlayLines.first == L10n.text("Start journey").uppercased(),
+      "Fresh Hot Seat attempt was lost or replaced Start Journey")
+    guard let sharedResume = homeMenuItems().firstIndex(where: { $0.action == .resume }) else {
+      throw IntegrationFailure(message: "Fresh Hot Seat omitted Resume level")
+    }
+    launchChoice = sharedResume
     advancePhase()
     try check(arcadeRunID == sharedRun && arcadeProfileID == guest.id && arcadeHotSeatID == sharedID && session?.currentTick == 0 && isPaused,
       "Hot Seat resume changed the owner, shared session or fresh attempt")
@@ -4701,9 +4705,9 @@ extension AppDelegate {
     try store.startRun(run, hotSeatID: nil)
     try store.recordLearningWin(runID: run.id, level: run.currentEntry.identity)
     try check(homeMenuItems().contains { item in
-      if case .fullQuest = item.action { return item.title == L10n.text("JOURNEY MAP  1 SOLVED") }
+      if case .fullQuest = item.action { return item.title == L10n.text("Resume journey (1/2)").uppercased() }
       return false
-    }, "A returning player did not get the Journey Map with the saved win count")
+    }, "A returning player did not get Resume Journey with the saved position")
     renderScreen()
     let nonFanTitles = Set(HomeContentFamily.allCases
       .filter { $0 != .fan }.flatMap(\.titles))

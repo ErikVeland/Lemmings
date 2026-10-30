@@ -31,7 +31,7 @@ extension MobileLibraryViewController {
         let page = MobileCareerArt.players(profiles, subtitle: subtitle, draft: renamingPlayer ? nameDraft : nil,
             creating: creatingPlayer, portrait: draftPortrait, canDelete: canDeleteActivePlayer,
             confirmingDelete: confirmingDelete, hotSeatTurn: hotSeat.map { playerName($0.turn) }, holdToEdit: holdToEdit,
-            editingPlayerID: editingPlayerID, hasSavedHotSeats: !hotSeats.sharedSessions(player: profiles.activeID).isEmpty)
+            editingPlayerID: editingPlayerID, hasSavedHotSeats: !hotSeats.savedSessions.isEmpty)
         return page
     }
 

@@ -191,6 +191,11 @@ public struct MobileHotSeatStore: Codable, Equatable, Sendable {
     public func resumable(host: String) -> [MobileHotSeat] { saved.filter { $0.host == host } }
     public func sharedSessions(player: String) -> [MobileHotSeat] { saved.filter { $0.players.contains(player) } }
 
+    /// The whole saved library, independent of the device's selected solo player.
+    public var savedSessions: [MobileHotSeat] {
+        saved.sorted { $0.savedAt == $1.savedAt ? $0.id < $1.id : $0.savedAt > $1.savedAt }
+    }
+
     @discardableResult
     public mutating func resume(id: String) -> MobileHotSeat? {
         guard let index = saved.firstIndex(where: { $0.id == id }) else { return nil }

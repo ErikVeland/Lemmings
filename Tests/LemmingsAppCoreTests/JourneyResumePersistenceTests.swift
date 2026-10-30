@@ -4,6 +4,34 @@ import Testing
 @testable import LemmingsAppCore
 
 @MainActor struct JourneyResumePersistenceTests {
+    @Test func olderImportedJourneyMigratesBeforeHomeLooksUpItsArchivedSession() throws {
+        let temporary = try AppStorage.temporary(named: "imported-journey-revision")
+        defer { temporary.removeTemporaryFiles() }
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let storage = AppStorage(applicationSupport: temporary.applicationSupport,
+            resources: root.appendingPathComponent("Resources"), defaults: temporary.defaults)
+        let journey = try #require(LearningJourneyLibrary.journey(storage: storage))
+        let store = try LevelPlaylistStore(file: storage.applicationSupport.appendingPathComponent("playlists.json"))
+        try store.add(journey.playlist())
+        let unrelated = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: Array(journey.lessons.prefix(2).map(\.entry)))
+        try store.startRun(unrelated, hotSeatID: "another-seat")
+        let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: "learning-23", summary: LearningJourney.title), entries: Array(journey.lessons.prefix(4).map(\.entry)), currentIndex: 1)
+        let snapshot = JourneySessionSnapshot(run: old, l2Progress: ["carry": Data([3])])
+        try store.importJourneySession(snapshot, hotSeatID: "ekv-uva")
+        try store.migrateLearningJourney(journey)
+        let saved = try #require(store.resumableLearningJourney(hotSeatID: "ekv-uva"))
+        #expect(saved.run.id == old.id && saved.run.currentIndex == old.currentIndex)
+        #expect(saved.run.pool.id == LearningJourney.version)
+        #expect(saved.l2Progress == ["carry": Data([3])])
+        #expect(store.activeRun == unrelated && store.activeRunHotSeatID == "another-seat")
+        let reopened = try LevelPlaylistStore(file: store.file)
+        #expect(reopened.resumableLearningJourney(hotSeatID: "ekv-uva")?.run == saved.run)
+        try reopened.importJourneySession(snapshot, hotSeatID: "ekv-uva")
+        #expect(reopened.resumableLearningJourney(hotSeatID: "ekv-uva")?.run == saved.run)
+    }
+
     @Test func integrationBuildCannotResolveProductionSavePaths() throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".bundle")
         defer { try? FileManager.default.removeItem(at: root) }

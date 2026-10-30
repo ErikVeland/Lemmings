@@ -4,6 +4,37 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileRewindTests {
+    @Test func slicedClassicSeeksPreserveSameTickCommandsAndCancelWithoutMutation() throws {
+        let game = session(try fixture())
+        for _ in 0..<60 { game.tick() }
+        let actor = try #require(game.targetCandidates(for: 0).first).id
+        #expect(game.assign(control: 0, to: actor))
+        #expect(game.assign(control: 1, to: actor))
+        let expected = ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation)
+        for _ in 0..<65 { game.tick() }
+        let original = ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation)
+        let cancelled = try #require(game.prepareSeek(to: 20))
+        _ = try cancelled.advance(seconds: 0)
+        cancelled.cancel()
+        #expect(throws: CancellationError.self) { try cancelled.advance() }
+        #expect(ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation) == original)
+        let document = try #require(try game.replayDocument())
+        let operation = try #require(game.prepareSeek(to: 60, backwardSteps: 3))
+        while try !operation.advance(seconds: 0) {
+            #expect(ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation) == original)
+        }
+        #expect(ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation) == expected)
+        #expect(game.rewindCount == 3)
+        #expect(game.usedRewind)
+        let review = try #require(try game.makeReplaySession(document: document))
+        for _ in 0..<100 { review.tick() }
+        let replaySeek = try #require(review.prepareSeek(to: 60))
+        while try !replaySeek.advance(seconds: 0) {}
+        let restored = try #require(review as? ClassicMobileSession)
+        #expect(ClassicDOSReplayRecorder.stateHash(of: restored.finalSimulation) == expected)
+        #expect(review.replaySkillUses == [.init(tick: 60, name: "Climber"), .init(tick: 60, name: "Floater")])
+    }
+
     @Test func pointerProbesMatchAssignmentsWithoutChangingTheRun() throws {
         var simulation = try fixture()
         for _ in 0..<70 { simulation.tick() }

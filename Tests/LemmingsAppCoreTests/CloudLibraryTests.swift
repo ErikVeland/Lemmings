@@ -562,6 +562,59 @@ private final class LibraryCredentials: @unchecked Sendable {
         #expect(b.hotSeatID == seat && b.playingProfile?.portrait == 7)
         #expect(b.records.activeProfileID == restored.host)
     }
+    @Test func previousSyncedHotSeatSurvivesAnotherSelectedPlayerOfflineAndReopen() async throws {
+        let aa = try AppStorage.temporary(named: "previous-seat-a"), bb = try AppStorage.temporary(named: "previous-seat-b")
+        defer { aa.removeTemporaryFiles(); bb.removeTemporaryFiles() }
+        let a = ArcadeStore(storage: aa, bundledProofs: nil), b = ArcadeStore(storage: bb, bundledProofs: nil)
+        let guest = try #require(a.addProfile(initials: "UVA", portrait: 0, select: false))
+        a.prepareHotSeat(); a.turnPolicy = .atFirstFail
+        #expect(a.passSessionTurn(after: a.records.activeProfileID))
+        let original = try #require(a.hotSeatID)
+        let entries = try [LevelSourceEngine.classic, .lemmings2, .lemmings3, .neolemmix].enumerated().map { index, engine in
+            try LevelPlaylistEntry(identity: .init(engine: engine, packID: "fixture", levelID: "\(index)"),
+                catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+                levelNameSnapshot: "Level \(index)", levelNumberSnapshot: index + 1)
+        }
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: entries, currentIndex: 2)
+        let snapshot = JourneySessionSnapshot(run: run)
+        try GameProgressPreferences.saveJourneySession(snapshot, profileID: a.records.mainProfileID,
+            sessionID: original, defaults: aa.defaults)
+        #expect(a.startNewHotSeat())
+        let recent = try #require(a.hotSeatID)
+        try GameProgressPreferences.saveJourneySession(JourneySessionSnapshot(run: run), profileID: a.records.mainProfileID,
+            sessionID: recent, defaults: aa.defaults)
+        let server = LibraryServer(), identity = CloudLibraryIdentity(), transport = LibraryTransport(server)
+        let sa = CloudLibrarySync(store: a, storage: aa, transport: LibraryTransport(server), identities: [identity])
+        let sb = CloudLibrarySync(store: b, storage: bb, transport: transport, identities: [identity])
+        defer { sa.stop(); sb.stop() }
+        await sa.syncNow(); await sb.syncNow()
+        #expect(sb.state == .synced)
+        _ = try #require(b.addProfile(initials: "NEW", portrait: 1, select: true))
+        #expect(Set(b.savedHotSeats.map(\.id)) == [original, recent])
+        #expect(b.resumeHotSeat(id: recent))
+        #expect(b.savedHotSeats.map(\.id) == [original])
+        #expect(b.resumeHotSeat(id: original))
+        let restoredTurn = b.playingProfileID
+        #expect(b.records.profile(restoredTurn)?.initials == guest.initials)
+        #expect(b.turnPolicy == .atFirstFail)
+        transport.offline = true
+        await sb.syncNow()
+        #expect(sb.state == .offline)
+        let reopened = ArcadeStore(storage: bb, bundledProofs: nil)
+        #expect(reopened.hotSeatID == original && reopened.playingProfileID == restoredTurn)
+        #expect(reopened.savedHotSeats.map(\.id) == [recent])
+        #expect(GameProgressPreferences.journeySession(profileID: reopened.records.activeProfileID,
+            sessionID: original, defaults: bb.defaults) == snapshot)
+        transport.offline = false
+        await sb.syncNow(); await sa.syncNow(); await sb.syncNow()
+        #expect(sb.state == .synced)
+        #expect(b.hotSeatID == original && b.playingProfileID == restoredTurn)
+        #expect(b.savedHotSeats.map(\.id) == [recent])
+        #expect(GameProgressPreferences.journeySession(profileID: b.records.activeProfileID,
+            sessionID: original, defaults: bb.defaults) == snapshot)
+    }
+
     @Test func divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() throws {
         let device = UUID().uuidString.lowercased(), p = UUID().uuidString.lowercased(), q = UUID().uuidString.lowercased(), id = UUID().uuidString.lowercased()
         var archive = CloudLibraryArchive()

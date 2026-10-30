@@ -27,6 +27,7 @@ import AVFAudio
     private var lastPitchCents: Double?
     private var appliedRespectMuteSetting: Bool?
     private var cachedSettings = MobileSettings.current(from: .standard)
+    private var cachedSoundtrackNames: [String]?
     private var profileID = MobileProfiles.defaultID
     private var compositionID: String?
     /// One main theme plays on the library menus for the whole launch.
@@ -37,8 +38,13 @@ import AVFAudio
     private var launchSettled = false
     private var launchSettleTask: Task<Void, Never>?
     private var requestedMenu = (visible: false, active: false)
-    private static let menuSuspendDelay = 0.4
-    private var menuSuspendTask: Task<Void, Never>?
+    private static let menuSpinDownSeconds = 0.12
+    // Includes the tracker's existing 186 ms PCM reserve before its short brake.
+    private static let menuSpinDownParkSeconds = 0.35
+    private var menuSpinDownTask: Task<Void, Never>?
+    private let menuAudio = MobileAudioSessionController()
+    private var menuAudioReady = false
+    private var menuActivationPending = false
     private var menuKey: String { "menu|" + soundtrack }
     private(set) var currentTrackTitle: String?
     private(set) var currentSoundtrackName: String?
@@ -50,6 +56,16 @@ import AVFAudio
     }
     private init() {
         connectFailureMusic()
+        audioObservers.append(NotificationCenter.default.addObserver(
+            forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                // Background entry also stops gameplay and invalidates delayed activation.
+                self.requestedMenu.active = false
+                self.suspend()
+            }
+        })
         audioObservers.append(NotificationCenter.default.addObserver(
             forName: AVAudioSession.mediaServicesWereResetNotification, object: nil, queue: .main
         ) { [weak self] _ in
@@ -85,8 +101,12 @@ import AVFAudio
     private var isTestAudioMuted: Bool { ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted" }
 
     var soundtrackNames: [String] {
-        ["Original"] + (macintoshMusic == nil ? [] : [Self.macintosh]) + ["Adaptive DJ"] + (musicRoot.map { SoundtrackPlayer.soundtracks(at: $0).keys.sorted() } ?? [])
+        if let cachedSoundtrackNames { return cachedSoundtrackNames }
+        let names = ["Original"] + (macintoshMusic == nil ? [] : [Self.macintosh]) + ["Adaptive DJ"] + (musicRoot.map { SoundtrackPlayer.soundtracks(at: $0).keys.sorted() } ?? [])
+        cachedSoundtrackNames = names
+        return names
     }
+    func invalidateSoundtrackNames() { cachedSoundtrackNames = nil }
     var soundtrack: String {
         get { soundtrackNames.contains(settings.soundtrack) ? settings.soundtrack : "Original" }
         set {
@@ -135,23 +155,37 @@ import AVFAudio
 
     /// Plays the main theme while the library shows and no level is open.
     func setMenu(visible: Bool, active: Bool) {
+        let active = active && MobileAudioSessionWorkQueue.shared.playbackAllowed
         requestedMenu = (visible, active)
+        // Begin braking before settings or layout work during a Duo fold/unfold.
+        if !active {
+            if MobileAudioSessionWorkQueue.shared.playbackAllowed, playing == menuKey {
+                spinDownMenu()
+            } else if (playing == menuKey && !inactive) || menuAudioReady || menuActivationPending {
+                suspend()
+            }
+            return
+        }
         applySettings()
         guard visible, isEnabled, settings.classic.menuMusic, settings.classic.musicVolume > 0, !isTestAudioMuted else {
+            releaseMenuAudio()
             if playing == menuKey { stop() }
             return
         }
-        if playing == menuKey {
-            if active { menuSuspendTask?.cancel(); menuSuspendTask = nil; if inactive { resume() }; return }
-            // Folding or unfolding Duo deactivates the scene for a moment. Cutting the
-            // decks there and fading them back in clicked, so wait before suspending.
-            guard menuSuspendTask == nil, !inactive else { return }
-            menuSuspendTask = Task { @MainActor [weak self] in
-                try? await Task.sleep(nanoseconds: UInt64(Self.menuSuspendDelay * 1_000_000_000))
-                guard let self, !Task.isCancelled else { return }
-                self.menuSuspendTask = nil
-                if self.playing == self.menuKey, !self.requestedMenu.active { self.suspend() }
+        if active, !menuAudioReady, playing == nil || playing == menuKey {
+            guard !menuActivationPending else { return }
+            menuActivationPending = true
+            menuAudio.resume { [weak self] succeeded in
+                guard let self else { return }
+                self.menuActivationPending = false
+                self.menuAudioReady = succeeded
+                guard succeeded else { self.releaseMenuAudio(); return }
+                self.setMenu(visible: self.requestedMenu.visible, active: self.requestedMenu.active)
             }
+            return
+        }
+        if playing == menuKey {
+            if inactive { resume() }
             return
         }
         // A level's attempt owns the decks until it exits and stops them.
@@ -173,6 +207,8 @@ import AVFAudio
         menuTheme = theme
         usingDJ = false; dj.stop()
         paused = false; inactive = false; resultComplete = false
+        speed = 1; rewinding = false; pitch = GameplayMusicPitch(); lastPitchCents = nil
+        applyPitch()
         let recording: URL? = switch theme {
         case .macintoshLemming1: macintoshMusic?.root.appendingPathComponent("classic/lemming1.m4a")
         case let .recording(path): musicRoot?.appendingPathComponent(path)
@@ -198,6 +234,7 @@ import AVFAudio
     }
 
     func play(identifier: String, index: Int, title: String, attemptID: UUID, context: MobileMusicContext = .init()) {
+        guard MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
         applySettings()
         guard isEnabled, settings.classic.musicVolume > 0, !isTestAudioMuted else { return }
         let key = attemptID.uuidString + "|" + soundtrack
@@ -330,7 +367,8 @@ import AVFAudio
     }
 
     /// Pause, speed and reverse scratches use the shared Mac transports.
-    func setGameplayState(paused: Bool, speed: Double, rewinding: Bool = false) {
+    func setGameplayState(paused: Bool, speed: Double, rewinding: Bool = false, attemptID: UUID) {
+        guard acceptsGameplay(attemptID: attemptID) else { return }
         guard self.paused != paused || self.speed != speed || self.rewinding != rewinding else { return }
         let changed = self.paused != paused
         self.paused = paused; self.speed = speed; self.rewinding = rewinding
@@ -340,7 +378,7 @@ import AVFAudio
     }
     func update(_ snapshot: MobileGameSnapshot, active: Int? = nil, nukeRemainingTicks: Int? = nil,
                 allNukePopped: Bool? = nil, ticksPerSecond: Double = 17) {
-        guard !isTestAudioMuted else { return }
+        guard !menuAudioReady, !menuActivationPending, playing != menuKey, !isTestAudioMuted else { return }
         if resultComplete != snapshot.isComplete { resultComplete = snapshot.isComplete; applyOutputState() }
         let failed = snapshot.isComplete ? !snapshot.didWin : active.map {
             FailureMoodDecision.isUnrecoverable(saved: snapshot.saved, active: $0,
@@ -370,7 +408,7 @@ import AVFAudio
             didWin: snapshot.didWin, isComplete: snapshot.isComplete))
     }
     func advance() {
-        guard !inactive, !isTestAudioMuted else { return }
+        guard !menuAudioReady, !menuActivationPending, playing != menuKey, !inactive, !isTestAudioMuted else { return }
         let now = ProcessInfo.processInfo.systemUptime
         failureMusic.advance(at: now); nukeMood.advanceReturn(at: now)
         pitch.update(speed: settings.classic.variableSpeedEnabled ? speed : 1, at: now)
@@ -384,7 +422,7 @@ import AVFAudio
     private func applyOutputState() {
         // Retry clears the track key before its vinyl brake finishes.
         // Lifecycle suspension must still park every existing transport.
-        if inactive {
+        if inactive || !MobileAudioSessionWorkQueue.shared.playbackAllowed {
             module.suspendOutput(immediately: true)
             recordings.suspendOutput(immediately: true)
             dj.suspendOutput(immediately: true)
@@ -405,22 +443,61 @@ import AVFAudio
         module.playRewind(); recordings.playRewind(); dj.playRewind()
     }
     func vinylStop() { module.vinylStop(); recordings.vinylStop(); dj.vinylStop(); playing = nil }
-    func suspend() {
-        menuSuspendTask?.cancel(); menuSuspendTask = nil
+    func suspend(attemptID: UUID? = nil) {
+        if let attemptID, !acceptsGameplay(attemptID: attemptID) { return }
+        menuSpinDownTask?.cancel(); menuSpinDownTask = nil
         inactive = true
         resultTransitionTask?.cancel(); resultTransitionTask = nil
+        // Park the graphs before mood cleanup or asynchronous session deactivation.
+        applyOutputState()
+        releaseMenuAudio()
         failureMusic.finish()
         nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + NukeMusicSweep.returnDuration)
-        applyOutputState()
     }
-    func resume() { menuSuspendTask?.cancel(); menuSuspendTask = nil; inactive = false; applyOutputState() }
+    func resume() {
+        guard MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
+        menuSpinDownTask?.cancel(); menuSpinDownTask = nil
+        if playing == menuKey, !menuAudioReady {
+            setMenu(visible: requestedMenu.visible, active: requestedMenu.active)
+            return
+        }
+        inactive = false; applyOutputState()
+    }
     func stop() {
+        menuSpinDownTask?.cancel(); menuSpinDownTask = nil
+        releaseMenuAudio()
         resultTransitionTask?.cancel(); resultTransitionTask = nil
         module.stop(); recordings.stop(); dj.stop()
         playing = nil; lastTrack = nil; currentTrackTitle = nil; currentSoundtrackName = nil; resultComplete = false
         lastPitchCents = nil
         nukeMood.reset(); failureMusic = FailureMusicTransition(); connectFailureMusic()
         module.setTempoScale(1); recordings.setPlaybackRate(1); dj.setPlaybackRate(1)
+    }
+
+    private func releaseMenuAudio() {
+        guard menuAudioReady || menuActivationPending else { return }
+        menuAudioReady = false
+        menuActivationPending = false
+        menuAudio.suspend()
+    }
+
+    private func spinDownMenu() {
+        guard !inactive else { return }
+        inactive = true
+        module.suspendOutput(spinDownDuration: Self.menuSpinDownSeconds)
+        recordings.suspendOutput(spinDownDuration: Self.menuSpinDownSeconds)
+        dj.suspendOutput(spinDownDuration: Self.menuSpinDownSeconds)
+        menuSpinDownTask = Task { @MainActor [weak self] in
+            do { try await Task.sleep(for: .seconds(Self.menuSpinDownParkSeconds)) } catch { return }
+            guard let self, !Task.isCancelled else { return }
+            self.menuSpinDownTask = nil
+            if !self.requestedMenu.active { self.suspend() }
+        }
+    }
+
+    private func acceptsGameplay(attemptID: UUID) -> Bool {
+        !menuAudioReady && !menuActivationPending
+            && (playing == nil || playing?.hasPrefix(attemptID.uuidString + "|") == true)
     }
 }
 #endif

@@ -76,6 +76,7 @@ import NxlvKit
             }
             self.progress[pack.id] = nil
             self.tasks[pack.id] = nil
+            MobileMusic.shared.invalidateSoundtrackNames()
             self.onChange?()
         }
         onChange?()
@@ -97,6 +98,7 @@ import NxlvKit
     func remove(_ pack: MusicLibraryCatalogue.Pack) {
         allRequestedPacks = nil
         try? MusicLibraryStore.remove(pack, in: Self.directory)
+        MobileMusic.shared.invalidateSoundtrackNames()
         onChange?()
     }
 

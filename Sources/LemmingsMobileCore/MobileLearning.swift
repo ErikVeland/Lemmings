@@ -45,7 +45,11 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
         savedRuns.insert(run, at: 0)
     }
     public mutating func resumeJourney() {
-        guard let saved = journeySession?.run, saved.id != run?.id else { return }
+        if journeySession == nil, run?.source == .playlist(LearningJourney.playlistID) { return }
+        let saved = journeySession.map { $0.run } ?? savedRuns.first {
+            $0.source == .playlist(LearningJourney.playlistID)
+        }
+        guard let saved, saved.id != run?.id else { return }
         preserveCurrentRun()
         savedRuns.removeAll { $0.id == saved.id }
         run = saved
@@ -88,7 +92,8 @@ public struct MobileLearningResume: Sendable {
 
     public static func find(owner: String, seats: MobileHotSeatStore,
                             storage: (String) -> MobileStorage, journeyOnly: Bool = true,
-                            currentSessionOnly: Bool = true) -> Self? {
+                            currentSessionOnly: Bool = true,
+                            snapshot: (String?) -> JourneySessionSnapshot? = { _ in nil }) -> Self? {
         if currentSessionOnly, let current = seats.current, !current.players.contains(owner) { return nil }
         let candidates = [seats.current].compactMap { $0 }.filter { $0.players.contains(owner) }
             + seats.sharedSessions(player: owner)
@@ -97,8 +102,10 @@ public struct MobileLearningResume: Sendable {
                 + candidates.filter { $0.id != seats.current?.id }.map { ($0.scope, $0) }
             : [(owner, nil)] + candidates.map { ($0.scope, $0) }
         let scopes = currentSessionOnly ? Array(allScopes.prefix(1)) : allScopes
-        for (scope, seat) in scopes {
-            guard var state = storage(scope).load(MobileLearningState.self, name: "learning") else { continue }
+        var visited: Set<String> = []
+        for (scope, seat) in scopes where visited.insert(scope).inserted {
+            var state = storage(scope).load(MobileLearningState.self, name: "learning") ?? .init()
+            if let incoming = snapshot(seat?.id) { state.importJourneySession(incoming) }
             if journeyOnly || state.run == nil { state.resumeJourney() }
             guard let run = state.run else { continue }
             if journeyOnly, !(run.source == .playlist(LearningJourney.playlistID) && run.pool.id.hasPrefix("learning-")) { continue }

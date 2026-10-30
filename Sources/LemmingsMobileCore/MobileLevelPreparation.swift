@@ -19,6 +19,10 @@ public struct MobileOpenedLibrary: @unchecked Sendable {
 }
 
 public actor MobileLibraryLoader {
+    public nonisolated var unownedExecutor: UnownedSerialExecutor {
+        MobilePreparationExecutor.shared.asUnownedSerialExecutor()
+    }
+
     public init() {}
 
     public nonisolated func open(_ makeLibrary: @escaping @Sendable () throws -> (any MobileGameLibrary)?) async throws -> MobileOpenedLibrary {
@@ -62,6 +66,10 @@ public struct MobilePreparedLevel: @unchecked Sendable {
 
 /// Keeps decoding, artwork preparation and saved-state restoration off the UI thread.
 public actor MobileMenuPreviewLoader {
+    public nonisolated var unownedExecutor: UnownedSerialExecutor {
+        MobilePreparationExecutor.shared.asUnownedSerialExecutor()
+    }
+
     private let makeLibrary: @Sendable () throws -> any MobileGameLibrary
     private var library: (any MobileGameLibrary)?
     private var frames: [Int: MobileMenuPreview] = [:]

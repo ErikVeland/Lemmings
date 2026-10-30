@@ -21,7 +21,7 @@ import NxlvKit
         let routeStatus = status + L10n.text("Current route \(solved)/\(total)")
             + (later > 0 ? L10n.text("   •   Later \(later)") : "")
         page.setDetail([next?.entry.levelNameSnapshot, routeStatus].compactMap { $0 }.joined(separator: "\n\n"))
-        let primary = page.addPrimaryAction(next == nil ? L10n.text("Revisit") : restoresCheckpoint ? L10n.text("Resume") : resume ? L10n.text("Continue") : L10n.text("Let's play")) {
+        let primary = page.addPrimaryAction(next == nil ? L10n.text("Revisit") : restoresCheckpoint ? L10n.text("Resume") : resume ? L10n.text("Continue") : L10n.text("Start journey")) {
             if next == nil { revisit() } else { play() }
         }
         primary.isEnabled = next != nil || later > 0
