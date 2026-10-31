@@ -71,6 +71,13 @@ import UIKit
     private let tube = MobileCRTView(tubeDevice: true)
     private var hdr: MobileHDRView?
     private var attemptedHDR = false
+    private let hdrPreparation = MobileDeferredPreparation<MobileHDRView.Pipelines>()
+    private struct PendingHDRBurst {
+        let rects: [CGRect]
+        let cinematic: Bool
+        let time: Double
+    }
+    private var pendingHDRBursts: [PendingHDRBurst] = []
     private var spriteTrails = MobileSpriteTrails()
     private var speedMultiplier = 1.0
     private var speedEffectsActive = false
@@ -365,20 +372,30 @@ import UIKit
     private func prepareHDR() {
         guard hdr == nil, !attemptedHDR, enhancedEffects else { return }
         attemptedHDR = true
-        guard let view = MobileHDRView(effects: true) else { return }
-        view.frame = bounds
-        // The decoration and input stay above the light surface.
-        insertSubview(view, belowSubview: bombCountdownView)
-        hdr = view
+        hdrPreparation.request({ MobileHDRView.preparePipelines() }) { [weak self] pipelines in
+            guard let self else { return }
+            guard self.enhancedEffects, let pipelines else { self.pendingHDRBursts.removeAll(); return }
+            let view = MobileHDRView(pipelines: pipelines)
+            view.frame = self.bounds
+            self.insertSubview(view, belowSubview: self.bombCountdownView)
+            self.hdr = view
+            let now = ProcessInfo.processInfo.systemUptime
+            for burst in self.pendingHDRBursts {
+                view.trigger(rects: burst.rects, cinematic: burst.cinematic, at: max(now, burst.time))
+            }
+            self.pendingHDRBursts.removeAll(keepingCapacity: true)
+        }
     }
     func suspendVisualEffects() {
         spriteTrails.reset(); trailRevision &+= 1
+        pendingHDRBursts.removeAll()
         hdr?.clear(); speedEffectsActive = false; failureMood.finish()
         tubeSignature = nil
     }
     func resetTransientEffects(preservingTrails: Bool = false) {
         if !preservingTrails { spriteTrails.reset() }
         directionPulse.reset(); obviousDirectionPulse.reset()
+        pendingHDRBursts.removeAll()
         hdr?.clear(); explosionBirths.removeAll()
         trailRevision &+= 1; tubeSignature = nil
     }
@@ -389,6 +406,7 @@ import UIKit
         tube?.releaseEffectResources()
     }
     private func releaseHDR() {
+        hdrPreparation.cancel(); pendingHDRBursts.removeAll()
         hdr?.clear(); hdr?.removeFromSuperview(); hdr = nil; attemptedHDR = false
     }
     func updatePresentation() {
@@ -443,7 +461,12 @@ import UIKit
             }
             if !fresh.isEmpty, enhancedEffects {
                 prepareHDR()
-                hdr?.trigger(rects: fresh, cinematic: displaySettings.cinematicExplosionsEnabled, at: now)
+                let cinematic = displaySettings.cinematicExplosionsEnabled
+                if let hdr { hdr.trigger(rects: fresh, cinematic: cinematic, at: now) }
+                else if attemptedHDR {
+                    pendingHDRBursts.append(.init(rects: fresh, cinematic: cinematic, time: now))
+                    if pendingHDRBursts.count > NuclearExplosionTimeline.maximumBursts { pendingHDRBursts.removeFirst() }
+                }
             }
         }
         #endif
@@ -451,8 +474,19 @@ import UIKit
         setNeedsDisplay()
     }
 
+    /// Present a retained frame without replaying its sound or explosion events.
+    func presentRewindFrame(_ frame: MobilePixelFrame) throws {
+        guard let image = MobileBitmapRenderer.image(frame) else { throw MobileSessionError.frameUnavailable }
+        bitmap = image
+        bitmapRect = frame.renderedRect
+        arrowGlints = frame.arrowGlints
+        tubeSignature = nil
+        updateTube()
+        setNeedsDisplay()
+    }
+
     func purgeBitmap() {
-        spriteTrails.reset(); hdr?.clear(); explosionBirths.removeAll()
+        spriteTrails.reset(); hdr?.clear(); explosionBirths.removeAll(); pendingHDRBursts.removeAll()
         bitmap = nil; arrowGlints = nil
         updateBombCountdowns()
         tube?.isHidden = true

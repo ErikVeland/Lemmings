@@ -139,6 +139,7 @@ extension MobileGameViewController {
 
     func aim(at point: MobilePoint?, hover: Bool = false) {
         guard overlay.isHidden, playState.canEdit, lifecycle.isForeground, !lifecycle.isInterrupted else { return }
+        if point != nil { cancelRewindPresentationForInput() }
         hoverAimActive = hover
         previewInput = .precision
         previewPoint = point
@@ -167,6 +168,7 @@ extension MobileGameViewController {
         #endif
     }
     func panInput(dx: Double, dy: Double) {
+        cancelRewindPresentationForInput()
         #if os(tvOS)
         tvTargetLock.clear()
         #endif

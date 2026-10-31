@@ -9,6 +9,7 @@ final class MusicRewindBuffer: @unchecked Sendable {
   static let seconds = 12.0
   static let impulseSeconds = VinylBackspin.seconds
   private let lock = NSLock()
+  private let sourceControlLock = NSLock()
   let sampleRate: Double
   private var left: [Float]
   private var right: [Float]
@@ -22,10 +23,16 @@ final class MusicRewindBuffer: @unchecked Sendable {
   private var lastTrigger = -Double.infinity
   private var anchorWritten: Int64 = -1
   private var bufferedSource: BufferedAudioSource?
+  private var sourceStarted = false
   private var tailUntil = -Double.infinity
   var audioDiagnostics: AudioBufferStatistics { bufferedSource?.diagnostics ?? AudioBufferStatistics() }
   func drain() { bufferedSource?.drain() }
-  func startOutput() { bufferedSource?.start() }
+  func startOutput() {
+    sourceControlLock.lock(); defer { sourceControlLock.unlock() }
+    guard let source = bufferedSource else { return }
+    source.start()
+    sourceStarted = true
+  }
 
   init(sampleRate: Double = 44_100) {
     self.sampleRate = sampleRate
@@ -57,6 +64,8 @@ final class MusicRewindBuffer: @unchecked Sendable {
 
   /// Repeated taps extend the same reverse read rather than layering copies.
   @discardableResult func trigger(skipping frames: Int = 0) -> Bool {
+    sourceControlLock.lock()
+    defer { sourceControlLock.unlock() }
     lock.lock()
     guard written > 1 else { lock.unlock(); return false }
     let now = ProcessInfo.processInfo.systemUptime
@@ -69,21 +78,31 @@ final class MusicRewindBuffer: @unchecked Sendable {
     total = Int(sampleRate * Self.impulseSeconds)
     remaining = total
     lock.unlock()
-    if bufferedSource?.nodes[0].engine?.isRunning == true { bufferedSource?.start() }
+    if let source = bufferedSource, source.nodes[0].engine?.isRunning == true {
+      source.start()
+      sourceStarted = true
+    }
     return true
   }
 
   func cancel(clearHistory: Bool = false) {
+    sourceControlLock.lock()
+    defer { sourceControlLock.unlock() }
     lock.lock()
     remaining = 0
     tailUntil = -.infinity
     if clearHistory { written = 0; readHead = 0; lastTrigger = -.infinity; anchorWritten = -1 }
     lock.unlock()
-    bufferedSource?.stop()
+    if sourceStarted {
+      bufferedSource?.stop()
+      sourceStarted = false
+    }
   }
 
   func source(format: AVAudioFormat) -> AVAudioPlayerNode {
-    bufferedSource?.stop()
+    sourceControlLock.lock()
+    defer { sourceControlLock.unlock() }
+    if sourceStarted { bufferedSource?.stop(); sourceStarted = false }
     let source = BufferedAudioSource(label: "Lemmings.rewind-pcm", format: format) { [weak self] _, buffer, _ in
       self?.render(UnsafeMutableAudioBufferListPointer(buffer.mutableAudioBufferList), frames: Int(buffer.frameLength))
     }

@@ -78,6 +78,15 @@ if [[ "$game_center" != 1 && -z "${BETA_SIGNING_IDENTITY:-}" ]]; then
   fi
 fi
 
+if [[ "$game_center" != 1 && -n "${BETA_SIGNING_IDENTITY:-}" ]]; then
+  cloud_profile_args=()
+  if [[ -n "${CLOUD_PROVISIONING_PROFILE:-}" ]]; then
+    cloud_profile_args=(--profile "$CLOUD_PROVISIONING_PROFILE")
+  fi
+  python3 "$project_dir/Scripts/sign-capabilities.py" --check --public-cloud \
+    --identity "$BETA_SIGNING_IDENTITY" "${cloud_profile_args[@]}"
+fi
+
 echo "==> Building"
 if [[ "$game_center" == 1 ]]; then
   # build-local-app.sh signs this one itself, through sign-capabilities.py: an
@@ -107,10 +116,12 @@ if [[ "$game_center" == 1 ]]; then
   echo "    entitlement present, catalogue enabled"
 elif [[ -n "${BETA_SIGNING_IDENTITY:-}" ]]; then
   echo "==> Signing with Developer ID"
-  # The runtime hardening and timestamp are both required before Apple will
-  # notarize the result.
-  codesign --force --deep --options runtime --timestamp \
-    --sign "$BETA_SIGNING_IDENTITY" "$app_dir"
+  profile_args=()
+  if [[ -n "${CLOUD_PROVISIONING_PROFILE:-}" ]]; then
+    profile_args=(--profile "$CLOUD_PROVISIONING_PROFILE")
+  fi
+  python3 "$project_dir/Scripts/sign-capabilities.py" "$app_dir" --public-cloud \
+    --identity "$BETA_SIGNING_IDENTITY" "${profile_args[@]}"
 else
   # Removing files invalidates the signature the build applied, so seal it again.
   echo "==> No Developer ID found. Re-sealing with an ad-hoc signature."

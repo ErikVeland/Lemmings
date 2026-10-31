@@ -260,8 +260,9 @@ do {
 
     for (sequel, argument) in CommandLine.arguments.dropFirst().enumerated() {
         let root = URL(fileURLWithPath: argument)
-        guard FileManager.default.fileExists(atPath: root.path) else {
-            print("SKIP unavailable private data: \(root.lastPathComponent)")
+        let firstLevel = root.appendingPathComponent(sequel == 0 ? "LEVELS/LEVEL000.DAT" : "LEVELS/LEVEL001.DAT")
+        guard FileManager.default.fileExists(atPath: firstLevel.path) else {
+            print("SKIP unavailable private game data: \(root.lastPathComponent) (missing \(firstLevel.lastPathComponent))")
             continue
         }
         let directory = root.appendingPathComponent("LEVELS")

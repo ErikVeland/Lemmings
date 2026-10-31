@@ -141,6 +141,21 @@ typealias MobileGameControllerBase = UIViewController
     private var nextHeldRewindAt = 0.0
     private var rewindQueue = MobileRewindQueue()
     private var rewindPressAcceleration = MobileRewindPressAcceleration()
+    #if os(tvOS)
+    private let rewindFrameLimit = 2 * 1_048_576
+    #else
+    private let rewindFrameLimit = 8 * 1_048_576
+    #endif
+    private var rewindFrames = MobileRewindFrameHistory<MobilePixelFrame>(maximumBytes: {
+        #if os(tvOS)
+        2 * 1_048_576
+        #else
+        8 * 1_048_576
+        #endif
+    }(), maximumFrames: 48)
+    private let rewindFrameLease = RuntimePixelCacheLease()
+    private var rewindFrameGeometry: (width: Int, height: Int, rect: MobileRect?)?
+    private var rewindPresentationTask: Task<Void, Never>?
     var onCompleted: ((MobileGameSnapshot) -> Void)?
 
     let summary: MobileLevelSummary
@@ -409,7 +424,6 @@ typealias MobileGameControllerBase = UIViewController
         solutionSelector.onSelect = { [weak self] mode in self?.selectSolutionMode(mode) }
         solutionSelector.onToggleGhost = { [weak self] in self?.toggleGhostSolution() }
         hud.onRewindHold = { [weak self] held in self?.setRewindHeld(held) }
-        hud.onRewindRepeat = { [weak self] in self?.repeatHeldRewind() }
         hud.onStepBatch = { [weak self] action, count in self?.handleSteps(action, count: count) }
         hud.onSpeedHold = { [weak self] held, allowTap in self?.setSpeedInput(.mouse, held: held, allowTap: allowTap) }
         onHints = { [weak self] in self?.showHints() }
@@ -963,7 +977,7 @@ typealias MobileGameControllerBase = UIViewController
 
     func handle(_ touchEffects: [MobileTouchEffect], input: MobileTargetInput? = nil) {
         guard !touchEffects.isEmpty else { return }
-        if seekOperation != nil { cancelSeek() }
+        if seekOperation != nil || rewindPresentationTask != nil { cancelSeek() }
         if touchEffects.contains(.cancelPreview) {
             (session as? Lemmings2MobileSession)?.releasePointerInput()
             touchSelection = nil
@@ -1227,7 +1241,7 @@ typealias MobileGameControllerBase = UIViewController
             if gameSettings.classic.showReticleCount, let point = playfieldView.cursorPoint {
                 playfieldView.cursorCount = candidates.filter { abs($0.point.x - point.x) <= 8 && abs($0.point.y - point.y) <= 8 }.count
             } else { playfieldView.cursorCount = nil }
-            if gameSettings.classic.lemmingSelectionStyle == .modern, overlay.isHidden {
+            if (gameSettings.classic.lemmingSelectionStyle == .modern || browsingTouchSelection), overlay.isHidden {
                 selectionFade.set(highlightedTarget?.id, at: ProcessInfo.processInfo.systemUptime)
             } else { selectionFade.reset() }
             let selection = selectionFade.sample(at: ProcessInfo.processInfo.systemUptime)
@@ -1241,6 +1255,7 @@ typealias MobileGameControllerBase = UIViewController
             if !reusesScene {
                 playfieldView.captureSpriteTrails(session: session)
                 try playfieldView.update(frame: frame)
+                rememberRewindFrame(frame, tick: tick)
             } else { playfieldView.updatePresentation() }
             if !overlay.isHidden, overlayCanvas.page.preview {
                 overlayCanvas.preview = playfieldView.bitmap
@@ -1314,6 +1329,13 @@ typealias MobileGameControllerBase = UIViewController
                                     title: self.summary.title, attemptID: self.runID, context: self.musicContext)
             MobileMusic.shared.resume()
         }
+    }
+
+    func resumeAfterGameCenterAuthentication() {
+        guard viewIsVisible, lifecycle.isForeground, !lifecycle.isInterrupted,
+              !displayUpdatesSuspended, !deskClockVisible, !paused, overlay.isHidden,
+              !session.snapshot.isComplete else { return }
+        resumeAudio()
     }
 
     func pausePlay(showControls: Bool) {
@@ -1934,8 +1956,10 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     func applyLifecycle(_ event: MobileLifecycleEvent) {
+        if event == .enteredBackground || event == .sceneDisconnected { clearRewindFrames() }
         if event == .memoryWarning {
             cancelSeek()
+            clearRewindFrames()
             MobileDevicePerformance.memoryWarning()
             updatePerformanceBudget()
             playfieldView.releaseEffectResources()
@@ -2026,6 +2050,10 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func applyPresentationSettings(_ settings: MobileSettings) {
+        if gameSettings.classic != settings.classic {
+            cancelSeek()
+            clearRewindFrames()
+        }
         gameSettings = settings
         session.applySettings(settings.classic)
         playfieldView.displaySettings = settings.classic
@@ -2162,6 +2190,7 @@ typealias MobileGameControllerBase = UIViewController
         overlayBackdrop.isHidden = overlay.isHidden
         view.addSubview(overlayBackdrop)
         overlay.delegate = self
+        overlay.onViewportChange = { [weak self] in self?.overlayCanvas.viewportDidScroll() }
         overlay.backgroundColor = .black
         overlay.accessibilityViewIsModal = true
         overlay.addSubview(overlayCanvas)
@@ -2367,12 +2396,15 @@ typealias MobileGameControllerBase = UIViewController
             solutionPanelContentFrame = nil
             return
         }
-        let region = MobileSystemRegions.menuFrame(in: view)
+        let fullDisplay = MobileSystemRegions.usesFullDisplay(in: view)
+        let foldable = MobileSystemRegions.isFoldable(in: view)
+        let region = fullDisplay ? view.bounds : MobileSystemRegions.menuFrame(in: view)
         let classic = session as? ClassicMobileSession
         solutionSelector.showsGhost = solutionGame == nil && classic?.hasGhostSolution == true
         solutionSelector.ghostEnabled = classic?.ghostSolutionEnabled == true
         let presentation = MobileSolutionSelectorArt.presentation(in: region,
-            showsGhost: solutionSelector.showsGhost, style: MobileSolutionSwitchView.style)
+            showsGhost: solutionSelector.showsGhost, style: MobileSolutionSwitchView.style,
+            avoiding: foldable ? MobileSystemRegions.layoutObstructions(in: view) : [])
         solutionSelector.apply(presentation)
         solutionPanelContentFrame = presentation.content
         solutionSelector.mode = solutionGame == nil ? .game : .solution
@@ -2397,7 +2429,48 @@ typealias MobileGameControllerBase = UIViewController
         #endif
     }
 
+    private func clearRewindFrames() {
+        rewindFrames.clear()
+        rewindFrameGeometry = nil
+        rewindFrameLease.release()
+    }
+
+    private func rememberRewindFrame(_ frame: MobilePixelFrame, tick: Int) {
+        let process = ProcessInfo.processInfo
+        guard !MobileDevicePerformance.constrained, !gameSettings.classic.reduceMotion,
+              !UIAccessibility.isReduceMotionEnabled,
+              !process.isLowPowerModeEnabled, process.thermalState != .serious,
+              process.thermalState != .critical else { clearRewindFrames(); return }
+        guard !paused, overlay.isHidden else { return }
+        if let old = rewindFrameGeometry,
+           old.width != frame.width || old.height != frame.height || old.rect != frame.renderedRect {
+            clearRewindFrames()
+        }
+        rewindFrames.discard(after: tick)
+        guard tick % 3 == 0 else {
+            if !rewindFrameLease.reserve(bytes: rewindFrames.retainedBytes) { clearRewindFrames() }
+            return
+        }
+        let bytes = frame.rgba.count + (frame.arrowGlints?.strength.count ?? 0)
+        let memory = RuntimeMemoryBudget.shared
+        let otherCaches = max(0, memory.retainedCacheBytes - rewindFrames.retainedBytes)
+        let limit = min(rewindFrameLimit, max(0, memory.snapshot().cacheBytes / 2 - otherCaches))
+        guard bytes > 0, bytes <= limit else { clearRewindFrames(); return }
+        rewindFrames.trim(toBytes: limit - bytes)
+        rewindFrames.record(tick: tick, frame: frame, bytes: bytes)
+        guard rewindFrameLease.reserve(bytes: rewindFrames.retainedBytes) else { clearRewindFrames(); return }
+        rewindFrameGeometry = (frame.width, frame.height, frame.renderedRect)
+    }
+
+    func cancelRewindPresentationForInput() {
+        if rewindPresentationTask != nil { cancelSeek() }
+    }
+
     func cancelSeek(clearRewindQueue: Bool = true) {
+        if let task = rewindPresentationTask {
+            task.cancel(); rewindPresentationTask = nil
+            if let latestFrame { try? playfieldView.presentRewindFrame(latestFrame) }
+        }
         if clearRewindQueue {
             rewindQueue.cancel()
             rewindPressAcceleration.reset()
@@ -2483,15 +2556,21 @@ typealias MobileGameControllerBase = UIViewController
     }
 
     private func queueRewind(ticks: Int, backwardSteps: Int = 1) {
-        if rewindQueue.targetTick == nil { cancelSeek(clearRewindQueue: false) }
+        if rewindQueue.targetTick == nil && rewindPresentationTask == nil { cancelSeek(clearRewindQueue: false) }
         guard rewindQueue.append(ticks: ticks, from: session.snapshot.tick,
                                  earliestTick: session.earliestRewindTick, backwardSteps: backwardSteps) else { return }
         // Do not throw away reconstruction progress when another press arrives.
-        if seekOperation == nil { drainRewindQueue() }
+        if seekOperation == nil && rewindPresentationTask == nil { drainRewindQueue() }
     }
 
     private func drainRewindQueue() {
         guard let request = rewindQueue.takePending() else { return }
+        let origin = latestFrame
+        let geometryMatches = origin.map { frame in
+            rewindFrameGeometry.map { $0.width == frame.width && $0.height == frame.height && $0.rect == frame.renderedRect } ?? false
+        } ?? false
+        let frames = geometryMatches ? rewindFrames.frames(from: session.snapshot.tick, through: request.tick,
+                                                            maximumOriginGap: 2, maximumSampleGap: 6) : nil
         let started = startSeek(to: request.tick, backwardSteps: request.backwardSteps, isQueuedRewind: true) { [weak self] in
             guard let self else { return }
             self.rewindQueue.didCommit()
@@ -2507,13 +2586,47 @@ typealias MobileGameControllerBase = UIViewController
             #endif
             self.renderCurrentFrame(force: true)
             self.updateHUD()
-            if self.rewindQueue.targetTick != nil {
-                self.drainRewindQueue()
-            } else if !self.rewindHeld {
-                self.saveCheckpoint(reason: .periodic)
-            }
+            self.presentRewindFrames(frames, origin: origin)
         }
         if !started { rewindQueue.cancel() }
+    }
+
+    private func presentRewindFrames(_ frames: [MobilePixelFrame]?, origin: MobilePixelFrame?) {
+        guard let frames, frames.count > 1, let origin, let destination = latestFrame,
+              origin.width == destination.width, origin.height == destination.height,
+              origin.renderedRect == destination.renderedRect,
+              !MobileDevicePerformance.constrained,
+              !gameSettings.classic.reduceMotion, !UIAccessibility.isReduceMotionEnabled,
+              !ProcessInfo.processInfo.isLowPowerModeEnabled else { finishRewindPresentation(); return }
+        do { try playfieldView.presentRewindFrame(origin) }
+        catch { finishRewindPresentation(); return }
+        let playback = [origin] + frames + [destination]
+        let duration = MobileRewindTiming.duration(frameCount: playback.count)
+        rewindPresentationTask = Task { @MainActor [weak self] in
+            let began = ProcessInfo.processInfo.systemUptime
+            var previous = 0
+            while previous < playback.count - 1 {
+                do { try await Task.sleep(nanoseconds: 16_666_667) } catch { return }
+                guard let self, !Task.isCancelled else { return }
+                let process = ProcessInfo.processInfo
+                if process.isLowPowerModeEnabled || process.thermalState == .serious || process.thermalState == .critical { break }
+                let index = MobileRewindTiming.frameIndex(elapsed: process.systemUptime - began,
+                                                         duration: duration, count: playback.count)
+                guard index != previous else { continue }
+                do { try self.playfieldView.presentRewindFrame(playback[index]) }
+                catch { break }
+                previous = index
+            }
+            guard let self, !Task.isCancelled else { return }
+            self.rewindPresentationTask = nil
+            if let latestFrame = self.latestFrame { try? self.playfieldView.presentRewindFrame(latestFrame) }
+            self.finishRewindPresentation()
+        }
+    }
+
+    private func finishRewindPresentation() {
+        if rewindQueue.targetTick != nil { drainRewindQueue() }
+        else if !rewindHeld { saveCheckpoint(reason: .periodic) }
     }
 
     func setRewindHeld(_ held: Bool) {
@@ -2857,6 +2970,10 @@ typealias MobileGameControllerBase = UIViewController
             return
         }
         var region = MobileSystemRegions.menuFrame(in: view)
+        if MobileSystemRegions.usesFullDisplay(in: view) { region = view.bounds }
+        overlayCanvas.obstructionReferenceView = view
+        overlayCanvas.viewportObstructions = MobileSystemRegions.isFoldable(in: view)
+            ? MobileSystemRegions.layoutObstructions(in: view).map { CGRect(x: $0.frame.x, y: $0.frame.y, width: $0.frame.width, height: $0.frame.height) } : []
         layoutSolutionSelector()
         overlay.accessibilityViewIsModal = solutionSelector.isHidden
         if let content = solutionPanelContentFrame { region = content }
@@ -2873,20 +2990,41 @@ typealias MobileGameControllerBase = UIViewController
         globalNavigation.headingTitle = nil
         overlayCanvas.showsStaticHeading = false
         #endif
-        let navigationHeight = globalNavigation.height(for: region.width)
-        globalNavigation.frame = CGRect(x: region.minX, y: region.minY, width: region.width, height: navigationHeight)
-        if horizontalSettings { globalNavigation.frame.origin.y = region.maxY - navigationHeight }
+        let previousBottom = region.maxY
+        var navigationHeight = globalNavigation.height(for: region.width)
+        var navigationFrame = CGRect(x: region.minX, y: horizontalSettings ? region.maxY - navigationHeight : region.minY,
+                                     width: region.width, height: navigationHeight)
+        if solutionPanelContentFrame != nil {
+            navigationFrame = MobileSystemRegions.clearRow(navigationFrame, in: view)
+            navigationHeight = globalNavigation.height(for: navigationFrame.width)
+            navigationFrame.size.height = navigationHeight
+        } else {
+            navigationFrame = MobileSystemRegions.clearRow(navigationFrame, in: view)
+            navigationHeight = globalNavigation.height(for: navigationFrame.width)
+            navigationFrame.size.height = navigationHeight
+            if let local = MobileSystemRegions.navigationFrame(in: view, height: navigationHeight, bottom: horizontalSettings) {
+                navigationHeight = globalNavigation.height(for: local.width)
+                navigationFrame = MobileSystemRegions.navigationFrame(in: view, height: navigationHeight, bottom: horizontalSettings) ?? navigationFrame
+            }
+        }
+        globalNavigation.frame = navigationFrame
         view.bringSubviewToFront(globalNavigation)
-        if !horizontalSettings { region.origin.y += navigationHeight }
-        region.size.height -= navigationHeight
+        if horizontalSettings { region.size.height = max(0, min(previousBottom, navigationFrame.minY) - region.minY) }
+        else {
+            region.origin.y = max(region.minY, navigationFrame.maxY)
+            region.size.height = max(0, previousBottom - region.minY)
+        }
         if let resultPane = layoutSplitResult(navigationBottom: region.minY) { region = resultPane }
         overlayCanvas.usesBottomSettingsNavigation = horizontalSettings
         settingsTabs.tabs = overlayCanvas.page.settingsTabs ?? []
         settingsTabs.isHidden = !horizontalSettings || settingsTabs.tabs.isEmpty
         settingsTabs.isUserInteractionEnabled = !displayUpdatesSuspended
         if !settingsTabs.isHidden {
-            let height = settingsTabs.height(for: region.width)
-            settingsTabs.frame = CGRect(x: region.minX, y: region.minY, width: region.width, height: height)
+            var height = settingsTabs.height(for: region.width)
+            var tabFrame = MobileSystemRegions.clearRow(CGRect(x: region.minX, y: region.minY, width: region.width, height: height), in: view)
+            height = settingsTabs.height(for: tabFrame.width)
+            tabFrame = MobileSystemRegions.clearRow(CGRect(x: region.minX, y: region.minY, width: region.width, height: height), in: view)
+            settingsTabs.frame = tabFrame
             region.origin.y += height
             region.size.height = max(0, region.height - height)
             view.bringSubviewToFront(settingsTabs)

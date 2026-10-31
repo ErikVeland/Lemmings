@@ -33,6 +33,7 @@ import UIKit
         super.viewDidLoad()
         view.backgroundColor = .black
         scroll.contentInsetAdjustmentBehavior = .never
+        scroll.onViewportChange = { [weak self] in self?.canvas.viewportDidScroll() }
         view.addSubview(scroll); scroll.addSubview(canvas)
         canvas.onAction = { [weak self] in self?.perform($0) }
         #if os(tvOS)
@@ -64,7 +65,12 @@ import UIKit
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let region = MobileSystemRegions.menuFrame(in: view)
+        let fullDisplay = MobileSystemRegions.usesFullDisplay(in: view)
+        let region = fullDisplay ? view.bounds : MobileSystemRegions.menuFrame(in: view)
+        canvas.obstructionReferenceView = view
+        canvas.viewportObstructions = MobileSystemRegions.isFoldable(in: view) ? MobileSystemRegions.layoutObstructions(in: view).map {
+            CGRect(x: $0.frame.x, y: $0.frame.y, width: $0.frame.width, height: $0.frame.height)
+        } : []
         var scrollFrame = region
         #if os(iOS)
         if view.bounds.height > view.bounds.width && view.bounds.width < 600

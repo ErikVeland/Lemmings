@@ -36,6 +36,7 @@ import AVFAudio
     /// started during that burst underruns its render thread and crackles.
     private static let launchSettleSeconds = 1.5
     private var launchSettled = false
+    var startupAuthenticationPending = false
     private var launchSettleTask: Task<Void, Never>?
     private var requestedMenu = (visible: false, active: false)
     private static let menuSpinDownSeconds = 0.12
@@ -155,7 +156,7 @@ import AVFAudio
 
     /// Plays the main theme while the library shows and no level is open.
     func setMenu(visible: Bool, active: Bool) {
-        let active = active && MobileAudioSessionWorkQueue.shared.playbackAllowed
+        let active = active && !startupAuthenticationPending && MobileAudioSessionWorkQueue.shared.playbackAllowed
         requestedMenu = (visible, active)
         // Begin braking before settings or layout work during a Duo fold/unfold.
         if !active {
@@ -234,7 +235,7 @@ import AVFAudio
     }
 
     func play(identifier: String, index: Int, title: String, attemptID: UUID, context: MobileMusicContext = .init()) {
-        guard MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
+        guard !startupAuthenticationPending, MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
         applySettings()
         guard isEnabled, settings.classic.musicVolume > 0, !isTestAudioMuted else { return }
         let key = attemptID.uuidString + "|" + soundtrack
@@ -455,7 +456,7 @@ import AVFAudio
         nukeMood.advanceReturn(at: ProcessInfo.processInfo.systemUptime + NukeMusicSweep.returnDuration)
     }
     func resume() {
-        guard MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
+        guard !startupAuthenticationPending, MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
         menuSpinDownTask?.cancel(); menuSpinDownTask = nil
         if playing == menuKey, !menuAudioReady {
             setMenu(visible: requestedMenu.visible, active: requestedMenu.active)

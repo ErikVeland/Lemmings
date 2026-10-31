@@ -55,7 +55,7 @@ enum DeskClockReason: Sendable {
          suspendMusic: @escaping @MainActor () -> Void = { MobileMusic.shared.suspend() },
          resumeMusic: @escaping @MainActor () -> Void = { MobileMusic.shared.resume() },
          setIdleTimerDisabled: @escaping @MainActor (Bool) -> Void = { UIApplication.shared.isIdleTimerDisabled = $0 },
-         regions: @escaping @MainActor (UIView) -> [MobileReservedRegion] = { MobileSystemRegions.read(in: $0) },
+         regions: @escaping @MainActor (UIView) -> [MobileReservedRegion] = { MobileSystemRegions.layoutObstructions(in: $0) },
          voiceOverRunning: @escaping @MainActor () -> Bool = { UIAccessibility.isVoiceOverRunning },
          reloadWidgets: @escaping @MainActor () -> Void = { WidgetCenter.shared.reloadAllTimelines() }) {
         self.reason = reason

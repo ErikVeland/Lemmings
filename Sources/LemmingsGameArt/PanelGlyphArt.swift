@@ -319,12 +319,12 @@ public enum GameStartupArt {
         public let hourglass: CGRect
     }
 
-    public static func layout(in safe: CGRect) -> Layout {
-        let width = min(640, max(0, safe.width - 48))
-        let height = min(width * 380 / 1440, max(0, safe.height - 100))
-        let logo = CGRect(x: floor(safe.midX - width / 2), y: floor(safe.midY - height / 2 - 28),
+    public static func layout(in bounds: CGRect) -> Layout {
+        let width = min(640, max(0, bounds.width - 48), max(0, bounds.height - 100) * 1440 / 380)
+        let height = width * 380 / 1440
+        let logo = CGRect(x: bounds.midX - width / 2, y: bounds.midY - height / 2 - 28,
                           width: width, height: height)
-        return Layout(logo: logo, hourglass: CGRect(x: floor(safe.midX - 24),
+        return Layout(logo: logo, hourglass: CGRect(x: floor(bounds.midX - 24),
             y: logo.maxY + 24, width: 48, height: 48))
     }
 

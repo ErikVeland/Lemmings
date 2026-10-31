@@ -155,6 +155,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var savedSeatsBackID = "hotSeat"
     /// The open record card's artwork, hints and catalogue location.
     var recordDetail: MobileRecordDetail?
+    var syncCode = ""
+    var syncDraft: String?
     var syncMessage = ""
     var syncBusy = false
     #if os(tvOS)
@@ -281,6 +283,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         scrollView.backgroundColor = .black
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.alwaysBounceVertical = false
+        scrollView.onViewportChange = { [weak self] in self?.canvas.viewportDidScroll() }
         menuBackdropView.backgroundColor = UIColor.black.withAlphaComponent(GameMenuBackdropArt.opacity)
         menuBackdropView.layer.compositingFilter = "overlayBlendMode"
         menuBackdropView.isOpaque = false
@@ -360,7 +363,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         searchField.frame = CGRect(x: -100, y: -100, width: 10, height: 10)
         searchField.addAction(UIAction { [weak self] _ in
             guard let self else { return }
-            if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
+            if self.syncDraft != nil {
+                self.syncDraft = String(AppleCloudLibraryTransport.cleanCode(self.searchField.text ?? "").prefix(12))
+                self.searchField.text = self.syncDraft
+            }
+            else if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
             else {
                 self.searchQuery = self.searchField.text ?? ""
                 if case .fanGroup = self.route { self.route = .family(.fan); self.canvas.focusedID = "search" }
@@ -400,6 +407,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         NotificationCenter.default.addObserver(self, selector: #selector(cloudBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         #if os(iOS)
         cloudTransport.onChange = { [weak self] in self?.cloudProgress.requestSync() }
+        MobileMusic.shared.startupAuthenticationPending = cloudTransport.available
+        cloudTransport.onAuthenticationChange = { [weak self] pending in
+            MobileMusic.shared.startupAuthenticationPending = pending
+            guard let self else { return }
+            self.syncMenuMusic()
+            if !pending { self.game?.resumeAfterGameCenterAuthentication() }
+        }
         cloudTransport.start { [weak self] controller in
             self?.cloudAuthentication = controller
             self?.presentCloudAuthentication()
@@ -658,6 +672,21 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             else { lastBookPanes = (view.bounds.size, book) }
         }
         var menuRegion = book.isEmpty ? MobileSystemRegions.menuFrame(in: view) : safe
+        if MobileSystemRegions.usesFullDisplay(in: view) { menuRegion = view.bounds }
+        canvas.obstructionReferenceView = view
+        canvas.viewportObstructions = MobileSystemRegions.isFoldable(in: view) && !canvas.page.home && !browserShown
+            ? MobileSystemRegions.layoutObstructions(in: view).map { CGRect(x: $0.frame.x, y: $0.frame.y, width: $0.frame.width, height: $0.frame.height) } : []
+        #if os(iOS)
+        let openDuoHome = route == .home && canvas.page.home && book.isEmpty
+            && MobileSystemRegions.isFoldable(in: view)
+            && min(view.bounds.width, view.bounds.height) >= 600
+            && !MobileSystemRegions.read(in: view).contains { $0.kind == .division }
+        if openDuoHome { menuRegion = view.bounds }
+        canvas.homeObstructions = openDuoHome ? MobileSystemRegions.layoutObstructions(in: view).map {
+            CGRect(x: $0.frame.x - view.bounds.minX, y: $0.frame.y - view.bounds.minY,
+                   width: $0.frame.width, height: $0.frame.height)
+        } : []
+        #endif
         canvas.usesMenuBackdrop = usesMenuOverlay
         globalNavigation.isHidden = game != nil || route == .home || deskClockShown
         browser.showsBack = globalNavigation.isHidden
@@ -692,20 +721,34 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if !globalNavigation.isHidden {
             globalNavigation.showsBack = browserShown || canvas.page.backAction != nil
             globalNavigation.backTitle = browserShown ? L10n.text("Back") : canvas.page.backAction?.title ?? L10n.text("Back")
-            let navigationHeight = globalNavigation.height(for: menuRegion.width)
-            globalNavigation.frame = CGRect(x: menuRegion.minX, y: menuRegion.minY,
+            let previousBottom = menuRegion.maxY
+            var navigationHeight = globalNavigation.height(for: menuRegion.width)
+            var navigationFrame = CGRect(x: menuRegion.minX, y: bottomSettingsNavigation ? menuRegion.maxY - navigationHeight : menuRegion.minY,
                 width: menuRegion.width, height: navigationHeight)
-            if bottomSettingsNavigation { globalNavigation.frame.origin.y = menuRegion.maxY - navigationHeight }
-            else { menuRegion.origin.y += navigationHeight }
-            menuRegion.size.height -= navigationHeight
+            navigationFrame = MobileSystemRegions.clearRow(navigationFrame, in: view)
+            navigationHeight = globalNavigation.height(for: navigationFrame.width)
+            navigationFrame.size.height = navigationHeight
+            if let local = MobileSystemRegions.navigationFrame(in: view, height: navigationHeight, bottom: bottomSettingsNavigation) {
+                navigationHeight = globalNavigation.height(for: local.width)
+                navigationFrame = MobileSystemRegions.navigationFrame(in: view, height: navigationHeight, bottom: bottomSettingsNavigation) ?? navigationFrame
+            }
+            globalNavigation.frame = navigationFrame
+            if bottomSettingsNavigation { menuRegion.size.height = max(0, min(previousBottom, navigationFrame.minY) - menuRegion.minY) }
+            else {
+                menuRegion.origin.y = max(menuRegion.minY, navigationFrame.maxY)
+                menuRegion.size.height = max(0, previousBottom - menuRegion.minY)
+            }
             browser.frame = CGRect(x: 0, y: menuRegion.minY, width: view.bounds.width, height: menuRegion.height)
             view.bringSubviewToFront(globalNavigation)
         }
         settingsTabs.isHidden = !bottomSettingsNavigation || canvas.page.settingsTabs == nil
         settingsTabs.tabs = canvas.page.settingsTabs ?? []
         if !settingsTabs.isHidden {
-            let height = settingsTabs.height(for: menuRegion.width)
-            settingsTabs.frame = CGRect(x: menuRegion.minX, y: menuRegion.minY, width: menuRegion.width, height: height)
+            var height = settingsTabs.height(for: menuRegion.width)
+            var tabFrame = MobileSystemRegions.clearRow(CGRect(x: menuRegion.minX, y: menuRegion.minY, width: menuRegion.width, height: height), in: view)
+            height = settingsTabs.height(for: tabFrame.width)
+            tabFrame = MobileSystemRegions.clearRow(CGRect(x: menuRegion.minX, y: menuRegion.minY, width: menuRegion.width, height: height), in: view)
+            settingsTabs.frame = tabFrame
             menuRegion.origin.y += height
             menuRegion.size.height = max(0, menuRegion.height - height)
             view.bringSubviewToFront(settingsTabs)
@@ -718,12 +761,18 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if !listTools.isHidden {
             listTools.frame = CGRect(x: menuRegion.minX, y: menuRegion.minY, width: menuRegion.width, height: 0)
             listTools.frame.size.height = listTools.shelfHeight
-            menuRegion.origin.y += listTools.shelfHeight
-            menuRegion.size.height -= listTools.shelfHeight
+            listTools.frame = MobileSystemRegions.clearRow(listTools.frame, in: view)
+            listTools.frame.size.height = listTools.shelfHeight
+            menuRegion.origin.y += listTools.frame.height
+            menuRegion.size.height -= listTools.frame.height
             view.bringSubviewToFront(listTools)
         }
         var scrollFrame = menuRegion
         #if os(iOS)
+        if openDuoHome {
+            scrollFrame.origin.y = view.bounds.minY
+            scrollFrame.size.height = view.bounds.height
+        }
         let extendsPortraitViewport = view.bounds.height > view.bounds.width
             && view.bounds.width < 600 && book.isEmpty
             && !MobileSystemRegions.read(in: view).contains { $0.kind == .division }
@@ -737,7 +786,20 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         canvas.bookHomePanes = book.map {
             CGRect(x: $0.minX - safe.minX, y: $0.minY - safe.minY, width: $0.width, height: $0.height)
         }
-        let size = canvas.size(width: scrollView.bounds.width, minimumHeight: menuRegion.height)
+        var size = canvas.size(width: scrollView.bounds.width, minimumHeight: menuRegion.height)
+        #if os(iOS)
+        if openDuoHome && (!canvas.homeLayoutClearsObstructions || size.height > menuRegion.height + 0.5) {
+            menuRegion = MobileSystemRegions.menuFrame(in: view)
+            canvas.homeObstructions = MobileSystemRegions.layoutObstructions(in: view).map {
+                CGRect(x: $0.frame.x - view.bounds.minX, y: $0.frame.y - view.bounds.minY,
+                       width: $0.frame.width, height: $0.frame.height)
+            }
+            scrollFrame.origin.x = menuRegion.minX
+            scrollFrame.size.width = menuRegion.width
+            scrollView.setViewportFrame(scrollFrame)
+            size = canvas.size(width: scrollView.bounds.width, minimumHeight: menuRegion.height)
+        }
+        #endif
         let contentTop = max(0, menuRegion.minY - scrollFrame.minY)
         let contentBottom = max(0, scrollFrame.maxY - menuRegion.maxY)
         scrollView.unobscuredInsets = UIEdgeInsets(top: contentTop, left: 0, bottom: contentBottom, right: 0)
@@ -756,6 +818,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             menuBackdropView.isHidden ? 0 : menuBackdropView.frame.maxY + contentBottom)
         let contentSize = CGSize(width: size.width, height: contentHeight)
         if scrollView.contentSize != contentSize { scrollView.contentSize = contentSize }
+        #if os(iOS)
+        scrollView.isScrollEnabled = !openDuoHome || contentHeight > scrollFrame.height + 0.5
+        if openDuoHome && !scrollView.isScrollEnabled && scrollView.contentOffset != .zero {
+            scrollView.setContentOffset(.zero, animated: false)
+        }
+        #endif
         canvas.layoutIfNeeded()
         globalNavigation.layoutIfNeeded()
         settingsTabs.layoutIfNeeded()
@@ -917,6 +985,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case .levels:
             guard let library, library.levels.indices.contains(selectedIndex) else { route = .home; rebuild(); return }
             let level = library.levels[selectedIndex]
+            if preparingLevel {
+                canvas.page = GameFrontEnd.levelLoading(level.title)
+                canvas.preview = nil
+                canvas.previewSource = nil
+                break
+            }
             let rank = library is MobileJourneyLibrary ? library.levels : library.levels.filter { $0.rank == level.rank }
             let rankIndex = rank.firstIndex(where: { $0.index == selectedIndex }) ?? 0
             let ranksCount = library is MobileJourneyLibrary ? 1 : Set(library.levels.map(\.rank)).count
@@ -989,7 +1063,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case .hotSeats:
             canvas.page = savedHotSeatsPage(subtitle: subtitle); canvas.preview = nil
         case .cloudSaves:
-            canvas.page = CloudSyncArt.page(testerEnabled: libraryCloud.testerSyncEnabled, busy: syncBusy, message: syncMessage, status: libraryCloud.status); canvas.preview = nil
+            canvas.page = CloudSyncArt.page(testerEnabled: libraryCloud.testerSyncEnabled, busy: syncBusy, message: syncMessage, status: libraryCloud.status, code: syncCode, draft: syncDraft); canvas.preview = nil
         case .progress:
             canvas.page = progressPage(subtitle: subtitle); canvas.preview = nil
         case let .progressPlayer(profileID):
@@ -1044,7 +1118,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         browser.playerName = playerName(hotSeat?.turn ?? profiles.activeID)
         browser.statusText = loading ? "" : notice
         browser.isLoading = loading
-        let available = MobileSystemRegions.menuFrame(in: view)
+        let available = MobileSystemRegions.usesFullDisplay(in: view) ? view.bounds : MobileSystemRegions.menuFrame(in: view)
         let coverBrowser = available.width >= 600 && available.height >= 300
         let show = game == nil && route == .levels && coverBrowser && library != nil && !preparingLevel
         scrollView.isHidden = game != nil || show
@@ -1052,7 +1126,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         browser.artworkLoadingEnabled = show && viewIsVisible && sceneIsActive && !preparingLevel && libraryTask == nil
         if show, !browserShown, let library {
             browser.frame = view.bounds
-            browser.configure(levels: library.levels.filter { canSelectJourneyLevel($0.index) }, selected: selectedIndex)
+            var levels = library.levels
+            if library is MobileJourneyLibrary, let run = learning.run,
+               !mobileSettings.classic.unlockAllClassicLevels {
+                levels = levels.filter { $0.index <= run.currentIndex }
+            }
+            browser.configure(levels: levels, selected: selectedIndex)
         }
         browserShown = show
         syncMenuMusic()
@@ -1063,7 +1142,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if deskClock != nil { MobileMusic.shared.suspend(); return }
         #endif
         MobileMusic.shared.selectProfile(settingsProfileID)
-        MobileMusic.shared.setMenu(visible: game == nil && !deskClockShown && viewIsVisible, active: sceneIsActive)
+        MobileMusic.shared.setMenu(visible: game == nil && !deskClockShown && viewIsVisible,
+                                   active: sceneIsActive && !MobileMusic.shared.startupAuthenticationPending)
     }
 
     private func coverArtwork(_ index: Int) async -> CGImage? {
@@ -1126,6 +1206,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         if next != .shuffleAll { shuffleTask?.cancel(); shuffleTask = nil; shuffleScanning = false }
         searchField.resignFirstResponder()
+        if route == .cloudSaves && next != .cloudSaves {
+            syncDraft = nil; syncCode = ""; searchField.resignFirstResponder(); searchField.text = searchQuery
+        }
         if nameDraft != nil, !{ if case .playlist = next { return true }; return next == .players }() { nameDraft = nil; renamingPlayer = false; creatingPlayer = false; editingPlayerID = nil; searchField.text = searchQuery }
         confirmingDelete = false
         stopMenuPreviews(); previewGeneration = UUID()
@@ -1707,10 +1790,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 await cancelledPreviews?.value
                 for task in menuTasks { await task.value }
                 try Task.checkCancellation()
-                let preview = try? await previewLoader.load(index, settings: settings)
-                guard !Task.isCancelled, previewGeneration == generation else { return }
-                selectedPreview = preview
-                rebuild()
                 let prepared = try await previewLoader.prepare(index, settings: settings,
                     checkpoint: checkpoint, allowUnrelatedCheckpoint: restoringMatchingCheckpoint)
                 guard !Task.isCancelled, previewGeneration == generation else { return }

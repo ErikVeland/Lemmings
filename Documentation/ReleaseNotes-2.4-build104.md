@@ -20,6 +20,10 @@ Classic keeps recent rewind states close for shorter steps. Repeated rewind pres
 
 Music transitions and sound-effect processing have been updated to reduce interruptions during busy play and when moving between screens.
 
+## Progress on another device
+
+Cloud Saves offers a private, one-use device code without a new account. Linking keeps existing players and combines their progress, including saved Hot Seat campaigns. Mid-level checkpoints stay on the device where you played.
+
 ## Compatibility
 
 Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.

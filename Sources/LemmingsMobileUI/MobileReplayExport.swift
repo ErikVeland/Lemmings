@@ -31,7 +31,7 @@ extension MobileGameViewController {
                    settings.musicEnabled, settings.classic.music != .silent {
                     recorder.setMusic(url: MobileMusic.shared.currentTrackURL, gain: Float(settings.classic.musicVolume))
                 }
-                let movieEffects = effects.movieEffects()
+                let movieEffects = await effects.movieEffects()
                 let expected = replay.replayEndTick
                 repeat {
                     guard !cancelled.cancelled, self.replayExportRequestID == request else { recorder.discard(); return }

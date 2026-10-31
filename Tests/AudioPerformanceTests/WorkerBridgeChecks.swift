@@ -1,6 +1,53 @@
 import Foundation
 
 extension SoundEffectPlayer {
+    static func checkRepeatedSuspensionDoesNotWaitForVoiceHandoff() throws {
+        let player = SoundEffectPlayer(voiceCount: 2)
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 2)!
+        try player.engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 512)
+        try player.start()
+        defer { player.stop(); player.engine.disableManualRenderingMode() }
+        player.suspendOutput()
+        player.bufferedSource?.drain()
+        let completed = DispatchSemaphore(value: 0)
+        player.voiceBridge.lock.lock()
+        DispatchQueue.global().async { player.suspendOutput(); completed.signal() }
+        let result = completed.wait(timeout: .now() + .milliseconds(250))
+        player.voiceBridge.lock.unlock()
+        if result != .success { _ = completed.wait(timeout: .now() + 2) }
+        precondition(result == .success, "Repeated suspension waited for the voice handoff")
+        try player.engine.start()
+        precondition(player.engine.isRunning)
+        player.suspendOutput()
+        precondition(!player.engine.isRunning, "Suspension failed to stop an unexpectedly running engine")
+        try player.resumeOutput()
+        precondition(player.engine.isRunning && !player.outputSuspended)
+        print("PASS repeated suspension avoids the voice handoff and output resumes")
+    }
+
+    static func checkUnchangedViewportDoesNotWaitForWorker() {
+        let budget = DeviceEffectResources(physicalMemory: 8 * 1_073_741_824, processorCount: 8)
+        let player = SoundEffectPlayer(voiceCount: 2, resources: budget)
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1)!
+        player.bufferedSource = BufferedAudioSource(label: "test.viewport.noop", format: format) { _, _, _ in }
+        let viewport = GameplaySoundViewport(x: 0, y: 0, width: 100, height: 100)
+        player.setViewport(viewport)
+        let completed = DispatchSemaphore(value: 0)
+        player.voiceBridge.lock.lock()
+        DispatchQueue.global().async { player.setViewport(viewport); completed.signal() }
+        let result = completed.wait(timeout: .now() + .milliseconds(250))
+        player.voiceBridge.lock.unlock()
+        if result != .success { _ = completed.wait(timeout: .now() + 2) }
+        precondition(result == .success, "Unchanged viewport waited for the audio worker")
+        player.activeVoiceLimit = 1
+        player.setViewport(viewport)
+        precondition(player.activeVoiceLimit == 2, "Unchanged viewport failed to refresh the audio budget")
+        let moved = GameplaySoundViewport(x: 10, y: 0, width: 100, height: 100)
+        player.setViewport(moved)
+        precondition(player.viewport == moved, "Moved viewport was not applied")
+        print("PASS unchanged viewport avoids the handoff and preserves budget and camera updates")
+    }
+
     static func checkWorkerBridge() {
         let bridge = VoiceBridge(count: 2)
         let samples: [Float] = [0.25, -0.25, 0.5, -0.5]
@@ -65,4 +112,70 @@ extension SoundEffectPlayer {
     }
 }
 
+extension SoundEffectPlayer {
+    static func checkUnchangedVoiceLimitDoesNotWaitForWorker() {
+        let budget = DeviceEffectResources(physicalMemory: 8 * 1_073_741_824, processorCount: 8)
+        let player = SoundEffectPlayer(voiceCount: 2, resources: budget)
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1)!
+        player.bufferedSource = BufferedAudioSource(label: "test.voice-limit.noop", format: format) { _, _, _ in }
+        let completed = DispatchSemaphore(value: 0)
+        player.voiceBridge.lock.lock()
+        DispatchQueue.global().async { player.setVoiceLimit(2); completed.signal() }
+        let result = completed.wait(timeout: .now() + .milliseconds(250))
+        player.voiceBridge.lock.unlock()
+        if result != .success { _ = completed.wait(timeout: .now() + 2) }
+        precondition(result == .success, "Unchanged voice limit waited for the audio worker")
+        player.setVoiceLimit(1)
+        precondition(player.requestedVoiceLimit == 1 && player.activeVoiceLimit == 1 && player.activeRescueLimit == 1)
+        player.setVoiceLimit(2)
+        precondition(player.requestedVoiceLimit == 2 && player.activeVoiceLimit == 2)
+        print("PASS unchanged voice limit avoids the handoff and real limit changes still apply")
+    }
+
+    static func checkActiveResumeDoesNotWaitForVoiceHandoff() throws {
+        let player = SoundEffectPlayer(voiceCount: 2)
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 2)!
+        try player.engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 512)
+        try player.start()
+        defer { player.stop(); player.engine.disableManualRenderingMode() }
+        let completed = DispatchSemaphore(value: 0)
+        player.voiceBridge.lock.lock()
+        DispatchQueue.global().async {
+            try? player.resumeOutput()
+            completed.signal()
+        }
+        let result = completed.wait(timeout: .now() + .milliseconds(250))
+        player.voiceBridge.lock.unlock()
+        if result != .success { _ = completed.wait(timeout: .now() + 2) }
+        precondition(result == .success, "Active resume waited for the voice handoff")
+        print("PASS active resume avoids the busy voice handoff")
+    }
+
+    static func checkUnchangedNukeDoesNotWaitForWorker() {
+        let player = SoundEffectPlayer(voiceCount: 2)
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 1)!
+        player.bufferedSource = BufferedAudioSource(label: "test.nuke.noop", format: format) { _, _, _ in }
+        let completed = DispatchSemaphore(value: 0)
+        player.voiceBridge.lock.lock()
+        DispatchQueue.global().async {
+            player.setNukeActive(false)
+            completed.signal()
+        }
+        let result = completed.wait(timeout: .now() + .milliseconds(250))
+        player.voiceBridge.lock.unlock()
+        if result != .success { _ = completed.wait(timeout: .now() + 2) }
+        precondition(result == .success, "Unchanged nuke state waited for the audio worker")
+        player.setNukeActive(true)
+        precondition(player.nukeActive && player.voices.contains(where: { $0.isActive }))
+        player.setNukeActive(false)
+        precondition(!player.nukeActive)
+        print("PASS unchanged nuke state avoids the audio handoff; state changes still play")
+    }
+}
+
 SoundEffectPlayer.checkWorkerBridge()
+SoundEffectPlayer.checkUnchangedNukeDoesNotWaitForWorker()
+try SoundEffectPlayer.checkActiveResumeDoesNotWaitForVoiceHandoff()
+try SoundEffectPlayer.checkRepeatedSuspensionDoesNotWaitForVoiceHandoff()
+SoundEffectPlayer.checkUnchangedViewportDoesNotWaitForWorker()
+SoundEffectPlayer.checkUnchangedVoiceLimitDoesNotWaitForWorker()

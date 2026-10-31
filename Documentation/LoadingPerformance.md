@@ -106,10 +106,19 @@ cooperative pool's smaller stack in the isolated Beach resume regression
 isolation, cancellation and off-main preparation without reserving a new stack
 for every preview. Classic, L2, L3 and supported NeoLemmix share this worker.
 
-Resume shows the level detail page while preparing, including on wide Duo
-layouts whose carousel artwork is suspended during preparation. It renders the
-opening preview before reconstructing the checkpoint. Optional preview failure
-does not discard or block a compatible saved attempt. Leaving cancels the
+Resume now uses a loading page while preparing, with no level-selection or Play
+targets. Fixed Back/Home navigation retains cancellation. This includes wide Duo
+layouts whose carousel artwork is suspended during preparation. Ready remains a
+separate paused step. The owner reported the earlier detail page looked interactive
+during Gen8 build-41 acceptance. The replacement needs device acceptance.
+
+The Gen8 build-41 trace also captures a 4.95-second Journey Resume pause. The
+browser reloaded and decoded the saved Journey inside its per-level filter.
+Build 42 reads that run once per browser configuration and keeps the existing
+current-position and unlock rules. It does not cache state between rebuilds.
+Device timing for this correction remains pending.
+The 31 October recovery restores 2.3's direct checkpoint preparation. It retains an existing
+preview but does not render a new preview before restoration. Leaving cancels the
 request; L2, L3 and Neo reconstruction check cancellation between ticks. Results
 from obsolete requests cannot replace the current screen. L2/L3 locate saved
 levels by identity before relying on their old catalogue position. Saved queues
@@ -117,7 +126,7 @@ are resolved before standalone engine routes. Save formats and identities stay
 unchanged.
 
 The muted offscreen regression reopens a 2,000-tick save of **Quad Quirks on the
-Quay!**, renders its preview, restores its exact state hash, then rewinds and
+Quay!**, with and without a cached preview, restores its exact state hash, then rewinds and
 returns to that state. It checks retained attempt ID, owner, scope, camera and
 selected control using isolated files. Native sequel cancellation and existing
 Classic/L2/L3/Neo checkpoint and rewind checks pass. This is local source

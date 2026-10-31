@@ -8,6 +8,14 @@ import UIKit
 /// Speed and pop light share the desktop shaders. The game display link drives
 /// this surface only while an effect is visible.
 @MainActor final class MobileHDRView: MTKView {
+    struct Pipelines: @unchecked Sendable {
+        let device: MTLDevice
+        let commands: MTLCommandQueue
+        let speed: MTLRenderPipelineState
+        let pop: MTLRenderPipelineState
+        let flash: MTLRenderPipelineState
+        let glint: MTLRenderPipelineState
+    }
     private let commands: MTLCommandQueue
     private let speedPipeline: MTLRenderPipelineState
     private let popPipeline: MTLRenderPipelineState
@@ -32,7 +40,7 @@ import UIKit
     private var project: ((SIMD2<Float>) -> CGPoint)?
     private var outstandingSubmissions = 0
 
-    init?(effects: Bool) {
+    nonisolated static func preparePipelines() -> Pipelines? {
         guard let device = MTLCreateSystemDefaultDevice(), let commands = device.makeCommandQueue(),
               let library = try? device.makeLibrary(source: GameplayHDRShaders.source, options: nil),
               let vertex = library.makeFunction(name: "flash_vertex") else { return nil }
@@ -51,9 +59,13 @@ import UIKit
         }
         guard let speed = pipeline("speed_fragment"), let pop = pipeline("nuclear_fragment"),
               let flash = pipeline("flash_fragment"), let glint = pipeline("glint_fragment") else { return nil }
-        self.commands = commands; speedPipeline = speed; popPipeline = pop; flashPipeline = flash
-        glintPipeline = glint
-        super.init(frame: .zero, device: device)
+        return Pipelines(device: device, commands: commands, speed: speed, pop: pop, flash: flash, glint: glint)
+    }
+
+    init(pipelines: Pipelines) {
+        commands = pipelines.commands; speedPipeline = pipelines.speed; popPipeline = pipelines.pop
+        flashPipeline = pipelines.flash; glintPipeline = pipelines.glint
+        super.init(frame: .zero, device: pipelines.device)
         colorPixelFormat = .rgba16Float
         framebufferOnly = true; autoResizeDrawable = false
         isPaused = true; enableSetNeedsDisplay = true

@@ -7,6 +7,8 @@ import Testing
 struct MobilePresentationParityTests {
     private static let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         .deletingLastPathComponent().deletingLastPathComponent()
+    private static let hasSequelLevels = ["Sources/Ports/Lemm2/LEVELS/LEVEL000.DAT", "Sources/Ports/LEM3CD/LEVELS/LEVEL001.DAT"]
+        .allSatisfy { FileManager.default.fileExists(atPath: root.appendingPathComponent($0).path) }
 
     @Test func feedbackRespectsSelectionStyleReducedEffectsAndSimulationTime() throws {
         let frame = try MobilePixelFrame(width: 1, height: 1, rgba: Data([100, 220, 80, 255]))
@@ -32,7 +34,7 @@ struct MobilePresentationParityTests {
         #expect(feedback.acknowledgement(in: 0, tick: 20, ticksPerSecond: 20) == nil)
     }
 
-    @Test @MainActor func nativeSequelLibrariesSupplyMasksAndAssignmentFeedback() throws {
+    @Test(.enabled(if: Self.hasSequelLevels)) @MainActor func nativeSequelLibrariesSupplyMasksAndAssignmentFeedback() throws {
         let temporary = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: temporary) }
         let storage = MobileStorage(directory: temporary)

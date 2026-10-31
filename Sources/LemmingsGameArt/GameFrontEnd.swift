@@ -128,6 +128,11 @@ public struct GameFrontEnd {
             self.homeInitials = homeInitials
         }
     }
+    public static func levelLoading(_ title: String) -> Page {
+        Page(title: L10n.text("Loading..."), subtitle: title,
+             footer: [.init("back", L10n.text("Back"))])
+    }
+
     public struct Target: Equatable {
         public let action: Action
         public let frame: CGRect
@@ -148,6 +153,96 @@ public struct GameFrontEnd {
         public func action(at point: CGPoint) -> String? {
             targets.first { $0.action.enabled && $0.frame.contains(point) }?.action.id
         }
+    }
+
+    /// Keeps drawing and input frames together around display obstructions.
+    public static func avoidingObstructions(_ layout: Layout, obstacles: [CGRect]) -> Layout {
+        guard !obstacles.isEmpty else { return layout }
+        let bounds = CGRect(origin: .zero, size: layout.size)
+        var placed: [Target] = []
+        for (index, target) in layout.targets.enumerated() {
+            let frame = target.frame
+            guard obstacles.contains(where: { $0.intersects(frame) }) else {
+                placed.append(target)
+                continue
+            }
+            let occupied = placed.map(\.frame) + layout.targets.dropFirst(index + 1).map(\.frame)
+            var candidates = [frame]
+            for obstacle in obstacles where obstacle.intersects(frame) {
+                candidates += [frame.offsetBy(dx: obstacle.minX - frame.maxX - 4, dy: 0),
+                               frame.offsetBy(dx: obstacle.maxX - frame.minX + 4, dy: 0),
+                               frame.offsetBy(dx: 0, dy: obstacle.minY - frame.maxY - 4),
+                               frame.offsetBy(dx: 0, dy: obstacle.maxY - frame.minY + 4)]
+                let leftWidth = obstacle.minX - frame.minX - 4
+                let rightX = obstacle.maxX + 4
+                let minimumWidth = max(44, (target.action.visibleTitle.split(whereSeparator: \.isWhitespace)
+                    .map { GameTextLayout.width(of: String($0)) }.max() ?? 0) + 32)
+                func captionHeight(_ width: CGFloat) -> CGFloat {
+                    max(frame.height, GameTextLayout.height(target.action.visibleTitle, width: width - 32) + 8)
+                }
+                if leftWidth >= minimumWidth {
+                    candidates.append(CGRect(x: frame.minX, y: frame.minY, width: leftWidth, height: captionHeight(leftWidth)))
+                }
+                if frame.maxX - rightX >= minimumWidth {
+                    candidates.append(CGRect(x: rightX, y: frame.minY, width: frame.maxX - rightX, height: captionHeight(frame.maxX - rightX)))
+                }
+            }
+            let suitable = candidates.filter { candidate in
+                bounds.contains(candidate) && !obstacles.contains(where: { $0.intersects(candidate) })
+                    && !occupied.contains(where: { $0.intersects(candidate) })
+                    && !candidate.intersects(layout.heading)
+            }
+            let nearest = suitable.min { a, b in
+                abs(a.midX - frame.midX) + abs(a.midY - frame.midY)
+                    < abs(b.midX - frame.midX) + abs(b.midY - frame.midY)
+            } ?? frame
+            placed.append(Target(action: target.action, frame: nearest))
+        }
+        for blocked in placed where obstacles.contains(where: { $0.intersects(blocked.frame) }) {
+            let indices = placed.indices.filter {
+                abs(placed[$0].frame.minY - blocked.frame.minY) < 0.01 &&
+                abs(placed[$0].frame.height - blocked.frame.height) < 0.01
+            }.sorted { placed[$0].frame.minX < placed[$1].frame.minX }
+            guard indices.count > 1, let first = indices.first, let last = indices.last else { continue }
+            let row = CGRect(x: placed[first].frame.minX, y: blocked.frame.minY,
+                             width: placed[last].frame.maxX - placed[first].frame.minX, height: blocked.frame.height)
+            let regions = obstacles.map { MobileReservedRegion(kind: .occlusion,
+                frame: MobileRect(x: $0.minX, y: $0.minY, width: $0.width, height: $0.height)) }
+            let clear = MobileDisplayRegions.clearHorizontalFrame(
+                MobileRect(x: row.minX, y: row.minY, width: row.width, height: row.height), avoiding: regions)
+            let gap: CGFloat = 8
+            let width = (clear.width - CGFloat(indices.count - 1) * gap) / CGFloat(indices.count)
+            guard width >= 44, indices.allSatisfy({
+                GameTextLayout.height(placed[$0].action.visibleTitle, width: width - 32) + 8 <= row.height
+            }) else { continue }
+            for (column, index) in indices.enumerated() {
+                placed[index] = Target(action: placed[index].action,
+                    frame: CGRect(x: clear.x + CGFloat(column) * (width + gap), y: row.minY, width: width, height: row.height))
+            }
+        }
+        var result = Layout(size: layout.size, board: layout.board, heading: layout.heading,
+            subtitle: layout.subtitle, preview: layout.preview, details: layout.details, targets: placed)
+        result.initials = layout.initials
+        result.stars = layout.stars
+        result.secondaryBoard = layout.secondaryBoard
+        result.libraryHeading = layout.libraryHeading
+        let regions = obstacles.map { MobileReservedRegion(kind: .occlusion,
+            frame: MobileRect(x: $0.minX, y: $0.minY, width: $0.width, height: $0.height)) }
+        result.rowHeadings = layout.rowHeadings.map { title, frame in
+            guard obstacles.contains(where: { $0.intersects(frame) }) else { return (title, frame) }
+            let shifts = obstacles.filter { $0.intersects(frame) }.flatMap { obstacle in
+                [frame.offsetBy(dx: obstacle.maxX - frame.minX + 2, dy: 0),
+                 frame.offsetBy(dx: obstacle.minX - frame.maxX - 2, dy: 0)]
+            }
+            if let shifted = shifts.first(where: { candidate in
+                bounds.contains(candidate) && !obstacles.contains(where: { $0.intersects(candidate) })
+            }) { return (title, shifted) }
+            let clear = MobileDisplayRegions.clearHorizontalFrame(
+                MobileRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height), avoiding: regions)
+            guard clear.width > 0, GameTextLayout.height(title, width: clear.width) <= frame.height else { return (title, frame) }
+            return (title, CGRect(x: clear.x, y: clear.y, width: clear.width, height: clear.height))
+        }
+        return result
     }
 
     public static func layout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, boxedHome: Bool = false,
@@ -178,7 +273,8 @@ public struct GameFrontEnd {
             columns: min(requestedColumns, fittingColumns), spanSingleAction: true)
         // A short, wide screen puts the preview beside its details so the actions stay in view.
         let compact = page.preview && minimumHeight < 520 && width > minimumHeight * 1.3
-        let titleScale = boardWidth >= 620 ? 2 : 1
+        let textOnly = !page.preview && page.rows.isEmpty
+        let titleScale = textOnly ? 2 : (boardWidth >= 620 ? 2 : 1)
         let headingHeight = max(compact ? 40 : 52, GameTextLayout.height(page.title, width: boardWidth - 40, face: .large, scale: titleScale))
         let heading = CGRect(x: x + 20, y: compact ? 28 : 32, width: boardWidth - 40, height: headingHeight)
         let subtitle = CGRect(x: x + 20, y: heading.maxY + (compact ? 2 : 8), width: boardWidth - 40, height: GameTextLayout.height(page.subtitle, width: boardWidth - 40))
@@ -243,14 +339,19 @@ public struct GameFrontEnd {
         let footerPitch = footerHeight + 12
         let height = max(minimumHeight, y + CGFloat(rows) * footerPitch + 36)
         y = max(y + 12, height - CGFloat(rows) * footerPitch - 24)
+        let textOnlyBottom = details.last?.maxY ?? subtitle.maxY
+        let textOnlyOffset = textOnly
+            ? max(0, floor((y - 12 + 24 - heading.minY - textOnlyBottom) / 2))
+            : 0
         for slot in footerGrid.slots {
             targets.append(Target(action: slot.action, frame: footerGrid.frame(for: slot, x: x + 20, y: y, width: boardWidth - 40,
                 height: footerHeight, gap: 12, rowGap: 12)))
         }
         var layout = Layout(size: CGSize(width: width, height: height),
                       board: CGRect(x: x, y: 16, width: boardWidth, height: height - 32),
-                      heading: heading, subtitle: subtitle, preview: preview,
-                      details: details, targets: targets)
+                      heading: heading.offsetBy(dx: 0, dy: textOnlyOffset),
+                      subtitle: subtitle.offsetBy(dx: 0, dy: textOnlyOffset), preview: preview,
+                      details: details.map { $0.offsetBy(dx: 0, dy: textOnlyOffset) }, targets: targets)
         layout.stars = stars
         layout.rowHeadings = rowHeadings
         return layout
@@ -397,22 +498,30 @@ public struct GameFrontEnd {
         }
         let available = minimumHeight - contentTop - actionsHeight - 36
         let previewWidth = sideBySide ? inner - detailWidth - gap : inner
-        let previewHeight = sideBySide ? max(64, fillsPane ? available : min(220, available))
-            : max(48, fillsPane ? minimumHeight - y - actionsHeight - 36 : min(140, minimumHeight - y - actionsHeight - 36))
+        let previewHeight = sideBySide ? max(64, min(220, available))
+            : max(48, min(140, minimumHeight - y - actionsHeight - 36))
         let preview = CGRect(x: x + inset, y: sideBySide ? contentTop : y, width: previewWidth, height: previewHeight)
         y = max(y, preview.maxY) + 8
         let contentHeight = y + actionsHeight + 24
         let height = max(minimumHeight, contentHeight)
         let offset = fillsPane ? 0 : max(0, (height - contentHeight) / 2)
-        let footerY = y
+        let footerY = fillsPane ? max(y + 12, height - actionsHeight - 24) : y
+        let contentBottom = max(y, preview.maxY)
+        let contentOffset = fillsPane
+            ? max(0, floor((24 + footerY - 12 - heading.minY - contentBottom) / 2))
+            : 0
         for slot in footerGrid.slots {
             targets.append(Target(action: slot.action, frame: footerGrid.frame(for: slot, x: x + inset, y: footerY, width: inner,
                 height: footerHeight, gap: gap, rowGap: gap)))
         }
         return Layout(size: CGSize(width: width, height: height),
-                      board: CGRect(x: x, y: 12 + offset, width: boardWidth, height: contentHeight - 24),
-                      heading: heading.offsetBy(dx: 0, dy: offset), subtitle: subtitle.offsetBy(dx: 0, dy: offset),
-                      preview: preview.offsetBy(dx: 0, dy: offset), details: details.map { $0.offsetBy(dx: 0, dy: offset) },
+                      board: CGRect(x: x, y: 12 + offset, width: boardWidth,
+                                    height: (fillsPane ? height : contentHeight) - 24),
+                      heading: heading.offsetBy(dx: 0, dy: offset + contentOffset),
+                      subtitle: subtitle.offsetBy(dx: 0, dy: offset + contentOffset),
+                      preview: preview.offsetBy(dx: 0, dy: offset + contentOffset), details: details.map {
+                          $0.offsetBy(dx: 0, dy: offset + contentOffset)
+                      },
                       targets: targets.map { Target(action: $0.action, frame: $0.frame.offsetBy(dx: 0, dy: offset)) })
     }
 

@@ -127,6 +127,13 @@ if [[ -z "$signing_identity" ]]; then
     awk -F'"' '/Developer ID Application:/ { print $2; exit }')"
 fi
 [[ -n "$signing_identity" ]] || fail "No Developer ID Application identity was found. Set SIGNING_IDENTITY."
+cloud_profile_args=()
+if [[ -n "${CLOUD_PROVISIONING_PROFILE:-}" ]]; then
+  cloud_profile_args=(--profile "$CLOUD_PROVISIONING_PROFILE")
+fi
+python3 "$project_dir/Scripts/sign-capabilities.py" --check --public-cloud \
+  --identity "$signing_identity" "${cloud_profile_args[@]}"
+
 [[ "${PUBLISH_GITHUB_RELEASE:-0}" == 0 ]] ||
   fail "Package first. Publish only after review with Scripts/publish-github-release.sh."
 if [[ -n "$notary_keychain" ]]; then
@@ -307,28 +314,12 @@ build_app() {
 
 sign_developer_id() {
   local app="$1"
-  local widget="$app/Contents/PlugIns/DeskClockMacWidget.appex"
-  if [[ -d "$widget" ]]; then
-    codesign --force --options runtime --timestamp --sign "$signing_identity" \
-      --entitlements "$project_dir/Apps/DeskClockWidget/Mac/DeskClockMacWidget.entitlements" "$widget"
+  local profile_args=()
+  if [[ -n "${CLOUD_PROVISIONING_PROFILE:-}" ]]; then
+    profile_args=(--profile "$CLOUD_PROVISIONING_PROFILE")
   fi
-  # Preserve Sparkle's helper entitlements while signing nested code inside out.
-  python3 - "$project_dir/Scripts/sign-capabilities.py" "$app" "$signing_identity" <<'PYSIGN'
-import pathlib, runpy, sys
-signing = runpy.run_path(sys.argv[1])
-contents = pathlib.Path(sys.argv[2]) / 'Contents'
-for library in sorted((contents / 'Frameworks').glob('*.dylib')):
-    signing['sign'](sys.argv[3], library)
-for framework in sorted((contents / 'Frameworks').glob('*.framework')):
-    signing['sign_framework'](sys.argv[3], framework)
-PYSIGN
-  # The hardened runtime blocks EventKit unless the app declares calendar access.
-  codesign --force --options runtime --timestamp --sign "$signing_identity" \
-    --entitlements "$project_dir/Resources/UltimateLemmings.entitlements" "$app"
-  codesign --verify --deep --strict --verbose=1 "$app"
-  codesign -d --entitlements :- "$app" 2>/dev/null |
-    grep -q 'com.apple.security.personal-information.calendars' ||
-    fail "The calendar entitlement is missing from $app. The Desk Clock cannot show the next event."
+  python3 "$project_dir/Scripts/sign-capabilities.py" "$app" --public-cloud \
+    --identity "$signing_identity" "${profile_args[@]}"
 }
 
 package_app() {

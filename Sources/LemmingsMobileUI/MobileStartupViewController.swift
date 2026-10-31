@@ -25,8 +25,6 @@ import UIKit
         super.viewDidLoad()
         view.backgroundColor = .black
         logo.contentMode = .scaleAspectFit
-        logo.layer.magnificationFilter = .nearest
-        logo.layer.minificationFilter = .nearest
         logo.isAccessibilityElement = false
         view.addSubview(logo)
         view.addSubview(hourglass)
@@ -34,8 +32,7 @@ import UIKit
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let safe = view.safeAreaLayoutGuide.layoutFrame
-        let layout = GameStartupArt.layout(in: safe)
+        let layout = GameStartupArt.layout(in: view.bounds)
         logo.frame = layout.logo
         hourglass.frame = layout.hourglass
         content?.view.frame = view.bounds

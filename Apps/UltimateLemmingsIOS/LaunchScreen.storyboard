@@ -25,11 +25,11 @@
                         <viewLayoutGuide key="safeArea" id="startup-safe"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="startup-logo" firstAttribute="centerX" secondItem="startup-safe" secondAttribute="centerX" id="logo-center-x"/>
-                            <constraint firstItem="startup-logo" firstAttribute="centerY" secondItem="startup-safe" secondAttribute="centerY" constant="-28" id="logo-center-y"/>
-                            <constraint firstItem="startup-logo" firstAttribute="width" secondItem="startup-safe" secondAttribute="width" constant="-48" priority="750" id="logo-width"/>
-                            <constraint firstItem="startup-logo" firstAttribute="height" relation="lessThanOrEqual" secondItem="startup-safe" secondAttribute="height" constant="-100" id="logo-height"/>
-                            <constraint firstItem="startup-logo" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="startup-safe" secondAttribute="leading" constant="24" id="logo-leading"/>
+                            <constraint firstItem="startup-logo" firstAttribute="centerX" secondItem="startup-background" secondAttribute="centerX" id="logo-center-x"/>
+                            <constraint firstItem="startup-logo" firstAttribute="centerY" secondItem="startup-background" secondAttribute="centerY" constant="-28" id="logo-center-y"/>
+                            <constraint firstItem="startup-logo" firstAttribute="width" secondItem="startup-background" secondAttribute="width" constant="-48" priority="750" id="logo-width"/>
+                            <constraint firstItem="startup-logo" firstAttribute="height" relation="lessThanOrEqual" secondItem="startup-background" secondAttribute="height" constant="-100" id="logo-height"/>
+                            <constraint firstItem="startup-logo" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="startup-background" secondAttribute="leading" constant="24" id="logo-leading"/>
                         </constraints>
                     </view>
                 </viewController>

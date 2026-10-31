@@ -4,6 +4,15 @@ import UIKit
 /// A menu drag can take over after a button has started tracking the touch.
 @MainActor class MobileMenuScrollView: UIScrollView {
     var unobscuredInsets = UIEdgeInsets.zero
+    var onViewportChange: (() -> Void)?
+    private var lastViewportOrigin = CGPoint.zero
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard lastViewportOrigin != bounds.origin else { return }
+        lastViewportOrigin = bounds.origin
+        onViewportChange?()
+    }
 
     func reveal(_ rect: CGRect) {
         let visibleTop = contentOffset.y + unobscuredInsets.top

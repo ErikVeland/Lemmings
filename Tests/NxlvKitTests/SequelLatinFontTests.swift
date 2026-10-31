@@ -5,8 +5,14 @@ import XCTest
 final class SequelLatinFontTests: XCTestCase {
     private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent() }
     private func read(_ path: String) throws -> Data { try Data(contentsOf: root.appendingPathComponent(path)) }
+    private func requireLocalAssets(_ paths: String...) throws {
+        let missing = paths.filter { !FileManager.default.fileExists(atPath: root.appendingPathComponent($0).path) }
+        guard missing.isEmpty else { throw XCTSkip("Original game assets are not present in this checkout: \(missing.joined(separator: ", "))") }
+    }
 
     func testAllThreeSequelFacesKeepSourcePixelsAndCoverWesternLatin() throws {
+        try requireLocalAssets("Sources/Ports/Lemm2/FONT.DAT", "Sources/Ports/Lemm2/PANEL.DAT",
+            "Sources/Ports/LEM3CD/GRAPHICS/FONT.DIN", "Sources/Ports/LEM3CD/GRAPHICS/FONT.DEL")
         let menu = try Lemmings2FrontEndFont(data: read("Sources/Ports/Lemm2/FONT.DAT"))
         let panel = try Lemmings2Panel(root: root.appendingPathComponent("Sources/Ports/Lemm2"))
         let l3 = try Lemmings3Font(index: read("Sources/Ports/LEM3CD/GRAPHICS/FONT.DIN"), data: read("Sources/Ports/LEM3CD/GRAPHICS/FONT.DEL"))
@@ -60,6 +66,7 @@ final class SequelLatinFontTests: XCTestCase {
     }
 
     func testPanelRowsKeepASCIIAndFitCombiningLettersWithoutClipping() throws {
+        try requireLocalAssets("Sources/Ports/Lemm2/PANEL.DAT")
         let panel = try Lemmings2Panel(root: root.appendingPathComponent("Sources/Ports/Lemm2"))
         let row = panel.font.raster("WALKER", fittingHeight: 8)
         for (index, character) in "WALKER".enumerated() {
@@ -85,6 +92,7 @@ final class SequelLatinFontTests: XCTestCase {
     }
 
     func testOriginalL2IntroductionRetainsTimingAndScenes() throws {
+        try requireLocalAssets("Sources/Ports/Lemm2/FONT.DAT")
         let base = root.appendingPathComponent("Sources/Ports/Lemm2")
         let font = try Lemmings2FrontEndFont(data: Data(contentsOf: base.appendingPathComponent("FONT.DAT")))
         var intro = try Lemmings2Introduction(root: base, font: font), frames = 0, scenes = Set<Int>()

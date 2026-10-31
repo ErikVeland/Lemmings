@@ -171,7 +171,8 @@ public enum GameStoneArt {
     private static let shadow = CGColor(srgbRed: 0.1457, green: 0.1718, blue: 0.1325, alpha: 1)
     private static let wellIdle = CGColor(srgbRed: 0.0876, green: 0.1166, blue: 0.0728, alpha: 1)
     private static let wellSelected = CGColor(srgbRed: 0.2211, green: 0.3123, blue: 0.1319, alpha: 1)
-    private static let accent = CGColor(srgbRed: 0.6755, green: 0.8639, blue: 0.2804, alpha: 1)
+    private static let selectedHighlight = CGColor(srgbRed: 0.78, green: 0.79, blue: 0.70, alpha: 1)
+    private static let selectedShadow = CGColor(srgbRed: 0.24, green: 0.29, blue: 0.19, alpha: 1)
 
     /// The recessed area inside the bevel, where a glyph belongs.
     public static func well(_ frame: CGRect, pixel: CGFloat) -> CGRect {
@@ -264,15 +265,21 @@ public enum GameStoneArt {
         context.restoreGState()
     }
 
-    /// The moss line along the foot of a selected socket.
+    /// A small raised rim marks a selected socket without adding a bright colour patch.
     public static func drawAccent(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat, monochrome: Bool = false) {
         guard selected else { return }
         let inner = well(frame, pixel: pixel)
+        guard inner.width > 2 * pixel, inner.height > 2 * pixel else { return }
         context.saveGState()
         context.setShouldAntialias(false)
-        context.setFillColor(monochrome ? CGColor(gray: 1, alpha: 1) : accent)
-        context.fill(CGRect(x: inner.minX + pixel, y: inner.maxY - 2 * pixel,
-                            width: inner.width - 2 * pixel, height: pixel))
+        let highlight = monochrome ? CGColor(gray: 1, alpha: 1) : selectedHighlight
+        let shadow = monochrome ? CGColor(gray: 0.45, alpha: 1) : selectedShadow
+        context.setFillColor(highlight)
+        context.fill(CGRect(x: inner.minX + pixel, y: inner.minY + pixel, width: inner.width - 2 * pixel, height: pixel))
+        context.fill(CGRect(x: inner.minX + pixel, y: inner.minY + pixel, width: pixel, height: inner.height - 2 * pixel))
+        context.setFillColor(shadow)
+        context.fill(CGRect(x: inner.minX + pixel, y: inner.maxY - 2 * pixel, width: inner.width - 2 * pixel, height: pixel))
+        context.fill(CGRect(x: inner.maxX - 2 * pixel, y: inner.minY + pixel, width: pixel, height: inner.height - 2 * pixel))
         context.restoreGState()
     }
 

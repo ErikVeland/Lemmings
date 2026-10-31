@@ -1,3 +1,4 @@
+#if os(macOS)
 import CryptoKit
 import Foundation
 import Testing
@@ -88,3 +89,4 @@ struct MusicLibraryInstallerTests {
         #expect(!MusicLibraryStore.isInstalled(good.pack, in: target))
     }
 }
+#endif

@@ -165,7 +165,13 @@ public final class RuntimeMemoryBudget: @unchecked Sendable {
         }
         if result == KERN_SUCCESS { footprint = info.phys_footprint }
         #if os(iOS) || os(tvOS)
-        available = UInt64(os_proc_available_memory())
+        let reportedAvailable = UInt64(os_proc_available_memory())
+        #if targetEnvironment(simulator)
+        // The hostless simulator test runner is not an app and has no app allowance.
+        if reportedAvailable != 0 || process.processName != "xctest" { available = reportedAvailable }
+        #else
+        available = reportedAvailable
+        #endif
         #endif
         #endif
         peak = max(peak, footprint)

@@ -400,7 +400,7 @@ public struct DeskClockSimulation: Equatable, Sendable {
             lemming.facingLeft.toggle()
             return
         }
-        if lemming.state == .walk && lemming.y == Self.groundY && abs(lemming.x - Self.exitX) <= 1
+        if lemming.state == .walk && lemming.y == Self.groundY && lemming.x == Self.exitX
             && isSolid(x: Self.exitX, y: Self.groundY)
             && (blocker == nil || blocker?.id == lemming.id) {
             lemming.state = .exit

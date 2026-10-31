@@ -17,6 +17,8 @@ private struct SavedGameHandles: @unchecked Sendable { let games: [GKSavedGame] 
     nonisolated public static let containerIdentifier = "iCloud.academy.glasscode.lemmings"
     public let available: Bool
     public var onChange: (@MainActor () -> Void)?
+    public var onAuthenticationChange: (@MainActor (Bool) -> Void)?
+    public private(set) var isAuthenticating = false
     private var versions: [String: [GKSavedGame]] = [:]
     private var conflicts: [String: [GKSavedGame]] = [:]
     private var authenticationObserver: NSObjectProtocol?
@@ -32,6 +34,8 @@ private struct SavedGameHandles: @unchecked Sendable { let games: [GKSavedGame] 
     }
     public func start(present: @escaping @MainActor (GameProgressAuthenticationController) -> Void = { _ in }) {
         guard available, authenticationObserver == nil else { return }
+        isAuthenticating = true
+        onAuthenticationChange?(true)
         GKLocalPlayer.local.register(self)
         authenticationObserver = NotificationCenter.default.addObserver(forName: .GKPlayerAuthenticationDidChangeNotificationName,
             object: nil, queue: .main) { [weak self] _ in
@@ -40,7 +44,13 @@ private struct SavedGameHandles: @unchecked Sendable { let games: [GKSavedGame] 
         GKLocalPlayer.local.authenticateHandler = { [weak self] controller, _ in
             Task { @MainActor in
                 if let controller { present(controller) }
-                else { self?.onChange?() }
+                else {
+                    if self?.isAuthenticating == true {
+                        self?.isAuthenticating = false
+                        self?.onAuthenticationChange?(false)
+                    }
+                    self?.onChange?()
+                }
             }
         }
         onChange?()

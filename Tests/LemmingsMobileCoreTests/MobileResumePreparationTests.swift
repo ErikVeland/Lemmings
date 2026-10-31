@@ -6,8 +6,11 @@ import Testing
 struct MobileResumePreparationTests {
     private static let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         .deletingLastPathComponent().deletingLastPathComponent()
+    private static let hasSequelLevels = ["Sources/Ports/Lemm2/LEVELS/LEVEL000.DAT", "Sources/Ports/LEM3CD/LEVELS/LEVEL001.DAT"]
+        .allSatisfy { FileManager.default.fileExists(atPath: root.appendingPathComponent($0).path) }
 
-    @MainActor @Test func beachResumePreparesPreviewThenRestoresTheExactAttempt() async throws {
+    @MainActor @Test(.enabled(if: Self.hasSequelLevels), arguments: [false, true])
+    func beachResumeRestoresTheExactAttempt(withCachedPreview: Bool) async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -29,9 +32,11 @@ struct MobileResumePreparationTests {
         try JSONEncoder().encode(checkpoint).write(to: file)
         let reopened = try JSONDecoder().decode(MobileCheckpointEnvelope.self, from: Data(contentsOf: file))
         let fresh = MobileMenuPreviewLoader { try Lemmings2MobileLibrary(directory: source, storage: storage) }
-        let preview = try await fresh.load(10)
-        #expect(preview.snapshot.tick == 0)
-        #expect(preview.frame.width > 0 && preview.frame.height > 0)
+        if withCachedPreview {
+            let preview = try await fresh.load(10)
+            #expect(preview.snapshot.tick == 0)
+            #expect(preview.frame.width > 0 && preview.frame.height > 0)
+        }
         let restored = try await fresh.prepare(10, checkpoint: reopened)
         #expect(restored.content.session.snapshot == session.snapshot)
         #expect(try restored.content.session.actionCapture()?.final.hash() == expected)
@@ -42,7 +47,7 @@ struct MobileResumePreparationTests {
         #expect(try restored.content.session.actionCapture()?.final.hash() == expected)
     }
 
-    @MainActor @Test func cancelledNativeSequelRestoreDoesNotReplaceTheSession() async throws {
+    @MainActor @Test(.enabled(if: Self.hasSequelLevels)) func cancelledNativeSequelRestoreDoesNotReplaceTheSession() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }
         let storage = MobileStorage(directory: directory)

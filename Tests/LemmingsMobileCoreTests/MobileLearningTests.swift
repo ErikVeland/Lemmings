@@ -333,6 +333,7 @@ struct MobileLearningTests {
         #expect(MobileLearningResume.find(owner: "host", seats: seats, storage: files,
             journeyOnly: false, currentSessionOnly: true)?.seat == nil)
     }
+    #if os(macOS)
     @Test func pythonStagingUsesMacSourceRevision() throws {
         let temporary = try AppStorage.temporary(named: "revision")
         defer { temporary.removeTemporaryFiles() }
@@ -348,4 +349,5 @@ struct MobileLearningTests {
         let actual = String(data: output.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines)
         #expect(actual == ClassicSourceRevision.directory(temporary.resources))
     }
+    #endif
 }

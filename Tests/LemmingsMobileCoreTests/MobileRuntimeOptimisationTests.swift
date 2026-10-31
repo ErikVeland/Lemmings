@@ -8,8 +8,16 @@ import Testing
 
 struct MobileRuntimeOptimisationTests {
     private let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+    private static let hasSequelLevels = ["Sources/Ports/Lemm2/LEVELS/LEVEL000.DAT", "Sources/Ports/LEM3CD/LEVELS/LEVEL001.DAT"]
+        .allSatisfy { FileManager.default.fileExists(atPath: URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent($0).path) }
+    private static let hasGameDataAndArtwork = ["Sources/Ports/lemmings_dos_1991-07-30/LEVEL000.DAT",
+        "Sources/Ports/Lemm2/LEVELS/LEVEL000.DAT", "Sources/Ports/LEM3CD/LEVELS/LEVEL001.DAT",
+        ".build/mac-artwork/export/lemmings"]
+        .allSatisfy { FileManager.default.fileExists(atPath: URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent($0).path) }
 
-    @MainActor @Test func viewportPixelsMatchFullSceneAcrossGamesAndArtwork() throws {
+    @MainActor @Test(.enabled(if: Self.hasGameDataAndArtwork)) func viewportPixelsMatchFullSceneAcrossGamesAndArtwork() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let storage = MobileStorage(directory: directory)
         defer { try? FileManager.default.removeItem(at: directory) }
@@ -112,7 +120,7 @@ struct MobileRuntimeOptimisationTests {
         #expect(game.usedRewind)
     }
 
-    @MainActor @Test func sequelSlicedSeekKeepsExactCommandsAndAssistanceCounts() throws {
+    @MainActor @Test(.enabled(if: Self.hasSequelLevels)) func sequelSlicedSeekKeepsExactCommandsAndAssistanceCounts() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }
         let storage = MobileStorage(directory: directory)

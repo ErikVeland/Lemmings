@@ -14,6 +14,7 @@ enum MobileAudioSessionOperation: Sendable {
         weak var requests: MobileAudioSessionRequests?
     }
     private var owners: [UUID: Owner] = [:]
+    private var sessionMayBeActive = false
     private(set) var playbackAllowed = true
 
     func setPlaybackAllowed(_ allowed: Bool) {
@@ -34,6 +35,17 @@ enum MobileAudioSessionOperation: Sendable {
     }
 
     var hasActiveOwners: Bool { owners.values.contains { $0.requests != nil } }
+
+    func activate(using perform: @Sendable (MobileAudioSessionOperation) async throws -> Void) async throws {
+        sessionMayBeActive = true
+        try await perform(.resume)
+    }
+
+    func deactivateIfNeeded(using perform: @Sendable (MobileAudioSessionOperation) async throws -> Void) async throws {
+        guard !hasActiveOwners, sessionMayBeActive else { return }
+        try await perform(.suspend)
+        sessionMayBeActive = false
+    }
 
     func enqueue(
         _ operation: @escaping @MainActor @Sendable () async throws -> Void,
@@ -94,7 +106,7 @@ enum MobileAudioSessionOperation: Sendable {
         let queue = queue
         return queue.enqueue({ [weak self] in
             guard self?.resumeID == id, queue.playbackAllowed else { return }
-            try await perform(.resume)
+            try await queue.activate(using: perform)
         }) { [weak self] succeeded in
             guard let self, self.resumeID == id else { return }
             if !succeeded { self.queue.release(self.ownerID) }
@@ -109,8 +121,7 @@ enum MobileAudioSessionOperation: Sendable {
         let queue = queue
         return queue.enqueue({
             // A departing level must not deactivate Home or its replacement level.
-            guard !queue.hasActiveOwners else { return }
-            try await perform(.suspend)
+            try await queue.deactivateIfNeeded(using: perform)
         }, completion: { _ in })
     }
 }

@@ -45,13 +45,14 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     }
   }
   private let lock = NSLock()
+  private let tempoLock = NSLock()
+  private var tempoScale = 1.0
 
   // Guarded by `lock`.
   private var player: ProTrackerEnhancedPlayer?
   private var enhancements: ProTrackerEnhancements = .faithful
   private var isMuted = false
   private var level: Double = 1.0
-  private var tempoScale = 1.0
   private var sourceFrames: Int64 = 0
   /// Turntable speed and level during a vinyl stop or start.
   private var vinylRateLocked = 1.0
@@ -311,14 +312,17 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     reverb.wetDryMix = 0
     if !engine.isRunning { try engine.start() }
     if let node = sourceNode, !node.isPlaying {
-      synthesisQueue.sync {
-        // A route/configuration reset can discard the player's schedule.
-        if !node.isPlaying { prime(node, format: node.outputFormat(forBus: 0)) }
+      synthesisQueue.async { [weak self] in
+        guard let self else { return }
+        // Restore a discarded schedule on its worker. Resume must not wait for PCM.
+        let active = self.lock.withLock { !self.outputSuspended }
+        if active, !node.isPlaying { self.prime(node, format: node.outputFormat(forBus: 0)) }
       }
     }
   }
 
   private func fill(_ buffers: UnsafeMutableAudioBufferListPointer, frames: Int) {
+    let tempo = tempoLock.withLock { tempoScale }
     lock.lock()
     defer { lock.unlock() }
 
@@ -352,7 +356,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
         frame = (
           left: currentFrame.left + (nextFrame.left - currentFrame.left) * blend,
           right: currentFrame.right + (nextFrame.right - currentFrame.right) * blend)
-        interpolationPhase += tempoScale * vinylRateLocked * (outputSuspended ? max(0.02, Double(gain) * Double(gain)) : spinUpRateLocked())
+        interpolationPhase += tempo * vinylRateLocked * (outputSuspended ? max(0.02, Double(gain) * Double(gain)) : spinUpRateLocked())
         while interpolationPhase >= 1 {
           currentFrame = nextFrame
           nextFrame = nextSourceFrameLocked()
@@ -631,6 +635,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   /// Tracker beat timing, including tempo commands on the opening row.
   public var beatInfo: (bpm: Double, delay: Double)? {
     let buffered = bufferedSeconds
+    let tempoScale = tempoLock.withLock { self.tempoScale }
     lock.lock(); defer { lock.unlock() }
     guard let player else { return nil }
     var clock = player.player
@@ -644,6 +649,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   }
   public var sourceSeconds: Double {
     let buffered = bufferedSeconds
+    let tempoScale = tempoLock.withLock { self.tempoScale }
     lock.lock(); defer { lock.unlock() }
     return max(0, Double(sourceFrames) / sampleRate - buffered * tempoScale)
   }
@@ -675,9 +681,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
 
   /// Sets module playback rate independently of the game clock.
   public func setTempoScale(_ value: Double) {
-    lock.lock()
-    tempoScale = min(1.08, max(0.5, value))
-    lock.unlock()
+    tempoLock.withLock { tempoScale = min(1.08, max(0.5, value)) }
   }
 
   public func setMuted(_ muted: Bool) {

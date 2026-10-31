@@ -200,7 +200,97 @@ for gib in [2, 4, 8, 16] {
 print("PASS bounded sources and rescue layers on 2/4/8/16 GiB devices, pressure trimming, warning priority and replay budgets")
 
 
+extension BufferedAudioSource {
+    func holdWorkerForResumeCheck(entered: DispatchSemaphore, release: DispatchSemaphore) {
+        queue.async {
+            entered.signal()
+            release.wait()
+        }
+    }
+}
+
+extension MusicRewindBuffer {
+    func checkIdleCancellationDoesNotWaitForWorker() {
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 2)!
+        _ = source(format: format)
+        let entered = DispatchSemaphore(value: 0)
+        let release = DispatchSemaphore(value: 0)
+        bufferedSource!.holdWorkerForResumeCheck(entered: entered, release: release)
+        precondition(entered.wait(timeout: .now() + 2) == .success)
+        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(300)) { release.signal() }
+        let began = ProcessInfo.processInfo.systemUptime
+        cancel(clearHistory: true)
+        let elapsed = ProcessInfo.processInfo.systemUptime - began
+        precondition(elapsed < 0.1, "Idle rewind cancellation waited for its worker")
+        bufferedSource?.drain()
+        print("PASS idle rewind cancellation does not wait for its worker")
+    }
+}
+let idleRewind = MusicRewindBuffer()
+idleRewind.checkIdleCancellationDoesNotWaitForWorker()
+
+extension ModuleMusicPlayer {
+    func checkTempoUpdateDoesNotWaitForSynthesis() throws {
+        let completed = DispatchSemaphore(value: 0)
+        lock.lock()
+        DispatchQueue.global().async {
+            self.setTempoScale(0.72)
+            completed.signal()
+        }
+        let result = completed.wait(timeout: .now() + .milliseconds(250))
+        lock.unlock()
+        if result != .success { _ = completed.wait(timeout: .now() + 2) }
+        precondition(result == .success, "Tempo change waited for tracker synthesis")
+        precondition(tempoLock.withLock { tempoScale } == 0.72, "Tempo update was lost")
+        setTempoScale(0.1)
+        precondition(tempoLock.withLock { tempoScale } == 0.5, "Tempo limit changed")
+        var bytes = [UInt8](repeating: 0, count: 1084 + 1024 + 64)
+        bytes[950] = 1
+        for (index, value) in "M.K.".utf8.enumerated() { bytes[1080 + index] = value }
+        bytes[43] = 32; bytes[45] = 64; bytes[49] = 32
+        bytes[1084] = 1; bytes[1085] = 172; bytes[1086] = 16
+        load(try ProTrackerModule(data: Data(bytes)), url: URL(fileURLWithPath: "/tmp/tempo-fixture.mod"))
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 2)!
+        let output = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 512)!
+        output.frameLength = 512
+        let buffers = UnsafeMutableAudioBufferListPointer(output.mutableAudioBufferList)
+        setTempoScale(1)
+        fill(buffers, frames: 512)
+        let normal = sourceFrames
+        setTempoScale(0.5)
+        fill(buffers, frames: 512)
+        precondition(sourceFrames - normal == 256, "Tempo was not applied to generated music")
+        print("PASS tempo update does not wait for tracker synthesis")
+    }
+}
+try ModuleMusicPlayer().checkTempoUpdateDoesNotWaitForSynthesis()
+
 extension SoundEffectPlayer {
+    func checkSuspensionDoesNotWaitForBusyWorker() throws {
+        let format = AVAudioFormat(standardFormatWithSampleRate: 44_100, channels: 2)!
+        try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 512)
+        try start()
+        defer { stop(); engine.disableManualRenderingMode() }
+        let entered = DispatchSemaphore(value: 0)
+        let release = DispatchSemaphore(value: 0)
+        bufferedSource!.holdWorkerForResumeCheck(entered: entered, release: release)
+        precondition(entered.wait(timeout: .now() + 2) == .success)
+        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(300)) { release.signal() }
+        let started = ProcessInfo.processInfo.systemUptime
+        suspendOutput()
+        let elapsed = ProcessInfo.processInfo.systemUptime - started
+        precondition(elapsed < 0.1, "Effects suspension waited for a busy PCM worker")
+        precondition(outputSuspended && !engine.isRunning, "Effects output did not pause")
+        let resumed = DispatchSemaphore(value: 0)
+        DispatchQueue.global().async { try? self.resumeOutput(); resumed.signal() }
+        precondition(resumed.wait(timeout: .now() + .milliseconds(80)) == .timedOut,
+                     "Resume skipped the queued stop")
+        precondition(!engine.isRunning, "Engine restarted before stale queued effects were cleared")
+        precondition(resumed.wait(timeout: .now() + 2) == .success, "Effects failed to resume")
+        precondition(!outputSuspended && engine.isRunning, "Effects output did not resume")
+        print("PASS effects suspension does not wait for a busy PCM worker and can resume")
+    }
+
     func checkBufferedEffects() throws {
         let format = AVAudioFormat(standardFormatWithSampleRate: 44100, channels: 2)!
         try engine.enableManualRenderingMode(.offline, format: format, maximumFrameCount: 512)
@@ -208,6 +298,16 @@ extension SoundEffectPlayer {
         for _ in voices.indices { play(samples: tone, rate: 44100, gain: 1) }
         try start()
         defer { stop(); engine.disableManualRenderingMode() }
+        let entered = DispatchSemaphore(value: 0)
+        let release = DispatchSemaphore(value: 0)
+        bufferedSource!.holdWorkerForResumeCheck(entered: entered, release: release)
+        precondition(entered.wait(timeout: .now() + 2) == .success)
+        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(300)) { release.signal() }
+        let resumeBegan = ProcessInfo.processInfo.systemUptime
+        try resumeOutput()
+        let resumeElapsed = ProcessInfo.processInfo.systemUptime - resumeBegan
+        precondition(resumeElapsed < 0.1, "An active effects engine waited for its busy audio worker")
+        print("PASS active effects resume does not wait for a busy audio worker")
         let output = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: 512)!
         for _ in 0..<16 {
             let status = try engine.renderOffline(512, to: output)
@@ -231,6 +331,21 @@ extension SoundEffectPlayer {
         controlLock.unlock()
         precondition(energy > 1 && elapsed < 0.1, "Effect output waited for a control lock")
         bufferedSource?.drain()
+        library[.explode] = tone
+        setNukeActive(true)
+        for index in 0..<24 {
+            play(.explode, at: GameplaySoundPoint(x: Double(index * 32), y: 20))
+        }
+        for _ in 0..<12 {
+            let status = try engine.renderOffline(512, to: output)
+            precondition(status == .success)
+            precondition((0..<512).allSatisfy {
+                let sample = output.floatChannelData![0][$0]
+                return sample.isFinite && abs(sample) <= 1.001
+            }, "Mass explosions produced invalid or clipped effects")
+            bufferedSource?.drain()
+        }
+        setNukeActive(false)
         setMuted(true)
         for block in 0..<6 {
             let status = try engine.renderOffline(512, to: output)
@@ -245,6 +360,8 @@ extension SoundEffectPlayer {
         print("PASS buffered spatial chorus survives control contention, limits peaks and mutes queued PCM")
     }
 }
+let lifecycleEffects = SoundEffectPlayer(voiceCount: 2)
+try lifecycleEffects.checkSuspensionDoesNotWaitForBusyWorker()
 let bufferedEffects = SoundEffectPlayer(voiceCount: 24)
 try bufferedEffects.checkBufferedEffects()
 let callbackEffects = SoundEffectPlayer(voiceCount: 4)

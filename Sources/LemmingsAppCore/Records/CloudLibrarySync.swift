@@ -413,12 +413,20 @@ import NxlvKit
         await syncNow()
         guard enabled, state == .synced || state == .pending, let apple = transport as? AppleCloudLibraryTransport,
             apple.providers.contains("Cloud"), !apple.issues.contains(where: { $0.hasPrefix("Cloud") }) else { throw SequelDataError.invalid(L10n.text("Connect to the internet to link a device.")) }
+        guard !testerSyncEnabled else { throw SequelDataError.invalid(L10n.text("Private device linking is unavailable for this library.")) }
         return try await apple.makeLink(identities)
     }
     public func join(_ code: String) async throws {
         guard canImport(), let apple = transport as? AppleCloudLibraryTransport else { throw SequelDataError.invalid(L10n.text("Return to the library before linking devices.")) }
-        let linked = try await apple.redeemLink(code)
+        guard !testerSyncEnabled else { throw SequelDataError.invalid(L10n.text("Private device linking is unavailable for this library.")) }
         var combined = identities.isEmpty ? try await apple.credentials() : identities
+        guard !combined.contains(try await Self.testerIdentity.value) else {
+            throw SequelDataError.invalid(L10n.text("Private device linking is unavailable for this library."))
+        }
+        let linked = try await apple.redeemLink(code)
+        guard !linked.contains(try await Self.testerIdentity.value) else {
+            throw SequelDataError.invalid(L10n.text("This code belongs to the shared tester library."))
+        }
         for identity in linked where !combined.contains(where: { $0.id == identity.id }) { combined.append(identity) }
         let stored = try await apple.storeCredentials(combined)
         identities = try AppleCloudLibraryTransport.mergeIdentities(identities, stored)

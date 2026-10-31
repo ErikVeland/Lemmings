@@ -5,9 +5,15 @@ import XCTest
 @testable import LemmingsLocal
 
 final class SequelLatinRenderTests: XCTestCase {
+    private var root: URL { URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent() }
+    private func requireLocalAssets(_ paths: String...) throws {
+        let missing = paths.filter { !FileManager.default.fileExists(atPath: root.appendingPathComponent($0).path) }
+        guard missing.isEmpty else { throw XCTSkip("Original game assets are not present in this checkout: \(missing.joined(separator: ", "))") }
+    }
+
     @MainActor func testL2FrontEndUnicodeAccessibilityAndActivation() throws {
+        try requireLocalAssets("Sources/Ports/Lemm2/FONT.DAT", "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF")
         _ = NSApplication.shared
-        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let base = root.appendingPathComponent("Sources/Ports/Lemm2")
         let font = try Lemmings2FrontEndFont(data: Data(contentsOf: base.appendingPathComponent("FONT.DAT")))
         let palette = try Lemmings2FrontEnd.Bank(data: Data(contentsOf: base.appendingPathComponent("FRONTEND/GFXIFFS/INFO.IFF"))).palettes[1]
@@ -41,6 +47,8 @@ final class SequelLatinRenderTests: XCTestCase {
     }
 
     @MainActor func testNativeFacesAndPanelLettering() throws {
+        try requireLocalAssets("Sources/Ports/Lemm2/FONT.DAT", "Sources/Ports/Lemm2/PANEL.DAT",
+            "Sources/Ports/LEM3CD/GRAPHICS/FONT.DIN", "Sources/Ports/LEM3CD/GRAPHICS/FONT.DEL")
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let l2 = root.appendingPathComponent("Sources/Ports/Lemm2"), l3 = root.appendingPathComponent("Sources/Ports/LEM3CD")
         let output = root.appendingPathComponent(".build/sequel-latin")

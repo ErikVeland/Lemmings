@@ -48,38 +48,41 @@ import Testing
             }
         }
     }
-    @Test func setupOnlyOffersOneTesterActionAndNavigation() {
+    @Test func publicLinkingKeepsTesterLibrariesSeparate() {
         let page = CloudSyncArt.page()
-        #expect(page.rows.isEmpty)
-        #expect(page.footer.map(\.id) == ["syncBack", "syncTester"])
-        #expect(page.footer.last?.title == "Enable tester sync")
-        #expect(page.backAction?.id == "syncBack")
-        let enabled = CloudSyncArt.page(testerEnabled: true)
-        #expect(enabled.footer.last?.selected == true)
-        #expect(enabled.footer.last?.enabled == false)
-        #expect(enabled.footer.first?.primary == true)
+        #expect(page.rows.map(\.id) == ["syncMake", "syncEnter"])
+        #expect(page.footer.map(\.id) == ["syncBack"])
+        let tester = CloudSyncArt.page(testerEnabled: true)
+        #expect(tester.rows.isEmpty)
+        #expect(tester.footer.map(\.id) == ["syncBack"])
+        #expect(CloudSyncArt.page(draft: "SHORT").footer.last?.enabled == false)
+        #expect(CloudSyncArt.page(draft: "ABCD2345EFGH").footer.last?.enabled == true)
+        #expect(CloudSyncArt.page(busy: true, draft: "ABCD2345EFGH").footer.last?.enabled == false)
     }
     @Test func syncErrorsKeepTheirActionableMessage() {
         let error: Error = SequelDataError.invalid("Return to the library before linking devices.")
         #expect(error.localizedDescription == "Return to the library before linking devices.")
         let offline = CloudSyncArt.page(testerEnabled: true, status: "Offline")
         #expect(offline.subtitle == "Offline")
-        #expect(offline.footer.last?.selected == true)
-        #expect(CloudSyncArt.page(busy: true, status: "Offline").subtitle == "Enabling")
+        #expect(CloudSyncArt.page(busy: true, status: "Offline").subtitle == "Connecting")
         #expect(CloudSyncArt.page(message: "Try again", status: "Synced").subtitle == "Try again")
     }
-    @Test func testerAccessibilityAndKeyboardUseTheSameTargets() throws {
+    @Test func linkAccessibilityAndKeyboardUseTheSameTargets() throws {
         let storage = try AppStorage.temporary(named: "cloud-view")
         defer { storage.removeTemporaryFiles() }
         let sync = CloudLibrarySync(store: ArcadeStore(storage: storage, bundledProofs: nil), storage: storage, transport: UICloudTransport(), identities: [CloudLibraryIdentity()])
         let view = CloudLibraryView(sync: sync)
-        #expect(view.page.title == "Tester sync")
-        let enable = try #require(view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityLabel() == "Enable tester sync" })
+        #expect(view.page.title == "Cloud saves")
+        let enable = try #require(view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityLabel() == "Enter code" })
         #expect(enable.accessibilityRole() == .button)
         let enter = try #require(NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,
             windowNumber: 0, context: nil, characters: "", charactersIgnoringModifiers: "", isARepeat: false, keyCode: 36))
-        view.keyDown(with: enter)
+        view.handle("syncEnter")
+        #expect(view.page.rows.first?.id == "syncCode")
         #expect(view.page.footer.last?.enabled == false)
+        view.handle("syncCancel")
+        #expect(view.page.rows.first?.id == "syncMake")
+        _ = enter
         var returned = false
         view.onBack = { returned = true }
         let escape = try #require(NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0,

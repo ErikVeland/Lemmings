@@ -48,6 +48,7 @@ struct DeskClockArtTests {
         #expect(GameDeskClockArt(directory: Self.artwork) != nil)
     }
 
+    #if os(macOS)
     @Test(.enabled(if: hasArtwork, "The Macintosh artwork export is absent; run the Mac artwork export first."))
     func loadsPrunedArtwork() throws {
         let destination = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
@@ -74,6 +75,7 @@ struct DeskClockArtTests {
         for index in [3, 9, 10, 36, 37, 38, 39] { #expect(frames.frame(1500, index) != nil) }
         for index in 0...16 { #expect(frames.frame(1600, index) != nil) }
     }
+    #endif
 
     @Test(.enabled(if: hasArtwork, "The Macintosh artwork export is absent; run the Mac artwork export first."))
     func rendersWidgets() throws {

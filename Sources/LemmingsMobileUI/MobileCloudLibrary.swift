@@ -76,19 +76,37 @@ extension MobileLibraryViewController {
     }
     func handleCloudSync(_ id: String) -> Bool {
         if id == "cloudSaves" {
-            syncBackRoute = route; syncMessage = ""
+            syncBackRoute = route; syncMessage = ""; syncCode = ""; syncDraft = nil
             navigate(.cloudSaves); return true
         }
         guard route == .cloudSaves, id.hasPrefix("sync") else { return false }
         guard (canvas.page.rows + canvas.page.footer).contains(where: { $0.id == id && $0.enabled }) else { return true }
         switch id {
         case "syncBack": navigate(syncBackRoute)
-        case "syncTester":
+        case "syncCancel":
+            syncDraft = nil; syncCode = ""; syncMessage = ""
+            searchField.resignFirstResponder(); searchField.text = searchQuery
+        case "syncEnter":
+            syncDraft = ""; searchField.text = ""; searchField.becomeFirstResponder()
+        case "syncCode": searchField.becomeFirstResponder()
+        case "syncMake", "syncJoin":
+            let input = syncDraft ?? ""
+            searchField.resignFirstResponder()
             syncBusy = true; syncMessage = ""
             Task { [weak self] in
                 guard let self else { return }
-                do { try await libraryCloud.enableTesterSync() }
-                catch { if route == .cloudSaves { syncMessage = error.localizedDescription } }
+                do {
+                    if id == "syncMake" {
+                        let code = try await libraryCloud.makeLink()
+                        if route == .cloudSaves { syncCode = code }
+                    }
+                    else {
+                        try await libraryCloud.join(input)
+                        if route == .cloudSaves {
+                            syncDraft = nil; searchField.text = searchQuery; syncMessage = L10n.text("Device linked")
+                        }
+                    }
+                } catch { if route == .cloudSaves { syncMessage = error.localizedDescription } }
                 syncBusy = false; rebuild()
             }
         default: break

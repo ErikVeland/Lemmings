@@ -1,5 +1,6 @@
 import CoreGraphics
 import NxlvKit
+import LemmingsMobileCore
 
 /// Shared geometry keeps bitmap rows and native touch/focus targets together.
 public enum MobileSolutionSelectorArt {
@@ -17,13 +18,24 @@ public enum MobileSolutionSelectorArt {
         public let scale: CGFloat
     }
 
-    public static func presentation(in region: CGRect, showsGhost: Bool, style: Style) -> Presentation {
+    public static func presentation(in region: CGRect, showsGhost: Bool, style: Style,
+                                    avoiding: [MobileReservedRegion] = []) -> Presentation {
         let scale: CGFloat = style == .television ? 2 : 1
-        let width = style == .television
+        var width = style == .television
             ? min(region.width - 296, min(640, max(608, floor(region.width * 0.34))))
             : region.width - 16
-        let height = layout(width: width / scale, showsGhost: showsGhost, style: style).size.height * scale
-        let controls = CGRect(x: region.minX + 8, y: region.minY + 8, width: width, height: height)
+        var height = layout(width: width / scale, showsGhost: showsGhost, style: style).size.height * scale
+        var x = region.minX + 8
+        if style == .touch, !avoiding.isEmpty {
+            let clear = MobileDisplayRegions.clearHorizontalFrame(
+                MobileRect(x: x, y: region.minY + 8, width: width, height: height), avoiding: avoiding)
+            if clear.width >= 88 {
+                x = clear.x
+                width = clear.width
+                height = layout(width: width / scale, showsGhost: showsGhost, style: style).size.height * scale
+            }
+        }
+        let controls = CGRect(x: x, y: region.minY + 8, width: width, height: height)
         let content = style == .television
             ? CGRect(x: controls.maxX + 16, y: region.minY, width: region.maxX - controls.maxX - 16, height: region.height)
             : CGRect(x: region.minX, y: controls.maxY + 8, width: region.width, height: region.maxY - controls.maxY - 8)

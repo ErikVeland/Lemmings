@@ -12,6 +12,158 @@ iPhone, iPad and Duo use the same mobile frontend. The normal TV application
 uses that frontend with remote/controller, focus and LAN-transfer adapters.
 The older standalone TV development shell is not the production parity baseline.
 
+## Touch rewind and nuke states — 31 October 2026
+
+The controller poller now releases only its own rewind chord during reset. This
+preserves a held touchscreen rewind when no controller is connected. A muted,
+hostless iOS test fails on every one of 180 polls with the old reset and passes
+with the correction. Controller-owned and TV timeline release paths remain.
+
+The shared HUD renderer gives Undo the Pause glyph clearance. Armed nuke uses
+the full selected socket border instead of an outline at the shorter safe-area
+rectangle. All 135 windowless Classic/L2/L3 state and target renders pass across
+iPad and Duo poses. Native iOS compilation passes. Manual touch, TV, Mac and
+supported NeoLemmix acceptance remain pending.
+
+Gen8 build-42 audio is owner-accepted. Duo nuke audio first crackled, then sounded
+clean during the USB capture. That intermittent fault remains open.
+
+## Audio command scheduling — 31 October 2026
+
+The physical Gen8 control is installed 2.3 build 36. The owner reports clean
+level-start and nuke audio, with occasional dropped effects. Build 41 passed owner
+listening checks on the Gen8 for menu music, level start,
+heavy nuke, pause/resume and Home-to-saved-level Resume. The owner also reports
+faster loading and correct restored state. Other devices and audio routes remain
+unverified. Shared mobile/TV Resume now prepares the saved session directly, without forcing a preview render first.
+Direct and cached-preview restoration preserve the tested sequel checkpoint.
+Build 42 also removes per-level saved-Journey reads from browser configuration
+and replaces misleading preparation controls with a loading page. Shared
+iOS/tvOS source retains Back/Home cancellation, level unlock rules and Ready.
+Rendered loading states and targets pass headless checks. Build-42 physical
+acceptance remains pending.
+
+Mobile effects preparation, Resume, cues and shutdown now use one ordered worker
+across Classic, L2, L3 and supported NeoLemmix, including iPhone, iPad, Duo and TV.
+Pause cancels pending cues. Replay export awaits its sound-library snapshot.
+An operation already running still finishes before shutdown. Native Mac effects
+lifecycle calls remain synchronous and are an explicit outstanding source gap.
+
+Tracker restart preparation no longer makes Resume wait for its synthesis worker.
+Recorded PCM avoids per-sample work when no loop-seam correction is active.
+Those changes apply to shared Mac/mobile/TV music and DJ transports. Focused
+control, recording and muted live-clock tests pass. iOS/tvOS frontend compilation
+passes. These host checks do not establish physical playback. Gen8 acceptance
+is separate. The original Duo long-loading report still needs device verification.
+See [runtime performance](RuntimePerformance.md#resume-blocking-and-23-comparison--31-october-2026).
+
+## Effects startup scheduling — 31 October 2026
+
+The shared-host-time scheduling experiment crashed on the physical Gen8 in build
+40. Its unsigned clock subtraction trapped during effects startup. Build 41
+restores 2.3's buffer-before-player startup order and removes the host-time offset.
+This shared source serves Mac, iPhone, iPad, Duo and TV, including Classic, L2, L3
+and supported NeoLemmix. Spatial processing, voice budgets and pending control
+fixes remain. The owner accepted the listed build-41 paths on Gen8. Duo, Mac,
+iPhone and TV playback and other audio routes remain unverified.
+See [runtime performance](RuntimePerformance.md#gen8-recovery-against-23--31-october-2026).
+
+## Mobile effects responsiveness — 31 October 2026
+
+The shared effects player no longer waits for its PCM worker when output is
+already active. On iPhone, iPad, Duo and TV, active lemmings keep the effects
+graph ready. An empty level can still park it, and pause and background still
+suspend it. The existing device voice limits remain in force.
+
+A muted offline check holds the worker busy and verifies that an active resume
+returns without waiting. It also checks a mass-explosion mix for finite,
+limited output. Simulator builds pass for iOS and tvOS. Physical-device frame
+timing and power use remain unverified. The owner accepted heavy nuke playback
+on Gen8 build 41; other physical devices remain unverified.
+
+An unchanged nuke state now skips the effects worker handoff. A muted check
+holds that handoff busy and verifies that the unchanged update returns. It
+also verifies that nuke state changes still start the cue. This removes one
+source of contention; it does not establish the cause of the reported audio
+crackling. The full debug audio performance run still fails its combined
+output-energy and timing assertion. Duo audio and gameplay remain release
+acceptance blockers until verified on the device.
+
+One host debug diagnostic took 165 ms for 16 blocks with the control lock held
+and 151 ms without it. Both exceeded the check's 100 ms limit. This sample
+does not isolate a lock wait or establish performance on a device.
+
+The active effects resume and an unchanged camera update also skip the voice
+handoff. Camera movement and pressure-limit changes still update the voices.
+Tracker tempo updates use a separate short lock, so a failure or nuke
+transition does not wait for a whole synthesis buffer. Muted checks reproduce
+the former waits and cover the new handoffs. These changes do not establish
+that the reported crackling or Duo stutter has stopped.
+
+Vari-speed used to repeat the same voice-limit handoff during its speed ramp.
+Unchanged limits now skip that handoff, while pressure and limit changes still
+apply. First use of the speed or explosion light also built Metal pipelines on
+the gameplay thread. The same setup took 560 ms in one muted Mac measurement.
+The mobile renderer now prepares those pipelines on a background worker and
+keeps a bounded queue of pending explosion effects. Cancellation discards stale
+results. This can delay the first light effect while preparation finishes.
+Rendered effects, Duo timing and audible playback remain unverified.
+
+When effects output is suspended, the engine pauses before its worker stops.
+The worker stop now runs in order without holding up the suspension caller.
+Resume waits for that stop before restarting, so old queued effects cannot
+play after a rapid return. A muted offline check holds the worker for 300 ms
+and verifies both paths. Rapid resume can still wait for the worker. Screenshot
+capture, folding, multitasking and audible device transitions remain unverified.
+Idle music rewind cancellation no longer waits for its worker. Active rewind
+cancellation and final effects graph teardown can still wait for their workers.
+Repeated background notifications now share one audio-session deactivation;
+a failed deactivation remains retryable. Muted checks cover both cases. No
+app-specific screenshot handler was found in the source audit; that does not
+establish how system screenshot capture affects playback.
+
+## Mobile startup and Game Center audio — 31 October 2026
+
+The iOS launch storyboard and the loading screen use the same full-view logo
+geometry. The loading screen adds the hourglass. The shared startup renderer
+also uses the full view on tvOS. The iOS menu and level music wait for the
+initial Game Center authentication callback when cloud progress is available.
+The existing menu startup delay starts after the music is allowed to play.
+
+The iOS and tvOS simulator targets compile. The launch storyboard compiles,
+and a muted, windowless artwork check covers four viewport sizes. Game Center
+authentication, the launch transition and audible first-start playback still
+need physical-device verification. The tvOS system launch screen currently
+shows a black background before the shared loading screen.
+
+## Duo menu obstructions — 31 October 2026
+
+On an undivided Duo display, the library and in-game menu canvas use the full
+viewport. The canvas adjusts action frames against reported obstructions as the
+page scrolls. Drawing, touch and accessibility use those same frames. The level
+browser and solution selector adjust their control rows around obstructions.
+Fixed navigation uses the clear part of its own row. Original-media menus use
+the shared scrolling path. Divided poses retain their pane layout.
+
+The iOS and tvOS simulator targets compile. Muted, windowless geometry checks
+cover representative settings and pause pages at three display sizes and text
+scales. Other checks cover Home at one size and browser and selector targets at
+three sizes.
+The checks do not cover every page, obstruction combination or live UIKit
+gesture. Home retains a clear-rectangle
+fallback when its content cannot fit or its controls cannot be placed. The
+shared action adjustment retains the original frame if no clear placement is
+found. Physical Duo pose transitions, scrolling, touch and accessibility remain
+device acceptance checks.
+
+Opened-screen follow-up, 31 October: Fixed rows and menu actions now use UIKit's
+horizontal corner clearance and per-corner display radii. Library pages, Home,
+gameplay headers, pause and Ready pages, and the solution selector apply these
+zones before camera and hinge obstructions. Artwork and action targets share
+the adjusted frames. Original-media pages and Desk Clock content use the same
+corner obstructions. iOS and tvOS SDK builds pass. Physical Duo corner fit,
+poses, touch and VoiceOver remain device checks.
+
 ## Saved-level loading and preview activation — 30 October 2026
 
 The shared iPhone/iPad/Duo/TV preparation actors use one serial worker with an
@@ -787,3 +939,45 @@ actual background timing and Duo folding acceptance remain open. Recording
 brakes still use main-actor rate/gain updates; this is not evidence that a blocked
 UI thread can sustain the ramp. See `RuntimePerformance.md`, “Phone Home Screen,
 Duo folding and menu handover”.
+
+### Rewind presentation and audio follow-up — 31 October 2026
+
+The shared iPhone, iPad, Duo and Apple TV gameplay controller can show recorded
+frames in reverse after an exact rewind. Playback starts and stops gradually. It
+does not run the game simulation again. The frame history is limited to 8 MiB on
+iOS and 2 MiB on tvOS, subject to the shared cache budget. It records every third
+game tick. Constrained devices, Reduce Motion, Low Power Mode, serious thermal
+pressure, incomplete history or a change in frame geometry use the existing exact
+seek without animation. Input ends the animation and shows the restored state.
+
+The shared path covers Classic, Lemmings 2, Lemmings 3 and supported NeoLemmix.
+The Mac renderer still uses its short rewind trail; it does not yet play the
+recorded-frame sequence. A muted offscreen iPhone simulator test exercised the
+Lemmings 3 animation and pointer interruption. Separate rewind tests checked the
+exact destination and counts for all four engines. The other mobile renderers,
+physical Duo, Apple TV and Mac still need presentation and input acceptance.
+
+Repeated effects suspension now avoids a redundant worker handoff when output is
+already stopped. Muted worker checks pass, including an unexpected engine restart.
+The broader debug audio suite passed once in isolation but failed playback-position
+and control-lock timing assertions in other runs. These results do not establish the cause or a cure
+for the reported crackling. Duo gameplay stutter and audible playback remain open;
+release 2.4 stays blocked pending resolution and verification.
+
+## Public progress sync — 2.4, 31 October 2026
+
+Mac, iPhone, iPad, Duo and TV share Cloud Saves, Link device and Enter code bitmap
+states. Mac uses the game search-field editor; mobile and TV use the existing
+system keyboard adapter. All use the same encrypted one-use link protocol and
+Classic/L2/L3 archive merger, including supported fan-level completion identities.
+The public page cannot join the shared tester library. Existing tester libraries
+cannot create or redeem private links. Independent profiles remain independent.
+Mid-level checkpoints, replay files and imported campaign files remain local.
+
+Mac production signing requests CloudKit independently of Game Center. The
+owner-supplied Developer ID profile now grants the shared iCloud container in
+Production and passes signing preflight. Management access now works. Schema
+exports show `ULPrivateLibrary` in Development but absent from Production.
+Production schema deployment and live propagation remain release gates.
+See [2.4 sync evidence](ReleaseReadiness/2.4-build104/CloudSync.md) for compilation,
+rendered-state evidence and remaining physical keyboard, remote and device checks.

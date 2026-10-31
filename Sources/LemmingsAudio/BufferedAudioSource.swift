@@ -69,13 +69,19 @@ final class BufferedAudioSource: @unchecked Sendable {
   }
 
   func stop() {
-    queue.sync {
-      lastPlayedFrame = currentPlayedFrame()
-      running = false
-      generation &+= 1
-      for node in nodes { node.stop() }
-      publishPosition()
-    }
+    queue.sync { stopOnQueue() }
+  }
+
+  func stopAfterPausingEngine() {
+    queue.async { self.stopOnQueue() }
+  }
+
+  private func stopOnQueue() {
+    lastPlayedFrame = currentPlayedFrame()
+    running = false
+    generation &+= 1
+    for node in nodes { node.stop() }
+    publishPosition()
   }
 
   func drain() { queue.sync {} }
@@ -145,7 +151,12 @@ public struct AudioBufferStatistics: Codable, Sendable {
 
   mutating func observeReserve(frames: Int64) {
     minimumReserveFrames = min(minimumReserveFrames ?? frames, frames)
-    if frames == 0 { emptyReserveObservations += 1 }
+    if frames == 0 {
+      emptyReserveObservations += 1
+      if emptyReserveObservations == 1 {
+        Self.logger.error("Audio buffer reserve exhausted")
+      }
+    }
   }
 
   mutating func recordQueueWait(since submitted: UInt64, reserveSeconds: Double) {

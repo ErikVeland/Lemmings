@@ -50,10 +50,16 @@ import UIKit
     private var touchpadClick = ControllerButtonEdge()
     let stepFeedback = ControllerStepFeedback()
     private var disabledMenuButton = ControllerButtonEdge()
+    private var rewindChordStartedAt: Double?
+    private var rewindChordHeld = false
 
     func reset() {
         updateAssignmentHeld(false)
-        onBoost?(false); onRewindHeld?(false); onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0
+        onBoost?(false)
+        // A controller reset must not release a rewind held by touch.
+        if rewindChordHeld { onRewindHeld?(false) }
+        onSpeedKey?(false); bindings.reset(); pressedKeys.removeAll(); lastPoll = 0
+        rewindChordStartedAt = nil; rewindChordHeld = false
         touchpadClick.reset(); stepFeedback.reset()
         #if os(tvOS)
         tvInput.reset()
@@ -117,7 +123,23 @@ import UIKit
         for (button, input) in buttons where input?.isPressed == true { pressed.insert(button) }
         if !isMenu() { pressed = ControllerBindings.remap(pressed, using: settings().controllerMappings) }
         updateAssignmentHeld(!isMenu() && pressed.contains(.a))
-        for action in bindings.update(pressed: pressed, inMenu: isMenu(), at: now) {
+        let rewindChord = !isMenu() && pressed.contains(.leftTrigger) && pressed.contains(.b)
+        if rewindChord {
+            if rewindChordStartedAt == nil { rewindChordStartedAt = now }
+            if !rewindChordHeld, let startedAt = rewindChordStartedAt, now - startedAt >= 0.22 {
+                rewindChordHeld = true
+                onRewindHeld?(true)
+            }
+        } else if let startedAt = rewindChordStartedAt {
+            if rewindChordHeld { onRewindHeld?(false) }
+            else if now - startedAt < 0.22 { perform(.rewind) }
+            rewindChordStartedAt = nil
+            rewindChordHeld = false
+        }
+        // B is the rewind chord's modifier action while LT is down. Keep it
+        // out of the edge-triggered bindings so a hold cannot also pause.
+        let actionsPressed = rewindChord ? pressed.subtracting([.b]) : pressed
+        for action in bindings.update(pressed: actionsPressed, inMenu: isMenu(), at: now) {
             perform(action)
             if case .step(let direction) = action, !isMenu() { stepFeedback.tick(direction, on: controller, at: now) }
         }

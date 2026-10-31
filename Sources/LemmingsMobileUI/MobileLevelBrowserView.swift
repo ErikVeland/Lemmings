@@ -144,7 +144,8 @@ import UIKit
             + [favourite, playlist, play]
         back.isHidden = !showsBack
         for button in [rankPrevious, rankNext] { button.isHidden = !(hasRanks && wideRoom) }
-        let layout = LevelBrowserGeometry(safe: MobileSystemRegions.menuFrame(in: self), actionCount: buttons.count, titleText: titleLabel.text, subtitleText: subtitleLabel.text,
+        let fullDisplay = MobileSystemRegions.usesFullDisplay(in: self)
+        let layout = LevelBrowserGeometry(safe: fullDisplay ? bounds : MobileSystemRegions.menuFrame(in: self), actionCount: buttons.count, titleText: titleLabel.text, subtitleText: subtitleLabel.text,
             actionTitles: buttons.map { $0.icon == .favourite ? "" : $0.title },
             includesBack: showsBack, rankActions: hasRanks && wideRoom ? (showsBack ? 1..<3 : 0..<2) : nil,
             occlusions: MobileSystemRegions.usesFullDisplay(in: self) ? MobileSystemRegions.read(in: self) : [])

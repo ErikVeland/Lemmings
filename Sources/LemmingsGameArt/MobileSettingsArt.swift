@@ -117,7 +117,7 @@ public enum MobileSettingsArt {
         case .privacy:
             rows = [toggle("telemetry", L10n.text("Share counts and records"), sharing, enabled: sharingAvailable),
                     .init("familiarNames", L10n.text("Familiar names")),
-                    .init("cloudSaves", L10n.text("Tester sync")),
+                    .init("cloudSaves", L10n.text("Cloud saves")),
                     .init("playInsights", L10n.text("Play Insights"))]
         }
         if inGame { rows.removeAll { $0.id == "cloudSaves" || $0.id == "familiarNames" } }

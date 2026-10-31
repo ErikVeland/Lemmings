@@ -1,5 +1,179 @@
 # Runtime performance
 
+## Duo follow-up and held rewind — 31 October 2026
+
+The owner accepted Gen8 build-42 audio as clean. The owner's Xcode Duo build
+(version 2.4, build 39) first crackled during a nuke, then sounded clean during
+the USB retest. The 181.02-second USB Time Profiler capture includes app PID
+11295 and 26,497 app samples across seconds 0.40–180.99. It is a clean comparison.
+No failing nuke was captured, so intermittent Duo crackling remains open. The
+wireless capture disconnected before useful fault evidence. No additional audio
+change was made from these observations.
+
+Held touch rewind had a separate confirmed input defect. Without a controller,
+`MobileInputAdapter.poll` reset on every frame and unconditionally emitted a
+rewind release. Reset now releases only a controller chord that the adapter held.
+An isolated, muted, hostless iOS test reproduces 180 unwanted releases with the
+old code and passes with the correction. The ordinary package test scheme was
+blocked by a Mac-only AppKit test dependency, so the focused test uses an isolated
+package containing the same production sources. Evidence is retained under
+`.build/recovery-2.3/rewind-input-before-real.log` and `rewind-input-after.log`.
+
+Undo now uses the same internal clearance as Pause. The armed-nuke white outline
+previously ended at the safe-area button rectangle while its face continued to
+the display edge, leaving a border inside the visible button. Arming now uses
+the shared selected socket border. All 135 muted, windowless HUD renders and
+target checks pass across Classic, L2 and L3, including armed and undo states,
+iPad orientations and Duo poses. The source corrections await manual touch
+acceptance. Supported NeoLemmix, Mac and TV device acceptance remain separate.
+
+## Gen8 recovery against 2.3 — 31 October 2026
+
+The owner tested installed 2.3 build 36 on the physical Gen8 over USB. A level
+start and nuke sounded clean. Some effects were dropped. This is the device
+control, distinct from the `v2.3` source tag's iOS build 34.
+
+Resume now follows 2.3's direct preparation order. It no longer forces a new
+preview render before checkpoint restoration. Existing previews remain available
+when already cached. The 8 MiB sequel preparation stack, checkpoint validation,
+queue resolution and save formats remain unchanged. Both direct preparation and
+preparation after a cached preview restore the same 2,000-tick Beach checkpoint
+hash, owner, scope and camera. Rewind after restoration also passes.
+
+The latest local 2.4 build 39 product is a Debug device build. Its compiler logs
+show `-Onone` for both NxlvKit and LemmingsAudio. This is a performance comparison
+variable, not a confirmed explanation of the installed Duo fault. Candidate 40
+uses Release compilation and development signing for the Gen8 comparison.
+
+The same muted host playback workload, with cues submitted after engine startup,
+produces continuous output with both 2.3 and current audio sources. The 2.3
+24-voice run reports exhausted reserves without a captured signal gap. Reserve
+counters alone therefore do not establish an audible failure or a repair.
+
+Evidence and source snapshots are under `.build/recovery-2.3/`. Device recovery
+copies include the Gen8 Library and Duo Application Support and preferences.
+The Gen8 Documents directory is empty. File hashes accompany these copies.
+Physical acceptance below comes from the owner playing on the Gen8. Saved-state
+checks, source compilation and host audio measurements remain separate evidence.
+
+Build 40 installed on the Gen8. All 163 saved-data and preference files matched
+their pre-install hashes. After an initial online-verification alert, the owner
+confirmed that the app opened. It then crashed when a level loaded. The retained
+report `gen8-40-level-crash.ips` symbolicates against the matching build-40 dSYM
+to `BufferedAudioSource.start()`, line 92 in that candidate. The effects worker
+trapped in the unsigned subtraction `host - anchor.hostTime`. The recorded anchor
+was later than the chosen host start time. This is a confirmed device failure in
+the experimental scheduling change, not a save-restoration failure.
+
+Build 41 removes that scheduling change and restores 2.3's initial-buffer and
+player-start order. It also restores player-position accounting without the
+experimental host-time offset. The ordered mobile control worker and published
+position remain. The build-41 source manifest must differ from build 40 only in
+`Sources/LemmingsAudio/BufferedAudioSource.swift`. The signed build meets that constraint.
+
+The owner accepted build 41 on the physical Gen8: loading was much faster, heavy
+nukes had no hiccups, and menu music, pause/resume and Home-to-saved-level Resume
+were clean. Resume restored the correct state. The passive 121.58-second capture
+`gen8-41-gameplay-audio.trace` includes the app, PID 1018. App time-profile
+samples cover only seconds 102.60–121.58 of that capture. Audio client event and
+load tables are empty. This trace cannot establish uninterrupted audio playback. The owner identified a separate UI defect: preparation
+looked interactive before Ready. The next source change replaces those controls
+with a loading page and retains Back/Home cancellation. It does not change audio.
+
+The same capture identifies a 4.95-second main-thread pause during Journey Resume.
+Matching build-41 symbols place 4.738 seconds of sampled main-thread work inside
+`syncPages()`, including 3.567 seconds inside the `learning` getter. The browser
+filter called `canSelectJourneyLevel` for every entry. Each call loaded, decoded
+and reconciled the saved Journey. The post-2.3 Resume path now navigates to that
+browser before checkpoint preparation, exposing this repeated work. Build 42
+reads the saved run once when configuring the browser, then applies the same
+current-position and unlock rule. There is no persistent cache or save-format
+change. Build 42 compiles, signs and exports. Twelve headless loading-page
+render/target checks pass. Build 42 is installed and confirmed on Gen8. All 164
+saved-data and preference files match their pre-install hashes, with no added or
+missing files. A passive three-minute Time Profiler capture was started for the
+owner's loading/Resume check. Device timing and listening acceptance remain pending.
+The owner is compiling and running the same source checkout on Duo through Xcode
+after the network installer timed out. No build-42 device pass is claimed.
+
+This acceptance covers the paths the owner exercised. Duo, other soundtracks,
+rewind, replay, background/foreground and audio-route changes remain device gaps.
+
+## Resume blocking and 2.3 comparison — 31 October 2026
+
+The owner reports a level load that remains on its loading screen until device
+Auto-Lock, a Resume lockup, and main-menu music crackling on Duo. The earlier Duo candidate
+remains unverified after the Gen8 recovery. No capture established the cause of
+that original long load. Network
+Instruments captures disconnected after about 1.4 seconds and did not include
+the app. Both Xcode versions failed to attach to the listed process. A system
+diagnostic required administrator authentication unavailable in this session.
+
+The `v2.3` tag points to `d1d1ddac` (26 October), labelled Mac build 100,
+iOS build 34 and TV build 13. It already includes buffered effects, four
+512-frame blocks, sequential player starts, and synchronous music restart work.
+Thus 2.3 is a useful behavioural control, but is not the earlier direct-source
+implementation from 2.2.1. The 29 October `ee25238d` commit substantially rewrites
+effects control/progress transfer. The 30 October `736b7255` commit adds the
+shared preparation executor and a preview render before saved-level preparation.
+The shared executor also runs catalogue discovery. These are source differences,
+not proof of the device's loading stall. Do not remove its 8 MiB stack protection
+without checking the previously reproduced sequel stack exhaustion.
+
+The earlier first-voice capture queued a tone before starting the source.
+Production mobile normally starts effects before submitting its first cue.
+The 221 ms captured gap establishes a scheduling weakness in that synthetic
+case. It does not prove the cause of production level-start or nuke crackling.
+
+A live host probe measured 30 effects pause/resume cycles. Resume occupied its
+caller for roughly 300–330 ms. The shared mobile/TV adapter now serialises graph
+preparation, control and playback through `AudioPlaybackQueue`. Pause cancels
+obsolete queued cues. Preparation and shutdown retain their order. Replay export
+awaits the prepared sound-library copy without blocking the UI. An already running
+operation is not interrupted, so graph startup time and shutdown latency remain
+separate acceptance checks. Native Mac effects adapters still use synchronous
+lifecycle methods and require further work.
+
+A stopped tracker player with a busy synthesis worker reproduced a 314 ms Resume
+wait. Re-priming now runs asynchronously on that worker and checks suspension
+before restarting. The focused test measures about 0.024 ms to submit Resume,
+then verifies actual restart, cancellation by a later pause and subsequent recovery.
+This is a controlled host measurement, not a Duo or Gen8 latency claim.
+
+Recorded PCM blocks without an active loop-seam correction now use a bulk copy.
+A local debug benchmark of 100 eight-buffer starts changed from about 0.60 s to
+0.013 s. Captured samples match byte-for-byte. Recording tests pass for exact
+loops, short ALAC loops, mono 48 kHz, seams, peaks and decoder errors. This does
+not quantify compressed-file decoding or device-wide performance. A tracker
+lookup-cache experiment showed no useful measured gain and was discarded.
+
+`Scripts/run-audio-control-tests.sh` passes command-order/cancellation and tracker
+restart checks after the startup rollback. Earlier real-time test results used
+the experimental startup path and cannot establish acceptance of build 41.
+The retained pre-armed startup test exercises a known 2.3 limitation. The broader
+offline debug timing assertion remains unresolved. Build 41 compiles and signs
+for iOS. The earlier TV compilation predates this rollback. Gen8 acceptance covers menu, level start, heavy nuke, pause/resume and saved-level
+Resume on build 41. Rewind, replay, background/foreground, audio-route changes
+and other physical devices remain unverified.
+
+Evidence: `.build/audio-resume-investigation/`. The copied device preferences are
+local diagnostic evidence, not test storage. No production save was modified.
+
+## Effects startup starvation experiment — 31 October 2026
+
+The earlier host test captured a 221 ms dropout when a tone was queued before
+starting 24 players. That ordering differs from production mobile, which starts
+effects before submitting the first cue. The attempted shared-host-time repair
+passed that synthetic test but crashed on the physical Gen8 in build 40. It has
+been removed. The retained pre-armed test remains evidence of a baseline
+limitation, not proof that the production regression is fixed.
+
+Current startup follows 2.3. No artificial start lead or host-time subtraction
+remains. The four-buffer reserve, spatial graph, voice budgets and pending
+control-handoff fixes remain. Historical test logs are under `.build/audio-cause/`
+and `.build/audio-resume-investigation/`. The device crash and recovery comparison
+are under `.build/recovery-2.3/`. Physical playback acceptance remains required.
+
 ## 2.3 audio and performance blocker — 26 October 2026
 
 The owner reports crackling on the latest iPhone Duo, iPad 8th generation and

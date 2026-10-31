@@ -75,6 +75,37 @@ import UIKit
     var boxesHome = false {
         didSet { if boxesHome != oldValue { setNeedsLayout(); setNeedsDisplay() } }
     }
+    var homeObstructions: [CGRect] = [] {
+        didSet {
+            guard homeObstructions != oldValue else { return }
+            measurement = nil
+            pageLayout = nil
+            setNeedsLayout()
+            setNeedsDisplay()
+        }
+    }
+    weak var obstructionReferenceView: UIView?
+    var viewportObstructions: [CGRect] = [] {
+        didSet {
+            guard viewportObstructions != oldValue else { return }
+            pageLayout = nil
+            setNeedsLayout()
+            setNeedsDisplay()
+        }
+    }
+    func viewportDidScroll() {
+        guard !viewportObstructions.isEmpty else { return }
+        pageLayout = nil
+        setNeedsLayout()
+        setNeedsDisplay()
+    }
+    var homeLayoutClearsObstructions: Bool {
+        guard let measurement else { return homeObstructions.isEmpty }
+        return measurement.layout.targets.allSatisfy { target in
+            let frame = target.frame.applying(CGAffineTransform(scaleX: measurement.scale, y: measurement.scale))
+            return homeObstructions.allSatisfy { !$0.intersects(frame) }
+        }
+    }
     var bookHomePanes: [CGRect] = [] {
         didSet {
             guard bookHomePanes != oldValue else { return }
@@ -92,8 +123,12 @@ import UIKit
         }
         #endif
         let panes = bookHomePanes.map { $0.applying(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale)) }
-        return GameFrontEnd.layout(page, width: width, minimumHeight: minimumHeight,
-                                   boxedHome: boxesHome, bookHomePanes: panes, fillsResultPane: splitResult)
+        let layout = GameFrontEnd.layout(page, width: width, minimumHeight: minimumHeight,
+                                         boxedHome: boxesHome, bookHomePanes: panes, fillsResultPane: splitResult)
+        guard page.home, !homeObstructions.isEmpty else { return layout }
+        return GameFrontEnd.avoidingObstructions(layout, obstacles: homeObstructions.map {
+            $0.applying(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
+        })
     }
     var preview: CGImage? { didSet { setNeedsDisplay() } }
     var resultStars: Int? { didSet { setNeedsDisplay() } }
@@ -332,6 +367,12 @@ import UIKit
         var layout = measuredLayout(page: page, viewport: viewport, scale: scale)
         if let footerViewport {
             layout = MobilePauseArt.pinningFooter(layout, viewport: footerViewport, actionIDs: Set(page.footer.map(\.id)))
+        }
+        if !viewportObstructions.isEmpty, let reference = obstructionReferenceView {
+            let obstacles = viewportObstructions.map {
+                convert($0, from: reference).applying(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
+            }
+            layout = GameFrontEnd.avoidingObstructions(layout, obstacles: obstacles)
         }
         presentationKey = key
         pageLayout = layout

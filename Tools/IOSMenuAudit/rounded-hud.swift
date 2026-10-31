@@ -64,7 +64,7 @@ extension MenuAudit {
                 let cornerSafe = duo
                     ? MobileInsets(top: max(safe.top, radius), bottom: max(safe.bottom, radius))
                     : MobileInsets(top: safe.top, left: max(safe.left, radius), bottom: safe.bottom, right: max(safe.right, radius))
-                for state in ["running", "paused", "selected-last", "undo"] {
+                for state in ["running", "paused", "selected-last", "armed", "undo"] {
                     let original = session.snapshot
                     let snapshot = MobileGameSnapshot(tick: original.tick, released: original.released, total: original.total,
                         saved: original.saved, required: original.required, remainingSeconds: original.remainingSeconds,
@@ -80,7 +80,7 @@ extension MenuAudit {
                     let selected = state == "selected-last" ? snapshot.skills.count - 1 : 0
                     let paused = state == "paused"
                     let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot,
-                        selectedSkill: selected, paused: paused, speed: 1, endRunArmed: false)
+                        selectedSkill: selected, paused: paused, speed: 1, endRunArmed: state == "armed")
                     let visibleTargets = targets.filter { item in
                         guard let portrait = layout.portrait, case .skill = item.action else { return true }
                         return portrait.skills.contains(item.inputFrame)
@@ -155,7 +155,7 @@ extension MenuAudit {
                         MobileBitmapRenderer.draw(image, viewport: viewport, in: context); context.restoreGState()
                     }
                     MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selected, paused: paused, speed: 1,
-                        endRunArmed: false, panelImage: panel, typography: typography, skillIcons: icons, playerName: "PLA", shape: .rounded,
+                        endRunArmed: state == "armed", panelImage: panel, typography: typography, skillIcons: icons, playerName: "PLA", shape: .rounded,
                         duoCorners: !pose.hasPrefix("ipad-"), displayBounds: bounds)
                         .draw(in: context, bounds: bounds)
                     context.restoreGState()

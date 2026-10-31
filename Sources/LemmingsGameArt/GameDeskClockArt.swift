@@ -481,7 +481,7 @@ public final class GameDeskClockArt: @unchecked Sendable {
         case .build: (pose, tick, footOffset) = (.building, lemming.tick, -13)
         case .ohNo: (pose, tick, footOffset) = (.ohNo, min(15, lemming.tick), -10)
         }
-        let left = lemming.facingLeft && ![.block, .exit, .ohNo].contains(lemming.state)
+        let left = lemming.facingLeft && ![.block, .ohNo].contains(lemming.state)
         let index = ClassicMacArtwork.lemmingFrameIndex(pose: pose, left: left, tick: tick)
         drawSprite(bank: Self.lemmingsBank, index: index,
                    at: CGPoint(x: lemming.x - 8, y: y + footOffset), in: context)

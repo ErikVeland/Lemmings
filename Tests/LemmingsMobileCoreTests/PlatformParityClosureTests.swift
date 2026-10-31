@@ -5,8 +5,12 @@ import Testing
 @testable import LemmingsMobileCore
 
 @MainActor struct PlatformParityClosureTests {
-    private static let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+    nonisolated private static let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         .deletingLastPathComponent().deletingLastPathComponent()
+    nonisolated private static let hasL2Level = FileManager.default.fileExists(atPath: root
+        .appendingPathComponent("Sources/Ports/Lemm2/LEVELS/LEVEL000.DAT").path)
+    nonisolated private static let hasSequelLevels = hasL2Level && FileManager.default.fileExists(atPath: root
+        .appendingPathComponent("Sources/Ports/LEM3CD/LEVELS/LEVEL001.DAT").path)
 
     private func neo() throws -> NeoLemmixMobileSession {
         var terrain = try NeoLemmixTerrain(width: 160, height: 64)
@@ -18,7 +22,7 @@ import Testing
             levelIdentifier: "neo-fixture", levelIndex: 0, levelFingerprint: "neo-fixture")
     }
 
-    @Test func practiceRestoresTheExactPanelWithoutCampaignWrites() throws {
+    @Test(.enabled(if: Self.hasL2Level)) func practiceRestoresTheExactPanelWithoutCampaignWrites() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }
         let storage = MobileStorage(directory: directory)
@@ -42,7 +46,7 @@ import Testing
         #expect(throws: (any Error).self) { try source.loadPractice(at: 0, skills: Array(repeating: .builder, count: 8)) }
     }
 
-    @Test func shortOpeningCarriesSurvivorsAndRestoresItsOwnQueue() throws {
+    @Test(.enabled(if: Self.hasL2Level)) func shortOpeningCarriesSurvivorsAndRestoresItsOwnQueue() throws {
         struct Witness: Decodable {
             struct Input: Decodable { let tick: Int, skill: Int, lemming: Int }
             let inputs: [Input]
@@ -100,7 +104,7 @@ import Testing
         #expect(trails.echoes.isEmpty)
     }
 
-    @Test func originalMediaStreamsFramesWithoutGameState() throws {
+    @Test(.enabled(if: Self.hasSequelLevels)) func originalMediaStreamsFramesWithoutGameState() throws {
         for engine in ["lemmings2", "lemmings3"] {
             let directory = Self.root.appendingPathComponent(engine == "lemmings2" ? "Sources/Ports/Lemm2" : "Sources/Ports/LEM3CD")
             for item in MobileOriginalMedia.Item.all(engine: engine) {
@@ -155,7 +159,7 @@ import Testing
         #expect(!restored.grantExtraSkill(choice))
     }
 
-    @Test func allNonClassicSessionsReviewExactInputsAndKeepPlaybackReadOnly() throws {
+    @Test(.enabled(if: Self.hasSequelLevels)) func allNonClassicSessionsReviewExactInputsAndKeepPlaybackReadOnly() throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: directory) }
         let storage = MobileStorage(directory: directory)

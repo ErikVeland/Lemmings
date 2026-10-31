@@ -41,6 +41,51 @@ extension MenuAudit {
         pages += MobileSettingsGroup.allCases.map {
             ($0.rawValue, MobileSettingsArt.page($0, settings: .init(), displayAvailable: true, foldable: true, ghostsVisible: false))
         }
+        if CommandLine.arguments.last == "--scroll-obstructions" {
+            for (name, page) in pages where !page.home {
+              for (width, height) in [(CGFloat(950), CGFloat(667)), (495, 720), (720, 495)] {
+               for scale: CGFloat in [1, 1.25, 1.5] {
+                let base = GameFrontEnd.layout(page, width: width / scale, minimumHeight: height / scale)
+                let maximum = max(0, base.size.height - height / scale)
+                for offset in stride(from: CGFloat(0), through: maximum, by: 20) {
+                    for x: CGFloat in [0, width - 90] {
+                        for y: CGFloat in [0, height - 80] {
+                            let obstacle = CGRect(x: x / scale, y: y / scale + offset, width: 90 / scale, height: 80 / scale)
+                            let pinned = page.pause != nil ? MobilePauseArt.pinningFooter(base,
+                                viewport: CGRect(x: 0, y: offset, width: width / scale, height: height / scale),
+                                actionIDs: Set(page.footer.map(\.id))) : base
+                            let layout = GameFrontEnd.avoidingObstructions(pinned, obstacles: [obstacle])
+                            guard layout.targets.count == base.targets.count,
+                                  layout.rowHeadings.allSatisfy({ !obstacle.intersects($0.1) }),
+                                  layout.targets.enumerated().allSatisfy({ index, target in
+                                !obstacle.intersects(target.frame) && target.frame.width * scale >= 44 &&
+                                    target.frame.height * scale >= 44 &&
+                                    layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == (target.action.enabled ? target.action.id : nil) &&
+                                    layout.targets.dropFirst(index + 1).allSatisfy { !target.frame.intersects($0.frame) }
+                            }) else {
+                                let blocked = layout.targets.filter { obstacle.intersects($0.frame) }.map { "\($0.action.id) \($0.action.title): \($0.frame), height=\(GameTextLayout.height($0.action.title, width: 330))" }.joined(separator: ", ")
+                                let headings = layout.rowHeadings.filter { obstacle.intersects($0.1) }.map { "\($0.0): \($0.1)" }
+                                FileHandle.standardError.write(Data("Obstructed \(name), size \(base.size), scale \(scale), offset \(offset), obstacle \(obstacle): \(blocked) headings \(headings)\n".utf8))
+                                throw invalidTargets(line: #line)
+                            }
+                            if name == "gameplay", width == 495, scale == 1, offset == 260, x == 0, y == 0 {
+                                let context = try bitmapContext(size: CGSize(width: width, height: height))
+                                context.translateBy(x: 0, y: -offset)
+                                GameFrontEnd.draw(page, layout: layout, typography: typography, preview: preview, in: context)
+                                context.translateBy(x: 0, y: offset)
+                                context.setFillColor(CGColor(gray: 0.3, alpha: 1))
+                                context.fill(CGRect(x: x, y: y, width: 90, height: 80))
+                                try save(context: context, to: output.appendingPathComponent("scroll-gameplay-corner.png"))
+                            }
+                        }
+                    }
+                }
+               }
+              }
+            }
+            print("PASS scrolling obstruction geometry")
+            return
+        }
         typealias Pose = (name: String, bounds: MobileRect, regions: [MobileReservedRegion])
         var poses: [Pose] = []
         for (name, size) in [("front-portrait", CGSize(width: 495, height: 720)),

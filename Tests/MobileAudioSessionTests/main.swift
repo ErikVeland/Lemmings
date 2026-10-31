@@ -1,10 +1,11 @@
 import Foundation
 
 private actor SessionProbe {
-    enum Failure: Error { case activation }
+    enum Failure: Error { case activation, deactivation }
     private var events: [String] = []
     private var holdResume: Bool
     private var failResume: Bool
+    private var failNextSuspend = false
     private var resumeStarted = false
     private var startedWaiter: CheckedContinuation<Void, Never>?
     private var resumeWaiter: CheckedContinuation<Void, Never>?
@@ -17,6 +18,10 @@ private actor SessionProbe {
     func perform(_ operation: MobileAudioSessionOperation) async throws {
         precondition(!Thread.isMainThread, "Session work ran on the main thread")
         events.append("\(operation):start")
+        if case .suspend = operation, failNextSuspend {
+            failNextSuspend = false
+            throw Failure.deactivation
+        }
         if case .resume = operation {
             resumeStarted = true
             startedWaiter?.resume()
@@ -41,6 +46,7 @@ private actor SessionProbe {
     }
 
     func log() -> [String] { events }
+    func failOneSuspend() { failNextSuspend = true }
 }
 
 @main private struct MobileAudioSessionChecks {
@@ -56,7 +62,42 @@ private actor SessionProbe {
         await checkBackgroundBlocksPlayback()
         await checkBackgroundReleasesEveryOwner()
         await checkRapidFoldReactivation()
+        await checkRepeatedBackgroundDeactivation()
+        await checkFailedDeactivationRetries()
         print("PASS audio session ordering, Home ownership, phone background/foreground, stale activation, failure and controller lifetime (silent, headless)")
+    }
+
+    @MainActor private static func checkFailedDeactivationRetries() async {
+        let queue = MobileAudioSessionWorkQueue()
+        let probe = SessionProbe()
+        let owner = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        await owner.resume { precondition($0) }.value
+        await probe.failOneSuspend()
+        await owner.suspend().value
+        await owner.suspend().value
+        let log = await probe.log()
+        precondition(log.filter { $0 == "suspend:start" }.count == 2 && log.last == "suspend:end",
+                     "A failed session deactivation was not retried")
+    }
+
+    @MainActor private static func checkRepeatedBackgroundDeactivation() async {
+        let queue = MobileAudioSessionWorkQueue()
+        let probe = SessionProbe()
+        let level = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        let menu = MobileAudioSessionRequests(queue: queue) { try await probe.perform($0) }
+        await level.resume { precondition($0) }.value
+        await menu.resume { precondition($0) }.value
+        queue.setPlaybackAllowed(false)
+        await level.suspend().value
+        let backgroundEvents = await probe.log()
+        precondition(backgroundEvents.filter { $0 == "suspend:start" }.count == 1,
+                     "One background transition deactivated the session more than once")
+        queue.setPlaybackAllowed(true)
+        await menu.resume { precondition($0) }.value
+        await menu.suspend().value
+        let finalEvents = await probe.log()
+        precondition(finalEvents.filter { $0 == "suspend:start" }.count == 2,
+                     "A later active session was not deactivated")
     }
 
     @MainActor private static func checkLevelTransitionOrder() async {

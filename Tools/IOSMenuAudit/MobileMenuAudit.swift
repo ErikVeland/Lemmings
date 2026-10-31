@@ -12,7 +12,10 @@ import NxlvKit
         return .invalidTargets
     }
     @MainActor static func main() async throws {
+        let cloudSync = CommandLine.arguments.last == "--cloud-sync"
         let duoRelease = CommandLine.arguments.last == "--duo-release"
+        let startup = CommandLine.arguments.last == "--startup"
+        let levelLoading = CommandLine.arguments.last == "--level-loading"
         let sharing = CommandLine.arguments.last == "--sharing"
         let previewFill = CommandLine.arguments.last == "--preview-fill"
         let muteSetting = CommandLine.arguments.last == "--mute-setting"
@@ -20,10 +23,10 @@ import NxlvKit
         let extraSkill = CommandLine.arguments.last == "--extra-skill"
         let roundedHUD = CommandLine.arguments.last == "--rounded-hud"
         let gridHUD = CommandLine.arguments.last == "--grid-hud"
-        let bookHome = CommandLine.arguments.last == "--book-home"
+        let bookHome = ["--book-home", "--book-home-flat"].contains(CommandLine.arguments.last ?? "")
         let support = CommandLine.arguments.last == "--support"
         let replayControls = CommandLine.arguments.last == "--replay-controls"
-        let edgeToEdge = CommandLine.arguments.last == "--edge-to-edge"
+        let edgeToEdge = ["--edge-to-edge", "--scroll-obstructions"].contains(CommandLine.arguments.last ?? "")
         let duo = CommandLine.arguments.last == "--duo"
         let staticHome = CommandLine.arguments.last == "--static-home"
         let hierarchy = CommandLine.arguments.last == "--hierarchy"
@@ -41,14 +44,17 @@ import NxlvKit
         let journeyHome = CommandLine.arguments.last == "--journey-home"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (replayControls || edgeToEdge || duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || gridHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || journeyHome || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (cloudSync || levelLoading || startup || replayControls || edgeToEdge || duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || gridHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || journeyHome || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        if startup { try checkStartup(output: output); return }
         guard let typography = GameMenuTypography(directory: artwork),
               typography.interface.logo != nil,
               typography.font(.small) != nil, typography.font(.large) != nil else { throw Failure.missingArtwork }
+        if cloudSync { try checkCloudSync(typography: typography, output: output); return }
+        if levelLoading { try checkLevelLoading(typography: typography, output: output); return }
         if edgeToEdge { try checkEdgeToEdge(typography: typography, content: content, output: output); return }
         if duoRelease { try checkDuoRelease(typography: typography, artwork: artwork, output: output); return }
         if sharing { try checkSharingPrivacy(typography: typography, output: output); return }

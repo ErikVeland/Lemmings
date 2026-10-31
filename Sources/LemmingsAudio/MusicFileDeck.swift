@@ -91,6 +91,16 @@ private final class MusicPCMStream: @unchecked Sendable {
       try read(file, scratch, AVAudioFrameCount(count))
       let read = Int(scratch.frameLength)
       guard read > 0 else { throw CocoaError(.fileReadCorruptFile) }
+      // Ordinary decoded blocks need no per-sample seam correction.
+      if !joining, joinFrame >= joinFrames {
+        for channel in lastSamples.indices {
+          memcpy(pcm.floatChannelData![channel] + filled, scratch.floatChannelData![channel],
+                 read * MemoryLayout<Float>.stride)
+          lastSamples[channel] = scratch.floatChannelData![channel][read - 1]
+        }
+        filled += read
+        continue
+      }
       for index in 0..<read {
         if joining {
           for channel in lastSamples.indices {

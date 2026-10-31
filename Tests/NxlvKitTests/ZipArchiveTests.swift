@@ -3,6 +3,7 @@ import Testing
 @testable import NxlvKit
 
 struct ZipArchiveTests {
+    #if os(macOS)
     private static let packs = URL(fileURLWithPath: #filePath)
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         .appendingPathComponent("Content/LevelPacks")
@@ -46,6 +47,7 @@ struct ZipArchiveTests {
         }
         #expect(members > 1_000)
     }
+    #endif
 
     @Test func rejectsDamagedAndNonArchives() throws {
         #expect(throws: ZipArchiveError.self) { try ZipArchive(data: Data("not a zip".utf8)) }

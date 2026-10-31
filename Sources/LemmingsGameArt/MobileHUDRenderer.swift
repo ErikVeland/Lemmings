@@ -266,7 +266,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     public func drawSkills(in context: CGContext, clipped: Bool = true) {
         guard let portrait = layout.portrait else { return }
         context.saveGState()
-        if clipped { context.clip(to: portrait.skills) }
+        if clipped { context.clip(to: edgeFrame(portrait.skills)) }
         for item in items { if case .skill = item.action { drawCell(item, context: context) } }
         context.restoreGState()
     }
@@ -360,7 +360,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         let width = CGFloat(icon.width) * fit, height = CGFloat(icon.height) * fit
         context.saveGState()
         context.setAlpha(readOnly || snapshot.skills[safe: index]?.count == 0 ? 0.35 : 1)
-        GameStoneArt.drawImage(icon, in: CGRect(x: floor(art.midX - width / 2), y: floor(art.midY - height / 2), width: width, height: height), context: context)
+        GameStoneArt.drawImage(icon, in: CGRect(x: floor(art.midX - width / 2), y: SkillArtworkAlignment.originY(for: icon, scale: fit, centredIn: art), width: width, height: height), context: context)
         context.restoreGState()
     }
 
@@ -476,24 +476,25 @@ public enum MobileHUDAction: Equatable, Sendable {
         case .skill(let index):
             drawStoneSocket(frame, selected: selected, pixel: 1, face: .skill(index), context: context)
             let scale = layout.compactScale
-            let well = GameStoneArt.well(frame, pixel: 1)
+            let visibleFrame = contentFrame(frame)
+            let well = GameStoneArt.well(visibleFrame, pixel: 1)
             context.saveGState()
             context.clip(to: well)
             if readOnly { context.setAlpha(0.35) }
             if case let .skill(index) = item.action, let icon = skillIcons[safe: index] ?? nil {
-                let art = CGRect(x: well.minX, y: frame.minY + 20, width: well.width, height: max(0, frame.height - 36))
-                let available = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
+                let art = CGRect(x: well.minX, y: visibleFrame.minY + 20, width: well.width, height: max(0, visibleFrame.height - 36))
+                let available = min(art.width / CGFloat(icon.width), max(0, frame.height - 36) / CGFloat(icon.height))
                 let fit = layout.isDiorama && available > 0
                     ? (available >= 1 ? floor(available) : 1 / ceil(1 / available)) : available
-                GameSkillSelectionArt.drawSprite(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: floor(art.midY - CGFloat(icon.height) * fit / 2), width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), selected: selected, context: context)
+                GameSkillSelectionArt.drawSprite(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: SkillArtworkAlignment.originY(for: icon, scale: fit, centredIn: art), width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), selected: selected, context: context)
             } else if layout.panel?.style != .lemmings3, let cell = item.sourceCell,
                let image = panelImage?.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
-                let available = CGRect(x: well.minX, y: frame.minY + 20, width: well.width, height: max(0, frame.height - 36))
+                let available = CGRect(x: well.minX, y: visibleFrame.minY + 20, width: well.width, height: max(0, visibleFrame.height - 36))
                 let art = CGRect(x: frame.midX - 8 * scale, y: floor(available.midY - 12 * scale), width: 16 * scale, height: 24 * scale)
                 GameStoneArt.drawImage(image, in: art, context: context)
             }
             context.restoreGState()
-            drawCompactCount(item, in: frame, context: context)
+            drawCompactCount(item, in: visibleFrame, context: context)
         case .pause, .endRun:
             drawGlyphButton(item, context: context, pixel: 1)
         case .speed:
@@ -524,7 +525,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         drawGameLabel(value, in: count, context: context)
         if case let .skill(index) = item.action, let skill = snapshot.skills[safe: index] {
             let name = Self.shortNames[skill.name.lowercased()] ?? SkillVocabulary.title(skill.name).uppercased()
-            let label = CGRect(x: frame.minX + 3, y: frame.maxY - 14, width: frame.width - 6, height: 10)
+            let label = CGRect(x: frame.minX + 3, y: frame.maxY - 16, width: frame.width - 6, height: 10)
             let bounds = GamePixelTypography.verticalBounds(of: name)
             let scale = max(1, min(2, floor(min(label.height / CGFloat(bounds.bottom - bounds.top), label.width / CGFloat(GamePixelTypography.width(of: name))))))
             GamePixelTypography.draw(name, in: label, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
@@ -685,7 +686,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         context.saveGState()
         defer { context.restoreGState() }
         if readOnly && item.action == .endRun { context.setAlpha(0.35) }
-        let selected = item.action == .pause ? paused : (snapshot.isEndingRun == true)
+        let selected = item.action == .pause ? paused : (snapshot.isEndingRun || endRunArmed)
         let glyph: PanelGlyphArt
         if item.action == .pause { glyph = paused ? .play : .pause }
         else { glyph = snapshot.isEndingRun == true ? .undo : .nuke }
@@ -694,14 +695,13 @@ public enum MobileHUDAction: Equatable, Sendable {
         let glyphFrame = contentFrame(item.frame)
         let well = GameStoneArt.well(glyphFrame, pixel: pixel)
         if let image = Self.glyphImage(glyph,
-            fitting: item.action == .pause ? well.insetBy(dx: 4 * pixel, dy: 4 * pixel).size
+            fitting: item.action == .pause || glyph == .undo ? well.insetBy(dx: 4 * pixel, dy: 4 * pixel).size
                 : glyph.isOriginalTile ? glyphFrame.insetBy(dx: 2, dy: 2).size : well.size,
             transparentRock: glyph.isOriginalTile) {
             GameStoneArt.drawImage(image.image, in: CGRect(
                 x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
                 width: image.size.width, height: image.size.height), context: context)
         }
-        if item.action == .endRun, endRunArmed, !selected { outline(item.frame, context: context) }
     }
 
     private func drawTextButton(_ item: Item, context: CGContext) {

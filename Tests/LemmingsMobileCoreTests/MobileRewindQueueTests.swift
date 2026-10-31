@@ -4,6 +4,12 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileRewindQueueTests {
+    private static let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+        .deletingLastPathComponent().deletingLastPathComponent()
+    private static let hasCampaignLevels = ["Sources/Ports/lemmings_dos_1991-07-30/LEVEL000.DAT",
+        "Sources/Ports/Lemm2/LEVELS/LEVEL000.DAT", "Sources/Ports/LEM3CD/LEVELS/LEVEL001.DAT"]
+        .allSatisfy { FileManager.default.fileExists(atPath: root.appendingPathComponent($0).path) }
+
     @Test func rapidPressesAccumulateBeyondTheDisplayedTick() throws {
         var queue = MobileRewindQueue()
         let appendedFirst = queue.append(ticks: 34, from: 200, earliestTick: 0)
@@ -65,7 +71,7 @@ struct MobileRewindQueueTests {
         #expect(freshTargetMatches)
     }
 
-    @Test @MainActor func stackedSeeksCommitExactStatesAndCountsAcrossEngines() throws {
+    @Test(.enabled(if: Self.hasCampaignLevels)) @MainActor func stackedSeeksCommitExactStatesAndCountsAcrossEngines() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)

@@ -16,43 +16,35 @@ builds keep sync off, and muted mechanical tests never start Apple transports.
 Devices on the same iCloud account discover the library automatically. No
 Game Center login, code, recovery file or manual sync action is needed.
 
-For the shared tester library, open **Settings → Privacy → Tester sync** on
-mobile/TV, or **Ultimate Lemmings → Tester Sync…** on Mac. Select **Enable tester sync**
-once on each device. The button uses `test99` automatically. It links the whole
-library: every player, solo progress and every saved Hot Seat, regardless of
-which player or session is selected. No password entry or session-specific setup is
-needed. The setup page does not display the password. Tester sync has no shortcut
-on the Players screen. Existing libraries combine without replacing either
-device's records.
+### Public device linking in 2.4
 
-Keychain retains the derived credentials and the enabled state survives relaunch.
-Setup works offline and during play. Sync, provider selection and retries run in
-the background. Incoming progress waits for a safe menu; linking never changes
-the selected player, session, roster or turn. The tester button changes to a
-selected **Tester sync: On** state once the credentials are stored.
+Open **Ultimate Lemmings → Cloud Saves…** on Mac or **Settings → Privacy →
+Cloud saves** on iPhone, iPad, Duo or Apple TV. Choose **Link device** on the
+first device. Choose **Enter code** on the second device, enter the 12-character
+code, then choose **Link device**. The code expires after ten minutes and works
+once. Both devices retain their existing player identities and progress.
+Incoming progress waits for a safe menu. Linking does not select a player,
+start gameplay or unpause a handover. Mid-level checkpoints remain local.
 
-Entering `test99` through the legacy password API also persists tester status.
-Existing shared tester credentials restore that status on the next provider pass.
-Every launch and foreground activation requests an immediate library sync.
-Mac quit flushes local saves and allows up to 20 seconds for a final sync.
-iPhone, iPad, Duo and Apple TV request system background time for the same final
-pass when the app enters the background. A final pass waits for any active sync,
-then captures again, with up to three passes for changes made during upload.
-These hooks use the whole-library coordinator for Classic, Lemmings 2,
-Lemmings 3, supported fan progress and saved Hot Seat campaigns.
+The public page has no shared tester join action. Existing tester credentials
+remain readable. A tester library displays its separate status and cannot
+create or redeem a private device link. The legacy tester API remains available
+for controlled testing; it must not become the public setup path.
 
-Network failures, force-quit and an expired system background allowance can
-prevent completion. Local progress remains saved and retries on the next load.
-Incoming progress still waits for a safe menu. Mid-level checkpoints remain
-local. Physical-device suspension and live cross-account sync need acceptance
-checks; headless coordinator tests do not prove service availability.
+Local saves finish before uploads. Launch, foreground activation and local
+changes request sync. Mac quit allows up to 20 seconds for a final pass.
+Mobile and TV request system background time. Force-quit, network failures and
+expired background time can prevent completion; the next load retries.
 
-The shared bitmap setup has Back and one tester button on Mac, iPhone, iPad and
-TV. Password fields, provider diagnostics, device codes, recovery files and manual
-sync controls are absent from the player flow. Legacy linking/recovery APIs and
-existing library identities remain readable for compatibility. The shared
-`test99` library is for testers who intentionally enable it, rather than an
-automatic global library for all players of the app.
+Public Mac packaging now requires a Developer ID profile with the shared
+CloudKit container and Production environment, independently of Game Center.
+The owner supplied a production Developer ID profile on 31 October. It grants
+the shared container and matches an installed signing certificate. Explicit and
+automatic profile checks pass. Management access now works. The 31 October
+schema export found `ULPrivateLibrary` in Development but absent from Production.
+Production schema deployment remains required. See the
+[2.4 sync release gates](ReleaseReadiness/2.4-build104/CloudSync.md).
+These source changes do not establish public iCloud availability.
 
 Players remain separate even if their names match. A fresh installation restores
 the existing primary player. Two installations that already have independent

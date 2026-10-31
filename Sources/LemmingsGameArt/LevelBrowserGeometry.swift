@@ -40,7 +40,10 @@ public struct LevelBrowserGeometry {
         var row = 0
         for grid in grids {
             for slot in grid.slots {
-                frames[slot.action.id] = grid.frame(for: slot, x: left, y: y + CGFloat(row) * (height + 12), width: width,
+                let rowY = y + CGFloat(row + slot.row) * (height + 12)
+                let clear = MobileDisplayRegions.clearHorizontalFrame(
+                    .init(x: left, y: rowY, width: width, height: height), avoiding: occlusions)
+                frames[slot.action.id] = grid.frame(for: slot, x: clear.x, y: y + CGFloat(row) * (height + 12), width: clear.width,
                     height: height, gap: 12, rowGap: 12)
             }
             row += grid.rows

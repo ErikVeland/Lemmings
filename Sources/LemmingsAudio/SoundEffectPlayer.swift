@@ -190,6 +190,9 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   private func beginControls() {
     controlLock.lock()
+    beginLockedControls()
+  }
+  private func beginLockedControls() {
     if bufferedSource != nil { voiceBridge.progress(into: &voices) }
     controlBaseline = voices
   }
@@ -344,7 +347,9 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   public func suspendOutput() {
     guard isRunning else { return }
-    beginControls()
+    controlLock.lock()
+    if outputSuspended && !engine.isRunning { controlLock.unlock(); return }
+    beginLockedControls()
     outputSuspended = true
     rewindSequence &+= 1
    for index in voices.indices {
@@ -353,7 +358,7 @@ public final class SoundEffectPlayer: @unchecked Sendable {
     }
     endControls()
     engine.pause()
-    bufferedSource?.stop()
+    bufferedSource?.stopAfterPausingEngine()
   }
 
   /// Park a silent graph after the last voice finishes. Playback adapters own retries.
@@ -371,9 +376,13 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   public func resumeOutput() throws {
     guard isRunning else { return }
-    beginControls()
+    controlLock.lock()
+    if !outputSuspended && engine.isRunning { controlLock.unlock(); return }
+    beginLockedControls()
+    let wasSuspended = outputSuspended
     outputSuspended = false
     endControls()
+    if wasSuspended { bufferedSource?.drain() }
     do { if !engine.isRunning { try engine.start() } }
     catch { suspendOutput(); throw error }
     bufferedSource?.start()
@@ -852,8 +861,13 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Refresh active one-shots as well as the next event when the camera moves.
   public func setViewport(_ value: GameplaySoundViewport) {
-    beginControls(); defer { endControls() }
-    refreshResourceBudgetLocked()
+    controlLock.lock()
+    let budget = voiceBudgetLocked()
+    guard viewport != value || activeVoiceLimit != budget.voice || activeRescueLimit != budget.rescue else {
+      controlLock.unlock(); return
+    }
+    beginLockedControls(); defer { endControls() }
+    applyVoiceBudgetLocked(voiceLimit: budget.voice, rescueLimit: budget.rescue)
     guard viewport != value else { return }
     viewport = value
     for index in voices.indices where voices[index].isActive { placeVoice(index) }
@@ -883,8 +897,9 @@ public final class SoundEffectPlayer: @unchecked Sendable {
   }
 
   public func setNukeActive(_ active: Bool) {
-    beginControls(); defer { deliverPlayNotificationsAndUnlock() }
-    guard active != nukeActive else { return }
+    controlLock.lock()
+    guard active != nukeActive else { controlLock.unlock(); return }
+    beginLockedControls(); defer { deliverPlayNotificationsAndUnlock() }
     nukeActive = active
     lastNukeImpact = -Double.infinity
     if active {
@@ -1015,16 +1030,26 @@ public final class SoundEffectPlayer: @unchecked Sendable {
 
   /// Admission changes without rebuilding the audio graph or changing settings.
   public func setVoiceLimit(_ count: Int) {
-    beginControls(); defer { endControls() }
+    controlLock.lock()
     requestedVoiceLimit = max(1, min(voices.count, count))
-    refreshResourceBudgetLocked()
+    let budget = voiceBudgetLocked()
+    guard activeVoiceLimit != budget.voice || activeRescueLimit != budget.rescue else {
+      controlLock.unlock(); return
+    }
+    beginLockedControls(); defer { endControls() }
+    applyVoiceBudgetLocked(voiceLimit: budget.voice, rescueLimit: budget.rescue)
   }
 
   private func refreshResourceBudgetLocked() {
+    let budget = voiceBudgetLocked()
+    applyVoiceBudgetLocked(voiceLimit: budget.voice, rescueLimit: budget.rescue)
+  }
+
+  private func voiceBudgetLocked() -> (voice: Int, rescue: Int) {
     let budget = fixedResources ?? DeviceEffectPressure.shared.snapshot()
-    applyVoiceBudgetLocked(voiceLimit: min(requestedVoiceLimit, budget.audioVoiceLimit),
-                          rescueLimit: min(rescueVoiceLimit ?? budget.rescueVoiceLimit, budget.rescueVoiceLimit,
-                                           requestedVoiceLimit < voices.count ? requestedVoiceLimit : Int.max))
+    return (min(requestedVoiceLimit, budget.audioVoiceLimit),
+            min(rescueVoiceLimit ?? budget.rescueVoiceLimit, budget.rescueVoiceLimit,
+                requestedVoiceLimit < voices.count ? requestedVoiceLimit : Int.max))
   }
 
   private func applyVoiceBudgetLocked(voiceLimit: Int, rescueLimit: Int) {

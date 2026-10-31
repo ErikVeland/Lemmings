@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sign a macOS app with its Game Center and Spatial Audio Profile capabilities."""
+"""Sign a macOS app for development capabilities or public CloudKit sync."""
 import argparse
 import datetime
 import hashlib
@@ -30,7 +30,7 @@ def supports_cloudkit(entitlements):
             and CLOUD_CONTAINER in entitlements.get(CLOUD_KEYS[0], []))
 
 
-def select_profile(paths, identities):
+def select_profile(paths, identities, public_cloud=False):
     candidates = []
     for path in paths:
         result = subprocess.run(['security', 'cms', '-D', '-i', str(path)], capture_output=True)
@@ -43,7 +43,13 @@ def select_profile(paths, identities):
             continue
         if 'OSX' not in profile.get('Platform', []):
             continue
-        if not all(entitlements.get(key) is True for key in CAPABILITIES):
+        if public_cloud:
+            environment = entitlements.get('com.apple.developer.icloud-container-environment', [])
+            if (not supports_cloudkit(entitlements) or 'Production' not in environment
+                    or profile.get('ProvisionedDevices') or not profile.get('ProvisionsAllDevices')
+                    or entitlements.get('get-task-allow', False)):
+                continue
+        elif not all(entitlements.get(key) is True for key in CAPABILITIES):
             continue
         if profile.get('ExpirationDate', datetime.datetime.min) <= datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None):
             continue
@@ -54,6 +60,8 @@ def select_profile(paths, identities):
                 break
     if candidates:
         return max(candidates, key=lambda candidate: (supports_cloudkit(candidate[1]), supports_cloud(candidate[1])))
+    if public_cloud:
+        raise SystemExit('Install a Developer ID provisioning profile with the shared CloudKit container and Production environment, plus its signing certificate.')
     raise SystemExit('No valid macOS provisioning profile for academy.glasscode.lemmings with both capabilities and an installed signing identity. Download the profile from Apple Developer, then retry.')
 
 
@@ -97,19 +105,27 @@ def require_one_team(app):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('app', type=pathlib.Path)
+    parser.add_argument('app', type=pathlib.Path, nargs='?')
     parser.add_argument('--profile', type=pathlib.Path)
+    parser.add_argument('--public-cloud', action='store_true')
+    parser.add_argument('--identity', help='Required signing certificate name or fingerprint.')
     parser.add_argument('--check', action='store_true', help='Validate signing prerequisites without changing the app.')
     args = parser.parse_args()
-    contents = args.app / 'Contents'
+    if args.app is None and not args.check:
+        parser.error('An app path is required for signing.')
+    contents = args.app / 'Contents' if args.app else pathlib.Path(__file__).resolve().parents[1] / 'Resources'
     info = plistlib.loads((contents / 'Info.plist').read_bytes())
     if info.get('CFBundleIdentifier') != BUNDLE_ID:
         raise SystemExit('The app bundle identifier does not match ' + BUNDLE_ID)
     identities = subprocess.check_output(['security', 'find-identity', '-v', '-p', 'codesigning'], text=True)
+    if args.public_cloud:
+        identities = '\n'.join(line for line in identities.splitlines() if 'Developer ID Application:' in line)
+    if args.identity:
+        identities = '\n'.join(line for line in identities.splitlines() if args.identity in line)
     roots = [pathlib.Path.home() / 'Library/Developer/Xcode/UserData/Provisioning Profiles',
              pathlib.Path.home() / 'Library/MobileDevice/Provisioning Profiles']
     paths = [args.profile] if args.profile else [p for root in roots for p in sorted(root.glob('*.provisionprofile'))]
-    path, allowed, identity = select_profile(paths, identities)
+    path, allowed, identity = select_profile(paths, identities, args.public_cloud)
     print('Selected profile: ' + str(path))
     cloud_enabled = supports_cloud(allowed)
     cloudkit_enabled = supports_cloudkit(allowed)
@@ -120,7 +136,7 @@ def main():
     if args.check:
         return
     # Only request app capabilities and the identifiers authorised by this profile.
-    entitlements = {key: True for key in CAPABILITIES}
+    entitlements = {} if args.public_cloud else {key: True for key in CAPABILITIES}
     # The hardened runtime blocks EventKit unless the app declares calendar access.
     entitlements[CALENDARS] = True
     if cloud_enabled:
@@ -132,7 +148,9 @@ def main():
         entitlements[CLOUD_KEYS[0]] = [CLOUD_CONTAINER]
     if (cloud_enabled or cloudkit_enabled) and 'com.apple.developer.icloud-container-environment' in allowed:
         entitlements['com.apple.developer.icloud-container-environment'] = allowed['com.apple.developer.icloud-container-environment']
-    info['LemmingsCloudProgressEnabled'] = cloud_enabled
+    if args.public_cloud:
+        entitlements['com.apple.developer.icloud-container-environment'] = 'Production'
+    info['LemmingsCloudProgressEnabled'] = cloud_enabled and not args.public_cloud
     info['CloudLibraryCloudKitEnabled'] = cloudkit_enabled
     (contents / 'Info.plist').write_bytes(plistlib.dumps(info))
     for key in ('com.apple.application-identifier', 'com.apple.developer.team-identifier', 'get-task-allow'):
@@ -143,7 +161,7 @@ def main():
     ids = [config[key] for key in ('starsID', 'clearsID', 'perfectID')] + [row['leaderboardID'] for row in config['levels'] if row.get('leaderboardID')]
     if len(set(ids)) != len(ids) or any(not re.fullmatch(r'[A-Za-z0-9_.]{1,100}', identifier) for identifier in ids):
         raise SystemExit('The catalogue contains duplicate or invalid Apple leaderboard IDs.')
-    config['enabled'] = True
+    config['enabled'] = not args.public_cloud
     board_path.write_text(json.dumps(config, indent=2, sort_keys=True) + '\n')
     shutil.copy2(path, contents / 'embedded.provisionprofile')
     with tempfile.TemporaryDirectory(prefix='lemmings-sign-') as temporary:
@@ -160,14 +178,17 @@ def main():
     require_one_team(args.app)
     signed = subprocess.run(['codesign', '-d', '--entitlements', ':-', str(args.app)], capture_output=True, check=True)
     actual = plistlib.loads(signed.stdout)
-    if not all(actual.get(key) is True for key in (*CAPABILITIES, CALENDARS)):
+    required = (CALENDARS,) if args.public_cloud else (*CAPABILITIES, CALENDARS)
+    if args.public_cloud and (actual.get('com.apple.developer.game-center') or actual.get('com.apple.developer.icloud-container-environment') != 'Production'):
+        raise SystemExit('The public signature must use production iCloud without Game Center.')
+    if not all(actual.get(key) is True for key in required):
         raise SystemExit('The finished signature is missing a required capability.')
     if cloud_enabled and ('CloudDocuments' not in actual.get('com.apple.developer.icloud-services', [])
                           or any(actual.get(key) != [CLOUD_CONTAINER] for key in CLOUD_KEYS)):
         raise SystemExit('The finished signature is missing the shared progress container.')
     if cloudkit_enabled and not supports_cloudkit(actual):
         raise SystemExit('The finished signature is missing the shared CloudKit container.')
-    print('Signed and verified both capabilities: ' + str(args.app))
+    print('Signed and verified app capabilities: ' + str(args.app))
 
 
 if __name__ == '__main__':

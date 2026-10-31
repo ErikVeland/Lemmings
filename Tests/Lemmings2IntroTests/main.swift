@@ -5,6 +5,10 @@ func check(_ condition: Bool, _ message: String) {
     guard condition else { FileHandle.standardError.write(Data("FAIL: \(message)\n".utf8)); exit(1) }
 }
 let root = URL(fileURLWithPath:CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "Sources/Ports/Lemm2")
+guard FileManager.default.fileExists(atPath: root.appendingPathComponent("FONT.DAT").path) else {
+    print("SKIP original L2 introduction checks: FONT.DAT is not present in this checkout")
+    exit(0)
+}
 let font = try Lemmings2FrontEndFont(data:Data(contentsOf:root.appendingPathComponent("FONT.DAT")))
 let bank = try Lemmings2FrontEnd.Bank(data:Data(contentsOf:root.appendingPathComponent("INTRODAT/GFXIFFS/INTRO.IFF")))
 let background = [UInt8](repeating:0,count:64000)

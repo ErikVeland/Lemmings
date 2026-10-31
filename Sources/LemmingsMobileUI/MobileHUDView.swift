@@ -76,7 +76,6 @@ import UIKit
     var onHold: ((MobileHUDAction) -> Void)?
     private typealias Item = MobileHUDRenderer.Item
     var onRewindHold: ((Bool) -> Void)?
-    var onRewindRepeat: (() -> Void)?
     var onStepBatch: ((MobileHUDAction, Int) -> Void)?
     private var readOnly = false
     var playerName: String? { didSet { if oldValue != playerName { setNeedsDisplay() } } }
@@ -366,7 +365,7 @@ import UIKit
         if !readOnly, layout?.portrait?.rateValue?.contains(point) == true { return self }
         // Each speed action has a separate target inside the shared speed socket.
         if !minimapView.isHidden, minimapView.frame.contains(point) {
-            return minimapView
+            return isTransportForwardDeadZone(point) ? self : minimapView
         }
         if !skillScroll.isHidden, skillScroll.frame.contains(point) {
             return skillScroll.hitTest(convert(point, to: skillScroll), with: event)
@@ -378,6 +377,13 @@ import UIKit
            point.y <= layout.interface.statusFrame.maxY { return self }
         if let status = layout?.interface.statusFrame, Self.cgRect(status).contains(point) { return self }
         return nil
+    }
+
+    /// Keep the minimap from stealing taps aimed at the forward transport control.
+    private func isTransportForwardDeadZone(_ point: CGPoint) -> Bool {
+        guard let forward = items.first(where: { $0.action == .step })?.inputFrame else { return false }
+        let exclusion = forward.insetBy(dx: -32, dy: -32)
+        return minimapView.frame.intersects(exclusion) && exclusion.contains(point)
     }
 
     /// Controller activation uses the visible button bounds, including scrolled skills.
@@ -435,8 +441,7 @@ import UIKit
                 switch effect {
                 case .activate:
                     if case .releaseRate = item.action { rateStartedAtMaximum = self?.snapshot?.releaseRate == 99 }
-                    if item.action == .rewind { self?.onRewindRepeat?() }
-                    else { self?.onAction?(item.action) }
+                    self?.onAction?(item.action)
                 case let .step(count): self?.onStepBatch?(item.action, count)
                 case .doubleTap: self?.onRateDoubleTap?(rateStartedAtMaximum)
                 case .hold: self?.onHold?(item.action)
@@ -656,7 +661,8 @@ import UIKit
     private var timer: Timer?
     init(kind: MobileHUDPress.Kind) {
         press = MobileHUDPress(kind)
-        needsRepeatTimer = kind != .pause && kind != .tap
+        // Held rewind repeats from the gameplay frame loop, alongside controller holds.
+        needsRepeatTimer = kind != .pause && kind != .tap && kind != .rewind
         super.init(frame: .zero)
         addAction(UIAction { [weak self] _ in self?.beginPress() }, for: .touchDown)
         addAction(UIAction { [weak self] _ in self?.finishPress(cancelled: false) }, for: .touchUpInside)

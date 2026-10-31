@@ -295,6 +295,9 @@ import Security
         if let token { request.setValue("Bearer " + token, forHTTPHeaderField: "Authorization") }
         if method == "PUT" { request.setValue(etags[path] ?? "*", forHTTPHeaderField: "If-Match") }
         let (data, response) = try await network.data(for: request)
+        if let response = response as? HTTPURLResponse, path.hasPrefix("/v1/links/"), response.statusCode == 404 {
+            throw SequelDataError.invalid(L10n.text("This code expired or was used. Create a new code on your other device."))
+        }
         guard let response = response as? HTTPURLResponse, (200..<300).contains(response.statusCode) || (allowMissing && response.statusCode == 404) else { throw URLError(.badServerResponse) }
         guard data.count <= CloudLibraryArchive.maximumBytes + 28 else { throw SequelDataError.invalid(L10n.text("The cloud response is too large.")) }
         if method == "GET", path.contains("/devices/"), response.statusCode == 200 {

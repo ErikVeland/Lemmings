@@ -24,10 +24,25 @@ for suite in "${suites[@]}"; do
   case "$suite" in
     ClassicGameFlowTests|ClassicDOSSimulationRegressions|ClassicDOSRewindTests|ClassicDOSReplayTests)
       args=("$project_dir/Content/lemming1.pc") ;;
-    Lemmings2RuntimeTests|Lemmings2IntroTests) args=("$project_dir/Sources/Ports/Lemm2") ;;
-    Lemmings3RuntimeTests) args=("$project_dir/Sources/Ports/LEM3CD") ;;
+    Lemmings2RuntimeTests)
+      if [[ -f "$project_dir/Sources/Ports/Lemm2/LEVELS/LEVEL000.DAT" ]]; then
+        args=("$project_dir/Sources/Ports/Lemm2")
+      fi
+      ;;
+    Lemmings2IntroTests) args=("$project_dir/Sources/Ports/Lemm2") ;;
+    Lemmings3RuntimeTests)
+      if [[ -f "$project_dir/Sources/Ports/LEM3CD/LEVELS/LEVEL001.DAT" ]]; then
+        args=("$project_dir/Sources/Ports/LEM3CD")
+      fi
+      ;;
     UnifiedGameTests) args=("$app_dir/Contents/Resources") ;;
-    BundledGameResourcesTests) args=("$app_dir") ;;
+    BundledGameResourcesTests)
+      if [[ ! -f "$app_dir/Contents/Resources/Ports/Lemm2/FONT.DAT" ]]; then
+        echo "SKIP BundledGameResourcesTests: original L2 game assets are not in the app bundle"
+        continue
+      fi
+      args=("$app_dir")
+      ;;
   esac
   if swiftc -swift-version 6 -O "${flags[@]}" \
     -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
