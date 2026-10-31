@@ -241,14 +241,14 @@ enum PanelButton: Equatable {
   private var usesWideDeck: Bool { !isCRTSource && !isMenuMode }
 
   private func wideDeckMetrics(for width: CGFloat) -> (rows: Int, inline: Bool, height: CGFloat) {
-    let available = max(1, width - inset * 2)
+    let available = min(1920, max(1, width - inset * 2))
     let skillCount = session?.skills.count ?? 8
-    let transportWidth: CGFloat = 64 + 12 + 44 + 32 + 44 + 100 + 64
+    let transportWidth: CGFloat = 104 + 24 + 44 + 32 + 44 + 100 + 132 + 64
     let inline = skillCount > 0 && skillCount <= 8
       && available - transportWidth >= CGFloat(skillCount) * 58
     let columns = max(1, Int(available / 64))
     let rows = inline ? 1 : max(1, (skillCount + columns - 1) / columns)
-    return (rows, inline, 44 + CGFloat(rows) * 80 + (inline ? 0 : 64) + statusStripHeight)
+    return (rows, inline, 60 + CGFloat(rows) * 104 + (inline ? 0 : 64) + statusStripHeight)
   }
 
   // MARK: - Layout
@@ -271,36 +271,45 @@ enum PanelButton: Equatable {
   }
 
   private func layoutWideButtons() {
-    let available = max(1, bounds.width - inset * 2)
+    let available = min(1920, max(1, bounds.width - inset * 2))
+    let deckX = floor((bounds.width - available) / 2)
     let metrics = wideDeckMetrics(for: bounds.width)
     let skillCount = session?.skills.count ?? 0
     panelScale = 2
-    panelFrame = CGRect(x: inset, y: 0, width: available, height: metrics.height - statusStripHeight)
-    timeline.frame = CGRect(x: inset, y: 0, width: min(144, available * 0.3), height: 44)
-    let mapX = timeline.frame.maxX + 8
-    minimapFrame = CGRect(x: mapX, y: 4, width: max(0, bounds.width - inset - mapX), height: 36)
-    let skillY: CGFloat = 44
-    let transportWidth: CGFloat = 64 + 12 + 44 + 32 + 44 + 100 + 64
+    panelFrame = CGRect(x: deckX, y: 0, width: available, height: metrics.height - statusStripHeight)
+    let timelineInRow = available >= 504
+    let mapWidth = min(800, max(0, available - (timelineInRow ? 0 : 140)))
+    minimapFrame = CGRect(x: deckX, y: 4, width: mapWidth, height: 44)
+    let skillY: CGFloat = 60
+    let nukeWidth: CGFloat = metrics.inline ? 104 : 64
+    let transportWidth: CGFloat = nukeWidth + 24 + 44 + 32 + 44 + 100 + (timelineInRow ? 132 : 0) + 64
     let skillBankWidth = metrics.inline ? available - transportWidth : available
     let columns = metrics.inline ? max(1, skillCount) : max(1, Int(available / 64))
     buttonFrames = (0..<skillCount).map { index in
       let row = index / columns, column = index % columns
       let rowCount = min(columns, skillCount - row * columns)
       let cell = skillBankWidth / CGFloat(max(1, rowCount))
-      let left = floor(inset + CGFloat(column) * cell)
-      let right = column == rowCount - 1 ? inset + skillBankWidth : floor(inset + CGFloat(column + 1) * cell)
-      return (.skill(index), CGRect(x: left, y: skillY + CGFloat(row) * 80,
-                                  width: right - left, height: 80))
+      let left = floor(deckX + CGFloat(column) * cell)
+      let right = column == rowCount - 1 ? deckX + skillBankWidth : floor(deckX + CGFloat(column + 1) * cell)
+      return (.skill(index), CGRect(x: left, y: skillY + CGFloat(row) * 104,
+                                  width: right - left, height: 104))
     }
-    let transportY = metrics.inline ? skillY : skillY + CGFloat(metrics.rows) * 80
-    let transportHeight: CGFloat = metrics.inline ? 80 : 64
-    let transportX = metrics.inline ? inset + skillBankWidth : inset + max(0, (available - transportWidth) / 2)
-    let nuke = CGRect(x: transportX, y: transportY, width: 64, height: transportHeight)
-    let down = CGRect(x: nuke.maxX + 12, y: transportY, width: 44, height: transportHeight)
-    rateValueFrame = CGRect(x: down.maxX, y: transportY, width: 32, height: transportHeight)
-    let up = CGRect(x: rateValueFrame.maxX, y: transportY, width: 44, height: transportHeight)
-    let speed = CGRect(x: up.maxX, y: transportY, width: 100, height: transportHeight)
-    let pause = CGRect(x: speed.maxX, y: transportY, width: 64, height: transportHeight)
+    let transportY = metrics.inline ? skillY : skillY + CGFloat(metrics.rows) * 104
+    let transportHeight: CGFloat = metrics.inline ? 104 : 64
+    let factor = min(1, max(0, (available - nukeWidth - 24) / (transportWidth - nukeWidth - 24)))
+    let usedWidth = nukeWidth + 24 + (transportWidth - nukeWidth - 24) * factor
+    let transportX = metrics.inline ? deckX + skillBankWidth : deckX + max(0, (available - usedWidth) / 2)
+    let nuke = CGRect(x: transportX + 12, y: transportY, width: nukeWidth, height: transportHeight)
+    let down = CGRect(x: nuke.maxX + 12, y: transportY, width: 44 * factor, height: transportHeight)
+    rateValueFrame = CGRect(x: down.maxX, y: transportY, width: 32 * factor, height: transportHeight)
+    let up = CGRect(x: rateValueFrame.maxX, y: transportY, width: 44 * factor, height: transportHeight)
+    let speed = CGRect(x: up.maxX, y: transportY, width: 100 * factor, height: transportHeight)
+    timeline.frame = timelineInRow
+      ? CGRect(x: speed.maxX, y: transportY, width: 132 * factor, height: transportHeight)
+      : CGRect(x: deckX + available - 132, y: 0, width: 132, height: 52)
+    let pause = CGRect(x: timelineInRow ? timeline.frame.maxX : speed.maxX,
+                       y: transportY, width: 64 * factor, height: transportHeight)
+    timeline.groupFrame = timelineInRow ? down.union(rateValueFrame).union(up).union(speed).union(timeline.frame).union(pause) : nil
     buttonFrames += [(.nuke, nuke), (.rateDown, down), (.rateUp, up),
                      (.fastForward, speed), (.pause, pause)]
   }
@@ -308,6 +317,7 @@ enum PanelButton: Equatable {
   /// Places the original controls and speed button over the status bar.
   private func layoutClassicButtons() {
     guard let panelImage else { return }
+    timeline.groupFrame = nil
     rateValueFrame = .zero
     let statusHeight: CGFloat = isCRTSource || bounds.height <= 40 ? 0 : statusStripHeight
     let scale = max(1, floor(min(bounds.width / CGFloat(panelImage.width),
@@ -346,6 +356,7 @@ enum PanelButton: Equatable {
   }
 
   private func layoutButtons() {
+    timeline.groupFrame = nil
     rateValueFrame = .zero
     let skillCount = session?.skills.count ?? 0
     var order: [PanelButton] = (0..<skillCount).map(PanelButton.skill)
@@ -565,16 +576,14 @@ enum PanelButton: Equatable {
   }
 
   private func controlIconBox(_ frame: CGRect) -> CGRect {
-    frame.insetBy(dx: min(12, frame.width * 0.18), dy: min(10, frame.height * 0.15))
+    if usesWideDeck && abs(frame.width - frame.height) < 0.01 {
+      return frame.insetBy(dx: 6, dy: 6)
+    }
+    return frame.insetBy(dx: min(12, frame.width * 0.18), dy: min(10, frame.height * 0.15))
   }
 
   private func drawRateValue() {
-    guard usesWideDeck, rateValueFrame.width > 0, let session,
-          let context = NSGraphicsContext.current?.cgContext else { return }
-    let group = controlGroupFrame(.rateDown,
-                                  frame: buttonFrames.first(where: { $0.0 == .rateDown })?.1 ?? rateValueFrame)
-    GameControlGroupArt.draw(in: context, frame: rateValueFrame, group: group,
-                             selected: false, face: .rate, monochrome: isMonochrome)
+    guard usesWideDeck, rateValueFrame.width > 0, let session else { return }
     drawGameLabel("\(session.rate)", in: rateValueFrame.insetBy(dx: 2, dy: 8))
   }
 
@@ -584,6 +593,7 @@ enum PanelButton: Equatable {
     SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward,
       bevelPixel: max(1, panelScale / 2), backdrop: rockImage(fitting: frame.size), monochrome: isMonochrome,
       drawBackground: { [self] in drawStoneButton(frame, selected: isFastForward, button: .fastForward) },
+      textInset: 2,
       text: { [self] text, box in drawGameLabel(text, in: box, maxPixelScale: .greatestFiniteMagnitude) })
   }
 
@@ -629,15 +639,16 @@ enum PanelButton: Equatable {
   }
 
   private func skillArtworkFrame(_ frame: CGRect) -> CGRect {
-    let bottom: CGFloat = panelScale >= 2 ? 14 : 4
-    return CGRect(x: frame.minX + 4, y: frame.minY + 20, width: max(0, frame.width - 8),
-      height: max(1, frame.height - 20 - bottom))
+    let top: CGFloat = usesWideDeck ? 26 : 20
+    let bottom: CGFloat = usesWideDeck ? 26 : panelScale >= 2 ? 14 : 4
+    return CGRect(x: frame.minX + 4, y: frame.minY + top, width: max(0, frame.width - 8),
+      height: max(1, frame.height - top - bottom))
   }
 
   private func drawMacPanel() {
     // All poses use the same source-pixel scale. Tools and the umbrella must
     // fit without making their lemmings smaller than the compact poses.
-    let images = macSkillImages.compactMap { $0 }
+    let images = macSkillImages.enumerated().compactMap { index, image in index == 0 || index == 1 ? nil : image }
     let largest = CGSize(width: images.map(\.size.width).max() ?? 1,
       height: images.map(\.size.height).max() ?? 1)
     let fit = buttonFrames.compactMap { button, frame -> CGFloat? in
@@ -648,6 +659,15 @@ enum PanelButton: Equatable {
     let deviceScale = max(1, abs(NSGraphicsContext.current?.cgContext.convertToDeviceSpace(
       CGSize(width: 1, height: 0)).width ?? 1))
     let scale = fit * deviceScale >= 1 ? floor(fit * deviceScale) / deviceScale : fit
+    let allImages = macSkillImages.compactMap { $0 }
+    let oldLargest = CGSize(width: allImages.map(\.size.width).max() ?? 1,
+      height: allImages.map(\.size.height).max() ?? 1)
+    let oldFit = buttonFrames.compactMap { button, frame -> CGFloat? in
+      guard case .skill = button else { return nil }
+      let box = skillArtworkFrame(frame)
+      return min(box.width / oldLargest.width, box.height / oldLargest.height)
+    }.min() ?? 1
+    let floaterScale = oldFit * deviceScale >= 1 ? floor(oldFit * deviceScale) / deviceScale : oldFit
     for (button, frame) in buttonFrames {
       NSGraphicsContext.saveGraphicsState()
       defer { NSGraphicsContext.restoreGraphicsState() }
@@ -657,11 +677,14 @@ enum PanelButton: Equatable {
       drawStoneButton(frame, selected: selected, button: button)
       if case let .skill(index) = button, let image = macSkillImages[safe: index] ?? nil {
         let box = skillArtworkFrame(frame)
-        let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        let preferredScale = index == 1 ? floaterScale : scale
+        let iconScale = index == 0 || index == 1 ? min(preferredScale, box.width / image.size.width, box.height / image.size.height) : scale
+        let size = CGSize(width: image.size.width * iconScale, height: image.size.height * iconScale)
+        let top = box.midY - size.height / 2
         if let context = NSGraphicsContext.current?.cgContext,
            let bitmap = image.cgImage(forProposedRect: nil, context: nil, hints: nil) {
           GameSkillSelectionArt.drawSprite(bitmap, in: CGRect(x: floor(box.midX - size.width / 2),
-            y: floor(box.maxY - size.height), width: size.width, height: size.height),
+            y: floor(top), width: size.width, height: size.height),
             selected: selected, context: context)
         }
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
@@ -697,6 +720,7 @@ enum PanelButton: Equatable {
   /// Pixel bevels keep the controls in the same visual period as the sprites.
   /// Joined controls retain their own Macintosh panel face inside one contour.
   private func drawStoneButton(_ frame: CGRect, selected: Bool, button: PanelButton) {
+    if usesWideDeck, button == .rateUp { return }
     let face: GamePlayButtonArt.Face
     switch button {
     case .skill(let index): face = .skill(index)
@@ -708,7 +732,12 @@ enum PanelButton: Equatable {
     }
     guard let context = NSGraphicsContext.current?.cgContext else { return }
     let group = controlGroupFrame(button, frame: frame)
-    GameControlGroupArt.draw(in: context, frame: frame, group: group, selected: selected,
+    let drawnFrame: CGRect
+    if usesWideDeck, button == .rateDown,
+       let up = buttonFrames.first(where: { $0.0 == .rateUp })?.1 {
+      drawnFrame = frame.union(rateValueFrame).union(up)
+    } else { drawnFrame = frame }
+    GameControlGroupArt.draw(in: context, frame: drawnFrame, group: group, selected: selected,
       face: face, monochrome: isMonochrome)
   }
 
@@ -746,12 +775,17 @@ enum PanelButton: Equatable {
       "disarmer": L10n.text("DISARM"), "bomber": L10n.text("BOMB"), "stoner": L10n.text("STONE"), "blocker": L10n.text("BLOCK"),
       "platformer": L10n.text("PLAT"), "builder": L10n.text("BUILD"), "stacker": L10n.text("STACK"), "laserer": L10n.text("LASER"),
       "basher": L10n.text("BASH"), "fencer": L10n.text("FENCE"), "miner": L10n.text("MINE"), "digger": L10n.text("DIG"), "cloner": L10n.text("CLONE")]
-    let names = session?.skills.map { shortNames[$0.name.lowercased()] ?? SkillVocabulary.title($0.name).uppercased() } ?? []
+    let baseNames = session?.skills.map { shortNames[$0.name.lowercased()] ?? SkillVocabulary.title($0.name).uppercased() } ?? []
+    let shortcuts = SkillShortcuts(names: session?.skills.map(\.name) ?? [])
+    let names = baseNames.enumerated().map { index, name in
+      guard let key = skillShortcut(index, shortcuts: shortcuts), !name.contains(key) else { return name }
+      return String(key) + " " + name
+    }
     let labelWidth = buttonFrames.compactMap { button, frame -> CGFloat? in
       if case .skill = button { return max(0, frame.width - 8) }
       return nil
     }.min() ?? 0
-    let labelHeight: CGFloat = usesWideDeck ? 18 : 10
+    let labelHeight: CGFloat = usesWideDeck ? 20 : 10
     let macScale: Int
     if let font = (macInterface ?? GameMenuArtwork.renderer())?.font(.small), names.allSatisfy({ font.covers($0) }) {
       let longest = names.map { font.width(of: $0) }.max() ?? 1
@@ -761,7 +795,6 @@ enum PanelButton: Equatable {
     let pixelBounds = GamePixelTypography.verticalBounds(of: names.joined())
     let longestPixels = names.map { GamePixelTypography.width(of: $0) }.max() ?? 1
     let pixelScale = max(1, min(3, floor(min(labelHeight / CGFloat(pixelBounds.bottom - pixelBounds.top), labelWidth / CGFloat(longestPixels)))))
-    let shortcuts = SkillShortcuts(names: session?.skills.map(\.name) ?? [])
     for (button, frame) in buttonFrames {
       guard case let .skill(index) = button, let name = names[safe: index] else { continue }
       let box = CGRect(x: frame.minX + 4, y: frame.maxY - labelHeight - 4,
@@ -772,11 +805,6 @@ enum PanelButton: Equatable {
         _ = drawMacLabel(name, centeredIn: box, scale: macScale, highlighted: key)
       } else {
         GamePixelText.draw(name, in: box, maxScale: pixelScale, highlighted: key, palette: panelPalette)
-      }
-      if let key, !name.contains(key) {
-        let badge = CGRect(x: frame.maxX - 10, y: frame.minY + 20, width: 6, height: 7)
-        NSColor.black.setFill(); badge.fill()
-        drawGameLabel(String(key), in: badge)
       }
     }
   }
@@ -804,11 +832,11 @@ enum PanelButton: Equatable {
       }
       let isSkill: Bool
       if case .skill = button { isSkill = true } else { isSkill = false }
-      let box = isSkill ? CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 14)
+      let box = isSkill ? CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: usesWideDeck ? 18 : 14)
         : CGRect(x: frame.minX + 2, y: frame.minY + 2, width: frame.width - 4, height: min(18, frame.height / 3))
       if !isSkill { NSColor.black.setFill(); box.fill() }
       if !isMonochrome, counterStyle == .macintosh,
-        (macInterface ?? GameMenuArtwork.renderer())?.drawCounter(value, in: box, panelScale: isSkill ? 1 : panelScale) == true { continue }
+        (macInterface ?? GameMenuArtwork.renderer())?.drawCounter(value, in: box, panelScale: isSkill ? (usesWideDeck ? 4 : 1) : panelScale) == true { continue }
       if drawMacLabel(value, centeredIn: box) { continue }
       GamePixelText.draw(value, in: box, palette: panelPalette)
     }
@@ -847,7 +875,7 @@ enum PanelButton: Equatable {
            let bitmap = image.cgImage(forProposedRect: nil, context: nil, hints: nil) {
           context.setAlpha(skill.isInfinite || skill.count > 0 ? 1 : 0.35)
           GameSkillSelectionArt.drawSprite(bitmap, in: CGRect(x: floor(well.midX - size.width / 2),
-            y: floor(well.maxY - size.height), width: size.width, height: size.height),
+            y: floor(well.midY - size.height / 2), width: size.width, height: size.height),
             selected: selected, context: context)
         }
         NSGraphicsContext.restoreGraphicsState()
@@ -1034,7 +1062,7 @@ enum PanelButton: Equatable {
     wideDeckMetrics(for: 900).height
   }
 
-  private let statusStripHeight: CGFloat = 22
+  private let statusStripHeight: CGFloat = 28
 }
 
 

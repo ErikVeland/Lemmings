@@ -174,8 +174,23 @@ public enum GamePixelTypography {
         }
         let top = floor(rect.midY - height * scale / 2) - CGFloat(bounds.top) * scale
         context.saveGState()
-        context.clip(to: rect)
+        let device = context.convertToDeviceSpace(CGSize(width: 1, height: 1))
+        let borderX = 1 / max(1, abs(device.width)), borderY = 1 / max(1, abs(device.height))
+        context.clip(to: rect.insetBy(dx: -borderX, dy: -borderY))
         context.setShouldAntialias(false)
+        context.saveGState()
+        context.setBlendMode(.overlay)
+        context.setFillColor(CGColor(gray: 0, alpha: 0.8 * alpha))
+        context.beginPath()
+        for item in items {
+            guard let glyph = item.glyph, let mask = monochromeMask(forSequence: item.sequence) else { continue }
+            for x in 0..<glyph.width { for y in 0..<glyph.height where mask[y * glyph.width + x] != 0 {
+                context.addRect(CGRect(x: start + CGFloat(item.x - bearing + glyph.x + x) * scale,
+                    y: top + CGFloat(glyph.y + y) * scale, width: scale, height: scale).insetBy(dx: -borderX, dy: -borderY))
+            } }
+        }
+        context.fillPath()
+        context.restoreGState()
         context.setFillColor(color ?? palette.colour)
         context.setAlpha(alpha)
         for item in items {

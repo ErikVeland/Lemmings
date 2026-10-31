@@ -352,11 +352,15 @@ public enum MobileHUDAction: Equatable, Sendable {
         guard case let .skill(index) = item.action else { return }
         drawStoneSocket(item.frame, selected: selectedSkill == index, pixel: pixel, face: .skill(index), context: context)
         let well = GameStoneArt.well(item.frame, pixel: pixel)
-        let fit = min(well.width / CGFloat(icon.width), well.height / CGFloat(icon.height))
+        let labelBottom = layout.panel.map { $0.frame.minY + 15 * $0.scale } ?? well.minY
+        let top = min(well.maxY, max(well.minY, labelBottom))
+        let art = CGRect(x: well.minX, y: top, width: well.width, height: max(0, well.maxY - top))
+        guard art.width > 0, art.height > 0 else { return }
+        let fit = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
         let width = CGFloat(icon.width) * fit, height = CGFloat(icon.height) * fit
         context.saveGState()
         context.setAlpha(readOnly || snapshot.skills[safe: index]?.count == 0 ? 0.35 : 1)
-        GameStoneArt.drawImage(icon, in: CGRect(x: floor(well.midX - width / 2), y: well.maxY - height, width: width, height: height), context: context)
+        GameStoneArt.drawImage(icon, in: CGRect(x: floor(art.midX - width / 2), y: floor(art.midY - height / 2), width: width, height: height), context: context)
         context.restoreGState()
     }
 
@@ -481,10 +485,11 @@ public enum MobileHUDAction: Equatable, Sendable {
                 let available = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
                 let fit = layout.isDiorama && available > 0
                     ? (available >= 1 ? floor(available) : 1 / ceil(1 / available)) : available
-                GameSkillSelectionArt.drawSprite(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: art.maxY - CGFloat(icon.height) * fit, width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), selected: selected, context: context)
+                GameSkillSelectionArt.drawSprite(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: floor(art.midY - CGFloat(icon.height) * fit / 2), width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), selected: selected, context: context)
             } else if layout.panel?.style != .lemmings3, let cell = item.sourceCell,
                let image = panelImage?.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
-                let art = CGRect(x: frame.midX - 8 * scale, y: frame.minY + 20, width: 16 * scale, height: 24 * scale)
+                let available = CGRect(x: well.minX, y: frame.minY + 20, width: well.width, height: max(0, frame.height - 36))
+                let art = CGRect(x: frame.midX - 8 * scale, y: floor(available.midY - 12 * scale), width: 16 * scale, height: 24 * scale)
                 GameStoneArt.drawImage(image, in: art, context: context)
             }
             context.restoreGState()

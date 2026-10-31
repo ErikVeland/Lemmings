@@ -25,6 +25,8 @@ import NxlvKit
         }
     }
     var frame = CGRect.zero
+    /// Optional enclosing deck contour; hit regions remain within `frame`.
+    var groupFrame: CGRect?
     var monochrome = false
     var rock: ((CGSize) -> NSImage?)?
     var enabled: (Action) -> Bool = { _ in false }
@@ -47,7 +49,7 @@ import NxlvKit
             case .forward: face = .stepForward
             }
             if let context = NSGraphicsContext.current?.cgContext {
-                GameControlGroupArt.draw(in: context, frame: box, group: frame,
+                GameControlGroupArt.draw(in: context, frame: box, group: groupFrame ?? frame,
                     selected: false, face: face, monochrome: monochrome)
             }
             let alpha: CGFloat = monochrome ? 1 : enabled(action) ? 1 : 0.3

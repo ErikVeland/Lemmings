@@ -1,9 +1,9 @@
 {
   "changes": [
-    "Progress follows the current Hot Seat player. Main menu logos stay centred as status and corner controls change.",
-    "Duo uses more of its display. Tent Pose opens Desk Clock with your game safely paused. Optional red night vision keeps the clock quiet.",
-    "Clearer navigation keeps your place. Fan packs are grouped for browsing, and Golden Path wins count in their original collections.",
-    "Shared stone artwork and clearer controls improve every platform. Touch selection and replay controls are easier to use.",
+    "Start or resume your Journey from Home. Earlier saved Hot Seats remain available, and level previews open the selected level.",
+    "Joined stone controls group skills, speed and transport. A pulsing marker shows a selected lemming’s walking direction.",
+    "Classic keeps recent rewind states close. Repeated rewind presses move further back.",
+    "Scene rendering, music transitions and sound effects have been updated for busy play.",
     "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only."
   ]
 }

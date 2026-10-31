@@ -164,7 +164,7 @@ import LemmingsGameArt
         GameControlGroupArt.draw(in: context, frame: bounds, group: groupFrame ?? bounds,
             selected: selected, face: .hints)
         if let glyph {
-            let well = GameStoneButton.well(bounds, pixel: 1).insetBy(dx: 2, dy: 2)
+            let well = GameStoneButton.well(bounds, pixel: 1).insetBy(dx: bounds.width * 0.14, dy: bounds.height * 0.14)
             if let image = glyph.image(fitting: well.size) {
                 image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2),
                     y: floor(well.midY - image.size.height / 2), width: image.size.width, height: image.size.height),

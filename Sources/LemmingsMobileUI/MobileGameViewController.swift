@@ -1206,6 +1206,8 @@ typealias MobileGameControllerBase = UIViewController
             playfieldView.explosions = session.explosions
             playfieldView.bombCountdowns = session.bombCountdowns
             playfieldView.selectionPoint = highlightedTarget?.point
+            playfieldView.selectionTargetID = overlay.isHidden ? highlightedTarget?.id : nil
+            playfieldView.selectionDirection = candidates.first(where: { $0.id == highlightedTarget?.id })?.direction ?? 0
             playfieldView.targetMarker = highlightedTarget
             playfieldView.markerEngine = session.engineIdentifier
             #if os(tvOS)

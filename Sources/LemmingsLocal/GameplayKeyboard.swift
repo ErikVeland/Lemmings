@@ -157,7 +157,7 @@ import NxlvKit
     private lazy var hintsButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
         button.fadeAppearance = navigationAppearance
-        button.title = L10n.text("Hints"); button.target = self; button.action = #selector(openHints)
+        button.title = L10n.text("Hints"); button.glyph = .hints; button.target = self; button.action = #selector(openHints)
         button.setAccessibilityLabel(L10n.text("Level hints"))
         button.helpText = L10n.text("Level goals and tiered hints") + " (I / F1)"
         return button
@@ -247,7 +247,7 @@ import NxlvKit
         let buttons = navigationButtons
         let wasVisible = buttons.contains { !$0.isHidden && $0.superview === root }
         if !wasVisible { buttons.forEach { $0.resetAppearance() } }
-        let height = max(1, navigationControlHeight())
+        let height: CGFloat = root.bounds.width >= 960 ? 64 : 32
         navigationButton.frame = CGRect(x: max(root.bounds.minX, root.bounds.maxX - height - 12),
             y: root.isFlipped ? root.bounds.minY + 12 : root.bounds.maxY - height - 12,
             width: height, height: height)
@@ -256,7 +256,7 @@ import NxlvKit
             if button !== settingsButton && (right == navigationButton.frame.minX || right == settingsButton.frame.minX) {
                 right -= GameHUDControlGroup.spacing
             }
-            let width: CGFloat = button === hintsButton ? max(height, 88, hintsButton.intrinsicContentSize.width) : height
+            let width = height
             button.frame = CGRect(x: right - width, y: navigationButton.frame.minY, width: width, height: height)
             right = button.frame.minX
         }

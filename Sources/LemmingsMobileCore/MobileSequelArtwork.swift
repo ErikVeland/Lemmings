@@ -60,6 +60,6 @@ final class MobileSequelArtworkCache: @unchecked Sendable {
     func sprite(_ value: MobileSpriteHighlight?, category: SequelMacCategory = .sprite) -> MobileSpriteHighlight? {
         guard let value, let result = try? frame(width: value.frame.width, height: value.frame.height,
             rgba: [UInt8](value.frame.rgba), palette: [], category: category) else { return nil }
-        return .init(frame: result, rect: value.rect, cacheKey: "mac/" + value.cacheKey, time: value.time)
+        return .init(frame: result, rect: value.rect, cacheKey: "mac/" + value.cacheKey, time: value.time, direction: value.direction)
     }
 }

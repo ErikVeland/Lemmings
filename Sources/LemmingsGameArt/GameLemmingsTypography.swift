@@ -51,7 +51,8 @@ public enum GameLemmingsTypography {
         let selected = highlighted.flatMap { key in items.firstIndex { $0.sequence.contains(key) } }
         context.saveGState()
         defer { context.restoreGState() }
-        context.clip(to: rect)
+        let device = context.convertToDeviceSpace(CGSize(width: 1, height: 1))
+        context.clip(to: rect.insetBy(dx: -1 / max(1, abs(device.width)), dy: -1 / max(1, abs(device.height))))
         context.setShouldAntialias(false)
         context.interpolationQuality = .none
         if let alpha { context.setAlpha(alpha) }
@@ -63,6 +64,7 @@ public enum GameLemmingsTypography {
                 cellHeight: font.cellHeight, pixels: pixels, ink: ink, color: color) else { continue }
             let frame = CGRect(x: origin.x + (CGFloat(item.x) * scale).rounded() + CGFloat(raster.x),
                 y: origin.y + CGFloat(raster.y), width: CGFloat(raster.image.width), height: CGFloat(raster.image.height))
+            GameStoneArt.drawTextOutline(raster.image, in: frame, context: context)
             GameStoneArt.drawImage(raster.image, in: frame, context: context)
         }
         if palette == .monochrome, let selected {

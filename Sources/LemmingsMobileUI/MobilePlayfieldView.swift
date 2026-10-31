@@ -75,7 +75,13 @@ import UIKit
     private var speedMultiplier = 1.0
     private var speedEffectsActive = false
     private var sprites: [String: CGImage] = [:]
+    private var directionPulse = SelectionDirectionPulse()
+    private var obviousDirectionPulse = SelectionDirectionPulse()
+    var selectionTargetID: Int? {
+        didSet { if oldValue != selectionTargetID { directionPulse.reset(); obviousDirectionPulse.reset() } }
+    }
     var selectionPoint: MobilePoint?
+    var selectionDirection = 0
     var targetMarker: MobileTargetSelection?
     var markerEngine = "classic-dos"
     var cursorPoint: MobilePoint?
@@ -372,6 +378,7 @@ import UIKit
     }
     func resetTransientEffects(preservingTrails: Bool = false) {
         if !preservingTrails { spriteTrails.reset() }
+        directionPulse.reset(); obviousDirectionPulse.reset()
         hdr?.clear(); explosionBirths.removeAll()
         trailRevision &+= 1; tubeSignature = nil
     }
@@ -646,8 +653,10 @@ import UIKit
     private func drawObviousSelection(viewport: MobileViewport, context: CGContext) {
         guard displaySettings.lemmingSelectionStyle == .obvious, let selectionPoint else { return }
         let point = viewport.viewPoint(fromLevel: selectionPoint)
+        let pulseTime = obviousDirectionPulse.elapsed(target: selectionTargetID, direction: selectionDirection, at: ProcessInfo.processInfo.systemUptime)
         LemmingSelectionRenderer.drawObvious(at: CGPoint(x: point.x, y: point.y), scale: viewport.zoom,
-            animated: !motionReduced && !displaySettings.reduceFlashes, context: context)
+            animated: !motionReduced && !displaySettings.reduceFlashes, direction: selectionDirection,
+            pulseTime: pulseTime, context: context)
     }
 
     private func drawCursorBadge(viewport: MobileViewport, context: CGContext) {
@@ -742,9 +751,11 @@ import UIKit
     private func selectionEffect(viewport: MobileViewport) -> LemmingSelectionEffect? {
         guard let sprite = selectionSprite, let image = spriteImage(sprite) else { return nil }
         let content = viewport.contentFrame
+        let pulseTime = directionPulse.elapsed(target: selectionTargetID, direction: sprite.direction, at: ProcessInfo.processInfo.systemUptime)
         var effect = LemmingSelectionEffect(sprite: image, rect: spriteRect(sprite, viewport: viewport),
             clipRect: CGRect(x: content.x, y: content.y, width: content.width, height: content.height),
-            bloom: true, time: motionReduced || displaySettings.reduceFlashes ? nil : sprite.time)
+            bloom: true, time: motionReduced || displaySettings.reduceFlashes ? nil : sprite.time, direction: sprite.direction,
+            directionTime: motionReduced || displaySettings.reduceFlashes ? nil : pulseTime)
         effect.opacity = selectionOpacity
         return effect
     }

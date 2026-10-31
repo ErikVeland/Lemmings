@@ -9884,17 +9884,37 @@ extension AppDelegate {
       return NeoLemmixSession(simulation: try NeoLemmixSimulation(terrain: neoTerrain, configuration: config), width: 320, height: 96)
     }
     for (family, fixture) in [("classic", classic as any GameSession), ("neo", try neo()), ("neo-all", try neo(allSkills: true))] {
-      for (width, height) in [(640, 80), (900, 150), (1600, 240)] {
-        let bar = PanelView(frame: CGRect(x: 0, y: 0, width: width, height: height))
+      for width in [640, 900, 1600] {
+        let bar = PanelView(frame: CGRect(x: 0, y: 0, width: width, height: 80))
+        bar.session = fixture; bar.interfaceArtwork = artwork; bar.isCRTSource = width == 640
+        bar.panelImage = family == "classic" ? classicPanel : nil
+        bar.frame.size.height = width == 640 ? 80 : bar.height(for: CGFloat(width), maximumScale: 3)
         let barHost = SpeedTestWindow(contentRect: bar.bounds, styleMask: [], backing: .buffered, defer: false)
         barHost.isReleasedWhenClosed = false
         barHost.contentView = bar
-        bar.session = fixture; bar.interfaceArtwork = artwork; bar.isCRTSource = width == 640
-        bar.panelImage = family == "classic" ? classicPanel : nil
         var pressed: [PanelButton] = []
         bar.onButton = { pressed.append($0) }
-        let before = bar.accessibleControls(owner: bar).compactMap { $0 as? GameAccessibleElement }
-          .map { ($0.accessibilityLabel(), $0.accessibilityFrame()) }
+        let controls = bar.accessibleControls(owner: bar).compactMap { $0 as? GameAccessibleElement }
+        let before = controls.map { ($0.accessibilityLabel(), $0.accessibilityFrame()) }
+        if width != 640 {
+          let primary = controls.filter {
+            let label = $0.accessibilityLabel()
+            return label != L10n.text("Decrease fast speed") && label != L10n.text("Increase fast speed")
+              && !TimelinePanelControls.Action.allCases.contains(where: { $0.label == label })
+          }
+          try check(primary.count == fixture.skills.count + 5, "Mac HUD lost a primary control")
+          try check(primary.filter { $0.accessibilityLabel() == L10n.text("End run") }.count == 1,
+            "Mac HUD repeated the end-run control")
+          for (index, control) in primary.enumerated() {
+            let frame = control.localFrame
+            try check(frame.width >= 44 && frame.height >= 44 && bar.bounds.contains(frame),
+              "Mac HUD control escaped the panel or fell below target size")
+            try check(!primary.prefix(index).contains { $0.localFrame.intersects(frame) },
+              "Mac HUD controls overlap")
+            try check(!frame.intersects(bar.minimapBounds), "Mac HUD overlaps its minimap")
+          }
+          try check(bar.bounds.contains(bar.minimapBounds), "Mac HUD minimap escaped the panel")
+        }
         for style in ClassicCounterStyle.allCases {
           bar.counterStyle = style
           let image = ReplayFrameCapture.image(size: bar.bounds.size) { bar.draw(bar.bounds) }!

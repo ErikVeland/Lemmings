@@ -95,6 +95,7 @@ public final class GameMenuTypography {
             guard let image = image(for: glyph, key: "\(face.rawValue)-\(display)-\(countdown != nil)-\(item.sequence)", palette: palette) else { continue }
             let rect = CGRect(x: origin.x + CGFloat(item.x * scale + glyph.x * pixels), y: origin.y + CGFloat(glyph.y * pixels),
                               width: CGFloat(glyph.width * pixels), height: CGFloat(glyph.height * pixels))
+            GameStoneArt.drawTextOutline(image, in: rect, context: context)
             Self.draw(image, in: rect, context: context)
         }
     }

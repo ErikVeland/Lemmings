@@ -1,5 +1,16 @@
 # UI clarity
 
+Shared bitmap UI lettering uses a one-device-pixel black outside outline at
+80% opacity with Overlay blending. Preserve the glyph's original colours,
+highlighted shortcuts and layout. Cache artwork outlines within a bounded
+budget, and keep the TV effects budget and input responsiveness intact.
+The selected lemming's plumbob pulses its facing-side facet between its original green and orange;
+Both styles start fully orange when the target or facing direction changes and pulse on the UI
+clock with a 0.8-second cycle. Reduced motion or flashes retain steady orange.
+Use the simulation's direction rather than inferring it from mirrored artwork.
+Centre individually rendered skill artwork vertically in its available space,
+keeping the count and skill name clear in the open Duo and other adaptive decks.
+
 Mobile startup uses an opaque black launch surface, the shipped pixel logo and
 the shared pixel hourglass before disk-backed menu setup. Keep this surface
 independent of engine, font-bank and player loading. Respect Reduce Motion,

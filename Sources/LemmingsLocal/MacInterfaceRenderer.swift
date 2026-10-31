@@ -125,9 +125,15 @@ import NxlvKit
   ) {
     guard let font = interface.font(face) else { return }
     if scale != 2 && scale != 4, let (image, bounds, _) = lineImage(text, face: face, font: font, palette: palette) {
-      image.draw(in: CGRect(x: origin.x + bounds.minX * CGFloat(scale),
+      let frame = CGRect(x: origin.x + bounds.minX * CGFloat(scale),
         y: origin.y + bounds.minY * CGFloat(scale), width: bounds.width * CGFloat(scale),
-        height: bounds.height * CGFloat(scale)), from: .zero, operation: .sourceOver,
+        height: bounds.height * CGFloat(scale))
+      if let context = NSGraphicsContext.current?.cgContext, let bitmap = image.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+        context.saveGState(); context.setAlpha(alpha)
+        GameStoneArt.drawTextOutline(bitmap, in: frame, context: context)
+        context.restoreGState()
+      }
+      image.draw(in: frame, from: .zero, operation: .sourceOver,
         fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
       return
     }
@@ -143,6 +149,11 @@ import NxlvKit
       let rect = CGRect(
         x: origin.x + CGFloat(item.x * scale + glyph.x * pixels), y: origin.y + CGFloat(glyph.y * pixels),
         width: CGFloat(glyph.width * pixels), height: CGFloat(glyph.height * pixels))
+      if let context = NSGraphicsContext.current?.cgContext, let bitmap = image.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+        context.saveGState(); context.setAlpha(alpha)
+        GameStoneArt.drawTextOutline(bitmap, in: rect, context: context)
+        context.restoreGState()
+      }
       image.draw(
         in: rect, from: .zero, operation: .sourceOver, fraction: alpha,
         respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])

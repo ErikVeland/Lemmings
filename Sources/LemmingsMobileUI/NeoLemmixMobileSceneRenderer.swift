@@ -122,7 +122,8 @@ final class NeoLemmixMobileSceneRenderer {
         }
         return .init(frame: pixels,
             rect: .init(x: Double(lemming.position.x - frame.footX), y: Double(lemming.position.y - frame.footY),
-                width: Double(frame.width), height: Double(frame.height)), cacheKey: key, time: nil)
+                width: Double(frame.width), height: Double(frame.height)), cacheKey: key, time: nil,
+            direction: lemming.direction.rawValue)
     }
 
     private static func composite(_ frame: NeoLemmixMobileSpriteFrame, atX x: Int, y: Int,

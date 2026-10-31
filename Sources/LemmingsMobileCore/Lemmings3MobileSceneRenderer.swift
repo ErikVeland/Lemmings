@@ -248,7 +248,8 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         }) else { return nil }
         return .init(frame: pixels,
             rect: .init(x: Double(lemming.x - animation.width / 2), y: Double(lemming.y - animation.height),
-                width: Double(animation.width), height: Double(animation.height)), cacheKey: key, time: nil)
+                width: Double(animation.width), height: Double(animation.height)), cacheKey: key, time: nil,
+            direction: lemming.direction)
     }
 
     /** Selects trace-derived frames for Mole states with a bank mapping. */

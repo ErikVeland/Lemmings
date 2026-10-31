@@ -11,7 +11,7 @@ enum PanelGlyph: String {
   case undo
   case fastForward
   case rewind, stepBackward, stepForward
-  case settings, download, hourglass, menu, graphics, ghosts, ghostsHidden, bonusSkill
+  case settings, download, hourglass, menu, graphics, ghosts, ghostsHidden, bonusSkill, hints
   case superzoom, levelSkip
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
@@ -211,6 +211,7 @@ enum PanelGlyph: String {
     /// `text` draws the speed label. A panel with a game font passes its own; the default is the pixel font.
     static func draw(in rect: CGRect, label: String, active: Bool, bevelPixel: CGFloat? = nil,
         backdrop: NSImage? = nil, monochrome: Bool = false, drawBackground: (() -> Void)? = nil,
+        textInset: CGFloat? = nil,
         text: ((String, CGRect) -> Void)? = nil) {
         let text = text ?? { GamePixelText.draw($0, in: $1, maxScale: .greatestFiniteMagnitude) }
         let boxes = SpeedPanelArt.boxes(in: rect)
@@ -223,7 +224,7 @@ enum PanelGlyph: String {
         for (index, box) in boxes.enumerated() {
             if index == 1 {
                 // The label always names the speed the game is running at now.
-                text(label, box.insetBy(dx: rect.height >= 60 ? 4 * pixel : pixel, dy: 6 * pixel))
+                text(label, box.insetBy(dx: textInset ?? (rect.height >= 60 ? 4 * pixel : pixel), dy: textInset ?? 6 * pixel))
             } else if let context = NSGraphicsContext.current?.cgContext {
                 SpeedPanelArt.drawArrow(in: context, box: box, pointsRight: index == 2, monochrome: monochrome)
             }

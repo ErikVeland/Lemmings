@@ -38,6 +38,81 @@ public enum GameControlShape: Sendable {
 /// Rectangles use a top-left origin, so a context must already be flipped to that
 /// orientation. AppKit views that return `isFlipped` and UIKit views both are.
 public enum GameStoneArt {
+    private struct TextOutline: @unchecked Sendable {
+        let source: CGImage
+        let image: CGImage
+        var bytes: Int { image.bytesPerRow * image.height }
+    }
+    private final class TextOutlineCache: @unchecked Sendable {
+        private let lock = NSLock()
+        private let limit = 8 * 1024 * 1024
+        private var bytes = 0
+        private var entries: [String: TextOutline] = [:]
+        private var order: [String] = []
+
+        func value(for key: String) -> TextOutline? {
+            lock.lock(); defer { lock.unlock() }
+            return entries[key]
+        }
+
+        func insert(_ value: TextOutline, for key: String) {
+            lock.lock(); defer { lock.unlock() }
+            guard value.bytes <= limit, entries[key] == nil else { return }
+            while bytes + value.bytes > limit, !order.isEmpty {
+                if let removed = entries.removeValue(forKey: order.removeFirst()) { bytes -= removed.bytes }
+            }
+            entries[key] = value; order.append(key); bytes += value.bytes
+        }
+    }
+    private static let textOutlines = TextOutlineCache()
+
+    /// Draw a one-device-pixel outside border without changing the bitmap ink.
+    public static func drawTextOutline(_ image: CGImage, in rect: CGRect, context: CGContext) {
+        let device = context.convertToDeviceSpace(CGSize(width: 1, height: 1))
+        let sx = max(1, abs(device.width)), sy = max(1, abs(device.height))
+        let width = max(1, Int((rect.width * sx).rounded()))
+        let height = max(1, Int((rect.height * sy).rounded()))
+        guard width <= 4096, height <= 4096, width * height <= 262_144 else { return }
+        let key = "\(ObjectIdentifier(image)):\(width):\(height)"
+        let cached = textOutlines.value(for: key)
+        let outline: CGImage
+        if let cached { outline = cached.image }
+        else {
+            let w = width + 2, h = height + 2
+            var pixels = [UInt8](repeating: 0, count: w * h * 4)
+            let success = pixels.withUnsafeMutableBytes { bytes -> Bool in
+                guard let bitmap = CGContext(data: bytes.baseAddress, width: w, height: h,
+                    bitsPerComponent: 8, bytesPerRow: w * 4, space: CGColorSpaceCreateDeviceRGB(),
+                    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue) else { return false }
+                bitmap.interpolationQuality = .none
+                bitmap.draw(image, in: CGRect(x: 1, y: 1, width: width, height: height))
+                return true
+            }
+            guard success else { return }
+            let alpha = stride(from: 3, to: pixels.count, by: 4).map { pixels[$0] }
+            var border = [UInt8](repeating: 0, count: pixels.count)
+            for y in 0..<h { for x in 0..<w where alpha[y * w + x] == 0 {
+                var opaque = false
+                for dy in -1...1 { for dx in -1...1 {
+                    let nx = x + dx, ny = y + dy
+                    if nx >= 0 && nx < w && ny >= 0 && ny < h && alpha[ny * w + nx] > 0 { opaque = true }
+                } }
+                if opaque { border[(y * w + x) * 4 + 3] = 204 }
+            } }
+            guard let provider = CGDataProvider(data: Data(border) as CFData),
+                  let made = CGImage(width: w, height: h, bitsPerComponent: 8, bitsPerPixel: 32,
+                    bytesPerRow: w * 4, space: CGColorSpaceCreateDeviceRGB(),
+                    bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue),
+                    provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return }
+            outline = made
+            textOutlines.insert(TextOutline(source: image, image: made), for: key)
+        }
+        context.saveGState()
+        context.setBlendMode(.overlay)
+        context.interpolationQuality = .none
+        drawImage(outline, in: rect.insetBy(dx: -1 / sx, dy: -1 / sy), context: context)
+        context.restoreGState()
+    }
     private struct RockFrame: Decodable {
         let width: Int, height: Int
         let file: String

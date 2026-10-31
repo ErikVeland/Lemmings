@@ -1952,6 +1952,8 @@ import NxlvKit
     private var hdrOverlay: ExplosionHDRView?
     private(set) var selectionEffect: LemmingSelectionEffect?
     private var selectionFade = SelectionFade<Int>()
+    private var directionPulse = SelectionDirectionPulse()
+    private var obviousDirectionPulse = SelectionDirectionPulse()
     private var selectionOpacity: CGFloat = 1
     private var selectionWasFading = false
     func advanceSelectionFade(at now: Double) {
@@ -1996,6 +1998,7 @@ import NxlvKit
         didSet {
             if game == nil || oldValue == nil || (game?.tick ?? 0) < (oldValue?.tick ?? 0) {
                 selectionFade.reset()
+                directionPulse.reset(); obviousDirectionPulse.reset()
                 crowdPresentation.reset()
                 explosionTimeline.reset()
                 lastBlastTick = -1
@@ -2360,6 +2363,7 @@ import NxlvKit
     }
     func resetCamera(_ level: Lemmings3Level) {
         selectionFade.reset()
+        directionPulse.reset(); obviousDirectionPulse.reset()
         terrainCategory = .lemmings3Terrain(style: level.style)
         cameraX = CGFloat(min(max(0, mapWidth - 320), level.screenX))
         cameraY = CGFloat(min(max(0, mapHeight - 160), level.screenY))
@@ -2402,6 +2406,9 @@ import NxlvKit
         }
         defer { if menuRows == nil { startCountdown.draw(in: playfieldRect) } }
         defer {
+            let obviousID = lemmingSelectionStyle == .obvious && !GameCursor.gameplaySuppressed && menuRows == nil ? highlightedLemmingID : nil
+            let obviousDirection = game?.lemmings.first(where: { $0.id == obviousID })?.direction ?? 0
+            let obviousPulseTime = obviousDirectionPulse.elapsed(target: obviousID, direction: obviousDirection, at: ProcessInfo.processInfo.systemUptime)
             assignmentHighlight.drawNotice()
             if !GameCursor.gameplaySuppressed, menuRows == nil,
                let id = manualCarrierID,
@@ -2410,14 +2417,13 @@ import NxlvKit
                     y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom))
                 LemmingSelectionGlow.draw(at: centre, scale: zoom, tint: .systemRed, animated: false, marker: false)
             }
-            if lemmingSelectionStyle == .obvious, !GameCursor.gameplaySuppressed, menuRows == nil,
-               let id = highlightedLemmingID,
+            if let id = obviousID,
                let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) {
                 let centre = precisionLens.display(CGPoint(x: origin.x + (CGFloat(lem.x) - cameraX) * zoom,
                     y: origin.y + (CGFloat(lem.y - 6) - cameraY) * zoom))
                 LemmingSelectionGlow.draw(at: centre, scale: zoom,
                     tint: assignmentHighlight.target != nil ? .systemYellow : .systemGreen,
-                    animated: !reduceMotion && !reduceFlashes)
+                    animated: !reduceMotion && !reduceFlashes, direction: lem.direction, pulseTime: obviousPulseTime)
             }
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
                 let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
@@ -2445,6 +2451,9 @@ import NxlvKit
     private func drawLemmings(_ game: Lemmings3Runtime, ghostsOnly: Bool, hotSeatColour: ReplayGhostColour? = nil) {
         var selectedID = !ghostsOnly && hotSeatColour == nil && !GameCursor.gameplaySuppressed && menuRows == nil
             ? highlightedLemmingID : nil
+        let pulseTime = !ghostsOnly && hotSeatColour == nil
+            ? directionPulse.elapsed(target: lemmingSelectionStyle == .modern ? selectedID : nil,
+                direction: game.lemmings.first(where: { $0.id == selectedID })?.direction ?? 0, at: ProcessInfo.processInfo.systemUptime) : nil
         if !ghostsOnly && hotSeatColour == nil {
             if lemmingSelectionStyle == .modern, !GameCursor.gameplaySuppressed, menuRows == nil {
                 let now = ProcessInfo.processInfo.systemUptime
@@ -2511,7 +2520,9 @@ import NxlvKit
         if hotSeatColour == nil, lemmingSelectionStyle == .modern, let selectedSprite {
             selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
                 rect: precisionLens.display(selectedSprite.rect), clipRect: playfieldRect,
-                time: reduceMotion || reduceFlashes ? nil : Double(game.tick) / Lemmings3Runtime.ticksPerSecond)
+                time: reduceMotion || reduceFlashes ? nil : Double(game.tick) / Lemmings3Runtime.ticksPerSecond,
+                direction: game.lemmings.first(where: { $0.id == selectedID })?.direction ?? 0,
+                directionTime: reduceMotion || reduceFlashes ? nil : pulseTime)
             selectionEffect?.opacity = selectionOpacity
         }
     }

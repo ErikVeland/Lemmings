@@ -96,7 +96,47 @@ still required; these rows do not describe an installed release.
 | Original sequel media | L2 introduction, ending and gold ending; all five original L3 FLIC movies. Shared bitmap menus provide pause, back and continuation through library and game pause routes. Covered gameplay stays paused. | All eight sources decode and advance. Automatic campaign story triggers remain separate WIP below. |
 | Neo extra-skill rewards | Valid finite charges retain assistance and one-use state across checkpoint/rewind. | Charge and recovery checks pass. Individual naming remains explicitly deferred for clones, preplaced actors and unlimited populations. |
 
+## Mac gameplay deck — 30 October 2026
+
+The new full-width deck is implemented in the flat Classic and NeoLemmix
+panel. CRT still uses its fixed 640-by-80 source panel. Lemmings 2 and
+Lemmings 3 retain their separate canvas layouts and have not yet received
+the new deck. These are source gaps, not platform acceptance.
+
+The focused Mac integration app compiled, but aborted during macOS
+application registration before its offscreen render or input checks ran.
+The rendered deck, input targets and manual gameplay therefore remain
+unverified. No foreground or secondary-display fallback was attempted.
+
 ## Mac panel navigation — 29 October 2026
+
+The shared bitmap lettering paths and flat/Metal selection artwork now carry
+the outline and directional-plumbob source changes for Classic, L2, L3 and
+supported NeoLemmix. Modern selection receives direction from each engine's
+actual actor; mobile Obvious selection uses its targeted actor. The bitmap CPU
+probe covers left and right orange–green–orange pulse values, a fresh phase on
+target and direction changes, the reduced-motion fallback and an outside overlay
+outline.
+Rendered platform states, CRT/Metal output, source paths outside the shared
+bitmap lettering renderers, older-device cost and TV effects acceptance remain
+separate validation gaps. Artwork text outlines currently skip unusually large
+rasters above 262,144 pixels to bound temporary memory.
+Individually drawn mobile skill artwork is centred within its count-and-label
+space, including open Duo layouts; Classic and NeoLemmix Mac artwork is centred
+in its skill well. A muted offscreen bitmap probe checked the rendered centre
+and a 44-point skill target at three adaptive sizes, including 650×465 and
+465×650. Both mobile SDKs compiled the shared interface and the final artwork
+module. Authored sequel panel images still need a separate visual check where
+skill pixels are baked into the panel; physical Duo input and appearance remain
+device acceptance checks.
+
+Mac Classic and supported NeoLemmix use the adaptive `PanelView` deck. Its
+rewind and stepping controls sit beside speed when the window is wide enough;
+narrow windows keep them above the skills. Lemmings 2 and Lemmings 3 still use
+their native panel arrangements and have not received this placement or the
+Classic skill-art sizing change. Their speed lettering also remains on the
+existing renderer. These sequel gaps and the rendered Mac states and hit targets
+need verification; the generated concept image is not a gameplay capture.
 
 Mac `GameMenuPage` panels retain Back in their existing bottom action row and
 add Main menu beside it, using the regular bitmap stone buttons. Shared Mac

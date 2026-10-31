@@ -280,7 +280,8 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
             return try? MobilePixelFrame(width: frame.width, height: frame.height, rgba: Data(rgba))
         }) else { return nil }
         return .init(frame: pixels, rect: .init(x: Double(x), y: Double(y),
-            width: Double(frame.width), height: Double(frame.height)), cacheKey: "l2-\(key)", time: nil)
+            width: Double(frame.width), height: Double(frame.height)), cacheKey: "l2-\(key)", time: nil,
+            direction: lemming.direction)
     }
 
     private struct Pose {

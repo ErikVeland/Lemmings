@@ -163,6 +163,8 @@ struct ReticleFeedback {
   private var hdrOverlay: ExplosionHDRView?
   private(set) var selectionEffect: LemmingSelectionEffect?
   private var selectionFade = SelectionFade<Int>()
+  private var directionPulse = SelectionDirectionPulse()
+  private var obviousDirectionPulse = SelectionDirectionPulse()
   private var selectionOpacity: CGFloat = 1
   private var selectionWasFading = false
   func advanceSelectionFade(at now: Double) {
@@ -441,7 +443,7 @@ struct ReticleFeedback {
     sceneTick = session.currentTick
   }
   var session: (any GameSession)? {
-    didSet { if oldValue !== session { invalidateClassicScene(); reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset(); selectionFade.reset(); crowdPresentation.reset() } }
+    didSet { if oldValue !== session { invalidateClassicScene(); reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; hdrBirths.removeAll(); hdrLastTick = 0; speedTrails.reset(); selectionFade.reset(); directionPulse.reset(); obviousDirectionPulse.reset(); crowdPresentation.reset() } }
   }
   var failureMoodAmount: CGFloat = 0 { didSet { if oldValue != failureMoodAmount { needsDisplay = true } } }
   var completionGlowAmount: CGFloat = 0 { didSet { if oldValue != completionGlowAmount { needsDisplay = true } } }
@@ -917,12 +919,15 @@ struct ReticleFeedback {
 
   override func draw(_ dirtyRect: NSRect) {
     selectionEffect = nil
+    let obviousID = lemmingSelectionStyle == .obvious && phase == .playing && !GameCursor.gameplaySuppressed ? highlightedLemmingID : nil
+    let obviousDirection = session?.lemmings.first(where: { $0.id == obviousID }).map { $0.facingLeft ? -1 : 1 } ?? 0
+    let obviousPulseTime = obviousDirectionPulse.elapsed(target: obviousID, direction: obviousDirection, at: ProcessInfo.processInfo.systemUptime)
     defer {
       if phase == .playing { startCountdown.draw(in: bounds) }
-      if lemmingSelectionStyle == .obvious, phase == .playing, !GameCursor.gameplaySuppressed,
-         let id = highlightedLemmingID, let lem = session?.lemmings.first(where: { $0.id == id && Self.canHighlight($0) }) {
+      if let id = obviousID, let lem = session?.lemmings.first(where: { $0.id == id && Self.canHighlight($0) }) {
         LemmingSelectionGlow.draw(at: precisionLens.display(viewport.viewPoint(fromLevel: CGPoint(x: lem.x, y: lem.y - 6))),
-          scale: viewport.zoom, tint: assignmentHighlight.target == nil ? .systemGreen : .systemYellow, animated: !reduceMotion && !reduceFlashes)
+          scale: viewport.zoom, tint: assignmentHighlight.target == nil ? .systemGreen : .systemYellow, animated: !reduceMotion && !reduceFlashes,
+          direction: lem.facingLeft ? -1 : 1, pulseTime: obviousPulseTime)
       }
       if presentsHDR, let selectionEffect {
         LemmingSelectionRenderer.draw(selectionEffect)
@@ -931,7 +936,7 @@ struct ReticleFeedback {
     updateSpeedTrails()
     hdrFlashes.removeAll(keepingCapacity:true)
     let tick = session?.currentTick ?? 0
-    if tick < hdrLastTick { hdrBirths.removeAll(); selectionFade.reset() }
+    if tick < hdrLastTick { hdrBirths.removeAll(); selectionFade.reset(); directionPulse.reset(); obviousDirectionPulse.reset() }
     hdrLastTick = tick
     defer {
       hdrOverlay?.setArrowGlints(presentsHDR && hdEffectsEnabled && phase == .playing && !usesHomeLayout
@@ -1674,6 +1679,9 @@ struct ReticleFeedback {
     let lemmings = session.lemmings
     selectionTargetID = phase == .playing && !GameCursor.gameplaySuppressed
       ? highlightedLemmingID : nil
+    let facing = lemmings.first(where: { $0.id == selectionTargetID }).map { $0.facingLeft ? -1 : 1 } ?? 0
+    let pulseTime = directionPulse.elapsed(target: lemmingSelectionStyle == .modern ? selectionTargetID : nil,
+      direction: facing, at: ProcessInfo.processInfo.systemUptime)
     if lemmingSelectionStyle == .modern, phase == .playing, !GameCursor.gameplaySuppressed {
       let now = ProcessInfo.processInfo.systemUptime
       selectionFade.set(selectionTargetID, at: now)
@@ -1702,7 +1710,9 @@ struct ReticleFeedback {
     if lemmingSelectionStyle == .modern, let selectedSprite {
       selectionEffect = LemmingSelectionEffect(sprite: selectedSprite.pixels,
         rect: precisionLens.display(selectedSprite.rect), clipRect: bounds,
-        time: reduceMotion || reduceFlashes ? nil : Double(session.currentTick) / Double(session.ticksPerSecond))
+        time: reduceMotion || reduceFlashes ? nil : Double(session.currentTick) / Double(session.ticksPerSecond),
+        direction: session.lemmings.first(where: { $0.id == selectionTargetID }).map { $0.facingLeft ? -1 : 1 } ?? 0,
+        directionTime: reduceMotion || reduceFlashes ? nil : pulseTime)
       selectionEffect?.opacity = selectionOpacity
     }
   }

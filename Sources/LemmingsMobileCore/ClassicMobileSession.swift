@@ -954,7 +954,8 @@ public final class ClassicMobileSession: MobileGameSession {
         return .init(frame: sprite.frame,
             rect: .init(x: sprite.rect.x + Double(lemming.foot.x) + doorShift, y: sprite.rect.y + Double(lemming.foot.y),
                 width: sprite.rect.width, height: sprite.rect.height),
-            cacheKey: sprite.cacheKey, time: reduced ? nil : Double(simulation.tickCount) / ticksPerSecond)
+            cacheKey: sprite.cacheKey, time: reduced ? nil : Double(simulation.tickCount) / ticksPerSecond,
+            direction: left ? -1 : 1)
     }
 
     private func makeSpriteHighlight(_ lemming: ClassicDOSLemming) -> MobileSpriteHighlight? {

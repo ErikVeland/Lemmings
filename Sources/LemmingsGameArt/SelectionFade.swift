@@ -22,3 +22,18 @@ public struct SelectionFade<Value> {
     }
     public func isFading(at now: TimeInterval) -> Bool { releasedAt != nil && sample(at: now) != nil }
 }
+
+/// Starts a fresh indicator phase when the selected actor changes.
+public struct SelectionDirectionPulse {
+    private var target: Int?
+    private var direction = 0
+    private var startedAt: TimeInterval = 0
+    public init() {}
+    public mutating func reset() { target = nil; direction = 0; startedAt = 0 }
+    public mutating func elapsed(target next: Int?, direction nextDirection: Int = 0, at now: TimeInterval) -> TimeInterval? {
+        guard let next else { reset(); return nil }
+        let facing = nextDirection.signum()
+        if target != next || direction != facing || now < startedAt { target = next; direction = facing; startedAt = now }
+        return max(0, now - startedAt)
+    }
+}

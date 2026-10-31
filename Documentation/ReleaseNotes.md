@@ -2,8 +2,8 @@
 
 ## Current build candidate
 
-The current source version is **2.3.1** (Mac build 103, iOS build 38, tvOS build 17). Read the
-[complete 2.3.1 candidate notes](ReleaseNotes-2.3.1-build103.md). These notes cover
+The current source version is **2.4** (Mac build 104, iOS build 39, tvOS build 18). Read the
+[complete 2.4 candidate notes](ReleaseNotes-2.4-build104.md). These notes cover
 the current main source and must stay current with the source selected for a build.
 
 ## Latest published release
@@ -11,11 +11,11 @@ the current main source and must stay current with the source selected for a bui
 Mac 2.3 build 102 is the latest published app release. Its full and slim
 downloads and five signed deltas are verified. iOS 2.3 build 37 and tvOS 2.3
 build 16 were assigned to their existing TestFlight groups; store availability
-and 2.3.1 delivery are separate. See the
+and 2.4 delivery are separate. See the
 [2.3 release record](ReleaseReadiness/2.3-build102/README.md).
 
 The public 2.3 tag still points to the earlier build 100 source; the build 102
-release record keeps its package and feed provenance. The 2.3.1 candidate uses
+release record keeps its package and feed provenance. The 2.4 candidate uses
 the published Mac build 102 source commit as its release base.
 
 ## Previous release

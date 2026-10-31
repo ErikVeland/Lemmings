@@ -328,11 +328,25 @@ import LemmingsGameArt
     let context = NSGraphicsContext.current?.cgContext
     context?.saveGState()
     context?.setShouldAntialias(false)
-    context?.clip(to: rect)
+    let device = context?.convertToDeviceSpace(CGSize(width: 1, height: 1)) ?? CGSize(width: 1, height: 1)
+    let borderX = 1 / max(1, abs(device.width)), borderY = 1 / max(1, abs(device.height))
+    context?.clip(to: rect.insetBy(dx: -borderX, dy: -borderY))
     defer { context?.restoreGState() }
     (color ?? (palette == .monochrome ? .white : palette == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
       : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1))).setFill()
     let layout = GamePixelTypography.layout(normalized)
+    if let context {
+      context.saveGState(); context.setBlendMode(.overlay); context.setFillColor(CGColor(gray: 0, alpha: 0.8))
+      context.beginPath()
+      for item in layout {
+        guard let glyph = item.glyph, let mask = GamePixelTypography.monochromeMask(forSequence: item.sequence) else { continue }
+        for x in 0..<glyph.width { for y in 0..<glyph.height where mask[y * glyph.width + x] != 0 {
+          context.addRect(CGRect(x: start + CGFloat(item.x + glyph.x + x) * scale,
+            y: top + CGFloat(glyph.y + y) * scale, width: scale, height: scale).insetBy(dx: -borderX, dy: -borderY))
+        } }
+      }
+      context.fillPath(); context.restoreGState()
+    }
     let highlightedIndex = highlighted.flatMap { character in layout.firstIndex { $0.sequence.contains(character) } }
     for (index, item) in layout.enumerated() {
       if let numberPalette {

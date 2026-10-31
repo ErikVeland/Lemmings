@@ -10,7 +10,7 @@ public enum PanelGlyphArt: String, Sendable {
   case fastForward
   case rewind, stepBackward, stepForward
   case settings, download, hourglass, menu, mobileMenu, reveal, dismiss
-  case graphics, ghosts, ghostsHidden, bonusSkill, superzoom, levelSkip
+  case graphics, ghosts, ghostsHidden, bonusSkill, superzoom, levelSkip, hints
   /// Shown on the pause button while the level is held, so the button says
   /// what it will do rather than what it did.
   case play
@@ -107,11 +107,19 @@ public enum PanelGlyphArt: String, Sendable {
       }
     case .bonusSkill:
       return [
-        "....##.........", "...####........", "..######.......",
-        "...######......", "....######.....", ".....######....",
-        "......######...", ".....#######...", "....#####.##...",
-        "...#####.......", "..#####........", ".#####.........",
-        "#####..........", ".###...........", "..#............",
+        ".......#.......", "......###......", "......###......",
+        "..##..###..##..", "...#########...", "....#######....",
+        ".#############.", "###############", ".#############.",
+        "....#######....", "...#########...", "..##..###..##..",
+        "......###......", "......###......", ".......#.......",
+      ]
+    case .hints:
+      return [
+        ".....#####.....", "...##.....##...", "..##.......##..",
+        ".##.........##.", ".##.........##.", ".##.........##.",
+        "..##.......##..", "...##.....##...", "....##...##....",
+        ".....#####.....", ".....#####.....", ".....#####.....",
+        "......###......", "......###......", "...............",
       ]
     case .superzoom:
       return [
@@ -213,7 +221,7 @@ public enum PanelGlyphArt: String, Sendable {
       return Dictionary(uniqueKeysWithValues: Self.classicPalette.enumerated().map { index, colour in
         (Character(String(index, radix: 16)), (colour.red, colour.green, colour.blue))
       })
-    case .play, .fastForward, .undo, .settings, .download, .hourglass, .menu, .mobileMenu, .reveal, .dismiss, .rewind, .stepBackward, .stepForward, .graphics, .ghosts, .ghostsHidden, .bonusSkill, .superzoom, .levelSkip:
+    case .play, .fastForward, .undo, .settings, .download, .hourglass, .menu, .mobileMenu, .reveal, .dismiss, .rewind, .stepBackward, .stepForward, .graphics, .ghosts, .ghostsHidden, .bonusSkill, .superzoom, .levelSkip, .hints:
       return ["#": (194, 224, 158)]
     }
   }

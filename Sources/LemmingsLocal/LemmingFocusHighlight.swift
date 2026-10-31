@@ -4,7 +4,7 @@ import LemmingsGameArt
 
 @MainActor enum LemmingSelectionGlow {
     static func draw(at point: CGPoint, scale: CGFloat, radius: CGFloat = 7,
-                     tint: NSColor, animated: Bool = true, marker: Bool = true) {
+                     tint: NSColor, animated: Bool = true, marker: Bool = true, direction: Int = 0, pulseTime: TimeInterval? = nil) {
         let pixel = max(1, floor(scale))
         let haloRadius = max(8 * pixel, radius * scale * 1.3)
         let alpha = haloAlpha(at: ProcessInfo.processInfo.systemUptime, animated: animated)
@@ -24,16 +24,17 @@ import LemmingsGameArt
             halo.draw(in: NSBezierPath(ovalIn: rect), relativeCenterPosition: .zero)
         }
         NSGraphicsContext.restoreGraphicsState()
-        if marker { drawTargetMarker(at: point, pixel: pixel) }
+        if marker { drawTargetMarker(at: point, pixel: pixel, direction: direction, animated: animated, pulseTime: pulseTime) }
     }
 
     /// A solid pointer stays visible when the soft halo meets bright terrain.
-    private static func drawTargetMarker(at point: CGPoint, pixel: CGFloat) {
+    private static func drawTargetMarker(at point: CGPoint, pixel: CGFloat, direction: Int, animated: Bool, pulseTime: TimeInterval?) {
         guard let context = NSGraphicsContext.current?.cgContext else { return }
         LemmingSelectionRenderer.drawPlumbob(in: CGRect(
             x: floor(point.x / pixel) * pixel - 4 * pixel,
             y: floor(point.y / pixel) * pixel - 21 * pixel,
-            width: 9 * pixel, height: 13 * pixel), context: context)
+            width: 9 * pixel, height: 13 * pixel), direction: direction,
+            time: animated ? (pulseTime ?? 0) : nil, context: context)
     }
 
     /// The halo's centre opacity. The shimmer modulates brightness only; the

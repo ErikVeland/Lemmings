@@ -14,7 +14,8 @@ struct MobileSpriteFeedback<State> {
     func sprite(in state: State, id: Int, tick: Int, ticksPerSecond: Double) -> MobileSpriteHighlight? {
         guard let sprite = provider?(state, id) else { return nil }
         return .init(frame: sprite.frame, rect: sprite.rect, cacheKey: sprite.cacheKey,
-            time: settings.reduceMotion || settings.reduceFlashes ? nil : Double(tick) / ticksPerSecond)
+            time: settings.reduceMotion || settings.reduceFlashes ? nil : Double(tick) / ticksPerSecond,
+            direction: sprite.direction)
     }
 
     func selection(in state: State, tick: Int, ticksPerSecond: Double) -> MobileSpriteHighlight? {

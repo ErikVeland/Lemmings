@@ -206,6 +206,85 @@ for current source evidence and open device and distribution checks.
 
 ## Build and run
 
+### Game data and asset preparation
+
+The Swift source can be compiled and checked without the original games, as
+described in the [developer handover](Documentation/DeveloperHandover.md#first-hour).
+Building the full, self-contained Mac app is different: its packaging scripts
+expect local game data, artwork, music and level packs that are not in a fresh
+checkout. The app interprets game data natively; you do not need to decompile
+or run the original game executables. Some artwork is extracted from original
+data and Lemmings 2 overlays during packaging.
+
+Obtain compatible copies of the original games and media you are entitled to
+use. The DOS editions of Lemmings, Lemmings 2: The Tribes and Lemmings 3
+(also sold as The Lemmings Chronicles or All New World of Lemmings) provide
+the principal game data. Original discs or existing installed copies are
+possible sources; check the edition and platform before buying second-hand
+media. We have not verified a current digital storefront for these DOS
+editions. Other artwork and music need the specific editions listed below.
+Owning a copy does not itself grant permission to redistribute its assets.
+
+| Input | Location expected in the checkout | Preparation |
+| --- | --- | --- |
+| Classic DOS Lemmings | `Sources/Ports/lemmings_dos_1991-07-30/` | Copy the installed game files, including `MAIN.DAT`, `ODDTABLE.DAT`, `LEVEL000.DAT`–`LEVEL009.DAT`, the `GROUND`, `VGAGR` and `VGASPEC` files. |
+| Lemmings 2 DOS | `Sources/Ports/Lemm2/` | Copy the complete installed game directory, preserving `LEVELS`, `STYLES`, `FRONTEND`, `PROCESS.RKO` and `VGA.RKO`. The build extracts animation data from the overlays; they are not shipped as executable code. |
+| Lemmings 3 DOS CD | `Sources/Ports/LEM3CD/` | Copy the game data directory, including `LEVELS/LEVEL001.DAT`, `STYLES/` and `GRAPHICS/`. |
+| Classic Mac and holiday artwork | `Sources/Ports/lemmings_1_5_2/Lemmings_1_5_2.dsk`, `Sources/Ports/LemmingsONML.sit_.bin` and `Sources/Ports/mac_extracted/Holiday_Lem93_94/` | Supply the corresponding original Mac disk image, Oh No! More Lemmings archive and extracted Holiday Lemmings 1994 installer and Xmas 1992 demo. Preserve Macintosh resource forks. The packaging scripts extract and decode these at build time. The holiday conversion also reads `MAIN.DAT`, `GROUND2O.DAT` and `VGAGR2.DAT` from `Sources/Ports/xmas_dos_XmasLemmingsV1.9a1/`. |
+| Amiga artwork | `Sources/Ports/amiga_extracted/` | Extract the compatible original Amiga disk images using the one-time import below. |
+| Soundtracks | `Sources/Music/` | Supply the music files and catalogue metadata expected by `Tools/MusicCatalogue/library.py`. The full soundtrack is a separate collection of recordings and modules from multiple ports, not something the DOS game files alone generate. |
+| Classic fan packs | `Content/LevelPacks/` | Supply the reviewed ZIP collection and `packs.json` index. The full packager also validates the reviewed pruning manifest. Individual packs can be sought from their creators and the [Lemmings Forums](https://www.lemmingsforums.net/); permissions vary. |
+| NeoLemmix levels, styles and sounds | `Content/NeoLemmix/` | Generate these from the pinned NeoLemmix Community Edition source with the command below. See the [Community Edition release thread](https://www.lemmingsforums.net/index.php?topic=7065.0). The script includes the selected DMA styles and stock sounds, not every community style. |
+
+The exact soundtrack collection, reviewed fan-pack set and a complete recipe
+for reconstructing the Mac holiday resource-fork tree are not currently
+provided by this repository. A fresh checkout and the three DOS games alone
+are therefore **not yet sufficient to reproduce the full app bundle**. Ask the
+project maintainers for the missing asset manifests and preparation details;
+do not assume another version of a file will pass the existing checks.
+
+On a Mac, install Xcode and select its command-line tools. Install Python 3,
+ImageMagick, `unar` and CMake; for example, with Homebrew:
+
+```sh
+xcode-select --install
+brew install python imagemagick unar cmake
+zsh Scripts/prepare-neolemmix-content.sh
+zsh Scripts/check-local-build.sh
+```
+
+Run these commands from the repository root. The NeoLemmix script downloads a
+pinned source revision and replaces its generated `Content/NeoLemmix` output;
+back up any local changes there first. `check-local-build.sh` checks tools and a
+few top-level inputs, not the completeness or compatibility of every asset.
+The build also fetches pinned Sparkle and Macintosh music-rendering tools when
+they are not already cached, so it needs network access on the first run.
+
+For the Amiga import, place the original IPF images at
+`Sources/Ports/lemmings_amiga_0132/Lemmings_Disk1.ipf`,
+`Sources/Ports/lemmings_amiga_0132/Lemmings_Disk2.ipf`,
+`Sources/Ports/OhNo!MoreLemmings.ipf` and
+`Sources/Ports/HolidayLemmings1994.ipf`. Build a compatible CAPS/SPS library
+locally, then pass its absolute library path to
+`python3 Tools/AmigaArtwork/extract-disks.py`. This writes decoded files and
+source hashes under `Sources/Ports/amiga_extracted/`; it does not download the
+disks or library. The repository does not yet document a verified CAPS/SPS
+installation procedure.
+
+The Lemmings 2 extractor can also be run separately with the original game
+directory and a separate output directory as its two arguments:
+
+```sh
+python3 Tools/Lemmings2Reference/prepare-assets.py Sources/Ports/Lemm2 .build/lemmings2-extracted
+```
+
+The normal app packager runs this step itself. It checks for a specific overlay
+layout and rejects incompatible editions. Keep original and extracted assets
+out of Git, and review [third-party notices](THIRD_PARTY_NOTICES.md) before
+sharing a build.
+
+### Mac application
+
 Build a universal arm64/x86_64 local application:
 
 ```sh
