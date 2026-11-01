@@ -13,7 +13,7 @@ from xml.etree import ElementTree
 SPARKLE_NAMESPACE = "http://www.andymatuschak.org/xml-namespaces/sparkle"
 SPARKLE_VERSION = "2.7.3"
 DELTA_BASE_COUNT = 5
-RELEASE_VERSION_PATTERN = re.compile(r"(?:1\.[789]|2\.[0-3])(?:\.\d+)?")
+RELEASE_VERSION_PATTERN = re.compile(r"(?:1\.[789]|2\.[0-4])(?:\.\d+)?")
 REQUIRED_SCRIPTS = (
     "Scripts/ensure-sparkle.sh",
     "Scripts/generate-appcast.sh",
@@ -37,7 +37,7 @@ def validate_info_plist(path):
     version = info.get("CFBundleShortVersionString")
     build = info.get("CFBundleVersion")
     if not isinstance(version, str) or not RELEASE_VERSION_PATTERN.fullmatch(version):
-        raise ValueError("Info.plist must identify a supported 1.7–1.9 or 2.0–2.3 application.")
+        raise ValueError("Info.plist must identify a supported 1.7–1.9 or 2.0–2.4 application.")
     if not isinstance(build, str) or not re.fullmatch(r"\d+", build):
         raise ValueError("Info.plist must contain a numeric build number.")
     if info.get("LSApplicationCategoryType") != "public.app-category.games":

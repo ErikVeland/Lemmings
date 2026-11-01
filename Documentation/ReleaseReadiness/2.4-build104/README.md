@@ -1,6 +1,6 @@
 # 2.4 build 104 preparation
 
-Status: release in progress, 1 November 2026. No 2.4 app has been published or submitted to a store. Candidate version numbers are Mac 104, iOS 39 and tvOS 18. Confirm the mobile numbers against App Store Connect before archiving. The previous published Mac source is `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` (2.3 build 102). The current source is `e10df1ebccfc63847f9e4499cb97f2ac5db783be` on `main`.
+Status: release in progress, 1 November 2026. Mac build 104 packages and the signed updater feed are ready for publication. No 2.4 app has been published or submitted to a store. Candidate version numbers are iOS 39 and tvOS 18; confirm them in App Store Connect before archiving. The previous published Mac source is `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` (2.3 build 102). The Mac candidate was built from `a19e9ad44681fe286f8a69c32d522295514ab459` on `main`.
 
 **Owner confirmation, 1 November 2026:** The owner confirmed that all release
 checks are complete and green. This closes the earlier audio crackling, Duo
@@ -53,12 +53,12 @@ outcome code. Mobile rewind presentation is outside the Mac scope.
 
 ## Delivery
 
-- **Mac:** Standard universal package signed, notarised and accepted by Gatekeeper. The update feed and slim download remain incomplete because the five recent delta base archives were not present locally. No public release.
+- **Mac:** Standard and slim universal packages signed, notarised and accepted by Gatekeeper. The signed updater feed includes all five recent delta bases and passes release-input checks. No public release yet.
 - **iOS and Duo:** Local development candidates archived and signed through build 42. No App Store archive or submission. Check App Store Connect build numbers and signing, then follow the existing distribution groups after Mac publication.
 - **tvOS:** Not archived or submitted. Check App Store Connect build numbers and signing after iOS submission.
 - **Sideloading:** Not delivered. Follow the channel register in [iOS distribution](../../IOSDistribution.md) after the higher-priority deliveries.
 
-The source commit was pushed to `main` during preparation. No release, tag or feed was published.
+The source commit was pushed to `main` during preparation. No release, tag or feed was published at this point.
 
 ## Access recheck, 31 October 2026
 
@@ -105,3 +105,30 @@ The standard ZIP above was built from `10fae692`, one documentation-only commit
 behind the current source. Rebuild or verify the final Mac package against
 `e10df1eb` before publication. The update feed still requires the five recent
 delta base archives. The slim download and public release were not completed.
+
+## Final Mac package and feed, 1 November 2026
+
+The owner confirmed release checks complete and green. The current universal
+Mac build was made from `a19e9ad4`, including the supporter-credit change, with
+the production CloudKit profile. Rescue-proof and hint gates passed. Automated
+app integration and foreground launch checks were skipped under the approved
+release policy; the affected engine checks are recorded above.
+
+Apple accepted standard notarisation submission
+`4d7eb5bc-902f-482b-a5c2-791271fcf7e3` and slim submission
+`95090279-8e5b-43b7-b32b-9d81061e3a9a`. Both tickets were stapled and validated.
+Both ZIPs passed Gatekeeper as Notarized Developer ID. The standard package is
+2,057,774,759 bytes (SHA-256
+`911fa2e6d75366aaf1b8afe0b87b9b8c7096770641345760c48f076c8aa4c066`); the slim
+package is 273,702,460 bytes (SHA-256
+`75d7699c0082cb08150c0b6ecfa42d659c3bc8e81f45bbb9d213995c139e7e87`).
+
+The signed update archive is 2,057,773,792 bytes (SHA-256
+`0626bf42266651858dd18d6d96d55480f51b276c0b66814872002cc4b734675b`). The
+signed appcast contains 28 items, including build 104 and direct deltas from
+builds 102, 99, 98, 97 and 96. `check-release-inputs.sh` passed. The slim ZIP is
+kept out of the updater feed so an update preserves the full music library.
+
+App Store Connect was not authenticated in this session. The iOS and tvOS
+candidate numbers, distribution signing and submission remain unverified. No
+platform release is public yet.
