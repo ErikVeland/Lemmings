@@ -2,6 +2,11 @@
 
 Updated 26 October 2026, Brisbane. Store evidence below was checked on 25 October.
 
+Mac 2.4 build 104 was published on 1 November. No 2.4 iOS IPA or tvOS
+submission is recorded yet. The iOS channels below remain on their last verified
+2.2.2 release until an App Store distribution archive and unencrypted IPA are
+available.
+
 The owner requires distribution across iOS sideloading stores. Treat each active
 store as release work. A compatible source, a downloadable IPA, a catalogue
 listing and a verified device installation are separate milestones.

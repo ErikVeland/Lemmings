@@ -1,6 +1,6 @@
 # 2.4 build 104 preparation
 
-Status: release in progress, 1 November 2026. Mac build 104 packages and the signed updater feed are ready for publication. No 2.4 app has been published or submitted to a store. Candidate version numbers are iOS 39 and tvOS 18; confirm them in App Store Connect before archiving. The previous published Mac source is `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` (2.3 build 102). The Mac candidate was built from `a19e9ad44681fe286f8a69c32d522295514ab459` on `main`.
+Status: release in progress, 1 November 2026. Mac 2.4 build 104 is public; iOS and tvOS submissions remain open. Candidate mobile build numbers are 39 and 18, but App Store Connect must confirm them before archiving. The previous published Mac source is `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` (2.3 build 102). The Mac candidate was built from `a19e9ad44681fe286f8a69c32d522295514ab459`; the current `main` is `59b04b18`.
 
 **Owner confirmation, 1 November 2026:** The owner confirmed that all release
 checks are complete and green. This closes the earlier audio crackling, Duo
@@ -53,12 +53,12 @@ outcome code. Mobile rewind presentation is outside the Mac scope.
 
 ## Delivery
 
-- **Mac:** Standard and slim universal packages signed, notarised and accepted by Gatekeeper. The signed updater feed includes all five recent delta bases and passes release-input checks. No public release yet.
+- **Mac:** [2.4 build 104 is public](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4). Standard and slim universal packages are signed, notarised and accepted by Gatekeeper. The live signed updater feed contains all five recent delta bases.
 - **iOS and Duo:** Local development candidates archived and signed through build 42. No App Store archive or submission. Check App Store Connect build numbers and signing, then follow the existing distribution groups after Mac publication.
 - **tvOS:** Not archived or submitted. Check App Store Connect build numbers and signing after iOS submission.
 - **Sideloading:** Not delivered. Follow the channel register in [iOS distribution](../../IOSDistribution.md) after the higher-priority deliveries.
 
-The source commit was pushed to `main` during preparation. No release, tag or feed was published at this point.
+The source commit was pushed to `main` during preparation. Mac publication is recorded below.
 
 ## Access recheck, 31 October 2026
 
@@ -129,6 +129,18 @@ signed appcast contains 28 items, including build 104 and direct deltas from
 builds 102, 99, 98, 97 and 96. `check-release-inputs.sh` passed. The slim ZIP is
 kept out of the updater feed so an update preserves the full music library.
 
-App Store Connect was not authenticated in this session. The iOS and tvOS
-candidate numbers, distribution signing and submission remain unverified. No
-platform release is public yet.
+The [Mac release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4)
+was published from source commit `a19e9ad44681fe286f8a69c32d522295514ab459`.
+GitHub reports the standard ZIP at 2,057,773,792 bytes and the slim ZIP at
+273,702,460 bytes. The live main-branch feed points to build 104 and contains
+five direct deltas. The feed publication commit is `59b04b18`.
+
+## iOS and tvOS distribution gate
+
+App Store Connect returned an unauthenticated session, no Apple Distribution
+identity is installed, and the local configuration has no issuer ID for its
+App Store Connect API key. The Mac Developer ID and notarisation credentials do
+not grant App Store distribution. The iOS and tvOS build numbers, archive
+signing and submissions are therefore not verified or submitted. Resume after
+App Store Connect sign-in and Apple Distribution signing are available; confirm
+the next build numbers and retain the store processing receipts.
