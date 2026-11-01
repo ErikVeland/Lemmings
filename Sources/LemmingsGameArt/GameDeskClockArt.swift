@@ -53,6 +53,9 @@ public final class GameDeskClockArt: @unchecked Sendable {
     private let rockTile: CGImage
     /// A wider opaque strip from the same Macintosh rock, mirrored at its edges.
     private let groundTile: CGImage
+    /// Moves the exiting animation onto the arch's centre. A walker reaches the centre,
+    /// but the exiting frames sit further left, so without this it steps back as it enters.
+    private let exitingShift: CGFloat
     private static let textureSize = 80
 
     private let lock = NSLock()
@@ -78,6 +81,23 @@ public final class GameDeskClockArt: @unchecked Sendable {
         self.groundTile = groundTile
         let required = [(Self.lemmingsBank, 75), (Self.groundsBank, 3), (Self.objectsBank, 0), (Self.objectsBank, 16)]
         guard required.allSatisfy({ artwork.frame($0.0, $0.1) != nil }) else { return nil }
+        let entering = ClassicMacArtwork.lemmingFrameIndex(pose: .exiting, left: false, tick: 0)
+        if let arch = artwork.frame(Self.objectsBank, 16).flatMap(Self.visibleCentre),
+           let lemming = artwork.frame(Self.lemmingsBank, entering).flatMap(Self.visibleCentre) {
+            exitingShift = Self.exit.x + arch - (CGFloat(DeskClockSimulation.exitX) - 8 + lemming)
+        } else {
+            exitingShift = 0
+        }
+    }
+
+    /// The centre of a frame's opaque columns, in scene pixels from its drawing point.
+    private static func visibleCentre(_ frame: ClassicMacArtwork.Frame) -> CGFloat? {
+        let rgba = [UInt8](frame.rgba)
+        let columns = (0..<frame.width).filter { x in
+            (0..<frame.height).contains { rgba[($0 * frame.width + x) * 4 + 3] != 0 }
+        }
+        guard let first = columns.first, let last = columns.last else { return nil }
+        return (CGFloat(frame.x) + CGFloat(first + last + 1) / 2) / 2
     }
 
     public func draw(_ sim: DeskClockSimulation, event: DeskClockEvent?, now: Date, time: TimeInterval,
@@ -483,8 +503,9 @@ public final class GameDeskClockArt: @unchecked Sendable {
         }
         let left = lemming.facingLeft && ![.block, .ohNo].contains(lemming.state)
         let index = ClassicMacArtwork.lemmingFrameIndex(pose: pose, left: left, tick: tick)
+        let shift = lemming.state == .exit ? exitingShift : 0
         drawSprite(bank: Self.lemmingsBank, index: index,
-                   at: CGPoint(x: lemming.x - 8, y: y + footOffset), in: context)
+                   at: CGPoint(x: CGFloat(lemming.x - 8) + shift, y: CGFloat(y + footOffset)), in: context)
     }
 
     private func dateLine(_ now: Date, calendar: Calendar) -> String {
