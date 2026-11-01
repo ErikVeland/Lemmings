@@ -51,10 +51,9 @@ Mid-level checkpoints remain local.
 1. Provisioning completed on 31 October. The installed Developer ID profile
    grants the shared CloudKit container in Production and matches an available
    signing identity. Recheck the selected profile when packaging.
-2. Verify the production `ULPrivateLibrary` record type. It needs `keys` (Bytes),
-   `devices` (String List) and `snapshot` (Asset). Keep access private to the
-   owner. Back up the current schema before any deployment. No query indexes
-   are required. The client creates the private `ULPrivateLibraryV2` zone.
+2. Done on 1 November 2026. Production `ULPrivateLibrary` has `keys` (Bytes),
+   `devices` (String List) and `snapshot` (Asset). The schema was backed up
+   before deployment. The client creates the private `ULPrivateLibraryV2` zone.
 3. Verify the actual signed package, including its embedded distribution profile,
    Production environment, CloudKit entitlement, calendar access and disabled
    Game Center catalogue. Complete normal notarisation and package checks.
@@ -113,3 +112,37 @@ found a deployment blocker. The next change is to deploy the development
 `ULPrivateLibrary` definition to Production, then export Production again and
 verify the fields. No deployment was performed during this read-only check.
 Signed-app and two-device acceptance remain separate release gates.
+
+## Pre-deployment backup — 1 November 2026
+
+Both environments were exported again before deployment. No schema or player
+data was changed.
+
+- [Production backup](CloudKitSchema/production-2026-11-01-before.ckdb) matches
+  the 31 October export. `ULPrivateLibrary` is still absent.
+- [Development export](CloudKitSchema/development-2026-11-01.ckdb) matches the
+  31 October export and validates against Development.
+- CloudKit refuses `validate-schema` and `import-schema` against Production:
+  "endpoint not applicable in the environment 'production'". The owner approved
+  the import. CloudKit rejected it, and Production did not change.
+
+Next: deploy the development schema to Production with **Deploy Schema
+Changes** in CloudKit Console. `cktool` cannot do this step. Production cannot
+remove a deployed record type or field. Then export Production again and verify `keys BYTES`,
+`devices LIST<STRING>` and `snapshot ASSET`.
+
+## Production schema deployment — 1 November 2026
+
+The first Console attempt stopped at **Confirm Deployment**. Two exports after
+that attempt still showed only `Users` in Production. The dialog was opened
+again, and its diff matched the development export. With the owner's approval,
+**Deploy** was selected. Console reported that the schema is deployed to
+Production.
+
+The [production export after deployment](CloudKitSchema/production-2026-11-01-after.ckdb)
+matches the development export. `ULPrivateLibrary` has `keys BYTES`,
+`devices LIST<STRING>` and `snapshot ASSET`, plus the development indexes and
+role grants. `Users` is unchanged. No player data was read or changed.
+
+The production schema gate is closed. Signed-package checks, two-device
+acceptance and native code entry remain open. Public sync is not claimed yet.

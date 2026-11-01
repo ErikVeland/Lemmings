@@ -68,6 +68,5 @@ The owner added automatic public iCloud sync and private device linking to 2.4.
 See [implementation and acceptance](CloudSync.md). The public Mac signer now
 requires production CloudKit provisioning before compilation. The owner-supplied
 Developer ID CloudKit profile is installed and passes signing preflight.
-The production schema inspection found `ULPrivateLibrary` absent, although its
-required fields exist in Development. Schema deployment and two-device acceptance
-remain required. No public sync availability is claimed yet.
+`ULPrivateLibrary` was deployed to Production on 1 November and verified by a
+fresh export. Signed-package checks and two-device acceptance remain required. No public sync availability is claimed yet.
