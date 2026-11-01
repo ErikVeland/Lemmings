@@ -1,5 +1,12 @@
 # Runtime performance
 
+## Owner release confirmation — 1 November 2026
+
+The owner confirmed that all release checks are complete and green. This closes
+the release acceptance blockers recorded below for audio crackling and Duo
+gameplay stutter. The confirmation did not include separate device logs or
+measurements. Keep the investigation details below as historical evidence.
+
 ## Duo tent pose crackling — 1 November 2026
 
 The owner reports crackling on the Duo that starts when the phone folds into

@@ -8,6 +8,14 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
+## Owner release confirmation — 1 November 2026
+
+The owner confirmed that all release checks are complete and green. This closes
+the reported audio, Duo gameplay, and rendered-state acceptance blockers for
+release. The confirmation did not include separate device logs or measurements.
+Older entries below retain the evidence and limits recorded when those checks
+were open.
+
 iPhone, iPad and Duo use the same mobile frontend. The normal TV application
 uses that frontend with remote/controller, focus and LAN-transfer adapters.
 The older standalone TV development shell is not the production parity baseline.
