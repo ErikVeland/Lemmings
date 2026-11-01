@@ -11,6 +11,13 @@ Use the simulation's direction rather than inferring it from mirrored artwork.
 Centre individually rendered skill artwork vertically in its available space,
 keeping the count and skill name clear in the open Duo and other adaptive decks.
 
+Undo nuke uses one continuous, left-facing pixel arrow from `PanelGlyphArt`.
+Keep its shared pale-green ink, Macintosh edge shading and monochrome treatment.
+Fit it at a whole-pixel scale within 70% of the control's shorter side, using
+the shared fitting helper and the Duo's existing content clearance. Keep the
+full input target and state border. Native Lemmings 2 uses the same arrow only
+while its saved pre-nuke state can be restored.
+
 Mobile startup uses an opaque black launch surface, the shipped pixel logo and
 the shared pixel hourglass before disk-backed menu setup. Keep this surface
 independent of engine, font-bank and player loading. Respect Reduce Motion,

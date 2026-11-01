@@ -616,8 +616,9 @@ enum PanelButton: Equatable {
       drawStoneButton(frame, selected: active, button: button)
       if glyph.isOriginalTile, let image = glyph.image(fitting: controlIconBox(frame).size, transparentRock: true) {
         drawSingleControlGlyph(image, in: frame)
-      } else if let image = glyph.image(fitting: frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
-        image.draw(in: CGRect(x: frame.midX - image.size.width / 2, y: frame.midY - image.size.height / 2,
+      } else if let image = glyph.image(fitting: glyph == .undo ? glyph.fittingSize(in: frame.size)
+        : frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
+        image.draw(in: CGRect(x: floor(frame.midX - image.size.width / 2), y: floor(frame.midY - image.size.height / 2),
           width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: nil)
       }
@@ -694,11 +695,11 @@ enum PanelButton: Equatable {
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
         // Rasterise the control glyph to fit the recessed well.
         let image = controlImage(glyph,
-          fitting: frame.insetBy(
-            dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
+          fitting: glyph == .undo ? glyph.fittingSize(in: frame.size)
+            : frame.insetBy(dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
         image.draw(
-          in: CGRect(x: frame.midX - image.size.width / 2,
-            y: frame.midY - image.size.height / 2,
+          in: CGRect(x: floor(frame.midX - image.size.width / 2),
+            y: floor(frame.midY - image.size.height / 2),
             width: image.size.width, height: image.size.height),
           from: .zero, operation: .sourceOver, fraction: 1,
           respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
@@ -891,10 +892,12 @@ enum PanelButton: Equatable {
     case .fastForward where variableSpeedEnabled:
       break
     default:
-      guard let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
-            let image = usesMacStyleControls
-              ? glyph.macImage(fitting: glyph.isOriginalTile ? controlIconBox(frame).size : well.size, transparentRock: true)
-              : glyph.image(fitting: glyph.isOriginalTile ? controlIconBox(frame).size : well.size, transparentRock: true) else { return }
+      guard let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true) else { return }
+      let iconSize = glyph == .undo ? glyph.fittingSize(in: frame.size)
+        : glyph.isOriginalTile ? controlIconBox(frame).size : well.size
+      guard let image = usesMacStyleControls
+        ? glyph.macImage(fitting: iconSize, transparentRock: true)
+        : glyph.image(fitting: iconSize, transparentRock: true) else { return }
       if glyph.isOriginalTile {
         drawSingleControlGlyph(image, in: frame)
       } else {

@@ -1475,6 +1475,7 @@ import NxlvKit
             unreleased: game.configuration.total - game.released, required: 1, total: game.configuration.total,
             isComplete: game.isComplete, didWin: game.didWin)
         canvas.deathCountdownText = screen == .playing ? deathCounter.visible : ""
+        canvas.canUndoNuke = screen == .playing && beforeNuke != nil && !game.isComplete && !canvas.readOnlyReplay
         canvas.update(game)
         let palette = Lemmings2Panel.palette(over: game.configuration.palette, phase: frontTicks / 4)
         let skillFrame: Lemmings2SpriteFrame? = {
@@ -2392,6 +2393,7 @@ import NxlvKit
     var hotSeatGhosts: HotSeatGhostPlayback?
     private let hotSeatGhostSprites = ReplayGhostSprites()
     var readOnlyReplay = false
+    var canUndoNuke = false { didSet { if oldValue != canUndoNuke { needsDisplay = true } } }
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
         let width = min(260, bounds.width - 16)
@@ -2416,14 +2418,16 @@ import NxlvKit
     override func accessibilityChildren() -> [Any]? {
         guard !readOnlyReplay else { return [] }
         guard let game else { return [] }
-        let names = game.configuration.skills.map { SkillVocabulary.title($0.name) } + [L10n.text("Pause"), L10n.text("End run"), L10n.text("Fan"), L10n.text("Fast-forward")]
+        let names = game.configuration.skills.map { SkillVocabulary.title($0.name) } + [L10n.text("Pause"),
+            canUndoNuke ? L10n.text("Undo end run") : L10n.text("End run"), L10n.text("Fan"), L10n.text("Fast-forward")]
         var children: [Any] = turnBadge.isHidden ? [] : [turnBadge]
         for slot in 0..<12 {
             let x = slot < 8 ? slot * 32 : 256 + (slot % 2) * 32
             let y = slot < 10 ? 160 : 180
             let height = slot < 8 ? 40 : 20
-            let frame = slot < 8 ? skillFrame(slot) : CGRect(x: panelX + CGFloat(x) * zoom,
-                y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
+            let frame = slot < 8 ? skillFrame(slot) : slot == Lemmings2Control.nuke.rawValue ? nukeRect
+                : CGRect(x: panelX + CGFloat(x) * zoom,
+                    y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
             let label = game.supplies.indices.contains(slot)
                 ? L10n.text("\(names[slot]), \(game.supplies[slot]) remaining\((slot == selectedSkillSlot ? L10n.text(", selected") : ""))")
                 : names[slot]
@@ -3305,8 +3309,25 @@ import NxlvKit
                        from: .zero, operation: .sourceOver, fraction: readOnlyReplay ? 0.45 : 1, respectFlipped: true,
                        hints: [.interpolation: NSImageInterpolation.none.rawValue])
             drawSkillGroup()
+            drawUndoNuke()
             if variableSpeedEnabled { SpeedPanelControls.draw(in: speedRect, label: speedLabel, active: isFastForward) }
         }
+    }
+    private func drawUndoNuke() {
+        guard canUndoNuke, let context = NSGraphicsContext.current?.cgContext else { return }
+        let frame = nukeRect
+        let glyph = PanelGlyph.undo
+        let fitting = glyph.fittingSize(in: frame.size)
+        guard let image = SequelArtworkPreference.enabled
+            ? glyph.macImage(fitting: fitting) : glyph.image(fitting: fitting) else { return }
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.clip(to: frame)
+        GameStoneButton.draw(frame, selected: true, pixel: max(1, zoom / 2), playFace: .endRun)
+        image.draw(in: CGRect(x: floor(frame.midX - image.size.width / 2),
+            y: floor(frame.midY - image.size.height / 2), width: image.size.width, height: image.size.height),
+            from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+            hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     private func drawSkillGroup() {
         guard let context = NSGraphicsContext.current?.cgContext, let game else { return }
@@ -3335,6 +3356,7 @@ import NxlvKit
             }
         }
     }
+    private var nukeRect: CGRect { CGRect(x: panelX + 288 * zoom, y: origin.y + 192 * zoom, width: 32 * zoom, height: 24 * zoom) }
     private var speedRect: CGRect { CGRect(x: panelX + 288 * zoom, y: origin.y + 216 * zoom, width: 32 * zoom, height: 24 * zoom) }
     private func drawBackgroundImage(_ image: NSImage, x: CGFloat, y: CGFloat) {
         drawImage(image, x: x, y: y)
