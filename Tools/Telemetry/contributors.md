@@ -17,3 +17,5 @@ Thank you to the players, testers, level authors and preservation projects that 
 Mark Ampersand
 
 Paul Douglas Hayward
+
+Pete Bailey
