@@ -3,8 +3,11 @@
   "channel": "AltStore Classic",
   "version": "2.4",
   "build": 39,
+  "sourceCommit": "20ed1413",
   "sourceURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json",
   "sourceSHA256": "7c8be5f5ebea1d6d37ccbe2ac010afcb682a3db4b0a2f4072c442625f3969445",
+  "publicSourceVerified": true,
+  "publicSourceVerifiedUTC": "2026-11-01T11:44:37Z",
   "ipaURL": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmingsIOS.ipa",
   "ipaBytes": 1992975997,
   "ipaSHA256": "05a76780e34b5c442089dbc63091271c3cf953b0b406a7e1ce816645755c8179",
@@ -13,6 +16,5 @@
   "publicAssetState": "uploaded",
   "publicAssetDigestMatchesLocal": true,
   "previousVersionRetained": true,
-  "publicSourceVerified": false,
   "deviceInstallation": "not run"
 }

@@ -53,7 +53,8 @@
   "altStoreClassic": {
     "sourceURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json",
     "localSourceSHA256": "7c8be5f5ebea1d6d37ccbe2ac010afcb682a3db4b0a2f4072c442625f3969445",
-    "publicSourceStatus": "Pending main branch publication and verification",
+    "sourceCommit": "20ed1413",
+    "publicSourceStatus": "Published and verified",
     "ipaValidation": "altstore-verification.json"
   },
   "pending": [
