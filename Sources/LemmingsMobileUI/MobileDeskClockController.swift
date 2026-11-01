@@ -194,6 +194,7 @@ enum DeskClockReason: Sendable {
         observers = MobileNotificationObserverBag()
         clockView.stop()
         setIdleTimerDisabled(false)
+        MobileAudioEventLog.record("desk clock close reason=\(reason) music=\(MobileAudioEventLog.summary(MobileMusic.shared.audioDiagnostics))")
         if let batteryMonitoring { UIDevice.current.isBatteryMonitoringEnabled = batteryMonitoring }
         batteryMonitoring = nil
         resumeMusic()
@@ -218,6 +219,7 @@ enum DeskClockReason: Sendable {
     }
 
     private func start() {
+        MobileAudioEventLog.record("desk clock open reason=\(reason) music=\(MobileAudioEventLog.summary(MobileMusic.shared.audioDiagnostics))")
         suspendMusic()
         batteryMonitoring = UIDevice.current.isBatteryMonitoringEnabled
         UIDevice.current.isBatteryMonitoringEnabled = true

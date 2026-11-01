@@ -1,5 +1,74 @@
 # Runtime performance
 
+## Duo tent pose crackling — 1 November 2026
+
+The owner reports crackling on the Duo that starts when the phone folds into
+tent pose. The installed app was built from `main` at 12:20. It is the Xcode
+`Debug-iphoneos` product, version 2.4 build 39. The project compiles that
+configuration with `-Onone`, so the Swift tracker, recording and effects render
+code ran unoptimised. Every Duo crackling report so far comes from a Debug build.
+The Gen8 audio that the owner accepted came from Release candidates 41 and 42.
+
+The Debug pose record in the Duo preferences shows the 12:22 test. The hinge
+reported fully open at 12:22:02, then tent at 12:22:12.97, and the automatic
+clock opened. Hinge updates then arrived at 20–40 Hz for about three seconds.
+The phone left tent pose at 12:22:31.5, the clock closed, and the hinge
+reported closed at 12:22:31.7. Each update in that burst rewrote two preference
+keys in an 848 KB preferences domain. This record exists only in Debug builds.
+
+Source trace of the tent path:
+
+- `DeskClockAutomaticEntry` presents the clock on the first tent update, also
+  above a level.
+- `MobileDeskClockController.start` calls `MobileMusic.suspend()`. That parks
+  the tracker, recording and Adaptive DJ engines at once with `engine.pause()`.
+  It also releases the menu's audio session. A level also pauses its effects.
+- Closing the clock resumes Home through `syncMenuMusic`. That reactivates the
+  session and starts the 180 ms spin-up. The ramp runs on the main actor while
+  UIKit lays out the library for the new display.
+- No mobile or TV code observes `AVAudioEngineConfigurationChange`. The Mac app
+  restarts output on that notification. On mobile, a hardware rate or channel
+  change stops an engine until the next suspend and resume.
+
+No source path keeps music or effects playing under the clock. The available
+evidence does not show when the crackle occurs: during the fold before the
+clock opens, under the clock, or after it closes. A `devicectl` sysdiagnose
+failed with `DiagnoseError 0`, and `log collect` from an attached device needs
+root. No system audio log was available. The cause is therefore not proved.
+
+Changes:
+
+- `MobileAudioEventLog` writes a short record to `Library/Caches/AudioEvents.log`
+  in the app container. It records launch, background, foreground, session
+  activation and deactivation, route changes, engine configuration changes,
+  interruptions, media-service resets, hinge status changes and Desk Clock
+  open and close. Session entries include the negotiated sample rate, I/O
+  duration, output latency, channel count and output route. Clock entries
+  include the music buffer statistics. The file keeps about 128 KB. A utility
+  queue writes it; render callbacks never do. Muted test runs do not write it.
+- The Duo candidate is a Release build, as the accepted Gen8 candidates were.
+  This removes the `-Onone` variable from the next device test.
+
+After the next tent test, copy the record with:
+
+    xcrun devicectl device copy from --device <Duo UDID> \
+      --domain-type appDataContainer --domain-identifier academy.glasscode.lemmings.ios \
+      --source Library/Caches/AudioEvents.log --destination .build/duo-tent-audio/
+
+Validation: the iOS and tvOS SDK module builds and both application entry points
+compile with the change. Release candidate 43 is signed for development, includes
+the Duo in its profile and passed export signature verification. Its IPA SHA-256
+is `105d369e5947bf9fe665af6b16441d141445393b53b619c8c11e49d3ed46ec1d`. It is built
+from `ec150d00` plus the working tree, including the uncommitted Desk Clock art
+change. The candidate is under `.build/duo-tent-audio/candidate-43/`, and a copy
+is in Downloads. The preference copy is under `.build/duo-tent-audio/prefs/`.
+
+Skipped: simulation, engine and release suites, because no engine code changed.
+No audio ran, and the log has no headless runtime check. The candidate is not
+installed, and the owner has not listened to it. The tent crackling gate stays
+open until the owner confirms clean audio through a fold into tent pose, under
+the clock and after it closes.
+
 ## Duo follow-up and held rewind — 31 October 2026
 
 The owner accepted Gen8 build-42 audio as clean. The owner's Xcode Duo build

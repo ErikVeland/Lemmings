@@ -56,6 +56,7 @@ import AVFAudio
         usingDJ ? dj.audioDiagnostics : usingRecording ? [recordings.audioDiagnostics].compactMap { $0 } : [module.audioDiagnostics]
     }
     private init() {
+        MobileAudioEventLog.start()
         connectFailureMusic()
         audioObservers.append(NotificationCenter.default.addObserver(
             forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main

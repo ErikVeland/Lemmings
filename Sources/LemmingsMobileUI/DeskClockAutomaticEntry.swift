@@ -63,6 +63,7 @@ import UIKit
                 // A display handoff can send an update without hinge data before the
                 // outer display reports its pose. Keep the last measured pose meanwhile.
                 if let hinge = update.hinge {
+                    let previous = self.hinge
                     switch hinge.status {
                     case .closed: self.hinge = .closed
                     case .partiallyOpen: self.hinge = .partiallyOpen
@@ -70,6 +71,7 @@ import UIKit
                     default: self.hinge = .unavailable
                     }
                     self.hingeAngle = Double(hinge.angle)
+                    if self.hinge != previous { MobileAudioEventLog.record("hinge \(self.hinge) angle=\(hinge.angle)") }
                 }
                 self.onPoseChange?()
             })

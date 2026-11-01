@@ -21,11 +21,14 @@ private actor MobileAudioSessionWorker {
             try session.setActive(true)
             let route = session.currentRoute.outputs.map { $0.portType.rawValue }.joined(separator: ",")
             logger.notice("Audio active: rate=\(session.sampleRate, privacy: .public), IO=\(session.ioBufferDuration, privacy: .public), latency=\(session.outputLatency, privacy: .public), route=\(route, privacy: .public)")
+            MobileAudioEventLog.record("session active", session: true)
         case .suspend:
             try session.setActive(false, options: [.notifyOthersOnDeactivation])
+            MobileAudioEventLog.record("session inactive")
         }
         } catch {
             logger.error("Audio session failed: \(String(describing: error), privacy: .public)")
+            MobileAudioEventLog.record("session \(operation) failed: \(error)")
             throw error
         }
     }
@@ -72,11 +75,13 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
         observers.append(centre.addObserver(
             forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main
         ) { _ in
+            MobileAudioEventLog.record("background")
             MainActor.assumeIsolated { MobileAudioSessionWorkQueue.shared.setPlaybackAllowed(false) }
         })
         observers.append(centre.addObserver(
             forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main
         ) { _ in
+            MobileAudioEventLog.record("foreground")
             MainActor.assumeIsolated { MobileAudioSessionWorkQueue.shared.setPlaybackAllowed(true) }
         })
         return observers
