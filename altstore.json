@@ -18,6 +18,15 @@
       "category": "games",
       "versions": [
         {
+          "version": "2.4",
+          "buildVersion": "39",
+          "date": "2026-11-01T11:34:35Z",
+          "localizedDescription": "Resume solo and Hot Seat journeys, with clearer controls and rewind. Music and sound processing are updated, and private iCloud device linking keeps saved progress. Classic and The Tribes remain Complete; Chronicles and NeoLemmix remain Beta. Mobile Journey remains Classic-only.",
+          "downloadURL": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmingsIOS.ipa",
+          "size": 1992975997,
+          "minOSVersion": "16.0"
+        },
+        {
           "version": "2.2.2",
           "buildVersion": "33",
           "date": "2026-10-24T00:42:55.666962Z",

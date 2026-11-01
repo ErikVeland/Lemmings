@@ -1,6 +1,6 @@
 # 2.4 build 104 preparation
 
-Status: release in progress, 1 November 2026. Mac 2.4 build 104 is public; iOS and tvOS submissions remain open. Candidate mobile build numbers are 39 and 18, but App Store Connect must confirm them before archiving. The previous published Mac source is `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` (2.3 build 102). The Mac candidate was built from `a19e9ad44681fe286f8a69c32d522295514ab459`; the current `main` is `59b04b18`.
+Status: release in progress, 1 November 2026. Mac 2.4 build 104 is public. iOS 2.4 build 39 and tvOS 2.4 build 18 were uploaded to App Store Connect and accepted for processing; TestFlight availability, store submission and public mobile availability remain open. The previous published Mac source is `96dc81b8491dfdb58683f0e32025fc4c8137aa1c` (2.3 build 102). The Mac candidate was built from `a19e9ad44681fe286f8a69c32d522295514ab459`; the current `main` is `59b04b18`.
 
 **Owner confirmation, 1 November 2026:** The owner confirmed that all release
 checks are complete and green. This closes the earlier audio crackling, Duo
@@ -137,10 +137,36 @@ five direct deltas. The feed publication commit is `59b04b18`.
 
 ## iOS and tvOS distribution gate
 
-App Store Connect returned an unauthenticated session, no Apple Distribution
-identity is installed, and the local configuration has no issuer ID for its
-App Store Connect API key. The Mac Developer ID and notarisation credentials do
-not grant App Store distribution. The iOS and tvOS build numbers, archive
-signing and submissions are therefore not verified or submitted. Resume after
-App Store Connect sign-in and Apple Distribution signing are available; confirm
-the next build numbers and retain the store processing receipts.
+The owner signed in to App Store Connect in Safari Technology Preview on
+1 November. The iOS record is `Ultimate Lemmings iOS` (app ID `6822112090`),
+currently at version 2.2.1 with build 21. The tvOS record is `Ultimate Lemmings`
+(app ID `6810873426`), currently at version 2.3 with no build selected. The
+project candidates were iOS 2.4 build 39 and tvOS 2.4 build 18. Both
+archives were built with stable Xcode 27.1 and uploaded on 1 November. Xcode
+reported `Upload succeeded` for both; App Store Connect reported that the
+packages were processing. See [mobile delivery receipt](mobile-delivery.json)
+for bundle IDs, package hashes, sizes, certificate and provisioning profiles.
+
+The local profile store contains App Store profiles for the iOS app and Desk
+Clock widget, and for the tvOS app and Top Shelf extension. All four profiles
+include distribution certificate SHA-1
+`6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412` and expire on 10 October 2027.
+
+Earlier mobile releases used Xcode's automatic signing and completed archive,
+export and upload. iOS 2.3 build 37 and tvOS 2.3 build 16 were accepted by App
+Store Connect from Xcode 27.1. The October 27 tvOS build 15 archive also records
+a successful App Store upload with the same distribution certificate. These
+records show that the project was provisioned and signed for earlier releases.
+
+Xcode automatic signing exported both apps with the Cloud Managed Apple
+Distribution certificate and the existing App Store profiles. The local login
+keychain does not contain that certificate's private key; Xcode completed the
+distribution signature remotely. The iOS Xcode Cloud manifest lists the app
+target, but the signed-in Xcode Cloud page did not render its workflow state.
+No replacement certificate or profile was created.
+
+The uploads are not yet confirmed as processed builds. TestFlight group
+assignment, App Store version metadata and review submission have not been
+verified. Public iOS and tvOS availability therefore remain unconfirmed.
+Automated test suites were not rerun because the owner confirmed the release
+checks were already green.

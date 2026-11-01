@@ -7,8 +7,8 @@ https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json
 ```
 
 Open **Sources**, choose the add-source control, and paste the address. The source
-offers Ultimate Lemmings 2.2.2 build 33 for iOS 16 or later. Its IPA is attached to the
-[canonical 2.2.2 release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.2.2).
+offers Ultimate Lemmings 2.4 build 39 for iOS 16 or later. Its IPA is attached to the
+[canonical 2.4 release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4).
 The [source JSON](../altstore.json) and app icon also stay in this repository.
 
 SideStore documents [full AltStore source compatibility](https://docs.sidestore.io/docs/advanced/app-sources).
@@ -18,9 +18,11 @@ these clients has not been verified on a device. Adding our source does not
 place the app in a client's recommended or community catalogue.
 
 For installers that import IPA files, download
-[the current IPA](https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-2.2.2-build33-ios.ipa).
-The published file is 207,620,836 bytes. Its SHA-256 is
-`c413b14de8dbc9f67c75dcc1fd45049498e9b7eb3607341d02d1f7dc88cd6f60`.
+[the current IPA](https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmingsIOS.ipa).
+The published file is 1,992,975,997 bytes. Its SHA-256 is
+`05a76780e34b5c442089dbc63091271c3cf953b0b406a7e1ce816645755c8179`.
+Its ZIP integrity passed. The app and widget are unencrypted and Apple accepted
+the distribution upload. Device installation and re-signing remain unverified.
 The [distribution register](IOSDistribution.md) tracks other installers,
 catalogues and marketplaces, including their remaining acceptance work.
 

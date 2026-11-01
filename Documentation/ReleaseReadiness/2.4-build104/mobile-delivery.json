@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-01",
+  "sourceCommit": "3c07a3f817a168fb130f91bcb5d8e0496ef39ab8",
+  "xcodeVersion": "27.1",
+  "xcodeBuild": "27A9275",
+  "signing": {
+    "style": "automatic",
+    "certificateType": "Cloud Managed Apple Distribution",
+    "certificateSHA1": "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412",
+    "certificateExpires": "2027-10-10"
+  },
+  "platforms": {
+    "ios": {
+      "appName": "Ultimate Lemmings iOS",
+      "appStoreConnectAppId": "6822112090",
+      "bundleId": "academy.glasscode.lemmings.ios",
+      "version": "2.4",
+      "build": "39",
+      "uploadResult": "Upload succeeded; Apple reported package processing",
+      "storeAvailability": "Not verified",
+      "artifact": {
+        "path": "/Users/veland/Downloads/UltimateLemmings-iOS-2.4-39-export/UltimateLemmingsIOS.ipa",
+        "releaseURL": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmingsIOS.ipa",
+        "githubAssetId": "698159196",
+        "bytes": 1992975997,
+        "sha256": "05a76780e34b5c442089dbc63091271c3cf953b0b406a7e1ce816645755c8179"
+      },
+      "profiles": {
+        "app": "9bd2f9bd-bb5a-4bfc-886c-ffff865c39cc",
+        "DeskClockWidget": "4eaad9bc-ea1a-419b-9080-92aacf7ec3bd"
+      }
+    },
+    "tvos": {
+      "appName": "Ultimate Lemmings",
+      "appStoreConnectAppId": "6810873426",
+      "bundleId": "academy.glasscode.lemmings",
+      "version": "2.4",
+      "build": "18",
+      "uploadResult": "Upload succeeded; Apple reported package processing",
+      "storeAvailability": "Not verified",
+      "artifact": {
+        "path": "/Users/veland/Downloads/UltimateLemmings-tvOS-2.4-18-xcode27.1-export/UltimateLemmingsTV.ipa",
+        "bytes": 1978289562,
+        "sha256": "669b31d89365474856d860e8c81aac6f0d0ef1005ce0b184cccd10e62b2b7b9e"
+      },
+      "profiles": {
+        "app": "b825e5b5-e947-4660-9e7c-2e8ea11a8157",
+        "TopShelf": "e4b8806b-81b3-45b1-8375-e27b73859e18"
+      }
+    }
+  },
+  "additionalAutomatedTests": "Not run; owner confirmed release checks green",
+  "altStoreClassic": {
+    "sourceURL": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json",
+    "localSourceSHA256": "7c8be5f5ebea1d6d37ccbe2ac010afcb682a3db4b0a2f4072c442625f3969445",
+    "publicSourceStatus": "Pending main branch publication and verification",
+    "ipaValidation": "altstore-verification.json"
+  },
+  "pending": [
+    "Confirm App Store Connect processing completes for each build",
+    "Verify TestFlight availability and assign the existing testing groups",
+    "Verify App Store version metadata and review submission state",
+    "Confirm public iOS and tvOS availability"
+  ]
+}

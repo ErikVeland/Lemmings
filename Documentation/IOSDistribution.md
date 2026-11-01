@@ -1,11 +1,22 @@
 # iOS distribution
 
-Updated 26 October 2026, Brisbane. Store evidence below was checked on 25 October.
+Updated 1 November 2026, Brisbane. AltStore Classic's 2.4 source and release
+asset were checked on 1 November. Evidence for the other sideloading channels
+was last checked on 25 October; the Mac release and App Store Connect uploads
+were checked on 1 November.
 
-Mac 2.4 build 104 was published on 1 November. No 2.4 iOS IPA or tvOS
-submission is recorded yet. The iOS channels below remain on their last verified
-2.2.2 release until an App Store distribution archive and unencrypted IPA are
-available.
+Mac 2.4 build 104 was published on 1 November. iOS 2.4 build 39 and tvOS 2.4
+build 18 were uploaded to App Store Connect with Xcode 27.1 on 1 November;
+Apple reported both packages as processing. Later processing status, TestFlight
+availability, store submission and public availability remain unverified. The
+AltStore Classic now offers the 2.4 build 39 IPA from the existing v2.4 GitHub
+release. Its source update and public asset digest are recorded in the
+[publication receipt](ReleaseReadiness/2.4-build104/altstore-publication.json).
+ZIP integrity, bundle identity, minimum OS and unencrypted app/widget binaries
+were checked locally. Device installation and re-signing remain unverified.
+
+The package identities, SHA-256 values, sizes and signing profiles are recorded
+in the [2.4 mobile delivery receipt](ReleaseReadiness/2.4-build104/mobile-delivery.json).
 
 The owner requires distribution across iOS sideloading stores. Treat each active
 store as release work. A compatible source, a downloadable IPA, a catalogue
@@ -18,29 +29,25 @@ delay the higher-priority platforms.
 
 ## Current release
 
-AltStore Classic offers **2.2.2 build 33**, published on 24 October. The live
+AltStore Classic offers **2.4 build 39**, published on 1 November. The live
 [source](https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json)
-was read again on 25 October. GitHub's public release metadata confirms the
-[IPA](https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-2.2.2-build33-ios.ipa),
-its 207,620,836-byte size and SHA-256:
+and GitHub release asset were verified after publication. The
+[IPA](https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmingsIOS.ipa)
+is 1,992,975,997 bytes with SHA-256:
 
 ```text
-c413b14de8dbc9f67c75dcc1fd45049498e9b7eb3607341d02d1f7dc88cd6f60
+05a76780e34b5c442089dbc63091271c3cf953b0b406a7e1ce816645755c8179
 ```
 
-The [publication receipt](ReleaseReadiness/2.2.2-build99/altstore-publication.json)
-records a complete public download on 24 October. The 25 October check read the
-live source and release metadata. It did not download or install the IPA again.
-The [25 October check receipt](ReleaseReadiness/IOSDistribution-2026-10-25.json)
-records that boundary and the source hash.
-The local source and installation guide still named 2.2.1 before this update.
-The live source already contained 2.2.2. This update restores that exact live
-source locally and retains both older versions.
+The [publication receipt](ReleaseReadiness/2.4-build104/altstore-publication.json)
+records the public source hash and GitHub asset digest. The source retains
+build 33 and earlier versions.
 
-The [IPA validation](ReleaseReadiness/2.2.2-build99/altstore-verification.json)
-records an unencrypted device binary, the widget, signatures and permissions.
-Re-signing, widget installation, iCloud and Game Center remain unverified on a
-physical device. TestFlight Beta Review is separate from marketplace notarisation.
+The [IPA validation](ReleaseReadiness/2.4-build104/altstore-verification.json)
+records the app, widget, bundle versions, minimum OS, encryption state, archive
+integrity and App Store export signing data. Re-signing, device installation,
+iCloud and Game Center remain unverified on a physical device. TestFlight Beta
+Review is separate from marketplace notarisation.
 
 ## Coverage and next actions
 

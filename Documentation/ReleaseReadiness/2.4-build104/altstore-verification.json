@@ -1,0 +1,47 @@
+{
+  "channel": "AltStore Classic, SideStore and Feather source",
+  "version": "2.4",
+  "build": "39",
+  "bundleIdentifier": "academy.glasscode.lemmings.ios",
+  "minimumOS": "16.0",
+  "deviceFamily": [
+    "iPhone",
+    "iPad"
+  ],
+  "ipaBytes": 1992975997,
+  "ipaSHA256": "05a76780e34b5c442089dbc63091271c3cf953b0b406a7e1ce816645755c8179",
+  "zipIntegrity": "passed",
+  "bundles": [
+    {
+      "bundleIdentifier": "academy.glasscode.lemmings.ios",
+      "version": "2.4",
+      "build": "39",
+      "minimumOS": "16.0",
+      "cryptid": 0,
+      "distributionProfile": "9bd2f9bd-bb5a-4bfc-886c-ffff865c39cc"
+    },
+    {
+      "bundleIdentifier": "academy.glasscode.lemmings.ios.DeskClockWidget",
+      "version": "2.4",
+      "build": "39",
+      "minimumOS": "16.0",
+      "cryptid": 0,
+      "distributionProfile": "4eaad9bc-ea1a-419b-9080-92aacf7ec3bd"
+    }
+  ],
+  "distributionSigning": {
+    "style": "Xcode automatic signing",
+    "certificate": "Cloud Managed Apple Distribution",
+    "certificateSHA1": "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412",
+    "appleUpload": "accepted"
+  },
+  "privacy": {
+    "NSCalendarsFullAccessUsageDescription": "The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.",
+    "NSCalendarsUsageDescription": "The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar."
+  },
+  "sourcePermissionsMatchExportedEntitlements": true,
+  "deviceInstallation": "not run",
+  "resigning": "not verified",
+  "iCloudAndGameCenterAfterResigning": "not verified",
+  "verifiedDate": "2026-11-01"
+}
