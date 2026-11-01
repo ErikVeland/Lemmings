@@ -2,6 +2,36 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>2.4</title>
+            <pubDate>Sun, 01 Nov 2026 15:29:57 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>104</sparkle:version>
+            <sparkle:shortVersionString>2.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}</style></head><body><!-- Release commit: a19e9ad44681fe286f8a69c32d522295514ab459 -->
+<h3>Find your way back</h3>
+<p>Home offers Start Journey or Resume Journey for the selected solo or Hot Seat session. Earlier saved Hot Seats remain available, and level previews can open the selected level.</p>
+<h3>Clearer controls</h3>
+<p>Joined stone controls group skills, speed and transport actions. Selected lemmings and skills are easier to see, and a pulsing direction marker shows which way a lemming is walking. Mac panels keep Back and Main menu in the bottom action row. Duo layouts use more of the screen, while menus keep their position as artwork loads.</p>
+<h3>Rewind and busy scenes</h3>
+<p>Classic keeps recent rewind states close for shorter steps. Repeated rewind presses on Apple TV can move further back. Scene rendering and input handling have been reworked to reduce unnecessary work during play.</p>
+<h3>Music and sound</h3>
+<p>Music transitions and sound-effect processing have been updated to reduce interruptions during busy play and when moving between screens.</p>
+<h3>Progress on another device</h3>
+<p>Cloud Saves offers a private, one-use device code without a new account. Linking keeps existing players and combines their progress, including saved Hot Seat campaigns. Mid-level checkpoints stay on the device where you played.</p>
+<h3>Compatibility</h3>
+<p>Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmings-2.4-build104.zip" length="2057773792" type="application/octet-stream" sparkle:edSignature="DJ7fHEzfn46p3jsiriOjjJjVEQHREKgbK1JxsvMF0YFfeaqPW2JxoGDmo+CcbRdjG3TK5RH2dM0+dHhi7Z/hAA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmings-build104-from102.delta" sparkle:deltaFrom="102" length="3804114" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="ar,Base,ca,cs,da,de,el" sparkle:edSignature="oeSp3mYupPFBAAzYyiDXNvMoKlxIPlliay3PYBZDlzTZ6+CL7N0UBH6rD+/9GDGWN4vvtU3bQKG4pcv76QG2CQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmings-build104-from99.delta" sparkle:deltaFrom="99" length="47972358" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="ar,Base,ca,cs,da,de,el" sparkle:edSignature="+r7ktLRU9pLEXPQ7P9SVgqGSVJn6kZP1F4bAR7FB33UovAgcxC2zLYUph/te02WvzZsD1bgWrg/yBRYBGgBWBg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmings-build104-from98.delta" sparkle:deltaFrom="98" length="48462654" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="ar,Base,ca,cs,da,de,el" sparkle:edSignature="FzOu1krcoylpAWPhJ/JCtBu3mmKmq+oWrS3nGqMyKDKdL16PEszuBIKgFkuhexviBOijYlB2PXqQZYOs75M3CA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmings-build104-from97.delta" sparkle:deltaFrom="97" length="48504610" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="ar,Base,ca,cs,da,de,el" sparkle:edSignature="yYA2l4U1G+pbulTTRis4D0ByfAz2vlyAlgL/lGA0NFXdK5wzjF8h6iUIjh0rm2/pmp6xiDlyRh5uTm9ldAbJCg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmings-build104-from96.delta" sparkle:deltaFrom="96" length="48895994" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="ar,Base,ca,cs,da,de,el" sparkle:edSignature="uQ5z/LwpPIO+J5mSKPINv/DnkDZ3ygKfJwzuMvwVJe7SjqA7cdWuewwnoxPNJQICROtW0obkTizenLCgrT3ABA=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.3</title>
             <pubDate>Tue, 27 Oct 2026 09:10:13 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
