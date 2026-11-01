@@ -6,6 +6,17 @@ The current source version is **2.4** (Mac build 104, iOS build 39, tvOS build 1
 [complete 2.4 candidate notes](ReleaseNotes-2.4-build104.md). These notes cover
 the current main source and must stay current with the source selected for a build.
 
+## Pending Mac hotfix
+
+- Fix the Home accessibility crash reported in [issue #30](https://github.com/ErikVeland/Lemmings/issues/30)
+  when Magnet or another accessibility client queries the game window.
+- Correct the Leaderboards and Playlists accessibility labels and the fallback
+  menu's Playlists and Donate actions.
+
+This source change is not yet packaged or published. A new version/build and its
+matching notes must be assigned before publishing a signed Mac update. See the
+[source verification limits](PlatformFeatureParity.md#mac-accessibility-footer-hotfix--1-november-2026).
+
 ## Latest published release
 
 Mac 2.3 build 102 is the latest published app release. Its full and slim
