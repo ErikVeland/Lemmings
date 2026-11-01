@@ -206,11 +206,16 @@ public final class GameDeskClockArt: @unchecked Sendable {
 
         let wide = width > height * 1.5
         let eventHeight: CGFloat = event == nil ? 0 : (wide ? 30 : 40)
-        let digitFit = min((usable.width - 24) / 128, (ground - usable.minY - 22 - eventHeight) / 38)
+        // World x 168...185 runs from the digits' right edge to the exit at maxX - 23. Keep at
+        // least 8.5 pixels of it, or walkers crawl or even move left (moonwalk) on the way in.
+        let exitRun: CGFloat = 8.5
+        let digitFit = min((usable.width - 12 - 23 - exitRun) / 128, (ground - usable.minY - 22 - eventHeight) / 38)
         let digitScale = animated ? max(0.5, floor(digitFit * 2) / 2) : max(0.1, digitFit)
         let digitWidth = 128 * digitScale, digitHeight = 38 * digitScale
         let shift = animated ? DeskClockFace.burnInOffset(at: now) : (x: 0, y: 0)
-        let digitX = usable.midX - digitWidth / 2 + CGFloat(shift.x) / unit
+        // Centre the digits unless that leaves the exit run short; then move them left.
+        let digitX = min(usable.midX - digitWidth / 2, usable.maxX - 23 - exitRun - digitWidth)
+            + CGFloat(shift.x) / unit
         let digitY = usable.minY + 22 + max(0, ground - usable.minY - 22 - eventHeight - digitHeight) * 0.35
             + CGFloat(shift.y) / unit
         if terrain?.blocks != simulation.blocks, let image = terrainImage(simulation) {
