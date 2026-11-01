@@ -16,9 +16,38 @@ verification remain pending. These local candidates are not App Store submission
 
 ## Release scope and checks
 
-Classic rewind history and seek behaviour changed since the published Mac source. The engine-change policy applies: run affected regression and replay checks on the frozen candidate, verify preserved fixture manifests and record affected-route evidence. The manifest checks on 31 October passed for 120 Classic solution fixtures, 322 campaign fixtures, 120 Lemmings 2 fixtures and 70 carry-over fixtures. Hash checks alone do not establish that routes still win. The headless Classic rewind and replay suites passed against the working source subsequently committed as `32c733e2`, including rewind export and verification in a fresh simulation. Affected-route evidence and any remaining engine checks are still required.
+Classic rewind history and seek behaviour changed since the published Mac source. The engine-change policy applies: run affected regression and replay checks on the frozen candidate, verify preserved fixture manifests and record affected-route evidence. The manifest checks on 31 October passed for 120 Classic solution fixtures, 322 campaign fixtures, 120 Lemmings 2 fixtures and 70 carry-over fixtures. Hash checks alone do not establish that routes still win. The headless Classic rewind and replay suites passed against the working source subsequently committed as `32c733e2`, including rewind export and verification in a fresh simulation. The affected engine checks passed on `bf3cbfff` on 1 November 2026; see [engine checks](#engine-checks-1-november-2026).
 
 The version-history check passed for 2.4 build 104 and `git diff --check` passed on the working candidate. Rendered Mac gameplay deck states and input targets remain unverified; see [platform parity](../../PlatformFeatureParity.md). The current source also records sequel panel layout gaps and device acceptance gaps. The new in-app release copy needs localisation review.
+
+## Engine checks, 1 November 2026
+
+Scope: affected routes, not the full campaign gate. The candidate is
+`bf3cbfff` with a clean tree. Since 2.3 (`96dc81b8`), Classic rewind changed
+how it keeps keyframes and added `preparedSeek`. The Classic, NeoLemmix, L2 and
+L3 simulations gained only read-only storage estimates. Tick, movement,
+collision, terrain, skill, replay and level-data code did not change. The live
+game steps Classic through `ClassicDOSRewind` in `GameSession`, so the affected
+routes are the Classic routes played through that session path.
+
+All checks ran headless and muted. All passed:
+
+| Check | Result |
+| --- | --- |
+| Classic DOS rewind, replay and simulation regressions | Passed |
+| Classic play-through | Passed |
+| Official Classic quest through `GameSession`, with conversions | 352 wins, 1,056 recovery points, 352 progress resumes, 6 chapter transitions |
+| Quest gate negative cases | Passed |
+| Preserved Classic, campaign and L2 fixture manifests | Passed |
+| NeoLemmix simulation, L2 runtime and L3 runtime | Passed |
+
+The quest used the packaged `Ports` from local build 103 (`mac-layout-ready`),
+because `Sources/Ports` has no generated Holiday native folders. Level data has
+not changed since 2.3. The audit's quest build lacked `FailureMusic.swift`,
+which `GameSession` has needed since `f06305941`. The audit now includes it.
+
+Not run: the L2, L3 and fan-route campaign gates. Their engines did not change
+outcome code. Mobile rewind presentation is outside the Mac scope.
 
 ## Delivery
 

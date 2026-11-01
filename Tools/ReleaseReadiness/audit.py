@@ -189,7 +189,8 @@ def main():
                 compile_command(ROOT / "Tools/OfficialClassicQuest/main.swift", quest_verifier,
                                 [ROOT / "Sources/LemmingsLocal/GameSession.swift",
                                  ROOT / "Sources/LemmingsAppCore/Recovery/RunRecovery.swift",
-                                 ROOT / "Sources/LemmingsAppCore/AppStorage.swift"]),
+                                 ROOT / "Sources/LemmingsAppCore/AppStorage.swift",
+                                 ROOT / "Sources/LemmingsAudio/FailureMusic.swift"]),
                 [quest_verifier, ports, base / "official-classic-quest.json"],
                 [quest_verifier, ports, base / "classic-conversion-quest.json", "--include-conversions"],
                 [sys.executable, "Tests/ClassicFamilyCompletionTests/test_official_quest.py", quest_verifier, ports, "--include-conversions"]]))
