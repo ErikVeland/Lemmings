@@ -20,6 +20,22 @@ iPhone, iPad and Duo use the same mobile frontend. The normal TV application
 uses that frontend with remote/controller, focus and LAN-transfer adapters.
 The older standalone TV development shell is not the production parity baseline.
 
+## Mac accessibility footer hotfix — 1 November 2026
+
+The source correction for [issue #30](https://github.com/ErikVeland/Lemmings/issues/30)
+keeps each footer action and its rendered frame together. The previous five-button
+Home footer indexed a four-label accessibility array and trapped on Donate.
+Typed action identities now supply the correct labels and callbacks for Home and
+the four-button fallback overlay, including Leaderboards, Playlists and Donate.
+Mouse, keyboard and accessibility activation share the same action dispatch.
+The correction covers flat and CRT Mac presentation through their existing shared
+accessibility method. It does not change the mobile/TV frontends or game engines.
+
+Source review confirms the mapping. Test suites and test-running audits were
+skipped under the non-engine Mac release policy. Native Mac compilation,
+Magnet/VoiceOver acceptance and signed package publication remain pending; this
+entry does not establish a released fix.
+
 ## Touch rewind and nuke states — 31 October 2026
 
 The controller poller now releases only its own rewind chord during reset. This

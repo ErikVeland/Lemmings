@@ -260,11 +260,12 @@ struct ReticleFeedback {
     if let title = overlayHandoverRetryTitle, let rect = handoverButtons.first {
       items.append(accessibleElements.element(id: "handover-retry", owner: owner, label: title, frame: transform(rect)) { [weak self] in self?.onHandoverRetry?() })
     }
-    for (index, rect) in overlayFooterButtons.enumerated() {
-      let rect = visibleFrame(rect)
+    for button in overlayFooterButtons {
+      let rect = visibleFrame(button.frame)
       if rect.isEmpty { continue }
-      items.append(accessibleElements.element(id: "footer-\(index)", owner: owner, label: [L10n.text("Player profiles"), L10n.text("Records"), L10n.text("Playlists"), L10n.text("Donate")][index], frame: transform(rect)) { [weak self] in
-        self?.activateFooterButton(index)
+      items.append(accessibleElements.element(id: "footer-\(button.action.rawValue)", owner: owner,
+        label: button.action.accessibilityLabel, frame: transform(rect)) { [weak self] in
+        self?.activateFooterButton(button.action)
       })
     }
     return items
@@ -299,17 +300,33 @@ struct ReticleFeedback {
   var overlayAvailableUpdate: String?
   var overlayUpdateIsBusy = false
   var onUpdate: (() -> Void)?
-  private var overlayFooterButtons: [CGRect] = []
-  private func activateFooterButton(_ index: Int) {
-    switch index {
-    case 0: onProfiles?()
-    case 1: onRecords?()
-    case 2: onLeaderboards?()
-    case 3: onPlaylists?()
-    case 4: onDonate?()
-    default: break
+    private enum OverlayFooterAction: String {
+        case profiles = "players"
+        case records
+        case leaderboards
+        case playlists
+        case donate
+
+        var accessibilityLabel: String {
+            switch self {
+            case .profiles: return L10n.text("Player profiles")
+            case .records: return L10n.text("Records")
+            case .leaderboards: return L10n.text("Leaderboards")
+            case .playlists: return L10n.text("Playlists")
+            case .donate: return L10n.text("Donate")
+            }
+        }
     }
-  }
+    private var overlayFooterButtons: [(action: OverlayFooterAction, frame: CGRect)] = []
+    private func activateFooterButton(_ action: OverlayFooterAction) {
+        switch action {
+        case .profiles: onProfiles?()
+        case .records: onRecords?()
+        case .leaderboards: onLeaderboards?()
+        case .playlists: onPlaylists?()
+        case .donate: onDonate?()
+        }
+    }
   /// Which overlay line is currently chosen, when the screen offers a choice.
   var overlayHighlight: Int?
   /// Marches real lemmings along the foot of the screen.
@@ -715,8 +732,8 @@ struct ReticleFeedback {
         return
       }
       if overlayProfileInitials != nil,
-        let index = overlayFooterButtons.firstIndex(where: { $0.contains(point) }) {
-        activateFooterButton(index)
+        let button = overlayFooterButtons.first(where: { $0.frame.contains(point) }) {
+        activateFooterButton(button.action)
         return
       }
       if let line = overlayRetryLine, overlayLineRects.indices.contains(line), overlayLineRects[line].contains(point) {
@@ -1124,12 +1141,12 @@ struct ReticleFeedback {
     let home = homeOverlay()
     let footerIndex = index - home.page.rows.count
     guard home.page.footer.indices.contains(footerIndex) else { return false }
-    switch home.page.footer[footerIndex].id {
-    case "players": onProfiles?()
-    case "records": onRecords?()
-    case "leaderboards": onLeaderboards?()
-    case "playlists": onPlaylists?()
-    case "donate": onDonate?()
+    let id = home.page.footer[footerIndex].id
+    if let action = OverlayFooterAction(rawValue: id) {
+        activateFooterButton(action)
+        return true
+    }
+    switch id {
     case "settings": onSettings?()
     case "whatsNew": onUpdate?()
     default: return false
@@ -1177,8 +1194,10 @@ struct ReticleFeedback {
     overlayLineRects = home.page.rows.compactMap { row in
       home.layout.targets.first { $0.action.id == row.id }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
     }
-    overlayFooterButtons = ["players", "records", "leaderboards", "playlists", "donate"].compactMap { id in
-      home.layout.targets.first { $0.action.id == id }.map { homeFrame($0.frame, scale: home.scale, layout: home.layout) }
+    overlayFooterButtons = home.page.footer.compactMap { row in
+        guard let action = OverlayFooterAction(rawValue: row.id),
+            let target = home.layout.targets.first(where: { $0.action.id == row.id }) else { return nil }
+        return (action: action, frame: homeFrame(target.frame, scale: home.scale, layout: home.layout))
     }
     let hovered = cursorViewPoint.flatMap { point in
       home.layout.targets.first { homeFrame($0.frame, scale: home.scale, layout: home.layout).contains(point) }?.action.id
@@ -1443,8 +1462,13 @@ struct ReticleFeedback {
         width: board.width - 40 * scale, height: max(36, 48 * scale))
       let footerScale = max(1, Int(scale.rounded()))
       let gap: CGFloat = 12 * scale
-      let labels = [L10n.text("PROFILES"), L10n.text("RECORDS"), L10n.text("PLAYLISTS"), L10n.text("Donate")]
-      let count = CGFloat(labels.count)
+      let buttons: [(action: OverlayFooterAction, title: String)] = [
+          (.profiles, L10n.text("PROFILES")),
+          (.records, L10n.text("RECORDS")),
+          (.playlists, L10n.text("PLAYLISTS")),
+          (.donate, L10n.text("Donate"))
+      ]
+      let count = CGFloat(buttons.count)
       // Let the roster grow while keeping each footer action readable.
       let cell = CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * footerScale)
       let name = MacInterfaceRenderer.menuText(initials)
@@ -1457,10 +1481,10 @@ struct ReticleFeedback {
       let start = floor(footer.midX - (initialsWidth + count * (buttonWidth + gap)) / 2)
       drawMenuGameText(initials, in: CGRect(x: start, y: footer.minY,
         width: initialsWidth, height: footer.height), face: .small, scale: footerScale, palette: .green)
-      for (index, label) in labels.enumerated() {
+      for (index, button) in buttons.enumerated() {
         let rect = CGRect(x: start + initialsWidth + gap + CGFloat(index) * (buttonWidth + gap),
           y: footer.minY, width: buttonWidth, height: footer.height)
-        overlayFooterButtons.append(rect)
+        overlayFooterButtons.append((action: button.action, frame: rect))
         let hovered = cursorViewPoint.map { rect.contains($0) } ?? false
         (hovered ? NSColor(calibratedRed: 0.06, green: 0.16, blue: 0.035, alpha: 1)
           : NSColor(calibratedWhite: 0.025, alpha: 1)).setFill()
@@ -1468,7 +1492,7 @@ struct ReticleFeedback {
         (hovered ? NSColor(calibratedRed: 0.48, green: 0.80, blue: 0.24, alpha: 1)
           : NSColor(calibratedWhite: 0.35, alpha: 1)).setStroke()
         NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
-        drawMenuGameText(label, in: rect, face: .small, scale: footerScale,
+        drawMenuGameText(button.title, in: rect, face: .small, scale: footerScale,
           palette: .blue)
       }
     } else if let overlayFooter {
