@@ -13,7 +13,11 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
     public let direction: Int
     public let assignment: MobileAssignmentState
     public let isBuilding: Bool
+    public let isBuilderContinuation: Bool
     public let isBlocking: Bool
+    public let isPerformingSkill: Bool
+    /// A blocker receiving a native bomb action, including L3's carried explosives.
+    public let isBombBlocker: Bool
     public let hasTool: Bool
     /// Level-space pick bounds relative to the candidate's sprite centre.
     public let pointerBounds: MobileRect?
@@ -24,7 +28,10 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
         direction: Int,
         assignment: MobileAssignmentState,
         isBuilding: Bool = false,
+        isBuilderContinuation: Bool? = nil,
         isBlocking: Bool = false,
+        isPerformingSkill: Bool = false,
+        isBombBlocker: Bool = false,
         hasTool: Bool = false,
         pointerBounds: MobileRect? = nil
     ) {
@@ -33,9 +40,29 @@ public struct MobileTargetCandidate: Codable, Equatable, Sendable {
         self.direction = direction < 0 ? -1 : 1
         self.assignment = assignment
         self.isBuilding = isBuilding
+        self.isBuilderContinuation = isBuilderContinuation ?? isBuilding
         self.isBlocking = isBlocking
+        self.isPerformingSkill = isPerformingSkill || self.isBuilderContinuation || isBlocking
+        self.isBombBlocker = isBombBlocker
         self.hasTool = hasTool
         self.pointerBounds = pointerBounds
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            id: try values.decode(Int.self, forKey: .id),
+            point: try values.decode(MobilePoint.self, forKey: .point),
+            direction: try values.decode(Int.self, forKey: .direction),
+            assignment: try values.decode(MobileAssignmentState.self, forKey: .assignment),
+            isBuilding: try values.decode(Bool.self, forKey: .isBuilding),
+            isBuilderContinuation: try values.decodeIfPresent(Bool.self, forKey: .isBuilderContinuation),
+            isBlocking: try values.decode(Bool.self, forKey: .isBlocking),
+            isPerformingSkill: try values.decodeIfPresent(Bool.self, forKey: .isPerformingSkill) ?? false,
+            isBombBlocker: try values.decodeIfPresent(Bool.self, forKey: .isBombBlocker) ?? false,
+            hasTool: try values.decode(Bool.self, forKey: .hasTool),
+            pointerBounds: try values.decodeIfPresent(MobileRect.self, forKey: .pointerBounds)
+        )
     }
 }
 
@@ -47,6 +74,7 @@ public enum MobileTargetInput: Equatable, Sendable {
 public enum MobileTargetPreference: Equatable, Sendable {
     case assignable
     case toolHolder
+    case toolUser
     case builder
     case bombBlocker
 }
@@ -73,6 +101,8 @@ public enum MobileTargetSelector {
         radius: Double = 26,
         preference: MobileTargetPreference = .assignable,
         favourApproaching: Bool = true,
+        favourActiveWorkers: Bool = false,
+        favourBombBlockers: Bool = false,
         input: MobileTargetInput = .touch,
         retaining: Int? = nil,
         wallDirectionForTarget: ((Int) -> Int?)? = nil
@@ -95,17 +125,28 @@ public enum MobileTargetSelector {
         }
         guard !projected.isEmpty else { return nil }
 
-        func preferred(_ candidate: MobileTargetCandidate) -> Bool {
+        func preferred(_ candidate: MobileTargetCandidate) -> Int {
             switch preference {
             case .assignable:
-                return candidate.assignment == .eligible
+                return candidate.assignment == .eligible ? 1 : 0
             case .toolHolder:
-                return candidate.hasTool
+                return candidate.hasTool ? 1 : 0
+            case .toolUser:
+                guard candidate.hasTool else { return 0 }
+                if candidate.assignment == .eligible {
+                    if favourBombBlockers && candidate.isBombBlocker { return 3 }
+                    if favourActiveWorkers && candidate.isBuilderContinuation { return 2 }
+                }
+                return 1
             case .builder:
-                return candidate.assignment == .eligible && candidate.isBuilding
+                return candidate.assignment == .eligible && candidate.isBuilderContinuation ? 1 : 0
             case .bombBlocker:
-                return candidate.assignment == .eligible && candidate.isBlocking
+                return candidate.assignment == .eligible && candidate.isBlocking ? 1 : 0
             }
+        }
+        func preferredWorker(_ candidate: MobileTargetCandidate) -> Bool {
+            favourActiveWorkers && candidate.assignment == .eligible && candidate.isPerformingSkill
+                && (!candidate.isBombBlocker || favourBombBlockers || preference == .bombBlocker)
         }
         func precedes(
             _ lhs: (MobileTargetCandidate, Double),
@@ -113,11 +154,14 @@ public enum MobileTargetSelector {
         ) -> Bool {
             let leftPreferred = preferred(lhs.0)
             let rightPreferred = preferred(rhs.0)
-            if leftPreferred != rightPreferred { return leftPreferred }
+            if leftPreferred != rightPreferred { return leftPreferred > rightPreferred }
             if lhs.0.assignment != rhs.0.assignment {
                 if lhs.0.assignment == .eligible { return true }
                 if rhs.0.assignment == .eligible { return false }
             }
+            let leftWorker = preferredWorker(lhs.0)
+            let rightWorker = preferredWorker(rhs.0)
+            if leftWorker != rightWorker { return leftWorker }
             if (lhs.0.id == retaining) != (rhs.0.id == retaining) { return lhs.0.id == retaining }
             if lhs.1 != rhs.1 { return lhs.1 < rhs.1 }
             return lhs.0.id < rhs.0.id
@@ -125,7 +169,8 @@ public enum MobileTargetSelector {
 
         let sorted = projected.sorted(by: precedes)
         guard var chosen = sorted.first?.0 else { return nil }
-        if favourApproaching, chosen.assignment == .eligible, preference != .builder, preference != .bombBlocker {
+        if favourApproaching, chosen.assignment == .eligible, preference != .builder, preference != .bombBlocker,
+           !preferredWorker(chosen), !(preference == .toolUser && preferred(chosen) > 1) {
             let wallDirection = wallDirectionForTarget?(chosen.id)
             // Retain an ordinary crowd pick, but reconsider it when it turns away from a wall.
             if chosen.id == retaining, wallDirection == nil {

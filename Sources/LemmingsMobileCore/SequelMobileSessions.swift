@@ -314,8 +314,19 @@ public final class Lemmings2MobileSession: MobileGameSession {
         return LemmingApproachTargeting.wallDirection(x: lemming.x, footY: lemming.y, isSolid: runtime.isSolid)
     }
 
+    public func targetPreference(for control: Int, settings: ClassicSettings) -> MobileTargetPreference {
+        guard runtime.configuration.skills.indices.contains(control) else { return .assignable }
+        switch runtime.configuration.skills[control] {
+        case .builder where settings.favorBuilders: return .builder
+        case .bomber, .blastBomber: return settings.favorBombBlockers ? .bombBlocker : .assignable
+        default: return .assignable
+        }
+    }
+
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard runtime.configuration.skills.indices.contains(control) else { return [] }
+        let skill = runtime.configuration.skills[control]
+        let isBombSkill = skill == .bomber || skill == .blastBomber
         let results = runtime.assignmentResults(slot: control)
         return runtime.lemmings.enumerated().compactMap { index, lemming in
             guard lemming.active else { return nil }
@@ -325,6 +336,10 @@ public final class Lemmings2MobileSession: MobileGameSession {
                 direction: lemming.direction,
                 assignment: results[index] ? .eligible : .unavailable,
                 isBuilding: lemming.state == .building,
+                isBuilderContinuation: lemming.state == .building || lemming.state == .shrugging,
+                isBlocking: lemming.state == .blocking,
+                isPerformingSkill: lemming.hasSkillTargetPriority,
+                isBombBlocker: isBombSkill && lemming.state == .blocking,
                 pointerBounds: MobileRect(x: -9, y: -12, width: 18, height: 24)
             )
         }
@@ -850,6 +865,15 @@ public final class Lemmings3MobileSession: MobileGameSession {
         return LemmingApproachTargeting.wallDirection(x: lemming.x, footY: lemming.y, isSolid: runtime.isSolid)
     }
 
+    public func targetPreference(for control: Int, settings: ClassicSettings) -> MobileTargetPreference {
+        guard Lemmings3Runtime.Action.allCases.indices.contains(control) else { return .assignable }
+        switch Lemmings3Runtime.Action.allCases[control] {
+        case .use: return .toolUser
+        case .drop: return .toolHolder
+        default: return .assignable
+        }
+    }
+
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard Lemmings3Runtime.Action.allCases.indices.contains(control) else { return [] }
         let action = Lemmings3Runtime.Action.allCases[control]
@@ -868,6 +892,10 @@ public final class Lemmings3MobileSession: MobileGameSession {
                 direction: lemming.direction,
                 assignment: accepted ? .eligible : .unavailable,
                 isBuilding: lemming.state == .building,
+                isBlocking: lemming.state == .blocking,
+                isPerformingSkill: lemming.hasSkillTargetPriority,
+                isBombBlocker: action == .use && lemming.state == .blocking
+                    && (lemming.tool == .bomb || lemming.tool == .grenade),
                 hasTool: lemming.tool != nil,
                 pointerBounds: MobileRect(x: -9, y: -12, width: 18, height: 24)
             )
@@ -1350,6 +1378,15 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         }
     }
 
+    public func targetPreference(for control: Int, settings: ClassicSettings) -> MobileTargetPreference {
+        guard controls.indices.contains(control) else { return .assignable }
+        switch controls[control] {
+        case .builder where settings.favorBuilders: return .builder
+        case .bomber where settings.favorBombBlockers: return .bombBlocker
+        default: return .assignable
+        }
+    }
+
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard controls.indices.contains(control) else { return [] }
         let skill = controls[control]
@@ -1362,6 +1399,10 @@ public final class NeoLemmixMobileSession: MobileGameSession {
                 direction: lemming.direction == .left ? -1 : 1,
                 assignment: accepted ? .eligible : .unavailable,
                 isBuilding: lemming.action == .building || lemming.action == .platforming,
+                isBuilderContinuation: lemming.action == .building || lemming.action == .platforming || lemming.action == .shrugging,
+                isBlocking: lemming.action == .blocking,
+                isPerformingSkill: lemming.hasSkillTargetPriority,
+                isBombBlocker: skill == .bomber && lemming.action == .blocking,
                 hasTool: lemming.traits.contains(.climber) || lemming.traits.contains(.floater),
                 pointerBounds: MobileRect(x: -8, y: -10, width: 16, height: 20)
             )

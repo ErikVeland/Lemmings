@@ -281,6 +281,9 @@ func testFollowerBehindBuilderIsTargeted() throws {
         "A follower approaching a bridge builder should receive the selected skill")
     check(game.target(slot: skillSlot, x: clickX, y: activeBuilder.y - 5)?.id == activeBuilder.id,
         "Turning the setting off should keep the nearest bridge builder")
+    check(game.target(slot: skillSlot, x: clickX, y: activeBuilder.y - 5,
+        preferApproaching: true, preferBuilders: true)?.id == activeBuilder.id,
+        "Active-skill preference must retain the eligible builder over an approaching follower")
     check(game.target(slot: builderSlot, x: clickX, y: activeBuilder.y - 5,
         preferApproaching: true, preferBuilders: true)?.id == follower.id,
         "A builder that cannot take Build yet must not block the eligible follower")
@@ -297,13 +300,97 @@ func testFollowerBehindBuilderIsTargeted() throws {
         preferApproaching: true, preferBombBlockers: true)?.id == activeBuilder.id,
         "Bomb must prefer the blocker over the nearer follower")
     check(game.target(slot: bomberSlot, x: follower.x, y: follower.y - 5,
-        preferApproaching: false, preferBombBlockers: false)?.id == follower.id,
+        preferApproaching: false, preferBombBlockers: false, preferBuilders: true)?.id == follower.id,
         "Bomb preference opt-out must preserve ordinary targeting")
     check(game.assign(slot: bomberSlot, to: activeBuilder.id), "Could not bomb the blocker")
     check(game.target(slot: bomberSlot, x: follower.x, y: follower.y - 5,
         preferApproaching: true, preferBombBlockers: true)?.id == follower.id,
         "An already bombed blocker must not receive a second bomb")
     print("PASS Lemmings 2 targeting favours a follower behind a builder")
+}
+
+func testActiveDiggerTargeting() throws {
+    let base = try fixture().configuration
+    var game = try Lemmings2Runtime(configuration: .init(width: base.width, height: base.height,
+        pixels: base.pixels, solid: base.solid, palette: base.palette, entrance: base.entrance,
+        exits: base.exits, skills: base.skills, supplies: base.supplies, total: 2,
+        timeLimit: base.timeLimit, releaseInterval: 1, terrainMasks: base.terrainMasks, firstReleaseTick: 1))
+    for _ in 0..<200 {
+        game.step()
+        if game.lemmings.filter({ $0.active && $0.state == .walking }).count == 2 { break }
+    }
+    let walkers = game.lemmings.filter { $0.active && $0.state == .walking }
+    guard let worker = walkers.max(by: { $0.x < $1.x }),
+          let walker = walkers.first(where: { $0.id != worker.id }) else {
+        check(false, "Active-skill fixture did not produce a worker and a walker")
+        return
+    }
+    let diggerSlot = game.configuration.skills.firstIndex(of: .digger)!
+    let basherSlot = game.configuration.skills.firstIndex(of: .basher)!
+    check(game.assign(slot: diggerSlot, to: worker.id), "Could not prepare the active digger")
+    check(abs(worker.x - walker.x) <= 9, "Active digger was outside the crowd pick box")
+    let point = (x: walker.x, y: walker.y - 5)
+    check(game.target(slot: basherSlot, x: point.x, y: point.y,
+        preferApproaching: true, preferBuilders: true)?.id == worker.id,
+        "Basher must prefer an active digger over the walker directly under the cursor")
+    check(game.target(slot: basherSlot, x: point.x, y: point.y,
+        preferApproaching: false, preferBuilders: false)?.id == walker.id,
+        "Worker preference opt-out must restore the nearer walker")
+    check(game.target(slot: diggerSlot, x: point.x, y: point.y,
+        preferApproaching: true, preferBuilders: true)?.id == walker.id,
+        "An existing digger must not hide a walker eligible for Dig")
+    let supply = game.supplies[basherSlot]
+    let target = game.target(slot: basherSlot, x: point.x, y: point.y,
+        preferApproaching: true, preferBuilders: true)!
+    check(game.assign(slot: basherSlot, to: target.id), "The selected digger rejected Bash")
+    check(game.lemmings.first(where: { $0.id == worker.id })?.state == .bashing
+        && game.lemmings.first(where: { $0.id == walker.id })?.state == .walking
+        && game.supplies[basherSlot] == supply - 1,
+        "Digger-to-Basher must affect only the selected worker and spend one skill")
+    print("PASS Lemmings 2 active digger selection and native Basher assignment")
+}
+
+func testCompletedBuilderTargetContinuity() throws {
+    var game = try fixture()
+    for _ in 0..<200 {
+        game.step()
+        if game.lemmings.first?.state == .walking { break }
+    }
+    check(game.lemmings.first?.state == .walking, "The builder-continuity fixture must reach the ground")
+    let climberSlot = game.configuration.skills.firstIndex(of: .climber)!
+    let builderSlot = game.configuration.skills.firstIndex(of: .builder)!
+    let floaterSlot = game.configuration.skills.firstIndex(of: .floater)!
+    check(game.assign(slot: climberSlot, to: 0), "Could not give the future builder its permanent Climber skill")
+    check(!game.lemmings[0].hasSkillTargetPriority,
+        "A permanent Climber assignment alone must not favour an ordinary walker")
+    check(game.assign(slot: builderSlot, to: 0), "Could not start the bridge builder")
+    for _ in 0..<600 {
+        game.step()
+        if game.lemmings[0].state == .walking || !game.lemmings[0].active { break }
+    }
+    let finished = game.lemmings[0]
+    check(finished.state == .walking && finished.climber && finished.hasSkillTargetPriority,
+        "The completed bridge builder must remain favoured while walking with its Climber skill")
+    check(game.target(slot: floaterSlot, x: finished.x, y: finished.y - 5,
+        preferApproaching: true, preferBuilders: true)?.id == finished.id,
+        "The completed builder must remain eligible for the next selected skill")
+    let beforeFall = game
+    for _ in 0..<100 {
+        game.step()
+        if game.lemmings[0].state == .falling || !game.lemmings[0].active { break }
+    }
+    check(game.lemmings[0].state == .falling && !game.lemmings[0].hasSkillTargetPriority,
+        "Stepping off the completed bridge must clear retained preference when falling starts")
+    for _ in 0..<100 {
+        game.step()
+        if game.lemmings[0].state == .walking || !game.lemmings[0].active { break }
+    }
+    check(game.lemmings[0].state == .walking && game.lemmings[0].climber
+        && !game.lemmings[0].hasSkillTargetPriority,
+        "Landing must not restore worker priority merely because the lemming remains a Climber")
+    check(beforeFall.lemmings[0].hasSkillTargetPriority,
+        "A copied pre-fall runtime must preserve the completed builder's targeting history")
+    print("PASS L2 completed bridge-builder continuity, falling reset, passive Climber and runtime copies")
 }
 
 // Deliberately synthetic rectangles exercise runtime phases without bundling
@@ -1862,6 +1949,8 @@ do {
     try testSameDirectionPackKeepsNearestPick()
     try testFavorApproachingLemmingFallsBackWithNoAlternative()
     try testFollowerBehindBuilderIsTargeted()
+    try testActiveDiggerTargeting()
+    try testCompletedBuilderTargetContinuity()
     print("PASS native L2 walking, rescue, inventory, terrain, replay and nuke tests")
 
     if CommandLine.arguments.count > 1 {

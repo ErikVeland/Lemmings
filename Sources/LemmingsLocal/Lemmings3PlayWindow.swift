@@ -2138,6 +2138,9 @@ import NxlvKit
             if favorBuilders, preferred.isBuilding, preferred.tool == .bricks { return preferred }
             if favorBombBlockers, preferred.isBlocking, preferred.tool == .bomb || preferred.tool == .grenade { return preferred }
         }
+        if favorBuilders, let preferred,
+           Lemmings3Targeting.isPreferredWorker(preferred, selected: selected,
+                favorBombBlockers: favorBombBlockers) { return preferred }
         let ordinary = game.target(x: x, y: y, selected: selected,
             favorApproaching: false, favorBombBlockers: false, favorBuilders: false)
         guard manualCarrierID == nil, preferred?.id == ordinary?.id,
@@ -2150,7 +2153,8 @@ import NxlvKit
         if favorApproachingLemmings, let preferred, preferred.direction != visible.direction { return preferred }
         return Lemmings3TargetCandidate(id: visible.id, x: visible.x, y: visible.y,
             direction: visible.direction, tool: visible.tool, isBuilding: visible.state == .building,
-            active: true, isBlocking: visible.state == .blocking)
+            active: true, isBlocking: visible.state == .blocking,
+            isPerformingSkill: visible.hasSkillTargetPriority)
     }
     var pointerTarget: Int? {
         guard let p = pointerPosition ?? controllerPointer, playfieldRect.contains(p), game != nil else { return nil }

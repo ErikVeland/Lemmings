@@ -3529,7 +3529,9 @@ import NxlvKit
         guard gameplayCursorStyle == .modern, zoom > 2 else { return preferred }
         if let preferred, game.configuration.skills.indices.contains(slot) {
             let skill = game.configuration.skills[slot]
-            if favorBuilders, skill == .builder, [.building, .shrugging].contains(preferred.state) { return preferred }
+            if favorBuilders, preferred.hasSkillTargetPriority,
+               game.canAssign(slot: slot, to: preferred.id),
+               !([.bomber, .blastBomber].contains(skill) && !favorBombBlockers && preferred.state == .blocking) { return preferred }
             if favorBombBlockers, [.bomber, .blastBomber].contains(skill), preferred.state == .blocking { return preferred }
         }
         let ordinary = game.target(slot: slot, x: x, y: y)

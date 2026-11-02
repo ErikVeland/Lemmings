@@ -42,6 +42,7 @@ private final class BombPreviewSession: GameSession {
 
 private final class TargetingSession: GameSession {
   var actors: [SessionLemming] = []
+  var unavailableIDs: Set<Int> = []
   var solid: (Int, Int) -> Bool = { _, _ in false }
   func terrainIsSolid(x: Int, y: Int) -> Bool { solid(x, y) }
   let levelWidth = 320, levelHeight = 160, ticksPerSecond = 17
@@ -57,7 +58,7 @@ private final class TargetingSession: GameSession {
   func tick() {}
   func assign(skillIndex: Int, to lemmingID: Int) -> String? { nil }
   func assignmentState(skillIndex: Int, to lemmingID: Int) -> AssignmentState {
-    guard skills.indices.contains(skillIndex), skills[skillIndex].count > 0,
+    guard skills.indices.contains(skillIndex), skills[skillIndex].count > 0, !unavailableIDs.contains(lemmingID),
       let lem = actors.first(where: { $0.id == lemmingID }) else { return .unavailable }
     if skillIndex == 2 && lem.pose == .building { return .alreadyAssigned }
     if skillIndex == 1 && lem.countdown != nil { return .alreadyAssigned }
@@ -148,6 +149,23 @@ private final class TargetingSession: GameSession {
   try require(LemmingApproachTargeting.wallDirection(x: 100, footY: 80, isSolid: { x, _ in abs(x - 100) >= 5 }) == nil,
     "Walls on both sides must not impose an arbitrary direction")
 
+  session.solid = { _, _ in false }
+  session.actors = [
+    .init(id: 0, x: 100, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil),
+    .init(id: 1, x: 97, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil),
+  ]
+  view.clearPointer()
+  let workerPoint = view.viewport.viewPoint(fromLevel: CGPoint(x: 100, y: 75))
+  view.handleMove(to: workerPoint)
+  view.cacheDisplay(in: view.bounds, to: view.bitmapImageRepForCachingDisplay(in: view.bounds)!)
+  try require(view.pointerLemmingID == 0, "Worker fixture did not first display the nearer walker")
+  session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .digging,
+    facingLeft: false, animationFrame: 0, countdown: nil)
+  var workerAssignment: Int?
+  view.onAssign = { workerAssignment = $0 }
+  view.handleClick(at: workerPoint)
+  try require(workerAssignment == 1, "Click retained the displayed walker instead of the newly active digger")
+
   let width = 256, height = 96
   var solid = Data(repeating: 0, count: width * height)
   for y in 80..<height { for x in 0..<width { solid[y * width + x] = 1 } }
@@ -208,8 +226,13 @@ private final class TargetingSession: GameSession {
     .init(id: 1, x: 97, y: 80, pose: .walking, facingLeft: false, animationFrame: 0, countdown: nil),
   ]
   view.favorApproachingLemmings = true
+  view.favorBuilders = false
   try require(view.lemming(at: CGPoint(x: 104, y: 80))?.id == 1,
     "A follower approaching a bridge builder should receive the selected skill")
+  view.favorBuilders = true
+  try require(view.lemming(at: CGPoint(x: 104, y: 80))?.id == 0,
+    "Active-skill targeting must retain the eligible builder ahead of its follower")
+  view.favorBuilders = false
   view.favorApproachingLemmings = false
   try require(view.lemming(at: CGPoint(x: 104, y: 80))?.id == 0,
     "Turning the setting off should keep the nearest bridge builder")
@@ -298,6 +321,70 @@ private final class TargetingSession: GameSession {
   session.skills[2] = .init(name: "Builder", count: 0, isInfinite: false)
   try require(view.lemming(at: point) == nil, "An empty Build supply must not retain a target")
   print("PASS bomb blockers, eligible builders, eligibility and independent opt-outs")
+}
+
+@MainActor private func testActiveSkillTargetPriorities() throws {
+    let view = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 640, height: 320))
+    let session = TargetingSession()
+    session.skills = [.init(name: "Basher", count: 5, isInfinite: false)]
+    view.session = session
+    view.favorApproachingLemmings = true
+    view.favorBuilders = true
+    let point = CGPoint(x: 100, y: 75)
+    let walker = SessionLemming(id: 0, x: 100, y: 80, pose: .walking,
+        facingLeft: false, animationFrame: 0, countdown: nil)
+    let digger = SessionLemming(id: 1, x: 97, y: 80, pose: .digging,
+        facingLeft: true, animationFrame: 0, countdown: nil)
+    session.actors = [walker, digger]
+    try require(view.lemming(at: point)?.id == digger.id
+        && view.clickTarget(at: point)?.id == digger.id
+        && view.reticleState(at: point, now: 1) == .eligible,
+        "Basher hover, click and reticule must prefer an eligible digger over a closer walker")
+    session.solid = { x, y in x >= 104 && y < 80 }
+    try require(view.lemming(at: point)?.id == digger.id,
+        "An approaching walker facing a wall must not steal an active worker")
+    view.favorBuilders = false
+    try require(view.lemming(at: point)?.id == walker.id,
+        "Disabling active-skill targeting must restore ordinary selection")
+    view.favorBuilders = true
+    session.unavailableIDs = [digger.id]
+    try require(view.lemming(at: point)?.id == walker.id
+        && view.clickTarget(at: point)?.id == walker.id,
+        "An ineligible worker must not hide an eligible walker")
+    session.unavailableIDs = []
+    session.solid = { _, _ in false }
+    session.actors[1] = .init(id: 1, x: 93, y: 80, pose: .digging,
+        facingLeft: true, animationFrame: 0, countdown: nil)
+    try require(view.lemming(at: point)?.id == walker.id,
+        "Worker preference must not expand the pointer pick box")
+    session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .walking,
+        facingLeft: false, animationFrame: 0, countdown: nil, hasClimber: true, hasFloater: true)
+    try require(view.lemming(at: point)?.id == walker.id,
+        "A walking climber or floater must not receive active-skill priority")
+    session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .walking,
+        facingLeft: true, animationFrame: 0, countdown: nil, hasClimber: true,
+        hasSkillTargetPriority: true)
+    try require(view.lemming(at: point)?.id == 1 && view.clickTarget(at: point)?.id == 1,
+        "A climber walking off its completed bridge must retain the worker's priority")
+    session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .falling,
+        facingLeft: true, animationFrame: 0, countdown: nil, hasClimber: true,
+        hasSkillTargetPriority: false)
+    try require(view.lemming(at: point)?.id == walker.id,
+        "Starting a fall must clear the completed worker's priority")
+    session.actors = [digger, .init(id: 2, x: 99, y: 80, pose: .mining,
+        facingLeft: false, animationFrame: 0, countdown: nil)]
+    try require(view.lemming(at: point)?.id == 2,
+        "The nearer eligible worker must win within the active-skill tier")
+    session.actors = [walker, .init(id: 1, x: 97, y: 80, pose: .walking,
+        facingLeft: true, animationFrame: 0, countdown: nil, neoAction: .shimmying)]
+    try require(view.lemming(at: point)?.id == 1,
+        "NeoLemmix active skills must use the native action rather than a fallback walking sprite")
+    session.actors[1] = .init(id: 1, x: 97, y: 80, pose: .building,
+        facingLeft: true, animationFrame: 0, countdown: nil, neoAction: .walking,
+        neoTraits: [.climber, .floater])
+    try require(view.lemming(at: point)?.id == walker.id,
+        "NeoLemmix walking must remain ordinary regardless of traits or fallback artwork")
+    print("PASS active-skill targeting, eligibility, opt-out, bounds and native NeoLemmix actions")
 }
 
 private func require(
@@ -1636,6 +1723,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     try testSameDirectionPackKeepsNearestPick()
     try testFollowerBehindBuilderIsTargeted()
     try testSkillTargetPriorities()
+    try testActiveSkillTargetPriorities()
     try testNukeGesturesAndQueuedUndo()
     try testNeoLemmixPanel()
     try testClassicPanelLabels()

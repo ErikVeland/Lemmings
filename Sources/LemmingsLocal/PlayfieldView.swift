@@ -810,8 +810,7 @@ struct ReticleFeedback {
   /// A small allowance covers sprite edges without reaching across the crowd.
   private static let pickBox = (halfWidth: CGFloat(6), top: CGFloat(14), bottom: CGFloat(5))
 
-  /// Hover and input share skill priorities. A current builder takes priority
-  /// only while it can accept Build, so lemmings behind it stay selectable.
+  /// Hover and input prefer active skills only when the new assignment is valid.
   func lemming(at point: CGPoint) -> SessionLemming? {
     guard let session else { return nil }
     let skill = selectedSkill()
@@ -833,6 +832,11 @@ struct ReticleFeedback {
     let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
     if favorBombBlockers, name == "bomber", let blocker = eligible.first(where: { $0.pose == .blocking }) {
       return blocker
+    }
+    if favorBuilders, let worker = eligible.first(where: {
+      $0.isPerformingSkill && !(name == "bomber" && !favorBombBlockers && $0.pose == .blocking)
+    }) {
+      return worker
     }
     guard let nearest = eligible.first else { return nil }
     if favorApproachingLemmings, nearest.pose == .building {
@@ -878,7 +882,8 @@ struct ReticleFeedback {
     let currentTarget = lemming(at: point)
     if let session, session.skills.indices.contains(selectedSkill()) {
       let name = session.skills[selectedSkill()].name.lowercased()
-      if (favorBuilders && name == "builder") || (favorBombBlockers && name == "bomber") {
+      if (favorBuilders && (name == "builder" || currentTarget?.isPerformingSkill == true))
+        || (favorBombBlockers && name == "bomber") {
         return currentTarget
       }
     }

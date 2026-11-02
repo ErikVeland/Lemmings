@@ -15,6 +15,22 @@ struct Lemmings3TargetCandidate {
   let active: Bool
   var isBlocking = false
   var canAssignSelected = true
+  let isPerformingSkill: Bool
+
+  init(id: Int, x: Int, y: Int, direction: Int, tool: Lemmings3Runtime.Tool?,
+       isBuilding: Bool, active: Bool, isBlocking: Bool = false,
+       canAssignSelected: Bool = true, isPerformingSkill: Bool? = nil) {
+    self.id = id
+    self.x = x
+    self.y = y
+    self.direction = direction
+    self.tool = tool
+    self.isBuilding = isBuilding
+    self.active = active
+    self.isBlocking = isBlocking
+    self.canAssignSelected = canAssignSelected
+    self.isPerformingSkill = isPerformingSkill ?? (isBuilding || isBlocking)
+  }
 }
 
 /// Picks which lemming a click or hover point resolves to.
@@ -47,6 +63,9 @@ enum Lemmings3Targeting {
         $0.canAssignSelected && $0.isBuilding && $0.tool == .bricks
       }).min(by: nearer) { return builder }
     }
+    if favorBuilders, let worker = nearby.filter({
+      isPreferredWorker($0, selected: selected, favorBombBlockers: favorBombBlockers)
+    }).min(by: nearer) { return worker }
     guard let nearest = nearby.min(by: { a, b in
       if a.canAssignSelected != b.canAssignSelected { return a.canAssignSelected }
       if selected >= 3, (a.tool == nil) != (b.tool == nil) { return a.tool != nil }
@@ -78,6 +97,15 @@ enum Lemmings3Targeting {
       return da == db ? a.id < b.id : da < db
     }
     return preferred ?? nearest
+  }
+
+  static func isPreferredWorker(_ candidate: Lemmings3TargetCandidate, selected: Int,
+                                favorBombBlockers: Bool) -> Bool {
+    guard candidate.canAssignSelected, candidate.isPerformingSkill else { return false }
+    if selected >= 3, candidate.tool == nil { return false }
+    if selected == 3, !favorBombBlockers, candidate.isBlocking,
+       candidate.tool == .bomb || candidate.tool == .grenade { return false }
+    return true
   }
 
   /// Selects a tool carrier for the original right-click interaction.
@@ -127,7 +155,8 @@ extension Lemmings3Runtime {
         let candidates = lemmings.map {
             Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool,
                 isBuilding: $0.state == .building, active: $0.active, isBlocking: $0.state == .blocking,
-                canAssignSelected: canAssign(Action.allCases[selected], to: $0.id))
+                canAssignSelected: canAssign(Action.allCases[selected], to: $0.id),
+                isPerformingSkill: $0.hasSkillTargetPriority)
         }
         return Lemmings3Targeting.nearest(among: candidates, x: x, y: y, selected: selected,
             favorApproaching: favorApproaching, favorBombBlockers: favorBombBlockers, favorBuilders: favorBuilders,
@@ -137,24 +166,15 @@ extension Lemmings3Runtime {
     func carrier(x: Int, y: Int, after currentID: Int?) -> Lemmings3TargetCandidate? {
         let candidates = lemmings.map {
             Lemmings3TargetCandidate(id: $0.id, x: $0.x, y: $0.y, direction: $0.direction, tool: $0.tool,
-                isBuilding: $0.state == .building, active: $0.active)
+                isBuilding: $0.state == .building, active: $0.active,
+                isPerformingSkill: $0.hasSkillTargetPriority)
         }
         return Lemmings3Targeting.carrier(among: candidates, x: x, y: y, after: currentID)
     }
 
     func canAssign(_ action: Action, to id: Int) -> Bool {
-        guard !isComplete, let lem = lemmings.first(where: { $0.id == id && $0.active }) else { return false }
-        if action == .walker && [.climbing, .shimmying].contains(lem.state) { return true }
-        if action == .walker && lem.state == .swimming { return lem.tool == .swimmer && lem.quantity >= 2 }
-        guard [.walking, .blocking, .building, .digging].contains(lem.state), isSolid(lem.x, lem.y) else { return false }
-        switch action {
-        case .walker, .jumper: return true
-        case .blocker: return lem.state != .blocking
-        case .drop: return lem.tool != nil
-        case .use:
-            guard let tool = lem.tool, lem.quantity > 0 else { return false }
-            return [.bricks, .spade, .sucker, .shimmy, .bomb, .grenade, .hadoken].contains(tool)
-        }
+        guard let lem = lemmings.first(where: { $0.id == id && $0.active }) else { return false }
+        return canAssign(action, to: lem)
     }
 
 }

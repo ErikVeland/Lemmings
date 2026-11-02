@@ -825,7 +825,8 @@ public enum RecoveryValueEncoding {
         let mirror = Mirror(reflecting: value)
         guard mirror.displayStyle != .class else { throw RunRecoveryError.invalid }
         let children = mirror.children.filter { child in
-            !(value is NeoLemmixSimulation && child.label == "bonusSkill"
+            !(child.value is LemmingSkillTargetingHistory)
+                && !(value is NeoLemmixSimulation && child.label == "bonusSkill"
                 && Mirror(reflecting: child.value).children.isEmpty)
         }
         var parts = try children.map { child -> Data in

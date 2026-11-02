@@ -281,6 +281,7 @@ public protocol MobileGameSession: AnyObject {
 
     func tick()
     func targetCandidates(for control: Int) -> [MobileTargetCandidate]
+    func targetPreference(for control: Int, settings: ClassicSettings) -> MobileTargetPreference
     /// A nearby wall's side, using the actor's native foot position and terrain.
     func targetWallDirection(for target: Int) -> Int?
     @discardableResult func assign(control: Int, to target: Int) -> Bool
@@ -331,6 +332,7 @@ public extension MobileGameSession {
     func retainExtraSkillUse(_ skillID: String) -> Bool { false }
     var lemmingInspection: LemmingInspection? { nil }
     func targetWallDirection(for target: Int) -> Int? { nil }
+    func targetPreference(for control: Int, settings: ClassicSettings) -> MobileTargetPreference { .assignable }
     var lostLemmingCount: Int { max(0, snapshot.released - snapshot.saved - activeLemmingCount) }
     func prepareCheckpointPayload() throws -> MobileCheckpointPayload {
         .init(encoded: try checkpointPayload())

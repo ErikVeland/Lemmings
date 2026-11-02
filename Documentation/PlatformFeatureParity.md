@@ -8,6 +8,53 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
+## Active-skill crowd targeting — 2 November 2026
+
+The existing builder preference now also prefers eligible lemmings actively
+using a skill over ordinary walkers within the existing pick region. This
+supports transitions such as Digger to Basher without selecting a nearby walker.
+Shared native-action classification covers Classic, Lemmings 2, Lemmings 3 and
+supported NeoLemmix. Finishing a skill retains that actor's priority while walking
+until it enters the falling state. A climber walking off its completed bridge
+therefore stays favoured until it falls. Landing does not restore the flag;
+another active skill does. Passive permanent abilities and carried tools alone
+do not receive worker priority. NeoLemmix uses its native action instead of its
+fallback sprite pose.
+
+Mac hover, clicks and canvas targets retain the worker before approaching-crowd,
+brief hover-retention or ordinary silhouette overrides. Mobile session adapters
+supply the same worker information and native per-control preferences to the
+shared iPhone/iPad/Duo/TV selector. The separate TV development controller also
+accepts the targeting settings. Explicit held touch selections, controller actor
+locks and L3 manual carriers remain authoritative. Repeat-Build and bomb-blocker
+priorities remain, including the separate bomb-blocker opt-out. Native skill
+eligibility, supplies, simulation rules and input bounds are unchanged.
+
+Each actor records the preference on native action transitions, independently of
+rendering and pointer queries. Copied rewind states and encoded checkpoints carry
+it; native input replay reconstructs it. Missing legacy metadata decodes safely.
+The metadata is excluded from gameplay equality and reflective recovery hashes,
+preserving existing save validation and replay identity.
+
+The saved `favorBuilders` key retains the player's existing choice. Settings now
+describe active skilled lemmings/workers. Presentation presets continue to
+preserve assistance choices. The changed labels and tooltip use English fallback
+where translations are not yet supplied.
+
+Validation in the Linux workspace: 38 focused Swift tests pass for the actual
+shared selector, precision bounds, held touch selection, all four native actor
+declarations and their action observers, retained worker history, checkpoint
+encoding/legacy decoding and gameplay identity. Nine fixture groups also pass
+for the actual L3 selector. Swift 6 syntax parsing passes for changed source and
+test files. The portable harness uses Foundation geometry and extracted native
+declarations with their original implementations. Recovery encoding uses an
+uninstantiated type-only stand-in for an unrelated simulation type check. It is
+not an Apple SDK or complete simulation build. Native Classic/L2/L3 regression
+cases are added for crowd priorities, real skill transitions, bridge completion,
+falling and checkpoint restoration. Their full runtime execution, rendered
+settings/reticule checks and physical Mac, iPhone, iPad, Duo and Siri Remote
+acceptance remain pending.
+
 ## Owner release confirmation — 1 November 2026
 
 The owner confirmed that all release checks are complete and green. This closes

@@ -392,6 +392,15 @@ public final class ClassicMobileSession: MobileGameSession {
         }
     }
 
+    public func targetPreference(for control: Int, settings: ClassicSettings) -> MobileTargetPreference {
+        guard ClassicSkill.allCases.indices.contains(control) else { return .assignable }
+        switch ClassicSkill.allCases[control] {
+        case .builder where settings.favorBuilders: return .builder
+        case .bomber where settings.favorBombBlockers: return .bombBlocker
+        default: return .assignable
+        }
+    }
+
     public func targetCandidates(for control: Int) -> [MobileTargetCandidate] {
         guard ClassicSkill.allCases.indices.contains(control) else { return [] }
         let skill = ClassicSkill.allCases[control]
@@ -416,7 +425,10 @@ public final class ClassicMobileSession: MobileGameSession {
                 direction: lemming.direction.rawValue,
                 assignment: state,
                 isBuilding: lemming.action == .building,
-                isBlocking: lemming.action == .blocking
+                isBuilderContinuation: lemming.action == .building || lemming.action == .shrugging,
+                isBlocking: lemming.action == .blocking,
+                isPerformingSkill: lemming.hasSkillTargetPriority,
+                isBombBlocker: skill == .bomber && lemming.action == .blocking
             )
         }
     }

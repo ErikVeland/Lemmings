@@ -168,7 +168,14 @@ public struct ClassicDOSLemming: Identifiable, Codable, Equatable, Sendable {
     /// Every action uses this single gameplay foot point.
     public var foot: ClassicDOSPoint
     public var direction: ClassicDOSDirection
-    public var action: ClassicDOSAction
+    public var action: ClassicDOSAction {
+        didSet {
+            guard oldValue != action else { return }
+            skillTargetingHistory.transition(wasPerformingSkill: oldValue.isPerformingSkill,
+                isPerformingSkill: action.isPerformingSkill, resets: action.resetsSkillTargetPriority)
+        }
+    }
+    internal var skillTargetingHistory = LemmingSkillTargetingHistory()
     public var animationFrame: Int
     public var fallDistance: Int
     public var hasClimber: Bool
@@ -189,6 +196,10 @@ public struct ClassicDOSLemming: Identifiable, Codable, Equatable, Sendable {
     internal var floatTableIndex: Int
 
     public var isActive: Bool { outcome == .active }
+    public var hasSkillTargetPriority: Bool {
+        isActive && !action.resetsSkillTargetPriority
+            && (action.isPerformingSkill || skillTargetingHistory.isFavoured)
+    }
     public var hasActiveBlockerField: Bool { ownsBlockerField }
 
     internal init(id: Int, foot: ClassicDOSPoint) {

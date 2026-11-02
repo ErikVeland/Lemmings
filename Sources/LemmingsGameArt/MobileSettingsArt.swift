@@ -61,7 +61,7 @@ public enum MobileSettingsArt {
                     toggle("interrupt", L10n.text("Pause on interruption"), c.pauseOnInterruption),
                     toggle("approaching", L10n.text("Target approaching lemmings"), c.favorApproachingLemmings),
                     toggle("bombBlockers", L10n.text("Target blockers for bombs"), c.favorBombBlockers),
-                    toggle("builders", L10n.text("Target current builders"), c.favorBuilders),
+                    toggle("builders", L10n.text("Target active workers"), c.favorBuilders),
                     choice("cursor", L10n.text("Cursor style"), c.gameplayCursorStyle.title),
                     choice("skillIcon", L10n.text("Skill icon size"), c.skillCursorIconSize.title),
                     toggle("reticule", L10n.text("Reticule count"), c.showReticleCount),
