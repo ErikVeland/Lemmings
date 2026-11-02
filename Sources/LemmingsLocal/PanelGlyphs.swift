@@ -31,6 +31,10 @@ enum PanelGlyph: String {
     return ((rows.first?.count ?? 0) / (isOriginalTile ? 2 : 1), rows.count)
   }
 
+  func fittingSize(in controlSize: CGSize) -> CGSize {
+    art.fittingSize(in: controlSize)
+  }
+
   /// The largest whole-number scale that fits a box.
   ///
   /// Whole numbers only. A fraction would put some source pixels across two

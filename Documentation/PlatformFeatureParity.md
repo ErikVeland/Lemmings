@@ -20,6 +20,29 @@ iPhone, iPad and Duo use the same mobile frontend. The normal TV application
 uses that frontend with remote/controller, focus and LAN-transfer adapters.
 The older standalone TV development shell is not the production parity baseline.
 
+## Undo-nuke artwork — 1 November 2026
+
+The shared undo glyph is now one connected, left-facing pixel arrow. Its
+existing pale-green palette, Macintosh shading and monochrome rendering stay
+consistent with the other controls. A shared fitting rule caps the artwork
+box at 70% of the control's shorter side before whole-pixel scaling. All three
+Mac Classic/Neo panel paths and the shared iPhone, iPad, Duo and production
+Apple TV HUD use it. Duo retains its existing screen-corner content clearance.
+
+Native Mac Lemmings 2 now shows this arrow and the accessible action name
+Undo end run while a playable, editable attempt has a saved pre-nuke state.
+Its overlay uses the existing Nuke input rectangle. Nuke arming, undo actions,
+button sizes, hit targets and focus routing are unchanged. Lemmings 3 has no
+undo-nuke state; this change does not introduce one.
+
+Source-derived raster inspection covers the old and new silhouettes, flat,
+Macintosh and monochrome treatments, and compact through large control sizes.
+The 11-pixel artwork fits the 16-point compact Mac cell and keeps clearance in
+the 44-, 64- and 104-point examples. Source review covers the shared mobile
+routes and native Lemmings 2 state, drawing and accessibility geometry.
+These checks do not execute AppKit or UIKit. Native builds, on-device rendering,
+touch and Siri Remote acceptance remain unverified for this change.
+
 ## Touch rewind and nuke states — 31 October 2026
 
 The controller poller now releases only its own rewind chord during reset. This

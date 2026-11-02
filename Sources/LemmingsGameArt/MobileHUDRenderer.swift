@@ -695,7 +695,8 @@ public enum MobileHUDAction: Equatable, Sendable {
         let glyphFrame = contentFrame(item.frame)
         let well = GameStoneArt.well(glyphFrame, pixel: pixel)
         if let image = Self.glyphImage(glyph,
-            fitting: item.action == .pause || glyph == .undo ? well.insetBy(dx: 4 * pixel, dy: 4 * pixel).size
+            fitting: glyph == .undo ? glyph.fittingSize(in: glyphFrame.size)
+                : item.action == .pause ? well.insetBy(dx: 4 * pixel, dy: 4 * pixel).size
                 : glyph.isOriginalTile ? glyphFrame.insetBy(dx: 2, dy: 2).size : well.size,
             transparentRock: glyph.isOriginalTile) {
             GameStoneArt.drawImage(image.image, in: CGRect(
