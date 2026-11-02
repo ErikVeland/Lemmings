@@ -655,11 +655,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private var cloudQuitPending = false
+  private var cloudQuitStatusID: UUID?
   func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
     guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted",
           let libraryCloud, libraryCloud.enabled else { return .terminateNow }
     guard !cloudQuitPending else { return .terminateLater }
     cloudQuitPending = true
+    cloudQuitStatusID = GameScreen.shared.beginLoading(owner: window,
+      message: L10n.text("Syncing iCloud..."))
     saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush(); ArcadeStore.shared.flushPendingSaves()
     let sync = Task { await libraryCloud.syncForLifecycle() }
     let deadline = Task {
@@ -667,6 +670,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard !Task.isCancelled, self.cloudQuitPending else { return }
       sync.cancel()
       self.cloudQuitPending = false
+      if let statusID = self.cloudQuitStatusID { GameScreen.shared.endLoading(statusID) }
+      self.cloudQuitStatusID = nil
       sender.reply(toApplicationShouldTerminate: true)
     }
     Task {
@@ -674,6 +679,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard self.cloudQuitPending else { return }
       deadline.cancel()
       self.cloudQuitPending = false
+      if let statusID = self.cloudQuitStatusID { GameScreen.shared.endLoading(statusID) }
+      self.cloudQuitStatusID = nil
       sender.reply(toApplicationShouldTerminate: true)
     }
     return .terminateLater

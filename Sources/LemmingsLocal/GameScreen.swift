@@ -5,18 +5,20 @@ import LemmingsGameArt
 
 /// A status inside the current screen. Navigation keeps its existing input targets.
 @MainActor final class GameLoadingIndicator: NSView {
+    private let message: String
     override var isFlipped: Bool { true }
-    override init(frame: NSRect) {
+    init(frame: NSRect, message: String = L10n.text("Loading...")) {
+        self.message = message
         super.init(frame: frame)
         setAccessibilityElement(true)
         setAccessibilityRole(.staticText)
-        setAccessibilityLabel(L10n.text("Loading"))
+        setAccessibilityLabel(message)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
     override func draw(_ dirtyRect: NSRect) {
         GameStyle.fill(bounds, .black)
-        GameControlText.draw(L10n.text("Loading..."), in: bounds.insetBy(dx: 8, dy: 2), alignment: .center, role: .heading)
+        GameControlText.draw(message, in: bounds.insetBy(dx: 8, dy: 2), alignment: .center, role: .heading)
     }
 }
 
@@ -78,11 +80,11 @@ import LemmingsGameArt
     }
     private var loadingID: UUID?
     private var loadingView: GameLoadingIndicator?
-    @discardableResult func beginLoading(owner: NSWindow) -> UUID {
+    @discardableResult func beginLoading(owner: NSWindow, message: String = L10n.text("Loading...")) -> UUID {
         clearLoading()
         let id = UUID()
         loadingID = id
-        let indicator = GameLoadingIndicator(frame: .zero)
+        let indicator = GameLoadingIndicator(frame: .zero, message: message)
         if let page = pages.last?.view as? GameMenuPage {
             page.installLoadingIndicator(indicator)
         } else if let root = owner.contentView {
