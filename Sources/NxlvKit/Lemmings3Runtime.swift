@@ -106,7 +106,14 @@ public struct Lemmings3Runtime: Sendable {
         public var x: Int
         public var y: Int
         public var direction = 1
-        public var state: State = .falling
+        public var state: State = .falling {
+            didSet {
+                guard oldValue != state else { return }
+                skillTargetingHistory.transition(wasPerformingSkill: oldValue.isPerformingSkill,
+                    isPerformingSkill: state.isPerformingSkill, resets: state.resetsSkillTargetPriority)
+            }
+        }
+        var skillTargetingHistory = LemmingSkillTargetingHistory()
         public var age = 0
         public var fall = 0
         public var velocityY = 0
@@ -122,6 +129,10 @@ public struct Lemmings3Runtime: Sendable {
         public var charmTicks = 0
         public var charmImmunity = 0
         public var active: Bool { state != .saved && state != .dead }
+        public var hasSkillTargetPriority: Bool {
+            active && !state.resetsSkillTargetPriority
+                && (state.isPerformingSkill || skillTargetingHistory.isFavoured)
+        }
     }
     public struct Point: Sendable { public let x: Int; public let y: Int
         public init(x: Int, y: Int) { self.x = x; self.y = y }

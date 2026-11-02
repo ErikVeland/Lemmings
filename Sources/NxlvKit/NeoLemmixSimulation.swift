@@ -1060,7 +1060,14 @@ public struct NeoLemmixLemming: Codable, Equatable, Sendable, Identifiable {
     public let id: Int
     public var position: NeoLemmixPoint
     public var direction: NeoLemmixDirection
-    public var action: NeoLemmixAction
+    public var action: NeoLemmixAction {
+        didSet {
+            guard oldValue != action else { return }
+            skillTargetingHistory.transition(wasPerformingSkill: oldValue.isPerformingSkill,
+                isPerformingSkill: action.isPerformingSkill, resets: action.resetsSkillTargetPriority)
+        }
+    }
+    internal var skillTargetingHistory = LemmingSkillTargetingHistory()
     public var animationFrame: Int
     public var actionProgress: Int
     public var fallDistance: Int
@@ -1098,6 +1105,10 @@ public struct NeoLemmixLemming: Codable, Equatable, Sendable, Identifiable {
     public var hasBeenOhNo: Bool?
 
     public var isActive: Bool { action != .removed }
+    public var hasSkillTargetPriority: Bool {
+        isActive && !action.resetsSkillTargetPriority
+            && (action.isPerformingSkill || skillTargetingHistory.isFavoured)
+    }
     public var canReceiveSkills: Bool {
         isActive && !traits.contains(.zombie) && !traits.contains(.neutral)
     }

@@ -216,7 +216,7 @@ import NxlvKit
     "pointerCaptureChanged:": L10n.text("Keep the pointer inside the game window, including paused screens and menus. Hold Option or switch apps to release it."),
     "favorApproachingChanged:": L10n.text("When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away."),
     "favorBombBlockersChanged:": L10n.text("Prefer eligible blockers for bomb skills. L2 Exploder supports blockers, but Bomber does not. L3 uses carried bombs."),
-    "favorBuildersChanged:": L10n.text("Prefer the current builder when assigning Build again. Native skill rules still apply. L3 uses carried bricks."),
+    "favorBuildersChanged:": L10n.text("Prefer lemmings currently using a skill when assigning another. Native skill rules still apply."),
     "cursorStyleChanged:": L10n.text("Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility. Applies to all three games."),
     "selectionStyleChanged:": L10n.text("None hides selection effects. Obvious adds a green diamond and halo. Modern adds the diamond, white outline and green glow in all three games."),
     "skillBackpacksChanged:": L10n.text("Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork."),
@@ -334,7 +334,7 @@ import NxlvKit
     let bombBlockers = GameCheckButton(title: L10n.text("Favor blockers for bombs"), target: self, action: #selector(favorBombBlockersChanged))
     bombBlockers.state = settings.favorBombBlockers ? .on : .off
     favorBombBlockersCheck = bombBlockers
-    let builders = GameCheckButton(title: L10n.text("Favor current builders for Build"), target: self, action: #selector(favorBuildersChanged))
+    let builders = GameCheckButton(title: L10n.text("Favour active skilled lemmings"), target: self, action: #selector(favorBuildersChanged))
     builders.state = settings.favorBuilders ? .on : .off
     favorBuildersCheck = builders
     let targeting = GameControlGroup(controls: [favorApproaching, bombBlockers, builders], label: L10n.text("Targeting"))

@@ -19,6 +19,11 @@ struct SessionLemming {
   let hasFloater: Bool
   let neoAction: NeoLemmixAction?
   let neoTraits: Set<NeoLemmixTrait>
+  private let skillTargetPriority: Bool?
+
+  var isPerformingSkill: Bool {
+    skillTargetPriority ?? neoAction?.isPerformingSkill ?? pose.isPerformingSkill
+  }
 
   init(
     id: Int,
@@ -31,7 +36,8 @@ struct SessionLemming {
     hasClimber: Bool = false,
     hasFloater: Bool = false,
     neoAction: NeoLemmixAction? = nil,
-    neoTraits: Set<NeoLemmixTrait> = []
+    neoTraits: Set<NeoLemmixTrait> = [],
+    hasSkillTargetPriority: Bool? = nil
   ) {
     self.id = id
     self.x = x
@@ -44,6 +50,7 @@ struct SessionLemming {
     self.hasFloater = hasFloater
     self.neoAction = neoAction
     self.neoTraits = neoTraits
+    self.skillTargetPriority = hasSkillTargetPriority
   }
 }
 
@@ -300,7 +307,8 @@ final class ClassicSession: GameSession {
         facingLeft: $0.direction == .left,
         animationFrame: $0.animationFrame,
         countdown: $0.bomberCountdown,
-        hasClimber: $0.hasClimber, hasFloater: $0.hasFloater)
+        hasClimber: $0.hasClimber, hasFloater: $0.hasFloater,
+        hasSkillTargetPriority: $0.hasSkillTargetPriority)
     }
   }
 
@@ -553,7 +561,8 @@ final class NeoLemmixSession: GameSession {
       animationFrame: lemming.animationFrame,
       countdown: lemming.bomberCountdown,
       neoAction: lemming.action,
-      neoTraits: lemming.traits)
+      neoTraits: lemming.traits,
+      hasSkillTargetPriority: lemming.hasSkillTargetPriority)
   }
 
   var entranceX: Int? { simulation.configuration.entrances.first?.position.x }

@@ -1730,7 +1730,7 @@ extension AppDelegate {
       "Modern did not restore backpacks in Settings and the playfield")
     try check(preferences.current.gameplayCursorStyle == .modern && playfield.gameplayCursorStyle == .modern
       && cursorStyle.titleOfSelectedItem == "Modern", "Modern preset did not restore the modern cursor")
-    for title in ["Favor lemmings still approaching", "Favor blockers for bombs", "Favor current builders for Build", "Show skill backpacks"] {
+    for title in ["Favor lemmings still approaching", "Favor blockers for bombs", "Favour active skilled lemmings", "Show skill backpacks"] {
       guard let control = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == title }) else {
         try check(false, "Targeting control is missing: \(title)"); return
       }

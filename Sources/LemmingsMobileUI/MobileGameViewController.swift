@@ -1094,11 +1094,7 @@ typealias MobileGameControllerBase = UIViewController
     private func selectTarget(at point: MobilePoint, candidates: [MobileTargetCandidate], control requestedControl: Int? = nil) -> MobileTargetSelection? {
         let control = requestedControl ?? selectedControl
         let settings = gameSettings.classic
-        let preference: MobileTargetPreference
-        if session.engineIdentifier == "classic-dos", control == 4, settings.favorBuilders { preference = .builder }
-        else if session.engineIdentifier == "classic-dos", control == 2, settings.favorBombBlockers { preference = .bombBlocker }
-        else if session.engineIdentifier == "lemmings3", control >= 3 { preference = .toolHolder }
-        else { preference = .assignable }
+        let preference = session.targetPreference(for: control, settings: settings)
         #if os(tvOS)
         let retained = TVTargetLock.retain(highlightedTarget, at: point, candidates: candidates,
                                            viewport: playfieldView.gameViewport)?.id
@@ -1112,6 +1108,8 @@ typealias MobileGameControllerBase = UIViewController
             radius: 30,
             preference: preference,
             favourApproaching: settings.favorApproachingLemmings,
+            favourActiveWorkers: settings.favorBuilders,
+            favourBombBlockers: settings.favorBombBlockers,
             input: previewInput,
             retaining: retained,
             wallDirectionForTarget: session.targetWallDirection

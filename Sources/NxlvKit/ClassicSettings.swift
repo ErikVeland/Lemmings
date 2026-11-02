@@ -222,6 +222,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var lemmingSelectionStyle: LemmingSelectionStyle
     public var favorApproachingLemmings: Bool
     public var favorBombBlockers: Bool
+    /// Active-skill targeting retains its original saved builder-preference key.
     public var favorBuilders: Bool
     public var experiencePreset: ClassicExperiencePreset
     public var controllerEnabled: Bool

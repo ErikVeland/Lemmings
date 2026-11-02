@@ -97,6 +97,7 @@ public struct TVGameCapabilities: Equatable, Sendable {
     public private(set) var lastAssignment: (control: Int, actor: Int)?
     public private(set) var assignmentPulse = 0.0
     public var preferences: TVPreferences
+    public var targetingSettings: ClassicSettings { didSet { refreshTarget() } }
     private var targetLock = TVTargetLock()
     private var lockedActor: Int? {
         get { targetLock.id }
@@ -117,9 +118,11 @@ public struct TVGameCapabilities: Equatable, Sendable {
     public var canInteract: Bool { foreground && !interrupted && play.canEdit && !countdown.isActive }
 
     public init(content: MobileLevelContent, owner: String, scope: String? = nil,
-                preferences: TVPreferences = .init(), checkpoint: MobileCheckpointEnvelope? = nil) throws {
+                preferences: TVPreferences = .init(), targetingSettings: ClassicSettings = .init(),
+                checkpoint: MobileCheckpointEnvelope? = nil) throws {
         self.content = content; self.owner = owner; self.scope = scope
         self.preferences = preferences.validated
+        self.targetingSettings = targetingSettings
         runID = checkpoint?.runID ?? UUID()
         viewport = MobileViewport(levelSize: content.session.levelSize,
             viewSize: .init(width: 1728, height: 760), pixelAspect: 1, maximumZoom: 24)
@@ -349,7 +352,11 @@ public struct TVGameCapabilities: Equatable, Sendable {
             return
         }
         target = MobileTargetSelector.select(candidates: candidates, touch: pointer, viewport: viewport,
-            radius: 36, input: .touch)
+            radius: 36, preference: session.targetPreference(for: selectedControl, settings: targetingSettings),
+            favourApproaching: targetingSettings.favorApproachingLemmings,
+            favourActiveWorkers: targetingSettings.favorBuilders,
+            favourBombBlockers: targetingSettings.favorBombBlockers,
+            input: .touch, wallDirectionForTarget: session.targetWallDirection)
     }
 
     private func bounded(_ point: MobilePoint) -> MobilePoint {

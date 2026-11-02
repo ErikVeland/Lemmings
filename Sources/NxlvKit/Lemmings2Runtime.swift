@@ -72,7 +72,14 @@ public struct Lemmings2Runtime: Sendable {
         /// Foot position: the first solid pixel below a standing lemming.
         public var y: Int
         public var direction = 1
-        public var state: State = .falling
+        public var state: State = .falling {
+            didSet {
+                guard oldValue != state else { return }
+                skillTargetingHistory.transition(wasPerformingSkill: oldValue.isPerformingSkill,
+                    isPerformingSkill: state.isPerformingSkill, resets: state.resetsSkillTargetPriority)
+            }
+        }
+        var skillTargetingHistory = LemmingSkillTargetingHistory()
         public var age = 0
         public var fallDistance = 0
         public var work = 0
@@ -104,6 +111,10 @@ public struct Lemmings2Runtime: Sendable {
         public var air: Lemmings2AirPhysics?
         public var bombTicks: Int?
         public var active: Bool { state != .dead && state != .saved }
+        public var hasSkillTargetPriority: Bool {
+            active && !state.resetsSkillTargetPriority
+                && (state.isPerformingSkill || skillTargetingHistory.isFavoured)
+        }
         /// Held object placement from PROCESS 4093 and 4297, before release.
         public var heldProjectile: (kind:Lemmings2Projectile.Kind,x:Int,y:Int,frame:Int)? {
             guard state == .throwing || state == .spearing else { return nil }
@@ -544,6 +555,13 @@ public struct Lemmings2Runtime: Sendable {
             if preferBuilders, skill == .builder, !isComplete, !isNuking, supplies[slot] > 0,
                let builder = candidates.filter({ [.building, .shrugging].contains($0.state) && canAssign(slot: slot, to: $0.id) }).min(by: nearer) {
                 return builder
+            }
+            if preferBuilders, let worker = candidates.filter({
+                $0.hasSkillTargetPriority && canAssign(slot: slot, to: $0.id)
+                    && !(skill == .bomber && !preferBombBlockers && $0.state == .blocking)
+                    && !(skill == .blastBomber && !preferBombBlockers && $0.state == .blocking)
+            }).min(by: nearer) {
+                return worker
             }
         }
         guard let nearest = candidates.min(by: { a, b in

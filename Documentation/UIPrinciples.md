@@ -325,9 +325,10 @@ Assignment feedback follows the engine's actual eligibility rules. The Modern cu
 accept the selected skill; green means the nearest target can accept the selected skill.
 Successful assignments get a 100 ms green pulse, with local HDR brightness when
 available. An existing assignment gets an 80 ms orange cue. An eligible neighbour
-normally takes priority over orange. When Build targeting favours a current builder,
-keep that builder selected until it finishes. Show its actual eligibility and do
-not queue an early click. Honour the reduced-flash setting.
+normally takes priority over orange. Active-skill targeting prefers a working
+lemming only when it can accept the selected assignment. A finished builder
+remains preferred for another Build when the native rules permit it. Show actual
+eligibility and do not queue an early click. Honour the reduced-flash setting.
 
 ## Anniversary foundation priorities
 
@@ -495,16 +496,37 @@ HD effects both on and off, and record cached draw costs on real sprites.
 Composited CRT window captures need an explicitly requested visible test run. Other poses and L2 attachments still
 need a full visual sweep.
 
-Gameplay settings offer Original, Modern and Custom presets. Modern enables
-approaching-lemming targeting, blockers for bombs and current builders for Build.
-Keep these three targeting options in one stone group, with its label aligned
-to the first option. The shared Settings page serves all three games.
-Original disables these aids. Individual changes select Custom, which persists
-even if the player restores the previous values. Only selecting a preset resets
-its choices. Machine artwork presets preserve targeting preferences.
-L2 retains a builder until native assignment rules allow another build. In L3,
-Use favours bomb-equipped blockers, then active brick builders. These preferences
-do not grant tools, change skill rules or queue builds.
+Gameplay settings offer independent preferences for approaching lemmings,
+blockers for bombs and actively skilled lemmings. Keep these three targeting
+options in one stone group, with its label aligned to the first option. The
+shared Settings page serves all three games. Original, Modern and Custom are
+presentation presets; they preserve the player's targeting preferences.
+Machine artwork presets also preserve them.
+
+The active-skill preference extends the existing builder preference and retains
+its saved setting. Within the normal pick region, prefer an eligible lemming
+currently building, digging, bashing, mining or performing another native skill
+over an ordinary walker. After finishing a skill, retain that lemming's priority
+through walking and other grounded movement until it enters the falling state.
+A climber walking off its completed bridge therefore remains favoured until it
+falls. Landing alone does not restore that priority; performing another skill
+does. A walking climber, floater or tool carrier with no preceding work does not
+gain priority from an unused permanent ability or tool. Use native actions,
+including NeoLemmix actions whose fallback artwork resembles a walker.
+An approaching follower, automatic target retention or ordinary crowd silhouette
+must not displace the chosen worker. Keep existing ordering within the worker
+tier and preserve explicit touch, controller and L3 carrier selections.
+
+Repeat-Build preference still applies before general worker selection, and only
+when native assignment rules allow another build. In L3, Use favours eligible
+bomb-equipped blockers, then active brick builders, then other eligible workers
+with tools. Turning off the separate bomb-blocker preference excludes those
+blockers from general worker priority for the bomb action. These preferences do
+not grant tools, change skill rules or queue builds. An ineligible worker must
+never hide a valid target, and the preference must not enlarge input regions.
+Track this history on native action changes, independently of hover or rendering.
+Rewind and checkpoints retain it, while legacy saves without it remain readable.
+This targeting metadata does not change physics equality or replay/recovery hashes.
 L2's Exploder can be assigned to blockers; its blast Bomber cannot. The preference
 only applies when the native skill rules permit the assignment.
 
@@ -513,7 +535,7 @@ upper-body terrain. It favours an eligible lemming facing that wall even when
 the pointer sits inside the returning crowd. Floors, shallow steps and walls
 on both sides retain cursor-relative selection. A centred click alone does
 not count as approach. Keep the normal pick regions, same-direction nearest
-selection, skill eligibility, bomb/builder priorities and L3 manual carriers.
+selection, skill eligibility, bomb/builder/active-skill priorities and L3 manual carriers.
 Classic's brief hover cache must yield when a target turns away and an eligible
 lemming still faces the wall. Classic/NeoLemmix, L2 and L3 use the same direction
 cue. L3 applies it to its native actions and carried tools; it has no Basher slot.
