@@ -1,0 +1,348 @@
+{
+  "logFormatVersion": 1,
+  "jobId": "0d6627ea-dd8e-408e-b008-6cf4fe31cf61",
+  "status": "Accepted",
+  "statusSummary": "Ready for distribution",
+  "statusCode": 0,
+  "archiveFilename": "slim-parallel-submission.zip",
+  "uploadDate": "2026-11-03T13:23:26.732Z",
+  "sha256": "13c328321d727a62ca9fd8db32200bb874623fe439e23d7eec216591233f8458",
+  "ticketContents": [
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Resources/Localization.bundle",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "b1a4f62afc861f33bfabc31f46693c3197a8b218",
+      "arch": null
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Resources/Localization.bundle/Info.plist",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "ff61a7407eab7c5c8233c369f3691628e781f140"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e153c4bbbcd823fa239afea5860d9fa52ad33ce6",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4b2e056b4b1e7b3dc94da3be1172414d47063700",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e153c4bbbcd823fa239afea5860d9fa52ad33ce6",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4b2e056b4b1e7b3dc94da3be1172414d47063700",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0e0356c9cd9427386b6a8ad493364274f93b4fa7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Installer.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9ad94ef304debe9fb00f872a39d077a47f83eb58",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsAppCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "3bfb467ba2df2c28ce20633c2326d22a44a0ec12",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsAppCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4439442222e44ae20a33a888e26e9b1b8ce86d1d",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsAudio.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "38fdd56fe026c7889cac2b4d9010eb7ff32dcf6a",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsAudio.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "5440ab2bf9db4e168bdd49937d38351ed11da6c0",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/PlugIns/DeskClockMacWidget.appex",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "a02e99964e2122d2518286abff5ce2fdedd3a1fb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/PlugIns/DeskClockMacWidget.appex",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "2728e7e008dccac404e0c6aacf900e8f6ffec5ee",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsMobileCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "c143e2b874717cdaebd596a348d32dadac93059a",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsMobileCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "cc5417ed690b026e443b3be73aa89352c470bf0d",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsGameArt.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "16d91647db2af1e30de82494dcd3c98af7ed9d3a",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsGameArt.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "3bd787b96c48d7ae875716f3153a307e5d9b9593",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "84a0e06f9da224f8f97c609bf4b45d269d7aa47b",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/XPCServices/Downloader.xpc",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0d756444e235b4f60bc6528b962b7a13fb00e119",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9ced1c16eadc51c39ca281636c00a0b6e15ce863",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "7acaa25ec8c18b62cc8faa0cd997952ca5bcb66d",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "168a1ceb19905c5486171780ddd75a5faf46d19f",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "709b3764ff08b66e2c6191512f8067399d91468c",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e153c4bbbcd823fa239afea5860d9fa52ad33ce6",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current/Updater.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4b2e056b4b1e7b3dc94da3be1172414d47063700",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e5750774a0e90aaecc8867d0e6f049c143eb0abb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9c7b489038c05e7830d44fcd845c696265f085a4",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsTVCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "841c7ad115918477c2a443f35bf01b823334197c",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsTVCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "f20f950a7353daae526dddd671cde351e90bc69a",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0dc8d832dad83dc864669ae5ad19c36ed54a45fb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/Current",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "ab911605fef8e4d287dc0cf1dfc13205a5a448d6",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/MacOS/LemmingsLocal",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "e5750774a0e90aaecc8867d0e6f049c143eb0abb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/MacOS/LemmingsLocal",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9c7b489038c05e7830d44fcd845c696265f085a4",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/PlugIns/DeskClockMacWidget.appex/Contents/MacOS/DeskClockMacWidget",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "a02e99964e2122d2518286abff5ce2fdedd3a1fb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/PlugIns/DeskClockMacWidget.appex/Contents/MacOS/DeskClockMacWidget",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "2728e7e008dccac404e0c6aacf900e8f6ffec5ee",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsGameArt.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "16d91647db2af1e30de82494dcd3c98af7ed9d3a",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsGameArt.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "3bd787b96c48d7ae875716f3153a307e5d9b9593",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsTVCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "841c7ad115918477c2a443f35bf01b823334197c",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsTVCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "f20f950a7353daae526dddd671cde351e90bc69a",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsAudio.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "38fdd56fe026c7889cac2b4d9010eb7ff32dcf6a",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsAudio.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "5440ab2bf9db4e168bdd49937d38351ed11da6c0",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsMobileCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "c143e2b874717cdaebd596a348d32dadac93059a",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsMobileCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "cc5417ed690b026e443b3be73aa89352c470bf0d",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsAppCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "3bfb467ba2df2c28ce20633c2326d22a44a0ec12",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libLemmingsAppCore.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "4439442222e44ae20a33a888e26e9b1b8ce86d1d",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9ced1c16eadc51c39ca281636c00a0b6e15ce863",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/libNxlvKit.dylib",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "7acaa25ec8c18b62cc8faa0cd997952ca5bcb66d",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "168a1ceb19905c5486171780ddd75a5faf46d19f",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "709b3764ff08b66e2c6191512f8067399d91468c",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0dc8d832dad83dc864669ae5ad19c36ed54a45fb",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "ab911605fef8e4d287dc0cf1dfc13205a5a448d6",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "84a0e06f9da224f8f97c609bf4b45d269d7aa47b",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0d756444e235b4f60bc6528b962b7a13fb00e119",
+      "arch": "arm64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "0e0356c9cd9427386b6a8ad493364274f93b4fa7",
+      "arch": "x86_64"
+    },
+    {
+      "path": "slim-parallel-submission.zip/Ultimate Lemmings.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer",
+      "digestAlgorithm": "SHA-256",
+      "cdhash": "9ad94ef304debe9fb00f872a39d077a47f83eb58",
+      "arch": "arm64"
+    }
+  ],
+  "issues": null
+}

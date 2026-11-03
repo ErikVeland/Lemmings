@@ -1,0 +1,37 @@
+[
+  {
+    "name": "UltimateLemmings-2.4-build104.zip",
+    "size": 2057773792,
+    "sha256": "0626bf42266651858dd18d6d96d55480f51b276c0b66814872002cc4b734675b",
+    "github_digest_matches": true,
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmings-2.4-build104.zip"
+  },
+  {
+    "name": "UltimateLemmings-2.3-build102.zip",
+    "size": 2057392819,
+    "sha256": "2a12460a6db2b4e33d936509e093ddb3dd5a673e0346bf907c9fdeada193eef1",
+    "github_digest_matches": true,
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-2.3-build102.zip"
+  },
+  {
+    "name": "UltimateLemmings-2.2.2-build99.zip",
+    "size": 2056896617,
+    "sha256": "ac9b46e195296421cf0a2fde132f4d4442726edd0662da12bf9a2972a1937d9a",
+    "github_digest_matches": true,
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-2.2.2-build99.zip"
+  },
+  {
+    "name": "UltimateLemmings-2.2.1-build98.zip",
+    "size": 2056641801,
+    "sha256": "31ef203dae8456461eb2fd27a3bc16019d994821ce96d29e604f0fc0d51759b0",
+    "github_digest_matches": true,
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-2.2.1-build98.zip"
+  },
+  {
+    "name": "UltimateLemmings-2.2-build97.zip",
+    "size": 2056573553,
+    "sha256": "13195f847eb1495667d228ea6e535b8ce89b0ac3032a871d1493ff96bcefbc68",
+    "github_digest_matches": true,
+    "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-2.2-build97.zip"
+  }
+]

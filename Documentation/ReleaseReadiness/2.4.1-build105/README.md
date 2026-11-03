@@ -1,4 +1,57 @@
-# 2.4.1 build 105 preparation
+# Mac 2.4.1 build 105 release
+
+Mac 2.4.1 build 105 was published on 3 November 2026.
+The [GitHub release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.1)
+is the latest app release. Full and slim downloads support Apple silicon and Intel.
+The signed updater feed includes deltas from builds 104, 102, 99, 98 and 97.
+iOS build 44 is next, followed by tvOS build 19. Neither mobile build is delivered.
+
+## Public package verification
+
+The release tag and both app packages use source
+`554f79fceaa72e02d52584a07df73df51d9eb2aa`.
+The Developer ID profile is `825c160c-59cc-462a-828d-d054815b9715`.
+Both apps enable CloudKit and carry its shared container entitlement in Production.
+The live Production schema matches the accepted 2.4 schema byte for byte.
+This establishes signing and schema readiness. Physical cross-device service
+acceptance remains separate.
+
+Apple accepted both notarisation submissions:
+
+- Full: `94f1150d-9d9d-4293-9915-d6eb8c40c985`.
+- Slim: `0d6627ea-dd8e-408e-b008-6cf4fe31cf61`.
+
+Both tickets are stapled and valid. Strict signatures and Gatekeeper checks pass.
+The full update and all five deltas verify against the public key embedded in
+the app. Public downloads match the local archive sizes and SHA-256 hashes.
+The live feed matches the verified signed feed. The tag resolves to the exact
+release source, and GitHub identifies 2.4.1 as the latest release.
+
+The full package uses the standard release pipeline. The slim package reuses its
+universal binaries and the canonical main-scope music bundler. It was separately
+signed, notarised, stapled and checked after extraction. This avoids compiling
+the same source again. The earlier preserve-profile stripping helper rejected a
+recording-profile mismatch. Canonical bundling regenerated the optional-library
+metadata without weakening its hashes. A source snapshot check and final release
+input checks passed before publication.
+
+See [package checks](public-package-verification.json),
+[public download checks](publication.json), [full notarisation](standard-notary.json),
+[slim notarisation](slim-notary.json), [Gatekeeper checks](gatekeeper.txt),
+[prior archive checks](previous-archive-verification.json)
+and [Production schema](production-schema-2026-11-03.ckdb).
+
+The final focused total is 74 passing checks: 12 native action/history, 18 mobile
+worker/session and 44 cloud/recovery tests. Affected engine and replay checks ran.
+Broad unrelated tests, foreground launch
+checks and physical-device acceptance were skipped under the release schedule.
+All mechanical checks remained offscreen and muted. No production saves changed.
+The local development build described below is historical. Its disabled CloudKit
+setting does not describe the published apps.
+
+---
+
+# Historical 2.4.1 build 105 preparation
 
 Status: public Mac release preparation, 3 November 2026. The owner authorised
 production signing, notarisation and publication. iOS and tvOS remain next in order.

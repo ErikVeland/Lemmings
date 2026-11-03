@@ -1,0 +1,4 @@
+public-package.log: /var/folders/x4/552661tn5vzgxk5405585gg80000gq/T//lemmings-notarise.dBrRu1/Ultimate Lemmings.app: accepted
+public-package.log: source=Notarized Developer ID
+publish.log: /Volumes/T5 500/Ultimate Lemmings Releases/2.4.1/build/2.4.1-105-20261103-164718/slim-gatekeeper/Ultimate Lemmings.app: accepted
+publish.log: source=Notarized Developer ID

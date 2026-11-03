@@ -1,16 +1,18 @@
 # Release notes
 
-## Current build candidate
+## Current source and delivery queue
 
 The current source version is **2.4.1** (Mac build 105, iOS build 44, tvOS build 19).
-Read the [complete 2.4.1 candidate notes](ReleaseNotes-2.4.1-build105.md).
-These notes describe the current source. No public 2.4.1 package has been published.
-See the [preparation record](ReleaseReadiness/2.4.1-build105/README.md) for validation and limits.
+Read the [complete 2.4.1 notes](ReleaseNotes-2.4.1-build105.md).
+iOS build 44 is next, followed by tvOS build 19. These builds are assigned, not delivered.
 
 ## Latest published release
 
-Mac 2.4 build 104 is published with full and slim universal packages and a signed updater feed.
-See the [2.4 release record](ReleaseReadiness/2.4-build104/README.md).
+[Mac 2.4.1 build 105](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.1)
+is published with full and slim universal packages and a signed updater feed.
+Both packages are notarised and enable CloudKit with the Production profile.
+See the [2.4.1 release record](ReleaseReadiness/2.4.1-build105/README.md).
+Mac 2.4 build 104 remains in the [2.4 release record](ReleaseReadiness/2.4-build104/README.md).
 iOS 2.4 build 39 and tvOS 2.4 build 18 were uploaded for Apple processing.
 Their public availability remains separate from the Mac release.
 

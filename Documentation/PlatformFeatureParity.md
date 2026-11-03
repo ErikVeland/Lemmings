@@ -8,7 +8,7 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
-## 2.4.1 source preparation — 3 November 2026
+## 2.4.1 Mac release and shared source — 3 November 2026
 
 The shared worker selector retains its four-engine coverage, explicit touch and
 controller choices, saved preference and checkpoint identity. Native tests now
@@ -31,15 +31,20 @@ The native harness measured the repeated read at 219.0 ms before and 0.4 ms
 after. This is a local unoptimised harness comparison, not a device deadline.
 L3’s measured repeated read was 5.2 ms and was left unchanged.
 
-Seventy-three focused tests pass for selection, real native-session assignments,
+Seventy-four focused tests pass for selection, real native-session assignments,
 checkpoint identity, cancellation and isolated save merge/recovery. Native L2
 runtime checks include 120 recorded campaign completions. L3 runtime and targeting,
 Classic replay and Neo replay checks pass. Preserved fixture hashes match.
 Mac crowd/footer, Settings and release-note render/input checks pass offscreen.
-Representative captures were inspected. The optimised arm64 app builds and its
-signature verifies. Its local profile does not authorise CloudKit. Physical input,
-live cloud and mobile/TV SDK acceptance for this candidate remain separate.
-See the [preparation record](ReleaseReadiness/2.4.1-build105/README.md).
+Representative captures were inspected. The published full and slim Mac apps
+support Apple silicon and Intel. Both strict signatures, notarisation tickets and
+Gatekeeper checks pass. Both enable CloudKit with the Production profile and
+shared container entitlement. The live Production schema matches the accepted
+2.4 schema. The exact release tag, seven public downloads and signed feed verify.
+The earlier local arm64 development build had CloudKit disabled. That limitation
+does not describe the public apps. Physical input, live cross-device sync and
+mobile/TV SDK acceptance remain separate. iOS build 44 is next, then tvOS build 19.
+See the [release record](ReleaseReadiness/2.4.1-build105/README.md).
 
 ## Active-skill crowd targeting — 2 November 2026
 

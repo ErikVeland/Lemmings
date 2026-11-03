@@ -10,10 +10,13 @@ verification. Older release receipts below retain the checks actually performed.
 Mac first: finish skilled-worker crowd targeting, bound quit-time cloud delivery,
 fix the measured repeated L2 completion read, and update release history.
 The Home accessibility correction is included. See the
-[2.4.1 preparation record](ReleaseReadiness/2.4.1-build105/README.md).
+[2.4.1 release record](ReleaseReadiness/2.4.1-build105/README.md).
 No new mode, sequel deck conversion or automatic story trigger is included.
 
-Mac 2.4 build 104 is published. The owner’s 1 November acceptance supersedes
+Mac 2.4.1 build 105 is published with full and slim notarised universal packages.
+Production CloudKit signing and the live updater feed pass verification. iOS build
+44 is next, followed by tvOS build 19. Mac 2.4 build 104 remains recorded.
+The owner’s 1 November acceptance supersedes
 the earlier audio and Duo blockers below for 2.4. It does not certify these
 2.4.1 changes. Older assessments retain their original dates and limits.
 
