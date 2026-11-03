@@ -3,8 +3,9 @@
 Updated 4 November 2026, Brisbane. Mac 2.4.1 build 105 was published on
 3 November. iOS 2.4.1 build 44 and tvOS 2.4.1 build 19 were uploaded to Apple
 on 4 November with stable Xcode 27.1 and production CloudKit profiles. Apple
-accepted both uploads. iOS is Waiting for Review in TestFlight with Lemmings
-and iOS Private Beta assigned. TV is processing; TV Private Beta is retained.
+accepted both uploads. Both builds are Waiting for Review in TestFlight. iOS
+retains Lemmings and iOS Private Beta. TV retains TV Private Beta. Automatic
+tester notification remains enabled for both beta submissions.
 See the [2.4.1 mobile delivery receipt](ReleaseReadiness/2.4.1-build105/MobileDelivery/delivery.json).
 Store review and public mobile availability remain separate milestones.
 

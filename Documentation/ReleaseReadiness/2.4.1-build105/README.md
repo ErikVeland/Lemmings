@@ -4,8 +4,8 @@ Mac 2.4.1 build 105 was published on 3 November 2026.
 The [GitHub release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.1)
 is the latest app release. Full and slim downloads support Apple silicon and Intel.
 The signed updater feed includes deltas from builds 104, 102, 99, 98 and 97.
-iOS build 44 and tvOS build 19 were uploaded on 4 November. iOS is Waiting for
-Review in TestFlight. tvOS is processing. Public mobile availability is not established.
+iOS build 44 and tvOS build 19 were uploaded on 4 November. Both are Waiting
+for Review in TestFlight. Public mobile availability is not established.
 
 ## Public package verification
 
@@ -61,7 +61,7 @@ were rerun. No test windows, game apps or audio were launched.
 | Platform | Version and build | Apple app ID | Upload accepted, Brisbane | Current Apple state |
 | --- | --- | --- | --- | --- |
 | iPhone, iPad and Duo | 2.4.1 (44) | 6822112090 | 4 November, 00:08:44 | TestFlight: Waiting for Review |
-| Apple TV | 2.4.1 (19) | 6810873426 | 4 November, 00:23:35 | Processing |
+| Apple TV | 2.4.1 (19) | 6810873426 | 4 November, 00:23:35 | TestFlight: Waiting for Review |
 
 Both App Store exports pass strict signatures, exact version and bundle checks,
 arm64 and matching crash-symbol checks. Both retain the full soundtrack and
@@ -85,14 +85,17 @@ archives with the same Production options for upload.
 The existing internal Lemmings group is assigned to iOS build 44. The existing
 iOS Private Beta group was added and the build was submitted for beta review.
 Automatic tester notification remains enabled. Apple shows Waiting for Review.
-TV Private Beta remains the TV delivery group. Build 19 cannot be assigned while
-Apple processes it. Group settings and existing builds remain intact.
+Build 19 was assigned to the existing TV Private Beta group and submitted for
+beta review after processing completed. Apple shows Waiting for Review for TV
+too. Automatic tester notification remains enabled. Group settings and existing
+builds remain intact.
 
 See [delivery status and upload receipts](MobileDelivery/delivery.json),
 [iOS package checks](MobileDelivery/ios-package-verification.json),
 [TV package checks](MobileDelivery/tvos-package-verification.json),
 [iOS upload result](MobileDelivery/ios-upload.txt) and
-[TV upload result](MobileDelivery/tvos-upload.txt).
+[TV upload result](MobileDelivery/tvos-upload.txt). Saved test notes are retained
+for [iOS](MobileDelivery/ios-what-to-test.txt) and [TV](MobileDelivery/tvos-what-to-test.txt).
 
 Apple processing, beta review, TestFlight availability, App Store review and
 public availability are separate milestones. App Store version review was not

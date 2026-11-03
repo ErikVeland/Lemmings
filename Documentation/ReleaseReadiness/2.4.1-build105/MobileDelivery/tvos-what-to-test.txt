@@ -1,0 +1,5 @@
+Crowd targeting now favours eligible lemmings using a skill and keeps their priority until they fall. Controller locks keep the lemming you chose.
+
+Please test skill changes in crowds across Classic, The Tribes, Chronicles and supported NeoLemmix content. Check saved-run reopen, interrupted sync and offline/reconnect. Previous 2.4 recordings remain compatible.
+
+Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. Journey on Apple TV is Classic-only.

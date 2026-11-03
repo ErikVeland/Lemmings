@@ -5,7 +5,7 @@
 The current source version is **2.4.1** (Mac build 105, iOS build 44, tvOS build 19).
 Read the [complete 2.4.1 notes](ReleaseNotes-2.4.1-build105.md).
 iOS 2.4.1 build 44 and tvOS 2.4.1 build 19 were uploaded to Apple on 4 November.
-iOS is Waiting for Review in TestFlight. tvOS is processing. See the
+Both are Waiting for Review in TestFlight. See the
 [mobile delivery record](ReleaseReadiness/2.4.1-build105/README.md#ios-and-tvos-delivery--4-november-2026).
 
 ## Latest published release
