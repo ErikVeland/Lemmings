@@ -78,12 +78,13 @@ public struct RunRecovery: Codable, Sendable {
             .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("Resources"))
     }()
-    /// Shipped engines whose recorded actions still replay on this one: 2.1.2, 2.2 to 2.2.2 and 2.3.
+    /// Shipped engines whose recorded actions still replay on this one: 2.1.2 through 2.4.
     /// Action replays still check their final state, so a replay that diverges is rejected.
     static let earlierCompatibleEngines: Set<String> = [
         "4e3bac8f74be058c9b684907678a8a1751b7dccba156d301fe2bf6e2097c389f",
         "ccd0577faa7a3d114ed4a45edbf24fad3b2405de914e7d10f22a7a2f6ae75490",
         "f2b12cacbdfa5cc9909b3ddd517c11f7511274ce93df8abbc05bace5cdecde88",
+        "99621460ad3f709160be82ab445cc0c1dd77448ffac49dcc2982ef47dcee1a8d",
     ]
     /// Whether a recording made with `fingerprint` can play on the bundled engine.
     public static func isCompatibleEngine(_ fingerprint: String) -> Bool {

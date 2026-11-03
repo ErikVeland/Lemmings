@@ -4,6 +4,9 @@ import Testing
 @testable import NxlvKit
 
 struct TargetingHistoryRecoveryTests {
+    @Test func published24ActionReplaysRemainCompatible() {
+        #expect(RunRecovery.isCompatibleEngine("99621460ad3f709160be82ab445cc0c1dd77448ffac49dcc2982ef47dcee1a8d"))
+    }
     @Test func neoTargetingHistoryDoesNotChangeGameplayIdentity() throws {
         let ordinary = NeoLemmixLemming(id: 1, position: .init(x: 40, y: 60),
             direction: .right, action: .walking, traits: [.climber])

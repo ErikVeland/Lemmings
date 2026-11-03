@@ -127,3 +127,17 @@ Their hint decks are unchanged. Only the engine fingerprint and audit time chang
 See the [recertification receipt](retained-route-recertification.json) and
 [summary](recertification.txt). These checks supersede the earlier local candidate's
 stale proof fingerprint and clear the package's proof/hint gate.
+
+### Preserve 2.4 recordings after recertification
+
+Before publication, the fresh engine fingerprint exposed a missing 2.4 entry in
+`RunRecovery.earlierCompatibleEngines`. The new regression failed on that source.
+The list now admits the published 2.4 fingerprint. Replay execution still checks
+its final state. The 609 unchanged retained routes support that compatibility.
+All 44 cloud/recovery tests pass after the correction, including the new check.
+The earlier native action and mobile-session checks remain applicable.
+
+The first public package attempt from `4f5c3d41` was stopped before signing or
+publication. A new frozen source includes this correction. The engine sources
+and recertified fingerprint are unchanged, so the retained-route audit remains valid.
+See the [final compatibility and recovery checks](replay-compatibility.txt).

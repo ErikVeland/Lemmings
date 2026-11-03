@@ -1,0 +1,98 @@
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite CloudLibraryTests started.
+􀟈  Suite CloudKitLibraryTests started.
+􀟈  Suite TargetingHistoryRecoveryTests started.
+􀟈  Test lifecycleSyncUploadsAgainAndIncludesChangesDuringUpload() started.
+􀟈  Test staleDiscoveryCannotReplaceThePasswordCredential() started.
+􀟈  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() started.
+􀟈  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() started.
+􀟈  Test cancelledAppleTransportStopsBeforePreparingAnUpload() started.
+􀟈  Test concurrentIdentityCreationRetainsBothLibraries() started.
+􀟈  Test discoversTheSameLibraryAcrossDevicesAndMigratesExistingKeys() started.
+􀟈  Test deviceSnapshotsAreEncryptedAndRetainConcurrentDevices() started.
+􀟈  Test journeyWithoutRosterCannotReportCompleteSync() started.
+􀟈  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() started.
+􀟈  Test cancelledUploadCannotReportSynced() started.
+􀟈  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() started.
+􀟈  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() started.
+􀟈  Test syncingStateAppearsBeforeProviderDiscovery() started.
+􀟈  Test malformedCloudArchiveNeverImportsOrOverwritesIt() started.
+􀟈  Test offlineHotSeatRevisionsMergeIntoOneSession() started.
+􀟈  Test cancelledSnapshotDoesNotStartADatabaseWrite() started.
+􀟈  Test previousSyncedHotSeatSurvivesAnotherSelectedPlayerOfflineAndReopen() started.
+􀟈  Test unreadableCredentialsNeverCreateReplacementKeys() started.
+􀟈  Test cancelledDownloadDoesNotImportOrUpload() started.
+􀟈  Test lifecycleWaitsForAnExistingUploadThenCapturesAgain() started.
+􀟈  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() started.
+􀟈  Test corruptKeysAndMissingSnapshotsPreventReplacement() started.
+􀟈  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() started.
+􀟈  Test legacyJourneySessionAbsorbsItsClassicTwinOnEveryDevice() started.
+􀟈  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() started.
+􀟈  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() started.
+􀟈  Test legacyTesterIdentityRestoresTesterStatus() started.
+􀟈  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() started.
+􀟈  Test sequelTargetingHistoryDoesNotChangeGameplayIdentity() started.
+􀟈  Test cancelledLifecycleWaitDoesNotWaitForAStalledUpload() started.
+􀟈  Test slowCredentialServicesLeaveTheMainActorResponsive() started.
+􀟈  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() started.
+􀟈  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() started.
+􀟈  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() started.
+􀟈  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() started.
+􀟈  Test syncPasswordGivesEveryDeviceTheSameValidVault() started.
+􀟈  Test neoTargetingHistoryDoesNotChangeGameplayIdentity() started.
+􀟈  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() started.
+􀟈  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() started.
+􀟈  Test previewBuildRestoresLatestSharedLibraryByDefault() started.
+􀟈  Test published24ActionReplaysRemainCompatible() started.
+􀟈  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() started.
+􀟈  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() started.
+􁁛  Test published24ActionReplaysRemainCompatible() passed after 0.002 seconds.
+􁁛  Test sequelTargetingHistoryDoesNotChangeGameplayIdentity() passed after 0.002 seconds.
+􁁛  Test neoTargetingHistoryDoesNotChangeGameplayIdentity() passed after 0.003 seconds.
+􁁛  Suite TargetingHistoryRecoveryTests passed after 0.003 seconds.
+􁁛  Test discoversTheSameLibraryAcrossDevicesAndMigratesExistingKeys() passed after 0.121 seconds.
+􁁛  Test concurrentIdentityCreationRetainsBothLibraries() passed after 0.121 seconds.
+􁁛  Test malformedCloudArchiveNeverImportsOrOverwritesIt() passed after 0.349 seconds.
+􁁛  Test staleDiscoveryCannotReplaceThePasswordCredential() passed after 0.716 seconds.
+􁁛  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() passed after 0.719 seconds.
+􁁛  Test corruptKeysAndMissingSnapshotsPreventReplacement() passed after 0.720 seconds.
+􁁛  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() passed after 0.725 seconds.
+􁁛  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() passed after 0.725 seconds.
+􁁛  Test syncPasswordGivesEveryDeviceTheSameValidVault() passed after 0.725 seconds.
+􁁛  Test cancelledDownloadDoesNotImportOrUpload() passed after 0.727 seconds.
+􁁛  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() passed after 0.728 seconds.
+􁁛  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() passed after 0.728 seconds.
+􁁛  Test cancelledAppleTransportStopsBeforePreparingAnUpload() passed after 0.729 seconds.
+􁁛  Test unreadableCredentialsNeverCreateReplacementKeys() passed after 0.821 seconds.
+􁁛  Test deviceSnapshotsAreEncryptedAndRetainConcurrentDevices() passed after 0.821 seconds.
+􁁛  Test syncingStateAppearsBeforeProviderDiscovery() passed after 0.823 seconds.
+􁁛  Test cancelledSnapshotDoesNotStartADatabaseWrite() passed after 0.832 seconds.
+􁁛  Suite CloudKitLibraryTests passed after 0.832 seconds.
+􁁛  Test legacyTesterIdentityRestoresTesterStatus() passed after 0.833 seconds.
+􁁛  Test slowCredentialServicesLeaveTheMainActorResponsive() passed after 0.850 seconds.
+􁁛  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() passed after 0.879 seconds.
+􁁛  Test journeyWithoutRosterCannotReportCompleteSync() passed after 0.881 seconds.
+􁁛  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() passed after 0.882 seconds.
+􁁛  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() passed after 0.888 seconds.
+􁁛  Test previewBuildRestoresLatestSharedLibraryByDefault() passed after 0.913 seconds.
+􁁛  Test cancelledUploadCannotReportSynced() passed after 0.927 seconds.
+􁁛  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() passed after 0.933 seconds.
+􁁛  Test cancelledLifecycleWaitDoesNotWaitForAStalledUpload() passed after 0.943 seconds.
+􁁛  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() passed after 0.947 seconds.
+􁁛  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() passed after 0.949 seconds.
+􁁛  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() passed after 0.954 seconds.
+􁁛  Test lifecycleWaitsForAnExistingUploadThenCapturesAgain() passed after 0.956 seconds.
+􁁛  Test lifecycleSyncUploadsAgainAndIncludesChangesDuringUpload() passed after 0.961 seconds.
+􁁛  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() passed after 0.964 seconds.
+􁁛  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() passed after 0.967 seconds.
+􁁛  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() passed after 0.970 seconds.
+􁁛  Test legacyJourneySessionAbsorbsItsClassicTwinOnEveryDevice() passed after 0.978 seconds.
+􁁛  Test previousSyncedHotSeatSurvivesAnotherSelectedPlayerOfflineAndReopen() passed after 0.980 seconds.
+􁁛  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() passed after 0.986 seconds.
+􁁛  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() passed after 0.993 seconds.
+􁁛  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() passed after 0.995 seconds.
+􁁛  Test offlineHotSeatRevisionsMergeIntoOneSession() passed after 0.999 seconds.
+􁁛  Suite CloudLibraryTests passed after 1.000 seconds.
+􁁛  Test run with 44 tests in 3 suites passed after 1.000 seconds.
