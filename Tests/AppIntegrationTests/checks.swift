@@ -8043,9 +8043,29 @@ extension AppDelegate {
     }
     for pass in 1...2 {
       if let root = try? BundledGameResources.lemmings2() {
+        measure("L2 saved completion \(pass)") { _ = Lemmings2PlayWindow.savedCompletion(root: root) }
+        let campaign = try Lemmings2Campaign(root: root)
+        let won = LevelCatalogueIdentity(engine: .lemmings2, packID: "tribes-0", levelID: "0:\(campaign.levels[0].fingerprint)")
+        let before = Lemmings2PlayWindow.savedCompletion(root: root)
+        try check(Lemmings2PlayWindow.savedCompletion(root: root, journeyWins: [won]) == before + 1,
+          "Cached bundled content hid a new Journey win")
+        try check(Lemmings2PlayWindow.savedCompletion(root: root) == before,
+          "Cached bundled content retained another session's progress")
+        if pass == 1 {
+          let imported = FileManager.default.temporaryDirectory.appendingPathComponent("completion-import-\(UUID().uuidString)")
+          try FileManager.default.createDirectory(at: imported, withIntermediateDirectories: true)
+          defer { try? FileManager.default.removeItem(at: imported) }
+          try FileManager.default.copyItem(at: root.appendingPathComponent("LEVELS"), to: imported.appendingPathComponent("LEVELS"))
+          try check(Lemmings2PlayWindow.savedCompletion(root: imported, journeyWins: [won]) == 1,
+            "Imported completion fixture did not match its content")
+          try Data([0]).write(to: imported.appendingPathComponent("LEVELS/LEVEL000.DAT"), options: .atomic)
+          try check(Lemmings2PlayWindow.savedCompletion(root: imported, journeyWins: [won]) == 0,
+            "Changed imported content reused stale completion data")
+        }
         try measure("L2 catalogue \(pass)") { _ = try Lemmings2PlayWindow.browserLevels(root: root, progressData: nil) }
       }
       if let root = try? BundledGameResources.lemmings3() {
+        measure("L3 saved completion \(pass)") { _ = Lemmings3PlayWindow.savedCompletion(root: root) }
         try measure("L3 catalogue \(pass)") { _ = try Lemmings3PlayWindow.browserLevels(root: root, progressData: [:]) }
       }
     }
@@ -8271,7 +8291,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
+    #if !PLAYFIELD_TESTS && !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -8283,7 +8303,9 @@ Task { @MainActor in
     #endif
     #endif
     #endif
-    #if FOUNDATION_TESTS
+    #if PLAYFIELD_TESTS
+    runPlayfieldDrawingChecks()
+    #elseif FOUNDATION_TESTS
     #if !FOUNDATION_REVIEW_TESTS
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -8489,6 +8511,10 @@ Task { @MainActor in
     try subject.testPrecisionZoomWallet()
     #elseif LOADING_LATENCY_TESTS
     try await subject.testLoadingLatency()
+    if ProcessInfo.processInfo.environment["PATCH241_UI"] == "1" {
+      try subject.testSelectionSettings()
+      try subject.testScrollableReleaseNotes()
+    }
     #elseif PERFORMANCE_TESTS
     try await subject.testReleasePerformance()
     #elseif HOT_SEAT_TESTS

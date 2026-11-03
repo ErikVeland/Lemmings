@@ -1,0 +1,16 @@
+{
+  "engine_fingerprint": "9a246f97fd42930d53c273a4bb9c45800f0379fd7326f7c65518d484ebfeeea5",
+  "previous_engine_fingerprint": "99621460ad3f709160be82ab445cc0c1dd77448ffac49dcc2982ef47dcee1a8d",
+  "same_retained_rescue_rows": true,
+  "same_witness_hashes": true,
+  "certificate_count": 294,
+  "rescue_record_count": 315,
+  "configurations": 615,
+  "level_identities": 562,
+  "unknown_configurations": 6,
+  "same_hint_decks": true,
+  "classic_routes_replayed_for_hints": 352,
+  "search_enabled": false,
+  "resources": "Installed 2.4 app Ports; bundled content unchanged",
+  "verifier_module": "Optimised arm64 NxlvKit from local 2.4.1 candidate"
+}

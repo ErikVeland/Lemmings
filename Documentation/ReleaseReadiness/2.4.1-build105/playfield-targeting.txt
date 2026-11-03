@@ -1,0 +1,8 @@
+UI test windows: offscreen; audio: muted
+PASS native crowd ink agrees with hover, click and paused inspection, including exposed rear sprites
+PASS mirrored crowded walls, centred clicks, hover-turn invalidation and one native Basher cutting terrain
+PASS Classic targeting favours a follower behind a builder
+PASS bomb blockers, eligible builders, eligibility and independent opt-outs
+PASS active-skill targeting, eligibility, opt-out, bounds and native NeoLemmix actions
+PASS Home and fallback footer labels, mouse targets and accessibility actions
+PASS focused crowd targeting and footer accessibility

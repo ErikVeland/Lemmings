@@ -2,6 +2,23 @@
 
 Measured on the local Apple Silicon development Mac on 25 September 2026.
 
+## 2.4.1 Mac Home completion counts — 3 November 2026
+
+`refreshSequelProgress` calls `Lemmings2PlayWindow.savedCompletion` on the main
+actor. Each call rebuilt and decoded all 120 Tribes levels. The native offscreen
+harness measured repeated reads at 219.0 ms. A bounded cache now retains only
+the initial campaign under the existing immutable bundled-resource key.
+Progress and Journey wins are applied to a fresh value copy on each call.
+Imported content bypasses the cache and is read again.
+
+The same harness measured the repeated read at 0.4 ms after the change.
+Cold reads remain: 217.0 ms before and 246.8 ms after. These are local,
+unoptimised native-harness observations with other background builds running.
+They establish the removed repeated work, not production-device latency.
+The imported-content mutation and session-specific Journey checks pass in the
+post-change run. L3’s repeated read measured 5.2 ms before and 5.3 ms after;
+its implementation was not changed.
+
 ## Causes fixed
 
 - Level Select rebuilt every game's catalogue on each visit. Chronicles also constructed all 90 runtimes to check availability. Bundled identities and decoded metadata now stay in bounded process caches.

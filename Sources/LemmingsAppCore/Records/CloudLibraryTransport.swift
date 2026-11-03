@@ -69,7 +69,10 @@ import Security
         for identity in identities { try identity.validate() }
     }
     private func checkAccount() async throws {
-        guard try await deviceAccess.currentAccount() == account else { throw SequelDataError.invalid(L10n.text("The iCloud account changed. Existing saves were kept.")) }
+        try Task.checkCancellation()
+        let current = try await deviceAccess.currentAccount()
+        try Task.checkCancellation()
+        guard current == account else { throw SequelDataError.invalid(L10n.text("The iCloud account changed. Existing saves were kept.")) }
     }
     public func discover(_ local: [CloudLibraryIdentity]) async throws -> [CloudLibraryIdentity] {
         guard enabled else { throw URLError(.notConnectedToInternet) }
@@ -238,23 +241,31 @@ import Security
         return data
     }
     public func save(_ data: Data, identity: CloudLibraryIdentity, device: String) async throws {
+        try Task.checkCancellation()
         let (sealed, contentHash) = try await Task.detached(priority: .utility) {
             _ = try CloudLibraryArchive.decode(data)
             return (try identity.seal(data), Data(SHA256.hash(data: data)))
         }.value
+        try Task.checkCancellation()
         var saved = false
         if readable[identity.id]?.contains("CloudKit") == true {
             if hashes[identity.id + "CloudKit"]?.contains(contentHash) == true { saved = true }
             else {
-                do { try await cloudKit.save(data, identity: identity, device: device); saved = true }
-                catch { issues.append("iCloud upload pending") }
+                do {
+                    try Task.checkCancellation()
+                    try await cloudKit.save(data, identity: identity, device: device)
+                    try Task.checkCancellation()
+                    saved = true
+                } catch { try Task.checkCancellation(); issues.append("iCloud upload pending") }
             }
         }
         if readable[identity.id]?.contains("iCloud") == true, let root {
+            try Task.checkCancellation()
             if hashes[identity.id + "iCloud"]?.contains(contentHash) == true { saved = true }
             else {
             do {
                 try await checkAccount()
+                try Task.checkCancellation()
                 let folder = root.appendingPathComponent(identity.id, isDirectory: true)
                 // Content-addressed files cannot overwrite another device or an
                 // unresolved iCloud conflict. Keep the previous local generation.
@@ -273,21 +284,24 @@ import Security
                     for obsolete in old.dropFirst(2) where obsolete != file { try FileManager.default.removeItem(at: obsolete) }
                 }.value
                 try await checkAccount(); saved = true
-            } catch { issues.append("iCloud upload pending") }
+            } catch { try Task.checkCancellation(); issues.append("iCloud upload pending") }
             }
         }
         if readable[identity.id]?.contains("Cloud") == true {
+            try Task.checkCancellation()
             if hashes[identity.id + "Cloud"]?.contains(contentHash) == true { saved = true }
             else {
             do {
                 _ = try await request("/v1/vaults/\(identity.id)/devices/\(device)", method: "PUT", token: identity.token, body: sealed)
                 saved = true
-            } catch { issues.append("Cloud upload pending") }
+            } catch { try Task.checkCancellation(); issues.append("Cloud upload pending") }
             }
         }
+        try Task.checkCancellation()
         guard saved else { throw URLError(.notConnectedToInternet) }
     }
     private func request(_ path: String, method: String = "GET", token: String? = nil, body: Data? = nil, allowMissing: Bool = false) async throws -> (Data, Int) {
+        try Task.checkCancellation()
         guard enabled, let endpoint, endpoint.scheme == "https", let url = URL(string: endpoint.absoluteString + path) else { throw URLError(.notConnectedToInternet) }
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = method; request.httpBody = body

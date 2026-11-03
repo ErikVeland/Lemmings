@@ -1,0 +1,1 @@
+PASS 322 campaign fixture hashes and coverage manifest

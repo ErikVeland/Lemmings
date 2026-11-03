@@ -27,7 +27,10 @@ import NxlvKit
         defaults.set(current.recordName, forKey: "CloudLibrary.CloudKitOwner")
     }
     private func checkAccount() async throws {
-        guard try await container.userRecordID() == owner else { throw URLError(.userAuthenticationRequired) }
+        try Task.checkCancellation()
+        let current = try await container.userRecordID()
+        try Task.checkCancellation()
+        guard current == owner else { throw URLError(.userAuthenticationRequired) }
     }
     func record(_ id: CKRecord.ID) async throws -> CKRecord {
         try await checkAccount()
@@ -125,6 +128,7 @@ import NxlvKit
         return data
     }
     func save(_ data: Data, identity: CloudLibraryIdentity, device: String) async throws {
+        try Task.checkCancellation()
         guard UUID(uuidString: device) != nil else { throw SequelDataError.invalid("Invalid cloud device.") }
         let file = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try await Task.detached(priority: .utility) {
@@ -133,6 +137,7 @@ import NxlvKit
         }.value
         defer { try? FileManager.default.removeItem(at: file) }
         for attempt in 0..<3 {
+            try Task.checkCancellation()
             let existing = try await read("vault-" + identity.id)
             let manifest = existing ?? CKRecord(recordType: "ULPrivateLibrary", recordID: id("vault-" + identity.id))
             // A missing manifest is new. An existing malformed manifest must never be replaced.
@@ -143,7 +148,8 @@ import NxlvKit
             let snapshot = try await read("save-" + identity.id + "-" + device)
                 ?? CKRecord(recordType: "ULPrivateLibrary", recordID: id("save-" + identity.id + "-" + device))
             snapshot["snapshot"] = CKAsset(fileURL: file)
-            do { try await database.save([manifest, snapshot]); return }
+            try Task.checkCancellation()
+            do { try await database.save([manifest, snapshot]); try Task.checkCancellation(); return }
             catch { if attempt == 2 || !conflict(error) { throw error } }
         }
     }

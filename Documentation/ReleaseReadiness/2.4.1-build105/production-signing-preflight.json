@@ -1,0 +1,11 @@
+{
+  "profile_name": "Ultimate Lemmings",
+  "profile_uuid": "825c160c-59cc-462a-828d-d054815b9715",
+  "application_identifier": "54WU29TRTY.academy.glasscode.lemmings",
+  "all_macs": true,
+  "production_cloudkit": true,
+  "expiration": "2044-10-26T09:40:07",
+  "identity": "Developer ID Application: Erik Veland (54WU29TRTY)",
+  "notary_profile": "lemmings-beta",
+  "preflight_passed": true
+}

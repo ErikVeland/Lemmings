@@ -1,0 +1,176 @@
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite LemmingSkillTargetingTests started.
+􀟈  Test historyRoundTripPreservesTheRetainedFlag() started.
+􀟈  Test classicBridgeCompletionKeepsPriorityUntilTheFirstFall() started.
+􀟈  Test legacyActiveWorkerRetainsPriorityAfterFinishingItsTask() started.
+􀟈  Test fallingAndTerminalStatesOverridePreviousSkillHistory() started.
+􀟈  Test aFallBetweenTargetQueriesStillClearsThePreviousWorker() started.
+􀟈  Test actorsKeepIndependentHistoriesAndNewWorkRestoresPriority() started.
+􀟈  Test physicsEqualityIgnoresOnlyTargetHistory() started.
+􀟈  Test sequelBridgeCompletionKeepsPriorityUntilTheFirstFall() started.
+􀟈  Test copiedHistoryRestoresTheWalkingWorkerWhenRewinding() started.
+􀟈  Test neoBridgeCompletionKeepsPriorityUntilTheFirstFall() started.
+􀟈  Test encodedActorsRestoreWalkingPriorityAndReadOlderSaves() started.
+􀟈  Test permanentTraitsAloneDoNotMakeAnOrdinaryWalkerPreferred() started.
+􁁛  Test copiedHistoryRestoresTheWalkingWorkerWhenRewinding() passed after 0.001 seconds.
+􁁛  Test actorsKeepIndependentHistoriesAndNewWorkRestoresPriority() passed after 0.001 seconds.
+􁁛  Test classicBridgeCompletionKeepsPriorityUntilTheFirstFall() passed after 0.001 seconds.
+􁁛  Test fallingAndTerminalStatesOverridePreviousSkillHistory() passed after 0.001 seconds.
+􁁛  Test historyRoundTripPreservesTheRetainedFlag() passed after 0.001 seconds.
+􁁛  Test sequelBridgeCompletionKeepsPriorityUntilTheFirstFall() passed after 0.001 seconds.
+􁁛  Test permanentTraitsAloneDoNotMakeAnOrdinaryWalkerPreferred() passed after 0.001 seconds.
+􁁛  Test aFallBetweenTargetQueriesStillClearsThePreviousWorker() passed after 0.001 seconds.
+􁁛  Test neoBridgeCompletionKeepsPriorityUntilTheFirstFall() passed after 0.001 seconds.
+􁁛  Test physicsEqualityIgnoresOnlyTargetHistory() passed after 0.001 seconds.
+􁁛  Test legacyActiveWorkerRetainsPriorityAfterFinishingItsTask() passed after 0.001 seconds.
+􁁛  Test encodedActorsRestoreWalkingPriorityAndReadOlderSaves() passed after 0.001 seconds.
+􁁛  Suite LemmingSkillTargetingTests passed after 0.001 seconds.
+􁁛  Test run with 12 tests in 1 suite passed after 0.002 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite MobileWorkerSessionTests started.
+􀟈  Suite MobileWorkerHistoryTests started.
+􀟈  Suite MobileWorkerTargetingTests started.
+􀟈  Test l3BlockersAreActiveWorkersWithoutBecomingBombCarriers() started.
+􀟈  Test completedClassicBridgeRetainsPriorityThroughWalkingAndRestoresItsCheckpoint() started.
+􀟈  Test l2CandidatesDistinguishActiveDiggersAndBombableBlockers() started.
+􀟈  Test classicCrowdTargetsAndAssignsBasherToTheExistingDigger() started.
+􀟈  Test nativeSkillOrderControlsBuilderAndBombPreferences() started.
+􀟈  Test neoCandidatesUseNativeShimmyingRatherThanItsWalkingSpriteFallback() started.
+􀟈  Test walkingClimberKeepsBridgePriorityUntilFallingAndDoesNotRegainItOnLanding() started.
+􀟈  Test activeWorkerBeatsCloserApproachingAndRetainedWalker(input:) started.
+􀟈  Test shruggingSupportsRepeatBuildWithoutInventingAnApproachingFollower() started.
+􀟈  Test neoPreplacedWorkerCarriesPriorityIntoWalkingButPermanentTraitsAloneDoNot() started.
+􀟈  Test heldManualSelectionIsNotReplacedByAnActiveWorker() started.
+􀟈  Test repeatBuildAndBombBlockersKeepTheirExplicitPriority() started.
+􀟈  Test carriedToolsAndL3BombOptOutRemainIndependentOfWorkerPreference() started.
+􀟈  Test workerPreferenceDoesNotExtendPointerOrFingerReach() started.
+􀟈  Test activeWorkersKeepStableDistanceIdentifierAndRetentionRules() started.
+􀟈  Test case passing 1 argument input → .precision to activeWorkerBeatsCloserApproachingAndRetainedWalker(input:) started.
+􀟈  Test disablingWorkerPreferenceAndFinishingWorkRestoreOrdinarySelection() started.
+􀟈  Test case passing 1 argument input → .touch to activeWorkerBeatsCloserApproachingAndRetainedWalker(input:) started.
+􀟈  Test nativeEligibilityWinsOverActiveSkill(state:) started.
+􀟈  Test previousCandidateEncodingRetainsItsMeaning() started.
+􀟈  Test case passing 1 argument state → .unavailable to nativeEligibilityWinsOverActiveSkill(state:) started.
+􀟈  Test case passing 1 argument state → .alreadyAssigned to nativeEligibilityWinsOverActiveSkill(state:) started.
+􁁛  Test shruggingSupportsRepeatBuildWithoutInventingAnApproachingFollower() passed after 0.001 seconds.
+􁁛  Test activeWorkersKeepStableDistanceIdentifierAndRetentionRules() passed after 0.001 seconds.
+􁁛  Test disablingWorkerPreferenceAndFinishingWorkRestoreOrdinarySelection() passed after 0.001 seconds.
+􁁛  Test nativeEligibilityWinsOverActiveSkill(state:) with 2 test cases passed after 0.001 seconds.
+􁁛  Test carriedToolsAndL3BombOptOutRemainIndependentOfWorkerPreference() passed after 0.001 seconds.
+􁁛  Test walkingClimberKeepsBridgePriorityUntilFallingAndDoesNotRegainItOnLanding() passed after 0.001 seconds.
+􁁛  Test activeWorkerBeatsCloserApproachingAndRetainedWalker(input:) with 2 test cases passed after 0.001 seconds.
+􁁛  Test repeatBuildAndBombBlockersKeepTheirExplicitPriority() passed after 0.001 seconds.
+􁁛  Test workerPreferenceDoesNotExtendPointerOrFingerReach() passed after 0.001 seconds.
+􁁛  Test heldManualSelectionIsNotReplacedByAnActiveWorker() passed after 0.001 seconds.
+􁁛  Test neoPreplacedWorkerCarriesPriorityIntoWalkingButPermanentTraitsAloneDoNot() passed after 0.001 seconds.
+􁁛  Suite MobileWorkerHistoryTests passed after 0.001 seconds.
+􁁛  Test previousCandidateEncodingRetainsItsMeaning() passed after 0.001 seconds.
+􁁛  Suite MobileWorkerTargetingTests passed after 0.001 seconds.
+􁁛  Test completedClassicBridgeRetainsPriorityThroughWalkingAndRestoresItsCheckpoint() passed after 0.049 seconds.
+􁁛  Test l2CandidatesDistinguishActiveDiggersAndBombableBlockers() passed after 0.049 seconds.
+􁁛  Test l3BlockersAreActiveWorkersWithoutBecomingBombCarriers() passed after 0.049 seconds.
+􁁛  Test classicCrowdTargetsAndAssignsBasherToTheExistingDigger() passed after 0.049 seconds.
+􁁛  Test neoCandidatesUseNativeShimmyingRatherThanItsWalkingSpriteFallback() passed after 0.049 seconds.
+􁁛  Test nativeSkillOrderControlsBuilderAndBombPreferences() passed after 0.049 seconds.
+􁁛  Suite MobileWorkerSessionTests passed after 0.050 seconds.
+􁁛  Test run with 18 tests in 3 suites passed after 0.050 seconds.
+􀟈  Test run started.
+􀄵  Testing Library Version: 2401
+􀄵  Target Platform: arm64e-apple-macos14.0
+􀟈  Suite CloudKitLibraryTests started.
+􀟈  Suite CloudLibraryTests started.
+􀟈  Suite TargetingHistoryRecoveryTests started.
+􀟈  Test corruptKeysAndMissingSnapshotsPreventReplacement() started.
+􀟈  Test deviceSnapshotsAreEncryptedAndRetainConcurrentDevices() started.
+􀟈  Test concurrentIdentityCreationRetainsBothLibraries() started.
+􀟈  Test discoversTheSameLibraryAcrossDevicesAndMigratesExistingKeys() started.
+􀟈  Test cancelledSnapshotDoesNotStartADatabaseWrite() started.
+􀟈  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() started.
+􀟈  Test previewBuildRestoresLatestSharedLibraryByDefault() started.
+􀟈  Test legacyJourneySessionAbsorbsItsClassicTwinOnEveryDevice() started.
+􀟈  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() started.
+􀟈  Test lifecycleSyncUploadsAgainAndIncludesChangesDuringUpload() started.
+􀟈  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() started.
+􀟈  Test staleDiscoveryCannotReplaceThePasswordCredential() started.
+􀟈  Test offlineHotSeatRevisionsMergeIntoOneSession() started.
+􀟈  Test slowCredentialServicesLeaveTheMainActorResponsive() started.
+􀟈  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() started.
+􀟈  Test lifecycleWaitsForAnExistingUploadThenCapturesAgain() started.
+􀟈  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() started.
+􀟈  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() started.
+􀟈  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() started.
+􀟈  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() started.
+􀟈  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() started.
+􀟈  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() started.
+􀟈  Test previousSyncedHotSeatSurvivesAnotherSelectedPlayerOfflineAndReopen() started.
+􀟈  Test syncPasswordGivesEveryDeviceTheSameValidVault() started.
+􀟈  Test sequelTargetingHistoryDoesNotChangeGameplayIdentity() started.
+􀟈  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() started.
+􀟈  Test cancelledDownloadDoesNotImportOrUpload() started.
+􀟈  Test cancelledAppleTransportStopsBeforePreparingAnUpload() started.
+􀟈  Test cancelledLifecycleWaitDoesNotWaitForAStalledUpload() started.
+􀟈  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() started.
+􀟈  Test cancelledUploadCannotReportSynced() started.
+􀟈  Test syncingStateAppearsBeforeProviderDiscovery() started.
+􀟈  Test unreadableCredentialsNeverCreateReplacementKeys() started.
+􀟈  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() started.
+􀟈  Test journeyWithoutRosterCannotReportCompleteSync() started.
+􀟈  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() started.
+􀟈  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() started.
+􀟈  Test neoTargetingHistoryDoesNotChangeGameplayIdentity() started.
+􀟈  Test malformedCloudArchiveNeverImportsOrOverwritesIt() started.
+􀟈  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() started.
+􀟈  Test legacyTesterIdentityRestoresTesterStatus() started.
+􀟈  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() started.
+􀟈  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() started.
+􁁛  Test sequelTargetingHistoryDoesNotChangeGameplayIdentity() passed after 0.002 seconds.
+􁁛  Test neoTargetingHistoryDoesNotChangeGameplayIdentity() passed after 0.003 seconds.
+􁁛  Suite TargetingHistoryRecoveryTests passed after 0.003 seconds.
+􁁛  Test discoversTheSameLibraryAcrossDevicesAndMigratesExistingKeys() passed after 0.017 seconds.
+􁁛  Test concurrentIdentityCreationRetainsBothLibraries() passed after 0.018 seconds.
+􁁛  Test malformedCloudArchiveNeverImportsOrOverwritesIt() passed after 0.742 seconds.
+􁁛  Test corruptKeysAndMissingSnapshotsPreventReplacement() passed after 0.748 seconds.
+􁁛  Test staleDiscoveryCannotReplaceThePasswordCredential() passed after 0.749 seconds.
+􁁛  Test divergentHotSeatVersionsRetainBothBranchesAndAdvanceIndependently() passed after 0.752 seconds.
+􁁛  Test linkLookupDoesNotRevealTheKeyThatDecryptsLibraryCredentials() passed after 0.753 seconds.
+􁁛  Test syncPasswordGivesEveryDeviceTheSameValidVault() passed after 0.753 seconds.
+􁁛  Test encryptionRejectsWrongLibraryKeyAndTamperedBytes() passed after 0.756 seconds.
+􁁛  Test deletingAnOlderIdentityAlsoRemovesItsOriginalUUID() passed after 0.757 seconds.
+􁁛  Test sharedLearningProgressUsesItsSessionAndKeepsSoloSeparate() passed after 0.758 seconds.
+􁁛  Test cancelledDownloadDoesNotImportOrUpload() passed after 0.758 seconds.
+􁁛  Test cancelledAppleTransportStopsBeforePreparingAnUpload() passed after 0.857 seconds.
+􁁛  Test deviceSnapshotsAreEncryptedAndRetainConcurrentDevices() passed after 0.858 seconds.
+􁁛  Test cancelledSnapshotDoesNotStartADatabaseWrite() passed after 0.858 seconds.
+􁁛  Suite CloudKitLibraryTests passed after 0.858 seconds.
+􁁛  Test unreadableCredentialsNeverCreateReplacementKeys() passed after 0.859 seconds.
+􁁛  Test syncingStateAppearsBeforeProviderDiscovery() passed after 0.860 seconds.
+􁁛  Test legacyTesterIdentityRestoresTesterStatus() passed after 0.870 seconds.
+􁁛  Test slowCredentialServicesLeaveTheMainActorResponsive() passed after 0.889 seconds.
+􁁛  Test originalPlayerUUIDFindsAnOlderCloudIdentityWithoutResultHistory() passed after 0.935 seconds.
+􁁛  Test journeyWithoutRosterCannotReportCompleteSync() passed after 1.003 seconds.
+􁁛  Test aSaveDuringUploadRemainsPendingUntilTheNewProgressUploads() passed after 1.004 seconds.
+􁁛  Test hotSeatRestoresRosterPolicyTurnAndSharedProgressAcrossEngines() passed after 1.011 seconds.
+􁁛  Test previewBuildRestoresLatestSharedLibraryByDefault() passed after 1.019 seconds.
+􁁛  Test cancelledUploadCannotReportSynced() passed after 1.020 seconds.
+􁁛  Test onePasswordPersistsOfflineDuringPlayAndDoesNotDuplicateOnRestart() passed after 1.032 seconds.
+􁁛  Test cancelledLifecycleWaitDoesNotWaitForAStalledUpload() passed after 1.048 seconds.
+􁁛  Test importsWaitForSafeMenuAndLocalMutationDuringFetchGetsAnotherPass() passed after 1.052 seconds.
+􁁛  Test existingIndependentPlayersRemainSeparateWhenLibrariesAreLinked() passed after 1.056 seconds.
+􁁛  Test lifecycleWaitsForAnExistingUploadThenCapturesAgain() passed after 1.059 seconds.
+􁁛  Test testerLibrarySyncsInactivePlayersAndEverySavedSession() passed after 1.062 seconds.
+􁁛  Test lifecycleSyncUploadsAgainAndIncludesChangesDuringUpload() passed after 1.072 seconds.
+􁁛  Test restoresEveryProfilePortraitRecordAndAchievementWithoutMergingNames() passed after 1.079 seconds.
+􁁛  Test partialLibrariesStayPendingUntilEveryLibraryRecovers() passed after 1.087 seconds.
+􁁛  Test previousSyncedHotSeatSurvivesAnotherSelectedPlayerOfflineAndReopen() passed after 1.095 seconds.
+􁁛  Test tombstonesPreventAnOfflineDeviceFromResurrectingADeletedPlayer() passed after 1.097 seconds.
+􁁛  Test legacyJourneySessionAbsorbsItsClassicTwinOnEveryDevice() passed after 1.104 seconds.
+􁁛  Test copiedPlayerIDsRestoreNewerProgressWithoutDuplicatingPlayers() passed after 1.109 seconds.
+􁁛  Test offlineResultsMergeOnReconnectAndRepeatedReceiptDoesNotDuplicateAttempts() passed after 1.118 seconds.
+􁁛  Test copiedLegacyResultsRecoverIdentityAndIdenticalHotSeatRevision() passed after 1.121 seconds.
+􁁛  Test offlineHotSeatRevisionsMergeIntoOneSession() passed after 1.125 seconds.
+􁁛  Suite CloudLibraryTests passed after 1.126 seconds.
+􁁛  Test run with 43 tests in 3 suites passed after 1.126 seconds.

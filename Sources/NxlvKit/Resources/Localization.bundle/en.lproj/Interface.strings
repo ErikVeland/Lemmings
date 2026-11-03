@@ -10568,3 +10568,16 @@
 
 /* Sources/NxlvKit/TrolleyCelebration.swift:168 */
 "{0}{1} more to rescue for three stars." = "{0}{1} more to rescue for three stars.";
+
+/* 2.4.1 interface additions. */
+"Crowd targeting favours lemmings using a skill. Their priority lasts until they fall. Your existing targeting preference stays in place." = "Crowd targeting favours lemmings using a skill. Their priority lasts until they fall. Your existing targeting preference stays in place.";
+"Favour active skilled lemmings" = "Favour active skilled lemmings";
+"Home works with Magnet and other accessibility tools. Footer actions have matching labels and destinations." = "Home works with Magnet and other accessibility tools. Footer actions have matching labels and destinations.";
+"Local saves finish before quitting. Cloud delivery has a shorter wait, and interrupted sync stays pending for a later retry." = "Local saves finish before quitting. Cloud delivery has a shorter wait, and interrupted sync stays pending for a later retry.";
+"Pick the worker" = "Pick the worker";
+"Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply." = "Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply.";
+"Save and close" = "Save and close";
+"Syncing iCloud..." = "Syncing iCloud...";
+"Target active workers" = "Target active workers";
+"Your next level is ready." = "Your next level is ready.";
+"macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete; Chronicles and NeoLemmix remain Beta." = "macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete; Chronicles and NeoLemmix remain Beta.";

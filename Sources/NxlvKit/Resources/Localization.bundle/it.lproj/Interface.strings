@@ -3523,3 +3523,8 @@
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
 "{0}H {1}M" = "{0}H {1}M";
 "{0}{1} more to rescue for three stars." = "Salva altri {0}{1} per ottenere tre stelle.";
+
+/* 2.4.1 crowd targeting. Draft translations require human review. */
+"Favour active skilled lemmings" = "Preferisci i lemming che usano abilità";
+"Target active workers" = "Seleziona lavoratori attivi";
+"Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply." = "Preferisce i lemming che usano un’abilità finché non cadono. Restano valide le regole di ogni abilità.";

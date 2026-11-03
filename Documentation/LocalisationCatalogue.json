@@ -4380,6 +4380,12 @@
       "Sources/NxlvKit/DifficultyTechniques.swift:39"
     ]
   },
+  "Crowd targeting favours lemmings using a skill. Their priority lasts until they fall. Your existing targeting preference stays in place.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+    ]
+  },
   "Current level": {
     "kind": "text",
     "references": [
@@ -5965,6 +5971,12 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:331"
     ]
   },
+  "Favour active skilled lemmings": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/SettingsWindow.swift:337"
+    ]
+  },
   "Favourite": {
     "kind": "text",
     "references": [
@@ -7148,6 +7160,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ClassicSaga.swift:35"
+    ]
+  },
+  "Home works with Magnet and other accessibility tools. Footer actions have matching labels and destinations.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:19"
     ]
   },
   "Home {0}/{1}": {
@@ -9702,6 +9720,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift:153"
+    ]
+  },
+  "Local saves finish before quitting. Cloud delivery has a shorter wait, and interrupted sync stays pending for a later retry.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
     ]
   },
   "Locked": {
@@ -12695,6 +12719,12 @@
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/END.IFF:1"
     ]
   },
+  "Pick the worker": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+    ]
+  },
   "Pixel Width": {
     "kind": "text",
     "references": [
@@ -13206,6 +13236,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:218"
+    ]
+  },
+  "Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/SettingsWindow.swift:219"
     ]
   },
   "Prefer the current builder when assigning Build again. Native skill rules still apply. L3 uses carried bricks.": {
@@ -15505,6 +15541,12 @@
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1707"
     ]
   },
+  "Save and close": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:18"
+    ]
+  },
   "Save and return to library": {
     "kind": "text",
     "references": [
@@ -17275,6 +17317,12 @@
       "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:52"
     ]
   },
+  "Syncing iCloud...": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/main.swift:666"
+    ]
+  },
   "Syncing your saved records...": {
     "kind": "text",
     "references": [
@@ -17504,6 +17552,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ControllerBindings.swift:37"
+    ]
+  },
+  "Target active workers": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileSettingsArt.swift:64"
     ]
   },
   "Target approaching lemmings": {
@@ -21307,6 +21361,12 @@
       "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:51"
     ]
   },
+  "Your next level is ready.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:14"
+    ]
+  },
   "Your rank: #{0} of {1} - {2}": {
     "kind": "text",
     "references": [
@@ -21727,6 +21787,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/ReleaseWelcome.swift:17"
+    ]
+  },
+  "macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete; Chronicles and NeoLemmix remain Beta.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:20"
     ]
   },
   "missing completion frame": {

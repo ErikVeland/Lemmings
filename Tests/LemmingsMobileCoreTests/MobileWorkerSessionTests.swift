@@ -3,7 +3,7 @@ import NxlvKit
 import Testing
 @testable import LemmingsMobileCore
 
-struct MobileWorkerSessionTests {
+@MainActor struct MobileWorkerSessionTests {
     private let width = 160
     private let height = 80
 

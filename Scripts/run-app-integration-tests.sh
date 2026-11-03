@@ -46,6 +46,11 @@ rsync -a --delete "$sparkle_framework" "$test_app/Contents/Frameworks/"
 resource_app="${LEMMINGS_TEST_APP:-$project_dir/.build/local/Ultimate Lemmings.app}"
 ln -sfn "$resource_app/Contents/Resources" "$test_app/Contents/Resources"
 test_flags=()
+if [[ "${TEST_SCOPE:-all}" == playfield ]]; then
+  test_flags+=(-D PLAYFIELD_TESTS)
+  cp "$project_dir/Tests/PlayfieldDrawTests/main.swift" "$build_dir/PlayfieldDrawingChecks.swift"
+  sources+=("$build_dir/PlayfieldDrawingChecks.swift")
+fi
 if [[ "${TEST_SCOPE:-all}" == foundations ]]; then test_flags+=(-D FOUNDATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == foundations-review ]]; then test_flags+=(-D FOUNDATION_TESTS -D FOUNDATION_REVIEW_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == quick-controls ]]; then test_flags+=(-D QUICK_CONTROLS_TESTS); fi

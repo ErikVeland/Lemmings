@@ -44,6 +44,52 @@ private final class LibraryCredentials: @unchecked Sendable {
 }
 
 @MainActor struct CloudLibraryTests {
+    @Test func cancelledAppleTransportStopsBeforePreparingAnUpload() async throws {
+        let storage = try AppStorage.temporary(named: "cancelled-apple-transport")
+        defer { storage.removeTemporaryFiles() }
+        let transport = AppleCloudLibraryTransport(defaults: storage.defaults, endpoint: nil,
+            deviceAccess: LibraryCredentials([]).access())
+        let data = try CloudLibraryArchive().encoded()
+        let upload = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            await #expect(throws: CancellationError.self) {
+                try await transport.save(data, identity: CloudLibraryIdentity(), device: UUID().uuidString)
+            }
+        }
+        await upload.value
+    }
+
+    @Test func cancelledDownloadDoesNotImportOrUpload() async throws {
+        let storage = try AppStorage.temporary(named: "cancelled-cloud-download")
+        defer { storage.removeTemporaryFiles() }
+        let store = ArcadeStore(storage: storage, bundledProofs: nil)
+        let transport = LibraryTransport(LibraryServer())
+        let sync = CloudLibrarySync(store: store, storage: storage, transport: transport,
+            identities: [CloudLibraryIdentity()])
+        defer { sync.stop() }
+        transport.afterLoad = { withUnsafeCurrentTask { $0?.cancel() } }
+        await Task { await sync.syncNow() }.value
+        #expect(transport.writes == 0)
+        #expect(sync.state == .pending)
+        #expect(sync.lastSynced == nil)
+    }
+
+    @Test func cancelledUploadCannotReportSynced() async throws {
+        let storage = try AppStorage.temporary(named: "cancelled-cloud-upload")
+        defer { storage.removeTemporaryFiles() }
+        let transport = LibraryTransport(LibraryServer())
+        let sync = CloudLibrarySync(store: ArcadeStore(storage: storage, bundledProofs: nil),
+            storage: storage, transport: transport, identities: [CloudLibraryIdentity()])
+        defer { sync.stop() }
+        transport.beforeSave = { withUnsafeCurrentTask { $0?.cancel() } }
+        await Task { await sync.syncNow() }.value
+        #expect(sync.state == .pending)
+        #expect(sync.lastSynced == nil)
+        transport.beforeSave = nil
+        await sync.syncForLifecycle()
+        #expect(sync.state == .synced)
+    }
+
     @Test func journeyWithoutRosterCannotReportCompleteSync() async throws {
         let storage = try AppStorage.temporary(named: "orphaned-journey-sync")
         defer { storage.removeTemporaryFiles() }
@@ -123,6 +169,34 @@ private final class LibraryCredentials: @unchecked Sendable {
         #expect(sync.state == .synced)
         let uploaded = try #require(transport.server.files[identity.id]?.values.first)
         #expect(try CloudLibraryArchive.decode(uploaded).players.values.contains { $0.records.runs.count == 1 })
+    }
+    @Test func cancelledLifecycleWaitDoesNotWaitForAStalledUpload() async throws {
+        let storage = try AppStorage.temporary(named: "cancelled-lifecycle-wait")
+        defer { storage.removeTemporaryFiles() }
+        let transport = LibraryTransport(LibraryServer())
+        let sync = CloudLibrarySync(store: ArcadeStore(storage: storage, bundledProofs: nil),
+            storage: storage, transport: transport, identities: [CloudLibraryIdentity()])
+        defer { sync.stop() }
+        let (started, signal) = AsyncStream<Void>.makeStream()
+        let (release, resume) = AsyncStream<Void>.makeStream()
+        transport.beforeSave = {
+            transport.beforeSave = nil
+            signal.yield(())
+            for await _ in release { break }
+        }
+        let active = Task { await sync.syncNow() }
+        for await _ in started { break }
+        var finished = false
+        let exit = Task { await sync.syncForLifecycle(); finished = true }
+        await Task.yield()
+        exit.cancel()
+        for _ in 0..<100 where !finished { try await Task.sleep(nanoseconds: 1_000_000) }
+        #expect(finished)
+        #expect(transport.writes == 0)
+        resume.yield(())
+        await active.value
+        await exit.value
+        #expect(transport.writes == 1)
     }
     @Test func legacyTesterIdentityRestoresTesterStatus() async throws {
         let storage = try AppStorage.temporary(named: "legacy-tester-library")

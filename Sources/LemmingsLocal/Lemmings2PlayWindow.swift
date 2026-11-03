@@ -900,8 +900,18 @@ import NxlvKit
         }
         if userPausedMusic && paused { updateUserMusicPause() }
     }
+    nonisolated private static let completionCampaignCache = GameAssetCache<Lemmings2Campaign>(capacity: 2)
+
     static func savedCompletion(root: URL, journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
-        guard var campaign = try? Lemmings2Campaign(root: root) else { return 0 }
+        let cacheKey = GameAssetCache<Lemmings2Campaign>.bundledKey(root)
+        var campaign: Lemmings2Campaign
+        if let cacheKey, let cached = completionCampaignCache.value(for: cacheKey) {
+            campaign = cached
+        } else {
+            guard let decoded = try? Lemmings2Campaign(root: root) else { return 0 }
+            campaign = decoded
+            if let cacheKey { completionCampaignCache.insert(decoded, for: cacheKey) }
+        }
         let key = campaignProgressKey(root: root)
         if let data = UserDefaults.standard.data(forKey: key),
            let saved = try? JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data) {

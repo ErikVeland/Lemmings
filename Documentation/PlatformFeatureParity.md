@@ -8,6 +8,39 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
+## 2.4.1 source preparation — 3 November 2026
+
+The shared worker selector retains its four-engine coverage, explicit touch and
+controller choices, saved preference and checkpoint identity. Native tests now
+exercise the mobile session adapters on the main actor, matching gameplay’s
+execution context. The prior cooperative-pool test run overflowed L2’s native
+step stack. Draft targeting labels and the retention tooltip are supplied in
+all eight translated packs. Human language review remains open.
+
+Shared cloud sync now releases cancelled lifecycle waiters and checks
+cancellation before import, provider writes and a new successful status.
+CloudKit and the hosted/iCloud transport check cancellation after asynchronous
+preparation and account checks. An already submitted write can finish. Local
+progress remains available for the next sync attempt. These shared changes apply
+to Mac, iPhone, iPad, Duo and TV. Mac flushes its local checkpoint and records
+before the quit decision and bounds its cloud wait to three seconds.
+
+Mac Home caches the initial bundled L2 campaign for completion counts, then
+restores current progress into a copy. Imported roots bypass this cache.
+The native harness measured the repeated read at 219.0 ms before and 0.4 ms
+after. This is a local unoptimised harness comparison, not a device deadline.
+L3’s measured repeated read was 5.2 ms and was left unchanged.
+
+Seventy-three focused tests pass for selection, real native-session assignments,
+checkpoint identity, cancellation and isolated save merge/recovery. Native L2
+runtime checks include 120 recorded campaign completions. L3 runtime and targeting,
+Classic replay and Neo replay checks pass. Preserved fixture hashes match.
+Mac crowd/footer, Settings and release-note render/input checks pass offscreen.
+Representative captures were inspected. The optimised arm64 app builds and its
+signature verifies. Its local profile does not authorise CloudKit. Physical input,
+live cloud and mobile/TV SDK acceptance for this candidate remain separate.
+See the [preparation record](ReleaseReadiness/2.4.1-build105/README.md).
+
 ## Active-skill crowd targeting — 2 November 2026
 
 The existing builder preference now also prefers eligible lemmings actively

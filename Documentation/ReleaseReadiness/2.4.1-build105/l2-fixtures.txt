@@ -1,0 +1,1 @@
+PASS 120 Lemmings 2 fixture hashes and 70 carry-over fixture hashes

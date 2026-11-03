@@ -2,52 +2,23 @@
 
 ## Current build candidate
 
-The current source version is **2.4** (Mac build 104, iOS build 39, tvOS build 18). Read the
-[complete 2.4 candidate notes](ReleaseNotes-2.4-build104.md). These notes cover
-the current main source and must stay current with the source selected for a build.
-
-## Pending Mac hotfix
-
-- Fix the Home accessibility crash reported in [issue #30](https://github.com/ErikVeland/Lemmings/issues/30)
-  when Magnet or another accessibility client queries the game window.
-- Correct the Leaderboards and Playlists accessibility labels and the fallback
-  menu's Playlists and Donate actions.
-
-This source change is not yet packaged or published. A new version/build and its
-matching notes must be assigned before publishing a signed Mac update. See the
-[source verification limits](PlatformFeatureParity.md#mac-accessibility-footer-hotfix--1-november-2026).
+The current source version is **2.4.1** (Mac build 105, iOS build 44, tvOS build 19).
+Read the [complete 2.4.1 candidate notes](ReleaseNotes-2.4.1-build105.md).
+These notes describe the current source. No public 2.4.1 package has been published.
+See the [preparation record](ReleaseReadiness/2.4.1-build105/README.md) for validation and limits.
 
 ## Latest published release
 
-Mac 2.3 build 102 is the latest published app release. Its full and slim
-downloads and five signed deltas are verified. iOS 2.3 build 37 and tvOS 2.3
-build 16 were assigned to their existing TestFlight groups; store availability
-and 2.4 delivery are separate. See the
-[2.3 release record](ReleaseReadiness/2.3-build102/README.md).
-
-The public 2.3 tag still points to the earlier build 100 source; the build 102
-release record keeps its package and feed provenance. The 2.4 candidate uses
-the published Mac build 102 source commit as its release base.
+Mac 2.4 build 104 is published with full and slim universal packages and a signed updater feed.
+See the [2.4 release record](ReleaseReadiness/2.4-build104/README.md).
+iOS 2.4 build 39 and tvOS 2.4 build 18 were uploaded for Apple processing.
+Their public availability remains separate from the Mac release.
 
 ## Previous release
 
-Mac 2.3 build 102 is available. Its
-[release record](ReleaseReadiness/2.3-build102/README.md) records the notarised
-universal packages, five direct updates, public asset and feed verification.
-See the [published notes](ReleaseNotes-2.3-build102.md) and
-[release scope](ReleaseScope.md).
-
-The same iOS build 33 export is published through the
-[AltStore Classic source](AltStore.md).
-
-The [2.2 notes](ReleaseNotes-2.2-build97.md) and
-[release record](ReleaseReadiness/2.2-build97/README.md) retain the previous delivery evidence.
-
-The [2.1.2 notes](ReleaseNotes-2.1.2-build96.md) and
-[release record](ReleaseReadiness/2.1.2-build96/README.md) retain the previous delivery evidence.
-
-The [2.1.1 notes](ReleaseNotes-2.1.1-build95.md) and
-[release record](ReleaseReadiness/2.1.1-build95/README.md) retain the earlier evidence.
+Mac 2.3 build 102 remains recorded in the [2.3 release record](ReleaseReadiness/2.3-build102/README.md).
+The public 2.3 tag still points to build 100 source. Its build 102 packages and feed retain their recorded provenance.
+See the [2.4 notes](ReleaseNotes-2.4-build104.md) and [2.3 notes](ReleaseNotes-2.3-build102.md).
 
 ## Earlier notes
 

@@ -6,10 +6,12 @@ import Testing
 @MainActor private final class PrivateLibraryDatabase: CloudKitLibraryDatabase {
     var records: [CKRecord.ID: CKRecord] = [:]
     var beforeSave: (() throws -> Void)?
+    var beforeRead: (() -> Void)?
     var writes = 0
     let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     func prepare() async throws { try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true) }
     func record(_ id: CKRecord.ID) async throws -> CKRecord {
+        beforeRead?()
         guard let record = records[id] else { throw CKError(.unknownItem) }
         return record.copy() as! CKRecord
     }
@@ -37,6 +39,21 @@ import Testing
 }
 
 @MainActor struct CloudKitLibraryTests {
+    @Test func cancelledSnapshotDoesNotStartADatabaseWrite() async throws {
+        let database = PrivateLibraryDatabase(); defer { database.clean() }
+        let store = CloudKitLibraryStore(database: database)
+        let identity = try #require(try await store.discover([]).first)
+        let writes = database.writes
+        let data = try CloudLibraryArchive().encoded()
+        database.beforeRead = { withUnsafeCurrentTask { $0?.cancel() } }
+        await Task {
+            await #expect(throws: CancellationError.self) {
+                try await store.save(data, identity: identity, device: UUID().uuidString)
+            }
+        }.value
+        #expect(database.writes == writes)
+    }
+
     private func id(_ name: String) -> CKRecord.ID { .init(recordName: name, zoneID: CloudKitLibraryStore.zone) }
 
     @Test func discoversTheSameLibraryAcrossDevicesAndMigratesExistingKeys() async throws {

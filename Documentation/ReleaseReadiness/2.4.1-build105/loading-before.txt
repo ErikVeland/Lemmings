@@ -1,0 +1,20 @@
+UI test windows: offscreen; audio: muted
+LOAD L2 saved completion 1: 217.0 ms
+LOAD L2 catalogue 1: 253.9 ms
+LOAD L3 saved completion 1: 18.5 ms
+LOAD L3 catalogue 1: 4791.4 ms
+LOAD L2 saved completion 2: 219.0 ms
+LOAD L2 catalogue 2: 0.1 ms
+LOAD L3 saved completion 2: 5.2 ms
+LOAD L3 catalogue 2: 0.0 ms
+LOAD Classic content: 2675.0 ms
+LOAD Classic select: 343.0 ms
+LOAD Classic retry 1: 184.1 ms
+LOAD Classic retry 2: 166.1 ms
+LOAD Classic retry 3: 164.2 ms
+LOAD Classic browser 1: 52.4 ms
+LOAD Classic browser 2: 47.9 ms
+LOAD Prepared Classic Start: 155.3 ms
+LOAD Replay retention dispatch (32 MB): 4.1 ms
+PASS background replay retention survives source deletion
+Loading latency checks completed

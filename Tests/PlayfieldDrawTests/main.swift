@@ -499,6 +499,53 @@ private func require(
   print("PASS the home screen has a square, accessible gear button for Settings")
 }
 
+/// Footer labels and input targets retain the same action identity.
+@MainActor private func testFooterAccessibilityActions() throws {
+  let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+    .deletingLastPathComponent().deletingLastPathComponent()
+  let artworkURL = ProcessInfo.processInfo.environment["LEMMINGS_TEST_APP"].map {
+    URL(fileURLWithPath: $0).appendingPathComponent("Contents/Resources/MacArtwork/lemmings")
+  } ?? root.appendingPathComponent(".build/mac-artwork/export/lemmings")
+  let artwork = try ClassicMacArtwork(directory: artworkURL)
+  for home in [false, true] {
+    let (window, view, _) = makeWindow()
+    view.phase = .briefing
+    view.overlayTitle = home ? "LEMMINGS" : "MENU"
+    view.overlayLines = ["START JOURNEY"]
+    view.overlayHighlight = 0
+    view.overlayProfileInitials = "LEM"
+    view.overlayShowsSettingsButton = home
+    if home { view.interfaceArtwork = artwork }
+    let expected = home ? ["Player profiles", "Records", "Leaderboards", "Playlists", "Donate"]
+      : ["Player profiles", "Records", "Playlists", "Donate"]
+    var actions: [String] = []
+    view.onProfiles = { actions.append("Player profiles") }
+    view.onRecords = { actions.append("Records") }
+    view.onLeaderboards = { actions.append("Leaderboards") }
+    view.onPlaylists = { actions.append("Playlists") }
+    view.onDonate = { actions.append("Donate") }
+    let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
+    view.cacheDisplay(in: view.bounds, to: bitmap)
+    let controls = view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    for label in expected {
+      guard let control = controls.first(where: { $0.accessibilityLabel() == label }) else {
+        throw Failure(description: "Missing footer action: \(label)")
+      }
+      try require(view.bounds.contains(control.localFrame), "Footer target is outside the view")
+      try require(control.accessibilityPerformPress() && actions.last == label,
+        "Footer accessibility action does not match its label")
+      let frame = control.localFrame
+      view.handleClick(at: CGPoint(x: frame.midX, y: frame.midY))
+      try require(actions.count == (expected.firstIndex(of: label)! + 1) * 2 && actions.last == label,
+        "Footer mouse action does not match its label")
+    }
+    let output = URL(fileURLWithPath: ".build/release-2.4.1/footer-\(home ? "home" : "fallback").png")
+    try bitmap.representation(using: .png, properties: [:])!.write(to: output)
+    withExtendedLifetime(window) {}
+  }
+  print("PASS Home and fallback footer labels, mouse targets and accessibility actions")
+}
+
 /// And the panel still draws its own area.
 @MainActor private func testPanelDrawsItself() throws {
   let (window, playfield, panel) = makeWindow()
@@ -1698,10 +1745,20 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   print("PASS native crowd ink agrees with hover, click and paused inspection, including exposed rear sprites")
 }
 
-@MainActor private func run() {
+@MainActor func runPlayfieldDrawingChecks() {
   let app = NSApplication.shared
   app.setActivationPolicy(.accessory)
   do {
+    if ProcessInfo.processInfo.environment["PLAYFIELD_TEST_SCOPE"] == "targeting" {
+      try testModernCrowdPrecisionTarget()
+      try testCrowdedWallBasherTarget()
+      try testFollowerBehindBuilderIsTargeted()
+      try testSkillTargetPriorities()
+      try testActiveSkillTargetPriorities()
+      try testFooterAccessibilityActions()
+      print("PASS focused crowd targeting and footer accessibility")
+      return
+    }
     try testModernCrowdPrecisionTarget()
     try testTickDirectionContinuity()
     try testSkillCursorBadgeGeometry()
@@ -1741,5 +1798,3 @@ private func testMacArtworkCropStaysPixelAligned() throws {
     exit(1)
   }
 }
-
-run()

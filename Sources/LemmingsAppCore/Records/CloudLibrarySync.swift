@@ -22,7 +22,7 @@ import NxlvKit
     private var identities: [CloudLibraryIdentity]
     private var saved = LocalState()
     private var running = false
-    private var idleWaiters: [CheckedContinuation<Void, Never>] = []
+    private var idleWaiters: [UUID: CheckedContinuation<Void, Never>] = [:]
     private var task: Task<Void, Never>?
     private var timer: Task<Void, Never>?
     private var requested = false
@@ -94,7 +94,11 @@ import NxlvKit
             }
         }
     }
-    public func stop() { stopped = true; requested = false; timer?.cancel(); timer = nil; task?.cancel(); task = nil }
+    public func stop() {
+        stopped = true; requested = false
+        timer?.cancel(); timer = nil; task?.cancel(); task = nil
+        resumeIdleWaiters()
+    }
     public func requestSync(immediately: Bool = false) {
         guard !stopped else { return }
         requested = true
@@ -232,6 +236,7 @@ import NxlvKit
         try local.archive.validate(); return local
     }
     public func syncNow() async {
+        guard !stopped, !Task.isCancelled else { return }
         guard enabled else { setState(.paused); return }
         if let apple = transport as? AppleCloudLibraryTransport, !apple.available { setState(.offline); return }
         guard !running else { requested = true; return }
@@ -241,15 +246,18 @@ import NxlvKit
         do {
             if identities.isEmpty, let apple = transport as? AppleCloudLibraryTransport {
                 let keys = try await apple.credentials()
+                try checkSyncCancellation()
                 identities = try AppleCloudLibraryTransport.mergeIdentities(identities, keys)
             }
             let discovered = try await transport.discover(identities)
+            try checkSyncCancellation()
             identities = try AppleCloudLibraryTransport.mergeIdentities(identities, discovered)
             if !testerSyncEnabled, identities.contains(try await Self.testerIdentity.value) {
                 defaults.set(true, forKey: "CloudLibrary.testerSync.enabled")
             }
             if let apple = transport as? AppleCloudLibraryTransport {
                 let keys = try await apple.storeCredentials(identities)
+                try checkSyncCancellation()
                 identities = try AppleCloudLibraryTransport.mergeIdentities(identities, keys)
             }
             let revision = store.progressRevision
@@ -259,6 +267,7 @@ import NxlvKit
             for identity in identities {
                 do {
                     let versions = try await transport.load(identity)
+                    try checkSyncCancellation()
                     let previous = remote
                     remote = try await Task.detached(priority: .utility) {
                         var combined = previous
@@ -267,11 +276,13 @@ import NxlvKit
                     }.value
                     writable.append(identity)
                 } catch {
+                    try checkSyncCancellation()
                     // Corrupt, unknown or unauthorized saves remain untouched.
                     if error is DecodingError || error is SequelDataError { throw error }
                 }
             }
             guard !writable.isEmpty else { setState(.offline); return }
+            try checkSyncCancellation()
             guard enabled, revision == store.progressRevision else { requested = enabled; setState(enabled ? .pending : .paused); return }
             var base = saved
             // Recover a copied player's identity before assigning a new one. A
@@ -327,6 +338,7 @@ import NxlvKit
             let merged = try await Task.detached(priority: .utility) {
                 var archive = captured.archive; try archive.merge(incomingRemote); return archive
             }.value
+            try checkSyncCancellation()
             guard enabled, revision == store.progressRevision else { requested = enabled; setState(enabled ? .pending : .paused); return }
             local.archive = merged
             let safe = canImport()
@@ -343,11 +355,19 @@ import NxlvKit
                 try await persist(captured)
             }
             let payload = try await Task.detached(priority: .utility) { try merged.encoded() }.value
+            try checkSyncCancellation()
             var uploaded = 0
             for identity in writable {
                 guard enabled else { setState(.paused); return }
-                do { try await transport.save(payload, identity: identity, device: saved.device); uploaded += 1 }
-                catch { /* Retry from local state on activation or the periodic pass. */ }
+                do {
+                    try checkSyncCancellation()
+                    try await transport.save(payload, identity: identity, device: saved.device)
+                    try checkSyncCancellation()
+                    uploaded += 1
+                } catch {
+                    try checkSyncCancellation()
+                    // Retry from local state on activation or the periodic pass.
+                }
             }
             guard uploaded > 0 else { setState(.offline); return }
             guard enabled else { setState(.paused); return }
@@ -359,7 +379,8 @@ import NxlvKit
             if complete { lastSynced = Date() }
             setState(complete ? .synced : .pending)
         } catch {
-            if error is SequelDataError || error is DecodingError { setState(.failed(error.localizedDescription)) }
+            if error is CancellationError { setState(enabled ? .pending : .paused) }
+            else if error is SequelDataError || error is DecodingError { setState(.failed(error.localizedDescription)) }
             else { setState(.offline) }
         }
     }
@@ -458,13 +479,33 @@ import NxlvKit
         enabled = true
         requestSync(immediately: true)
     }
+    private func checkSyncCancellation() throws {
+        try Task.checkCancellation()
+        if stopped { throw CancellationError() }
+    }
     private func waitUntilIdle() async {
-        while running { await withCheckedContinuation { idleWaiters.append($0) } }
+        while running && !stopped && !Task.isCancelled {
+            let id = UUID()
+            await withTaskCancellationHandler {
+                await withCheckedContinuation { continuation in
+                    if Task.isCancelled || stopped { continuation.resume() }
+                    else { idleWaiters[id] = continuation }
+                }
+            } onCancel: {
+                Task { @MainActor [weak self] in
+                    self?.idleWaiters.removeValue(forKey: id)?.resume()
+                }
+            }
+        }
+    }
+    private func resumeIdleWaiters() {
+        let waiters = idleWaiters.values
+        idleWaiters.removeAll()
+        for waiter in waiters { waiter.resume() }
     }
     private func finishOperation() {
         running = false
-        let waiters = idleWaiters; idleWaiters.removeAll()
-        for waiter in waiters { waiter.resume() }
+        resumeIdleWaiters()
         if requested && task == nil { requestSync() }
     }
     /// A portable private key restores an account-free library after losing a device.

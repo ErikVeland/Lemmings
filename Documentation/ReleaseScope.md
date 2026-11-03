@@ -5,6 +5,18 @@ order: Mac, iOS, tvOS, then sideloading stores. For Mac releases, skip tests
 unless the candidate changes an engine. Keep required package and publication
 verification. Older release receipts below retain the checks actually performed.
 
+## 2.4.1 current scope — 3 November 2026
+
+Mac first: finish skilled-worker crowd targeting, bound quit-time cloud delivery,
+fix the measured repeated L2 completion read, and update release history.
+The Home accessibility correction is included. See the
+[2.4.1 preparation record](ReleaseReadiness/2.4.1-build105/README.md).
+No new mode, sequel deck conversion or automatic story trigger is included.
+
+Mac 2.4 build 104 is published. The owner’s 1 November acceptance supersedes
+the earlier audio and Duo blockers below for 2.4. It does not certify these
+2.4.1 changes. Older assessments retain their original dates and limits.
+
 ## 2.3 release assessment
 
 Assessment: 26 October 2026, `feature/2.3` at `234acea9` plus the current
@@ -85,12 +97,14 @@ connected device list contains only the Mac; CoreSimulator is unavailable.
 
 ## Latest published release
 
-Mac 2.3 build 102 is published with universal full and slim downloads, five
-signed deltas and the live signed appcast. iOS build 36 and tvOS build 15
-remain in the delivery queue; sideloading channels follow them. See the
-[current release record](ReleaseReadiness/2.3-build102/README.md). The
-[2.2.2 build 99 record](ReleaseReadiness/2.2.2-build99/README.md) remains
-historical.
+Mac 2.4 build 104 is published with full and slim universal downloads, five
+signed deltas and the signed updater feed. iOS 2.4 build 39 and tvOS 2.4 build 18
+were uploaded for Apple processing. Public mobile availability remains separate.
+See the [2.4 release record](ReleaseReadiness/2.4-build104/README.md).
+The [2.3 build 102 record](ReleaseReadiness/2.3-build102/README.md) and
+[2.2.2 build 99 record](ReleaseReadiness/2.2.2-build99/README.md) remain historical.
+
+### Historical 2.2.2 validation
 
 The final frozen source is `fea37bf3`; artifacts use `9ffc23e7` with identical
 production inputs. Only two Mac integration-test files differ. All 56 final
