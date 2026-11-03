@@ -1,0 +1,29 @@
+{
+  "adamId": "6822112090",
+  "certificateSHA1": "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412",
+  "destination": "upload",
+  "identifier": "b2f3fff9-d141-4acc-8ab5-003a9271470e",
+  "preparationEvent": {
+    "date": "2026-11-03T13:59:25Z",
+    "errors": [],
+    "infoMessages": [],
+    "shortTitle": "Prepared",
+    "state": "success",
+    "title": "Prepared archive for uploading",
+    "warnings": []
+  },
+  "providerId": "7b152c28-1a8d-4980-834f-7cb8530365b0",
+  "task": "distribute",
+  "teamID": "54WU29TRTY",
+  "uploadDestination": "App Store",
+  "uploadEvent": {
+    "date": "2026-11-03T14:08:44Z",
+    "errors": [],
+    "infoMessages": [],
+    "shortTitle": "Uploaded",
+    "state": "success",
+    "title": "Uploaded to Apple",
+    "warnings": []
+  },
+  "uploadedBuildNumber": "44"
+}

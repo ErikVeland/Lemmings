@@ -1,0 +1,18 @@
+{
+  "sourceCommit": "bbb66121f62467a31a70affd01833bcbbfdbf982",
+  "startedUTC": "2026-11-03T13:52:01.933689+00:00",
+  "xcode": "27.1 (27A9275)",
+  "requestedVersions": {
+    "ios": {
+      "version": "2.4.1",
+      "build": 44
+    },
+    "tvos": {
+      "version": "2.4.1",
+      "build": 19
+    }
+  },
+  "engineChecks": "Carry forward 2.4.1 affected engine and replay checks; no additional source changes",
+  "testWindows": "No tests or apps launched; mechanical audio muted",
+  "productionSourceMatchesMacRelease": "554f79fceaa72e02d52584a07df73df51d9eb2aa"
+}

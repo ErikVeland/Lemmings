@@ -1,0 +1,72 @@
+{
+  "platform": "ios",
+  "version": "2.4.1",
+  "build": "44",
+  "sourceCommit": "bbb66121f62467a31a70affd01833bcbbfdbf982",
+  "ipa": "/Users/veland/Downloads/UltimateLemmings-iOS-2.4.1-44-export/UltimateLemmingsIOS.ipa",
+  "bytes": 1993070413,
+  "bundles": [
+    {
+      "bundleId": "academy.glasscode.lemmings.ios",
+      "profileUUID": "9bd2f9bd-bb5a-4bfc-886c-ffff865c39cc",
+      "profileName": "iOS Team Store Provisioning Profile: academy.glasscode.lemmings.ios",
+      "profileExpires": "2027-10-10T13:17:05",
+      "certificateSHA1": "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412",
+      "signedEntitlements": {
+        "application-identifier": "54WU29TRTY.academy.glasscode.lemmings.ios",
+        "beta-reports-active": true,
+        "com.apple.developer.game-center": true,
+        "com.apple.developer.icloud-container-environment": "Production",
+        "com.apple.developer.icloud-container-identifiers": [
+          "iCloud.academy.glasscode.lemmings"
+        ],
+        "com.apple.developer.icloud-services": [
+          "CloudDocuments",
+          "CloudKit"
+        ],
+        "com.apple.developer.team-identifier": "54WU29TRTY",
+        "com.apple.developer.ubiquity-container-identifiers": [
+          "iCloud.academy.glasscode.lemmings"
+        ],
+        "get-task-allow": false
+      },
+      "strictSignatureVerified": true
+    },
+    {
+      "bundleId": "academy.glasscode.lemmings.ios.DeskClockWidget",
+      "profileUUID": "4eaad9bc-ea1a-419b-9080-92aacf7ec3bd",
+      "profileName": "iOS Team Store Provisioning Profile: academy.glasscode.lemmings.ios.DeskClockWidget",
+      "profileExpires": "2027-10-10T13:17:05",
+      "certificateSHA1": "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412",
+      "signedEntitlements": {
+        "application-identifier": "54WU29TRTY.academy.glasscode.lemmings.ios.DeskClockWidget",
+        "beta-reports-active": true,
+        "com.apple.developer.team-identifier": "54WU29TRTY",
+        "get-task-allow": false
+      },
+      "strictSignatureVerified": true
+    }
+  ],
+  "checksUTC": "2026-11-03T13:59:22.099775+00:00",
+  "contentFiles": 933,
+  "portsSourceRevisions": {
+    "holidayLemmings1993": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
+    "holidayLemmings1994": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
+    "lemmings": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+    "ohNoMoreLemmings": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+    "ohYesMoreLemmings": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
+    "xmasLemmings1991": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
+    "xmasLemmings1992": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7"
+  },
+  "musicScope": "full",
+  "ipaSHA256": "16f597b1890e9453de8f49f9b7d0214a7946001f60b114e20e81d609a491849f",
+  "minimumOS": "16.0",
+  "deviceFamilies": [
+    1,
+    2
+  ],
+  "supportedPlatforms": [
+    "iPhoneOS"
+  ],
+  "verificationScope": "Locally exported App Store IPA from the uploaded archive. Xcode separately exports the same archive with the same Production options for upload."
+}

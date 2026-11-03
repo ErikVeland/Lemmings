@@ -15,7 +15,8 @@ No new mode, sequel deck conversion or automatic story trigger is included.
 
 Mac 2.4.1 build 105 is published with full and slim notarised universal packages.
 Production CloudKit signing and the live updater feed pass verification. iOS build
-44 is next, followed by tvOS build 19. Mac 2.4 build 104 remains recorded.
+44 and tvOS build 19 were uploaded on 4 November with production profiles. iOS
+is Waiting for Review in TestFlight; TV is processing. Mac 2.4 build 104 remains recorded.
 The owner’s 1 November acceptance supersedes
 the earlier audio and Duo blockers below for 2.4. It does not certify these
 2.4.1 changes. Older assessments retain their original dates and limits.

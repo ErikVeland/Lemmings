@@ -1,0 +1,131 @@
+[
+  {
+    "path": "/Users/veland/Library/Developer/Xcode/UserData/Provisioning Profiles/e4b8806b-81b3-45b1-8375-e27b73859e18.mobileprovision",
+    "uuid": "e4b8806b-81b3-45b1-8375-e27b73859e18",
+    "name": "tvOS Team Store Provisioning Profile: academy.glasscode.lemmings.TopShelf",
+    "platform": [
+      "tvOS"
+    ],
+    "expires": "2027-10-10T13:17:05",
+    "entitlements": {
+      "beta-reports-active": true,
+      "com.apple.security.application-groups": [
+        "group.academy.glasscode.lemmings"
+      ],
+      "application-identifier": "54WU29TRTY.academy.glasscode.lemmings.TopShelf",
+      "keychain-access-groups": [
+        "54WU29TRTY.*"
+      ],
+      "get-task-allow": false,
+      "com.apple.developer.team-identifier": "54WU29TRTY"
+    },
+    "certificateSHA1": [
+      "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412"
+    ]
+  },
+  {
+    "path": "/Users/veland/Library/Developer/Xcode/UserData/Provisioning Profiles/9bd2f9bd-bb5a-4bfc-886c-ffff865c39cc.mobileprovision",
+    "uuid": "9bd2f9bd-bb5a-4bfc-886c-ffff865c39cc",
+    "name": "iOS Team Store Provisioning Profile: academy.glasscode.lemmings.ios",
+    "platform": [
+      "iOS",
+      "xrOS",
+      "visionOS"
+    ],
+    "expires": "2027-10-10T13:17:05",
+    "entitlements": {
+      "beta-reports-active": true,
+      "application-identifier": "54WU29TRTY.academy.glasscode.lemmings.ios",
+      "keychain-access-groups": [
+        "54WU29TRTY.*",
+        "com.apple.token"
+      ],
+      "get-task-allow": false,
+      "com.apple.developer.team-identifier": "54WU29TRTY",
+      "com.apple.developer.ubiquity-kvstore-identifier": "54WU29TRTY.*",
+      "com.apple.developer.icloud-services": "*",
+      "com.apple.developer.icloud-container-environment": [
+        "Production",
+        "Development"
+      ],
+      "com.apple.developer.icloud-container-identifiers": [
+        "iCloud.academy.glasscode.lemmings"
+      ],
+      "com.apple.developer.icloud-container-development-container-identifiers": [
+        "iCloud.academy.glasscode.lemmings"
+      ],
+      "com.apple.developer.ubiquity-container-identifiers": [
+        "iCloud.academy.glasscode.lemmings"
+      ],
+      "com.apple.developer.game-center": true
+    },
+    "certificateSHA1": [
+      "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412"
+    ]
+  },
+  {
+    "path": "/Users/veland/Library/Developer/Xcode/UserData/Provisioning Profiles/b825e5b5-e947-4660-9e7c-2e8ea11a8157.mobileprovision",
+    "uuid": "b825e5b5-e947-4660-9e7c-2e8ea11a8157",
+    "name": "tvOS Team Store Provisioning Profile: academy.glasscode.lemmings",
+    "platform": [
+      "tvOS"
+    ],
+    "expires": "2027-10-10T13:17:05",
+    "entitlements": {
+      "beta-reports-active": true,
+      "com.apple.security.application-groups": [
+        "group.academy.glasscode.lemmings"
+      ],
+      "application-identifier": "54WU29TRTY.academy.glasscode.lemmings",
+      "keychain-access-groups": [
+        "54WU29TRTY.*"
+      ],
+      "get-task-allow": false,
+      "com.apple.developer.team-identifier": "54WU29TRTY",
+      "com.apple.developer.icloud-services": [
+        "CloudKit"
+      ],
+      "com.apple.developer.ubiquity-kvstore-identifier": "54WU29TRTY.*",
+      "com.apple.developer.icloud-container-environment": [
+        "Production",
+        "Development"
+      ],
+      "com.apple.developer.icloud-container-identifiers": [
+        "iCloud.academy.glasscode.lemmings"
+      ],
+      "com.apple.developer.icloud-container-development-container-identifiers": [
+        "iCloud.academy.glasscode.lemmings"
+      ],
+      "com.apple.developer.game-center": true,
+      "aps-environment": "production",
+      "com.apple.developer.spatial-audio.profile-access": true
+    },
+    "certificateSHA1": [
+      "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412"
+    ]
+  },
+  {
+    "path": "/Users/veland/Library/Developer/Xcode/UserData/Provisioning Profiles/4eaad9bc-ea1a-419b-9080-92aacf7ec3bd.mobileprovision",
+    "uuid": "4eaad9bc-ea1a-419b-9080-92aacf7ec3bd",
+    "name": "iOS Team Store Provisioning Profile: academy.glasscode.lemmings.ios.DeskClockWidget",
+    "platform": [
+      "iOS",
+      "xrOS",
+      "visionOS"
+    ],
+    "expires": "2027-10-10T13:17:05",
+    "entitlements": {
+      "beta-reports-active": true,
+      "application-identifier": "54WU29TRTY.academy.glasscode.lemmings.ios.DeskClockWidget",
+      "keychain-access-groups": [
+        "54WU29TRTY.*",
+        "com.apple.token"
+      ],
+      "get-task-allow": false,
+      "com.apple.developer.team-identifier": "54WU29TRTY"
+    },
+    "certificateSHA1": [
+      "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412"
+    ]
+  }
+]

@@ -4,7 +4,8 @@ Mac 2.4.1 build 105 was published on 3 November 2026.
 The [GitHub release](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.1)
 is the latest app release. Full and slim downloads support Apple silicon and Intel.
 The signed updater feed includes deltas from builds 104, 102, 99, 98 and 97.
-iOS build 44 is next, followed by tvOS build 19. Neither mobile build is delivered.
+iOS build 44 and tvOS build 19 were uploaded on 4 November. iOS is Waiting for
+Review in TestFlight. tvOS is processing. Public mobile availability is not established.
 
 ## Public package verification
 
@@ -48,6 +49,56 @@ checks and physical-device acceptance were skipped under the release schedule.
 All mechanical checks remained offscreen and muted. No production saves changed.
 The local development build described below is historical. Its disabled CloudKit
 setting does not describe the published apps.
+
+## iOS and tvOS delivery — 4 November 2026
+
+Both device archives were built with stable Xcode 27.1 (`27A9275`) from
+`bbb66121f62467a31a70affd01833bcbbfdbf982`. Production source is unchanged from
+the shipped Mac source, `554f79fceaa72e02d52584a07df73df51d9eb2aa`.
+The affected engine and replay checks above remain applicable. No test suites
+were rerun. No test windows, game apps or audio were launched.
+
+| Platform | Version and build | Apple app ID | Upload accepted, Brisbane | Current Apple state |
+| --- | --- | --- | --- | --- |
+| iPhone, iPad and Duo | 2.4.1 (44) | 6822112090 | 4 November, 00:08:44 | TestFlight: Waiting for Review |
+| Apple TV | 2.4.1 (19) | 6810873426 | 4 November, 00:23:35 | Processing |
+
+Both App Store exports pass strict signatures, exact version and bundle checks,
+arm64 and matching crash-symbol checks. Both retain the full soundtrack and
+933 files in the shipped game-data tree. Exported game files match their
+archives, and the required Classic inputs match the source. iOS supports iOS
+16.0 or later; the TV archive requires tvOS 17.0 or later.
+
+The app and extension profiles are the existing App Store profiles. Their UUIDs
+and signed entitlements are retained in the package receipts. Both app exports
+have CloudKit enabled and select the shared container in Production. The TV app
+also selects production push signing. The Desk Clock widget and Top Shelf each
+have their own matching distribution profile. All four use Cloud Managed Apple
+Distribution certificate `6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412`.
+All four production profile UUIDs match the previous mobile release.
+
+Xcode's archive receipts confirm both uploads against the correct Apple app IDs
+and build numbers, with no upload errors or warnings. The recorded IPA hashes
+identify the verified local App Store exports. Xcode separately exports the same
+archives with the same Production options for upload.
+
+The existing internal Lemmings group is assigned to iOS build 44. The existing
+iOS Private Beta group was added and the build was submitted for beta review.
+Automatic tester notification remains enabled. Apple shows Waiting for Review.
+TV Private Beta remains the TV delivery group. Build 19 cannot be assigned while
+Apple processes it. Group settings and existing builds remain intact.
+
+See [delivery status and upload receipts](MobileDelivery/delivery.json),
+[iOS package checks](MobileDelivery/ios-package-verification.json),
+[TV package checks](MobileDelivery/tvos-package-verification.json),
+[iOS upload result](MobileDelivery/ios-upload.txt) and
+[TV upload result](MobileDelivery/tvos-upload.txt).
+
+Apple processing, beta review, TestFlight availability, App Store review and
+public availability are separate milestones. App Store version review was not
+submitted. Existing store metadata and the AltStore PAL review direction remain
+unchanged. Sideloading stores remain priority 4. Physical input, audio and live
+cross-device sync acceptance remain separate from signing and SDK builds.
 
 ---
 

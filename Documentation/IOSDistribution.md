@@ -1,22 +1,20 @@
 # iOS distribution
 
-Updated 1 November 2026, Brisbane. AltStore Classic's 2.4 source and release
-asset were checked on 1 November. Evidence for the other sideloading channels
-was last checked on 25 October; the Mac release and App Store Connect uploads
-were checked on 1 November.
+Updated 4 November 2026, Brisbane. Mac 2.4.1 build 105 was published on
+3 November. iOS 2.4.1 build 44 and tvOS 2.4.1 build 19 were uploaded to Apple
+on 4 November with stable Xcode 27.1 and production CloudKit profiles. Apple
+accepted both uploads. iOS is Waiting for Review in TestFlight with Lemmings
+and iOS Private Beta assigned. TV is processing; TV Private Beta is retained.
+See the [2.4.1 mobile delivery receipt](ReleaseReadiness/2.4.1-build105/MobileDelivery/delivery.json).
+Store review and public mobile availability remain separate milestones.
 
-Mac 2.4 build 104 was published on 1 November. iOS 2.4 build 39 and tvOS 2.4
-build 18 were uploaded to App Store Connect with Xcode 27.1 on 1 November;
-Apple reported both packages as processing. Later processing status, TestFlight
-availability, store submission and public availability remain unverified. The
-AltStore Classic now offers the 2.4 build 39 IPA from the existing v2.4 GitHub
+AltStore Classic's 2.4 source and release asset were checked on 1 November.
+Evidence for the other sideloading channels was last checked on 25 October.
+AltStore Classic still offers the 2.4 build 39 IPA from the existing v2.4 GitHub
 release. Its source update and public asset digest are recorded in the
 [publication receipt](ReleaseReadiness/2.4-build104/altstore-publication.json).
 ZIP integrity, bundle identity, minimum OS and unencrypted app/widget binaries
 were checked locally. Device installation and re-signing remain unverified.
-
-The package identities, SHA-256 values, sizes and signing profiles are recorded
-in the [2.4 mobile delivery receipt](ReleaseReadiness/2.4-build104/mobile-delivery.json).
 
 The owner requires distribution across iOS sideloading stores. Treat each active
 store as release work. A compatible source, a downloadable IPA, a catalogue
@@ -27,7 +25,7 @@ All channels in this register are priority 4 in the
 onboarding and cut their releases in that order. Pending store work must not
 delay the higher-priority platforms.
 
-## Current release
+## Current AltStore Classic release
 
 AltStore Classic offers **2.4 build 39**, published on 1 November. The live
 [source](https://raw.githubusercontent.com/ErikVeland/Lemmings/main/altstore.json)

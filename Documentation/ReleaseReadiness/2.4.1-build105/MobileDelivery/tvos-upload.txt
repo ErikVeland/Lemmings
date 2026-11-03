@@ -1,0 +1,4 @@
+2026-11-04 00:23:35.169 xcodebuild[41136:648705] Progress 100%: Uploaded package is processing.
+2026-11-04 00:23:35.206 xcodebuild[41136:648705] Progress 100%: Upload succeeded.
+Uploaded UltimateLemmingsTV
+** EXPORT SUCCEEDED **

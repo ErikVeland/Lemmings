@@ -1,0 +1,120 @@
+{
+  "date": "2026-11-04",
+  "timezone": "Australia/Brisbane",
+  "sourceCommit": "bbb66121f62467a31a70affd01833bcbbfdbf982",
+  "productionSourceMatchesMacRelease": "554f79fceaa72e02d52584a07df73df51d9eb2aa",
+  "xcode": "27.1 (27A9275)",
+  "order": [
+    "ios",
+    "tvos"
+  ],
+  "platforms": {
+    "ios": {
+      "appId": "6822112090",
+      "version": "2.4.1",
+      "build": "44",
+      "uploadReceipt": {
+        "adamId": "6822112090",
+        "certificateSHA1": "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412",
+        "destination": "upload",
+        "identifier": "b2f3fff9-d141-4acc-8ab5-003a9271470e",
+        "preparationEvent": {
+          "date": "2026-11-03T13:59:25Z",
+          "errors": [],
+          "infoMessages": [],
+          "shortTitle": "Prepared",
+          "state": "success",
+          "title": "Prepared archive for uploading",
+          "warnings": []
+        },
+        "providerId": "7b152c28-1a8d-4980-834f-7cb8530365b0",
+        "task": "distribute",
+        "teamID": "54WU29TRTY",
+        "uploadDestination": "App Store",
+        "uploadEvent": {
+          "date": "2026-11-03T14:08:44Z",
+          "errors": [],
+          "infoMessages": [],
+          "shortTitle": "Uploaded",
+          "state": "success",
+          "title": "Uploaded to Apple",
+          "warnings": []
+        },
+        "uploadedBuildNumber": "44"
+      },
+      "portalState": "Waiting for Review",
+      "portalCheckedLocal": "2026-11-04T00:27:34+10:00",
+      "existingGroups": [
+        "Lemmings",
+        "iOS Private Beta"
+      ],
+      "newBuildGroupAssignment": "Lemmings and iOS Private Beta",
+      "localExport": {
+        "path": "/Users/veland/Downloads/UltimateLemmings-iOS-2.4.1-44-export/UltimateLemmingsIOS.ipa",
+        "bytes": 1993070413,
+        "sha256": "16f597b1890e9453de8f49f9b7d0214a7946001f60b114e20e81d609a491849f",
+        "minimumOS": "16.0"
+      },
+      "profileUUIDs": [
+        "9bd2f9bd-bb5a-4bfc-886c-ffff865c39cc",
+        "4eaad9bc-ea1a-419b-9080-92aacf7ec3bd"
+      ],
+      "betaReviewSubmitted": true,
+      "automaticallyNotifyTesters": true
+    },
+    "tvos": {
+      "appId": "6810873426",
+      "version": "2.4.1",
+      "build": "19",
+      "uploadReceipt": {
+        "adamId": "6810873426",
+        "certificateSHA1": "6DF0BE4C1DACFC6D0A8DFF8450520C089C30F412",
+        "destination": "upload",
+        "identifier": "922edc2a-e1a8-416b-a5a8-a83706127ffb",
+        "preparationEvent": {
+          "date": "2026-11-03T14:14:34Z",
+          "errors": [],
+          "infoMessages": [],
+          "shortTitle": "Prepared",
+          "state": "success",
+          "title": "Prepared archive for uploading",
+          "warnings": []
+        },
+        "providerId": "7b152c28-1a8d-4980-834f-7cb8530365b0",
+        "task": "distribute",
+        "teamID": "54WU29TRTY",
+        "uploadDestination": "App Store",
+        "uploadEvent": {
+          "date": "2026-11-03T14:23:35Z",
+          "errors": [],
+          "infoMessages": [],
+          "shortTitle": "Uploaded",
+          "state": "success",
+          "title": "Uploaded to Apple",
+          "warnings": []
+        },
+        "uploadedBuildNumber": "19"
+      },
+      "portalState": "Processing",
+      "portalCheckedLocal": "2026-11-04 00:24 Australia/Brisbane",
+      "existingGroups": [
+        "TV Private Beta"
+      ],
+      "newBuildGroupAssignment": "Pending Apple processing",
+      "localExport": {
+        "path": "/Users/veland/Downloads/UltimateLemmings-tvOS-2.4.1-19-export/UltimateLemmingsTV.ipa",
+        "bytes": 1978338012,
+        "sha256": "1b29fe3e139dc78e2bd3cbf4869ea0ea83ff39cc35c80346103f34664b9ac1d6",
+        "minimumOS": "17.0"
+      },
+      "profileUUIDs": [
+        "b825e5b5-e947-4660-9e7c-2e8ea11a8157",
+        "e4b8806b-81b3-45b1-8375-e27b73859e18"
+      ]
+    }
+  },
+  "physicalDeviceAcceptance": "Not performed",
+  "additionalAutomatedTests": "Not rerun; production source is unchanged from the verified Mac 2.4.1 release",
+  "publicAvailability": "Not established",
+  "storeReviewSubmission": "Not performed; store review and sideloading remain separate delivery steps"
+}

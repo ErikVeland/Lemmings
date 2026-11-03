@@ -43,7 +43,10 @@ shared container entitlement. The live Production schema matches the accepted
 2.4 schema. The exact release tag, seven public downloads and signed feed verify.
 The earlier local arm64 development build had CloudKit disabled. That limitation
 does not describe the public apps. Physical input, live cross-device sync and
-mobile/TV SDK acceptance remain separate. iOS build 44 is next, then tvOS build 19.
+physical mobile/TV acceptance remain separate. Both device archives build with
+Xcode 27.1 and export with production CloudKit profiles. Apple accepted iOS build
+44, then TV build 19, on 4 November. iOS is Waiting for Review in TestFlight;
+TV is processing. SDK compilation does not establish physical-device acceptance.
 See the [release record](ReleaseReadiness/2.4.1-build105/README.md).
 
 ## Active-skill crowd targeting — 2 November 2026
