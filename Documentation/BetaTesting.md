@@ -1,12 +1,9 @@
 # Public testing
 
-The current public Mac release is 2.2.1 build 98. See its
-[release notes](ReleaseNotes-2.2.1-build98.md) and
-[release checks](ReleaseReadiness/2.2.1-build98/README.md).
-iPhone/iPad/Duo build 21 is Waiting for Review. Apple TV build 11: Waiting for Review
-Apple processing and Beta Review determine external tester availability.
-Freeze one source commit for each public candidate; earlier records do not
-certify a new package.
+See the [release notes](ReleaseNotes.md) for the current Mac release and mobile
+delivery state. Apple processing and Beta Review determine external tester
+availability. Freeze one source commit for each public candidate. Earlier
+records do not certify a new package.
 
 ## Newcomer and veteran playtests
 
@@ -68,128 +65,55 @@ feed. State that updates are manual. Confirm the bundled game and soundtrack
 assets are approved for public distribution. Record known preview limits in
 the beta notes.
 
-## Local build and notarisation
+## Local builds
 
-After the current source, notes and proof gates pass, run the tri-archive
-release script:
-
-The public app supports Intel and Apple silicon Macs with macOS 12.3 or later.
-It includes the bundled campaigns, fan packs and soundtrack catalogue. No extra
-game files are needed for those campaigns. Optional external NeoLemmix styles
-use a separately selected folder. Game Center is disabled in the public app.
-Local records remain available.
-
-Existing installations can use **Ultimate Lemmings → Check for Updates…**.
-Keep a backup of saved runs before testing an upgrade. Use copies for recovery
-tests. Do not overwrite your only copy with an older release.
-
-## What to test
-
-Before it builds, the script checks for source changes after the previous
-release, requires tracked notes for the exact build, and checks that the
-Monterey worktree contains the current commit. It does not create missing
-notes. It then writes three timestamped ZIP files to
-`~/Downloads`: Developer ID standard, macOS 12 Monterey and Game Center.
-
-Classic and Lemmings 2 retain their Complete classifications.
-Lemmings 3 and NeoLemmix remain Beta.
-Physical Intel, minimum-macOS, complete VoiceOver, physical-controller and
-sustained performance checks remain separate from automated checks.
-
-[Report a problem](https://github.com/ErikVeland/Lemmings/issues/new) with the
-build number, Mac model, macOS version, game and level, settings, input device,
-and steps to reproduce. Include a screenshot or replay when it helps.
-
-## Build locally
+For a quick manual Mac build, use the current architecture and copy the app
+to Downloads:
 
 ```sh
 LEMMINGS_ARCHITECTURES="$(uname -m)" zsh Scripts/build-local-app.sh
 ditto ".build/local/Ultimate Lemmings.app" "$HOME/Downloads/Ultimate Lemmings.app"
 ```
 
-For a quick manual test build, set `LEMMINGS_ARCHITECTURES="$(uname -m)"` and
-copy the finished app to Downloads. Skip automated tests and notarisation for
-that build. Universal builds are for public release candidates.
-For a quick, current-architecture Game Center snapshot:
+Skip automated tests, release audits, Intel compilation and notarisation for
+this local build. See [development](Development.md) for the source-only workflow.
+
+For a development-signed Game Center snapshot:
 
 ```sh
 zsh Scripts/build-game-center-snapshot.sh
 ```
 
-The snapshot uses an Apple Development signature and a provisioning profile.
-It runs only on registered Macs. It always includes the full soundtrack from
-`Sources/Music`, reusing converted files in `.build/music-aac`. It is not notarised
-and is not the public download.
+That snapshot requires a provisioning profile and runs only on registered Macs.
+It is not notarised. Keep the tester roster and profile out of public downloads.
+See [Game Center setup](GameCenterSetup.md).
 
-## Prepare a release
+## Public releases
 
-1. Set the build number and write the matching release notes.
-2. Build the local app with the current assets.
-3. Run `Scripts/verify-trolley-maxima.sh` and `Scripts/generate-level-hints.sh`.
-4. Run the relevant engine, audio, input, recovery and app checks.
-5. Commit the release source, assets metadata, proofs, hints and notes.
-6. Prepare a clean Monterey worktree at the same commit, with local asset paths.
-7. Run the release script with a separate update directory for the new build.
-
-```sh
-NOTARY_PROFILE=lemmings-beta \
-RELEASE_BASE=v2.0.2 RELEASE_TAG=v2.0.3 \
-MONTEREY_WORKTREE=/path/to/clean-release-worktree \
-UPDATES_DIR="$PWD/.build/release-2.0.3/updates" \
-zsh Scripts/build-and-notarise.sh
-```
-
-The script validates the reviewed notes. It does not create missing notes.
-It builds Developer ID standard, Monterey and Game Center archives in Downloads.
-Standard and Monterey are universal apps with the same macOS 12.3 minimum.
-The separate Monterey build does not prove execution on physical Monterey hardware.
-Both public-capable archives are notarised, stapled and checked with Gatekeeper.
-The Game Center archive stays local to registered testers.
-
-The script also checks rescue proofs, hints, app integration, fresh-user launch,
-source consistency and the signed Sparkle feed. `--dry-run` checks the initial
-inputs without building or uploading. Set `RELEASE_BASE` explicitly.
-Run `zsh Scripts/run-localisation-tests.sh` for the catalogue and picker gate.
-
-`NOTARY_KEYCHAIN` selects another keychain. Apple ID authentication uses
-`APPLE_ID` and `APPLE_TEAM_ID`, with a secure password prompt. App Store Connect
-API-key authentication uses `ASC_KEY_PATH`, `ASC_KEY_ID` and `ASC_ISSUER_ID`.
-Keep credentials outside Git.
+Follow the [release schedule](ReleaseSchedule.md) and
+[packaging procedure](../README.md#local-release-packaging). Mac delivery comes
+first. Run affected engine checks only when engine behaviour changes. Keep
+build, signature, notarisation, package and updater-feed checks for every release.
+Record skipped checks explicitly.
 
 `Scripts/package-beta.sh` is the historical beta packager. Its legacy notes
-naming and full closure gate do not match the current public tester workflow.
-Use `build-and-notarise.sh` for this release.
+naming and full closure gate do not match the current release procedure.
+Use `Scripts/build-and-notarise.sh` for current public packages.
 
-## Validate and publish
+A signed source build does not establish physical input, screen-reader use,
+audible playback, live sync or sustained device performance. Record those
+checks separately. Keep automated mechanical checks offscreen and muted through
+`Tools/UITestRunner/run.py`. Foreground or audible checks require an explicit
+request.
 
-```sh
-python3 Tools/ReleaseReadiness/audit.py --app --scope minor
-zsh Scripts/run-music-timing-tests.sh
-zsh Scripts/run-music-catalogue-tests.sh
-zsh Scripts/run-adaptive-dj-playback-tests.sh "$PWD/Sources/Music"
-TEST_ARCH=x86_64 zsh Scripts/run-app-integration-tests.sh
-```
+See [automatic updates](AutomaticUpdates.md) for feed and publication checks.
+Keep credentials outside Git. Read [third-party notices](../THIRD_PARTY_NOTICES.md)
+for content provenance and distribution scope.
 
-Review failures and open gates before publishing. A regression audit does not
-certify all hardware or complete the preview campaigns. Record each remaining
-limit in the release evidence and notes.
+## Report a problem
 
-Use `--scope all` when engine or content changes can affect campaign outcomes.
-The signed shipping-app launch check requires the real desktop and a separate
-explicit request. Offscreen tests do not close that gate. Keep all automated
-mechanical checks muted through the repository runner.
-
-Publish the notarised update ZIP, stamped Markdown notes, BBCode notes and
-checksums. A public tester release is a GitHub prerelease. Verify the public
-download and a real Sparkle update before treating distribution as complete.
-See [Automatic updates](AutomaticUpdates.md) for the publication checks.
-
-## Game Center testing
-
-Game Center requires a separate development-signed archive and a provisioning
-profile that includes each tester's Mac. Keep the device roster and profile out
-of the public release attachments. See [Game Center setup](GameCenterSetup.md).
-The Developer ID app uses local records and needs no device registration.
-
-Read [third-party notices](../THIRD_PARTY_NOTICES.md) for content provenance and
-distribution scope. The owner authorised this public tester release.
+Include the build number, device, operating system, game, level, settings,
+input method and reproduction steps in an
+[issue](https://github.com/ErikVeland/Lemmings/issues/new).
+Attach a screenshot or replay when it helps. Use copies of saved runs for
+upgrade and recovery tests.

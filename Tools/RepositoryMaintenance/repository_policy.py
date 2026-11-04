@@ -5,7 +5,11 @@ from pathlib import Path
 import subprocess
 
 
-LOCAL_DIRECTORIES = {".git", ".build", ".archive", ".swiftpm", "__pycache__", "xcuserdata"}
+LOCAL_DIRECTORIES = {
+    ".git", ".build", ".archive", ".swiftpm", "__pycache__", "xcuserdata",
+    "-Xcc", ".pytest_cache", ".ruff_cache",
+}
+LOCAL_ROOTS = {".claude", ".superpowers", ".playwright-mcp", "generated_images"}
 COMPILER_SUFFIXES = {".swiftmodule", ".swiftdoc", ".swiftsourceinfo", ".dylib", ".o", ".pyc"}
 PRIVATE_SUFFIXES = {".p8", ".p12", ".pfx", ".pem", ".key", ".mobileprovision", ".provisionprofile"}
 
@@ -24,7 +28,8 @@ def exclusion_reason(relative):
         return "compiler output must stay in ignored build storage"
     if relative.suffix in PRIVATE_SUFFIXES:
         return "private signing inputs must stay untracked"
-    if (any(part in LOCAL_DIRECTORIES or part.endswith(".app") for part in relative.parts)
+    if ((relative.parts and relative.parts[0] in LOCAL_ROOTS)
+            or any(part in LOCAL_DIRECTORIES or part.endswith(".app") for part in relative.parts)
             or relative.name == ".DS_Store" or relative.suffix == ".xcuserstate"):
         return "local state or generated output must stay untracked"
     return None

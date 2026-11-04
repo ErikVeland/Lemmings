@@ -260,7 +260,7 @@ claiming end-to-end language coverage. Do not enable an incomplete pack merely
 to make a render test select it.
 
 Validate Mac, iOS and tvOS source compilation after runtime changes.
-`Scripts/check-tvos-sdk.sh` compiles TV modules and the app entry point.
+`Scripts/check-apple-ui-sdk.sh tvos` compiles TV modules and the app entry point.
 `Scripts/check-1.3-mobile.sh --require-sdk` is the broader iOS gate and requires
 an available Simulator runtime. Read it before running. Report unavailable
 headless checks instead of switching to visible windows or device tests.

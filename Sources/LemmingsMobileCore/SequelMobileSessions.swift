@@ -217,9 +217,14 @@ public final class Lemmings2MobileSession: MobileGameSession {
         return MobilePoint(x: Double(point.x), y: Double(point.y))
     }
 
-    public var spriteActorIDs: [Int] { runtime.lemmings.filter(\.active).map(\.id) }
+    public var spriteActorIDs: [Int] { runtime.lemmings.compactMap { $0.active ? $0.id : nil } }
     public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
-    public var minimapActorPoints: [MobilePoint] { runtime.lemmings.filter(\.active).map { .init(x: Double($0.x), y: Double($0.y)) } }
+    public var minimapActorPoints: [MobilePoint] {
+        runtime.lemmings.compactMap { lemming in
+            guard lemming.active else { return nil }
+            return .init(x: Double(lemming.x), y: Double(lemming.y))
+        }
+    }
     public var assignedSkillCount: Int {
         inputs.filter { if case .assign = $0 { return true }; return false }.count
     }
@@ -819,9 +824,14 @@ public final class Lemmings3MobileSession: MobileGameSession {
         return MobilePoint(x: Double(point.x), y: Double(point.y))
     }
 
-    public var spriteActorIDs: [Int] { runtime.lemmings.filter(\.active).map(\.id) }
+    public var spriteActorIDs: [Int] { runtime.lemmings.compactMap { $0.active ? $0.id : nil } }
     public var activeLemmingCount: Int { runtime.lemmings.reduce(0) { $0 + ($1.active ? 1 : 0) } }
-    public var minimapActorPoints: [MobilePoint] { runtime.lemmings.filter(\.active).map { .init(x: Double($0.x), y: Double($0.y)) } }
+    public var minimapActorPoints: [MobilePoint] {
+        runtime.lemmings.compactMap { lemming in
+            guard lemming.active else { return nil }
+            return .init(x: Double(lemming.x), y: Double(lemming.y))
+        }
+    }
     public var assignedSkillCount: Int { assignedSkills.values.reduce(0, +) }
     /// Extras start on the map and are not included in the entrance's released count.
     public var lostLemmingCount: Int { runtime.lost }
@@ -1239,9 +1249,14 @@ public final class NeoLemmixMobileSession: MobileGameSession {
         return .init(x: Double(zone.bounds.x + zone.bounds.width / 2), y: Double(zone.bounds.y + zone.bounds.height / 2))
     }
 
-    public var spriteActorIDs: [Int] { simulation.lemmings.filter(\.isActive).map(\.id) }
+    public var spriteActorIDs: [Int] { simulation.lemmings.compactMap { $0.isActive ? $0.id : nil } }
     public var activeLemmingCount: Int { simulation.lemmings.reduce(0) { $0 + ($1.isActive ? 1 : 0) } }
-    public var minimapActorPoints: [MobilePoint] { simulation.lemmings.filter { $0.action != .removed }.map { .init(x: Double($0.position.x), y: Double($0.position.y)) } }
+    public var minimapActorPoints: [MobilePoint] {
+        simulation.lemmings.compactMap { lemming in
+            guard lemming.action != .removed else { return nil }
+            return .init(x: Double(lemming.position.x), y: Double(lemming.position.y))
+        }
+    }
     public var lostLemmingCount: Int { simulation.lostCount }
     public let engineIdentifier = "neolemmix"
     public let engineFingerprint: String

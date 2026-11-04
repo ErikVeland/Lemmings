@@ -3,7 +3,7 @@ name: macOS
 on:
   pull_request:
   push:
-    branches: [main, codex/ios-2.0-release-gates]
+    branches: [main]
   workflow_dispatch:
 
 permissions:

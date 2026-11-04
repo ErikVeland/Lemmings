@@ -2,7 +2,7 @@
 
 Mac published on 22 October 2026 at [GitHub](https://github.com/ErikVeland/Lemmings/releases/tag/v2.1.2).
 All three release archives use source `48282886baf4c78217e62c90a935d8aecf74b843`.
-The [release notes](../../ReleaseNotes-2.1.2-build96.md) describe shared progress,
+The [release notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.1.2-build96.md) describe shared progress,
 safer Resume and recovery, current controls, refined lettering, authored individual
 stories and Duo input/layout recovery.
 

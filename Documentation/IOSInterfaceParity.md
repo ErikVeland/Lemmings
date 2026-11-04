@@ -37,7 +37,7 @@ Source coverage does not close physical-device, native-focus, service, audio,
 engine-fidelity or release-package gates.
 
 The shared Classic frontend implements the scope in the
-[iPad feature parity plan](IPadFeatureParityPlan.md). The current
+[iPad feature parity plan](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/IPadFeatureParityPlan.md). The current
 [2.0 release gate](ReleaseReadiness/2.0ReleaseGate-2026-10-14.md) records the
 subsequent sequel and supported NeoLemmix source work and its remaining limits.
 
@@ -237,8 +237,8 @@ has tested the installed candidate. No automatic foreground fallback is allowed.
 
 Release evidence: [build 8](ReleaseReadiness/2.0DeviceBeta-2026-10-11/Build8/README.md).
 
-The phased work to close the remaining gaps is in the
-[iPad feature parity plan](IPadFeatureParityPlan.md).
+The original implementation sequence is retained in the historical
+[iPad feature parity plan](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/IPadFeatureParityPlan.md).
 
 ## 12 October adaptive source increment
 

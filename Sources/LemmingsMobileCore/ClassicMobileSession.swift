@@ -115,9 +115,14 @@ public final class ClassicMobileSession: MobileGameSession {
     private var terrainFrame: Data?
     private var cachedPanelFrame: MobilePixelFrame?
     public var renderScale: Double { nativeScene == nil ? 1 : 2 }
-    public var spriteActorIDs: [Int] { simulation.lemmings.filter { $0.isActive }.map(\.id) }
+    public var spriteActorIDs: [Int] { simulation.lemmings.compactMap { $0.isActive ? $0.id : nil } }
     public var activeLemmingCount: Int { simulation.activeCount }
-    public var minimapActorPoints: [MobilePoint] { simulation.lemmings.filter(\.isActive).map { .init(x: Double($0.foot.x), y: Double($0.foot.y)) } }
+    public var minimapActorPoints: [MobilePoint] {
+        simulation.lemmings.compactMap { lemming in
+            guard lemming.isActive else { return nil }
+            return .init(x: Double(lemming.foot.x), y: Double(lemming.foot.y))
+        }
+    }
     public var bombCountdowns: [MobileBombCountdown] {
         simulation.lemmings.filter(\.isActive).compactMap { lemming in
             guard let ticks = lemming.bomberCountdown, let assets else { return nil }
@@ -152,7 +157,7 @@ public final class ClassicMobileSession: MobileGameSession {
             }
     }
     public var allNukeExplosionsPlayed: Bool { simulation.lemmings.allSatisfy { !$0.isActive || $0.action == .exploding || $0.action == .exiting } }
-    public var nukeRemainingTicks: Int? { simulation.lemmings.filter(\.isActive).compactMap(\.bomberCountdown).min() }
+    public var nukeRemainingTicks: Int? { simulation.lemmings.lazy.filter(\.isActive).compactMap(\.bomberCountdown).min() }
     private let assets: ClassicMainDATAssets?
     private let palette: [ClassicRGBColor]
     private var history: ClassicDOSRewind

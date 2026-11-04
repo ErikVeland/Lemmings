@@ -1,7 +1,7 @@
 # Bundled NeoLemmix packs
 
-Date: 28 September 2026
-Status: approved by the owner
+This record preserves the approved 28 September 2026 bundling decision.
+Read [release scope](ReleaseScope.md) for current coverage and platform support.
 
 ## Decision
 
@@ -73,7 +73,7 @@ CE `levels.nxmi` manifests list 788 of the 794 level files.
 - `AppIntegrationTests` (`TEST_SCOPE=neo-pack`): no folder prompt, 75
   unavailable levels, and restore by IDs after the saved path is removed.
 
-## Out of scope
+## Original scope limits
 
 - The community-pack updater.
 - iOS and Monterey packaging.

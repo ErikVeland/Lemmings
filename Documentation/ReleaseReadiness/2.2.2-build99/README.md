@@ -1,7 +1,7 @@
 # 2.2.2 build 99 release record
 
 Published on 24 October 2026 at [GitHub](https://github.com/ErikVeland/Lemmings/releases/tag/v2.2.2).
-The [release notes](../../ReleaseNotes-2.2.2-build99.md) lead with Duo and describe
+The [release notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.2.2-build99.md) lead with Duo and describe
 improvements across Mac, iPhone, iPad and Apple TV.
 
 ## Delivery

@@ -76,6 +76,55 @@ class RepositoryMaintenanceTests(unittest.TestCase):
             self.assertEqual(len(errors), 1)
             self.assertIn("symlinks", errors[0])
 
+    def test_rejects_compiler_indexes_and_agent_output(self):
+        generated = [
+            "Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/-Xcc/v5/records/new",
+            "Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj/-Xcc/v6/units/new",
+            ".claude/worktrees/experiment/source.swift",
+            ".superpowers/sdd/session.json", ".playwright-mcp/page.yml",
+            "generated_images/exec-example.png", "Tools/.pytest_cache/state",
+            "Tools/.ruff_cache/state",
+        ]
+        for name in generated:
+            with self.subTest(path=name):
+                self.assertIsNotNone(exclusion_reason(Path(name)))
+        for name in ("AGENTS.md", "Documentation/NeoLemmixBundling.md",
+                     "Resources/MenuArtwork/title.png", "Tests/Fixtures/page.yml"):
+            with self.subTest(path=name):
+                self.assertIsNone(exclusion_reason(Path(name)))
+
+    def test_rejects_agent_execution_scaffolding_but_allows_quoted_examples(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            directive = '> **For agentic workers:** REQUIRED SUB-SKILL: Use an execution skill.\n'
+            (root / "plan.md").write_text("# Implementation plan\n\n" + directive)
+            (root / "guide.md").write_text("# Example\n\n```md\n" + directive + "```\n")
+            _, errors = check_files(root, [Path("plan.md"), Path("guide.md")])
+            self.assertEqual(len(errors), 1)
+            self.assertIn("plan.md", errors[0])
+            self.assertIn("agent execution", errors[0])
+
+    def test_ignore_rules_cover_new_cache_entries_without_hiding_source(self):
+        import subprocess
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            (root / ".gitignore").write_bytes((ROOT / ".gitignore").read_bytes())
+            ignored = [
+                "Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/-Xcc/v6/records/new",
+                "Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj/-Xcc/v6/records/new",
+                ".superpowers/sdd/session.json", ".playwright-mcp/page.yml",
+                "generated_images/exec-example.png", "Tools/.pytest_cache/state",
+                "Tools/.ruff_cache/state", "key.p8", "Content/game.dat", ".build/app",
+            ]
+            visible = ["Sources/NxlvKit/main.swift", "Tools/NewTool/main",
+                       "Tests/Fixtures/Content/level.json", "Documentation/Development.md"]
+            result = subprocess.run(["git", "check-ignore", "--no-index", "--stdin"],
+                                    cwd=root, input="\n".join(ignored + visible) + "\n",
+                                    capture_output=True, text=True, check=True)
+            self.assertEqual(set(result.stdout.splitlines()), set(ignored))
+
     def test_working_inventory_omits_deleted_files_and_includes_new_files(self):
         import subprocess
 

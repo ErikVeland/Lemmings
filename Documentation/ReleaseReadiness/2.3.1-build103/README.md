@@ -2,7 +2,7 @@
 
 Status: local Apple silicon test app built and ad hoc signed on 30 October 2026. No public package or feed update has been made.
 
-Source at start: `a7be9c525ac1a93825772d6d6d3bfdda34ec6b1d` on `main` plus the version, notes and What's New changes in this worktree. Release base: published Mac build 102 source `96dc81b8491dfdb58683f0e32025fc4c8137aa1c`, since the public `v2.3` tag still points to build 100. Platform numbers reserved: Mac 103, iOS 38, tvOS 17. See [candidate notes](../../ReleaseNotes-2.3.1-build103.md).
+Source at start: `a7be9c525ac1a93825772d6d6d3bfdda34ec6b1d` on `main` plus the version, notes and What's New changes in this worktree. Release base: published Mac build 102 source `96dc81b8491dfdb58683f0e32025fc4c8137aa1c`, since the public `v2.3` tag still points to build 100. Platform numbers reserved: Mac 103, iOS 38, tvOS 17. See [candidate notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.3.1-build103.md).
 
 ## Scope and checks
 

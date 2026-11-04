@@ -398,7 +398,7 @@ questions.
 | What content is planned and how is it gated? | [`Documentation/ContentUniverseRoadmap.md`](Documentation/ContentUniverseRoadmap.md) |
 | What evidence closes a campaign or release gate? | [`Documentation/ReleaseReadiness/`](Documentation/ReleaseReadiness/) and the relevant completion README |
 | How is local beta packaging run? | [`Documentation/BetaTesting.md`](Documentation/BetaTesting.md) |
-| What design decisions are active? | [`docs/superpowers/`](docs/superpowers/) |
+| How were targeting and bundled packs designed? | [Target selection](Documentation/TargetSelection.md) and [NeoLemmix bundling](Documentation/NeoLemmixBundling.md) |
 | What third-party material and rights limits apply? | [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) |
 
 Do not copy a status table into another document. Link to the canonical table

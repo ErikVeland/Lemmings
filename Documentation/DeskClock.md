@@ -320,16 +320,16 @@ checks are therefore part of this candidate's acceptance gates. The
 [current check record](ReleaseReadiness/2.2DuoPolish-2026-10-22.md) separates
 source verification from signed builds and device acceptance.
 
-## Calls made for the owner to check
+## Implementation choices
 
-These are my calls, not decisions the owner made:
+These choices came from the implementation rather than explicit owner requirements:
 
 - The trigger delay is 60 seconds of no input.
-- The live clock follows the device's display brightness; it adds no night overlay.
+- The live clock follows the device's display brightness. It adds no night overlay.
 - The clock pauses menu music.
 - The clock shows events in the next 24 hours only, and skips all-day and declined events.
 - The widget bundles a pruned copy of the Mac artwork instead of reading the app's artwork through an app group.
-- The automatic triggers apply to the Duo only. You asked for the widget to serve other phones.
+- The automatic triggers apply to the Duo only. The widget serves other phones.
 - Only the menu entry and a widget tap ask for calendar access. An unattended clock never shows the prompt.
 - The minimum iOS version stays 16.0, with availability gates for the iOS 17 features.
 - One event in three is a nuke, chosen by a stable hash, not by counting. A count would change when an event moves or the app restarts.

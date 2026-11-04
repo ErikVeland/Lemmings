@@ -1,7 +1,7 @@
 # Classic iOS port evidence — 12 October 2026
 
 This evidence covers the Classic scope in the
-[iPad feature parity plan](../../IPadFeatureParityPlan.md). It covers source,
+[iPad feature parity plan](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/IPadFeatureParityPlan.md). It covers source,
 shared logic, bitmap rendering and an unsigned iOS build. It does not establish
 physical-device acceptance or three-engine parity.
 

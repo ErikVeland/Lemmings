@@ -2,7 +2,7 @@
 
 Prepared on 19 October 2026 from the working tree after v2.0.7. This record
 covers source and interface checks. It does not certify a published package.
-The feed remains on 2.0.7. See the [candidate notes](../../ReleaseNotes-2.0.8-build92.md).
+The feed remains on 2.0.7. See the [candidate notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.0.8-build92.md).
 
 Later access, presentation, hints and review work has its own
 [anniversary foundation evidence](../AnniversaryFoundations-2026-10-19/README.md).

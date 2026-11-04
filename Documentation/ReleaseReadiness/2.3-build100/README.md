@@ -3,7 +3,7 @@
 Superseded; no platform package or submission is recorded for build 100. The
 `v2.3` tag points to this candidate source, but there is no published GitHub
 release. The current candidate uses build 101. Retain this file as build 100
-evidence only. [Release notes](../../ReleaseNotes-2.3-build100.md).
+evidence only. [Release notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.3-build100.md).
 
 Release commit: d1d1ddac201dd97f86dbe9ffac3f702f55ae47d9
 Release base: v2.2.2

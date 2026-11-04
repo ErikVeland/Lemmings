@@ -3,7 +3,7 @@
 Published on 21 October 2026 at [GitHub](https://github.com/ErikVeland/Lemmings/releases/tag/v2.1.1).
 Release source: `9af6210022a51f4df086c88803d992839b782828`. Compiled source:
 `ec1815441e055cc054e7457fc06efccd0ccba632`, cut from current main `a2245430`.
-The [release notes](../../ReleaseNotes-2.1.1-build95.md) cover Journey counts,
+The [release notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.1.1-build95.md) cover Journey counts,
 automatic worldwide rankings, current Mole timing and recovery, bundled fan
 scope and Macintosh-first menu music.
 

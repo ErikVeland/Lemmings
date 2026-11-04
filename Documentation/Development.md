@@ -52,6 +52,10 @@ language-picker regressions. The picker checks need the shipped bitmap artwork.
 `Tools/RepositoryMaintenance/repository_policy.py` owns the file exclusions used
 by both the repository checker and the handover verifier. Update that policy
 when adding a local-only input rather than maintaining a separate export rule.
+Compiler indexes, agent session files, browser captures and raw image-generation
+drafts stay untracked. Put accepted artwork in `Resources` and durable decisions
+in `Documentation`. Keep only the current release notes in the working tree.
+The checker also rejects agent execution scaffolding in maintained Markdown.
 
 Run `zsh Scripts/run-source-tests.sh` for shared source regressions without
 commercial data. Run `python3 Tools/DeveloperHandover/verify.py` to exercise that

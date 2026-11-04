@@ -49,6 +49,8 @@ def check_files(root, paths):
                 counts["shell"] += 1
             elif path.suffix == ".md":
                 text = re.sub(r"```.*?```|~~~.*?~~~", "", path.read_text(), flags=re.S)
+                if "> **For agentic workers:** REQUIRED SUB-SKILL:" in text:
+                    errors.append(f"{relative}: keep agent execution plans outside maintained documentation")
                 for match in re.finditer(r"!?\[[^\]]*\]\((<[^>]+>|[^)\s]+)(?:\s+\"[^\"]*\")?\)", text):
                     target = match[1].strip("<>")
                     url = urlsplit(target)

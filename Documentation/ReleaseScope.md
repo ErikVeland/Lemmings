@@ -85,10 +85,7 @@ appcast is live on `main`. GitHub asset hashes and sizes are recorded in the
 
 The public annotated `v2.3` tag still points to build 100 source
 `d1d1ddac201dd97f86dbe9ffac3f702f55ae47d9`, while release 424931561 and the
-build 102 appcast identify `96dc81b8491dfdb58683f0e32025fc4c8137aa1c`. A
-compare-and-swap correction to the latter was rejected by automatic approval
-review because its exact owner approval came from delegated transcript
-evidence, not a trusted direct message. No tag change was made. The discrepancy
+build 102 appcast identify `96dc81b8491dfdb58683f0e32025fc4c8137aa1c`. No tag change was made. A correction requires direct owner approval. The discrepancy
 affects source provenance and clients that cached the old ref; it does not
 change the published downloads or feed. Obtain direct owner approval before
 retrying an exact expected-old tag update. Full download evidence is in
@@ -99,14 +96,11 @@ and no iOS Distribution certificate/private key. The tvOS build 15 archive is
 unsigned. Store delivery and mobile/TV device acceptance remain open. The
 connected device list contains only the Mac; CoreSimulator is unavailable.
 
-## Latest published release
+## Published releases
 
-Mac 2.4 build 104 is published with full and slim universal downloads, five
-signed deltas and the signed updater feed. iOS 2.4 build 39 and tvOS 2.4 build 18
-were uploaded for Apple processing. Public mobile availability remains separate.
-See the [2.4 release record](ReleaseReadiness/2.4-build104/README.md).
-The [2.3 build 102 record](ReleaseReadiness/2.3-build102/README.md) and
-[2.2.2 build 99 record](ReleaseReadiness/2.2.2-build99/README.md) remain historical.
+The [release-note index](ReleaseNotes.md) records the current published version
+and each platform's delivery state. Exact package and service receipts remain
+in the linked release records.
 
 ### Historical 2.2.2 validation
 
@@ -258,9 +252,9 @@ Earlier Trolley evidence checks
 the Classic fan, L2 Gold Ark, L3 route or NeoLemmix style gaps.
 
 The feed and source versions are recorded at the start of this document. The
-latest Mac package acceptance record is build 93. See the
+historical 2.1 package acceptance record is build 93. See the
 [2.1 publication record](ReleaseReadiness/2.1-build93/README.md),
-[current release notes](ReleaseNotes-2.1-build93.md) and [current-main
+[2.1 release notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.1-build93.md) and [current-main
 reconciliation](ReleaseReadiness/2.0-build83/current-main-sync-reconciliation-2026-10-17.json).
 Build 86 records no non-localisation resource-index changes from build 85, but
 its complete app audit was not rerun. The last installed iOS beta, build 8,

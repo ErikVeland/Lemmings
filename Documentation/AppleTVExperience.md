@@ -343,7 +343,7 @@ Artwork uses `TV_MAC_ARTWORK_DIR`, effects use `TV_AMIGA_SOUND_DIR`, and soundtr
 scope uses `TV_MUSIC_SCOPE` (full by default, including all soundtrack libraries;
 main is an explicit smaller-bundle override).
 
-`Scripts/check-tvos-sdk.sh` compiles all shared dependencies, including
+`Scripts/check-apple-ui-sdk.sh tvos` compiles all shared dependencies, including
 `LemmingsMobileUI`, then checks the TV application entry point.
 `Scripts/check-tv-experience.sh` runs native checks through the offscreen, muted
 runner and checks both historical and shared frontend bitmap states/targets.

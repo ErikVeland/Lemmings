@@ -24,9 +24,8 @@ additional app source.
 The original public releases repository is archived and links here. Its
 existing release files remain available at their original URLs.
 
-The artwork repository remains private and unchanged. Automatic approval
-review rejected its upload because consolidation did not explicitly authorise
-publication of the private payload. Its SHA-256 digest is
+The artwork repository remains private. Publication of its ZIP is not
+authorised. Its SHA-256 digest is
 `1f4b404b57da0a2167a058cc5a707ab3d7ff2edf6688f6feddc238472fd25653`.
 Obtain explicit approval before copying that ZIP into this public repository.
 

@@ -1,7 +1,6 @@
 # Lemmings 2 seeded search results
 
-15 September 2026. This report records phase 2 of the Lemmings 2 route solver. The
-design is in `docs/superpowers/specs/2026-09-14-lemmings2-seeded-search-design.md`.
+15 September 2026. This report records phase 2 of the Lemmings 2 route solver.
 The [completion report](README.md) holds the current coverage and route quality.
 
 ## Result

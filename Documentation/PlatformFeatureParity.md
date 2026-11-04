@@ -8,6 +8,23 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
+## Shared session allocation cleanup — 4 November 2026
+
+Classic, L2, L3 and NeoLemmix now build sprite-ID and minimap-point arrays in
+one pass, without temporary filtered actor arrays. Classic also scans bomb
+countdowns lazily. The shared mobile/TV sessions preserve actor order and each
+engine's existing visibility rules. Mac-specific session code is unchanged.
+No simulation, replay, checkpoint or storage format changed.
+
+The native Mac-hosted build and 44 focused session/presentation tests pass
+with muted audio and no windows. The initial broader run found 160 existing
+layout assertions failing in `MobileAdaptiveLayoutTests` and
+`MobilePortraitHUDTests` before these source edits. That run was stopped before
+its full content-corpus checks finished. Those layout checks remain unresolved.
+The iOS and tvOS SDK builds compile all eight shared modules and both app
+entry points without a Simulator launch. Physical-device acceptance was not
+repeated. Existing release receipts retain their original source limits.
+
 ## 2.4.1 Mac release and shared source — 3 November 2026
 
 The shared worker selector retains its four-engine coverage, explicit touch and

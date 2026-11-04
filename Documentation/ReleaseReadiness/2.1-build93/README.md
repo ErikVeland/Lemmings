@@ -2,7 +2,7 @@
 
 Published on 20 October 2026 at [GitHub](https://github.com/ErikVeland/Lemmings/releases/tag/v2.1).
 Release source: `4f4075880f03c1feb157fb4e1fe488dd938af31a`. Release base: `v2.0.7`.
-The [release notes](../../ReleaseNotes-2.1-build93.md) describe the Mac release.
+The [release notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.1-build93.md) describe the Mac release.
 iOS and tvOS retain their separate versions and acceptance records.
 
 ## Packages and updates

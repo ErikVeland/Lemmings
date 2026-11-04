@@ -15,7 +15,7 @@ The mobile menu scrolling changes are recorded in
 
 Build 102 contains the centered main-menu logo, optical background-corner
 guidance and the Hot Seat progress selector. The release notes are
-[`ReleaseNotes-2.3-build102.md`](../../ReleaseNotes-2.3-build102.md).
+[`ReleaseNotes-2.3-build102.md`](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.3-build102.md).
 
 ## Source and UI checks
 

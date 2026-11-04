@@ -83,7 +83,13 @@ class PackageScopeTests(unittest.TestCase):
                   'test "$MUSIC_BUNDLE" = main\n'
                   'touch "$LEMMINGS_BUILD_DIR/Ultimate Lemmings.app/Contents/Resources/Music/main-bundle"\n')
             write('Scripts/strip-recorded-music.sh', 'touch "$1/stripped"\n')
-            write('bin/codesign', '#!/bin/zsh\ntouch "$LEMMINGS_BUILD_DIR/signed"\n', True)
+            write('Scripts/sign-capabilities.py', '''
+import os, sys
+from pathlib import Path
+if '--check' not in sys.argv:
+    (Path(os.environ['LEMMINGS_BUILD_DIR']) / 'signed').touch()
+''')
+            write('bin/codesign', '#!/bin/zsh\nexit 0\n', True)
             write('Tools/ReleaseReadiness/audit.py', '''
 def scoped_gates(gates, scope):
     return gates
