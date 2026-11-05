@@ -1,0 +1,66 @@
+{
+  "release_url": "https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.2",
+  "release_id": 434874486,
+  "tag": "v2.4.2",
+  "tag_commit": "55f8f52703e04db6b6f9460fd7b962de81aab26f",
+  "latest_release": true,
+  "published_at": "2026-11-05T07:10:16Z",
+  "live_appcast_sha256": "0602d4259f07e98a4df43feb3fee035e20e3cde24681d1fc8d119a4b2c4c9990",
+  "assets": [
+    {
+      "name": "UltimateLemmings-2.4.2-build106.zip",
+      "size": 2057843804,
+      "sha256": "72bf292f33c98cb8b198d2c0fe52cd6ff3fb63a013aa4214b820e4bac868b1ec",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-2.4.2-build106.zip",
+      "ed25519": true,
+      "public_download_verified": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from105.delta",
+      "size": 619082,
+      "sha256": "fd9e387eb7215a29a0fe430309ef6fa17c81d75154e7123031e34f135f34515f",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from105.delta",
+      "ed25519": true,
+      "public_download_verified": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from104.delta",
+      "size": 46694586,
+      "sha256": "2738e85bf05c240bbbd5a50235a405c6d39c3d4bef4222747eb8b01beb5fddd2",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from104.delta",
+      "ed25519": true,
+      "public_download_verified": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from102.delta",
+      "size": 47959322,
+      "sha256": "8aa7b90d64ba6519de8368cc85997e528dbc1cdad443791a5521a1ab256da685",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from102.delta",
+      "ed25519": true,
+      "public_download_verified": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from99.delta",
+      "size": 51613854,
+      "sha256": "360aa5d3af4378c8ec6025365898c7a1cc2ef7734eeae2ec526f05d6784e9be2",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from99.delta",
+      "ed25519": true,
+      "public_download_verified": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from98.delta",
+      "size": 52088118,
+      "sha256": "e3e2a1efda948b703e5c54d14b685ba9bf51ca10c6e467c644e23e42a593460e",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from98.delta",
+      "ed25519": true,
+      "public_download_verified": true
+    },
+    {
+      "name": "UltimateLemmings-2.4.2-build106-slim.zip",
+      "size": 273773010,
+      "sha256": "0f40f16931f4f4e041554887e96e2bdef2c53f434977725ec2def3da24241fa7",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-2.4.2-build106-slim.zip",
+      "public_download_verified": true
+    }
+  ]
+}

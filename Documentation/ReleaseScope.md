@@ -5,7 +5,14 @@ order: Mac, iOS, tvOS, then sideloading stores. For Mac releases, skip tests
 unless the candidate changes an engine. Keep required package and publication
 verification. Older release receipts below retain the checks actually performed.
 
-## 2.4.1 current scope — 3 November 2026
+## 2.4.2 Mac release — 5 November 2026
+
+Mac build 106 ships repository maintenance, build tooling and shared HUD fixes.
+Simulation and replay sources match build 105. The release skips test suites
+under the non-engine Mac policy. Both universal packages and the signed feed
+pass verification. See the [2.4.2 release record](ReleaseReadiness/2.4.2-build106/README.md).
+
+## 2.4.1 release — 3 November 2026
 
 Mac first: finish skilled-worker crowd targeting, bound quit-time cloud delivery,
 fix the measured repeated L2 completion read, and update release history.

@@ -1,0 +1,215 @@
+{
+  "version": "2.4.2",
+  "build": 106,
+  "release_commit": "55f8f52703e04db6b6f9460fd7b962de81aab26f",
+  "engine_changes": false,
+  "suites": "skipped at owner request under the Mac non-engine release policy",
+  "foreground_launch": "skipped",
+  "previous_feed_items_preserved": 29,
+  "feed_url": "https://raw.githubusercontent.com/ErikVeland/Lemmings/main/appcast.xml",
+  "appcast_sha256": "0602d4259f07e98a4df43feb3fee035e20e3cde24681d1fc8d119a4b2c4c9990",
+  "packages": {
+    "full": {
+      "zip_integrity": true,
+      "strict_signature": true,
+      "staple": true,
+      "gatekeeper": "/Users/veland/Lemmings/.build/release-2.4.2/tmpmk0hpxnq/Ultimate Lemmings.app: accepted\nsource=Notarized Developer ID\norigin=Developer ID Application: Erik Veland (54WU29TRTY)",
+      "notarisation": {
+        "status": "Accepted",
+        "id": "b14c018f-237a-4772-ab96-76aeb8382d31",
+        "message": "Processing complete"
+      },
+      "profile_uuid": "825c160c-59cc-462a-828d-d054815b9715",
+      "cloudkit": "Production",
+      "architectures": {
+        "Contents/MacOS/LemmingsLocal": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsAppCore.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsAudio.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsGameArt.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsMobileCore.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsTVCore.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libNxlvKit.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/PlugIns/DeskClockMacWidget.appex/Contents/MacOS/DeskClockMacWidget": [
+          "arm64",
+          "x86_64"
+        ]
+      },
+      "music_scope": "full",
+      "music_versions": 495
+    },
+    "slim": {
+      "zip_integrity": true,
+      "strict_signature": true,
+      "staple": true,
+      "gatekeeper": "/Users/veland/Lemmings/.build/release-2.4.2/tmprorlk9ab/Ultimate Lemmings.app: accepted\nsource=Notarized Developer ID\norigin=Developer ID Application: Erik Veland (54WU29TRTY)",
+      "notarisation": {
+        "status": "Accepted",
+        "id": "ef302a3c-227d-478c-8636-42492d47f32b",
+        "message": "Processing complete"
+      },
+      "profile_uuid": "825c160c-59cc-462a-828d-d054815b9715",
+      "cloudkit": "Production",
+      "architectures": {
+        "Contents/MacOS/LemmingsLocal": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsAppCore.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsAudio.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsGameArt.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsMobileCore.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libLemmingsTVCore.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/Frameworks/libNxlvKit.dylib": [
+          "arm64",
+          "x86_64"
+        ],
+        "Contents/PlugIns/DeskClockMacWidget.appex/Contents/MacOS/DeskClockMacWidget": [
+          "arm64",
+          "x86_64"
+        ]
+      },
+      "music_scope": "main",
+      "music_versions": 54
+    }
+  },
+  "assets": [
+    {
+      "name": "UltimateLemmings-2.4.2-build106.zip",
+      "size": 2057843804,
+      "sha256": "72bf292f33c98cb8b198d2c0fe52cd6ff3fb63a013aa4214b820e4bac868b1ec",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-2.4.2-build106.zip",
+      "ed25519": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from105.delta",
+      "size": 619082,
+      "sha256": "fd9e387eb7215a29a0fe430309ef6fa17c81d75154e7123031e34f135f34515f",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from105.delta",
+      "ed25519": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from104.delta",
+      "size": 46694586,
+      "sha256": "2738e85bf05c240bbbd5a50235a405c6d39c3d4bef4222747eb8b01beb5fddd2",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from104.delta",
+      "ed25519": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from102.delta",
+      "size": 47959322,
+      "sha256": "8aa7b90d64ba6519de8368cc85997e528dbc1cdad443791a5521a1ab256da685",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from102.delta",
+      "ed25519": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from99.delta",
+      "size": 51613854,
+      "sha256": "360aa5d3af4378c8ec6025365898c7a1cc2ef7734eeae2ec526f05d6784e9be2",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from99.delta",
+      "ed25519": true
+    },
+    {
+      "name": "UltimateLemmings-build106-from98.delta",
+      "size": 52088118,
+      "sha256": "e3e2a1efda948b703e5c54d14b685ba9bf51ca10c6e467c644e23e42a593460e",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from98.delta",
+      "ed25519": true
+    },
+    {
+      "name": "UltimateLemmings-2.4.2-build106-slim.zip",
+      "size": 273773010,
+      "sha256": "0f40f16931f4f4e041554887e96e2bdef2c53f434977725ec2def3da24241fa7",
+      "url": "https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-2.4.2-build106-slim.zip"
+    }
+  ],
+  "delta_checks": [
+    {
+      "base": 105,
+      "matching_payload_entries": 18943,
+      "strict_signature": true
+    },
+    {
+      "base": 104,
+      "matching_payload_entries": 18943,
+      "strict_signature": true
+    },
+    {
+      "base": 102,
+      "matching_payload_entries": 18943,
+      "strict_signature": true
+    },
+    {
+      "base": 99,
+      "matching_payload_entries": 18943,
+      "strict_signature": true
+    },
+    {
+      "base": 98,
+      "matching_payload_entries": 18943,
+      "strict_signature": true
+    }
+  ],
+  "verified_bases": {
+    "105": {
+      "name": "UltimateLemmings-2.4.1-build105.zip",
+      "sha256": "7cec9e7d5fde92441eeb38a0cd139040f74f15611d808146f7e5c000425a9651",
+      "size": 2057846775
+    },
+    "104": {
+      "name": "UltimateLemmings-2.4-build104.zip",
+      "sha256": "0626bf42266651858dd18d6d96d55480f51b276c0b66814872002cc4b734675b",
+      "size": 2057773792
+    },
+    "102": {
+      "name": "UltimateLemmings-2.3-build102.zip",
+      "sha256": "2a12460a6db2b4e33d936509e093ddb3dd5a673e0346bf907c9fdeada193eef1",
+      "size": 2057392819
+    },
+    "99": {
+      "name": "UltimateLemmings-2.2.2-build99.zip",
+      "sha256": "ac9b46e195296421cf0a2fde132f4d4442726edd0662da12bf9a2972a1937d9a",
+      "size": 2056896617
+    },
+    "98": {
+      "name": "UltimateLemmings-2.2.1-build98.zip",
+      "sha256": "31ef203dae8456461eb2fd27a3bc16019d994821ce96d29e604f0fc0d51759b0",
+      "size": 2056641801
+    }
+  }
+}

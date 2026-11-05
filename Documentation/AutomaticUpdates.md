@@ -23,18 +23,14 @@ commit the key or pass the key value as a command argument.
 
 ## Current releases
 
-Public 2.2.1 build 98 is the current Mac release. Its
-[release record](ReleaseReadiness/2.2.1-build98/README.md) covers notarised full and
-slim archives, the live signed feed and direct deltas from builds 97, 96, 95,
-93 and 91. Every delta matches the target app tree and signature. The installed
-public key verifies the update archive and each delta. Foreground launch and
-actual updater relaunch remain unrun under the offscreen-only instruction.
-Publish a feed only with its matching signed and notarised archive.
+Mac 2.4.2 build 106 is the current release. Its
+[release record](ReleaseReadiness/2.4.2-build106/README.md) covers both
+notarised ZIPs, the live feed and direct deltas from builds 105, 104, 102, 99
+and 98.
 
-Under the repository's offscreen-only instruction, run the individual build,
-signing, notarisation and archive commands and record launch/relaunch as unrun.
-The full release wrapper also launches apps and requires separate foreground
-authorisation. Universal builds, release audits and distribution checks still apply.
+Set `SKIP_RELEASE_TESTS=1` for a Mac release with no engine changes. The
+release wrapper still signs and notarises the packages and checks Gatekeeper.
+Follow the [release schedule](ReleaseSchedule.md) for test and launch limits.
 
 Public releases require a slim fresh-install download. It includes the
 54 essential music versions and offers missing optional libraries on first

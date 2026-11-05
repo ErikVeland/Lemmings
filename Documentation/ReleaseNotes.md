@@ -4,25 +4,19 @@
 
 The current source version is **2.4.2** (Mac build 106, iOS build 45, tvOS build 20).
 Read the [complete 2.4.2 notes](ReleaseNotes-2.4.2-build106.md).
-iOS 2.4.1 build 44 and tvOS 2.4.1 build 19 were uploaded to Apple on 4 November.
-Both are Waiting for Review in TestFlight. See the
-[mobile delivery record](ReleaseReadiness/2.4.1-build105/README.md#ios-and-tvos-delivery--4-november-2026).
+iOS build 45 and tvOS build 20 are reserved. See the
+[2.4.1 mobile delivery record](ReleaseReadiness/2.4.1-build105/README.md#ios-and-tvos-delivery--4-november-2026)
+for the previous TestFlight submissions.
 
-## Latest published release
+## Latest published Mac release
 
-[Mac 2.4.1 build 105](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.1)
-is published with full and slim universal packages and a signed updater feed.
-Both packages are notarised and enable CloudKit with the Production profile.
-See the [2.4.1 release record](ReleaseReadiness/2.4.1-build105/README.md).
-Mac 2.4 build 104 remains in the [2.4 release record](ReleaseReadiness/2.4-build104/README.md).
-iOS 2.4 build 39 and tvOS 2.4 build 18 were uploaded for Apple processing.
-Their public availability remains separate from the Mac release.
+[Mac 2.4.2 build 106](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.2)
+has full and slim notarised downloads for Apple silicon and Intel. The signed
+feed includes direct deltas from the five preceding builds.
+See the [2.4.2 release record](ReleaseReadiness/2.4.2-build106/README.md).
 
-## Previous release
-
-Mac 2.3 build 102 remains recorded in the [2.3 release record](ReleaseReadiness/2.3-build102/README.md).
-The public 2.3 tag still points to build 100 source. Its build 102 packages and feed retain their recorded provenance.
-See the [2.4 notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.4-build104.md) and [2.3 notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.3-build102.md).
+The [Mac 2.4.1 record](ReleaseReadiness/2.4.1-build105/README.md) retains the
+previous release checks.
 
 ## Earlier notes
 
