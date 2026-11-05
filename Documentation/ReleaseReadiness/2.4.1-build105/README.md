@@ -119,7 +119,7 @@ production signing, notarisation and publication. iOS and tvOS remain next in or
 - [x] Assign 2.4.1, Mac build 105, iOS build 44 and tvOS build 19. Update candidate notes, in-app notes and release history.
 - [x] Build and sign the local Apple silicon app. Verify its signature after copying it to Downloads.
 
-The [candidate notes](../../ReleaseNotes-2.4.1-build105.md) describe the player-facing changes.
+The [candidate notes](https://github.com/ErikVeland/Lemmings/blob/554f79fceaa72e02d52584a07df73df51d9eb2aa/Documentation/ReleaseNotes-2.4.1-build105.md) describe the player-facing changes.
 The existing Mac Home accessibility correction is included.
 No new game mode, sequel deck conversion or automatic story trigger was added.
 

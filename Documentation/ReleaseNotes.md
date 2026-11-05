@@ -2,8 +2,8 @@
 
 ## Current source and delivery queue
 
-The current source version is **2.4.1** (Mac build 105, iOS build 44, tvOS build 19).
-Read the [complete 2.4.1 notes](ReleaseNotes-2.4.1-build105.md).
+The current source version is **2.4.2** (Mac build 106, iOS build 45, tvOS build 20).
+Read the [complete 2.4.2 notes](ReleaseNotes-2.4.2-build106.md).
 iOS 2.4.1 build 44 and tvOS 2.4.1 build 19 were uploaded to Apple on 4 November.
 Both are Waiting for Review in TestFlight. See the
 [mobile delivery record](ReleaseReadiness/2.4.1-build105/README.md#ios-and-tvos-delivery--4-november-2026).
@@ -29,6 +29,7 @@ See the [2.4 notes](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379b
 These links preserve the exact notes in Git history. The working tree keeps
 only the current release notes. Packaged notes remain with their release evidence.
 
+- [2.4.1 build 105](https://github.com/ErikVeland/Lemmings/blob/554f79fceaa72e02d52584a07df73df51d9eb2aa/Documentation/ReleaseNotes-2.4.1-build105.md)
 - [2.4 build 104](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.4-build104.md)
 - [2.3.1 build 103](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.3.1-build103.md)
 - [2.3 build 102](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.3-build102.md)
