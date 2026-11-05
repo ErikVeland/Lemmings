@@ -8,6 +8,18 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
+## HUD target clearance — 5 November 2026
+
+The shared mobile HUD joins controls within each clear bank. It keeps targets
+outside the Duo hinge, even when the gap is less than one point. The optional
+navigation rail uses the standard deck if the skill row and Nuke cannot fit.
+Layout tests cover the current adaptive tablet and compact phone decks.
+
+All 39 layout tests and 44 session and presentation tests pass. Eleven muted
+offscreen renders verify the hinge and rail targets, including NeoLemmix's
+21-skill bank. iOS and tvOS SDK compilation passes. Physical touch acceptance
+remains a device check.
+
 ## Shared session allocation cleanup — 4 November 2026
 
 Classic, L2, L3 and NeoLemmix now build sprite-ID and minimap-point arrays in
@@ -20,7 +32,8 @@ The native Mac-hosted build and 44 focused session/presentation tests pass
 with muted audio and no windows. The initial broader run found 160 existing
 layout assertions failing in `MobileAdaptiveLayoutTests` and
 `MobilePortraitHUDTests` before these source edits. That run was stopped before
-its full content-corpus checks finished. Those layout checks remain unresolved.
+its full content-corpus checks finished. The 5 November HUD checks close those
+layout failures.
 The iOS and tvOS SDK builds compile all eight shared modules and both app
 entry points without a Simulator launch. Physical-device acceptance was not
 repeated. Existing release receipts retain their original source limits.

@@ -35,7 +35,7 @@ struct MobilePortraitHUDTests {
     }
 
     /// Portrait keeps the touch deck. Landscape restores the Mac panel at a whole scale.
-    @Test func originalIPadProUsesMacPanelInLandscape() throws {
+    @Test func originalIPadProKeepsPlayfieldHeightWithAdaptiveLandscapeDeck() throws {
         for (size, panelScale) in [(MobileSize(width: 768, height: 1024), 3.0), (.init(width: 1024, height: 1366), 4.0)] {
             let portrait = MobileHUDLayout.make(container: size, safeArea: .init(top: 20),
                 hasRate: true, skillCount: 8, supportsRewind: true)
@@ -44,8 +44,11 @@ struct MobilePortraitHUDTests {
             #expect(portrait.interface.playfieldFrame.height == size.height - 240)
             let landscape = MobileHUDLayout.make(container: .init(width: size.height, height: size.width),
                 safeArea: .init(top: 20), hasRate: true, skillCount: 8, supportsRewind: true)
-            #expect(landscape.portrait == nil)
-            #expect(landscape.panel.map { Double($0.scale) } == panelScale)
+            let deck = try #require(landscape.portrait)
+            #expect(landscape.panel == nil)
+            #expect(landscape.interface.playfieldFrame.maxY == size.width - (40 * panelScale + 44))
+            #expect(landscape.interface.controlsFrame.width == size.height)
+            #expect(Double(deck.minimap.minY) == landscape.interface.playfieldFrame.maxY)
             #expect(landscape.canPlay)
         }
     }
@@ -92,7 +95,8 @@ struct MobilePortraitHUDTests {
                 let transport = layout.interface.controlFrames
                 let pause = transport[offset + skills], nuke = transport[offset + skills + 1]
                 let speed = transport[offset + skills + 2], rewind = transport[offset + skills + 3]
-                #expect(speed.maxX < nuke.minX && nuke.maxX < pause.minX)
+                #expect(abs(speed.maxX - nuke.minX) < 0.001)
+                #expect(abs(nuke.maxX - pause.minX) < 0.001)
                 #expect([pause, nuke, speed].allSatisfy { $0.y == pause.y && $0.width >= 44 })
                 #expect(rewind.y == portrait.minimap.minY && rewind.height == portrait.minimap.height)
                 #expect(rewind.minX == layout.interface.safeFrame.minX)
@@ -180,8 +184,8 @@ struct MobilePortraitHUDTests {
         #expect(layout.interface.orientation == .landscape)
         #expect(layout.canPlay)
         #expect(deck.skills.minX == 47 && deck.skills.maxX < 797)
-        #expect(layout.interface.controlsFrame.height == 126)
-        #expect(layout.interface.playfieldFrame.height == 199)
+        #expect(layout.interface.controlsFrame.height == 124)
+        #expect(layout.interface.playfieldFrame.height == 201)
         let controls = layout.interface.controlFrames
         #expect(abs(controls[0].y - Double(deck.skills.minY)) < 0.001)
         #expect(abs(controls[10].y - Double(deck.skills.minY)) < 0.001)

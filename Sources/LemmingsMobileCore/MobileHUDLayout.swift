@@ -103,7 +103,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
         }
         layout = topStatusLayout(layout, television: television)
         layout = duoTabletLayout(layout)
-        layout = joiningControls(layout, hasRate: hasRate, skillCount: max(0, skillCount))
+        layout = joiningControls(layout, hasRate: hasRate, skillCount: max(0, skillCount), avoiding: systemRegions)
         if fillsDisplayWidth {
             layout = MobileHUDLayout(portrait: layout.portrait, interface: layout.interface, panel: layout.panel,
                 compactScale: layout.compactScale, speedArrows: layout.speedArrows,
@@ -178,19 +178,26 @@ public struct MobileHUDLayout: Equatable, Sendable {
             showsMenuButton: layout.showsMenuButton, television: layout.television)
     }
 
-    private static func joiningControls(_ layout: MobileHUDLayout, hasRate: Bool, skillCount: Int) -> MobileHUDLayout {
+    private static func joiningControls(_ layout: MobileHUDLayout, hasRate: Bool, skillCount: Int,
+                                        avoiding regions: [MobileReservedRegion]) -> MobileHUDLayout {
         guard layout.portrait != nil else { return layout }
         let original = layout.interface
         var frames = original.controlFrames
+        func rect(_ frame: MobileRect) -> CGRect {
+            CGRect(x: frame.x, y: frame.y, width: frame.width, height: frame.height)
+        }
+        let reserved = regions.map { rect($0.frame) }
+        let rail = original.controlsPlacement == .trailingRail ? rect(original.controlsFrame) : nil
         let skillStart = hasRate ? 2 : 0
         let transportStart = skillStart + skillCount
         let navigationStart = transportStart + 3
         for range in [skillStart..<transportStart, transportStart..<navigationStart,
                       navigationStart..<(navigationStart + (layout.supportsRewind ? 3 : 1))] {
             guard range.upperBound <= frames.count else { continue }
-            let joined = GameHUDControlGroup.joined(range.map {
-                CGRect(x: frames[$0].x, y: frames[$0].y, width: frames[$0].width, height: frames[$0].height)
-            })
+            let joined = GameHUDControlGroup.joined(range.map { rect(frames[$0]) }) { first, second in
+                if let rail, rail.contains(first) != rail.contains(second) { return false }
+                return reserved.allSatisfy { first.union(second).intersection($0).isEmpty }
+            }
             for (index, frame) in zip(range, joined) {
                 frames[index] = MobileRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height)
             }
@@ -332,7 +339,8 @@ public struct MobileHUDLayout: Equatable, Sendable {
               map.minY - safe.minY - height >= 88 else { return nil }
 
         let skillBankWidth = safe.width - 44 - groupGap
-        let skillWidth = max(44, (skillBankWidth - 2 * Double(max(0, skillCount - 1))) / Double(max(1, skillCount)))
+        let skillWidth = (skillBankWidth - gap * Double(max(0, skillCount - 1))) / Double(max(1, skillCount))
+        guard skillWidth >= 44 else { return nil }
         let skills = (0..<skillCount).map {
             MobileRect(x: safe.minX + Double($0) * (skillWidth + 2), y: skillY, width: skillWidth, height: skillHeight)
         }

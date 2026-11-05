@@ -36,12 +36,13 @@ public enum GameHUDControlGroup {
     }
 
     /// Divide existing gaps between neighbours without moving either outer edge.
-    public static func joined(_ frames: [CGRect]) -> [CGRect] {
+    public static func joined(_ frames: [CGRect], canJoin: (CGRect, CGRect) -> Bool = { _, _ in true }) -> [CGRect] {
         var result = frames
         for group in groups(frames) {
             for left in group {
                 for right in group where left != right {
                     let a = frames[left], b = frames[right]
+                    guard canJoin(a, b) else { continue }
                     if abs(a.minY - b.minY) < 0.01, abs(a.height - b.height) < 0.01,
                        b.minX >= a.maxX, b.minX - a.maxX <= 4 {
                         let edge = floor((a.maxX + b.minX) / 2)
