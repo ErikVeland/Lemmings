@@ -2,6 +2,29 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>2.4.2</title>
+            <pubDate>Thu, 05 Nov 2026 16:56:07 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>106</sparkle:version>
+            <sparkle:shortVersionString>2.4.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}</style></head><body><!-- Release commit: 55f8f52703e04db6b6f9460fd7b962de81aab26f -->
+<h3>Maintenance</h3>
+<p>This Mac update simplifies the build tools, removes redundant project files and keeps earlier release notes available through Git history.</p>
+<p>Shared mobile and Apple TV code builds actor lists with fewer temporary allocations. The shared HUD keeps controls clear of narrow screen divisions. If a navigation rail leaves too little room for the skill row and Nuke, the HUD uses the standard deck.</p>
+<h3>Compatibility</h3>
+<p>macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta.</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-2.4.2-build106.zip" length="2057843804" type="application/octet-stream" sparkle:edSignature="/GoaVNw06Gv6m5NxHbokWAJHZMBe2PleeVqPvO2RTM2STOA3BRgwvoRVbzheTjWrZelc0a/ZvcpkI1e32xi/DQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from105.delta" sparkle:deltaFrom="105" length="619082" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="fdBc05TT2VmOmUMD9QemC+9M/COFrh4eXqrCHiMdd4RNmmHmpC+yFGjbFkN/96hvK8w3J2GTPog8H4d4XQIRDw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from104.delta" sparkle:deltaFrom="104" length="46694586" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="lBS92ptVh7S/zWbs9cNSc5fBmVnSxkAixhscZz0968bvMwvfGqAiMVxCCeuoNXph0PRWVcnTUVSQx+8LrDtpBg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from102.delta" sparkle:deltaFrom="102" length="47959322" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="Xg9QqWLkZxUn1pCG7kM2eeXbTnB1qAmLjuuf6Po3fgcX+8CkePTI02uBhUHIrcAtZmoAQlHnRp2ccFawezDeDQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from99.delta" sparkle:deltaFrom="99" length="51613854" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="gHzASPDK/R93v8BRhnLmYy7jyJICMcAOU/WUNTKLK4RfG2ENiUoXpCQGXWbbl2SttIZEJv01SYttLOEIU2Q0Dw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from98.delta" sparkle:deltaFrom="98" length="52088118" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="M+IComQy74WbLVazEmN11PEw9CJhSbO1hRh4ZcyQjUfCG9kiw8spSpVYbMe9NWqjCfnnvzs58RWn6fSql0ZmCg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.4.1</title>
             <pubDate>Tue, 03 Nov 2026 17:22:48 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
