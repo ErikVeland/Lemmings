@@ -3,12 +3,18 @@ import Testing
 @testable import NxlvKit
 
 struct FanLevelOrganisationTests {
-    private var content: URL {
+    private static var content: URL {
         URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
             .deletingLastPathComponent().appendingPathComponent("Content/LevelPacks")
     }
+    private static let hasInstalledPackCorpus: Bool = {
+        guard let entries = try? FileManager.default.contentsOfDirectory(at: content, includingPropertiesForKeys: nil) else {
+            return false
+        }
+        return entries.filter { $0.pathExtension == "zip" }.count >= 535
+    }()
     private func installed() throws -> [FanLevelOrganisation.Pack] {
-        try FileManager.default.contentsOfDirectory(at: content, includingPropertiesForKeys: nil)
+        try FileManager.default.contentsOfDirectory(at: Self.content, includingPropertiesForKeys: nil)
             .filter { $0.pathExtension == "zip" }
             .map { .init(id: ClassicFanPack.catalogueID($0), title: ClassicFanPack.displayName(of: $0)) }
     }
@@ -16,7 +22,7 @@ struct FanLevelOrganisationTests {
         [group] + group.children.flatMap(descendants)
     }
 
-    @Test func everyInstalledPackAppearsExactlyOnceOnBoundedPages() throws {
+    @Test(.enabled(if: Self.hasInstalledPackCorpus)) func everyInstalledPackAppearsExactlyOnceOnBoundedPages() throws {
         let packs = try installed()
         #expect(packs.count >= 535)
         let root = FanLevelOrganisation.library(packs)
@@ -27,7 +33,7 @@ struct FanLevelOrganisationTests {
         #expect(root == FanLevelOrganisation.library(Array(packs.reversed())))
     }
 
-    @Test func numberedAndSplitCollectionsStayTogether() throws {
+    @Test(.enabled(if: Self.hasInstalledPackCorpus)) func numberedAndSplitCollectionsStayTogether() throws {
         let groups = descendants(FanLevelOrganisation.library(try installed()))
         for (title, ids) in [("Mikepak", [5, 6, 19]), ("ISteve", [20, 21, 138]),
                              ("geoo", [1, 2, 108, 388, 461]), ("Timpack", [88, 98, 99, 104]),
@@ -43,7 +49,7 @@ struct FanLevelOrganisationTests {
         #expect(mike.packIDs.last == "lldb-19")
     }
 
-    @Test func learningMagazinesAndContestsHaveTheirOwnHomes() throws {
+    @Test(.enabled(if: Self.hasInstalledPackCorpus)) func learningMagazinesAndContestsHaveTheirOwnHomes() throws {
         let root = FanLevelOrganisation.library(try installed())
         for (category, ids) in [("learning", [400, 409]), ("magazines", [577, 578, 579, 580, 584, 585, 594]),
                                 ("community", [207, 214, 430, 438, 450]), ("ports", [80, 473, 488, 568])] {

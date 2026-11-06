@@ -4,17 +4,21 @@ import NxlvKit
 import LemmingsMobileCore
 
 struct MobileLevelSkipTests {
-    private let resources = URL(fileURLWithPath: ProcessInfo.processInfo.environment["LEMMINGS_TEST_RESOURCES"]
+    private static let resources = URL(fileURLWithPath: ProcessInfo.processInfo.environment["LEMMINGS_TEST_RESOURCES"]
         ?? "/Applications/Ultimate Lemmings.app/Contents/Resources")
+    private static let hasRequiredGameData = [
+        "Ports/Lemm2/LEVELS/LEVEL010.DAT", "Ports/Lemm2/LEVELS/LEVEL011.DAT",
+        "Ports/LEM3CD/LEVELS/LEVEL001.DAT", "Ports/LEM3CD/LEVELS/LEVEL002.DAT",
+    ].allSatisfy { FileManager.default.fileExists(atPath: resources.appendingPathComponent($0).path) }
 
-    @Test func sequelSkipsPreservePopulationAndCanRollBackWithoutAwardingAClear() throws {
+    @Test(.enabled(if: Self.hasRequiredGameData)) func sequelSkipsPreservePopulationAndCanRollBackWithoutAwardingAClear() throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: root) }
         for engine in [2, 3] {
             let storage = MobileStorage(directory: root.appendingPathComponent("engine-\(engine)"))
             let library: any MobileGameLibrary
-            if engine == 2 { library = try Lemmings2MobileLibrary(directory: resources.appendingPathComponent("Ports/Lemm2"), storage: storage) }
-            else { library = try Lemmings3MobileLibrary(directory: resources.appendingPathComponent("Ports/LEM3CD"), storage: storage) }
+            if engine == 2 { library = try Lemmings2MobileLibrary(directory: Self.resources.appendingPathComponent("Ports/Lemm2"), storage: storage) }
+            else { library = try Lemmings3MobileLibrary(directory: Self.resources.appendingPathComponent("Ports/LEM3CD"), storage: storage) }
             let index = engine == 2 ? 10 : 0
             let available = library.canSkipLevel(at: index)
             #expect(available)
@@ -38,7 +42,7 @@ struct MobileLevelSkipTests {
         }
     }
 
-    @Test func failedCampaignSaveDoesNotMoveTheLevel() throws {
+    @Test(.enabled(if: Self.hasRequiredGameData)) func failedCampaignSaveDoesNotMoveTheLevel() throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: root) }
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
@@ -47,8 +51,8 @@ struct MobileLevelSkipTests {
             try Data([1]).write(to: blocked)
             let storage = MobileStorage(directory: blocked)
             let library: any MobileGameLibrary
-            if engine == 2 { library = try Lemmings2MobileLibrary(directory: resources.appendingPathComponent("Ports/Lemm2"), storage: storage) }
-            else { library = try Lemmings3MobileLibrary(directory: resources.appendingPathComponent("Ports/LEM3CD"), storage: storage) }
+            if engine == 2 { library = try Lemmings2MobileLibrary(directory: Self.resources.appendingPathComponent("Ports/Lemm2"), storage: storage) }
+            else { library = try Lemmings3MobileLibrary(directory: Self.resources.appendingPathComponent("Ports/LEM3CD"), storage: storage) }
             let index = engine == 2 ? 10 : 0
             #expect(throws: (any Error).self) { _ = try library.prepareLevelSkip(at: index) }
             let available = library.canSkipLevel(at: index)
