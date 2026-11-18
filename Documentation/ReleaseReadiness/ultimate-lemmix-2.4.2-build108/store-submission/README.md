@@ -2,22 +2,23 @@
 
 Checked 19 November 2026. Version 2.4.2, build 108 on Mac, iOS and tvOS.
 
-The retained Store packages are signed and passed Apple's local package analysis.
-Fresh archives include the later compiler-compatibility correction. Their final
-exports await credential-access checks after the owner unlocks the Mac.
+All three refreshed Store packages are signed and passed Apple's local package
+analysis with zero product errors. The final exports completed after the owner
+restored Xcode credential access.
 No build has been uploaded, processed by App Store Connect, submitted for review
 or published. These are preparation artifacts, not a completed submission.
 
 ## Packages
 
-| Platform | Retained Handoff package | Verification |
+| Platform | Current Handoff package | Verification |
 | --- | --- | --- |
 | Mac, Apple silicon and Intel | `Mac/Ultimate Lemmix 2.4.2 (108).pkg` | [Mac receipt](mac-store-package.json) |
 | iPhone and iPad | `iOS/Ultimate Lemmix 2.4.2 (108).ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
 | Apple TV | `Apple TV/Ultimate Lemmix 2.4.2 (108).ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
 
 Paths start at `/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff`.
-All three signed packages are retained unchanged. Both mobile packages use the shared main ID
+All three refreshed packages replaced the earlier exports after exact verification.
+Both mobile packages use the shared main ID
 `academy.glasscode.ultimatelemmix`, with their distinct extensions retained.
 The separate-ID mobile packages are superseded and remain outside the handoff
 in the dated build archive.
@@ -28,8 +29,8 @@ Fresh archives use source `1ac19c638e3f62dd48f7d4dedf17b285b961b079`.
 Their development signatures, resources and entitlements passed local checks.
 See [Mac archive refresh](MacSourceRefresh.md) and
 [mobile archive refresh](MobileRenderRefresh.md).
-Retry exports after credential access is confirmed. Another compilation is not required.
-Replace the retained packages only after export and exact package verification pass.
+Exports and exact package verification passed for all three archives.
+Earlier exports remain in the dated build archive under `Superseded`.
 
 The Mac package contains both architectures, all six shared libraries and Desk
 Clock widget. iOS retains its Desk Clock widget; TV retains Top Shelf. Every
@@ -73,7 +74,7 @@ Sparkle feed or separate notarisation step for these App Store packages.
 ## Restoration bundle
 
 The separate transport file is
-`restoration/Ultimate-Lemmix-Restoration-20261118.zip`.
+`Restoration/Ultimate-Lemmix-Restoration-20261118.zip`.
 It contains 23,591 resources, including the local levels, artwork, original
 font and 495 music variants. Native import and a separate-process reopen passed.
 Every archive member's size, checksum and CRC passed. See the
@@ -96,27 +97,27 @@ App Store Connect sign-in is verified. The owner selected one listing for
 Mac, iOS and tvOS: Apple ID `6836347807`, main bundle ID
 `academy.glasscode.ultimatelemmix`. All three platform records exist. Mac version
 2.4.2 listing text, Games/Puzzle category and content rights are saved. Release
-is manual. The iOS and tvOS draft-version saves are not verified because browser
-controls stopped responding while the Mac was locked.
-Do not treat their requested version 2.4.2 as saved.
+is manual. The iOS and tvOS records still show version 1.0. The signed-in
+browser accepts text but button presses do not take effect. An owner handoff
+is pending for the filled iOS draft. Do not treat version 2.4.2 as saved there.
 The new record has no Game Center leaderboards configured yet.
 
-The website is built locally for `https://lemmings.glasscode.academy`.
-Cloudflare sign-in, DNS and TLS setup remain pending. The site and its privacy
-URL are not verified live. The contact address `erik@veland.au` is verified from
-the published GenErik DJ site. Saving that address to App Review fields remains
-separate from verifying the address itself.
+The website is live at `https://lemmings.glasscode.academy` with valid HTTPS.
+All ten public routes, redirects, deployed hashes and the 404 response passed.
+Mac support and marketing URLs are saved. Other Store URL fields remain open.
+The contact address `erik@veland.au` is verified from the published GenErik DJ
+site. App Review contact fields still need completion, including a phone number.
 
-First, unlock the Mac and verify Xcode credential access. Export and verify the
-refreshed Mac package, then the mobile packages.
+The [Store account checklist](StoreAccountChecklist.md) records source-backed
+privacy, rating, encryption and Game Center requirements. These answers are
+prepared but are not saved account declarations.
 
 Complete these account and publication items before submitting:
 
 1. Verify and save version 2.4.2 for iOS and tvOS. Complete age rating,
    price/availability and the review contact, including its telephone number.
 2. Configure the required Game Center leaderboards for the shared listing.
-3. Complete DNS and TLS setup. Publish the approved website and privacy notice,
-   then verify their public URLs before saving them in App Store Connect.
+3. Save the verified website URLs in the remaining App Store Connect fields.
 4. Confirm deployed retention and provider logging against the privacy notice
    and App Store privacy responses. Complete the encryption determination.
 5. Review the [listing draft](StoreListing.en-AU.json), screenshots and

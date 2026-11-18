@@ -19,12 +19,11 @@
     "-jobs",
     "2",
     "-derivedDataPath",
-    "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/tvos-derived",
+    "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-derived",
     "-archivePath",
-    "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/UltimateLemmix-tvOS.xcarchive",
-    "-allowProvisioningUpdates",
+    "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-tvOS.xcarchive",
     "DEVELOPMENT_TEAM=54WU29TRTY",
-    "ULTIMATE_LEMMIX_RESOURCES_DIR=/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mobile-resources-submission",
+    "ULTIMATE_LEMMIX_RESOURCES_DIR=/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-resources-submission",
     "ULTIMATE_LEMMIX_RELEASE_CHECKS=1",
     "REGISTER_APP_GROUPS=YES",
     "archive",
@@ -38,9 +37,9 @@
     "LEMMINGS_PUBLICATION_BUILD": "108",
     "ULTIMATE_LEMMIX_STORE": "1"
   },
-  "sourceCommit": "7dd5340b9cec5bbb945c2f1da05e098d71cf35f5",
+  "sourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
   "sourceBefore": {
-    "sourceFingerprint": "73f26655040bdca8160cb5f2a9ac7c0f958073263defea565702346152866ac7",
+    "sourceFingerprint": "591aabf1c1ae27aff8960c9092c63e98eb4199529d6fe7b3830238cbf80d3f7e",
     "sources": [
       {
         "path": "Apps/SharedAppleMobile/AppDelegate.swift",
@@ -456,7 +455,7 @@
       },
       {
         "path": "Sources/LemmingsGameArt/GamePlayButtonArt.swift",
-        "sha256": "3230099d3a72d72892a8463ec8f6c7169897b6fcfd3815b306f6dc902d50c162"
+        "sha256": "b4439040ff1439fc0b9bedf8d9e31cce0224db660f6f1d2f102cc1ab5955b530"
       },
       {
         "path": "Sources/LemmingsGameArt/GamePortraitArt.swift",
@@ -2684,10 +2683,10 @@
       }
     ]
   },
-  "sourceAfterFingerprint": "73f26655040bdca8160cb5f2a9ac7c0f958073263defea565702346152866ac7",
+  "sourceAfterFingerprint": "591aabf1c1ae27aff8960c9092c63e98eb4199529d6fe7b3830238cbf80d3f7e",
   "sharedSourcesUnchanged": true,
   "publicationMetadataUnchanged": true,
-  "publicationManifestSHA256": "bcf23a3ea54cf0cde757bcd5a314780df2c8d3e898c27ae2157910a1dea75b71",
+  "publicationManifestSHA256": "12790691005fb3bea77a6c47219b70a1644f6d55e1abdb77fa272cfba9f83723",
   "compilerExitCode": 0,
   "exitCode": 0
 }

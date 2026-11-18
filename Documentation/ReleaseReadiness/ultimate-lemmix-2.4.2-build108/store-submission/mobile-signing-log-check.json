@@ -1,42 +1,38 @@
 [
   {
     "platform": "ios",
-    "log": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/ios-archive.log",
-    "checkedAtUTC": "2026-11-18T12:45:29.015614+00:00",
-    "lineCount": 2064,
-    "findings": [
-      {
-        "line": 2040,
-        "text": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/veland/UltimateLemmix/Apps/UltimateLemmixIOS/../../.build/publication-resources/ultimate-lemmix/ultimate-lemmix-mobile-resources.json'"
-      },
-      {
-        "line": 2058,
-        "text": "** ARCHIVE FAILED **"
-      }
-    ]
+    "stage": "archive",
+    "log": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-archive.log",
+    "checkedAtUTC": "2026-11-18T22:34:24.734931+00:00",
+    "lineCount": 3689,
+    "successMarkerPresent": true,
+    "findings": []
+  },
+  {
+    "platform": "ios",
+    "stage": "export",
+    "log": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-store-export.log",
+    "checkedAtUTC": "2026-11-18T22:34:24.735709+00:00",
+    "lineCount": 4,
+    "successMarkerPresent": true,
+    "findings": []
   },
   {
     "platform": "tvos",
-    "log": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/tvos-archive.log",
-    "checkedAtUTC": "2026-11-18T12:45:29.041651+00:00",
-    "lineCount": 3615,
-    "findings": [
-      {
-        "line": 943,
-        "text": "    Signing Identity:     \"Apple Development: Erik Veland (T93G24W53E)\""
-      },
-      {
-        "line": 944,
-        "text": "    Provisioning Profile: \"tvOS Team Provisioning Profile: academy.glasscode.ultimatelemmix.tvos.TopShelf\""
-      },
-      {
-        "line": 3596,
-        "text": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/veland/UltimateLemmix/Apps/UltimateLemmixTVOS/../../.build/publication-resources/ultimate-lemmix/ultimate-lemmix-mobile-resources.json'"
-      },
-      {
-        "line": 3609,
-        "text": "** ARCHIVE FAILED **"
-      }
-    ]
+    "stage": "archive",
+    "log": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-archive.log",
+    "checkedAtUTC": "2026-11-18T22:34:24.766586+00:00",
+    "lineCount": 3837,
+    "successMarkerPresent": true,
+    "findings": []
+  },
+  {
+    "platform": "tvos",
+    "stage": "export",
+    "log": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-store-export.log",
+    "checkedAtUTC": "2026-11-18T22:34:24.766975+00:00",
+    "lineCount": 4,
+    "successMarkerPresent": true,
+    "findings": []
   }
 ]

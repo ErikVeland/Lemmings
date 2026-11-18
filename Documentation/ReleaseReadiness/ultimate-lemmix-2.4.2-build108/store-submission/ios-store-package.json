@@ -1,12 +1,12 @@
 {
   "platform": "ios",
-  "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/ios-store-export/UltimateLemmixIOS.ipa",
-  "sha256": "eb5bce023715301b65b0b91109f98fe50daa6c07392e260731d6940d6f096b78",
-  "bytes": 50180585,
-  "checkedUTC": "2026-11-18T13:05:02.694475+00:00",
+  "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-store-export/UltimateLemmixIOS.ipa",
+  "sha256": "ed7d6d3afd733ed1c9d71301270b75101ed5722779e4054629e1e52e383d2b1f",
+  "bytes": 50180093,
+  "checkedUTC": "2026-11-18T22:31:59.693805+00:00",
   "bundles": [
     {
-      "bundleID": "academy.glasscode.ultimatelemmix.ios",
+      "bundleID": "academy.glasscode.ultimatelemmix",
       "version": "2.4.2",
       "build": "108",
       "authorities": [
@@ -15,7 +15,7 @@
         "Apple Root CA"
       ],
       "entitlements": {
-        "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix.ios",
+        "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix",
         "beta-reports-active": true,
         "com.apple.developer.game-center": true,
         "com.apple.developer.icloud-container-environment": "Production",
@@ -35,8 +35,8 @@
         ],
         "get-task-allow": false
       },
-      "profileUUID": "5482c7a5-69fd-407d-b9a3-c96ada8f6cd8",
-      "profileName": "iOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix.ios",
+      "profileUUID": "34405246-06a5-4ba2-8854-6e50f3cb7024",
+      "profileName": "iOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix",
       "profileExpires": "2027-10-10T13:17:05",
       "privacyManifest": {
         "NSPrivacyAccessedAPITypes": [
@@ -233,6 +233,6 @@
     }
   ],
   "appStoreInfoProductErrors": [],
-  "helperSHA256": "2d058d7c4cf89e0ff3eb682f6541b974b6d74bf9757ab7a8c44f1bd80e17c766",
+  "helperSHA256": "78e94af8a97a05be997e25e8f103c58457bd7049434c270ae0f06a8cdd539e65",
   "allChecksPassed": true
 }

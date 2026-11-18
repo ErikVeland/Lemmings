@@ -6,13 +6,13 @@ The current notice is implemented in [the website privacy page](../../../../Webs
 These pages replace the earlier submission-dossier draft. Maintain the website
 sources as the single policy text.
 
-The intended public URLs are:
+The verified public URLs are:
 
 - https://lemmings.glasscode.academy/privacy
 - https://lemmings.glasscode.academy/privacy/choices
 
-Both pages are built and pass local route checks. DNS, TLS and public access
-remain unverified. App Store Connect has not saved these website URLs.
+Both pages are live with valid HTTPS and passed public route and content checks.
+App Store Connect has not saved these privacy URLs.
 Developer, privacy and support contact: [erik@veland.au](mailto:erik@veland.au).
 The published GenErik DJ site verifies this contact address.
 

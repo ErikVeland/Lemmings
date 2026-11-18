@@ -38,7 +38,8 @@
       "version",
       "copyright",
       "sign-in not required",
-      "manual release"
+      "manual release",
+      "marketing URL"
     ],
     "gameCenter": "No leaderboards configured in the new record",
     "buildsUploaded": false,
@@ -52,7 +53,7 @@
       "requested": "2.4.2",
       "iOSSavedVerified": false,
       "tvOSSavedVerified": false,
-      "reason": "Platform records exist. Draft-version saves remain unverified after browser input stopped taking effect. The Mac was subsequently confirmed locked; repeat after unlock."
+      "reason": "The signed-in Store session shows iOS and tvOS version 1.0. New iOS fields are filled but Save has not taken effect; owner handoff pending."
     },
     "unifiedMobilePackagesVerified": true,
     "unifiedMobileEvidence": "unified-mobile-package-results.json"
@@ -61,10 +62,11 @@
   "website": {
     "canonicalOrigin": "https://lemmings.glasscode.academy",
     "localBuildReady": true,
-    "liveVerified": false,
-    "dnsReady": false,
-    "tlsReady": false,
-    "blocker": "Cloudflare sign-in is pending for DNS and TLS setup."
+    "liveVerified": true,
+    "dnsReady": true,
+    "tlsReady": true,
+    "deployedSourceRevision": "6c1d19d9b2b6048de044fc04d2a6fd2243daebba",
+    "liveEvidence": "WebsiteLiveVerification.json"
   },
   "contact": {
     "email": "erik@veland.au",
