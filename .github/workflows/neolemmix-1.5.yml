@@ -21,7 +21,7 @@ jobs:
   source-gate:
     name: Source gate
     runs-on: macos-15-intel
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Check out Ultimate Lemmings
         uses: actions/checkout@v5
