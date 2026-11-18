@@ -68,6 +68,15 @@ Local asset folders, signing inputs and existing app bundles are not copied when
 creating a working folder. Supply each product's existing approved build inputs.
 Do not copy preservation media into the licensed Lemmix resource bundle.
 
+The local Lemmix Mac test packager can include the owner's full collection.
+Set `ULTIMATE_LEMMIX_LOCAL_GAME_RESOURCES` to an existing app's resource folder.
+Set `ULTIMATE_LEMMIX_LOCAL_CONTENT` to the checkout's `Content` folder for current
+fan and NeoLemmix levels. Set `ULTIMATE_LEMMIX_LOCAL_NEO_STYLES` to the local
+NeoLemmix styles folder when those levels need community artwork.
+These optional inputs apply to the personal Mac test build, not public releases.
+The packager always generates and verifies the three starter levels.
+The Lemmix logo and character default remain independent of the supplied levels.
+
 ## Product builds
 
 Run commands from the matching product working folder. These commands build

@@ -1753,7 +1753,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 }.value
                 try GameResources.activate(bundleURL: installed.bundleURL, forceReload: true)
                 if GameArtworkResources.originalInterfaceAvailable {
-                    GameArtworkSkin.setLixEnabled(false)
                     if mobileSettings.soundtrack == "Lix" {
                         MobileMusic.shared.soundtrack = "Original"
                     }

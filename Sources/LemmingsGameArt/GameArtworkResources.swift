@@ -61,10 +61,11 @@ public enum GameArtworkResources {
  * Keeps the existing artwork choice independent from distribution identity.
  */
 public enum GameArtworkSkin {
-    public static let key = "LixCharactersEnabledV1"
+    private static let isLemmix = Bundle.main.object(forInfoDictionaryKey: "UltimateLemmixStore") as? Bool == true
+    public static let key = isLemmix ? "LemmixCharactersEnabledV1" : "LixCharactersEnabledV1"
     public static let changed = Notification.Name("LixCharactersChanged")
     public static var lixEnabled: Bool {
-        UserDefaults.standard.object(forKey: key) as? Bool ?? (GameResources.directory("MacArtwork/lemmings") == nil)
+        UserDefaults.standard.object(forKey: key) as? Bool ?? (isLemmix || GameResources.directory("MacArtwork/lemmings") == nil)
     }
     public static var usesLixInterface: Bool {
         GameArtworkResources.lixInterface != nil && (lixEnabled || GameArtworkResources.interface == nil)
