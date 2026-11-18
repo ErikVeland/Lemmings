@@ -24,7 +24,7 @@ final class FavouriteAndReturnTests: XCTestCase {
         XCTAssertEqual(view.mode, .records)
         view.back()
         XCTAssertEqual(view.mode, .career)
-        XCTAssertEqual(view.backTitle, L10n.text("Back to result"))
+        XCTAssertEqual(view.backTitle, GameLocalisation.text("Back to result"))
         view.back()
         XCTAssertEqual(view.mode, .result)
         XCTAssertEqual(closed, 0)
@@ -76,7 +76,7 @@ final class FavouriteAndReturnTests: XCTestCase {
             button.onPress = { presses += 1 }
             for saved in [false, true] {
                 button.showSaved(saved)
-                XCTAssertEqual(button.accessibilityLabel(), saved ? L10n.text("Remove favourite") : L10n.text("Add favourite"))
+                XCTAssertEqual(button.accessibilityLabel(), saved ? GameLocalisation.text("Remove favourite") : GameLocalisation.text("Add favourite"))
                 for enabled in [false, true] {
                     button.isEnabled = enabled
                     for focused in [false, true] {
@@ -168,7 +168,7 @@ final class FavouriteAndReturnTests: XCTestCase {
                         to: output.appendingPathComponent("result-\(engine.rawValue)-\(Int(width))-\(saved).png"))
                     let buttons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
                         .filter { $0.accessibilityRole() == .button }
-                    let star = try XCTUnwrap(buttons.first { $0.accessibilityLabel() == (saved ? L10n.text("Remove favourite") : L10n.text("Add favourite")) })
+                    let star = try XCTUnwrap(buttons.first { $0.accessibilityLabel() == (saved ? GameLocalisation.text("Remove favourite") : GameLocalisation.text("Add favourite")) })
                     XCTAssertTrue(view.bounds.contains(star.localFrame))
                     XCTAssertTrue(buttons.filter { $0 !== star }.allSatisfy { !$0.localFrame.intersects(star.localFrame) })
                     XCTAssertTrue(star.accessibilityPerformPress())

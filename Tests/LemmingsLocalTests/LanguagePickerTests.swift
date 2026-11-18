@@ -1,4 +1,5 @@
 #if os(macOS)
+import LemmingsAppCore
 import AppKit
 import NxlvKit
 import XCTest
@@ -7,7 +8,7 @@ import XCTest
 final class LanguagePickerTests: XCTestCase {
     @MainActor private func withSettings(_ body: (NSView, NSWindow) throws -> Void) throws {
         _ = NSApplication.shared
-        let original = L10n.currentLanguagePreference
+        let original = GameLocalisation.currentLanguagePreference
         let stored = UserDefaults.standard.object(forKey: InterfaceLanguagePreference.defaultsKey)
         let previousWindow = GameScreen.shared.gameWindow
         let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 1280, height: 800),
@@ -20,9 +21,9 @@ final class LanguagePickerTests: XCTestCase {
             GameScreen.shared.gameWindow = previousWindow
             window.close()
             UserDefaults.standard.set(stored, forKey: InterfaceLanguagePreference.defaultsKey)
-            L10n.setLanguage(original)
+            GameLocalisation.setLanguage(original)
         }
-        L10n.setLanguage(.system)
+        GameLocalisation.setLanguage(.system)
         InterfaceLanguagePreference.save(.system, to: .standard)
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
@@ -44,19 +45,19 @@ final class LanguagePickerTests: XCTestCase {
             openPicker(in: host)
             let french = try language(.french, in: host)
             try click(french, in: host)
-            XCTAssertEqual(L10n.currentLanguagePreference, .french)
-            XCTAssertEqual(L10n.interface.language, "fr")
+            XCTAssertEqual(GameLocalisation.currentLanguagePreference, .french)
+            XCTAssertEqual(GameLocalisation.interface.language, "fr")
             XCTAssertEqual(InterfaceLanguagePreference.load(from: .standard), .system)
             XCTAssertEqual(try language(.french, in: host).state, .on)
             XCTAssertEqual(try language(.system, in: host).state, .off)
             let picker = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
             picker.controllerBackButton.performClick(nil)
-            XCTAssertEqual(L10n.currentLanguagePreference, .system)
+            XCTAssertEqual(GameLocalisation.currentLanguagePreference, .system)
 
             openPicker(in: host)
             try click(try language(.french, in: host), in: host)
             let apply = try XCTUnwrap(descendants(host).compactMap { $0 as? GameActionButton }
-                .first { $0.title == L10n.text("Apply") && !$0.isHiddenOrHasHiddenAncestor })
+                .first { $0.title == GameLocalisation.text("Apply") && !$0.isHiddenOrHasHiddenAncestor })
             apply.performClick(nil)
             XCTAssertEqual(InterfaceLanguagePreference.load(from: .standard), .french)
             openPicker(in: host)
@@ -64,7 +65,7 @@ final class LanguagePickerTests: XCTestCase {
             try click(try language(.system, in: host), in: host)
             let reopened = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
             reopened.controllerBackButton.performClick(nil)
-            XCTAssertEqual(L10n.currentLanguagePreference, .french)
+            XCTAssertEqual(GameLocalisation.currentLanguagePreference, .french)
             XCTAssertEqual(InterfaceLanguagePreference.load(from: .standard), .french)
         }
     }
@@ -78,10 +79,10 @@ final class LanguagePickerTests: XCTestCase {
             try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
             for size in [CGSize(width: 900, height: 620), CGSize(width: 1280, height: 800)] {
                 window.setContentSize(size)
-                for choice in L10n.languageOptions {
+                for choice in GameLocalisation.languageOptions {
                     for fraction: CGFloat in [0.02, 0.5, 0.98] {
                         try click(try language(choice, in: host), in: host, fraction: fraction)
-                        XCTAssertEqual(L10n.currentLanguagePreference, choice)
+                        XCTAssertEqual(GameLocalisation.currentLanguagePreference, choice)
                     }
                     let selected = try language(choice, in: host)
                     XCTAssertEqual(selected.state, .on)
@@ -105,9 +106,9 @@ final class LanguagePickerTests: XCTestCase {
                     location: .zero, modifierFlags: [], timestamp: 0, windowNumber: window.windowNumber,
                     context: nil, characters: " ", charactersIgnoringModifiers: " ", isARepeat: false, keyCode: 49)),
                     in: page, window: window, dismiss: {}))
-                XCTAssertEqual(L10n.currentLanguagePreference, .english)
+                XCTAssertEqual(GameLocalisation.currentLanguagePreference, .english)
                 _ = try language(.french, in: host).accessibilityPerformPress()
-                XCTAssertEqual(L10n.currentLanguagePreference, .french)
+                XCTAssertEqual(GameLocalisation.currentLanguagePreference, .french)
             }
         }
     }
@@ -120,13 +121,13 @@ final class LanguagePickerTests: XCTestCase {
             XCTAssertEqual(ReleaseWelcome.notesVersion, info["CFBundleShortVersionString"] as? String)
             let output = root.appendingPathComponent(".build/language-picker-renders")
             try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-            for choice in L10n.languageOptions where choice != .system {
+            for choice in GameLocalisation.languageOptions where choice != .system {
                 GameScreen.shared.dismissAll()
-                L10n.setLanguage(choice)
-                XCTAssertEqual(ReleaseWelcome.subtitle, L10n.text("Your next level is ready."))
-                XCTAssertEqual(ReleaseWelcome.sections.first?.0, L10n.text("Find your way back"))
+                GameLocalisation.setLanguage(choice)
+                XCTAssertEqual(ReleaseWelcome.subtitle, GameLocalisation.text("Your next level is ready."))
+                XCTAssertEqual(ReleaseWelcome.sections.first?.0, GameLocalisation.text("Find your way back"))
                 if choice != .english {
-                    XCTAssertNotEqual(L10n.text("Continue"), "Continue")
+                    XCTAssertNotEqual(GameLocalisation.text("Continue"), "Continue")
                 }
                 let welcome = ReleaseWelcome(build: 88, version: ReleaseWelcome.notesVersion)
                 var continued = false
@@ -164,7 +165,7 @@ final class LanguagePickerTests: XCTestCase {
     @MainActor private func openPicker(in host: NSView) {
         host.layoutSubtreeIfNeeded()
         let popup = descendants(host).compactMap { $0 as? GamePopUpButton }
-            .first { $0.itemTitles == L10n.languageOptions.map(\.title) }
+            .first { $0.itemTitles == GameLocalisation.languageOptions.map(\.title) }
         XCTAssertNotNil(popup)
         popup?.performClick(nil)
         host.layoutSubtreeIfNeeded()

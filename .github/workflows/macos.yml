@@ -20,7 +20,7 @@ env:
 jobs:
   source-gate:
     name: Shared tests and universal Mac build
-    runs-on: macos-15
+    runs-on: macos-15-intel
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
