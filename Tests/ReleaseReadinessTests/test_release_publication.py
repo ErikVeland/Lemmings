@@ -21,6 +21,8 @@ class ReleasePublicationTests(unittest.TestCase):
             shutil.copytree(ROOT / relative, self.repository / relative,
                             ignore=shutil.ignore_patterns("__pycache__"))
         subprocess.run(["git", "init", "-q", "-b", "release/ultimate-lemmings"], cwd=self.repository, check=True)
+        # Prevent detached maintenance from writing during fixture cleanup.
+        subprocess.run(["git", "config", "maintenance.auto", "false"], cwd=self.repository, check=True)
         subprocess.run(["git", "add", "."], cwd=self.repository, check=True)
         subprocess.run(["git", "-c", "user.name=Release test", "-c", "user.email=test@example.invalid",
                         "commit", "-qm", "Create isolated publication fixture"], cwd=self.repository, check=True)
