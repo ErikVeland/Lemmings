@@ -54,6 +54,19 @@ links when JavaScript is unavailable.
 - Nginx route checks use an isolated loopback-only worker. They verify clean
   routes, redirects and error status without changing existing production sites.
 
+The requested [Lighthouse CLI](https://github.com/GoogleChrome/lighthouse) ran
+in a separate headless browser with muted audio. Mobile home scores are
+97 performance and 100 accessibility, best practices and SEO. Desktop home
+scores are 100 in each category. The manual scores 100 for accessibility, best
+practices and SEO. Mobile simulated largest-content paint is 2.6 seconds, with
+zero layout shift and zero total blocking time. These local measurements do not
+establish public-network performance or complete accessibility acceptance.
+
+The first audit found an oversized logo and low-contrast footer caption.
+Responsive WebP versions preserve the logo artwork and proportions. The caption
+now uses a darker text colour. The final audits include both corrections.
+`Website/verification-summary.json` retains report hashes and measured values.
+
 Browser evidence is in the local ignored `Website/verification` directory.
 The route and build checks can be reproduced with Python's standard library.
 The final interactive browser pass is incomplete: input stopped taking effect

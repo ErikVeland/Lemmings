@@ -1,0 +1,57 @@
+{
+  "checkedDate": "2026-11-19",
+  "scope": "Local preview; no public-origin, physical-device or cross-browser acceptance claimed.",
+  "tool": "Lighthouse13.6.0",
+  "toolDocumentation": "https://github.com/GoogleChrome/lighthouse",
+  "headless": true,
+  "audioMuted": true,
+  "reports": [
+    {
+      "name": "mobile-final",
+      "url": "http://127.0.0.1:4391/",
+      "reportSHA256": "4819fab6cc5ae7f71a61ee59871181dc64bbd3b14ae53f865886f61a1870dd53",
+      "scores": {
+        "performance": 97,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100,
+        "agentic-browsing": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 903.9199000000001,
+        "largest-contentful-paint": 2628.9199,
+        "cumulative-layout-shift": 0,
+        "total-blocking-time": 0
+      }
+    },
+    {
+      "name": "desktop",
+      "url": "http://127.0.0.1:4391/",
+      "reportSHA256": "dc8b3808eba459eee01209262e6f4f082ab2d2d7b2eb06f19a690499d9004fc9",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100,
+        "agentic-browsing": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 243.0362,
+        "largest-contentful-paint": 523.0362,
+        "cumulative-layout-shift": 0,
+        "total-blocking-time": 0
+      }
+    },
+    {
+      "name": "manual",
+      "url": "http://127.0.0.1:4391/manual",
+      "reportSHA256": "05ba85be1bd9eb22916c596e6686eb9863e958f3ff9f2a55faca1c7763d54aa3",
+      "scores": {
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {}
+    }
+  ]
+}

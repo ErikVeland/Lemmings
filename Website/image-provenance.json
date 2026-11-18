@@ -55,6 +55,15 @@
       "treatment": "Unmodified current product logo."
     },
     {
+      "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
+      "sha256": "ccc23dc09af112019fd0f9b914c4678a967fc127914c8c5cf25ce38e551f8754",
+      "outputs": [
+        "logo-480.webp",
+        "logo-960.webp"
+      ],
+      "treatment": "Proportional responsive conversion of the current logo. No redrawing."
+    },
+    {
       "source": "/Users/veland/UltimateLemmix/Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
       "sha256": "f852c3d872d85822107f89b2db3b10770132c6fa0800261b909f9946f77af1df",
       "outputs": [
