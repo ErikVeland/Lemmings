@@ -3,8 +3,9 @@
 Draft for operator review. Not published. Prepared 18 November 2026 for version
 2.4.2, build 108.
 
-Before publication, confirm a monitored privacy contact and the deployed retention
-and hosting arrangements. No public Ultimate Lemmix privacy URL was verified.
+Before publication, confirm the deployed retention and hosting arrangements.
+The contact address below was verified from the published GenErik DJ site on
+19 November 2026. No public Ultimate Lemmix privacy URL was verified.
 The retention details below describe the reviewed service source. Public health
 responses cannot verify server configuration, backups or provider retention.
 
@@ -132,7 +133,8 @@ network providers process data needed to operate their services.
 
 Developer: Erik Veland.
 
-Publication requirement: add the verified, monitored privacy contact here before
-publishing this notice. The reviewed project did not establish a dedicated
-Ultimate Lemmix privacy mailbox or contact page. Do not use public issue comments
-for passwords, recovery keys, private saves or other personal information.
+Privacy and support: [erik@veland.au](mailto:erik@veland.au).
+
+Do not send passwords, recovery keys, private saves or other sensitive information
+in public issue comments. The intended website is `https://lemmings.glasscode.academy`.
+Its DNS, TLS and public privacy page are not yet verified live.

@@ -97,6 +97,15 @@ def validate_actions(value, run):
     if not isinstance(commands, list) or len(commands) > 100000:
         raise ValueError("Too many commands")
     previous = 0
+    grants = 0
+    conditions = value["conditions"]
+    bonus = conditions["modifiers"].get("bonus-skill-v1")
+    original_tool = conditions["modifiers"].get("bonus-original-tool-v1")
+    tools = {name: 5000 + i for i, name in enumerate(
+        ("bricks", "bomb", "spade", "shimmy", "sucker", "umbrella", "hadoken", "grenade", "swimmer"))}
+    valid_bonus = bool(bonus) and original_tool is None and conditions["startingSkills"].get(bonus, 0) > 1
+    if engine == "lemmings3" and not conditions["startingSkills"]:
+        valid_bonus = bonus in tools and original_tool == bonus
     shapes = {"assign": {"lemming", "skill"}, "rate": {"value"}, "nuke": set()}
     if engine == "lemmings2":
         shapes = {"assign": {"lemming", "skill"}, "fan": {"x", "y", "held"}, "aim": {"x", "y", "held"},
@@ -104,6 +113,8 @@ def validate_actions(value, run):
     elif engine == "lemmings3":
         shapes = {a: {"lemming"} for a in ("walker", "blocker", "jumper", "drop")}
         shapes.update(use={"lemming", "direction"}, abort=set())
+    shapes["bonusTool" if engine == "lemmings3" else "bonusSkill"] = (
+        {"lemming", "skill"} if engine == "lemmings3" else {"skill"})
     for c in commands:
         if not isinstance(c, dict) or not isinstance(c.get("action"), str) or c["action"] not in shapes or set(c) != {"tick", "action"} | shapes[c["action"]]:
             raise ValueError("Invalid command")
@@ -113,8 +124,21 @@ def validate_actions(value, run):
                 integer(c[k], -1000000, 1000000)
         if "lemming" in c:
             integer(c["lemming"], 0, 1000000)
+        if c["action"] in ("bonusSkill", "bonusTool"):
+            grants += 1
+            if grants > 1 or not valid_bonus:
+                raise ValueError("Invalid bonus grant")
         if "skill" in c:
-            integer(c["skill"], 0, 31 if engine == "neolemmix" else 7)
+            if c["action"] == "bonusTool":
+                integer(c["skill"], 5000, 5008)
+                if tools.get(bonus) != c["skill"]:
+                    raise ValueError("Bonus tool differs from conditions")
+            else:
+                integer(c["skill"], 0, 31 if engine == "neolemmix" else 7)
+                if c["action"] == "bonusSkill" and engine == "classic":
+                    skills = ("climber", "floater", "bomber", "blocker", "builder", "basher", "miner", "digger")
+                    if skills[c["skill"]] != bonus:
+                        raise ValueError("Bonus skill differs from conditions")
         if "held" in c and type(c["held"]) is not bool:
             raise ValueError("Invalid pointer input")
         if "direction" in c and c["direction"] not in ("upLeft", "up", "upRight", "left", "right", "downLeft", "down", "downRight"):

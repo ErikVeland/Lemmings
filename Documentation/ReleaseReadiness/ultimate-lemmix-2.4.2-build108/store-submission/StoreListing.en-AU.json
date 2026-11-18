@@ -5,15 +5,15 @@
   "promotionalText": "Guide the Lemmix to safety. Start with three original puzzles, then bring your own compatible game data. Keep your journeys, replays and local Hot Seat games.",
   "description": "The rescue quota has been approved. You may have other plans.\n\nGuide a determined little crowd through pixel puzzles. Choose skills, plan a route and try to bring everyone home.\n\nUltimate Lemmix includes three authored starter puzzles, Lix characters, pixel lettering and stone controls. You can play the included puzzles without original game files or a hosted account.\n\nPlay your way:\n• Pause, plan and rewind.\n• Keep saved journeys, records and replays.\n• Take turns locally with Hot Seat.\n• Use hints and rescue targets where verified data is available.\n• Choose HD effects and presentation options.\n• Import supported levels or restore assets from your own collection.\n\nAdditional campaigns, original artwork and original soundtracks are not included. Compatible game-data import is optional. You must have the rights required to use the files you import. Some supported engines and content formats remain Beta.\n\nCloud-save and sharing features need a network connection. Community record sharing is optional. Local play remains available without it.\n\nMac and iPhone/iPad include Desk Clock and its widget. Apple TV includes Top Shelf. Input and effects adapt to each platform.",
   "keywords": "puzzle,strategy,pixel,retro,rescue,levels,local multiplayer,rewind",
-  "supportURL": "https://github.com/ErikVeland/Lemmings/issues",
-  "privacyPolicyURL": null,
+  "supportURL": "https://lemmings.glasscode.academy/support",
+  "privacyPolicyURL": "https://lemmings.glasscode.academy/privacy",
   "primaryCategory": "Games",
   "gamesSubcategory": "Puzzle",
   "version": "2.4.2",
   "copyright": "2026 Erik Veland",
-  "status": "Mac listing text saved in App Store Connect; no build uploaded or submitted",
+  "status": "Mac listing text saved; iOS and tvOS records created, final version saves unverified. Website URLs are prepared and not yet live or saved to App Store Connect. No build uploaded or submitted.",
   "fieldsRequiringAccountReview": [
-    "Privacy policy URL and public privacy contact",
+    "Publish and verify public website URLs, then save them in App Store Connect",
     "App Review contact",
     "Age-rating answers",
     "Price and availability",
@@ -21,5 +21,16 @@
     "Encryption determination",
     "Processed platform builds and screenshots"
   ],
-  "appStoreConnectAppleID": "6836347807"
+  "appStoreConnectAppleID": "6836347807",
+  "marketingURL": "https://lemmings.glasscode.academy/",
+  "privacyChoicesURL": "https://lemmings.glasscode.academy/privacy/choices",
+  "accessibilityURL": "https://lemmings.glasscode.academy/accessibility",
+  "websiteURLsVerifiedLive": false,
+  "publicContact": "erik@veland.au",
+  "bundleIdentifier": "academy.glasscode.ultimatelemmix",
+  "platformRecords": [
+    "macOS",
+    "iOS",
+    "tvOS"
+  ]
 }

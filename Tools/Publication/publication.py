@@ -94,6 +94,17 @@ def metadata_errors(root, manifest, platforms=None, selected_edition=None):
                 for key, value in {**expected, "PRODUCT_BUNDLE_IDENTIFIER": profile["bundleIdentifier"]}.items():
                     if str(settings.get(key)) != value:
                         errors.append(f"{profile['project']}: app {key} must be {value}.")
+            for name, bundle_id in profile.get("extensionBundleIdentifiers", {}).items():
+                if not bundle_id.startswith(profile["bundleIdentifier"] + "."):
+                    errors.append(f"{profile['project']}: extension {name} must use the app ID prefix.")
+                extensions = [item for item in objects.values()
+                              if item.get("isa") == "PBXNativeTarget" and item.get("name") == name]
+                if len(extensions) != 1:
+                    errors.append(f"{profile['project']}: extension target {name} is missing.")
+                    continue
+                for identifier in objects[extensions[0]["buildConfigurationList"]]["buildConfigurations"]:
+                    if objects[identifier]["buildSettings"].get("PRODUCT_BUNDLE_IDENTIFIER") != bundle_id:
+                        errors.append(f"{profile['project']}: extension {name} must use {bundle_id}.")
         except (OSError, ValueError, KeyError, subprocess.CalledProcessError) as error:
             errors.append(f"{edition}/{platform}: cannot read the project: {error}")
     return errors

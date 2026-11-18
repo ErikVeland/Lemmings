@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "date": "2026-11-18",
+  "date": "2026-11-19",
   "source": "Owner reply in release-preparation chat",
   "restoration": {
     "ownerConfirmsRedistributionPermission": true,
@@ -24,7 +24,7 @@
     "createdPlatform": "macOS",
     "recordCreated": true,
     "detailsPageError": "Initial error resolved on retry",
-    "platformListingDecision": "awaiting owner choice",
+    "platformListingDecision": "One App Store listing across macOS, iOS and tvOS",
     "macVersion": "2.4.2",
     "savedFields": [
       "name",
@@ -41,7 +41,34 @@
       "manual release"
     ],
     "gameCenter": "No leaderboards configured in the new record",
-    "buildsUploaded": false
+    "buildsUploaded": false,
+    "platformRecordsCreated": [
+      "macOS",
+      "iOS",
+      "tvOS"
+    ],
+    "savedFieldsPlatform": "macOS",
+    "mobileDraftVersion": {
+      "requested": "2.4.2",
+      "iOSSavedVerified": false,
+      "tvOSSavedVerified": false,
+      "reason": "Platform records exist. Draft-version saves are unverified because browser text input stopped working."
+    },
+    "unifiedMobilePackagesVerified": true,
+    "unifiedMobileEvidence": "unified-mobile-package-results.json"
   },
-  "uploadedOrSubmitted": false
+  "uploadedOrSubmitted": false,
+  "website": {
+    "canonicalOrigin": "https://lemmings.glasscode.academy",
+    "localBuildReady": true,
+    "liveVerified": false,
+    "dnsReady": false,
+    "tlsReady": false,
+    "blocker": "Cloudflare sign-in is pending for DNS and TLS setup."
+  },
+  "contact": {
+    "email": "erik@veland.au",
+    "verifiedSource": "Published GenErik DJ site, verified in the owner task",
+    "savedToAppStoreReviewContactVerified": false
+  }
 }
