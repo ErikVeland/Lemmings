@@ -8,5 +8,9 @@
   "transportEntries": 23615,
   "archiveVerification": "Every member hash, size and CRC verified after ZIP creation.",
   "nativeImportAndReopen": "passed in isolated storage",
-  "redistributionCleared": false
+  "redistributionCleared": false,
+  "redistributionStatusAtPackaging": "No permission confirmation had been received",
+  "ownerConfirmsRedistributionPermission": true,
+  "supportingRecordsReceived": false,
+  "currentDecisionRecord": "OwnerDecisions.json"
 }
