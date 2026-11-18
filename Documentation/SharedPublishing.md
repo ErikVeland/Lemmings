@@ -1,73 +1,100 @@
-# One game codebase, two publication profiles
+# Separate projects, synchronised shared code
 
-Ultimate Lemmings and Ultimate Lemmix use one source tree and one marketing
-version. Implement features and fixes once in the shared application modules.
-Build each publication profile from the same source revision.
+Ultimate Lemmings and Ultimate Lemmix are separate projects with separate releases.
+They share engines and feature modules in the canonical `ErikVeland/Lemmings`
+repository. Sharing code does not combine their product identities or releases.
 
-The separate targets contain publication configuration: asset policy, bundle
-identity, signing, update channel and Store artwork guards. They do not contain
-separate gameplay or interface implementations. Development belongs on the
-shared main branch through the normal merge-request workflow. Edition-specific
-long-lived feature branches are not part of this design.
+| Project | Release branch | Release metadata |
+| --- | --- | --- |
+| Ultimate Lemmings | `release/ultimate-lemmings` | `Resources/Publishing/ultimate-lemmings.json` |
+| Ultimate Lemmix | `release/ultimate-lemmix` | `Resources/Publishing/ultimate-lemmix.json` |
 
-`Resources/Publishing/editions.json` owns the marketing version and publication
-metadata. Each destination retains its existing build-number sequence. A
-different build number does not select different game source.
+Each release branch has its own working folder and tracked `Product.json` marker.
+The marker identifies the product even in a detached checkout. Build entry points
+reject the other product on a release branch or in a marked working folder.
+`main` remains the default branch for shared integration. Do not merge the two
+product branches together or remove their separate release identities.
 
-## Shared source boundaries
+## Independent release state
 
-| Source | Both publication profiles use |
-| --- | --- |
-| Engines and services | The same `Sources/` modules and `Package.swift` |
-| Mac application | The same `Sources/LemmingsLocal` frontend and Mac compilation helper |
-| iOS and tvOS launch | `Apps/SharedAppleMobile/AppDelegate.swift` and `LaunchURL.swift` |
-| Top Shelf | `Apps/SharedAppleMobile/TopShelf/ContentProvider.swift` |
-| Desk Clock widget | `Apps/DeskClockWidget/DeskClockWidget.swift` |
-| iOS launch checks | `Apps/SharedAppleMobile/UITests` |
+Each product owns its marketing version, platform build counters, bundle IDs,
+asset policy, signing, service configuration and release channels. The shared
+`Resources/Publishing/editions.json` file indexes the two product manifests.
+It cannot define a common marketing version.
 
-The publication profiles select bundled resources, application identifiers,
-signing, services and update channels. Ultimate Lemmix also requires the Store
-artwork compilation condition in the application and its Swift package targets.
-`StoreBuildGuard.swift` makes a missing package condition fail compilation.
-Edition conditions do not belong in `NxlvKit`.
+Ultimate Lemmings retains its 2.4.3 candidate: Mac 107, iOS 46 and tvOS 21.
+Ultimate Lemmix retains its documented 2.4.2 build 108 candidate on all platforms.
+These values describe candidate metadata. They do not claim a new release.
+Future releases can advance independently while using matching shared code.
 
-The existing resource provider selects licensed defaults or imported owned
-assets. Importing assets retains the same application code. See
-[Ultimate Lemmix](UltimateLemmix.md) for asset coverage and acceptance limits.
+The existing iOS and tvOS Xcode projects remain separate. Mac builds retain
+separate app names, bundle identifiers, resource packagers and signing inputs.
+Ultimate Lemmings retains its Sparkle feed and existing release tags.
+Ultimate Lemmix must not publish into that feed or replace the latest Lemmings
+release. Give any future Lemmix GitHub release an `ultimate-lemmix-` tag prefix
+and keep `make_latest` false. Store submission remains product-specific.
 
-## Build commands
+## Keep shared changes in sync
 
-Run these commands from the repository root. They build local products and do
-not upload or publish them.
+Implement engine and shared feature fixes once through `main`. Merge the same
+shared revision into each clean product working folder. Do not reset either
+release branch to `main`, because that removes its product marker and release work.
 
-Check both publication profiles without compiling the game:
+Run these commands in each product folder:
+
+```sh
+git fetch origin
+git merge --no-edit origin/main
+```
+
+Resolve any conflict before building or pushing. Preserve the local product
+marker and its independently reviewed release metadata. Do not copy one
+product's version, assets or signing configuration into the other product.
+
+After updating both local branches, compare shared inputs from either folder:
+
+```sh
+python3 Tools/Publication/publication.py compare release/ultimate-lemmings
+python3 Tools/Publication/publication.py compare release/ultimate-lemmix
+```
+
+The comparison checks engines, application modules, package dependencies,
+shared mobile launch and test sources, the widget and the Mac compiler helper.
+It reports changed paths and fails when shared inputs differ. Push both updated
+branches after resolving shared drift. A product can ship independently once its
+own platform and distribution checks pass.
+
+Local asset folders, signing inputs and existing app bundles are not copied when
+creating a working folder. Supply each product's existing approved build inputs.
+Do not copy preservation media into the licensed Lemmix resource bundle.
+
+## Product builds
+
+Run commands from the matching product working folder. These commands build
+local products. They do not upload or publish them.
+
+Check both product contracts without compiling:
 
 ```sh
 zsh Scripts/build-publication.sh --check
 ```
 
-Set the marketing version and destination build counters in
-`Resources/Publishing/editions.json`. Then update the generated project values:
+Update only the selected product's JSON file. Then synchronise only that product:
 
 ```sh
-zsh Scripts/build-publication.sh --sync
-zsh Scripts/build-publication.sh --check
+zsh Scripts/build-publication.sh --sync ultimate-lemmings
+zsh Scripts/build-publication.sh --check --edition ultimate-lemmings
 ```
 
-Inspect a build command before running it:
+Use `ultimate-lemmix` for the Lemmix working folder. The sync command requires an
+explicit product and does not rewrite the other product's metadata.
+
+Inspect or run an Ultimate Lemmix iOS build:
 
 ```sh
 zsh Scripts/build-publication.sh --dry-run ultimate-lemmix ios \
   -configuration Release -destination 'generic/platform=iOS' \
   CODE_SIGNING_ALLOWED=NO build
-```
-
-Use `ultimate-lemmings` or `ultimate-lemmix` as the edition. Use `macos`, `ios`
-or `tvos` as the platform. For example:
-
-```sh
-zsh Scripts/build-publication.sh ultimate-lemmings macos
-zsh Scripts/build-publication.sh ultimate-lemmix macos
 
 zsh Scripts/build-publication.sh ultimate-lemmix ios \
   -configuration Release -destination 'generic/platform=iOS' \
@@ -75,58 +102,46 @@ zsh Scripts/build-publication.sh ultimate-lemmix ios \
   CODE_SIGNING_ALLOWED=NO build
 ```
 
-The Mac commands retain each existing packager's resource and signing inputs.
-For a current-architecture preservation build, set `LEMMINGS_ARCHITECTURES` to
-the current architecture. The Lemmix Mac packager requires
-`ULTIMATE_LEMMIX_ALTERNATIVE_RESOURCES`. It refuses to replace an existing
-Downloads app. Follow the repository's local-build and release policies.
-
-Prepare the licensed mobile resource profile before its first build:
+Use `macos`, `ios` or `tvos` for the platform. A TV build uses
+`generic/platform=tvOS`. `Apps/UltimateLemmixSupport/build.sh` remains a Lemmix-only
+entry point. Mac builds use their separate existing packagers:
 
 ```sh
-python3 Apps/UltimateLemmixSupport/prepare_resources.py \
-  --output .build/publication-resources/ultimate-lemmix \
-  --alternative-resources /path/to/verified/alternative/resources
+zsh Scripts/build-publication.sh ultimate-lemmings macos
 ```
 
-Use the TV destination `generic/platform=tvOS` for a `tvos` build.
-`Apps/UltimateLemmixSupport/build.sh` remains a compatible entry point and
-delegates to the publication command.
+Run the Lemmix command from its own folder:
 
-## Drift checks and build records
+```sh
+zsh Scripts/build-publication.sh ultimate-lemmix macos
+```
 
-The publication check validates all six destination profiles. It rejects stale
-versions, incorrect application identities, copied launch sources, different
-package roots and missing Store guards. It also rejects edition conditions in
-the engine and original-media build phases in the licensed mobile targets.
-The command rejects overrides of profile-owned identity, Info.plist, entitlements
-and artwork conditions. Destination and signing-team options remain available.
-The selected profile sets the artwork mode independently of the parent shell.
+Follow the local-build and release policies in [AGENTS.md](../AGENTS.md).
+The Lemmix Mac packager requires `ULTIMATE_LEMMIX_ALTERNATIVE_RESOURCES` and
+refuses to replace an existing Downloads app. Prepare its licensed mobile
+resources with `Apps/UltimateLemmixSupport/prepare_resources.py` before building.
 
-Both Mac editions use `Scripts/build-mac-sources.sh`. Its recursive source list
-includes new Swift files in every existing module. Cache records include source
-content, compiler, SDK, target, flags, build helpers and compiled output hashes.
-Normal builds refresh stale code. Partial builds reject stale dependencies.
+## Verification and release guards
 
-The common publication command records each build under
-`.build/publications/EDITION/PLATFORM/last-build.json`. The record includes the
-shared-source fingerprint, source revision, command and compiler result.
-A source or manifest change during compilation makes the command fail.
-Compare successful records when preparing both editions from the same revision.
+Product metadata checks validate each product against its own version and build
+counters. A selected-product build does not require matching release metadata
+for the other product. Shared-source checks continue to reject copied launchers,
+missing Store guards, original-media build phases in Lemmix and product conditions
+inside the engine.
 
-The `Shared publication contract` CI workflow checks source membership, metadata,
-publication commands and compiler-cache behaviour. These checks use isolated
-fixtures and a fake compiler. They do not require commercial game data.
+Build records remain separate under
+`.build/publications/PRODUCT/PLATFORM/last-build.json`. They record the product,
+version, source revision, shared-source fingerprint and compiler result. Changes
+to shared source or the selected product's metadata during compilation fail the
+build. Changes to the other product's release metadata do not invalidate it.
 
-## Validation limits
+The `Separate product release contracts` workflow checks both product contracts
+on `main`, pull requests and the two release branches. Regression checks cover
+independent versions, isolated updates, branch guards, detached product markers
+and metadata changes during builds. These checks do not need original game data.
 
-Local checks cover publication metadata, all mobile project source memberships,
-the shared launch URL contract and both Mac source lists. Both Mac editions
-currently select the same 531 Swift source files. Focused compiler-cache tests
-cover nested source additions and stale inputs. Shared mobile entry points and
-the Store guard also passed SDK type checks.
-
-This consolidation changes build configuration and launch-source ownership.
-It does not change engine rules or replace existing app bundles, release feeds
-or historical evidence. No new packaged app, device acceptance, hosted CI run
-or Store submission forms part of these checks.
+`Scripts/publish-github-release.sh` publishes Ultimate Lemmings only. Actual
+publication requires `release/ultimate-lemmings` in addition to the existing
+release-input and approval checks. Its read-only `--check` remains available
+outside that branch. Lemmix release signing, Store acceptance and distribution
+remain separate work. This branch separation publishes no app release.

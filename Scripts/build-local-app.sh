@@ -4,7 +4,8 @@ set -euo pipefail
 project_dir="${0:A:h:h}"
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 export PATH="$DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/bin:$PATH"
-python3 "$project_dir/Tools/Publication/publication.py" check --metadata-only
+python3 "$project_dir/Tools/Publication/publication.py" guard ultimate-lemmings
+python3 "$project_dir/Tools/Publication/publication.py" check --metadata-only --edition ultimate-lemmings
 build_dir="${LEMMINGS_BUILD_DIR:-$project_dir/.build/local}"
 build_dir="${build_dir:A}"
 mkdir -p "$build_dir/ClangModuleCache" "$build_dir/ModuleCache"

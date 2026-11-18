@@ -147,6 +147,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 100000000000000000000070 /* Build configuration list for PBXNativeTarget "UltimateLemmingsIOS" */;
 			buildPhases = (
+				AA1800000000000000000001 /* Product identity */,
 				B23F3AD7E6F441D68E3A0101 /* Release version history */,
 				100000000000000000000040 /* Sources */,
 				100000000000000000000020 /* Frameworks */,
@@ -292,6 +293,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		AA1800000000000000000001 /* Product identity */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			outputPaths = ();
+			name = "Product identity";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/Publication/publication.py\" guard ultimate-lemmings || exit $?\npython3 \"$SRCROOT/../../Tools/Publication/publication.py\" check --metadata-only --edition ultimate-lemmings\n";
+		};
+
 		100000000000000000000044 /* Beta content */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;

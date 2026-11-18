@@ -8,8 +8,8 @@ target embeds Top Shelf. Campaigns that require original data become available
 after the player imports that data.
 
 Both editions share their launch sources and application modules. The
-[publication manifest](../../Resources/Publishing/editions.json) owns the version
-and build counters. See [shared publishing](../../Documentation/SharedPublishing.md)
+[Lemmix manifest](../../Resources/Publishing/ultimate-lemmix.json) owns the version
+and build counters. Keep this project on `release/ultimate-lemmix`. See [separate product releases](../../Documentation/SharedPublishing.md)
 for the common build commands. These targets retain separate identifiers:
 
 | Product | Bundle identifier |

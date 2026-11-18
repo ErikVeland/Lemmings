@@ -175,6 +175,11 @@ def check_sources(root: Path, manifest: dict) -> list[str]:
                         errors.append(f"{label}: The target {name} has no shared source contract.")
                         continue
                     actual = project.source_files(target)
+                    if name == settings["appTarget"]:
+                        phases = [project.objects[identifier] for identifier in target.get("buildPhases", [])]
+                        identity = phases[0].get("shellScript", "") if phases else ""
+                        if f"publication.py\" guard {edition}" not in identity:
+                            errors.append(f"{label}: The app must check its product identity before building.")
                     wanted = {(root / path).resolve() for path in expected[name]}
                     if actual != wanted:
                         errors.append(f"{label}/{name}: The source files differ: {source_difference(root, actual, wanted)}.")
@@ -199,7 +204,8 @@ def main():
     args = parser.parse_args()
     source_fingerprint = None
     try:
-        manifest = json.loads((args.root / "Resources/Publishing/editions.json").read_text())
+        from publication import load_manifest
+        manifest = load_manifest(args.root)
         errors = check_sources(args.root, manifest)
         mac_edition = next((edition for edition, details in manifest["editions"].items()
                             if "macos" in details["platforms"]), None)

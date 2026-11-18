@@ -11,6 +11,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "Tools/Publication"))
+from publication import load_manifest
 from check_sources import check_sources
 
 
@@ -19,7 +20,7 @@ class SharedMobileSourcesTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory(prefix="lemmings-publication-sources-")
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
-        self.manifest = json.loads((ROOT / "Resources/Publishing/editions.json").read_text())
+        self.manifest = load_manifest(ROOT)
         self.projects = {}
         for edition, details in self.manifest["editions"].items():
             details["platforms"].pop("macos", None)
@@ -45,8 +46,7 @@ class SharedMobileSourcesTests(unittest.TestCase):
         return self.projects[edition, platform][1]["objects"]
 
     def test_publication_targets_share_mobile_sources(self):
-        self.assertEqual(check_sources(ROOT, json.loads(
-            (ROOT / "Resources/Publishing/editions.json").read_text())), [])
+        self.assertEqual(check_sources(ROOT, load_manifest(ROOT)), [])
 
     def test_isolated_projects_pass(self):
         self.assertEqual(check_sources(self.root, self.manifest), [])
@@ -63,6 +63,11 @@ class SharedMobileSourcesTests(unittest.TestCase):
         phase["files"].remove("A77100000000000000000013")
         self.write_projects()
         self.assertTrue(any("StoreBuildGuard.swift" in error for error in check_sources(self.root, self.manifest)))
+
+    def test_missing_product_identity_phase_fails(self):
+        self.objects()["AA1800000000000000000001"]["shellScript"] = ""
+        self.write_projects()
+        self.assertTrue(any("product identity" in error for error in check_sources(self.root, self.manifest)))
 
     def test_wrong_package_root_fails(self):
         self.objects()["100000000000000000000080"]["relativePath"] = "../wrong-package"

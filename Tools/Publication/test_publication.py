@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 import plistlib
+import subprocess
 import tempfile
 from types import SimpleNamespace
 import unittest
@@ -17,11 +18,11 @@ class PublicationTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         self.manifest = {
-            "schemaVersion": 1,
-            "version": "2.4.2",
+            "schemaVersion": 2,
             "editions": {
                 "ultimate-lemmings": {
                     "name": "Ultimate Lemmings", "storeArtwork": False,
+                    "version": "2.4.3", "releaseBranch": "release/ultimate-lemmings",
                     "platforms": {
                         "macos": {"build": 106, "bundleIdentifier": "example.original",
                                   "infoPlist": "Original.plist", "buildScript": "Scripts/original.sh"},
@@ -31,6 +32,7 @@ class PublicationTests(unittest.TestCase):
                 },
                 "ultimate-lemmix": {
                     "name": "Ultimate Lemmix", "storeArtwork": True,
+                    "version": "2.4.2", "releaseBranch": "release/ultimate-lemmix",
                     "platforms": {
                         "macos": {"build": 108, "bundleIdentifier": "example.licensed",
                                   "infoPlist": "Licensed.plist", "buildScript": "Scripts/licensed.sh"},
@@ -45,11 +47,11 @@ class PublicationTests(unittest.TestCase):
                 "CFBundleIdentifier": identifier, "CFBundleShortVersionString": "1.8.4", "CFBundleVersion": "1",
             }))
 
-    def test_one_version_updates_both_mac_editions_without_merging_build_counters(self):
+    def test_products_keep_independent_versions_and_build_counters(self):
         publication.sync_metadata(self.root, self.manifest, platforms={"macos"})
         original = plistlib.loads((self.root / "Original.plist").read_bytes())
         licensed = plistlib.loads((self.root / "Licensed.plist").read_bytes())
-        self.assertEqual(original["CFBundleShortVersionString"], "2.4.2")
+        self.assertEqual(original["CFBundleShortVersionString"], "2.4.3")
         self.assertEqual(licensed["CFBundleShortVersionString"], "2.4.2")
         self.assertEqual(original["CFBundleVersion"], "106")
         self.assertEqual(licensed["CFBundleVersion"], "108")
@@ -62,6 +64,104 @@ class PublicationTests(unittest.TestCase):
         self.assertTrue(any("Licensed.plist" in error for error in errors))
         publication.sync_metadata(self.root, self.manifest, platforms={"macos"})
         self.assertEqual(publication.metadata_errors(self.root, self.manifest, platforms={"macos"}), [])
+
+    def test_sync_one_product_does_not_touch_or_validate_the_other_release(self):
+        original = (self.root / "Original.plist").read_bytes()
+        self.manifest["editions"]["ultimate-lemmix"]["version"] = "3.1"
+        publication.sync_metadata(self.root, self.manifest, platforms={"macos"},
+                                  selected_edition="ultimate-lemmix")
+        self.assertEqual((self.root / "Original.plist").read_bytes(), original)
+        self.assertEqual(publication.metadata_errors(self.root, self.manifest, platforms={"macos"},
+                         selected_edition="ultimate-lemmix"), [])
+        self.assertTrue(publication.metadata_errors(self.root, self.manifest, platforms={"macos"},
+                        selected_edition="ultimate-lemmings"))
+
+    def write_manifests(self):
+        directory = self.root / "Resources/Publishing"
+        directory.mkdir(parents=True, exist_ok=True)
+        index = {"schemaVersion": 2, "editions": {}}
+        for key, edition in self.manifest["editions"].items():
+            path = directory / (key + ".json")
+            path.write_text(json.dumps(edition))
+            index["editions"][key] = str(path.relative_to(self.root))
+        (self.root / publication.MANIFEST).write_text(json.dumps(index))
+
+    def test_loader_uses_separate_product_manifests(self):
+        self.write_manifests()
+        loaded = publication.load_manifest(self.root)
+        self.assertEqual(loaded["editions"], self.manifest["editions"])
+        index = self.root / publication.MANIFEST
+        data = json.loads(index.read_text())
+        data["version"] = "4.0"
+        index.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError, "shared release version"):
+            publication.load_manifest(self.root)
+
+    def test_loader_rejects_one_release_branch_for_both_products(self):
+        self.manifest["editions"]["ultimate-lemmix"]["releaseBranch"] = "release/ultimate-lemmings"
+        self.write_manifests()
+        with self.assertRaisesRegex(ValueError, "separate release branches"):
+            publication.load_manifest(self.root)
+
+    def test_release_branch_rejects_the_other_product(self):
+        for edition in self.manifest["editions"]:
+            own = self.manifest["editions"][edition]["releaseBranch"]
+            publication.guard_product_branch(self.root, self.manifest, edition,
+                                             require_release=True, branch=own)
+            for branch in ["main", "feature/shared-fix", ""]:
+                with self.assertRaises(ValueError):
+                    publication.guard_product_branch(self.root, self.manifest, edition,
+                                                     require_release=True, branch=branch)
+            other = next(key for key in self.manifest["editions"] if key != edition)
+            with self.assertRaises(ValueError):
+                publication.guard_product_branch(self.root, self.manifest, other, branch=own)
+
+    def test_selected_product_metadata_is_pinned_during_build(self):
+        self.write_manifests()
+        def change_product(*arguments, **options):
+            path = self.root / "Resources/Publishing/ultimate-lemmix.json"
+            path.write_text(path.read_text().replace('"2.4.2"', '"2.4.4"'))
+            return SimpleNamespace(returncode=0)
+        result = publication.run_build(self.root, self.manifest, "ultimate-lemmix", "macos", [],
+                                       runner=change_product)
+        self.assertEqual(result, 1)
+
+    def test_product_marker_rejects_the_other_app_in_a_detached_checkout(self):
+        (self.root / "Product.json").write_text('{"product":"ultimate-lemmix"}')
+        publication.guard_product_branch(self.root, self.manifest, "ultimate-lemmix", branch="")
+        with self.assertRaisesRegex(ValueError, "another product"):
+            publication.guard_product_branch(self.root, self.manifest, "ultimate-lemmings", branch="")
+
+    def test_other_product_metadata_does_not_invalidate_a_build(self):
+        self.write_manifests()
+        def change_other_product(*arguments, **options):
+            path = self.root / "Resources/Publishing/ultimate-lemmings.json"
+            path.write_text(path.read_text().replace('"2.4.3"', '"2.5"'))
+            return SimpleNamespace(returncode=0)
+        result = publication.run_build(self.root, self.manifest, "ultimate-lemmix", "macos", [],
+                                       runner=change_other_product)
+        self.assertEqual(result, 0)
+
+    def test_branch_comparison_allows_product_metadata_but_rejects_shared_drift(self):
+        def git(*arguments):
+            return subprocess.check_output(["git", "-c", "user.name=Publication test",
+                "-c", "user.email=test@example.invalid", *arguments], cwd=self.root, text=True).strip()
+        git("init", "-q", "-b", "main")
+        source = self.root / "Sources/Game/Feature.swift"
+        source.parent.mkdir(parents=True)
+        source.write_text("struct Feature {}\n")
+        git("add", "Sources")
+        git("commit", "-qm", "Add shared source")
+        baseline = git("rev-parse", "HEAD")
+        (self.root / "Product.json").write_text('{"product":"ultimate-lemmix"}')
+        git("add", "Product.json")
+        git("commit", "-qm", "Identify the separate product")
+        publication.compare_shared_sources(self.root, baseline)
+        source.write_text("struct ChangedFeature {}\n")
+        git("add", "Sources")
+        git("commit", "-qm", "Change shared source")
+        with self.assertRaisesRegex(ValueError, "Sources/Game/Feature.swift"):
+            publication.compare_shared_sources(self.root, baseline)
 
     def test_mobile_store_flags_and_version_apply_to_the_whole_build(self):
         command, _ = publication.build_command(self.root, self.manifest, "ultimate-lemmix", "ios", ["-configuration", "Release", "build"])
@@ -82,7 +182,8 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(original[:2], ["zsh", str(self.root / "Scripts/original.sh")])
         self.assertEqual(licensed[:2], ["zsh", str(self.root / "Scripts/licensed.sh")])
         self.assertEqual(licensed[-1], "--reuse-core")
-        self.assertEqual(original_env["LEMMINGS_PUBLICATION_VERSION"], licensed_env["LEMMINGS_PUBLICATION_VERSION"])
+        self.assertEqual(original_env["LEMMINGS_PUBLICATION_VERSION"], "2.4.3")
+        self.assertEqual(licensed_env["LEMMINGS_PUBLICATION_VERSION"], "2.4.2")
 
     def test_command_cannot_select_a_different_project_or_release_version(self):
         for argument in [["-project", "Other.xcodeproj"], ["-scheme", "Other"], ["MARKETING_VERSION=1.8.4"], ["CURRENT_PROJECT_VERSION=1"]]:
@@ -119,7 +220,7 @@ class PublicationTests(unittest.TestCase):
         manifest = json.loads(json.dumps(self.manifest))
         del manifest["editions"]["ultimate-lemmix"]["platforms"]["ios"]
         publication.sync_metadata(self.root, manifest, platforms={"ios"})
-        self.assertEqual(project.read_text(), original.replace("CURRENT_PROJECT_VERSION = 1;", "CURRENT_PROJECT_VERSION = 45;").replace("MARKETING_VERSION = 1.8.4;", "MARKETING_VERSION = 2.4.2;"))
+        self.assertEqual(project.read_text(), original.replace("CURRENT_PROJECT_VERSION = 1;", "CURRENT_PROJECT_VERSION = 45;").replace("MARKETING_VERSION = 1.8.4;", "MARKETING_VERSION = 2.4.3;"))
 
     def test_shared_snapshot_tracks_new_game_and_launcher_source(self):
         source = self.root / "Sources/Game/Feature.swift"

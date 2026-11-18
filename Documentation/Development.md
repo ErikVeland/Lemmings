@@ -3,16 +3,17 @@
 Start with the [developer handover](DeveloperHandover.md) for an asset-free
 source build, isolated verification, ownership map and dependency inventory.
 
-`main` is the combined development branch for both editions on Mac, iOS and tvOS. It can
-contain unreleased work. Release tags identify shipped source. Read the
-[release scope](ReleaseScope.md) before making compatibility claims.
-Implement each feature once in the shared modules. Use the
-[publication profiles](SharedPublishing.md) to select assets and distribution
-settings when building either edition from the same revision.
+Ultimate Lemmings and Ultimate Lemmix are separate projects. Each has a release
+branch and working folder. `main` integrates shared engines and features.
+Synchronise those changes into both product branches. Keep product versions,
+build counters, identities, assets and release channels independent.
+See [separate product releases](SharedPublishing.md) for branches and commands.
+Release tags identify shipped source. Read [release scope](ReleaseScope.md)
+before making compatibility claims.
 
 ## Branches and unfinished work
 
-Use `codex/` branches when work needs an isolated checkout. Keep a branch
+Use `feature/` branches when work needs an isolated checkout. Keep a branch
 focused on one change. Merge its code, tests and required evidence into `main`
 together. Delete merged local branches after preserving any unfinished work.
 

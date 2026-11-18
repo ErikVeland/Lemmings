@@ -344,13 +344,14 @@ and [implementation guidance](https://developer.apple.com/videos/play/wwdc2025/2
 
 ### Packaging
 
-Ultimate Lemmings and Ultimate Lemmix are publication profiles of this source
-tree. They share application, engine, mobile launch, widget and Top Shelf code.
-`Resources/Publishing/editions.json` owns one marketing version and independent
-destination build counters. `Scripts/build-publication.sh` selects the profile
-and checks source membership before compilation. Both Mac profiles use the same
-recursive compiler helper and validated caches. See
-[shared publishing](Documentation/SharedPublishing.md) for commands and limits.
+Ultimate Lemmings and Ultimate Lemmix are separate projects and releases.
+Their release branches retain separate product markers, targets, versions,
+build counters, assets and distribution channels. Shared engines, application
+modules, launchers and extensions stay in sync through `main`.
+`Resources/Publishing/editions.json` indexes two independent product manifests.
+`Scripts/build-publication.sh` selects one product and checks its metadata and
+source membership. Both Mac projects reuse the compiler helper and cache checks.
+See [separate product releases](Documentation/SharedPublishing.md).
 
 `Package.swift` defines `NxlvKit`, the mobile core and UI libraries, the native
 macOS executables and package test targets. `Scripts/build-local-app.sh` builds

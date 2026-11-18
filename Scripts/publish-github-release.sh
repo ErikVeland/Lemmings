@@ -30,6 +30,7 @@ fail() {
 [[ "$repository" == */* ]] || fail "GITHUB_REPOSITORY must be OWNER/REPOSITORY."
 if (( ! check_only )); then
   [[ "$approval" == 1 ]] || fail "Set RELEASE_APPROVED=1 only after the release checks are recorded."
+  python3 "$project_dir/Tools/Publication/publication.py" guard ultimate-lemmings --release
 fi
 git -C "$project_dir" rev-parse --verify "$source_revision^{commit}" >/dev/null 2>&1 ||
   fail "RELEASE_COMMIT does not resolve to a local commit."

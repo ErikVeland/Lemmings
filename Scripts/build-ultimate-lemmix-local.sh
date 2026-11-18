@@ -2,7 +2,8 @@
 # Build a current-architecture manual candidate from the full application modules.
 set -euo pipefail
 project_dir="${0:A:h:h}"
-python3 "$project_dir/Tools/Publication/publication.py" check --metadata-only
+python3 "$project_dir/Tools/Publication/publication.py" guard ultimate-lemmix
+python3 "$project_dir/Tools/Publication/publication.py" check --metadata-only --edition ultimate-lemmix
 publication_version="$(python3 "$project_dir/Tools/Publication/publication.py" field ultimate-lemmix macos version)"
 publication_build="$(python3 "$project_dir/Tools/Publication/publication.py" field ultimate-lemmix macos build)"
 build_dir="${ULTIMATE_LEMMIX_BUILD_DIR:-$project_dir/.build/ultimate-lemmix-$publication_version-build$publication_build}"

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -15,8 +16,16 @@ class ReleasePublicationTests(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         root = Path(self.directory.name)
+        self.repository = root / "repository"
+        for relative in ["Scripts", "Tools/Publication", "Tools/ReleaseReadiness", "Resources/Publishing"]:
+            shutil.copytree(ROOT / relative, self.repository / relative,
+                            ignore=shutil.ignore_patterns("__pycache__"))
+        subprocess.run(["git", "init", "-q", "-b", "release/ultimate-lemmings"], cwd=self.repository, check=True)
+        subprocess.run(["git", "add", "."], cwd=self.repository, check=True)
+        subprocess.run(["git", "-c", "user.name=Release test", "-c", "user.email=test@example.invalid",
+                        "commit", "-qm", "Create isolated publication fixture"], cwd=self.repository, check=True)
         self.commit = subprocess.check_output(
-            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+            ["git", "rev-parse", "HEAD"], cwd=self.repository, text=True
         ).strip()
         self.archive = root / "UltimateLemmings-1.5-build45.zip"
         self.archive.write_bytes(b"test update archive")
@@ -50,7 +59,7 @@ class ReleasePublicationTests(unittest.TestCase):
         env.update(extra)
         return subprocess.run(
             ["zsh", "Scripts/publish-github-release.sh", *options, str(self.archive)],
-            cwd=ROOT, env=env, capture_output=True, text=True, check=False
+            cwd=self.repository, env=env, capture_output=True, text=True, check=False
         )
 
     def test_check_accepts_matching_inputs_without_publication(self):
@@ -114,6 +123,12 @@ class ReleasePublicationTests(unittest.TestCase):
         result = self.run_publication()
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("RELEASE_APPROVED=1", result.stderr)
+
+    def test_publication_rejects_the_other_product_branch_before_upload(self):
+        subprocess.run(["git", "switch", "-qc", "release/ultimate-lemmix"], cwd=self.repository, check=True)
+        result = self.run_publication(RELEASE_APPROVED="1")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("belongs to ultimate-lemmix", result.stderr)
 
     def test_publication_uploads_delta_with_spaces_in_name(self):
         patch = self.archive.with_name("Ultimate Lemmings45-44.delta")

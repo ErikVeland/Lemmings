@@ -49,9 +49,10 @@ No original game data or unreviewed remix is offered as a hosted download.
 
 ## Build and acceptance
 
-Both editions now use [one codebase and two publication profiles](SharedPublishing.md).
-The publication manifest owns release metadata. Shared source checks prevent
-the application and build entry points from diverging between editions.
+Ultimate Lemmix is a [separate project and release](SharedPublishing.md) on
+`release/ultimate-lemmix`. Its own manifest controls its version and build counters.
+Shared engines and features stay in sync with Ultimate Lemmings through `main`.
+Its current candidate metadata is 2.4.2 build 108 on all three platforms.
 
 The local Mac candidate is 2.4.2 build 108. It uses the current Mac architecture
 and the complete frontend. Its ad hoc signature passes strict verification.

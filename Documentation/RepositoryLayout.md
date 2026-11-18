@@ -1,9 +1,14 @@
 # Repository layout
 
 [ErikVeland/Lemmings](https://github.com/ErikVeland/Lemmings) is the canonical
-repository for Ultimate Lemmings. Keep source, issues, app releases, music
+repository for Ultimate Lemmings and Ultimate Lemmix. Keep source, issues, app releases, music
 libraries and exported artwork here. `main` is the default development branch.
-App updates use the existing `main/appcast.xml` feed.
+Ultimate Lemmings uses `release/ultimate-lemmings`. Ultimate Lemmix uses
+`release/ultimate-lemmix`. These are separate projects with independent releases.
+Shared engine and feature changes pass through `main` and into both branches.
+See [separate product releases](SharedPublishing.md).
+Ultimate Lemmings updates retain the existing `main/appcast.xml` feed.
+Ultimate Lemmix does not publish to that feed.
 
 Publish supplemental downloads as releases in this repository. Set
 `make_latest` to `false` so an artwork handoff or historical import cannot

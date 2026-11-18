@@ -7,6 +7,20 @@ downloads as releases here, without replacing the latest app release.
 Keep `main` as the default branch. See `Documentation/RepositoryLayout.md`
 for the archived repositories and migration record.
 
+# Separate products and releases
+
+Ultimate Lemmings and Ultimate Lemmix are separate projects in this repository.
+Keep `release/ultimate-lemmings` and `release/ultimate-lemmix` as separate branches
+with separate working folders. Each branch owns its `Product.json` marker.
+Never consolidate these branches into one product or one release.
+
+Keep shared engines and features in sync through `main`. Merge shared changes
+into both product branches, then compare their shared source. Preserve each
+product's targets, bundle IDs, asset policy, signing, saves and release channels.
+Each product owns `Resources/Publishing/PRODUCT.json`, including its version and
+platform build numbers. Updating one product must not change the other's release.
+Read `Documentation/SharedPublishing.md` before build or release changes.
+
 # Interface changes
 
 For work that changes visible UI, read `Documentation/UIPrinciples.md`.

@@ -3,6 +3,7 @@
 set -euo pipefail
 
 project_dir="${0:A:h:h}"
+python3 "$project_dir/Tools/Publication/publication.py" guard ultimate-lemmix
 build_dir="${ULTIMATE_LEMMIX_BUILD_DIR:-$project_dir/.build/ultimate-lemmix-app-store-build4-universal}"
 build_dir="${build_dir:A}"
 app_dir="$build_dir/Ultimate Lemmix.app"

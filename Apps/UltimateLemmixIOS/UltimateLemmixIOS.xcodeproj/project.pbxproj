@@ -153,7 +153,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 100000000000000000000070 /* Build configuration list for PBXNativeTarget "UltimateLemmixIOS" */;
 			buildPhases = (
-				B23F3AD7E6F441D68E3A0101 /* Release version history */,
+				AA1800000000000000000001 /* Product identity */,
+				B23F3AD7E6F441D68E3A0101 /* Product release metadata */,
 				100000000000000000000040 /* Sources */,
 				100000000000000000000020 /* Frameworks */,
 				100000000000000000000042 /* Resources */,
@@ -307,6 +308,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		AA1800000000000000000001 /* Product identity */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ();
+			outputPaths = ();
+			name = "Product identity";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../../Tools/Publication/publication.py\" guard ultimate-lemmix || exit $?\npython3 \"$SRCROOT/../../Tools/Publication/publication.py\" check --metadata-only --edition ultimate-lemmix\n";
+		};
+
 		100000000000000000000044 /* Beta content */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -320,7 +334,7 @@
 			shellPath = /bin/sh;
 			shellScript = "python3 \"$SRCROOT/../UltimateLemmixSupport/copy_resources.py\" --source \"$ULTIMATE_LEMMIX_RESOURCES_DIR\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\" --scope app\n";
 		};
-		B23F3AD7E6F441D68E3A0101 /* Release version history */ = {
+		B23F3AD7E6F441D68E3A0101 /* Product release metadata */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -331,7 +345,7 @@
 			outputPaths = ();
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${ULTIMATE_LEMMIX_RELEASE_CHECKS:-0}\" = 1 ]; then\n  zsh \"$SRCROOT/../../Scripts/check-release-history.sh\"\nfi\n";
+			shellScript = "if [ \"${ULTIMATE_LEMMIX_RELEASE_CHECKS:-0}\" = 1 ]; then\n  python3 \"$SRCROOT/../../Tools/Publication/publication.py\" check --metadata-only --edition ultimate-lemmix\nfi\n";
 		};
 		DC2200000000000000000016 /* Clock artwork */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -445,7 +459,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -472,7 +486,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -532,7 +546,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios.DeskClockWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -560,7 +574,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.2;
 				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios.DeskClockWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

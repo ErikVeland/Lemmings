@@ -1,9 +1,9 @@
-name: Shared publication contract
+name: Separate product release contracts
 
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, release/ultimate-lemmings, release/ultimate-lemmix]
 
 jobs:
   publication-contract:
@@ -18,3 +18,15 @@ jobs:
         run: python3 -m unittest discover -s Apps/SharedAppleMobile/Tests -p 'test_*.py'
       - name: Check shared Mac compiler contracts
         run: python3 -m unittest discover -s Tests/ReleaseReadinessTests -p 'test_mac_sources.py'
+
+  product-contract:
+    name: ${{ matrix.product }} release contract
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        product: [ultimate-lemmings, ultimate-lemmix]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check independent product metadata
+        run: zsh Scripts/build-publication.sh --check --edition '${{ matrix.product }}'
