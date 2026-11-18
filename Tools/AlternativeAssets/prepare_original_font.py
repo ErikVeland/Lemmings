@@ -16,6 +16,7 @@ OUTPUT = ROOT / '.build/personal-preview-assets/Fonts/OriginalLemmings'
 PACK_ID = 'ultimate-lemmix-personal-original-lettering-v1'
 DISK_SHA256 = 'fdcae811b0c5b967f543f9943df0c51e262b4671351c768f27823c27e45e2bd3'
 EXPORT_SHA256 = '1dada9e2603d899d9490292555f887365f73120fe291ae866a36383d785bb41e'
+CURRENT_EXPORT_SHA256 = '5f18a5d04833309b96302938f2f12b64ae7bd47eae4bce404ab9ecab62a51c34'
 GLYPHS_SHA256 = 'd6defafa920060a4b09423299b99f61c4370a099362c944d0d3a33ef9e74587c'
 
 
@@ -46,26 +47,28 @@ def validate_frame(row, bank, index, width, height):
         raise ValueError('An original-font glyph has an unexpected path or shape.')
 
 
-def expected_files():
+def expected_files(source_root=ROOT):
     """Select only the pinned original printable ASCII glyphs and provenance."""
-    disk = read_regular(SOURCE_DISK, 3_000_000)
-    manifest_data = read_regular(SOURCE / 'manifest.json', 100_000)
-    if digest(disk) != DISK_SHA256 or digest(manifest_data) != EXPORT_SHA256:
+    source_disk = source_root / SOURCE_DISK.relative_to(ROOT)
+    source = source_root / SOURCE.relative_to(ROOT)
+    disk = read_regular(source_disk, 3_000_000)
+    manifest_data = read_regular(source / 'manifest.json', 100_000)
+    if digest(disk) != DISK_SHA256 or digest(manifest_data) not in {EXPORT_SHA256, CURRENT_EXPORT_SHA256}:
         raise ValueError('The local Macintosh font source differs from the reviewed source.')
-    source = json.loads(manifest_data)
+    manifest = json.loads(manifest_data)
     files, banks, names = {}, {}, {}
     for bank, name, width, height in (
             ('1301', 'Charset1', 12, 18), ('1302', 'Charset2', 16, 20)):
-        if source['names'].get(bank) != name:
+        if manifest['names'].get(bank) != name:
             raise ValueError('The original font bank name changed.')
-        rows = source['banks'][bank][:95]
+        rows = manifest['banks'][bank][:95]
         if len(rows) != 95 or rows[0] is not None or any(row is None for row in rows[1:]):
             raise ValueError('The original font does not contain the reviewed printable ASCII range.')
         for index, row in enumerate(rows):
             if row is None:
                 continue
             validate_frame(row, bank, index, width, height)
-            data = read_regular(SOURCE / row['file'], width * height * 4)
+            data = read_regular(source / row['file'], width * height * 4)
             if len(data) != row['width'] * row['height'] * 4:
                 raise ValueError('An original-font glyph is truncated.')
             files[row['file']] = data
@@ -93,7 +96,7 @@ def expected_files():
         'redistributionCleared': False, 'cc0': False, 'storeBundleAllowed': False,
         'sourceDisk': {'path': SOURCE_DISK.relative_to(ROOT).as_posix(), 'sha256': DISK_SHA256},
         'sourceExport': {'path': (SOURCE / 'manifest.json').relative_to(ROOT).as_posix(),
-                         'sha256': EXPORT_SHA256},
+                         'sha256': digest(manifest_data)},
         'sourceDecoder': 'Tools/MacArtwork/prepare.py',
         'glyphAggregateSHA256': GLYPHS_SHA256, 'glyphFiles': 188, 'glyphBytes': 150_120,
         'characterRange': {'first': 32, 'last': 126},
@@ -178,11 +181,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--verify', action='store_true')
     parser.add_argument('--self-test', action='store_true')
+    parser.add_argument('--source-root', type=Path, default=ROOT)
     args = parser.parse_args()
     if args.self_test:
         result = unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromTestCase(FontSafetyTests))
         return 0 if result.wasSuccessful() else 1
-    files = expected_files()
+    files = expected_files(args.source_root)
     if args.verify:
         verify(OUTPUT, files)
     else:

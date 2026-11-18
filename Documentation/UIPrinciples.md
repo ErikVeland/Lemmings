@@ -58,17 +58,19 @@ not queue an early click. Honour the reduced-flash setting.
 ## Typography
 
 Ultimate Lemmix keeps typography independent from imported level artwork.
-Its personal preview uses the original bitmap lettering across the full HUD.
+Use the original Lemmings bitmap lettering across menus, pages and the full HUD.
+Local Mac builds must include the original lettering pack. Keep bundled lettering
+available when imported levels change the active resource folder.
 Compact slots can show the native 2× source at half logical size. Keep peer
 skill captions at one common scale, leave a gap between captions and keep
-speed text at the counter scale. Clean builds use the bundled Lix UI font,
-rasterised at whole pixel sizes. Use measured font widths for multiline text.
+speed text at the counter scale. Do not substitute the Lix UI font in local builds.
+Use measured font widths for multiline text.
 Lix HUD buttons use the authored skill, transport and checkbox sheets, plus
 Lix's button palette and backing rules. Match each input target to its visible button.
 
 Use the shipped green and blue bitmap fonts for all interface text, including
-in-game notices. Classic lemming explosion countdowns use white, bold system
-digits for crisp, readable numbers above each lemming. Use large green lettering for page titles,
+in-game notices and compact HUD labels. Lemming explosion countdowns use white
+Lemmings bitmap digits above each lemming. Use large green lettering for page titles,
 small green lettering for section headings and selected or primary actions,
 and small blue lettering for body text, quantities and secondary actions.
 Keep each row of peer controls at the same face and scale. Do not size individual

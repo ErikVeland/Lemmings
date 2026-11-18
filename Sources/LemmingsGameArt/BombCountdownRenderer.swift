@@ -18,6 +18,13 @@ import AppKit
         guard seconds > 0, zoom.isFinite, zoom > 0,
             anchor.x.isFinite, anchor.y.isFinite else { return .null }
         let size = 10 * zoom / 3
+        let bitmapHeight = max(6, size)
+        let bitmapFrame = CGRect(x: anchor.x - bitmapHeight * CGFloat(String(seconds).count) / 2,
+            y: anchor.y - bitmapHeight, width: bitmapHeight * CGFloat(String(seconds).count), height: bitmapHeight)
+        if GameLemmingsTypography.draw(String(seconds), in: bitmapFrame, height: bitmapHeight,
+            palette: .monochrome, color: CGColor(gray: 1, alpha: 1), context: context) {
+            return bitmapFrame
+        }
         if size != cachedSize { lines.removeAll(keepingCapacity: true); cachedSize = size }
         let line: CTLine
         if let cached = lines[seconds] { line = cached }

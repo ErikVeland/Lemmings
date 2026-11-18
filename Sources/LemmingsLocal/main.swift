@@ -899,9 +899,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     traceLaunch("content")
     startFanUpdates()
     startTimer()
-    // Enter full screen while the window is still unordered, so the player never
-    // sees the windowed state. launchingFullScreen makes this one transition
-    // instant; a later toggle by the player keeps the normal animation.
+    presentLaunchPages()
+    // Present the completed opening screen before asking AppKit for full screen.
+    // A full-screen transition does not replace ordering the window.
+    window.contentView?.layoutSubtreeIfNeeded()
+    window.makeKeyAndOrderFront(nil)
+    window.contentView?.displayIfNeeded()
+    CATransaction.flush()
+    traceLaunch("opening-screen-visible")
     #if APP_INTEGRATION_TESTS
     let permitsLaunchFullScreen = ProcessInfo.processInfo.environment["LEMMINGS_TEST_WINDOWS"] == "foreground"
     #else
@@ -920,7 +925,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let path = index + 1 < CommandLine.arguments.count ? CommandLine.arguments[index + 1] : nil
       openNativeL3(path.flatMap { $0.hasPrefix("--") ? nil : URL(fileURLWithPath: $0) })
     }
-    presentLaunchPages()
     // Return to AppKit before starting playback. Submit the visible menu first.
     DispatchQueue.main.async { [weak self] in self?.finishLaunchPresentation() }
   }

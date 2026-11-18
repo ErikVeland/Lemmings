@@ -8,6 +8,26 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
+## Lemmix Mac launch and lettering — 18 November 2026
+
+Local Mac builds include the original Lemmings lettering pack. The shared
+renderer retains bundled lettering after a resource import. Compact HUD labels,
+countdowns and the Mac widget use the same font family. The Lix artwork choice
+remains separate from typography. The two products retain separate release branches.
+
+A silent offscreen capture verifies both original font faces at seven sizes,
+including compact HUD text. A fontless imported bundle does not remove the
+bundled lettering. The original 188 glyph files match their recorded pixel hash.
+The packaged Mac app submits its opening page before requesting full screen.
+A separate copy with isolated storage produced an offscreen opening-page capture.
+The runner rejects full screen and prevents focus, so this does not verify the
+physical full-screen transition.
+
+This is a local arm64 candidate. Automated suites, release audits, Intel builds
+and notarisation are skipped under the local-build policy. Physical full-screen
+transitions and iPhone, iPad, Duo and Apple TV acceptance remain unverified.
+Mobile and TV packaging still require separate original-font resource validation.
+
 ## PR 33 integration repair — 18 November 2026
 
 The consolidated source had replaced current mobile controllers, HUD controls,

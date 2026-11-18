@@ -20,9 +20,11 @@ public enum GameArtworkResources {
             if revision != next {
                 revision = next
                 original = nil
-                for path in ["MacArtwork/lemmings", "Fonts/OriginalLemmings"] {
-                    guard let directory = GameResources.directory(path),
-                          let artwork = try? ClassicMacArtwork(directory: directory),
+                let directories = [GameResources.directory("MacArtwork/lemmings"),
+                    Bundle.main.resourceURL?.appendingPathComponent("Fonts/OriginalLemmings"),
+                    GameResources.directory("Fonts/OriginalLemmings")].compactMap { $0 }
+                for directory in directories {
+                    guard let artwork = try? ClassicMacArtwork(directory: directory),
                           let interface = ClassicMacUserInterface(artwork: artwork),
                           ClassicMacUserInterface.Face.allCases.allSatisfy({ interface.font($0) != nil }) else { continue }
                     original = Original(artwork: artwork, interface: interface)
@@ -62,7 +64,7 @@ public enum GameArtworkSkin {
     public static let key = "LixCharactersEnabledV1"
     public static let changed = Notification.Name("LixCharactersChanged")
     public static var lixEnabled: Bool {
-        UserDefaults.standard.object(forKey: key) as? Bool ?? (GameArtworkResources.interface == nil)
+        UserDefaults.standard.object(forKey: key) as? Bool ?? (GameResources.directory("MacArtwork/lemmings") == nil)
     }
     public static var usesLixInterface: Bool {
         GameArtworkResources.lixInterface != nil && (lixEnabled || GameArtworkResources.interface == nil)
