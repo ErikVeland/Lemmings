@@ -1,6 +1,6 @@
 # Ultimate Lemmix Store submission handoff
 
-Checked 18 November 2026. Version 2.4.2, build 108 on Mac, iOS and tvOS.
+Checked 19 November 2026. Version 2.4.2, build 108 on Mac, iOS and tvOS.
 
 All three local Store packages are signed and pass Apple's local package
 analysis. No build has been uploaded, processed by App Store Connect, submitted
@@ -10,12 +10,15 @@ for review or published.
 
 | Platform | Final package | Verification |
 | --- | --- | --- |
-| Mac, Apple silicon and Intel | `mac/Export/Ultimate Lemmix.pkg` | [Mac receipt](mac-store-package.json) |
-| iPhone and iPad | `ios-store-export/UltimateLemmixIOS.ipa` | [iOS receipt](ios-store-package.json) |
-| Apple TV | `tvos-store-export/UltimateLemmixTVOS.ipa` | [TV receipt](tvos-store-package.json) |
+| Mac, Apple silicon and Intel | `20261118/mac/Export/Ultimate Lemmix.pkg` | [Mac receipt](mac-store-package.json) |
+| iPhone and iPad | `20261119/ios-store-export/UltimateLemmixIOS.ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
+| Apple TV | `20261119/tvos-store-export/UltimateLemmixTVOS.ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
 
-The paths above are relative to
-`/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118`.
+The date prefixes select `/Volumes/Games/CodexBuilds/UltimateLemmix-Store-DATE`.
+The Mac package is unchanged. Both new mobile packages use the shared main ID
+`academy.glasscode.ultimatelemmix`, with their distinct extensions retained.
+The separate-ID mobile packages are superseded and remain outside the handoff
+in the dated build archive.
 The `Handoff` folder contains copies of the final packages, checksums and review
 material. A Downloads shortcut points to that folder.
 
@@ -80,25 +83,32 @@ been uploaded to archive.org or another host.
 
 ## Remaining submission work
 
-App Store Connect browser sign-in is verified. The new Ultimate Lemmix Mac record
-has Apple ID `6836347807` and bundle ID `academy.glasscode.ultimatelemmix`.
-The initial details-page error resolved on retry. Version 2.4.2 listing text,
-Games/Puzzle category and content rights are saved. Release is manual.
+App Store Connect sign-in is verified. The owner selected one listing for
+Mac, iOS and tvOS: Apple ID `6836347807`, main bundle ID
+`academy.glasscode.ultimatelemmix`. All three platform records exist. Mac version
+2.4.2 listing text, Games/Puzzle category and content rights are saved. Release
+is manual. The iOS and tvOS draft-version saves are not verified because browser
+controls stopped responding. Do not treat their requested version 2.4.2 as saved.
 The new record has no Game Center leaderboards configured yet.
-The stored Xcode account already completed provisioning and local Store export.
-The owner is choosing one cross-platform listing or separate platform listings.
-A single listing requires matching mobile app identifiers and new mobile packages.
+
+The website is built locally for `https://lemmings.glasscode.academy`.
+Cloudflare sign-in, DNS and TLS setup remain pending. The site and its privacy
+URL are not verified live. The contact address `erik@veland.au` is verified from
+the published GenErik DJ site. Saving that address to App Review fields remains
+separate from verifying the address itself.
 
 Complete these account and publication items before submitting:
 
-1. Verify the platform app records, build numbers, Game Center boards, age
-   rating, price/availability and review contact.
-2. Approve and publish the [privacy notice](PrivacyNotice.md). Supply its public
-   URL and contact. Confirm deployed retention and provider logging against the
-   source-backed declarations.
-3. Review the [listing draft](StoreListing.en-AU.json), screenshots and
-   [App Review notes](AppReviewNotes.md). Complete the encryption determination.
-4. Upload the signed packages and require successful Apple processing before
+1. Verify and save version 2.4.2 for iOS and tvOS. Complete age rating,
+   price/availability and the review contact, including its telephone number.
+2. Configure the required Game Center leaderboards for the shared listing.
+3. Complete DNS and TLS setup. Publish the approved website and privacy notice,
+   then verify their public URLs before saving them in App Store Connect.
+4. Confirm deployed retention and provider logging against the privacy notice
+   and App Store privacy responses. Complete the encryption determination.
+5. Review the [listing draft](StoreListing.en-AU.json), screenshots and
+   [App Review notes](AppReviewNotes.md).
+6. Upload the signed packages. Require successful Apple processing before
    selecting each platform build for review.
 
 [Hosted service evidence](HostedServices.md) confirms public endpoints respond.
@@ -114,11 +124,12 @@ with the dedicated external build directory, team, signing identity and matching
 development profiles. The script preserves source records, verifies all
 resources, signs nested bundles, archives and exports a local Store package.
 
-[Mobile packaging instructions](MobilePackages.md) cover current source archives,
+[Unified mobile packaging instructions](UnifiedListingMobile.md) cover current source archives,
 resource-bundle signing, local exports and exact verification. The build wrapper
 keeps Store compilation flags separate from overridable resource locations.
-[Account and service details](AccountAndServices.md) identify the six executable
-IDs and required capabilities.
+[Account and service details](AccountAndServices.md) retain the original signing
+investigation. The [unified identity record](UnifiedListingMobile.md) supersedes
+their earlier mobile main IDs and records the current profiles and capabilities.
 
 Ultimate Lemmings and Ultimate Lemmix retain separate product markers, release
 branches, versions and release histories. Shared source changes pass through

@@ -6,13 +6,14 @@ Starter play needs no game folder, account or download.
 
 | Platform | Project | Bundle identifier | Minimum OS |
 | --- | --- | --- | --- |
-| iPhone and iPad | `Apps/UltimateLemmixIOS/UltimateLemmixIOS.xcodeproj` | `academy.glasscode.ultimatelemmix.ios` | iOS 16 |
-| Apple TV | `Apps/UltimateLemmixTVOS/UltimateLemmixTVOS.xcodeproj` | `academy.glasscode.ultimatelemmix.tvos` | tvOS 16 |
+| iPhone and iPad | `Apps/UltimateLemmixIOS/UltimateLemmixIOS.xcodeproj` | `academy.glasscode.ultimatelemmix` | iOS 16 |
+| Apple TV | `Apps/UltimateLemmixTVOS/UltimateLemmixTVOS.xcodeproj` | `academy.glasscode.ultimatelemmix` | tvOS 16 |
 
 Both display the name **Ultimate Lemmix**. Current candidate metadata is 2.4.2,
 build 108. The 0.1 records below are historical. The existing
 Ultimate Lemmings iOS target remains separate. The
-[macOS edition](UltimateLemmix.md) has its own identity and build.
+[macOS edition](UltimateLemmix.md) shares the Lemmix App Store app identity.
+Each platform retains its own target and signed package.
 The requested project icon is shared across these editions. Its character
 rights review remains open.
 

@@ -1,5 +1,14 @@
 # Hosted service readiness
 
+> Historical record — status clarified 19 November 2026. This document retains
+> the earlier investigation, service checks or separate-mobile-ID packages.
+> It is not the current gate list. Use the [current handoff](README.md),
+> [unified mobile identity evidence](UnifiedListingMobile.md) and
+> [website release record](WebsiteRelease.md) for current status.
+> All main apps now use one listing. The website is built locally, with DNS
+> and TLS pending. Earlier missing-signing or separate-ID findings are retained
+> as history, not current package blockers.
+
 Checked 18 November 2026 at approximately 12:42 UTC. Requests used HTTPS GET,
 without credentials, player identifiers, vault identifiers or request bodies.
 No data was created, changed or removed.

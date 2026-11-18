@@ -1,0 +1,61 @@
+{
+  "checkedDate": "2026-11-19",
+  "timezone": "Australia/Brisbane",
+  "activatedAtUTC": "2026-11-18T14:41:50Z",
+  "status": "deployed-and-checked",
+  "endpoint": "https://glasscode.academy/lemmings-api/rankings",
+  "source": "Tools/Rankings/server.py",
+  "sourceSHA256": "3ccaf3390ddf7dcdeede16754ea00cb5b673d2cb813c80217b36e4cb361cb443",
+  "previousSourceSHA256": "d43acf483d0c15c72a0752c88d3432e3240de67771e6e9efa8cd3faf36849603",
+  "coldBackup": {
+    "serverPath": "/var/backups/lemmings-rankings/20261118T144150Z.9VSiFRA4",
+    "access": "700 root:root",
+    "verifiedWhileStopped": true,
+    "stateBytes": 2392064,
+    "stateExported": false,
+    "retained": true
+  },
+  "schemaChange": "Add runs.action_bytes INTEGER NOT NULL DEFAULT 0 if absent. Preserve existing columns, records and files.",
+  "preservedCatalogue": {
+    "levels": 512,
+    "sha256": "cef047ee50ba55776d52c07cd9d93edd8920160119a83e22f768392b856a9f61",
+    "appCatalogueLevels": 609,
+    "gapClosed": false
+  },
+  "preservedConfiguration": {
+    "systemdUnit": true,
+    "nginxLocation": true,
+    "nginxRateLimit": true
+  },
+  "isolatedServerChecks": {
+    "count": 20,
+    "localPython": "3.14",
+    "serverPython": "3.12.3",
+    "bothPassed": true,
+    "oldSchemaMigration": true,
+    "allFourEngineBonusEnvelopes": true,
+    "allNineL3Tools": true,
+    "invalidBonusCommandsRejected": true,
+    "productionStorageUsed": false
+  },
+  "publicHTTPSChecks": {
+    "health": true,
+    "authenticatedIdempotentScore": true,
+    "bonusSkillActionUpload": true,
+    "exactDownloadSHA256": true,
+    "movieUploadAndDownload": true,
+    "assistedBoardSeparation": true,
+    "unauthenticatedScoreRejected": true,
+    "temporaryPlayerDeleted": true,
+    "temporaryRecordsDeleted": true,
+    "temporaryActionAndMovieDeleted": true,
+    "deletionVerified": true
+  },
+  "appEngineSourceChanged": false,
+  "engineTestsRun": false,
+  "physicalDeviceAcceptance": false,
+  "rollbackNeeded": false,
+  "privateUserRowsQueried": false,
+  "privateLogsRead": false,
+  "evidenceDirectory": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/service-deployment-review"
+}

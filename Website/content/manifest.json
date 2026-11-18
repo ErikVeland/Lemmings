@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "contentDate": "2026-11-19",
+  "language": "en-AU",
+  "releaseStatus": "candidate",
+  "pages": [
+    {
+      "route": "/support",
+      "title": "Support",
+      "description": "Help with starting, importing game data, saved journeys and reporting a problem.",
+      "file": "support.html"
+    },
+    {
+      "route": "/manual",
+      "title": "Manual",
+      "description": "A practical guide to starter levels, controls, imports, journeys, Hot Seat and saved progress.",
+      "file": "manual.html"
+    },
+    {
+      "route": "/privacy",
+      "title": "Privacy",
+      "description": "How Ultimate Lemmix handles local saves, cloud libraries, optional sharing and website requests.",
+      "file": "privacy.html"
+    },
+    {
+      "route": "/privacy/choices",
+      "title": "Your privacy choices",
+      "description": "Manage optional counts, shared records, calendar access and library credentials.",
+      "file": "privacy-choices.html"
+    },
+    {
+      "route": "/accessibility",
+      "title": "Accessibility",
+      "description": "Presentation and input options, known limits and ways to report an access barrier.",
+      "file": "accessibility.html"
+    },
+    {
+      "route": "/terms",
+      "title": "Terms of use",
+      "description": "Apple’s standard licence and the separate rights attached to imported content.",
+      "file": "terms.html"
+    },
+    {
+      "route": "/release-notes",
+      "title": "Release notes",
+      "description": "Changes and current release status for Ultimate Lemmix 2.4.2, build 108.",
+      "file": "release-notes.html"
+    },
+    {
+      "route": "/legal",
+      "title": "Legal information",
+      "description": "Product identity, content rights and applicable third-party notices.",
+      "file": "legal.html"
+    },
+    {
+      "route": "/credits",
+      "title": "Credits",
+      "description": "The people and projects behind Ultimate Lemmix and its game-preservation foundations.",
+      "file": "credits.html"
+    }
+  ]
+}
