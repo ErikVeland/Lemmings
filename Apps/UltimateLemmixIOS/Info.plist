@@ -64,9 +64,9 @@
 	<key>MinimumOSVersion</key>
 	<string>$(IPHONEOS_DEPLOYMENT_TARGET)</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
+	<string>The Desk Clock shows your next event on the signpost. Lemmix cannot change your calendar.</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
+	<string>The Desk Clock shows your next event on the signpost. Lemmix cannot change your calendar.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

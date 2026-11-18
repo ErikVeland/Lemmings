@@ -203,6 +203,11 @@ def build_command(root, manifest, edition_id, platform, arguments):
     command = ["xcodebuild", "-project", str(root / profile["project"]), "-scheme", profile["scheme"]]
     if edition["storeArtwork"]:
         command += ["-xcconfig", str(root / "Apps/UltimateLemmixSupport/Store.xcconfig")]
+        supplied = {argument.partition("=")[0] for argument in retained}
+        if "ULTIMATE_LEMMIX_RESOURCES_DIR" not in supplied:
+            command += ["ULTIMATE_LEMMIX_RESOURCES_DIR=" + str(root / ".build/publication-resources/ultimate-lemmix")]
+        if "ULTIMATE_LEMMIX_RELEASE_CHECKS" not in supplied:
+            command += ["ULTIMATE_LEMMIX_RELEASE_CHECKS=1"]
     command += retained + [key + "=" + value for key, value in version_arguments.items()]
     return command, environment
 
@@ -329,6 +334,8 @@ def main():
             return 0
         if not check(root, manifest, selected_edition=arguments.edition):
             return 1
+        subprocess.run([sys.executable, str(root / "Tools/ReleaseReadiness/version_history.py"),
+                        "--edition", arguments.edition], check=True)
         return run_build(root, manifest, arguments.edition, arguments.platform, arguments.arguments)
     except (ValueError, OSError, KeyError, subprocess.CalledProcessError) as error:
         print(str(error), file=sys.stderr)

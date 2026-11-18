@@ -2974,7 +2974,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     artworkLevel = level
     artworkGroundOverride = groundOverride
     artworkSpecialOverride = specialOverride
-    if GameArtworkSkin.lixEnabled {
+    if playfield.usesLixArtwork {
       switch level.title {
       case "Float to Safety": playfield.lixSceneTheme = .earth
       case "Over the Rise": playfield.lixSceneTheme = .wood

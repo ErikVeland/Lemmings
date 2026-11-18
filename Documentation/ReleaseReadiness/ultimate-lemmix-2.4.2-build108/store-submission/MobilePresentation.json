@@ -1,0 +1,102 @@
+{
+  "status": "passed-scoped-home-presentation-capture",
+  "captureDate": "2026-11-18",
+  "captureMethod": "Headless CoreSimulator boot, muted uninjected app launch, simctl io screenshot to /tmp, exact copy to external evidence folder.",
+  "audioEnvironment": {
+    "LEMMINGS_TEST_AUDIO": "muted"
+  },
+  "screens": [
+    {
+      "name": "iPhone-Home",
+      "raw": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/iPhone-Home.png",
+      "rawSHA256": "7d3e54debb9e282dc73e9f474d87124628c41e7af19e12908ebd9fc7233cb119",
+      "submission": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/iPhone-Home.png",
+      "submissionSHA256": "2cd99d62ae8f11bb5411b67ac859be45ff99452eca2c24c8ff9a1eb8115e78e7",
+      "width": 1206,
+      "height": 2622,
+      "rawAlphaAll255": true,
+      "submissionColorType": 2,
+      "rgbPixelsExactMatch": true,
+      "rgbPixelSHA256": "eb69cfa10bc81a2632b7945cd9cf355050d3fa697c242f53c5cbd6cb7c3f88b1",
+      "colorProfilePreserved": true
+    },
+    {
+      "name": "iPad-Home",
+      "raw": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/iPad-Home.png",
+      "rawSHA256": "f39bf020e8b1d8e63160631384c3ed6aee484cb740e1d8eaca2ac1da3e3fa429",
+      "submission": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/iPad-Home.png",
+      "submissionSHA256": "27ed3719363f9854b9fed9ffd820f1fc1d3bd601edb4a1bc884a6c6f40c169f4",
+      "width": 2064,
+      "height": 2752,
+      "rawAlphaAll255": true,
+      "submissionColorType": 2,
+      "rgbPixelsExactMatch": true,
+      "rgbPixelSHA256": "edc06be029eb1a6c60727fbbd6cb2cccb1e6030b17deb8c07833163c1d1ce7ea",
+      "colorProfilePreserved": true
+    },
+    {
+      "name": "AppleTV-Home",
+      "raw": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/AppleTV-Home.png",
+      "rawSHA256": "e1d9f09c7bca7a1583c8ae64020a528ef8a831757e4ae397baf871b8a3dd3e4f",
+      "submission": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/AppleTV-Home.png",
+      "submissionSHA256": "8354cd368edbb72f556be058721cc79c12c99096167c40e0d770bd4764bdf29d",
+      "width": 3840,
+      "height": 2160,
+      "rawAlphaAll255": true,
+      "submissionColorType": 2,
+      "rgbPixelsExactMatch": true,
+      "rgbPixelSHA256": "218e9f2fd896ef80cfd9599dfff3917cb55d008c3803a089d6a0695dbf9e81d3",
+      "colorProfilePreserved": true
+    }
+  ],
+  "devices": [
+    {
+      "name": "iPhone",
+      "udid": "610B4D06-D890-42AF-B42C-09D3DC59BD68",
+      "runtime": "iOS27.0",
+      "type": "iPhone17Pro",
+      "capture": "iPhone-Home.png",
+      "method": "simctl screenshot; no injection; muted launch; isolated welcome preference acknowledged",
+      "state": "deleted-after-capture"
+    },
+    {
+      "name": "iPad",
+      "udid": "4A22D6A3-8BC3-44FB-A143-0B66FB8493F7",
+      "runtime": "iOS27.0",
+      "type": "iPadPro13M5",
+      "state": "deleted-after-capture",
+      "capture": "iPad-Home.png",
+      "method": "simctl screenshot; no injection; muted launch; isolated welcome preference acknowledged"
+    },
+    {
+      "name": "AppleTV",
+      "udid": "54B5131A-B7AA-4D37-B5F8-49C0D607CF61",
+      "runtime": "tvOS27.0",
+      "type": "AppleTV4K3rdgen",
+      "state": "deleted-after-capture",
+      "capture": "AppleTV-Home.png",
+      "method": "simctl screenshot; no injection; muted launch; isolated welcome preference acknowledged"
+    }
+  ],
+  "visuallyInspected": true,
+  "visibleResult": "Each Home screen shows the Ultimate Lemmix logo, Classic 0/3 starter entry, Start Journey and content import controls. iPhone uses its actual scrolling layout; iPad and TV show their wider layouts.",
+  "candidateType": "Clean Debug simulator builds from the current source; not physical-device Release binaries.",
+  "proofSetup": "Separate integration-tests bundle identifiers. Hosted endpoint keys removed and cloud flags disabled in proof copies. Welcome flags acknowledged only in each isolated test app container.",
+  "productionDataUsedOrChanged": false,
+  "sourceFilesChanged": false,
+  "simulatorAppOpened": false,
+  "userDevicesModified": false,
+  "allOwnedDevicesDeleted": true,
+  "compiledDebugCodeMatchesSources": true,
+  "diagnostics": {
+    "externalInjection": "The first injected launch waited in dyld while opening the capture library on the external volume. The stack sample is retained.",
+    "localInjection": "The /tmp library loaded, but the helper produced no ready receipt. It enumerates UIWindowScene while this product uses a legacy UIWindow. Final captures used no injected library.",
+    "productStartup": "Uninjected app launches reached Home on all three platforms. No product startup blocker reproduced."
+  },
+  "limits": [
+    "Home presentation only; no gameplay, touch, controller or focus-navigation acceptance.",
+    "Physical devices, hosted services and release-signed binary runtime were not exercised.",
+    "No broad test suites or App Store uploads were run.",
+    "These are actual screenshots without resizing, artwork replacement or added marketing text."
+  ]
+}

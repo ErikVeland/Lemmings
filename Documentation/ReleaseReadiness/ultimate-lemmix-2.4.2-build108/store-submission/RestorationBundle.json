@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "archive": "Ultimate-Lemmix-Restoration-20261118.zip",
+  "archiveBytes": 2035221543,
+  "archiveSHA256": "8aedd8feb91247c61b4f0f8e6b2dd3d54b34035b1ea1cf75f06236354347f16c",
+  "resourceFiles": 23591,
+  "resourceBytes": 2272822083,
+  "transportEntries": 23615,
+  "archiveVerification": "Every member hash, size and CRC verified after ZIP creation.",
+  "nativeImportAndReopen": "passed in isolated storage",
+  "redistributionCleared": false
+}

@@ -1,0 +1,18 @@
+{
+  "ios": {
+    "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/ios-store-export/UltimateLemmixIOS.ipa",
+    "sha256": "eb5bce023715301b65b0b91109f98fe50daa6c07392e260731d6940d6f096b78",
+    "bytes": 50180585,
+    "allChecksPassed": true,
+    "appStoreInfoProductErrors": []
+  },
+  "tvos": {
+    "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/tvos-store-export/UltimateLemmixTVOS.ipa",
+    "sha256": "eaeb5a434dd3323ea682f35718d1e676ddee26dfc302585188a8005eb5237412",
+    "bytes": 34356205,
+    "allChecksPassed": true,
+    "appStoreInfoProductErrors": []
+  },
+  "uploadPerformed": false,
+  "metadataComplete": false
+}

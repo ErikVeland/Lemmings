@@ -42,7 +42,7 @@ def write_data_inventory(output):
                                      'files': rows}, indent=2) + '\n').encode())
 
 
-def prepare(output, alternatives):
+def prepare(output, alternatives, store=False):
     output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()):
         raise ValueError('Prepare resources in a new, empty output directory.')
@@ -61,33 +61,52 @@ def prepare(output, alternatives):
         copy_tree(ROOT / 'Resources' / name, output / name, '.json')
     subprocess.run(['python3', ROOT / 'Tools/TrolleyVerification/catalogue.py', 'bundle', output / 'Trolley'], check=True)
     subprocess.run(['python3', ROOT / 'Scripts/bundle-about.py', output / 'About'], check=True)
+    publication = json.loads((ROOT / 'Resources/Publishing/ultimate-lemmix.json').read_bytes())
+    notes = ROOT / ('Documentation/ReleaseNotes-UltimateLemmix-' + publication['version']
+                    + '-build' + str(publication['platforms']['macos']['build']) + '.md')
+    history = '\n'.join(line for line in notes.read_text().splitlines()
+                        if not line.startswith(('Build:', 'Release base:', 'Platform builds:')))
+    write(output / 'About/VersionHistory.md', (history.strip() + '\n').encode())
     for name, data in starter_resources().items():
         write(output / 'Ports/ultimate_lemmix_starter' / name, data)
     copy_tree(ROOT / 'Resources/UltimateLemmix/MenuArtwork', output / 'MenuArtwork')
-    icon = ROOT / 'Resources/AppIcon/AppIcon.png'
-    write(output / 'AppIcon.png', icon.read_bytes())
-    write(output / 'Licences/Project-icon-source.md', (ROOT / 'Resources/AppIcon/README.md').read_bytes())
+    if store:
+        from store_resources import clean_icon
+        from prepare_project_pixel import resources as pixel_resources
+        metadata = json.loads((output / 'AlternativeAssets/Lix/sprite-metadata.json').read_bytes())
+        sheet = output / 'AlternativeAssets/Lix/assets' / metadata['sourcePath']
+        for name, data in clean_icon(sheet.read_bytes(), metadata).items():
+            write(output / name, data)
+        for name, data in pixel_resources().items():
+            write(output / name, data)
+    else:
+        icon = ROOT / 'Resources/AppIcon/AppIcon.png'
+        write(output / 'AppIcon.png', icon.read_bytes())
+        write(output / 'Licences/Project-icon-source.md', (ROOT / 'Resources/AppIcon/README.md').read_bytes())
+        write(output / 'Provenance/project-icon-source.json', (json.dumps({
+            'kind': 'requested-existing-project-icon', 'cc0': False, 'redistributionCleared': False,
+            'rightsReviewRequired': True, 'sha256': hashlib.sha256(icon.read_bytes()).hexdigest(),
+            'notice': 'Licences/Project-icon-source.md'}, indent=2) + '\n').encode())
+        boards = output / 'GameCenter/leaderboards.json'
+        config = json.loads(boards.read_bytes())
+        config['enabled'] = False
+        boards.write_text(json.dumps(config, indent=2, sort_keys=True) + '\n')
     write(output / 'Licences/THIRD_PARTY_NOTICES.md', (ROOT / 'THIRD_PARTY_NOTICES.md').read_bytes())
-    write(output / 'Provenance/project-icon-source.json', (json.dumps({
-        'kind': 'requested-existing-project-icon', 'cc0': False, 'redistributionCleared': False,
-        'rightsReviewRequired': True, 'sha256': hashlib.sha256(icon.read_bytes()).hexdigest(),
-        'notice': 'Licences/Project-icon-source.md'}, indent=2) + '\n').encode())
-    # This is the normal ad-hoc capability configuration; code and UI stay present.
-    boards = output / 'GameCenter/leaderboards.json'
-    config = json.loads(boards.read_bytes())
-    config['enabled'] = False
-    boards.write_text(json.dumps(config, indent=2, sort_keys=True) + '\n')
     guide = (ROOT / 'Resources/UltimateLemmix/BYO-README.txt').read_bytes()
     contract = (ROOT / 'Resources/UltimateLemmix/byo-integration.json').read_bytes()
     integration = output / 'Integration'
     integration.mkdir()
     with zipfile.ZipFile(integration / 'Ultimate-Lemmix-BYO.zip', 'w', compression=zipfile.ZIP_DEFLATED) as archive:
-        archive.writestr('README.txt', guide)
-        archive.writestr('byo-integration.json', contract)
+        for name, data in (('README.txt', guide), ('byo-integration.json', contract)):
+            entry = zipfile.ZipInfo(name, date_time=(2026, 1, 1, 0, 0, 0))
+            entry.compress_type = zipfile.ZIP_DEFLATED
+            entry.external_attr = 0o100644 << 16
+            archive.writestr(entry, data)
     write(integration / 'README.txt', guide)
     write(output / 'Licences/Distribution-scope.txt', (
-        'Lix graphics and music retain their CC0 notices. The Lix font has its own full licence.\n'
-        'The requested existing project icon is separate and requires rights review.\n'
+        'Lix graphics and music retain their CC0 notices. The Lix font has its own full licence.\n' +
+        ('The Store icon uses the approved CC0 Lix sprite. Interface lettering uses project pixel glyphs.\n'
+         if store else 'The requested existing project icon is separate and requires rights review.\n') +
         'Original game assets are supplied by the player and stay outside the installed app.\n'
         'Imports and this helper do not grant redistribution rights.\n').encode())
     fingerprint = (output / 'Trolley/engine-fingerprint.txt').read_text().strip()
