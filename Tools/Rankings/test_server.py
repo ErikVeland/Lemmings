@@ -1,4 +1,6 @@
 import io
+import hashlib
+import sqlite3
 import json
 from pathlib import Path
 import tempfile
@@ -38,6 +40,118 @@ class RankingsTests(unittest.TestCase):
         data=canonical(value or self.action_payload(p)).encode()
         self.store.upload_actions(player or self.a,p['id'],io.BytesIO(data),len(data))
         return data
+    def test_native_bonus_actions_are_stored_for_each_engine(self):
+        # These command envelopes use the native skill slots and L3 tool raw values.
+        cases = [
+            ('classic', 'lemmings', 170, {'builder': 11}, {'bonus-skill-v1': 'builder'},
+             dict(tick=0, action='bonusSkill', skill=4)),
+            ('neolemmix', 'neolemmix', 170, {'builder': 11}, {'bonus-skill-v1': 'builder'},
+             dict(tick=0, action='bonusSkill', skill=0)),
+            ('lemmings2', 'lemmings2', 175, {'builder': 11}, {'bonus-skill-v1': 'builder'},
+             dict(tick=0, action='bonusSkill', skill=7)),
+            ('lemmings3', 'lemmings3', 230, {},
+             {'bonus-skill-v1': 'swimmer', 'bonus-original-tool-v1': 'swimmer'},
+             dict(tick=0, action='bonusTool', lemming=0, skill=5008)),
+        ]
+        for raw, name in enumerate(('bricks', 'bomb', 'spade', 'shimmy', 'sucker', 'umbrella', 'hadoken', 'grenade', 'swimmer'), 5000):
+            cases.append(('lemmings3', 'lemmings3', 230, {},
+                          {'bonus-skill-v1': name, 'bonus-original-tool-v1': name},
+                          dict(tick=0, action='bonusTool', lemming=0, skill=raw)))
+        for engine, game, ticks, stock, modifiers, command in cases:
+            with self.subTest(engine=engine):
+                conditions = dict(CONDITIONS, gameID=game, startingSkills=stock, modifiers=modifiers)
+                run = self.add(conditionsJSON=canonical(conditions), skills=0)
+                value = self.action_payload(run, engine=engine, ticks=ticks, commands=[command])
+                try:
+                    self.upload_actions(run, value)
+                except ValueError as error:
+                    self.fail(f'Valid native {engine} bonus action was rejected: {error}')
+                stored = json.loads((self.store.movies / (run['id'] + '.actions.json')).read_text())
+                self.assertEqual(stored['commands'], [command])
+                board = self.entries('mostSaved', key=checked_conditions(run['conditionsJSON'])[1])
+                self.assertTrue(board[0]['actionReplay'])
+                self.store.delete_player(self.a)
+                self.assertFalse((self.store.movies / (run['id'] + '.actions.json')).exists())
+                self.a = self.store.identity('a'*64, 'UVA')
+
+    def test_bonus_actions_reject_extra_grants_and_invalid_native_fields(self):
+        conditions = dict(CONDITIONS, startingSkills={'builder': 11}, modifiers={'bonus-skill-v1': 'builder'})
+        grant = dict(tick=0, action='bonusSkill', skill=4)
+        cases = [
+            ('classic', CONDITIONS, [grant]),
+            ('classic', dict(conditions, modifiers={'bonus-skill-v1': ''}), [grant]),
+            ('classic', dict(conditions, startingSkills={'builder': 1}), [grant]),
+            ('classic', conditions, [grant, dict(grant, tick=1)]),
+            ('classic', conditions, [dict(grant, skill=True)]),
+            ('classic', conditions, [dict(grant, skill=-1)]),
+            ('classic', conditions, [dict(grant, skill=8)]),
+            ('classic', conditions, [dict(grant, skill=3)]),
+            ('classic', dict(conditions, modifiers={'bonus-skill-v1': 'builder', 'bonus-original-tool-v1': 'builder'}), [grant]),
+            ('classic', conditions, [dict(grant, lemming=0)]),
+            ('classic', conditions, [dict(tick=0, action='bonusTool', lemming=0, skill=5000)]),
+            ('lemmings2', dict(conditions, gameID='lemmings2'), [dict(grant, skill=8)]),
+            ('neolemmix', dict(conditions, gameID='neolemmix'), [dict(grant, skill=32)]),
+        ]
+        l3 = dict(CONDITIONS, gameID='lemmings3', startingSkills={},
+                  modifiers={'bonus-skill-v1': 'bricks', 'bonus-original-tool-v1': 'bricks'})
+        tool = dict(tick=0, action='bonusTool', lemming=0, skill=5000)
+        cases.extend([
+            ('lemmings3', l3, [dict(tool, skill=4999)]),
+            ('lemmings3', l3, [dict(tool, skill=5009)]),
+            ('lemmings3', l3, [dict(tool, skill=True)]),
+            ('lemmings3', l3, [dict(tool, lemming=-1)]),
+            ('lemmings3', l3, [dict(tool, skill=5001)]),
+            ('lemmings3', l3, [dict(tick=0, action='bonusTool', skill=5000)]),
+            ('lemmings3', l3, [dict(tick=0, action='bonusSkill', skill=0)]),
+            ('lemmings3', l3, [tool, dict(tool, tick=1)]),
+            ('lemmings3', dict(l3, modifiers={'bonus-skill-v1': 'bricks'}), [tool]),
+        ])
+        for engine, conditions, commands in cases:
+            with self.subTest(engine=engine, commands=commands, conditions=conditions):
+                ticks = {'classic': 170, 'neolemmix': 170, 'lemmings2': 175, 'lemmings3': 230}[engine]
+                run = self.add(conditionsJSON=canonical(conditions), skills=0)
+                with self.assertRaises(ValueError):
+                    self.upload_actions(run, self.action_payload(run, engine=engine, ticks=ticks, commands=commands))
+                self.assertFalse((self.store.movies / (run['id'] + '.actions.json')).exists())
+        # A rewind can remove the grant while retaining the run's bonus conditions.
+        run = self.add(conditionsJSON=canonical(dict(CONDITIONS, startingSkills={'builder': 11},
+                       modifiers={'bonus-skill-v1': 'builder'})), skills=0)
+        self.upload_actions(run, self.action_payload(run, commands=[]))
+        self.assertTrue((self.store.movies / (run['id'] + '.actions.json')).is_file())
+
+    def test_old_database_migration_preserves_credentials_scores_and_movies(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            player, run_id = str(uuid.uuid4()), str(uuid.uuid4())
+            (root / 'replays').mkdir()
+            (root / 'replays' / (run_id + '.mp4')).write_bytes(MOVIE)
+            with sqlite3.connect(root / 'rankings.sqlite3') as db:
+                db.executescript("""
+                    CREATE TABLE players (id TEXT PRIMARY KEY, token TEXT UNIQUE NOT NULL, name TEXT NOT NULL);
+                    CREATE TABLE runs (id TEXT PRIMARY KEY, player TEXT NOT NULL, conditions TEXT NOT NULL,
+                        board_key TEXT NOT NULL, level_key TEXT NOT NULL, assisted INTEGER NOT NULL,
+                        saved INTEGER NOT NULL, population INTEGER NOT NULL, skills INTEGER NOT NULL,
+                        milliseconds INTEGER NOT NULL, won INTEGER NOT NULL, stars INTEGER NOT NULL,
+                        submitted INTEGER NOT NULL, replay_bytes INTEGER NOT NULL DEFAULT 0);
+                """)
+                db.execute('INSERT INTO players VALUES(?,?,?)',
+                           (player, hashlib.sha256(('a'*64).encode()).hexdigest(), 'OLD'))
+                db.execute('INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                           (run_id, player, canonical(CONDITIONS), self.key, canonical(['lemmings','pack','1']),
+                            0, 8, 10, 2, 10000, 1, 2, 123456, len(MOVIE)))
+            migrated = Store(root)
+            self.assertEqual(migrated.identity('a'*64), player)
+            row = migrated.board(self.key, 'mostSaved', False)['entries'][0]
+            self.assertEqual((row['name'], row['score'], row['runID'], row['replay'], row['actionReplay']),
+                             ('OLD', 8, run_id, True, False))
+            self.assertEqual((root / 'replays' / (run_id + '.mp4')).read_bytes(), MOVIE)
+            with migrated.db() as db:
+                self.assertEqual(db.execute('SELECT COUNT(*) FROM runs').fetchone()[0], 1)
+                self.assertEqual(db.execute('SELECT action_bytes FROM runs').fetchone()[0], 0)
+            restarted = Store(root)
+            self.assertEqual(restarted.identity('a'*64), player)
+            self.assertEqual(restarted.board(self.key, 'mostSaved', False)['entries'][0], row)
+
     def test_action_identity_ownership_immutability_delete_and_restart(self):
         p=self.add()
         with self.assertRaises(PermissionError): self.upload_actions(p,player=self.b)

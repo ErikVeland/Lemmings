@@ -156,7 +156,8 @@ def validate_export(args):
     app = next((inspection / "Payload").glob("*.app"))
     product = json.loads((ROOT / "Resources/Publishing/ultimate-lemmix.json").read_text())
     config = product["platforms"][args.platform]
-    expected_ids = {config["bundleIdentifier"], config["bundleIdentifier"] + (".DeskClockWidget" if args.platform == "ios" else ".TopShelf")}
+    expected_ids = {config["bundleIdentifier"], *config["extensionBundleIdentifiers"].values()}
+    require(all(value.startswith(config["bundleIdentifier"] + ".") for value in config["extensionBundleIdentifiers"].values()), "Extension identity must use the app prefix.")
     records = []
     for bundle in [app, *app.glob("PlugIns/*.appex")]:
         info = read_plist(bundle / "Info.plist")

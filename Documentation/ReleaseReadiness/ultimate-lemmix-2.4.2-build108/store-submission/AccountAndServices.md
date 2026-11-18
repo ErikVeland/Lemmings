@@ -1,5 +1,14 @@
 # Ultimate Lemmix account and service gates
 
+> Historical record — status clarified 19 November 2026. This document retains
+> the earlier investigation, service checks or separate-mobile-ID packages.
+> It is not the current gate list. Use the [current handoff](README.md),
+> [unified mobile identity evidence](UnifiedListingMobile.md) and
+> [website release record](WebsiteRelease.md) for current status.
+> All main apps now use one listing. The website is built locally, with DNS
+> and TLS pending. Earlier missing-signing or separate-ID findings are retained
+> as history, not current package blockers.
+
 Candidate: 2.4.2, build 108 on Mac, iOS and tvOS. Checked 18 November 2026.
 This record distinguishes local source checks from Apple account and device acceptance.
 It does not establish submission readiness, an uploaded build, or a published release.

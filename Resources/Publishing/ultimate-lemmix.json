@@ -11,17 +11,23 @@
     },
     "ios": {
       "build": 108,
-      "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios",
+      "bundleIdentifier": "academy.glasscode.ultimatelemmix",
       "project": "Apps/UltimateLemmixIOS/UltimateLemmixIOS.xcodeproj",
       "scheme": "UltimateLemmixIOS",
-      "appTarget": "UltimateLemmixIOS"
+      "appTarget": "UltimateLemmixIOS",
+      "extensionBundleIdentifiers": {
+        "DeskClockWidget": "academy.glasscode.ultimatelemmix.ios.DeskClockWidget"
+      }
     },
     "tvos": {
       "build": 108,
-      "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos",
+      "bundleIdentifier": "academy.glasscode.ultimatelemmix",
       "project": "Apps/UltimateLemmixTVOS/UltimateLemmixTVOS.xcodeproj",
       "scheme": "UltimateLemmixTVOS",
-      "appTarget": "UltimateLemmixTVOS"
+      "appTarget": "UltimateLemmixTVOS",
+      "extensionBundleIdentifiers": {
+        "TopShelf": "academy.glasscode.ultimatelemmix.tvos.TopShelf"
+      }
     }
   },
   "version": "2.4.2",

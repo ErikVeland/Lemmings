@@ -1,0 +1,241 @@
+# Third-party notices
+
+## Classic DOS file-format research
+
+The classic DAT, level, campaign-order, graphics, and related format work is
+informed by the public Lemmings reverse-engineering community, including:
+
+- ccexplore and rt's binary format documentation, archived by The Lemmings
+  Archive: <https://www.camanis.net/lemmings/tools.php>
+- Thomas Zeugner's MIT-licensed `lemmings.js` / `lemmings.ts` work:
+  <https://github.com/tomsoftware/lemmings.ts>
+- VorticonCmdr's MIT-licensed format documentation and independent decoder
+  verification: <https://github.com/VorticonCmdr/lemmings>
+- LemmixPlayer's DOS-compatible behavior reference:
+  <https://github.com/AaronKelley/LemmixPlayer>
+- DOSBox Staging's VGA DAC behavior reference:
+  <https://github.com/dosbox-staging/dosbox-staging>
+
+The MIT notice applicable to the referenced Thomas Zeugner work follows:
+
+> MIT License
+>
+> Copyright (c) 2017 Thomas Zeugner
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all
+> copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.
+
+The LemmixPlayer source describes itself as freeware that must remain
+noncommercial. This project uses it as a behavioral cross-check. It does not
+include copied LemmixPlayer source or assets.
+
+## Sequel format research
+
+The native Lemmings 2 and 3 readers use format research by GuyPerfect,
+geoo89, and Mindless. Private beta packages include supplied game data.
+Those files retain their original ownership and are not covered by the source
+code licences listed here. Public distribution requires the relevant rights
+or a player-import workflow, as described below.
+See [SequelInterpreters.md](Documentation/SequelInterpreters.md) for the exact
+references and the current implementation boundary.
+The Chronicles graphics format was also investigated using the `lem3edit`
+format readers by Carl Reinke and Kieran Millar as a reference. This project
+does not bundle the editor or its source code.
+The L2 airborne-motion implementation also uses the behaviour documented by
+exit and RavenNine in their DOSBox physics investigation:
+<https://www.lemmingsforums.net/index.php?topic=5886.0>.
+Original-engine recordings are local test material and are not distributed.
+
+## NeoLemmix format research
+
+The NeoLemmix parser is informed by the published format specification and the
+NeoLemmix Community Edition source:
+
+- <https://www.lemmingsforums.net/index.php?topic=4336.0>
+- <https://github.com/Willicious/NeoLemmixCommunityEdition>
+
+NeoLemmix Community Edition is published under a Creative Commons
+Attribution-NonCommercial 4.0 licence. The reviewed 1.2.0 oracle is commit
+`38d0449f87501798e78ac668a9494848f4aa9649`. Its source credits Eric
+Langedijk for Lemmix, Stephan Neupert and Namida Verasche. This project does
+not include its source code.
+
+The CE repository states that bundled images, music and sound retain their
+creators' copyright and restricts their use to running NeoLemmix. The public CI
+gate therefore does not download or render that corpus.
+
+On 28 September 2026 the owner decided to bundle the CE levels, as the app
+bundles fan level packs. The app also bundles the 26 styles that CE
+`License.txt` assigns to DMA. These are conversions of the original assets
+that the owner approved for distribution on 15 September. The app does not
+bundle community styles, CE interface graphics or music. The NeoLemmix SFX
+work requested on 7 October adds nine stock gadget WAV samples from the pinned
+CE sound directory: chain, electric, fire, slurp, teleporter, tenton, thud,
+thunk and weedgulp. They retain their upstream copyright notices and are used
+for NeoLemmix content. Preparation records each sample hash in the manifest.
+Other community samples remain player-supplied. Levels that
+need community styles stay unavailable until the player adds a NeoLemmix folder
+with those styles. The bundle carries CE `License.txt` next to the levels.
+`Scripts/prepare-neolemmix-content.sh` records the source commit and the style
+list. CC BY-NC 4.0 does not permit commercial use. A paid release needs
+separate permission from the CE authors.
+
+## Lix alternative resources
+
+The optional preparation tools use Lix revision
+`f1e805048fe439a4a0e9cc650c613713ababac8b` from
+<https://github.com/SimonN/LixD>. Its
+[copying notice](https://github.com/SimonN/LixD/blob/f1e805048fe439a4a0e9cc650c613713ababac8b/doc/copying.txt)
+dedicates sprites, menu icons, tileset graphics and selected music to the public
+domain through CC0 1.0. The prepared pack retains that notice and creator
+credits. This graphics pack excludes fonts and `music/rubix` tracks.
+
+A separate font pack includes the unchanged `data/fonts/djvusans.ttf`, DejaVu
+Sans Condensed Bold 2.29. The Bitstream Vera and Arev font licences apply to it.
+The bundle retains their complete copyright, trademark and permission notices
+in `Licences/Lix-font-LICENSE.txt`. Font hashes and the pinned official notice
+source are recorded in
+[`lix-font-source.json`](Resources/AlternativeAssets/lix-font-source.json).
+The font is not CC0. Read the
+[official font licence](https://dejavu-fonts.github.io/License.html) for its terms.
+
+Read [Alternative assets](Documentation/AlternativeAssets.md) for the exact
+scope, source records, remix audit and integration limits. Preparation does not
+clear original Lemmings content or certify the current app for distribution.
+
+## resource_dasm format reference
+
+The Macintosh SHPD and Presage LZSS decoder follows the format implementation in
+https://github.com/fuzziqersoftware/resource_dasm (SpriteDecoders/Lemmings-PrinceOfPersia-SHPD.cc
+and DataCodecs/Presage-LZSS.cc). Original game artwork remains supplied game data.
+
+The 1.9 build also uses pinned resource_dasm and phosg as file-only preparation
+tools for the original Macintosh sampled-instrument music. Neither tool is
+linked into the app. See `Documentation/MacintoshFidelity.md` for versions,
+source hashes and the WAV-size correction. Original music remains supplied
+game data.
+
+The MIT License (MIT)
+
+Copyright (c) 2023 Martin Michelsen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+## Amiga artwork import formats
+
+The Amiga importer uses the CAPS/SPS decoder as a separately installed,
+import-time tool. It is not linked or bundled with the game. Decoder source:
+https://www.kryoflux.com/download/spsdeclib_5.1_source.zip
+
+The CAPS ABI, Amiga MFM checksums, and Psygnosis B track layout were checked
+against Keir Fraser's Disk Utilities and Greaseweazle, released into the public
+domain (Unlicense):
+https://github.com/keirf/disk-utilities and https://github.com/keirf/greaseweazle
+
+ByteKiller decoding follows Ancient's ByteKillerDecompressor implementation:
+https://github.com/temisu/ancient
+
+BSD 2-Clause License
+
+Copyright (c) 2017-2026, Teemu Suutari
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+## Tamil pixel font
+
+The bundled Tamil pixel font derives from Noto Sans Tamil Bold and Noto Sans
+Tamil Supplement. The prototype also uses Noto Sans Bold for ASCII comparison.
+The source fonts and derived bitmap artwork use the SIL Open Font License 1.1.
+
+- Copyright 2022 The Noto Project Authors: [Tamil sources](https://github.com/notofonts/tamil).
+- Copyright 2018 The Noto Project Authors: [Latin sources](https://github.com/notofonts/noto-fonts).
+
+The app carries the derived pixels in
+`Sources/NxlvKit/Resources/Localization.bundle/Fonts/TamilPixelFont.json`.
+`OFL.txt` and `OFL-Latin.txt` reproduce the font copyright and licence notices
+beside that resource. The derived pixel resource is named `TamilPixelFont.json`.
+The original Noto font files remain developer inputs under
+`Tools/TamilPixelFont/vendor/`.
+
+The repertoire uses Unicode 17 character data and named sequences. Unicode
+data is © 2025 Unicode, Inc. The reproduced Unicode Licence v3 notice is
+`Fonts/UNICODE-LICENSE.txt` in the runtime bundle and
+`Tools/TamilPixelFont/vendor/UNICODE-LICENSE.txt` in the source tree.
+Source URLs and file hashes are recorded in `Tools/TamilPixelFont/vendor/sources.json`
+and `repertoire.json`. See the [font tool](Tools/TamilPixelFont/README.md) for
+the derivation and rebuild procedure.
+
+## Lix alternative resources
+
+Ultimate Lemmix uses selected resources from Lix revision
+`f1e805048fe439a4a0e9cc650c613713ababac8b` at
+<https://github.com/SimonN/LixD>. Its copying notice dedicates the selected
+sprites, menu icons, tileset graphics and music to CC0 1.0. The prepared media
+retains that notice and creator credits. Rubix tracks are excluded.
+
+The unchanged `data/fonts/djvusans.ttf` is DejaVu Sans Condensed Bold 2.29.
+Its Bitstream Vera and Arev licences apply separately. The font is not CC0.
+Complete notices accompany the font and the rasterised interface glyphs.
+The exact permitted media hashes are recorded in
+[the alternative-resource source record](Resources/UltimateLemmix/alternative-resource-source.json).
+
+Original game media, unreviewed remixes and the retained project icon do not
+gain redistribution permission from these licences. The icon's character
+rights remain a separate review gate.
+
+## Sparkle
+
+The preservation macOS app bundles Sparkle 2.7.3 for signed automatic updates.
+The Ultimate Lemmix Store profile excludes that updater. Sparkle is
+available from <https://github.com/sparkle-project/Sparkle>. Its MIT licence and
+the licences for its bundled third-party components are included in the Sparkle
+distribution used to build the app.

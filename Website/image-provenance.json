@@ -1,0 +1,77 @@
+{
+  "captures": [
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/submission/Starter.png",
+      "sha256": "94a1ea6f5dd0b23df747010c4dc2685a8d9662a222c7f68e9e4afa36d5edc9de",
+      "outputs": [
+        "starter-800.webp",
+        "starter-800.jpg",
+        "starter-1600.webp",
+        "starter-1600.jpg",
+        "starter-2560.webp",
+        "starter-2560.jpg"
+      ],
+      "treatment": "Full actual capture; proportional resize and format conversion only."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/submission/Home.png",
+      "sha256": "4b7c36b924947838b2d1ab270486e0f676b7ed428088df8856fbad790f252ba3",
+      "outputs": [
+        "home-800.webp",
+        "home-800.jpg",
+        "home-1600.webp",
+        "home-1600.jpg"
+      ],
+      "treatment": "Full actual capture; proportional resize and format conversion only."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/iPhone-Home.png",
+      "sha256": "2cd99d62ae8f11bb5411b67ac859be45ff99452eca2c24c8ff9a1eb8115e78e7",
+      "outputs": [
+        "phone-402.webp",
+        "phone-402.jpg",
+        "phone-804.webp",
+        "phone-804.jpg"
+      ],
+      "treatment": "Full actual capture; proportional resize and format conversion only."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/AppleTV-Home.png",
+      "sha256": "8354cd368edbb72f556be058721cc79c12c99096167c40e0d770bd4764bdf29d",
+      "outputs": [
+        "tv-960.webp",
+        "tv-960.jpg",
+        "tv-1920.webp",
+        "tv-1920.jpg"
+      ],
+      "treatment": "Full actual capture; proportional resize and format conversion only."
+    },
+    {
+      "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
+      "sha256": "ccc23dc09af112019fd0f9b914c4678a967fc127914c8c5cf25ce38e551f8754",
+      "outputs": [
+        "logo.png"
+      ],
+      "treatment": "Unmodified current product logo."
+    },
+    {
+      "source": "/Users/veland/UltimateLemmix/Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "sha256": "f852c3d872d85822107f89b2db3b10770132c6fa0800261b909f9946f77af1df",
+      "outputs": [
+        "favicon.png"
+      ],
+      "treatment": "Nearest-neighbour resize of clean Store icon."
+    },
+    {
+      "source": "/Users/veland/UltimateLemmix/.build/approved-alternative-resources/AlternativeAssets/Lix/assets/data/images/lixsprites.png",
+      "sha256": "5dfdef3ac67c716515804444b2f9009004ea8fc3b1c4141dd458f69c37073a45",
+      "outputs": [
+        "walker.png",
+        "walk-strip.png"
+      ],
+      "treatment": "Extracted published walker frames using pinned metadata and the existing black/grid transparency keys. No redrawing."
+    }
+  ],
+  "social": "Authored composition using the unchanged product logo and full Mac starter capture.",
+  "font": "Archivo, SIL Open Font License; reused from the existing GenErik DJ website."
+}

@@ -10,18 +10,20 @@ after the player imports that data.
 Both editions share their launch sources and application modules. The
 [Lemmix manifest](../../Resources/Publishing/ultimate-lemmix.json) owns the version
 and build counters. Keep this project on `release/ultimate-lemmix`. See [separate product releases](../../Documentation/SharedPublishing.md)
-for the common build commands. These targets retain separate identifiers:
+for the common build commands. Mac, iOS and tvOS use one App Store app identity.
+Mobile extensions retain distinct identifiers:
 
 | Product | Bundle identifier |
 | --- | --- |
-| iOS | `academy.glasscode.ultimatelemmix.ios` |
+| iOS | `academy.glasscode.ultimatelemmix` |
 | Desk Clock widget | `academy.glasscode.ultimatelemmix.ios.DeskClockWidget` |
-| tvOS | `academy.glasscode.ultimatelemmix.tvos` |
+| tvOS | `academy.glasscode.ultimatelemmix` |
 | Top Shelf | `academy.glasscode.ultimatelemmix.tvos.TopShelf` |
 
 The targets retain the existing iCloud container, Game Center capability and TV
-App Group. Their new app identifiers still need the relevant service associations
-and provisioning. An unsigned SDK build does not verify those services.
+App Group. Archive and export receipts must verify the service assignments for
+the shared app identity and each extension. An unsigned SDK build does not verify
+those services.
 
 ## Resource profile
 
