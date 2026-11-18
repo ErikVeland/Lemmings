@@ -128,7 +128,10 @@ import AVFAudio
     func invalidateSoundtrackNames() { cachedSoundtrackNames = nil }
     var soundtrack: String {
         get {
-            if settings.soundtrack == "Original", !hasOriginalMusic, soundtrackNames.contains("Lix") { return "Lix" }
+            if settings.soundtrack == "Original", !hasOriginalMusic {
+                if soundtrackNames.contains("Traditional Remixes") { return "Traditional Remixes" }
+                if soundtrackNames.contains("Lix") { return "Lix" }
+            }
             return soundtrackNames.contains(settings.soundtrack) ? settings.soundtrack : "Original"
         }
         set {
@@ -146,7 +149,7 @@ import AVFAudio
     static let macintosh = "Macintosh"
     /// The shared setting that matches a mobile soundtrack choice.
     static func source(soundtrack: String) -> ClassicMusicSource {
-        if soundtrack == "Lix" { return .remix(name: "Lix") }
+        if soundtrack == "Lix" || soundtrack == "Traditional Remixes" { return .remix(name: soundtrack) }
         return soundtrack == "Adaptive DJ" ? .adaptiveDJ : soundtrack == macintosh ? .macintoshMIDI : .amigaModules
     }
 
@@ -157,11 +160,11 @@ import AVFAudio
 
     private func playLix(index: Int, identity: String, menu: Bool = false) -> Bool {
         guard LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
-            position: index, identity: identity, menu: menu) else { return false }
+            position: index, identity: identity, menu: menu, preferRemixes: soundtrack != "Lix") else { return false }
         module.stop(); recordings.stop()
         usingDJ = true; usingRecording = false; playing = identity
-        dj.onTrackChange = { [weak self] _ in self?.announce(self?.dj.currentURL, soundtrack: "Lix") }
-        announce(dj.currentURL, soundtrack: "Lix")
+        dj.onTrackChange = { [weak self] _ in self?.announce(self?.dj.currentURL, soundtrack: self?.dj.currentURL?.path.contains("Traditional Remixes/") == true ? "Traditional Remixes" : "Lix") }
+        announce(dj.currentURL, soundtrack: dj.currentURL?.path.contains("Traditional Remixes/") == true ? "Traditional Remixes" : "Lix")
         applyOutputState()
         return true
     }
@@ -248,7 +251,7 @@ import AVFAudio
         paused = false; inactive = false; resultComplete = false
         speed = 1; rewinding = false; pitch = GameplayMusicPitch(); lastPitchCents = nil
         applyPitch()
-        if (soundtrack == "Lix" || !hasOriginalMusic), playLix(index: 0, identity: menuKey, menu: true) { return }
+        if (soundtrack == "Lix" || soundtrack == "Traditional Remixes" || !hasOriginalMusic), playLix(index: 0, identity: menuKey, menu: true) { return }
         let recording: URL? = switch theme {
         case .macintoshLemming1: macintoshMusic?.root.appendingPathComponent("classic/lemming1.m4a")
         case let .recording(path): musicRoot?.appendingPathComponent(path)
@@ -281,7 +284,7 @@ import AVFAudio
         guard playing != key else { return }
         lastPitchCents = nil
         let position = context.scorePosition ?? index
-        if soundtrack == "Lix", playLix(index: position, identity: key) { return }
+        if (soundtrack == "Lix" || soundtrack == "Traditional Remixes"), playLix(index: position, identity: key) { return }
         let tune = MobileMusicAssignment.tune(identifier: identifier, index: position, title: title)
         compositionID = tune.game + "." + tune.track.lowercased()
         let cycle = MobileMusicAssignment.cycle(tune: tune, index: position, titles: context.titles, isFan: context.isFan)

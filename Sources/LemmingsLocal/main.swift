@@ -884,6 +884,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       music.loadLibrary(at: bundled)
     }
     loadSoundtracks()
+    if AppDistribution.isStore, settings.music == .amigaModules,
+      music.library.isEmpty, !soundtrackLibrary.isEmpty {
+      settings.music = .adaptiveDJ
+      if let data = try? JSONEncoder().encode(settings) { UserDefaults.standard.set(data, forKey: settingsKey) }
+    }
     applyAudioSettings()
     do {
       try effects.start()
@@ -1450,6 +1455,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
       settings = stored
     } else if UserDefaults.standard.bool(forKey: musicPresetKey) {
       settings.musicStyle = .modern
+    }
+    if AppDistribution.isStore, !UserDefaults.standard.bool(forKey: "LemmixAddedEffectsRestoredV1") {
+      settings.hdEffectsEnabled = true
+      settings.fullScreenHDRFlashes = true
+      settings.refreshExperiencePreset()
+      if let data = try? JSONEncoder().encode(settings) { UserDefaults.standard.set(data, forKey: settingsKey) }
+      UserDefaults.standard.set(true, forKey: "LemmixAddedEffectsRestoredV1")
     }
     let owner = ArcadeStore.shared.playingProfileID
     settingsProfileID = owner
@@ -8618,9 +8630,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let identity = arcadeRunID.uuidString + String(describing: activeMusic)
     guard startedMusicIdentity != identity else { return }
     startedMusicIdentity = identity
-    if activeMusic == .remix(name: "Lix"),
+    if activeMusic == .remix(name: "Lix") || activeMusic == .remix(name: "Traditional Remixes"),
       LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
-        position: max(0, picker.indexOfSelectedItem), identity: identity) {
+        position: max(0, picker.indexOfSelectedItem), identity: identity,
+        preferRemixes: activeMusic == .remix(name: "Traditional Remixes")) {
       music.stop(); soundtrack.stop()
       return
     }
@@ -8638,7 +8651,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if playLearningJourneyMusic(assignedName: assignedName, game: game, position: position) { return }
       if AppDistribution.isStore,
         LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
-          position: position, identity: identity) {
+          position: position, identity: identity, preferRemixes: true) {
         music.stop(); soundtrack.stop()
         return
       }
@@ -8663,7 +8676,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       if AppDistribution.isStore,
         LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
-          position: position, identity: identity) {
+          position: position, identity: identity, preferRemixes: true) {
         music.stop(); soundtrack.stop()
         return
       }
@@ -8736,7 +8749,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       || (AppDistribution.isStore && BundledGameResources.music("lemmings_music_mod", in: GameResources.bundle) == nil
         && macintoshMusic == nil),
       LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
-        position: 0, identity: identity, menu: true) {
+        position: 0, identity: identity, menu: true, preferRemixes: settings.music != .remix(name: "Lix")) {
       music.stop(); soundtrack.stop()
       return
     }

@@ -59,18 +59,34 @@ public struct MobileSettings: Codable, Equatable, Sendable {
     /// Migrate once. Keep legacy keys so a downgrade can still read its saved preferences.
     public static func load(from defaults: UserDefaults) -> MobileSettings {
         if let data = defaults.data(forKey: defaultsKey),
-           let saved = try? JSONDecoder().decode(Self.self, from: data) { return saved }
+           var saved = try? JSONDecoder().decode(Self.self, from: data) {
+            saved.restoreLemmixEffects(from: defaults)
+            return saved
+        }
         #if os(tvOS)
         let planning = false
         #else
         let planning = !defaults.bool(forKey: "mobile.continuousSkillSelection")
         #endif
-        let migrated = Self(pauseToAssign: planning,
+        var migrated = Self(pauseToAssign: planning,
                             fastSpeed: defaults.integer(forKey: "mobile.fastSpeed"),
                             musicEnabled: defaults.object(forKey: "mobile.music") as? Bool ?? true,
                             soundtrack: defaults.string(forKey: "mobile.soundtrack") ?? "Original")
+        migrated.restoreLemmixEffects(from: defaults)
         migrated.save(to: defaults)
         return migrated
+    }
+
+    private mutating func restoreLemmixEffects(from defaults: UserDefaults) {
+        guard Bundle.main.object(forInfoDictionaryKey: "UltimateLemmixStore") as? Bool == true,
+              !defaults.bool(forKey: "LemmixAddedEffectsRestoredV1") else { return }
+        classic.hdEffectsEnabled = true
+        #if !os(tvOS)
+        classic.fullScreenHDRFlashes = true
+        #endif
+        classic.refreshExperiencePreset()
+        save(to: defaults)
+        defaults.set(true, forKey: "LemmixAddedEffectsRestoredV1")
     }
 
     public func save(to defaults: UserDefaults) {

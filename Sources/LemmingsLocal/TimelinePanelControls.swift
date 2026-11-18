@@ -48,7 +48,10 @@ import NxlvKit
                 case .forward: control = .stepForward
                 case .hints: control = .help
                 }
-                LixInterfaceRenderer.shared.drawButton(box, enabled: enabled(action))
+                if let context = NSGraphicsContext.current?.cgContext {
+                    GameControlGroupArt.draw(in: context, frame: box, group: groupFrame ?? frame,
+                        selected: false, face: action == .hints ? .hints : .rewind, monochrome: monochrome)
+                }
                 LixInterfaceRenderer.shared.drawControl(control, in: box.insetBy(dx: 2, dy: 2), enabled: enabled(action))
                 continue
             }

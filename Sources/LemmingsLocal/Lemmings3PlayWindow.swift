@@ -1030,7 +1030,8 @@ import NxlvKit
             gameMusicAvailable: !music.library.isEmpty) {
             music.stop()
             LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
-                position: campaign.index, identity: arcadeRunID.uuidString)
+                position: campaign.index, identity: arcadeRunID.uuidString,
+                preferRemixes: audioSettings.music != .remix(name: "Lix"))
             return
         }
         let prefix: String

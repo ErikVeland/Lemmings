@@ -16,7 +16,8 @@ export SDKROOT="$sdk"
 module_dir="$build_dir/$architecture/modules"
 export CLANG_MODULE_CACHE_PATH="$build_dir/ClangModuleCache"
 export SWIFT_MODULE_CACHE_PATH="$build_dir/ModuleCache"
-mkdir -p "$module_dir" "$build_dir/ModuleCache" "$build_dir/ClangModuleCache"
+mkdir -p "$module_dir" "$build_dir/ModuleCache" "$build_dir/ClangModuleCache" "$build_dir/Temporary"
+export TMPDIR="$build_dir/Temporary/"
 app="$build_dir/Ultimate Lemmix.app"
 reuse_core=0
 core_only=0
@@ -79,6 +80,10 @@ fi
 if [[ -n "${ULTIMATE_LEMMIX_LOCAL_NEO_STYLES:-}" ]]; then
   [[ -d "$ULTIMATE_LEMMIX_LOCAL_NEO_STYLES" ]] || { print -u2 'Missing local NeoLemmix styles folder.'; exit 1; }
   ditto "$ULTIMATE_LEMMIX_LOCAL_NEO_STYLES" "$app/Contents/Resources/NeoLemmix/styles"
+fi
+if [[ -n "${ULTIMATE_LEMMIX_LOCAL_REMIX_SOURCE:-}" ]]; then
+  python3 -B "$project_dir/Tools/AlternativeAssets/prepare_local_remixes.py" \
+    --source "$ULTIMATE_LEMMIX_LOCAL_REMIX_SOURCE" --output "$app/Contents/Resources"
 fi
 python3 -B "$project_dir/Tools/AlternativeAssets/prepare_open_starter.py" \
   --output "$app/Contents/Resources/Ports/ultimate_lemmix_starter"

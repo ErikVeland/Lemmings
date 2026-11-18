@@ -105,3 +105,17 @@ The catalogue now offers 495 playable versions across 210 identities. There are 
 All 81 additions have passed full Core Audio decoding through their selected playback files. The original SNES `13 As Long As You Try Your Best.mp3` raised Core Audio error -39 at the end of decoding. Its ALAC copy passed. The original file remains untouched and excluded from library selection. MP3 provenance remains lossy.
 
 The SNES mappings use explicit collection-specific level titles. Mariarti and the four named special remixes retain special roles; Paintball retains five separate bonus identities. Generic SNES/SMS win/loss cues play once and cannot select endings, credits, intermissions or voice clips. See [the journey rules](SoundtrackJourney.md).
+
+
+## Lemmix local traditional remixes — 18 November 2026
+
+The requested local Mac build includes six MandelSoft recordings: Can-Can,
+Coming Round the Mountain, Dance of the Reed Flutes, Turkish March,
+Dance of the Little Swans and London Bridge Is Falling Down.
+The [creator permits credited level-pack and replacement-soundtrack use](https://www.lemmingsforums.net/index.php?topic=3921.0).
+
+`prepare_local_remixes.py` verifies each local file against the existing byte count
+and SHA-256 record. It copies only the selected recordings, preserves composition
+identities and records creator credit in the catalogue and bundled notice.
+It runs only through the explicit local-build source option. This does not mark
+the earlier public-distribution audit as approved or publish a music pack.

@@ -622,30 +622,17 @@ public struct GameFrontEnd {
             let chosen = action.enabled && (action.primary || action.selected)
             let focused = action.enabled && highlighted == action.id
             if page.home, rowIDs.contains(action.id) {
-                // The home screen uses the same dark rows and green selection as the Mac title overlay.
-                context.setFillColor(chosen ? CGColor(srgbRed: 0.18, green: 0.27, blue: 0.12, alpha: 1)
-                    : CGColor(gray: 0.07, alpha: 1))
-                shape.fill(target.frame, in: context)
-                context.setStrokeColor(chosen ? CGColor(srgbRed: 0.70, green: 0.84, blue: 0.29, alpha: 1)
-                    : CGColor(gray: 0.29, alpha: 1))
-                context.setLineWidth(chosen ? 2 : 1)
-                shape.stroke(target.frame, inset: 1, in: context)
+                GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1, shape: shape)
             } else if page.home, ["settings", "whatsNew"].contains(action.id) {
                 GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1, shape: shape)
                 let glyph: PanelGlyphArt = action.id == "settings" ? .settings : action.busy ? .hourglass : .download
-                let well = GameStoneArt.well(target.frame, pixel: 1).insetBy(dx: 2, dy: 2)
+                let well = GameStoneArt.well(target.frame, pixel: 1)
                 let scale = glyph.scale(fitting: well.size)
                 if let image = glyph.cgImage(scale: scale) {
                     drawImage(image, fittedIn: well, context: context)
                 }
                 if focused { drawFocus(target.frame, shape: shape, in: context) }
                 continue
-            } else if page.home {
-                context.setFillColor(chosen ? CGColor(srgbRed: 0.06, green: 0.16, blue: 0.035, alpha: 1) : CGColor(gray: 0.025, alpha: 1))
-                shape.fill(target.frame, in: context)
-                context.setStrokeColor(chosen ? CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1) : CGColor(gray: 0.35, alpha: 1))
-                context.setLineWidth(1)
-                shape.stroke(target.frame, inset: 0.5, in: context)
             } else {
                 GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1, shape: shape)
             }
