@@ -1260,3 +1260,27 @@ exports show `ULPrivateLibrary` in Development but absent from Production.
 Production schema deployment and live propagation remain release gates.
 See [2.4 sync evidence](ReleaseReadiness/2.4-build104/CloudSync.md) for compilation,
 rendered-state evidence and remaining physical keyboard, remote and device checks.
+
+## Lemmix names before restoration — 18 November 2026
+
+Mac, iPhone, iPad, Duo and Apple TV use the shared product wording rule in
+`GamePresentationText`. Platform localisation adapters apply the rule after
+translation. Shared bitmap layout and drawing also apply it to catalogue text.
+Mobile and TV accessibility labels use the same wording. Mac window titles,
+menus, level cards and native sequel text renderers also use the rule.
+
+Ultimate Lemmings retains its names. A validated restored resource bundle enables
+the original names in Ultimate Lemmix. Bundled personal-test levels do not count
+as restored assets. Home omits the original sequel logos before restoration.
+The native Mac Tribes menu uses a stone heading over its original title image.
+
+The local Mac candidate has rendered-state and restoration evidence in
+[the naming record](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/naming-local.json).
+iOS and tvOS changes have source review only. Physical-device, remote and Duo
+acceptance remain open. No engine, save-format or service behaviour changed.
+
+Original sequel story movies remain unavailable before asset restoration because
+their frames contain original character names. Automatic introductions are skipped.
+Ending transitions retain their completion callbacks when the movie is skipped.
+The manual movie page directs the player to Restore assets. This rule also applies
+to the mobile and TV original-media player.

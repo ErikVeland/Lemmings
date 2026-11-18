@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 /// Tiny HUD lettering and compatibility entry point for the Lemmings typeface.
@@ -58,7 +59,7 @@ public enum GamePixelTypography {
 
     public static func layout(_ text: String) -> [PositionedGlyph] {
         var pen = 0
-        return BitmapTamilGlyphs.sequences(in: text).map { sequence in
+        return BitmapTamilGlyphs.sequences(in: GamePresentationText.display(text)).map { sequence in
             let glyph = bitmapGlyph(forSequence: sequence)
             let latin = sequence.count == 1 && sequence.first.map { glyphs[$0] != nil || $0 == " " } == true
             let advance = latin ? 6 : BitmapTamilGlyphs.advance(for: sequence, cellHeight: 7) ?? 6

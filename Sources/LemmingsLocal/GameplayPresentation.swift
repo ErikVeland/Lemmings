@@ -2,6 +2,7 @@
 import AppKit
 import NxlvKit
 import LemmingsGameArt
+import LemmingsAppCore
 
 /// Afterimages follow moving actors. Solid sprites stay sharp.
 @MainActor final class SpeedTrails {
@@ -581,7 +582,7 @@ struct PrecisionZoomStatus: Equatable {
         setAccessibilityParent(owner)
         setAccessibilityEnabled(true)
         setAccessibilityRole(press == nil ? .staticText : .button)
-        setAccessibilityLabel(label)
+        setAccessibilityLabel(GamePresentationText.display(label))
     }
     // AppKit accessibility overrides are nonisolated. All game-view state stays on the main actor.
     nonisolated private func onMain<T: Sendable>(_ operation: @MainActor @Sendable () -> T) -> T {
@@ -607,7 +608,7 @@ struct PrecisionZoomStatus: Equatable {
     override func accessibilityValue() -> Any? {
         if let value = onMain({ [state] in state.readNumber?() }) { return value }
         let value: String? = onMain { [state] in state.readValue?() }
-        return value ?? super.accessibilityValue()
+        return value.map { GamePresentationText.display($0) } ?? super.accessibilityValue()
     }
     override func setAccessibilityValue(_ value: Any?) {
         if let text = (value as? String) ?? (value as? NSNumber)?.stringValue, onMain({ [state] in
@@ -640,7 +641,7 @@ struct PrecisionZoomStatus: Equatable {
     func element(id: String, owner: NSView, label: String, frame: CGRect, press: (() -> Void)? = nil) -> GameAccessibleElement {
         let element = elements[id] ?? GameAccessibleElement(owner: owner, label: label, frame: frame, press: press)
         element.owner = owner; element.localFrame = frame; element.press = press
-        element.setAccessibilityParent(owner); element.setAccessibilityLabel(label)
+        element.setAccessibilityParent(owner); element.setAccessibilityLabel(GamePresentationText.display(label))
         element.setAccessibilityRole(press == nil ? .staticText : .button)
         elements[id] = element
         return element

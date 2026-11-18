@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import LemmingsGameArt
 #if canImport(NxlvKit)
 import NxlvKit
@@ -31,6 +32,16 @@ import NxlvKit
 }
 
 @MainActor class GameButton: NSButton {
+    override func accessibilityLabel() -> String? {
+        super.accessibilityLabel().map { GamePresentationText.display($0) }
+    }
+    override func accessibilityTitle() -> String? {
+        super.accessibilityTitle().map { GamePresentationText.display($0) }
+    }
+    override func accessibilityValue() -> Any? {
+        let value = super.accessibilityValue()
+        return (value as? String).map { GamePresentationText.display($0) } ?? value
+    }
     var isCheck: Bool { false }
     override var acceptsFirstResponder: Bool { isEnabled }
     override func becomeFirstResponder() -> Bool { needsDisplay = true; return super.becomeFirstResponder() }
@@ -95,6 +106,15 @@ import NxlvKit
 }
 
 @MainActor final class GameLabel: NSTextField {
+    override func accessibilityLabel() -> String? {
+        super.accessibilityLabel().map { GamePresentationText.display($0) }
+    }
+    override func accessibilityTitle() -> String? {
+        super.accessibilityTitle().map { GamePresentationText.display($0) }
+    }
+    override func accessibilityValue() -> String? {
+        super.accessibilityValue().map { GamePresentationText.display($0) }
+    }
     var role: GameTypography.Role = .body {
         didSet { invalidateIntrinsicContentSize(); needsDisplay = true }
     }
@@ -188,7 +208,7 @@ import NxlvKit
         controls.forEach { addArrangedSubview($0) }
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
-        setAccessibilityLabel(label)
+        setAccessibilityLabel(GamePresentationText.display(label))
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func draw(_ dirtyRect: NSRect) {
@@ -219,6 +239,13 @@ import NxlvKit
 
 /// Choices open in a scrollable game page, including when activated by keyboard.
 @MainActor final class GamePopUpButton: NSPopUpButton {
+    override func accessibilityTitle() -> String? {
+        super.accessibilityTitle().map { GamePresentationText.display($0) }
+    }
+    override func accessibilityValue() -> Any? {
+        let value = super.accessibilityValue()
+        return (value as? String).map { GamePresentationText.display($0) } ?? value
+    }
     var onShowChoices: (() -> Void)?
     override var acceptsFirstResponder: Bool { isEnabled }
     override func accessibilityPerformPress() -> Bool {

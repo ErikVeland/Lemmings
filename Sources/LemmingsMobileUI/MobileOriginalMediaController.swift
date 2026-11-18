@@ -89,7 +89,11 @@ import UIKit
         scroll.contentSize = CGSize(width: size.width, height: top + size.height + bottom)
     }
     private func rebuild() {
-        if let media {
+        if GamePresentationText.usesLemmixNames {
+            canvas.preview = nil
+            canvas.page = GameFrontEnd.Page(title: L10n.text("Original movies"),
+                details: [L10n.text("Restore assets")], footer: [.init("back", L10n.text("Back"))])
+        } else if let media {
             canvas.page = MobileSequelMenuArt.movie(media.item, paused: paused, finished: media.finished, failure: failure)
             canvas.preview = MobileBitmapRenderer.image(media.frame)
         } else {
@@ -99,6 +103,7 @@ import UIKit
         input.reset(); view.setNeedsLayout()
     }
     private func perform(_ action: String) {
+        guard action == "back" || !GamePresentationText.usesLemmixNames else { return }
         if action == "back" {
             soundtrack?.stop(); soundtrack = nil; effects.stop()
             if media != nil { media = nil; failure = nil; rebuild() }

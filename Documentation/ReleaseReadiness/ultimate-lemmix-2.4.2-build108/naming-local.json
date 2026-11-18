@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-18",
+  "edition": "ultimate-lemmix",
+  "version": "2.4.2",
+  "build": "108",
+  "kind": "Local arm64 manual candidate; no public release",
+  "app": "/Users/veland/Downloads/Ultimate Lemmix 2.4.2 build108 naming.app",
+  "executableSHA256": "e25b4182d6688fb7d45d859299a5bfc5a14fcb90f1d36df199983d34364501be",
+  "signature": "codesign --verify --deep --strict passed",
+  "sourceChanges": [
+    "Shared presentation-only naming rule and localisation adapters",
+    "Campaign names shortened; characters use Lemmix",
+    "Bitmap measurement, drawing, native menus, window titles and accessibility labels agree",
+    "Original sequel logos and story movies require restored original assets",
+    "Original-product names, identifiers, paths, filenames and links retain their spelling"
+  ],
+  "restoration": [
+    "A validated owned-resource bundle enables original names and logos",
+    "Bundled personal-preview levels do not enable original names",
+    "Removing the active resource bundle re-enables Lemmix names",
+    "Character artwork preferences do not control naming"
+  ],
+  "verified": [
+    "Home labels and original-logo replacement",
+    "Classic pack browser with full local collection",
+    "Native Tribes menu title and input labels",
+    "Native Tribes introduction shows Restore assets",
+    "Chronicles opens at the level without the original story movie",
+    "Chronicles character instructions say click a Lemmix",
+    "900x620 Home scroll exposes profile and playlist targets",
+    "Presentation renderer retains original font",
+    "Naming and original-logo state switch in both restoration directions",
+    "Product identity and publication source checks pass"
+  ],
+  "captureRoot": "/Volumes/Games/CodexBuilds/lemmix-naming-proof",
+  "captures": {
+    "unrestored": "07d768dd18053b61e5e91d996313acc8f544ada87da14a77d643517c9dae168f",
+    "restored": "404af067e9e2c7bddded7e80f805724c54880d074465b43437e754a550758d2f",
+    "home": "d7edaf211ba2c504de9fdd62e7b767b5adc273b6a0224e60ff2c05e39fc90ec0",
+    "classic": "7cba91147400f9ecd086b901e32b3bda05c833b336d26200c5621d8fa2f8478e",
+    "tribes": "14e28dc41b012943720c8f309a1de401c81a75ed56e80ecfd828fadeaa74b5b6",
+    "compact": "912e5b4a1438fa12b7358aaa55e6d05ba1eb932b224d6fee44bb46c232ac2adc",
+    "chronicles-final": "43a5f50a651c133c33c4595212f4743c0e6742a6b9221e7f00b6d257699e2cb8",
+    "tribes-intro-final": "8868c1c018ba118f01b2993be1955bae88380438be27265743311689cbfa4ccc"
+  },
+  "storage": "/Volumes/Games/CodexBuilds/lemmix-naming-proof/isolated-home",
+  "windowMode": "offscreen",
+  "audio": "muted",
+  "engineChanges": false,
+  "skipped": [
+    "Engine and broad test suites: no engine changes",
+    "Release audits, Intel build and notarisation: local test-build policy",
+    "iOS and tvOS compilation and device acceptance: source review only",
+    "Exhaustive frame review of restored original movies: source assets retain their original content"
+  ],
+  "completionFlow": "Skipped endings retain the existing completion callbacks. This path has source review only.",
+  "remainingAcceptance": [
+    "Physical Mac gameplay acceptance by owner",
+    "iPhone, iPad, Duo and Apple TV render and input acceptance"
+  ]
+}

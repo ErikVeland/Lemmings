@@ -4,6 +4,7 @@ import NxlvKit
 import LemmingsMobileCore
 import LemmingsTVCore
 import UIKit
+import LemmingsAppCore
 
 @MainActor private final class MobileMenuTextElement: UIAccessibilityElement {
     var onFocus: (() -> Void)?
@@ -415,7 +416,7 @@ import UIKit
         let headingText = showsStaticHeading ? "" : page.title
         for (text, frame) in [(headingText, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
             let element = textElement(frame.applying(transform))
-            element.accessibilityLabel = text
+            element.accessibilityLabel = GamePresentationText.display(text)
             if let items = page.achievementItems,
                let index = page.details.indices.first(where: { page.details[$0] == text }), index % 2 == 0,
                let star = items[index / 2].star {
@@ -436,7 +437,7 @@ import UIKit
         }
         for (title, frame) in layout.rowHeadings {
             let element = textElement(frame.applying(transform))
-            element.accessibilityLabel = title
+            element.accessibilityLabel = GamePresentationText.display(title)
             element.accessibilityTraits = .header
             element.accessibilityFrameInContainerSpace = frame.applying(transform)
             elements.append(element)
