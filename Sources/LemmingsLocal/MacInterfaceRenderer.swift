@@ -168,7 +168,7 @@ import NxlvKit
 
   init(interface: ClassicMacUserInterface) {
     self.interface = interface
-    menuLogo = interface.logo.flatMap { GameMenuLogo.image(for: $0) }.map {
+    menuLogo = (GameMenuLogo.productImage ?? interface.logo.flatMap { GameMenuLogo.image(for: $0) }).map {
       NSImage(cgImage: $0, size: GameMenuLogo.logicalSize(of: $0))
     }
   }

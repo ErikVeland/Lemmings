@@ -18,7 +18,7 @@ public final class GameMenuTypography {
 
     public init(interface: ClassicMacUserInterface, homeLogos: GameHomeLogoArt = .bundled) {
         self.interface = interface
-        menuLogo = interface.logo.flatMap { GameMenuLogo.image(for: $0) }
+        menuLogo = GameMenuLogo.productImage ?? interface.logo.flatMap { GameMenuLogo.image(for: $0) }
         self.homeLogos = homeLogos
     }
 

@@ -6,6 +6,14 @@ import NxlvKit
 
 /// Places the Ultimate badge across the original logo's upper-left L.
 public enum GameMenuLogo {
+    /// Product branding stays with the app when the player imports game data.
+    public static let productImage: CGImage? = {
+        guard Bundle.main.object(forInfoDictionaryKey: "UltimateLemmixStore") as? Bool == true,
+              let url = Bundle.main.resourceURL?.appendingPathComponent("MenuArtwork/ultimate-lemmix.png"),
+              let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        return CGImageSourceCreateImageAtIndex(source, 0, nil)
+    }()
+
     public static let resolutionScale: CGFloat = 2
     public enum Layer { case combined, lemmings, ultimate }
 
@@ -21,10 +29,11 @@ public enum GameMenuLogo {
     /// Centres the original mark while allowing the badge to extend left.
     public static func frame(canvasSize: CGSize, originalWidth: CGFloat, in box: CGRect,
                              topAligned: Bool = false, wholeNumberScale: Bool = true) -> CGRect {
-        let overhang = max(0, canvasSize.width - originalWidth)
+        let baseWidth = productImage == nil ? originalWidth : canvasSize.width
+        let overhang = max(0, canvasSize.width - baseWidth)
         let fit = min(box.width / (canvasSize.width + overhang), box.height / canvasSize.height)
         let scale = wholeNumberScale && fit >= 1 ? floor(fit) : fit
-        return CGRect(x: floor(box.midX - (overhang + originalWidth / 2) * scale),
+        return CGRect(x: floor(box.midX - (overhang + baseWidth / 2) * scale),
             y: topAligned ? box.minY : floor(box.midY - canvasSize.height * scale / 2),
             width: canvasSize.width * scale, height: canvasSize.height * scale)
     }

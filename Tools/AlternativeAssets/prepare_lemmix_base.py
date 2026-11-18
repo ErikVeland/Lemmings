@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import zipfile
+from prepare_open_starter import resources as starter_resources
 
 ROOT = Path(__file__).resolve().parents[2]
 PIN = ROOT / 'Resources/UltimateLemmix/alternative-resource-source.json'
@@ -60,7 +61,9 @@ def prepare(output, alternatives):
         copy_tree(ROOT / 'Resources' / name, output / name, '.json')
     subprocess.run(['python3', ROOT / 'Tools/TrolleyVerification/catalogue.py', 'bundle', output / 'Trolley'], check=True)
     subprocess.run(['python3', ROOT / 'Scripts/bundle-about.py', output / 'About'], check=True)
-    copy_tree(ROOT / 'Resources/UltimateLemmix/Starter', output / 'Ports/ultimate_lemmix_starter')
+    for name, data in starter_resources().items():
+        write(output / 'Ports/ultimate_lemmix_starter' / name, data)
+    copy_tree(ROOT / 'Resources/UltimateLemmix/MenuArtwork', output / 'MenuArtwork')
     icon = ROOT / 'Resources/AppIcon/AppIcon.png'
     write(output / 'AppIcon.png', icon.read_bytes())
     write(output / 'Licences/Project-icon-source.md', (ROOT / 'Resources/AppIcon/README.md').read_bytes())
