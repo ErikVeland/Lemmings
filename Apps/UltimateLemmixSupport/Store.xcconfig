@@ -1,5 +1,3 @@
 // Pass this file through xcodebuild -xcconfig so Swift package targets receive the same condition.
 OTHER_SWIFT_FLAGS = $(inherited) -DULTIMATE_LEMMIX_STORE
 SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) ULTIMATE_LEMMIX_STORE
-ULTIMATE_LEMMIX_RESOURCES_DIR = $(SRCROOT)/../../.build/publication-resources/ultimate-lemmix
-ULTIMATE_LEMMIX_RELEASE_CHECKS = 0

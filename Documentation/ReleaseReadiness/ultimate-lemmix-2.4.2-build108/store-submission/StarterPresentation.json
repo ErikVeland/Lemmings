@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "kind": "starter-presentation-source-verification",
+  "prepared": "2026-11-18",
+  "scope": "Mac presentation only",
+  "reproduction": {
+    "trigger": "Restore owned assets, select Original characters, then open an Open Starter level.",
+    "sourceFacts": [
+      "GameStarterContent has no MAIN.DAT sprite bank. readClassicArtwork deliberately returns assets=nil.",
+      "buildLevel installs assets=nil and a nonnil Classic scene before configureArtwork.",
+      "Previously scene and sprite drawing required global Lix enabled. With Original selected, the actor path fell through to guard let assets and returned.",
+      "The new shared local predicate forces the existing Lix rendering path when the Classic scene has no native sprite bank. The stored global artwork choice is unchanged."
+    ]
+  },
+  "verification": {
+    "exactPermittedSourceDelta": true,
+    "actorSpriteRenderingBodyUnchanged": true,
+    "spriteFootAnchorsUnchanged": true,
+    "viewportTransformUnchanged": true,
+    "selectionSpriteCaptureUnchanged": true,
+    "assignmentPulseAndTargetsUnchanged": true,
+    "noPreferenceWritesAdded": true,
+    "starterThemeUsesSamePredicate": true,
+    "engineFingerprintUnchanged": "c9abe4e0aab0410ab43923a4c9b8c5cced89f3e0792f091740b97b5be9c99d93",
+    "diffWhitespaceCheck": "passed",
+    "sourceHashes": {
+      "Sources/LemmingsLocal/PlayfieldView.swift": "5677e00f50c3f1f8006f85f22da729ea7c167f65f515929004ed839179aefb16",
+      "Sources/LemmingsLocal/main.swift": "274028ef2a346dde12162a2e8c455fe59d275c9e15fbd5126e564db170c2da79"
+    }
+  },
+  "remainingAcceptance": [
+    "The Mac Store build owns compilation of these final frontend files.",
+    "No UI, audio, test suite or native render harness ran for this change.",
+    "The source trace establishes the prior missing-sprite branch and reuse of the unchanged existing rendering/target path. Rendered manual acceptance remains open."
+  ]
+}

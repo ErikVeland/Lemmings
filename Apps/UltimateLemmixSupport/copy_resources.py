@@ -9,7 +9,7 @@ from pathlib import Path, PurePosixPath
 MANIFEST = "ultimate-lemmix-mobile-resources.json"
 RECEIPT = "ultimate-lemmix-resource-receipt.json"
 FOLDERS = {"AlternativeAssets", "Fonts", "Music", "Licences", "Provenance", "Integration",
-           "Localization.bundle", "About", "GameCenter", "Hints", "Progression", "Trolley", "Ports"}
+           "Localization.bundle", "About", "GameCenter", "Hints", "Progression", "Trolley", "Ports", "MenuArtwork"}
 WIDGET_FOLDERS = {"AlternativeAssets", "Fonts", "Licences", "Provenance"}
 
 

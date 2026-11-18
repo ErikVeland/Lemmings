@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import io
 import json
+import os
 from pathlib import Path, PurePosixPath
 import plistlib
 import shutil
@@ -181,93 +182,34 @@ def verify_sources():
 
 
 def privacy_manifest():
-    """Accept only the reviewed no-collection declarations and actual API uses."""
-    path = ROOT / 'Resources/UltimateLemmix/PrivacyInfo.xcprivacy'
-    data = path.read_bytes()
+    """Validate the source-backed collection categories and required API declarations."""
+    data = (ROOT / 'Resources/UltimateLemmix/PrivacyInfo.xcprivacy').read_bytes()
     manifest = plistlib.loads(data)
-    expected = {'NSPrivacyTracking': False, 'NSPrivacyCollectedDataTypes': [],
-        'NSPrivacyAccessedAPITypes': [
-            {'NSPrivacyAccessedAPIType': 'NSPrivacyAccessedAPICategoryFileTimestamp',
-             'NSPrivacyAccessedAPITypeReasons': ['C617.1', '3B52.1']},
-            {'NSPrivacyAccessedAPIType': 'NSPrivacyAccessedAPICategorySystemBootTime',
-             'NSPrivacyAccessedAPITypeReasons': ['35F9.1']},
-            {'NSPrivacyAccessedAPIType': 'NSPrivacyAccessedAPICategoryUserDefaults',
-             'NSPrivacyAccessedAPITypeReasons': ['CA92.1']}]}
-    if manifest != expected:
-        raise ValueError('The store privacy manifest differs from the reviewed declarations.')
+    categories = {row['NSPrivacyCollectedDataType']: row for row in manifest['NSPrivacyCollectedDataTypes']}
+    expected = {'NSPrivacyCollectedDataTypeUserID', 'NSPrivacyCollectedDataTypeDeviceID',
+                'NSPrivacyCollectedDataTypeGameplayContent', 'NSPrivacyCollectedDataTypeProductInteraction'}
+    if manifest['NSPrivacyTracking'] or set(categories) != expected:
+        raise ValueError('The Store privacy collection declarations changed. Review their source evidence.')
+    for category, row in categories.items():
+        analytics = category == 'NSPrivacyCollectedDataTypeProductInteraction'
+        purpose = 'NSPrivacyCollectedDataTypePurposeAnalytics' if analytics else 'NSPrivacyCollectedDataTypePurposeAppFunctionality'
+        if (row['NSPrivacyCollectedDataTypeTracking'] or row['NSPrivacyCollectedDataTypeLinked'] != (not analytics)
+                or row['NSPrivacyCollectedDataTypePurposes'] != [purpose]):
+            raise ValueError('The Store privacy purpose or linkage declaration changed.')
     return data
 
 
 def collect(allow_missing_integration=False):
-    """Build a fresh allowlist with no legacy artwork, samples, campaigns or remixes."""
+    """Prepare current shared features with the exact pinned alternative media inventory."""
+    from prepare_lemmix_base import prepare as prepare_base, write_data_inventory
     verify_sources()
-    graphics, art_files = prepared('lix')
-    music, music_files = prepared('music')
-    pin = json.loads((ROOT / 'Resources/AlternativeAssets/lix-source.json').read_text())
-    lock = json.loads((ROOT / 'Resources/AlternativeAssets/music-sources.json').read_text())
-    if (graphics['revision'] != pin['revision'] or graphics['licence']['spdx'] != 'CC0-1.0'
-            or music['licence'] != 'CC0-1.0' or music['sourceLockSHA256'] != sha(
-                (ROOT / 'Resources/AlternativeAssets/music-sources.json').read_bytes())
-            or music['source'] != lock['source']):
-        raise ValueError('The prepared resources do not match their approved source records.')
-    output = {}
-    font_files = prepare_lix_font.expected_files()
-    prepare_lix_font.verify(files=font_files)
-    output.update(font_files)
-    output['PrivacyInfo.xcprivacy'] = privacy_manifest()
-    for name, data in art_files.items():
-        if ((name.startswith('assets/data/images/') and name.endswith('.png'))
-                or (name.startswith('assets/images/') and name.endswith(('.png', '.txt')))
-                or name in ('sprite-metadata.json', 'licences/copying.txt')):
-            output['AlternativeAssets/Lix/' + name] = data
-    catalogue = {'schemaVersion': 1, 'tracks': []}
-    if [row['sourceTrack'] for row in music['tracks']] != lock['tracks']:
-        raise ValueError('The approved music track list changed.')
-    for row in music['tracks']:
-        track, playback = row['sourceTrack'], row['playback']
-        name = safe_name(playback['path'])
-        if not name.startswith('Music/Lix/') or not name.endswith('.mp3'):
-            raise ValueError('Only the approved Lix MP3 playback files may enter the store bundle.')
-        output[name] = read_checked(ROOT / '.build/alternative-assets/music' / name, playback)
-        relative = str(PurePosixPath(name).relative_to('Music'))
-        catalogue['tracks'].append({'id': track['id'], 'game': 'lix', 'title': track['title'],
-            'role': 'menu' if track['id'] == 'lix.menulix' else 'level', 'variants': [{
-                'id': track['id'] + '.mp3', 'path': relative, 'port': 'lix',
-                'quality': 'lossy-source', 'remix': 'original', 'confidence': 'documented',
-                'sourcePath': track['path'], 'credits': track['creator'], 'licence': 'CC0-1.0',
-                'evidence': lock['source']['licenceURL']} ]})
-    output['Music/catalogue.json'] = encoded(catalogue)
-    output['Music/libraries.json'] = encoded({'schemaVersion': 1, 'version': 'ultimate-lemmix-0.1', 'packs': []})
-    output['Licences/Lix-copying.txt'] = music_files['Licences/Lix-copying.txt']
-    output['Licences/Lix-music-credits.txt'] = music_files['Credits.txt']
-    output['Licences/THIRD_PARTY_NOTICES.md'] = (ROOT / 'THIRD_PARTY_NOTICES.md').read_bytes()
-    output['Licences/Distribution-scope.txt'] = (
-        'Ultimate Lemmix store candidate\n\n'
-        'This build includes approved CC0 Lix graphics and music, the separately\n'
-        'licensed unchanged DejaVu font, and source-code licence notices.\n'
-        'Licences/Lix-font-LICENSE.txt contains the full Bitstream and Arev notice.\n'
-        'THIRD_PARTY_NOTICES.md is the shared project notice record.\n'
-        'Its legacy asset and beta-package descriptions refer to the preservation edition.\n'
-        'They do not describe the resources bundled in this separate store build.\n'
-        'The store-resources-manifest.json file records the exact bundled resources.\n'
-        'This audit does not establish App Store approval or complete legal clearance.\n'
-    ).encode()
-    output['OpenStarter/manifest.json'] = encoded({'schemaVersion': 1,
-        'id': 'ultimate-lemmix-open-starter-v1', 'title': 'Open Starter',
-        'generatorSource': 'Sources/NxlvKit/OpenStarterContent.swift',
-        'generatorSourceSHA256': sha((ROOT / 'Sources/NxlvKit/OpenStarterContent.swift').read_bytes()),
-        'commercialGameDataIncluded': False, 'generatedAtRuntime': True,
-        'levels': [{'index': index, 'title': title} for index, title in enumerate(
-            ('First Steps', 'Float to Safety', 'Over the Rise'))]})
-    for filename in ('lix-source.json', 'music-sources.json'):
-        output['Provenance/' + filename] = (ROOT / 'Resources/AlternativeAssets' / filename).read_bytes()
-    output['Provenance/lix-preparation-manifest.json'] = encoded(graphics)
-    output['Provenance/music-preparation-manifest.json'] = encoded(music)
-    output.update(project_icon())
-    from feature_resources import collect as feature_data
-    output.update(feature_data())
-    output.update(integration_files(allow_missing_integration))
-    return output
+    with tempfile.TemporaryDirectory(prefix='lemmix-clean-resources-') as temporary:
+        output = Path(temporary) / 'Resources'
+        prepare_base(output, ROOT / '.build/approved-alternative-resources', store=True)
+        (output / 'PrivacyInfo.xcprivacy').write_bytes(privacy_manifest())
+        write_data_inventory(output)
+        return {path.relative_to(output).as_posix(): path.read_bytes()
+                for path in sorted(output.rglob('*')) if path.is_file()}
 
 
 def media_rights(files):
@@ -339,7 +281,16 @@ def verify_tree(output, files):
             raise ValueError('Links are not permitted in the store resources.')
         if path.is_file():
             actual.add(path.relative_to(output).as_posix())
-    if actual != set(files) | {MANIFEST}:
+    signatures = set()
+    resource_signature = {'Localization.bundle/_CodeSignature/' + name for name in
+                          ('CodeResources', 'CodeDirectory', 'CodeRequirements', 'CodeSignature')}
+    if actual & resource_signature:
+        if not resource_signature <= actual or 'Localization.bundle/Info.plist' not in files:
+            raise ValueError('The localization resource signature is incomplete or unexpected.')
+        subprocess.run(['codesign', '--verify', '--strict', str(output / 'Localization.bundle')],
+                       check=True, capture_output=True)
+        signatures = resource_signature
+    if actual != set(files) | {MANIFEST} | signatures:
         raise ValueError('The store resources contain extra or missing files.')
     expected = resource_manifest(files)
     if json.loads((output / MANIFEST).read_text()) != expected:
@@ -355,9 +306,10 @@ def validate_output(output):
     if output.is_symlink():
         raise ValueError('The store output must not be a link.')
     output = output.resolve()
-    if (ROOT / '.build').resolve() not in output.parents or output.parts[-2:] != ('Contents', 'Resources'):
+    build_root = Path(os.environ.get('ULTIMATE_LEMMIX_BUILD_DIR', ROOT / '.build')).resolve()
+    if build_root not in output.parents or output.parts[-2:] != ('Contents', 'Resources'):
         raise ValueError('Store resources must be inside a generated app under .build.')
-    build_name = output.relative_to((ROOT / '.build').resolve()).parts[0].lower()
+    build_name = output.relative_to(build_root).as_posix().lower()
     if build_name.startswith('ultimate-lemmix-personal-preview') or 'manual-review' in build_name:
         raise ValueError('The clean resource preparer must not write a personal-preview build.')
     if not output.parent.parent.name.endswith('.app'):

@@ -1,4 +1,4 @@
-"""Check the restored authored feature data and requested icon boundaries."""
+"""Check current Store feature data and the boundary around original assets."""
 from pathlib import Path
 import hashlib
 import sys
@@ -17,13 +17,16 @@ class RestoredFeatureResourceTests(unittest.TestCase):
                      'Hints/classic.json', 'Hints/solutions.json', 'Trolley/engine-fingerprint.txt',
                      'Trolley/verified-maxima.json', 'GameCenter/leaderboards.json'):
             self.assertIn(name, files)
-        self.assertFalse(any(name.startswith(('Ports/', 'MacArtwork/', 'Sounds/')) for name in files))
+        self.assertFalse(any(name.startswith(('MacArtwork/', 'Sounds/')) for name in files))
+        self.assertTrue(all(not name.startswith('Ports/') or name.startswith('Ports/ultimate_lemmix_starter/')
+                            for name in files))
 
-    def test_project_icon_is_preserved_with_its_separate_rights_record(self):
+    def test_store_icon_excludes_the_uncleared_personal_icon(self):
         files = store_resources.collect()
-        self.assertEqual(hashlib.sha256(files['AppIcon.png']).hexdigest(),
+        self.assertNotEqual(hashlib.sha256(files['AppIcon.png']).hexdigest(),
                          hashlib.sha256((ROOT / 'Resources/AppIcon/AppIcon.png').read_bytes()).hexdigest())
-        self.assertIn('Provenance/project-icon-source.json', files)
+        self.assertNotIn('Provenance/project-icon-source.json', files)
+        self.assertFalse(any(name.startswith('Fonts/OriginalLemmings/') for name in files))
 
     def test_embedded_game_payloads_are_rejected(self):
         for value in ({'levelData': 'payload'}, {'nested': {'terrain': []}},
@@ -31,12 +34,12 @@ class RestoredFeatureResourceTests(unittest.TestCase):
             with self.subTest(valueType=type(value).__name__), self.assertRaises(ValueError):
                 feature_resources.inspect_metadata(value)
 
-    def test_current_recovery_stamp_does_not_relabel_old_certificates(self):
-        files = feature_resources.collect()
+    def test_packaging_preserves_reviewed_certificate_and_hint_bytes(self):
+        files = store_resources.collect()
         self.assertEqual(files['Trolley/verified-maxima.json'],
                          (ROOT / 'Resources/Trolley/verified-maxima.json').read_bytes())
         self.assertEqual(files['Hints/classic.json'], (ROOT / 'Resources/Hints/classic.json').read_bytes())
-        self.assertNotEqual(files['Trolley/engine-fingerprint.txt'],
+        self.assertEqual(files['Trolley/engine-fingerprint.txt'],
                             (ROOT / 'Resources/Trolley/engine-fingerprint.txt').read_bytes())
 
 

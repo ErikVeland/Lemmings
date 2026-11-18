@@ -1,0 +1,56 @@
+{
+  "scope": "Public read-only endpoints only. No player, vault, admin or write operations.",
+  "results": [
+    {
+      "service": "telemetry-public-total",
+      "method": "GET",
+      "url": "https://glasscode.academy/lemmings-api/v1/saved",
+      "checkedAtUTC": "2026-11-18T12:42:09.485146+00:00",
+      "credentialsSent": false,
+      "status": 200,
+      "finalURL": "https://glasscode.academy/lemmings-api/v1/saved",
+      "responseHeaders": {
+        "Date": "Wed, 18 Nov 2026 12:42:09 GMT",
+        "Content-Type": "application/json",
+        "Server": "cloudflare",
+        "Cache-Control": "no-store",
+        "x-content-type-options": "nosniff"
+      },
+      "responseBody": "{\"saved\":128848}"
+    },
+    {
+      "service": "cloud-health",
+      "method": "GET",
+      "url": "https://glasscode.academy/lemmings-api/cloud/v1/health",
+      "checkedAtUTC": "2026-11-18T12:42:09.651637+00:00",
+      "credentialsSent": false,
+      "status": 200,
+      "finalURL": "https://glasscode.academy/lemmings-api/cloud/v1/health",
+      "responseHeaders": {
+        "Date": "Wed, 18 Nov 2026 12:42:09 GMT",
+        "Content-Type": "application/json",
+        "Server": "cloudflare",
+        "Cache-Control": "no-store",
+        "x-content-type-options": "nosniff"
+      },
+      "responseBody": "{\"version\":2,\"status\":\"ok\"}"
+    },
+    {
+      "service": "rankings-health",
+      "method": "GET",
+      "url": "https://glasscode.academy/lemmings-api/rankings/v1/health",
+      "checkedAtUTC": "2026-11-18T12:42:09.705952+00:00",
+      "credentialsSent": false,
+      "status": 200,
+      "finalURL": "https://glasscode.academy/lemmings-api/rankings/v1/health",
+      "responseHeaders": {
+        "Date": "Wed, 18 Nov 2026 12:42:09 GMT",
+        "Content-Type": "application/json",
+        "Server": "cloudflare",
+        "Cache-Control": "no-store",
+        "x-content-type-options": "nosniff"
+      },
+      "responseBody": "{\"status\":\"ok\",\"version\":1}"
+    }
+  ]
+}

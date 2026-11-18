@@ -1,0 +1,2693 @@
+{
+  "schemaVersion": 1,
+  "edition": "ultimate-lemmix",
+  "platform": "ios",
+  "version": "2.4.2",
+  "build": 108,
+  "command": [
+    "xcodebuild",
+    "-project",
+    "/Users/veland/UltimateLemmix/Apps/UltimateLemmixIOS/UltimateLemmixIOS.xcodeproj",
+    "-scheme",
+    "UltimateLemmixIOS",
+    "-xcconfig",
+    "/Users/veland/UltimateLemmix/Apps/UltimateLemmixSupport/Store.xcconfig",
+    "-configuration",
+    "Release",
+    "-destination",
+    "generic/platform=iOS",
+    "-jobs",
+    "3",
+    "-derivedDataPath",
+    "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/ios-derived",
+    "-archivePath",
+    "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/UltimateLemmix-iOS.xcarchive",
+    "-allowProvisioningUpdates",
+    "DEVELOPMENT_TEAM=54WU29TRTY",
+    "ULTIMATE_LEMMIX_RESOURCES_DIR=/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mobile-resources-submission",
+    "ULTIMATE_LEMMIX_RELEASE_CHECKS=1",
+    "REGISTER_APP_GROUPS=YES",
+    "archive",
+    "MARKETING_VERSION=2.4.2",
+    "CURRENT_PROJECT_VERSION=108"
+  ],
+  "environment": {
+    "DEVELOPER_DIR": "/Applications/Xcode.app/Contents/Developer",
+    "LEMMINGS_PUBLICATION_EDITION": "ultimate-lemmix",
+    "LEMMINGS_PUBLICATION_VERSION": "2.4.2",
+    "LEMMINGS_PUBLICATION_BUILD": "108",
+    "ULTIMATE_LEMMIX_STORE": "1"
+  },
+  "sourceCommit": "7dd5340b9cec5bbb945c2f1da05e098d71cf35f5",
+  "sourceBefore": {
+    "sourceFingerprint": "73f26655040bdca8160cb5f2a9ac7c0f958073263defea565702346152866ac7",
+    "sources": [
+      {
+        "path": "Apps/SharedAppleMobile/AppDelegate.swift",
+        "sha256": "bec367e7d4b3ce989587f5ee0d55d12b6cde6433be4910977e0b1d2f0bda290b"
+      },
+      {
+        "path": "Apps/SharedAppleMobile/LaunchURL.swift",
+        "sha256": "05c16ba67d4df6f5b12e79b988db34e95b7342cc51856407ff40ce13bc9e07d6"
+      },
+      {
+        "path": "Apps/SharedAppleMobile/StoreBuildGuard.swift",
+        "sha256": "31d4811dfb5ab2981820e3b3b1228f8bc23490555556240b8f0a7f59551a1888"
+      },
+      {
+        "path": "Apps/SharedAppleMobile/TopShelf/ContentProvider.swift",
+        "sha256": "f9a1c0d11fcbc1579b674afa80cc8b9fb8f061e7c1615c8dbaf58c4129e22fa9"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/AppStorage.swift",
+        "sha256": "d518f93cddad408a64828477a4a24211e143cbdb5aa5ab19fb3b21bb034da56b"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift",
+        "sha256": "59a77a16f54f55a03911834d9ae868942998c396a50338d33b6684a95d154ed0"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Collections/JourneyCompletionSummary.swift",
+        "sha256": "1b7bbebdd307e39a74a00976988f962d222d4f2a9e64e0615bd2037cf9c7ad2f"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Collections/JourneySourceCompletion.swift",
+        "sha256": "adbe71aefb2fde5748309cf1cb4d919d876ddaf69c72f635077f470da101241e"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Collections/LearningJourneyLibrary.swift",
+        "sha256": "1cbb3e60760b78d40f3ddb19219ad8886065e397739000241261f53132890f75"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Collections/LevelPlaylistStore.swift",
+        "sha256": "47fdcef911a116eb998e863cb0422620cf1164710c557acb3ab72af1812b9a46"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Collections/RecordLevelNavigation.swift",
+        "sha256": "924db0be30ea34d88307514cae527568c21dce6e8201c6113cd16fdc3b5ebd2f"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Collections/ShortPlayCatalogue.swift",
+        "sha256": "594ab8fe097a6799be32515d9808188bb8e2ce17645f1ada54029a7bf0b9fa4b"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Hints/ClassicRouteRecorder.swift",
+        "sha256": "f11be4f30e0a1064974a1ccebb9a5cbc213c74f888ee2ef91247035a588b2065"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Hints/DifficultyLibrary.swift",
+        "sha256": "44c54ad506da57d8a54ef8bcc967affdd7b9011ebbc47c117729b2f345f8d561"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Hints/LevelHints.swift",
+        "sha256": "5d25e12aba5e580a67f16fa284fb48c43184ad86879c1d4acd4d2a05719aa366"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Import/BYOIntegration.swift",
+        "sha256": "88db43fdfa4c9d97452a597a86f93686ba4d84070ad5d5f17cd3496801bf45ec"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Import/ClassicSourceIdentity.swift",
+        "sha256": "a87ed09d93a4a2f51460bc4c5590beb30627f8b2416346cd626eb78441eacd2a"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Import/NativeCursorRecovery.swift",
+        "sha256": "b8ec7c30528e5c81f162ae3642d9a1db32c3a48b995d52d341c2b844ef868e09"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Import/OwnedContentIdentity.swift",
+        "sha256": "b760d430840ce90ae6f3e02dd23b4bfe18d73000c2c8626e3d5510679b57e36a"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Import/OwnedGameLibrary.swift",
+        "sha256": "40e93401d57655406967b5b6611ba0a83f18d3524d5d5a774ae49902b3207a47"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Import/OwnedResourceLibrary.swift",
+        "sha256": "e52e9fe70e3a2f4443db5cd367a4db3722cc27908719a42db69c6170d18f58a2"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Input/ControllerStepFeedback.swift",
+        "sha256": "d13ce259fc77256ab946ac83a4c724ef735a654363aa05e6c398e7ada40deed6"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Input/GameplayCommands.swift",
+        "sha256": "ea4bd28563a23499a76e7fad2ff4221a136dff3a82269eb4bf29dbe7ef206760"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Privacy/AnonymousTelemetry.swift",
+        "sha256": "57252e00cf2e914d48aad999ea2cd3a96fc7ca2665189d316e698685f38f7715"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Profiles/ArcadeRecordFile.swift",
+        "sha256": "421ba7e0a66efd0f29e28c904021379a1c310408e9f79770259a23e09a2da624"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Profiles/ArcadeStore.swift",
+        "sha256": "947340e25ce056c8599508de032f201112b17291437dcca88d31d4c7a60578b2"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Profiles/LegacySaveMigration.swift",
+        "sha256": "a020cc86ff58e4b66b4fd6c61d1e27e14492d32358eeb7dd27764d8f0538fa94"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/AppleGameProgressTransport.swift",
+        "sha256": "c9d96725c835c71a6875696f1a495853c7ecf0a18cf82e32c28f5ace937b6637"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/BackgroundKeychain.swift",
+        "sha256": "3bd63b61f0dd7a15fea0831ad2c5b16f5622637409e7b6402a558851ad30b299"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/CloudKitLibraryStore.swift",
+        "sha256": "b941d2a83495613f6eeace57e84a2a3aa40dc7e274b0fdba1256c0ebd370a64e"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/CloudLibraryArchive.swift",
+        "sha256": "e6776ec1db2129810f55aa7203f1a420c8e4ee70389c10c675c649a234f9d254"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift",
+        "sha256": "d98a5fda5852a709ffbc79c5fa25569c8681067792ccfd5019c54decf81ea56d"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/CloudLibraryTransport.swift",
+        "sha256": "3fc9b99223730cc57bbdd91e6450b3327b653112463e5551bc5891d904898d3b"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/FamiliarNamesStore.swift",
+        "sha256": "669979006086f9d347e4ef4087bbd909b74183e26f2cb000c55bc705f0b36513"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/GameCenterProgressSync.swift",
+        "sha256": "4f465cfddcbcd91ce73fc115049faa8545c72688970b0a9b2e3331fc1e0dcf38"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/GameCenterScores.swift",
+        "sha256": "212db4c5ead3ba58fab91467243ffb6880017249e740675c476054d798011c79"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/GameProgressPreferences.swift",
+        "sha256": "2389c28b1eee24211237fbc2a02d2ce6384a1947924ed7ff4ebd05aff9d06e38"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/HostedRankings.swift",
+        "sha256": "e2c003811c9232bbfa16aced4e7cedf14260f80e16fc87b49c0610e33a5e1808"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/HotSeatGhost.swift",
+        "sha256": "5e42619b4fdab589b9ec2985626a057d754cbca02a9fb931a8a38354bb8832b2"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/LeaderboardActionReplay.swift",
+        "sha256": "6d8804d931b19b5237b25149808e98b5b611584a222b29eac8e5fce94db67024"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/LeaderboardClassicReplay.swift",
+        "sha256": "4b4921be7ffb37a92f1c7add0119c1242f0abeb60176d1a25bfe1a19fa84ccbb"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift",
+        "sha256": "8ccedf9d11d1e0740b3df16638a20a63366c0a6c0dbee25d8f8ee881cb95d0ec"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/LemmingInspection.swift",
+        "sha256": "a54c84a4044225be65cdaeacce1fbb39fa2d9af3de01716973e30b2c67bc3913"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/ReplayMovie.swift",
+        "sha256": "18733c9a7c09b31ff78e4fba30a0a7a6c3487ff5b461bec4f793c13fcfef1348"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/ResultAwards.swift",
+        "sha256": "cf9e79fe8cce70d009e5a891ecd0e27547d85de0503bf8994e0e15678e5c51e4"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/TrolleyBundledProofs.swift",
+        "sha256": "809742e0528cbaf8f8436942e06ee9d9bef2017da520b426719432c791d36893"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/TrolleyCapture.swift",
+        "sha256": "6f9a0d2ba1a6fe0323c7395194e3030cc4383df62929ea8a45c6c67394f1be7f"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Records/VerifiedSolution.swift",
+        "sha256": "996ba4af0ba51e01674768da52232c061f68921a6479f69206c80c0da60123b5"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Recovery/RunRecovery.swift",
+        "sha256": "31d8e50a0341119606a447f4309770002de2d3e2d23e7430d070d205a5baf4f5"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Resources/GameDeskClockResources.swift",
+        "sha256": "ead5e7bdfb19f3f46611acbdad2dc3e11eb7fb1aa57aafc699d8a8744e9d07e9"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Resources/GamePresentationText.swift",
+        "sha256": "ce1cb822405174dc2b475346d65babb5324738ca160f64c9e735d27b7e66ceaf"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Resources/GameResources.swift",
+        "sha256": "ac24919467b0356cdbd4c29d57b4f2078a5156a4a244daa3c543576092fde7f0"
+      },
+      {
+        "path": "Sources/LemmingsAppCore/Resources/GameStarterContent.swift",
+        "sha256": "4684ba72fa596a231b54e473a6e987509471e429e3fd1f1e0136d1d3be631c80"
+      },
+      {
+        "path": "Sources/LemmingsAudio/AdaptiveDJPlayer.swift",
+        "sha256": "6fce78271dcac47606d9aa1cd4920dbbca86f67e9706aae9a0a602c2b951999f"
+      },
+      {
+        "path": "Sources/LemmingsAudio/AudioPlaybackQueue.swift",
+        "sha256": "84943a7d30ecd3ef2a9a0744db325ae92cdd55583688c7cba0d4cbf594258ac3"
+      },
+      {
+        "path": "Sources/LemmingsAudio/BufferedAudioSource.swift",
+        "sha256": "acfafee5c35f4e834961825f87ccc17338f758e7c6daba274e4e4e79c2cc5dc4"
+      },
+      {
+        "path": "Sources/LemmingsAudio/FailureMusic.swift",
+        "sha256": "17ed949a2ca9e063ef984194bb7e95b509f5e5ebfc12f6a8a8e3c540e8e58d6c"
+      },
+      {
+        "path": "Sources/LemmingsAudio/LegacyDJCrossfade.swift",
+        "sha256": "10ded93834abf33b3048ab8ff7b76cc9be9a61cc6caf8efa2949b161d0be2951"
+      },
+      {
+        "path": "Sources/LemmingsAudio/LixSoundtrack.swift",
+        "sha256": "f62eebe6bf77ab6e803028da6381da0b417ead26bdc3f7f8b9aef3e1b3388151"
+      },
+      {
+        "path": "Sources/LemmingsAudio/LixSoundtrackPlayer.swift",
+        "sha256": "0698ab50e9ba091674f3bf422e3f9a925d273324aefea22b4cfb721eaf059325"
+      },
+      {
+        "path": "Sources/LemmingsAudio/ModuleMusicPlayer.swift",
+        "sha256": "b62f6805ec6c6ef3ea050ec53380fafcc06a328ddb16b9d1d7813c73cdf80de1"
+      },
+      {
+        "path": "Sources/LemmingsAudio/MusicFileDeck.swift",
+        "sha256": "2af86cb41928e5b2421e310f8d50b7f9ba1a6de76d3e76b382ae26113ae48424"
+      },
+      {
+        "path": "Sources/LemmingsAudio/MusicLibrary.swift",
+        "sha256": "80edeceaeaa43bd5f1c3d3b228f90f3b0888a77180dfbbcc7665aa7004e15b19"
+      },
+      {
+        "path": "Sources/LemmingsAudio/MusicRewindBuffer.swift",
+        "sha256": "8effc1d8a5c061c2e0b762926b46f2340ee0377d16d195dd00a02bdd91d864fc"
+      },
+      {
+        "path": "Sources/LemmingsAudio/ResultChimeSamples.swift",
+        "sha256": "27883a85bd8c329f7c9198a0c32ae278d4e8db505cd588386128445e4d5eb8fa"
+      },
+      {
+        "path": "Sources/LemmingsAudio/SoundEffectPlayer.swift",
+        "sha256": "8b10a8d3e4d26ce2d95bae5fbdc8e4842d2d8e169efe2287b307ae43b4041087"
+      },
+      {
+        "path": "Sources/LemmingsAudio/SoundtrackPlayer.swift",
+        "sha256": "e36efaf5909d2645fbeabbfa2ebc4841fa19015e07c81585b826f8a4d9d325e7"
+      },
+      {
+        "path": "Sources/LemmingsAudio/VinylRamp.swift",
+        "sha256": "c3cd714ec01bf2d128a298d41adc0c0f3ac49708ffe28b853dc637509fab95d6"
+      },
+      {
+        "path": "Sources/LemmingsDataTool/main.swift",
+        "sha256": "979de2bb2a15478956c978325994418088ee660879d685bd0445c64734338979"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/AdaptiveFXPerformance.swift",
+        "sha256": "f0c1be5fca66653de6cf7e7b6caf98d0d16727a3890eeb453f025041c3f540e9"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/AdaptiveFXQuality.swift",
+        "sha256": "80a3c4a0996ede3b22791ff0dad1700718a2a3e86f9c20658378e009424b55cf"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/BombCountdownRenderer.swift",
+        "sha256": "8ee89019781026ff4e026b03d114cc3890c58bd7afc54877b709a40a41b004f1"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/CRTSettings.swift",
+        "sha256": "aabcd59c7679f2b2f7c3c730a076aaccb31d9955b8cc10e804d9aee397e5408e"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/CRTShaders.swift",
+        "sha256": "b422785b024ad2e1b63e3516e261e3252a97a80ac3eadef952d662927843cc0f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/ClassicLixSceneFrame.swift",
+        "sha256": "b412b7f58520ca50c98a696769019f8017474cc94f0c928dbdceb77b14eb289b"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/CloudSyncArt.swift",
+        "sha256": "c5d62f1189f6be395b5e11b3f9b17a47f3851b8593ee1b72dfd2aba670de1f1e"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/ExplosionGlow.swift",
+        "sha256": "938eec4e52645165cb869eb4f58c4fd5756c15b1353656baf90e2e8d89fd5e7f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/FailureMoodArt.swift",
+        "sha256": "5410929f56f14c848343a70725f17f51c5970e18c3d0f7e01b99907cc17e16f1"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/FamiliarNamesArt.swift",
+        "sha256": "524cd07fa4139f7a3a6a2ac35db2b5bd4e6ae6f6a3bb73b4b8ac73a85bf94ba8"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/FanLevelLibraryArt.swift",
+        "sha256": "96a7e76615ee13196dd694a775a4e13e9d35c70d6fd8ef7f41a75f687a9e150f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameArtworkResources.swift",
+        "sha256": "b654d6d1149aeb5653e7940d04bc565a5f1fd6cf404bed84e07d0c574799489f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameArtworkStoreBuild.swift",
+        "sha256": "01cb64d6d8ed160090193d831965c184ff8eedf090ee2074d3470f6d9f74e001"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameControlGroupArt.swift",
+        "sha256": "5df485638561d8e1a7099133e9969bb318889b9e55a52af90f80e45cc122509c"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameDeskClockArt.swift",
+        "sha256": "0b62e6ab2c68df2e92627f1a1bc6873ad1f355a2825f75df96e18b4f51c4fbad"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameDisplayArt.swift",
+        "sha256": "c83d7caab92a5d987d6b5356f0a52fadbb47ce2ad239304d5ba6272ef094852b"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameFooterGrid.swift",
+        "sha256": "b584b438a65bcfc96389a2d3b4d66ee3384a6f10e4b120cd828324d3c7368e19"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameFrontEnd.swift",
+        "sha256": "20bb1b2306f5259a4cf638db19f0bcd015bdecbb566607e86fd23e96ac4db8d4"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameHomeBackdropArt.swift",
+        "sha256": "41f03d11ae4f48cbd09370976e62cf757f16bb5938d227675c4128ef3de16e03"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameHomeLogoArt.swift",
+        "sha256": "83eb8633ae297d88b7f5039df7cee28c1ed4bfb94be9c0aac01fe287af8acde2"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameLemmingsCountdownFace.swift",
+        "sha256": "d32e7e03b48ea1fda5407602a346be300b76b7888e09393c584c99f30c38973f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameLemmingsDisplayFace.swift",
+        "sha256": "1a97e3769d5af72eeeb0f61a477eec3b6a7d0c9ae1f0ce35dc367945881d1717"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameLemmingsTypography.swift",
+        "sha256": "84034fe117499e0c31f0206ecea557c36d090fcce2aad21ce029e4d33e8b0500"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameListGrid.swift",
+        "sha256": "9539df210bc4e0643da2c021846ad8740f0eb5c348cdfe4cc0df626910ea19af"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameListToolsArt.swift",
+        "sha256": "7d67c0fe2dcec9fc5f3b7415960ef19bfb00b5dcb73b399668e9834b4cab202a"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameLixInterfaceArt.swift",
+        "sha256": "3d91ced6222260fe80119fc3bb43208a6dd80c83c51a1c12f8ec0ccaa6f08adc"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameLocalisation.swift",
+        "sha256": "1b7c7165e2f05ae04e38d260b68c765f6d9d9c31c08fc7a28a7a4fca4fd6af11"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameMenuBackdropArt.swift",
+        "sha256": "50ffa97ddab005d5c2dd9a267f93d0a64affa8eb73fecbe6c2e282298b81f229"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameMenuFrameArt.swift",
+        "sha256": "5aad35baacfe741485921b2f6b37f71a996e56416e75a43382a8088b1f3f0a63"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameMenuLogo.swift",
+        "sha256": "827af881d5c70dd85c1849f207555888a1e22c301d1a18dde96eb546bfd56514"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameMenuTypography.swift",
+        "sha256": "1eafd68bf74ee332477a53f7ecaeff87cbf1eb60e3f4e4c4bd67d14ba4faa5e7"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameMinimapArt.swift",
+        "sha256": "a069d9b4de7c63560f55492c855fe547e2e41e74ea904473f4a2bb034fd111c1"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameNavigationArt.swift",
+        "sha256": "11bc58e74db983c32f8f6b4f926cb7557cf049071398438c9e6ec004ff565b52"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GamePixelTypography.swift",
+        "sha256": "90a09bba7969661bbf8a6824369701f0ef833fc67aabc445bd8e5fffd568315c"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GamePlayButtonArt.swift",
+        "sha256": "3230099d3a72d72892a8463ec8f6c7169897b6fcfd3815b306f6dc902d50c162"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GamePortraitArt.swift",
+        "sha256": "6d9b95a9a1da33279760129eb170e9c354d81cd4733def1c503dd2cbe11ecd0c"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameRecoveryArt.swift",
+        "sha256": "ada5ec5ab2466eafb29122197c0607965d323e6a00e7b3572761b582841bc78e"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameReleaseCopy.swift",
+        "sha256": "25d03bbefe600577e5b454ff8dc3169af4c28555254da55230cd22f84dfaebd7"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameSemanticText.swift",
+        "sha256": "17c0279ef9f7e11f0d4cba5e967bc0a31ee2c797fb35efe0d892fa8e0034eb56"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameStarArt.swift",
+        "sha256": "e56cd715dbc6c4fb6df7b28c0054717a6fff5cc70b933c774861fde4f9a93b0c"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameStartupArt.swift",
+        "sha256": "59380f02aa9765d59e9c9ebe6907aa9ccdcb495c256765a00c1d4bd619e7f608"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameStoneArt.swift",
+        "sha256": "4172bb93e90c285d7a2ab269d9d524104b297be71c741cd6c1d1988cff1a2978"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameSupport.swift",
+        "sha256": "f757608fe53339aae5d24bdb88cc660e4ed68a299dd7b730999f071e05328c1b"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameTextLayout.swift",
+        "sha256": "104e7bb831a873f265d989e0870ef3e2bbdf7097d2fde12926b1bb8b010e2040"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameUnfoldArt.swift",
+        "sha256": "3a9878efb701bc4b842418db449c811c9c7a4d4f7a89fe9a5d90e23382b8cf60"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GameplayHDR.swift",
+        "sha256": "6236571098c3f25c87aae3bde529e1e7ab74557ea3e3b412b906b2d793e4c43c"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/GhostSolutionArt.swift",
+        "sha256": "a77cb0629e2d2e4297fbb0b1e10bfe537100a14a83cbdd96f3e19533ae13ae27"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/LemmingInspectionArt.swift",
+        "sha256": "b3cc36a939aee983b1354fb69e0c018a7116b0c2e931add2959bfbbab7138e94"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/LemmingInspectionHoverArt.swift",
+        "sha256": "fd0b6054827c510be350e9146e5823dd4d832b0dee55705e044b2d5d570dd434"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/LemmingSelectionRenderer.swift",
+        "sha256": "35efdd06300578bc20b1ec58d370ddc362d3bb3dd6f67825bb6a92ed33e9e269"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/Lemmings3PanelArt.swift",
+        "sha256": "2ef76b27f952bcca6da00cb7c56f484cd3aaa4794360ce578fdec7c30ad3b9f8"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/LevelBrowserGeometry.swift",
+        "sha256": "83e9bb92494e7f1a1306fcebc1c2c69f893d6c6261b477a5dc4ce62117c3d1ed"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/LevelCoverArt.swift",
+        "sha256": "935e7f7ce3d0d545b44567dda464a33507e526a2f4a01b0de14d50addc533eb0"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/LixArtwork.swift",
+        "sha256": "d933b0d52c131066feb12fc758650bc0738205104f36d0ab305f0b8110a5cfaf"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/LixInterfaceArtwork.swift",
+        "sha256": "0990367d6cb6768aaf46180c07d1fcbb32019326a00e3cedf548427800cdab6d"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/LixInterfaceText.swift",
+        "sha256": "8786a725799e7b3bd88f158e8db753590b14eb64df0d6b9776bb096cbbe74c0f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/LixSceneArtwork.swift",
+        "sha256": "ad866792d676b6393fa82e84cee67bb30c230397dfb8ec93d462f81783e3a20f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileBookHomeArt.swift",
+        "sha256": "3282d5d43882aa3a955ae2b70bbe2620b12aa8b155bba27a1cd32f3feca48899"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileCareerArt.swift",
+        "sha256": "95524d67e002cfb145414f2b86667ca104c6aa1c19d38e64494b1b5cc8d3e037"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileExtraSkillArt.swift",
+        "sha256": "fcc92221d158c890172295edfe191094ea7690d3bd50addb00d66e191218f643"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileHUDRenderer.swift",
+        "sha256": "7527c11447eac17d02dfc9a6d1744669d68ef4179cb2608f44a0eb26372bcee8"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileHomeArt.swift",
+        "sha256": "e3bd2397be6ada35c9286d452b35c7030128697900f6b41e6a72eeae978de6c3"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileInformationArt.swift",
+        "sha256": "c7dd5e3e907507b703718b264cdd88d2365c4378e09228c143bc4c33ce382c91"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileLixArtwork.swift",
+        "sha256": "e57a33ed46b6a6eda0127439755585365a3bcf6b9851ec6f00b67cac9dc8c2ff"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobilePauseArt.swift",
+        "sha256": "c68e0fffc2c108cc981bf69ff201666255486c4a9508f66383ebb025a9a00a01"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileReplaySkillArt.swift",
+        "sha256": "702bf6d3e5bbc73b22dec50a8225f739a9cf13299ef442edae4d2f1708e6769a"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileReplayTitleArt.swift",
+        "sha256": "79d4fc9d4518415eb8ef70f81499663cc48ed08ddaf14b51943fc3e03fe7d7d6"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileRescueArt.swift",
+        "sha256": "f05340c0a5c887436ed73b8c63cf74bd17b835f57cdbd63655d7f5bfd6f18ae8"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileResultAchievementsArt.swift",
+        "sha256": "96863de6c9a6005bf7f1efc90d90d3721a87a91bfbae4719665594d93990d0a7"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileSettingsArt.swift",
+        "sha256": "8f33e74c8f965d9ea4aa0b53c32fe1557555c07830fb7b59d13e41f9c54ceb61"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileSettingsTabsArt.swift",
+        "sha256": "273d133d574694d9092ecf3715a1c0c4b66adfd184159a33151bb89b39e91b9f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift",
+        "sha256": "4902b3de163a04e7738a15e618bca73c18d6f59147e7e6ce55028bc2f622f84f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MobileTurnArt.swift",
+        "sha256": "7451112932df5b238827f62a8ee097ca134be69fdf4313a4ac45ed940d193282"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/MusicTitleCard.swift",
+        "sha256": "ac0f39b09716c120e73f5bf386c5c5e66b01aa1745176b0fa73692bd062573d9"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/OwnedClassicPanelArt.swift",
+        "sha256": "516eecd0609c2e7d906ddeba52ca4e8df8d4160a144d1402d788bb98c1a3fdcc"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/PanelGlyphArt.swift",
+        "sha256": "cf9b2dd4702f1cfd675bd256eafdb441cfff1e7cf3c966a1481ce8d39691d02c"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/ReplayMoveArt.swift",
+        "sha256": "48b06a33ef5abdbc1d283184bcea435daf772963b51335751bbc6c7a77cc3161"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/RescueBackgroundGlow.swift",
+        "sha256": "4f42bf8b854476a909b68f4d09d2f1eff59de1d855d8f77f3144b712284962b7"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/SelectionFade.swift",
+        "sha256": "0b739b0c805b72f13b0679f443d5e9717ab9d0e86b8aae2aef19eb4341e7efa8"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/ShortGamesArt.swift",
+        "sha256": "3d542d0e731b920260f1cf00f3bea91a2817808f07ee3669562b84b33b06ca88"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/SkillArtworkAlignment.swift",
+        "sha256": "818339ea012aa451f9df380e4664b7467ee3bab7073cc73ca68cd3a7813c948c"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/SkillPointerBadge.swift",
+        "sha256": "480f178049b6f7d5974434c279bf065f02647762554fe18dbd2c093b3d3196ef"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/SolutionSwitchArt.swift",
+        "sha256": "b7060a5c7d6c6dee38241e73206408457fc98ddd83a7f535bdf84109dc2afc9f"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/SpeedPanelArt.swift",
+        "sha256": "1bb07c6a338a8a658b4810928cbf7999f5e8114a390f2648c2935e539e38af69"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/SpriteAssignmentPulse.swift",
+        "sha256": "d82796bb3f8002bf6930b66a8edfc76faa49788af57803a033fc35eee551fd23"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/TVMenuArt.swift",
+        "sha256": "72f01641c19928fef90c319b75588fc602409bbaed091c3d936fe77f58b4b36c"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/TVMenuPresentation.swift",
+        "sha256": "37ebff6a55a5b82b9630dfd89fb752a2f2c925926aa248a190a497fe232f84a8"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/TVPlayfieldArt.swift",
+        "sha256": "cc3e2f0d974d50fc2087c5c1ea41887d26d8ef4ae22478b1e5778310d96cadd5"
+      },
+      {
+        "path": "Sources/LemmingsGameArt/TVSharedMenuArt.swift",
+        "sha256": "e8c4aa38a5adc0c6307bea3f0819a23678776fed6af2d8219ba8c544ef79d2e4"
+      },
+      {
+        "path": "Sources/LemmingsLocal/AboutWindow.swift",
+        "sha256": "df805304fe9959ef8307d10ebf189cc90997c39de3ac21799237ff5b5045be40"
+      },
+      {
+        "path": "Sources/LemmingsLocal/AchievementsWindow.swift",
+        "sha256": "55d2c4ea6892b1f210c03cb7020a2a2ef6efdb01c44b5ba398480f06010a14c2"
+      },
+      {
+        "path": "Sources/LemmingsLocal/AffinityPopoverView.swift",
+        "sha256": "6792c59d87e4dea12f004c217e008aa8c52d2b597899c5ff91f742f0911ecaaf"
+      },
+      {
+        "path": "Sources/LemmingsLocal/AppDistribution.swift",
+        "sha256": "2de8aef18c64397a37d62c6efcd68f58cf9114bc23db63fd69b3bd80ae01c6f5"
+      },
+      {
+        "path": "Sources/LemmingsLocal/AppUpdates.swift",
+        "sha256": "43311a6b4279c5002a7dd154e331bff6774b36c539b03e62639e7bb24c19faa0"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ArcadeStore+Mac.swift",
+        "sha256": "f2d507c0ad2db4d2b160b62af724573ae77c3d8989005d98a9ce28f8befa5784"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ArcadeWindow.swift",
+        "sha256": "4b0e1eb5bc0b0e75f3c24fb28d5ca6bb6e1025260323b22c731f08cd2bd084da"
+      },
+      {
+        "path": "Sources/LemmingsLocal/CRTShaders.swift",
+        "sha256": "1ca9e6aa5b6e58a6c2536f61c7a5d6b92d063b8d325602a2ab1c7316b7974bf6"
+      },
+      {
+        "path": "Sources/LemmingsLocal/CRTView.swift",
+        "sha256": "313ac2a8e8f4d8072487aad2d1ad2cd53960b2229cebc576604ec42fca1d4407"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ClassicRouteRecorder+Session.swift",
+        "sha256": "5a94d67c1b82ae6956c06050a9679cc7dae19569bec29000ddf9a50d8cdeb0e2"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ClassicSkillBackpack.swift",
+        "sha256": "cdd09ff986c906c4b9d6754a8e2f20cf9fdd76776e86eb47f3a3d8e4c2a5aadd"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ClassicSourceIdentity.swift",
+        "sha256": "7de678285b4cbcae6491943a346bf705ef5bb4b28fc268e07b7d08af8d40f63c"
+      },
+      {
+        "path": "Sources/LemmingsLocal/CloudLibraryView.swift",
+        "sha256": "599e7207923b15621ec293807025afa546453f446c71fb289aeba673a2e69548"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ControllerDevicePresentation.swift",
+        "sha256": "3b37b5db6afd378276deeb38490c1977c129169b654f663e7e9188861f105668"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ControllerMenuNavigator.swift",
+        "sha256": "0237c7f6b8117e6c176afee687a137ee352a0b8530b9076d367e6f4a337cd7b8"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ControllerPointer.swift",
+        "sha256": "014c9c5052c6055b66c3030cc9740d9127a21656ab7e34b0f7bf338be77b9d27"
+      },
+      {
+        "path": "Sources/LemmingsLocal/DialogKeyboardNavigation.swift",
+        "sha256": "17ac6161729848d28389ee1dc628dd1011d409b0233897878acf09a71f0f23a2"
+      },
+      {
+        "path": "Sources/LemmingsLocal/EffectsWelcome.swift",
+        "sha256": "9a264599bf08a0a8cfe37ee445e59f5c8207adf8e9a5113c2502348c9481ce1a"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ExplosionHDR.swift",
+        "sha256": "a578d264bc5a20388ab79dae448ae3866a95f0ab262107d20ce0463af290f38c"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ExtraSkillMac.swift",
+        "sha256": "7b7dd87fac31935f373e657b6bbe468da6e9d0c0b1ec9db6a166cf4eb0e9980b"
+      },
+      {
+        "path": "Sources/LemmingsLocal/FailureMood.swift",
+        "sha256": "c931a63ce08e83bdefe6c0a2af0a6011cfd1c54a9440a954138ef246e24c2fba"
+      },
+      {
+        "path": "Sources/LemmingsLocal/FamiliarNamesPage.swift",
+        "sha256": "c5f9d6a63c670eff1960d30fbcc5d01a355fa95bdc18a5ae0d7f34700fd9628e"
+      },
+      {
+        "path": "Sources/LemmingsLocal/FanLevelGroupPage.swift",
+        "sha256": "7291431ba15bef47d0afc0de45d9e4b511c8dee25f3d9552544be6e2fdd6ea95"
+      },
+      {
+        "path": "Sources/LemmingsLocal/FanLevelLibrary.swift",
+        "sha256": "69832ecadbf434536be03388910741aa564e9e53ffc9f984ea238a8de5cf8284"
+      },
+      {
+        "path": "Sources/LemmingsLocal/FanLevelUpdates.swift",
+        "sha256": "4885091829504e0665553389e783b3aa9334aa529f7be43aeff6470e4c4edd22"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameAssetCache.swift",
+        "sha256": "12da418a57f072f1777efc78fdbf155836700ed7c3e3b3c4c7b48d53af227871"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameCenterScores.swift",
+        "sha256": "626bdbd99ed731222713b46f95d874ed2bc999daf682b59f3f07d7965a201847"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameControls.swift",
+        "sha256": "fbd9066f5cb6d0463f76631a5b2dca390c871fad790260e327147797df0d069a"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameCursor.swift",
+        "sha256": "4bce8df43423ee0d793522b6bc8fb3f055da540cea93738833c095f0213d6e5e"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameLocalisation.swift",
+        "sha256": "1b7c7165e2f05ae04e38d260b68c765f6d9d9c31c08fc7a28a7a4fca4fd6af11"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameMenuArtwork.swift",
+        "sha256": "c56a325994326f6cbc48c4ccb7e86d71fafe954dfdceb6bd4df1673dfcc26882"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GamePauseMenu.swift",
+        "sha256": "717ceaace479b707869ce6cb7cf53c36973c0b3f576bc6dc5fc9a29fd4b1b7f8"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GamePointerCapture.swift",
+        "sha256": "448513b882a8065845372c754c5e11fca92ad09db6756723606623e01dd48e4b"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameResources.swift",
+        "sha256": "50397e0dd5c12164a5a82fd05d63748e8bcdff5bf96913a2b9b2578e4c6837db"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameScreen.swift",
+        "sha256": "4b0023d52589cb5f42095622fdb29ad9e7c627767e7c56f39fc4d8128d11c442"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameSession.swift",
+        "sha256": "2c24f9302f114b4da0f122117585a3e0bc45b14fcdcf54b3bc98fcf66bfee93a"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameSettingsHelp.swift",
+        "sha256": "66b51c0cbfa9dea721c8da393b912741f0df127ad731eaa25dbfe20796512c07"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameplayBitmapCache.swift",
+        "sha256": "e5aa6407893a70f9b45605eb1a183c20b7b084774329870a0030fd3f6532406f"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameplayControlHelp.swift",
+        "sha256": "fb54ec9920b2229caad11e6fc5cf4a7cac1910767ed127d656560bc2a7954521"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameplayController.swift",
+        "sha256": "a44f3836203555bef2be45fc092eb1190b42020cd0f00eed3235b5075bb42198"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameplayKeyboard.swift",
+        "sha256": "a189405ae95c882ebb8a41db0cb9250ed8e5de9a7d8627c3db7d41f6062f8c42"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameplayMenuButton.swift",
+        "sha256": "a67e16b17a3c03deae6924556389be8843216fa634fcdae65e00b3bcc45af558"
+      },
+      {
+        "path": "Sources/LemmingsLocal/GameplayPresentation.swift",
+        "sha256": "89ea0baeee059a8ae98e5cf54997c0d49782ac96e95a4a040503de0bdf1fe745"
+      },
+      {
+        "path": "Sources/LemmingsLocal/HostedRankings.swift",
+        "sha256": "529d510bd860860654c564b18bc5d5b4d7a72b979c8674da5e3bda2e548c4846"
+      },
+      {
+        "path": "Sources/LemmingsLocal/HostedRankingsView.swift",
+        "sha256": "0792f0a3454d3113bd7b636f6a04fed71f1066f071d71a44e37f421b4da28ee5"
+      },
+      {
+        "path": "Sources/LemmingsLocal/KeyboardCommandsView.swift",
+        "sha256": "abe0fef8d4a51869be70689ff7e0eec9760b7c4bb2a1ae3fa391f4c987bfcfce"
+      },
+      {
+        "path": "Sources/LemmingsLocal/KeyboardOverlayView.swift",
+        "sha256": "0f275f2ab2fe9ebe9db4abbf63fc1c53911b8d977b41872479b67077e6a936ce"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LeaderboardReplayWindow.swift",
+        "sha256": "66c7bec5cafdfabf104953c280951da41250a352f1fa61edad08c1b7feea40d3"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LearningJourneyMenu.swift",
+        "sha256": "11872fdfc1a94188ddab45538fc672ffc590560ea29f738cb74693e8f7876839"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LemmingAssignmentPulse.swift",
+        "sha256": "72422413143d4aeff0e181a3e49865a146f7a4e20bc7649dfa5b4da5506ff9ad"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LemmingCrowdPresentation.swift",
+        "sha256": "ab88b583e75033966c2a15dcf6df2f2b2c7ac2fbe8ba8ac2548db4d7856d4abb"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LemmingFocusHighlight.swift",
+        "sha256": "0885493a3f4d17711d86d8fe36f109607ade568183d296a8ba72bc84e74e330b"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LemmingInspectionHover.swift",
+        "sha256": "2c3fe6f642f722c89597256dd7b8bb6519deaba201d43291ddcb9371e42a1bca"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LemmingInspectionPage.swift",
+        "sha256": "cecac57da0603c3f0e5156ad5bdec40bf6b3c1b7fad17b9ed7519027293f1b6c"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LemmingSelectionHDR.swift",
+        "sha256": "76e48ebf2bd9dc45329b0f4d5b019d131a203c6e5e05bc69a1c77dc4bf464a19"
+      },
+      {
+        "path": "Sources/LemmingsLocal/Lemmings2PlayWindow.swift",
+        "sha256": "d67aaf88a049c99d809d0a5fbc761b2dfe807a4d8de662e7b6f4d416a53ed1df"
+      },
+      {
+        "path": "Sources/LemmingsLocal/Lemmings2RouteRecorder.swift",
+        "sha256": "6151fa8b2bba95f699cf7bf2bf67a7ce5c223f575e936c0b8f1bcb47733c0fe5"
+      },
+      {
+        "path": "Sources/LemmingsLocal/Lemmings2SoundPlayer.swift",
+        "sha256": "511c09a8746dd84aa1aa8cde2455dfed4578d84606f94df9d42cf5cf15c5b543"
+      },
+      {
+        "path": "Sources/LemmingsLocal/Lemmings3Panel.swift",
+        "sha256": "0519386dc84ae3d35a43744249e212ab0da888976250e5eb41ae2d10c92d6ad3"
+      },
+      {
+        "path": "Sources/LemmingsLocal/Lemmings3PlayWindow.swift",
+        "sha256": "3fba7b4c6d817cb28695b6ed42b1b54878b10ee5d038692e1305817a6909b96b"
+      },
+      {
+        "path": "Sources/LemmingsLocal/Lemmings3StoryFlow.swift",
+        "sha256": "5dc74aa513aca8830b45be0cf0e9ee8726520e933dc96742b702546b07c295f8"
+      },
+      {
+        "path": "Sources/LemmingsLocal/Lemmings3Targeting.swift",
+        "sha256": "8e85baf533f21f6d8398447f46c0cbd3b0d25219f030b15b855fd1f0d2311b9e"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LevelCollections.swift",
+        "sha256": "0ddf1debfa0e2adee0f17d5d8ca5255596834129705b9e89c4da344a72bccf1d"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LevelCoverFlowView.swift",
+        "sha256": "ee33d61209e228bac5df4c97e28589e6a92e054bb44d3703e534bef4973905ff"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LevelHintWindow.swift",
+        "sha256": "b9651b8bf6c50f591b837568bd392553fc470ebce2f81f2a9ba67b507bd8af94"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LevelPreviewStore.swift",
+        "sha256": "3b7374c68c4937b9b9ee817a00ca1e34b492f54c5d96f397c5731ccbdbd1551f"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LixArtworkRenderer.swift",
+        "sha256": "90426ef521a2c5aa93ba85ad313e85f7a2f6734cf2b7044217628cdfb0f41615"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LixInterfaceRenderer.swift",
+        "sha256": "b452d559cac0cdae296975933bea8ac50ce141c8ffcdc23ac7205b1f7b7a5dcf"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LixSoundtrack.swift",
+        "sha256": "8429d78f70d4153786c6a54055c84ce5b8d362f023db34dbdd0d6600f0130dca"
+      },
+      {
+        "path": "Sources/LemmingsLocal/LixSoundtrackPlayer.swift",
+        "sha256": "9c57f7dea1eb5d700e70c47a5bf497188fcbf0fd4c856485f3b2bd1c5d67cfe2"
+      },
+      {
+        "path": "Sources/LemmingsLocal/MacFXPerformance.swift",
+        "sha256": "420b28e8fe3511a94bfc0677ba690c199393058fb3d506ee937cd46d74aeed3f"
+      },
+      {
+        "path": "Sources/LemmingsLocal/MacInterfaceRenderer.swift",
+        "sha256": "ca3ec3ed562b57e4c9fc93616578dc6248d02f23139c472f9ee6728d549b1fa0"
+      },
+      {
+        "path": "Sources/LemmingsLocal/MusicLibraryWindow.swift",
+        "sha256": "410e4f5a6f415fe4954411bd1c1198a80d878b42f79d1b9f854e3a8cc5d1af8f"
+      },
+      {
+        "path": "Sources/LemmingsLocal/NativeCursorRecovery.swift",
+        "sha256": "b8ec7c30528e5c81f162ae3642d9a1db32c3a48b995d52d341c2b844ef868e09"
+      },
+      {
+        "path": "Sources/LemmingsLocal/NeoLemmixSpriteSet.swift",
+        "sha256": "2f0d6d229902333f7191b1f72b42e29abc58f5f898288d8b33f585791e40c867"
+      },
+      {
+        "path": "Sources/LemmingsLocal/NowPlayingNotice.swift",
+        "sha256": "113377157c740aeb921d26c2432565748d2ef560a7b17980b672a080bdcf1ead"
+      },
+      {
+        "path": "Sources/LemmingsLocal/OriginalMoviePlayer.swift",
+        "sha256": "4b24d09ce0277dd27f2e1c8315fba7784afa28168f7ff5e2b95a89fde2055438"
+      },
+      {
+        "path": "Sources/LemmingsLocal/OwnedGameImportWindow.swift",
+        "sha256": "6b28fd71f6197f4fd8ea787bebe063a4d5550c613731dbfedd063c50819e7cbb"
+      },
+      {
+        "path": "Sources/LemmingsLocal/OwnedGameLibrary.swift",
+        "sha256": "a9e08aef141feea632d7d2f36687782b42c4776d8f53a8f9a36bc6b0f7e36487"
+      },
+      {
+        "path": "Sources/LemmingsLocal/OwnedResourceLibrary.swift",
+        "sha256": "81920977cbd0a2e2a977406bbf9da0b5ec4fc8a3d4e29985e29fca1f99951f08"
+      },
+      {
+        "path": "Sources/LemmingsLocal/PanelGlyphs.swift",
+        "sha256": "616b8d415f0c1d8ed093f5efa2fd34bdad079a37032ce619fb7053158062df06"
+      },
+      {
+        "path": "Sources/LemmingsLocal/PanelView.swift",
+        "sha256": "a3d8067747bdab5a61c62c680055dc38a276d715bee2f098205d8df567b5d45c"
+      },
+      {
+        "path": "Sources/LemmingsLocal/PlayfieldView.swift",
+        "sha256": "5677e00f50c3f1f8006f85f22da729ea7c167f65f515929004ed839179aefb16"
+      },
+      {
+        "path": "Sources/LemmingsLocal/PrecisionZoomController.swift",
+        "sha256": "439bb6b4ecb3c33b60e83bd1ec5f6fc66a8f37cf4a03dd02fd6361ec45d3102a"
+      },
+      {
+        "path": "Sources/LemmingsLocal/PrecisionZoomLens+AppKit.swift",
+        "sha256": "f7fc5cd1fa837e5d1f0513350606ed89c16c5d725971066fc38a99caa6015a6d"
+      },
+      {
+        "path": "Sources/LemmingsLocal/PrecisionZoomScrollGesture+AppKit.swift",
+        "sha256": "26d92ef1dedddc48443e0795f267188f37f73b71cca1d6150c90affc71a78eec"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ProgressionMenu.swift",
+        "sha256": "c46fb3f9bf8a241889689e37e9a904c3d29088f7dc1fa1135141c826820cdab9"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ReleaseWelcome.swift",
+        "sha256": "71f0324d22be9bb0358aac0e4ca17d0146a40fe797a3c0ba0508dd6b03b0f71b"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ReplayGhostSprites.swift",
+        "sha256": "a01067f2b08198d7a1f9fae0b925699a305b26daef3fc2e9008f3b3196fa7cec"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ReplayMovie.swift",
+        "sha256": "4b68510f922f0a3c9a702b368bdafa6a95726dfafbaf76f154108021a9137379"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ReplaySkillPanel.swift",
+        "sha256": "816d75c1340b2b549e955d13fc8ed5b9465992fe739eb0294336a33755100ab3"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ReplayWindow.swift",
+        "sha256": "813547a419c6128549d3dee34cae673deb91290e22125ffff6312588d9321390"
+      },
+      {
+        "path": "Sources/LemmingsLocal/RescueBackgroundGlow.swift",
+        "sha256": "e2d3be9048834270a88cb7633ad41e59aeea149e2f15699b3ef29afa30b307e1"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ResultAchievementHelp.swift",
+        "sha256": "62d239463bae3e8cd894ef29535f9b7f165de328b0aa6eda82120d9165c05dae"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ResultCelebrationView.swift",
+        "sha256": "f4ac707719fe5b23d1cc74fdc7433ae96eb4e0853943268a6843b79ba937693c"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ResultChimes.swift",
+        "sha256": "eb8fd068e94184e37962670e3373e2fd853269b87eeeeb90e516163d7cb3a576"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ResultEarnedRewards.swift",
+        "sha256": "959f9a08b7d873225ae3b1878d813db67bb331072b69008e7952e472ef71769f"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ResultLayout.swift",
+        "sha256": "da82e225688c8127a17d99e036747921c4cb38dc8d1b9b6f7c4b685cfd2139cc"
+      },
+      {
+        "path": "Sources/LemmingsLocal/ResultPerkAwards.swift",
+        "sha256": "780766c51defcea945ecd4bdc449954cb9c1a87c4bac6de3a8ce376b22aefd7a"
+      },
+      {
+        "path": "Sources/LemmingsLocal/RewindForwardKeyTransport.swift",
+        "sha256": "107215a8c0c83f3e402dbaa6c57c57db7c0bdd25be70332a13f2e59ef79f9684"
+      },
+      {
+        "path": "Sources/LemmingsLocal/RewindTransportCue.swift",
+        "sha256": "ed2cf16f4b2e14e52e35dc7396a3a54666249f27e64bd8705ecd35a3ccf14074"
+      },
+      {
+        "path": "Sources/LemmingsLocal/SequelArtworkRenderer.swift",
+        "sha256": "e7a377fb074eab3b758219bd95a71dae76ab462b0b648a58a7fca3c9fde6ae47"
+      },
+      {
+        "path": "Sources/LemmingsLocal/SequelEffectArtwork.swift",
+        "sha256": "91fe6e72b60b86a9dbbf18ef6e0f3a470b78e6c1aa70a82771d9772a61570986"
+      },
+      {
+        "path": "Sources/LemmingsLocal/SettingsWindow.swift",
+        "sha256": "459536ba349d01987beb2627340ee32cefa2c3f8e9bf297d3a4aa38a2d897a23"
+      },
+      {
+        "path": "Sources/LemmingsLocal/SkillCursorBadge.swift",
+        "sha256": "0ce9e0efda168171e50f69f3dca507d1d197d2a15f18d42430cd259b449dc402"
+      },
+      {
+        "path": "Sources/LemmingsLocal/SolutionReplay.swift",
+        "sha256": "fffe9bfb20fe72eeb411182608625068420ff3d11f0fdcfc24ae7dca36312d0c"
+      },
+      {
+        "path": "Sources/LemmingsLocal/SolutionSwitchView.swift",
+        "sha256": "ed0a91f3aa577d32d67ad04f90ce060abf92bb919747f68d9892af3f2adef855"
+      },
+      {
+        "path": "Sources/LemmingsLocal/TelemetryDashboard.swift",
+        "sha256": "af7821cba7f8128698e360c219294f5738fbb7cbb7d7cadda26652be6e265ab2"
+      },
+      {
+        "path": "Sources/LemmingsLocal/TextEditingMenu.swift",
+        "sha256": "1039d1846f50318b28324bb6150f9342254f715cf4c08fc89fa5a7f52697563b"
+      },
+      {
+        "path": "Sources/LemmingsLocal/TimelinePanelControls.swift",
+        "sha256": "669c9cacc21e963df857f1b055898dd34a6f0b237087af85b70a001c99c0b296"
+      },
+      {
+        "path": "Sources/LemmingsLocal/TrolleyCapture+Session.swift",
+        "sha256": "dc8e8cf579e36c45b798c048b37aef72f79a743cbc3c16a50d540c7be71153dc"
+      },
+      {
+        "path": "Sources/LemmingsLocal/TrolleyResultView.swift",
+        "sha256": "3bdf62e9d433f9448b971b04503d9b4058b4614646b45297ff20570c1562bdb8"
+      },
+      {
+        "path": "Sources/LemmingsLocal/UserResourceAccess.swift",
+        "sha256": "c3739fa70957f49b9817b7ec4005829ab362d2c6622f64989ec84209ef03e3d7"
+      },
+      {
+        "path": "Sources/LemmingsLocal/VinylRamp.swift",
+        "sha256": "a9c1e2d6fe6c6f2c01dd70168f36c83fca986e7fbe9b54debfa94c222f11b841"
+      },
+      {
+        "path": "Sources/LemmingsLocal/main.swift",
+        "sha256": "274028ef2a346dde12162a2e8c455fe59d275c9e15fbd5126e564db170c2da79"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/ClassicFanMobileLibrary.swift",
+        "sha256": "02ab905d6b4367492e6f5e3b3e757e39cd998eb783321806721abcd3d3632800"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/ClassicMobileArtworkCache.swift",
+        "sha256": "86e28a9835dfb8a4e55cb04c05eca3cfb955f60417305cd81bfc5bba168e0048"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/ClassicMobileSession.swift",
+        "sha256": "d7c3bae14d394af389921944518f4cb587021163e33765398530127d94f2ce52"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/ClassicOhYesMobileLibrary.swift",
+        "sha256": "671919f57ec89cb867b325a84a6ba58eb4540aee0647b2d3faa78db747110f39"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/DeskClockEventReader.swift",
+        "sha256": "4a5a8988b3a72ef4437512bdf45208d65ddc0dc336585a5ffa57323f1dd7ed2b"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/DeskClockEvents.swift",
+        "sha256": "d89d4ece5b4a197c541d039128c17129a469b4c8b01701f8c4cbf7cf9866ec80"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/DeskClockFace.swift",
+        "sha256": "da0ab6d258cc6bc45b6dabb5d79c650b1cfda275f6f524ec6682990156159178"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/DeskClockLayout.swift",
+        "sha256": "5464ac5167fefb92f26e79dacd61c796c7cd1c05146193f026666f362ced396b"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/DeskClockSettings.swift",
+        "sha256": "12c19b07a7d6f1a891588ff7d00665d64477dac4f046de252311df99fbacc0b8"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/DeskClockSimulation.swift",
+        "sha256": "62f79ce18fb6c0d9beea4372780645326b6feda79dcd9b02a18b528873d1a086"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/DeskClockTimeline.swift",
+        "sha256": "2cd685049d27dbef27196345e3ff09e1b476ce9bbe8eae009433a284144a5c3a"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/DeskClockTrigger.swift",
+        "sha256": "69e445156c65343d180c48c86e4f6ac3dab1138a56df51d13c063b4674384ee3"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/GameHUDControlGroup.swift",
+        "sha256": "8cf18fedc118a38af0d9b2e0264f71470020caeea9e200ee3eda8edb4b13ae9a"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/GameLocalisation.swift",
+        "sha256": "1b7c7165e2f05ae04e38d260b68c765f6d9d9c31c08fc7a28a7a4fca4fd6af11"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/Lemmings2MobileLibrary.swift",
+        "sha256": "63a496e53da49e511440de72564ed8e4abbfc777c0d03cbe91477283226ec4ad"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/Lemmings2MobileSceneRenderer.swift",
+        "sha256": "9dfca06606dde48cce1d56dcbda21d85c83689630b427aa11f91e758926aa7e6"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/Lemmings2PracticeMobileLibrary.swift",
+        "sha256": "a25f9c1abdc19aec6ab70bc364926274632173b6993f2fbca6e6623ce495f3ef"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/Lemmings2ShortPlayMobileLibrary.swift",
+        "sha256": "a6bb54016eccbb0e39b512eb13a96bd12ce1033ee0246585223ff756cede1ec9"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/Lemmings3MobileLibrary.swift",
+        "sha256": "00f98ebb96fcc693785f4b6379fb576802f17b5589cdd2f549ecf12ba39370d6"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/Lemmings3MobileSceneRenderer.swift",
+        "sha256": "62a60dcda2940342c14cc454be525b48d2b38bbc264f09122c929454cecc87b2"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/LocalImportTransfer.swift",
+        "sha256": "914939dda1d68bda56796e8c6a2a2e77be29a570c701bdda14ff7b3a0650899c"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileActionReplaySession.swift",
+        "sha256": "734c3b10154643a52f1cb4aaba4181bec783574c0072e798ff3e1b8b8c18179e"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileArtworkInstallation.swift",
+        "sha256": "1d76b766580f6cca6198233d895e5b0b498770a81bcd6b8d2c95ad32e2b642fe"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileBitmapRenderer.swift",
+        "sha256": "0791a0cfa1ab369dce1d926c46daa018a6d447ac10591d31901597af30b6097f"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileBuildInfo.swift",
+        "sha256": "6bc497f585c2fe4c7a72a77b085d78761d3cd20bff3e91234487c2c54a23b347"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileCampaignProgress.swift",
+        "sha256": "5407533c084ad0b10fd1ee2594a07e4c3524aea1525019c965f3715b619bd3b2"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileCatalogue.swift",
+        "sha256": "3b3ee5ca46ed12ec58b30b0cc47ff3deae0515c0a003c0dba967b8917209f6a4"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileCatalogueLoader.swift",
+        "sha256": "e37fefe1211c20b4de3d52bd025e0d4082d0e45a145ba5eadf3e706e42d655f1"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileCheckpoint.swift",
+        "sha256": "0f3428547b318ebf58a4b20e97da14c42d6c97c443edf1d21aa9a69b52e1dec4"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileCollectionsBridge.swift",
+        "sha256": "474c5f525127a57d8d9c93aa2edcd699efb9c18f969e9b8f5d38dca36a8f0742"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileContentStore.swift",
+        "sha256": "289edca3db4901e09045c04b77d4b7864a57398b8a7d94fe6f49a44ec4811d7e"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileControllerConnection.swift",
+        "sha256": "379fd87e9aa428c3cce37f4820bd5c9d79e4d385f6bd40a5517d8b6d26a609a2"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileCrowdShadow.swift",
+        "sha256": "38ec38a17b47760c79954843163cd2e2da82d68a0f9d38fbcaf8d22ac1322682"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileDeferredPreparation.swift",
+        "sha256": "d187dfe4ac05fb41491376dbdedf18a20df9738f237a2fc81d5185df86b6a29e"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileDirectionPickerLayout.swift",
+        "sha256": "d1c5c68f8f6b9769649149b452af1f0c11c86677e08a51e25d0b0ba66834fc14"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileDisplayRegions.swift",
+        "sha256": "28d870fd38ae8a29ab173a54911e43c89a83528606284b5ae49d1bd8552b3767"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileFanCountStore.swift",
+        "sha256": "91eba53ab95833640f1b16245b59deebf5866a70990bbee4e804e5f5c940c262"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileFavourites.swift",
+        "sha256": "07158ddc4bee68e763c0a8b2facb53de13fc2ed62794494ff017cd8b82dcfefc"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileGameResult.swift",
+        "sha256": "437e39057c3e975e216ee98cf59963fee7cd472bfb71dc1528f67f89ca21afd0"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileGameSession.swift",
+        "sha256": "bea1f84afd90e24daa5fac9777465cf3be8ce9bec1a29a17135cfa0c2f69b7b6"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileGeometry.swift",
+        "sha256": "d67316e7e74218c1bf427249d3e64d1b0d1fdfd29c06c876950bb157bb3e83e5"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileHUDLayout.swift",
+        "sha256": "d81ae2684d0cb645603862431ad743698701919df8149a7245b9440b51603138"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileHUDPress.swift",
+        "sha256": "c2aec57db3afc22e4e094df8c43c170812ee0735833d49c63a256d2ee8393b56"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileHomeBackdrop.swift",
+        "sha256": "ae9be2e1b7fe65510c379caca9bd80440d666032e2e25b54d290a78a70315256"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileHotSeat.swift",
+        "sha256": "66390161b44d30a0155e5b735d96c6b6fcdbc5e1e220b7b6161ce57f20e9ef5d"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileHotSeatGhosts.swift",
+        "sha256": "1cfebe9f073e4911dfb24134dd42cb73479c58e5afa4200dab6fc0e4e5f07ce5"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileIndexedTerrain.swift",
+        "sha256": "26a1bdac162af1ac3e177a3474dee16a06b0c1ae9e70f28ea4a7a9bf0967e50a"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileLayout.swift",
+        "sha256": "37addea40f7c2d79d9138d6100988e490062d698e8cccf92d5ed9abe7bb428e4"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileLearning.swift",
+        "sha256": "418df68c4daaedb840e381ddedf30c10a2bc6d5bc198b5e38170cbd2755ce0cc"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileLevelPreparation.swift",
+        "sha256": "214134c2e9aa9400294259bf7a608a99ea0b2ee08c2b17a8a5c8780f4160a57d"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileLibrary.swift",
+        "sha256": "5948c55870992df8ad7ac472160d9ed2f618801c8757c8366950fa9bb2105004"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileLifecycle.swift",
+        "sha256": "178543691e0a8cddc3878e1904a8c26f237dff37e71a624e5c2676392f5d47d5"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileMusicAssignment.swift",
+        "sha256": "bf5cf66dc2f130db9552a25a7b63396b24f80bb2ab8d2aa2160d18d4033c933f"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileOriginalMedia.swift",
+        "sha256": "679409836cd6d87b2493975e1b290cff1f9f20f4c47feae100be222644f81919"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobilePauseSummary.swift",
+        "sha256": "ab8a333cf0d4cd9a4f8a5c998fa83042265ba7abebb04ce59f925a50c620b40c"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobilePerformance.swift",
+        "sha256": "4cefff3ec6c339a16becaa8c49acce146067e9ed2c0ad03f6157a435e550a94a"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobilePlayState.swift",
+        "sha256": "e648c83cd6ab62bcb6060a46c4bfced5c0ddee6857b2e18a0005e7acbff225da"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobilePlaylists.swift",
+        "sha256": "f0b8a2f5b2a89a456e17acb239d541b7871de73cde70cf552a23bebe5d7bfa67"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobilePreparationExecutor.swift",
+        "sha256": "2bf3be6691620f08102386c38432c19bf0e7bb27f3b218b6fefa0ecced6c8109"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileProgressionBuilder.swift",
+        "sha256": "67a533520267bf726a71a8f4da10dd1f34f2cc0e890b8291e0f623b2ed70bd3c"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileReservedRegionRuntime.swift",
+        "sha256": "6e7f511950c857b8473df58aefbab48ada94362dbb901d001bb765cffafe0e4a"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileResourceAccess.swift",
+        "sha256": "c139fdc31b9b62ea28f120415de4df597a902b26894a55f5d801f4866c7c1e79"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileRewindFrameHistory.swift",
+        "sha256": "f3a5449d0ff04415b5a20b22d09753b4e812729204d9710e69940de7370a26d9"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileSequelArtwork.swift",
+        "sha256": "4e165e1669b20eb531a6dbeb3828ef268baf8a5e98575fdc20fd969f773bac5e"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileSettings.swift",
+        "sha256": "0e627a47b4e9132f0740d253004f5852f12156f2fe5df0a59cd148a5fe4965ba"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileShortPlayCatalogue.swift",
+        "sha256": "fdcba4bf018cff92d07e4a7212dc4aaff937dff67cbd725babd64f863917666f"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileSpriteFeedback.swift",
+        "sha256": "38cbe8c3c47146079e23212bb2d7c0ec30d503b4cb9bba4a956a689e4f1c9605"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileSpriteTrails.swift",
+        "sha256": "0c555bbadba31fa9274a2c592bbd848a492707320eee44b237840958010f8c73"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileStorage.swift",
+        "sha256": "edda67afb4dcf522358daff3fd58d5c4b7a667eb74a5bcbebfe069bc2cf79f5f"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileTargeting.swift",
+        "sha256": "7522165b63e5a3ee0db68971d24aa9ce427cbca218ce84b83932a311d48ec0c2"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileTouchRouter.swift",
+        "sha256": "bc59a29e099520309592c640da0306d4fcae444e8c8c4634690da381d1aa0906"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileTouchSelection.swift",
+        "sha256": "37bd14188b90aea92dea173cd8e93b631d92151aa77d096a0d0fec4616a6d4c0"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/MobileViewport.swift",
+        "sha256": "967252ec858e273447bcf835170be5a9924b5e86e52478825a674518d8af7a0c"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/NeoLemmixMobileSupport.swift",
+        "sha256": "3153cd7b4081738924bd511b0d4076efa76698c39796e22debaccf346f909cc5"
+      },
+      {
+        "path": "Sources/LemmingsMobileCore/SequelMobileSessions.swift",
+        "sha256": "cbd7c974eea4d4e72e516c1b2f71f443d91bad079eeb0535a540ef2bd02e7247"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/DeskClockAutomaticEntry.swift",
+        "sha256": "952a2096a561e4e6c77446a6910711b4d4c3e10376bbefaf0f42488f3bae8a0e"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/GameLocalisation.swift",
+        "sha256": "1b7c7165e2f05ae04e38d260b68c765f6d9d9c31c08fc7a28a7a4fca4fd6af11"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileApplication.swift",
+        "sha256": "6ff1787ba64a95b56b38394598761d968db309d348a4a13c0002e167a5c85931"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileAudioEventLog.swift",
+        "sha256": "da2bbd7a2ac540af620fa1fa7bd5bc2a063e3f82731faab2dd467034d7339f26"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileAudioSessionController.swift",
+        "sha256": "f1ef32a62cef8e2ea5437b31f6ad13d8319e65bfee5946bbc92ba9e697043e12"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileAudioSessionRequests.swift",
+        "sha256": "15b352579d8b050ce1859cb7d61c2b553607089ee80ef952742ecaa821533fdd"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileBombCountdownView.swift",
+        "sha256": "9cf9d5a854090e31fe57c2105927bf532fc4518b30bb014ddc8afcabfcce3efe"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileCRTView.swift",
+        "sha256": "7525bd705d210a7cfebdd1f7383f79910373a1de6b2037ef4461cc601db29445"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileCloudLibrary.swift",
+        "sha256": "5ea28dc1a3cd1e4b14e38430b89978bb82f4bffaf278bb0c24d19aa779ef88ab"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileControllerInput.swift",
+        "sha256": "edfe5596993f790969f10b82403a16a916c858b7779b2040ca50334a4b7866be"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileCoverFlowView.swift",
+        "sha256": "641768fe025c27da093610f36c95903293cb6cb5689d1330672c885990ee81a5"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileDeskClockController.swift",
+        "sha256": "a7943515147f928a05b6ed034a8c081a0a9377216136fde089758aa181e5e2bb"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileDeskClockView.swift",
+        "sha256": "0c50a451f1f3bd04df1a67f36b007c922ba80c6e514cc3db9508bc063fcb2b65"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileDevicePerformance.swift",
+        "sha256": "f35c3887fde43566daf30bf5e2a3cbfd0a7cc8bd9c222b09e58d5c7a1e9454ac"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileDisplayLinkTarget.swift",
+        "sha256": "7dc624bd9bd1cf00e2ec285adbb98da834a72d15f4633af2d252b2ef1fee2c62"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileEffects.swift",
+        "sha256": "802e39a78f2d6eedd62511cb61085cec03a31296989e11ec52dfb3462ff495d6"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileFamiliarNamesPages.swift",
+        "sha256": "34aa5e14620f592763182e351cc0e9e84cbd67d420a6678a5d3cddacab0370de"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileFanCountPages.swift",
+        "sha256": "401f075df0fb036c88be0e1d6bd78340460ff3515a3ea1beec59b24528ff9e4f"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileFocusButton.swift",
+        "sha256": "ba603145e8c0344ba5466e6f710c40ce88a934bef0367b88afdb1b13772321e3"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileGameHints.swift",
+        "sha256": "ec0cca7c8e348f0fb31ea370bb67e6a868ab1a79e0109b825edab9e18b04fa8d"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileGameInput.swift",
+        "sha256": "89a86e04bac98f39872c42f296e4a085d2e1ddd0dd7171f598ebc86cd914ebab"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileGameViewController.swift",
+        "sha256": "ce3e77af1db5023d4e602a0ca883a5efc4756174baffd743c17bac72e7f759c6"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileHDRView.swift",
+        "sha256": "5a05f6fe0125f57d0e0b01755355e75f0b48df8177059011021e1c672a195aeb"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileHUDView.swift",
+        "sha256": "8a2e3dbe5690a149db452e78d8774645755463394a18535b8237bee907262039"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileHomeBackdropView.swift",
+        "sha256": "08b2ce25992a590a0c29a5293fbdcb58738ee667d735c0f32f265b44dd451852"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileInputAdapter.swift",
+        "sha256": "313929d49add56af0b4ef8e3a0732a7c27c34090dc1b114a52ef1da153897da1"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileInsightsPages.swift",
+        "sha256": "94d3bd3fb9a414e2670f3c826fbd8b18255357e0c17d773bbbf52c59a3a56dbe"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLemmingInspectionHover.swift",
+        "sha256": "daf1037ab0c96a5f084221b8c0f30c9ffda2f0797939d30faba6a02240239583"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLemmingInspectionTooltip.swift",
+        "sha256": "06142ab130e84754b3bbe56f91fe48e815ba8760cfbb08c18c3bb4a3b490997f"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLemmings2Practice.swift",
+        "sha256": "af0d47e35147ab57745f884d7ef7f2fc8d93cf19b9ba036c3d206554161a9486"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLemmixOptions.swift",
+        "sha256": "5274b4eb734ae931967eb8a8d8725279733d2f1ec9d25e0ea88d1496f3c699a8"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift",
+        "sha256": "043e14f588c51d7681938c1ed6127005c872a69ca1a48e36f1c1d5f94a61eac2"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLibraryCollections.swift",
+        "sha256": "006851ba98f6be60d23f780e9c81591e26f551030745eb399fc001172fd2beec"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift",
+        "sha256": "b82ac7303fedfca7558c96a2c72a8d23da251f48b46b2d5253d9d37356a7114f"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLibraryInput.swift",
+        "sha256": "cbffa5b2b844f9756966eae47d030d124b5cb53748856d622d1e413762dd49f7"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLibraryLearning.swift",
+        "sha256": "f50e0c0b7b84264d72f3d7f853857c7160c5025e6eafb7923e4304b0ec099fe7"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLibraryShortGames.swift",
+        "sha256": "83ed5a4662f5459e6811eb37133fb17833d2463a69faee4dd17240ac7d04732a"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLibraryViewController.swift",
+        "sha256": "fc39b591ff62462061cd16aab016132cb25b94be9dd351d96d8779d7b9d007ae"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileListToolsView.swift",
+        "sha256": "def3a7306c16735667645602e8bf83b4f66b734319959e1ec024031ed7df2e06"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileLixInterface.swift",
+        "sha256": "d390582ad91be28cfd8e5928b70bdf538d8c6b06209b4b76104efbc4be659890"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileMenuCanvas.swift",
+        "sha256": "b4be38a246c3e810b84e5a300689d45bfd9111281c200bdf2be7358c6c3ace77"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileMenuScrollView.swift",
+        "sha256": "916b1f089ea742d2f742cbc9a4413f2bac6543bd508e5ec287061fd4ddb63bc4"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileMusic.swift",
+        "sha256": "cea38b990fc6aed820dfd1cc989df4f494c9d276a5d52805cc24cad52b8f8339"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileMusicLibraries.swift",
+        "sha256": "ec244b1facc108ba579b7f793c3104272cfe0602ea38b9d64ad81524829ee736"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileNavigationView.swift",
+        "sha256": "18fb53f972ccaf37fdd9a066767fbdb9462d7ea5be398fdf05641b1a480df5b0"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileNowPlayingView.swift",
+        "sha256": "237f3414558e11ec3e169e09bfb8d6c0d1aa0f833b4bc6201f27505f7760984b"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileOriginalMediaController.swift",
+        "sha256": "a7f746478d75947e3bff6868a993da0a5f7470f0ae4271ad83ed99cc57b0b4fa"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobilePixelText.swift",
+        "sha256": "eb4482c8379b1a42f6375206f1d6f6a01d24ce5592953d3fb6ef76a9c46f212f"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobilePlayfieldView.swift",
+        "sha256": "4a344a1b619d060706f98dfd7b2cc3eacc10dbd70a22653bf686a453f8651ce4"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileProfilePages.swift",
+        "sha256": "8fb691c6acb534518acf0342dd68bde4dfa30b189eb13d75c2c2e2b616f35ee9"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileRankings.swift",
+        "sha256": "faaf2b6d1114615f2b81c7dbb82d554d85cfbd6a867a6e767ed8c5fa1fbceecf"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileRecordsPages.swift",
+        "sha256": "d229a3a8af7fa705b4ad931afda97b860e0c5d22e59f3f5818ddd9efcaeccd96"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileReplayExport.swift",
+        "sha256": "922b4023f2ceadc89cec654c8ce4c03e65e5f679587ca9271a530addc206b667"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileReplayMoveView.swift",
+        "sha256": "0b7b4ad81e2cdc691a8615cccaf04cec7640ddd7377f37ce9c6043abb5e3f232"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileReplaySkillView.swift",
+        "sha256": "38eb42e53d490bb6402de2b6e8f45df1ab208e69e1af0462f1708283d8764899"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileReplayTitleView.swift",
+        "sha256": "36f6687c7a9b3f7333e90376494cd72d654192befea34cd7a60b2fc061f7631f"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileReservedRegions.swift",
+        "sha256": "71f40fbbb7d6e1ee4c76b471b6445503a1cbdbe85facbd4e0411dfc5387f00e0"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift",
+        "sha256": "a2f4a328b2e027c8a6ca09eae2dda7b5617f8a3d1291a31d7562cd9372b99f3b"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileSettingsPages.swift",
+        "sha256": "02b58f4cb1f5266ad6f2c83284eedfaa2b9421cbbed55e0174665516ca82cc98"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileSettingsTabsView.swift",
+        "sha256": "4dc51e27bff22ed2d3eb2fde088a42a71e7813540320cc44d3bd54db45e4d276"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift",
+        "sha256": "4f51666b096c6e7c19326ee7c052fa540d1749b4ec4bdf3c4a82610b650c9a78"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileStartupViewController.swift",
+        "sha256": "41256097fd67e6487d27d224dcac7b9f0e6609b75d7fecad89e59303d7e70644"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileTVBootstrap.swift",
+        "sha256": "e478743c2026f3d93404ed0f7b6293511b2752dcc008bce2d1336c27a12ae202"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileTVControllerInput.swift",
+        "sha256": "4fafa064bd4202828b26b838683d8a74bd63572db81136d51b2fab427a394aa2"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileTVFileTransfer.swift",
+        "sha256": "ea2531e22a76becdec85dc39dd9114a1337c3c8823a8c7e4bbc77882e7850c93"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileTVGameControls.swift",
+        "sha256": "3b99c8e679ff7026efd37006380e1910cdba26fe372c33463e32f13672ebe652"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileTVPointer.swift",
+        "sha256": "d65ecd48e8932768619e53b71cc096cd0d64fe1e96678e1072aab8b6bd042e1e"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileTVSaveBackup.swift",
+        "sha256": "2f88cc0462775332be754a2974b3218d9e9bfa636ca0236afca4a8ab23f758d5"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileTopShelfScenery.swift",
+        "sha256": "b18eca9d9bf59fcd150727bc9e45ced699e9b0ac0e9c1a8d2105ff15906e1e54"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileTouchLoupe.swift",
+        "sha256": "98d02f240e76d98c280ef69d8b4b8ba2159a62e634eb5439be815e0a86a42920"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileUnfoldView.swift",
+        "sha256": "10c3fe39945d8fc3bcba39944657ac75a6ed757174da010774a3bbb56cac3bc6"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileWelcomePages.swift",
+        "sha256": "08991b3759e1474d91ecc79950a9732618912f07d21d1689f5978749a72bf577"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/MobileWidgetResources.swift",
+        "sha256": "8efa7e3c900f39ffb3ea6328e996cc3093236498dfc8ba70002bb02f65f83da7"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/NeoLemmixMobileLibrary.swift",
+        "sha256": "2c0fb602eb2011e8b99631d1bbabfa3ae323f0cf0997cc3f9e39615b3518041e"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/NeoLemmixMobileSceneRenderer.swift",
+        "sha256": "9cc3e8b511a244649b465a5cc0e9af93ccec04830cc1305c460ff58e1e0c7955"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/NeoLemmixMobileSpriteSet.swift",
+        "sha256": "f79d5c22bb19644aaccdc5db7ca162aa485092eb18462f78428db9c7664ea0d3"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/TVGameImportServer.swift",
+        "sha256": "403e3e8974f2887c5e94fed510cb72587864db3731edd5a9bd8e2e91f5fb4062"
+      },
+      {
+        "path": "Sources/LemmingsMobileUI/TVGameImportViewController.swift",
+        "sha256": "4dbf534c81857cdfd0143968d9953443cb8f5461e3da14021be4d19d9646d881"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/GameLocalisation.swift",
+        "sha256": "1b7c7165e2f05ae04e38d260b68c765f6d9d9c31c08fc7a28a7a4fca4fd6af11"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVActivationGate.swift",
+        "sha256": "6bc1cde046e9fa0acf85f30ffad921d34102edafed6be6c795e7f8fb5381e7a1"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVControllerBindings.swift",
+        "sha256": "e5ca10549387933b31a62bdb10fecef1773da87597ff9bb52e126cc8a203ae17"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVControllerButtonEvents.swift",
+        "sha256": "7802695cb7dacd11d7d5ca919c1880410043f46ee4dad546b3b87d7416c02e47"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVExperience.swift",
+        "sha256": "6613e5049a24be13fb5f152543cb329fcb206c3df9d1f9a2fd2ab6bf35b7e76c"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVFrontendMigration.swift",
+        "sha256": "0c14433cd749724a852e93bf706b3df49b7baa4c9198e357670cd26bad347074"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVLibrarySource.swift",
+        "sha256": "45d8f4a5a0c4562b2989dd9c032ff43737c2cf9e4c2037e4e9f1e3e6249cd0be"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVMobileMigration.swift",
+        "sha256": "67c153d9dd7d9c07cb7fb7538fcdbf15430f62879e11c43db717cedcf9349410"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVSaveBackup.swift",
+        "sha256": "4343aa7413d3b177ecc3c2ce339b21542394e0c7c39f8a7f3ca984bbbee29eb6"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVTargetLock.swift",
+        "sha256": "524832be494e1eaf800dd3ed0928e7321d3079e2e03132fd835cfcb4ca594c94"
+      },
+      {
+        "path": "Sources/LemmingsTVCore/TVTimelineTransport.swift",
+        "sha256": "93dad9f01eb9237bbce84f01cc5325f26beb6e337b8796b8c94a4f18de9fb930"
+      },
+      {
+        "path": "Sources/LemmingsTVUI/GameLocalisation.swift",
+        "sha256": "1b7c7165e2f05ae04e38d260b68c765f6d9d9c31c08fc7a28a7a4fca4fd6af11"
+      },
+      {
+        "path": "Sources/LemmingsTVUI/TVApplication.swift",
+        "sha256": "6b2f606a8c354aac83ce7faa7a3517efd0a5f783d56c4ebcf7497e08a2af9339"
+      },
+      {
+        "path": "Sources/LemmingsTVUI/TVAudio.swift",
+        "sha256": "f2895acbfacaa9335b81079dfcbf954dceef2ba0722a02e0e4400a8554d402ad"
+      },
+      {
+        "path": "Sources/LemmingsTVUI/TVInputAdapter.swift",
+        "sha256": "f47ab8e85e082ce70ef59f574a98a490a769dda4aac893a196b37433225cf6bc"
+      },
+      {
+        "path": "Sources/LemmingsTVUI/TVLibraryViewController.swift",
+        "sha256": "2cc36dafbd97e3e442978e14071ed7bc42bea1208359055b7ea6061486bddfef"
+      },
+      {
+        "path": "Sources/LemmingsTVUI/TVMenuView.swift",
+        "sha256": "0b1f5600e49f2aa821c0ad2c372341a5c6072c27108a5955581bb9f0b903d654"
+      },
+      {
+        "path": "Sources/LemmingsTVUI/TVPlayfieldView.swift",
+        "sha256": "4a027978f508c5ee26b91a3f187f253e6d654d54f88ad3054d00c6c083c78c48"
+      },
+      {
+        "path": "Sources/NxlvKit/AdaptiveDJDirector.swift",
+        "sha256": "64af0c3544af3f4dde918449da00abf2657742848b9687505f3d86528333efe0"
+      },
+      {
+        "path": "Sources/NxlvKit/AdaptiveDJEngine.swift",
+        "sha256": "e699b20df8eaa7123bda56b61fb79f08bd0934e7de06c259328b44684b8ed55b"
+      },
+      {
+        "path": "Sources/NxlvKit/AdlibSequencer.swift",
+        "sha256": "ce0744434c683207d4d2680a6e53dc20357c0c45eb6ae5dc673856daf9bef373"
+      },
+      {
+        "path": "Sources/NxlvKit/AmigaSoundBank.swift",
+        "sha256": "c48c67ceb25d082790ef5ad631360aaf691ca1f0eaad5784348e118b6c74fddd"
+      },
+      {
+        "path": "Sources/NxlvKit/AmigaVersusCampaign.swift",
+        "sha256": "c6c8aaa5e611575336b7fe1d10537774344ea04b3533c291f1d2155ebbc123af"
+      },
+      {
+        "path": "Sources/NxlvKit/ArcadeLevelDecoder.swift",
+        "sha256": "b5b37f2592f125ec837a33dbc617b0fcc898d02f5e32aa7bcd57635d0457aaa2"
+      },
+      {
+        "path": "Sources/NxlvKit/ArcadeRecords.swift",
+        "sha256": "7e71c5b9be01c0547dca1ba52bf546f9d28531e4a090876939ab3e651e6b49ba"
+      },
+      {
+        "path": "Sources/NxlvKit/ArchivalAudioRegistry.swift",
+        "sha256": "cdc4bed128f7e591b0c719311d2d5bda68e1b47d39bc5cfd35b39bd115671011"
+      },
+      {
+        "path": "Sources/NxlvKit/ArchivalCatalog.swift",
+        "sha256": "1e36ead63cfcbcb2b8831a073c28f70345453e33bf222de9017dd037770e3032"
+      },
+      {
+        "path": "Sources/NxlvKit/ArchivalGraphicsRegistry.swift",
+        "sha256": "ffcedbbbbdd3efd355b19bc7c52fa86f85e84792baae79ced3340449cd00ac1f"
+      },
+      {
+        "path": "Sources/NxlvKit/AssignmentFocus.swift",
+        "sha256": "0a471f95ba5566b3df3fa86e490d0757abce2e327b1151ea1ee2370966c9b55b"
+      },
+      {
+        "path": "Sources/NxlvKit/AssignmentPointerShape.swift",
+        "sha256": "25e89a408ff71c70b6ec5891a89c9fceba59695570dbdfc8e01f69e392de67b4"
+      },
+      {
+        "path": "Sources/NxlvKit/BYOIntegration.swift",
+        "sha256": "d20b36c4586e3107ab6e7d3af670f0f32d0d0429287b1a1cf94c281acb2bb376"
+      },
+      {
+        "path": "Sources/NxlvKit/BitmapLatinGlyphs.swift",
+        "sha256": "e071ca2364c1772a612675da9f042a855d706b9945003cff60d060087f6b22c9"
+      },
+      {
+        "path": "Sources/NxlvKit/BitmapTamilGlyphs.swift",
+        "sha256": "bd9f455bf4fb7d83226424d5afe8450f1315c2388d4c99eb657ceb205e0441bd"
+      },
+      {
+        "path": "Sources/NxlvKit/BundledGameResources.swift",
+        "sha256": "69baca5a1151a10a67863fed324b69b35baa6dea23a8db0ab12d7f51ae4657e8"
+      },
+      {
+        "path": "Sources/NxlvKit/BundledPlayableScope.swift",
+        "sha256": "3199dd16155edf54caf16b8e61d8bd8cf6cc6532a6158fccc78e4322001cf505"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicADFVolume.swift",
+        "sha256": "9a888494f6a6f4004e2ba9522a9d444f534012e89a609dd5a1f65948206f54f4"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicAchievements.swift",
+        "sha256": "74e4e53263733c8d7cf2e569003f0fbad1dcee07f1797fc7866369ce71719f5a"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicCampaign.swift",
+        "sha256": "32d83364051c02752224e63014bfca991188083524f5d28f5a16e9d7a571b23c"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicDATArchive.swift",
+        "sha256": "9964e8696a2c6a2130cab5324ca9904d96735ef0724b44e24afe168bbc097c96"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicDOSReplay.swift",
+        "sha256": "7a986cd350ec2f5306f6b3259954992a2093a7e42d4df7d98aa11bc25823bc45"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicDOSRewind.swift",
+        "sha256": "ecb713881573e2668fdaaf3ee5ff20d71d88572618e82917b94e91d02f7f0c49"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicDOSSimulation.swift",
+        "sha256": "23ab967bd2198d01dec9e2c341d4ba337eb0e2fb97e75e024db73a0557e05016"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicDataSet.swift",
+        "sha256": "1b8c40342e719b0c62be2e176ea06fb9bae026f33e839d9b9b4f3560e695e2ed"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicDifficultyAnalysis.swift",
+        "sha256": "09bd342c04f808f1715f3aced493986a0d5be4dd7c0200c108425845cf171579"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicFanArtwork.swift",
+        "sha256": "a01cbb5cd54489cab1d9edd66f4b356cda7a735f1ce686dbb6ab36045b8906c7"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicFanPack.swift",
+        "sha256": "50a3d77650f4302c010edd9e3250a716a34c14b41e4a8f528624c40d0f5525e9"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicGameFlow.swift",
+        "sha256": "b7626267cc4a5ed62c1eaf4493b73b1e1f98e81909a7ac8aa913cf1cb1acf763"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicGraphics.swift",
+        "sha256": "3de688c8807f84e1f5b15d4e75ec0c9c1f8170e69de0ef50a6d871fd256bba0e"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicHolidayCampaign.swift",
+        "sha256": "0ec8c538b2320d32c81a6075c442dc95987b3d79162e98d43b1d3c1eeec49096"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicLevel.swift",
+        "sha256": "323b347376f3f82eefe2e1521526e47f5c8c4d0db0d6b0fed76dd1826d0039af"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicMacArtwork.swift",
+        "sha256": "1c3deea473cd593d9fca730c758154de6e4a33428195d4613f5d25590333ace6"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicMacMusicLibrary.swift",
+        "sha256": "52d642410ff3c7ddfbae1b84be3ec5760be62e31aceea33adb07691235eebddb"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicMacReleaseRate.swift",
+        "sha256": "ac903f64d44c3cc5baaa5b6afc7b2631e4fb6025d13e6e15306ff93e9753d8ec"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicMacResources.swift",
+        "sha256": "7cc7adb17166c868937417fbcc0d32ff7bce898dbe2f2f0723c9578be362b6fa"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicMacUserInterface.swift",
+        "sha256": "55dd3b1341e33e8cf983252e11b3a9c44ac71a830765d8d1e5442aaa8c7e3175"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicMainDAT.swift",
+        "sha256": "040462c1a56da8cf22fb127fd485c3f3361161bc4351bc738436d1741cd87f99"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicMonochromeBackpack.swift",
+        "sha256": "72c7838a7baf19512d9836a3158c349cebe5687509d783b17d30dfa76b14c7b1"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicSaga.swift",
+        "sha256": "36908654cad099ba6d96bf153d048473ff8e191b8ecca66a9255d1193132fd37"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicSampleBank.swift",
+        "sha256": "51c52ebe84f5352e35bea0eb619837b5c9a047c34ea422228ab73a188fc31f5c"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicSceneFrame.swift",
+        "sha256": "0db7db1b0b46da77245a340fb594828f127688dcae08c73e5f7e01ed14310047"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicSettings.swift",
+        "sha256": "b9cf6d6a9b0ec05031814cc7af360f89b3715be3367353bbfec9a069d4ffb0e3"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicSolutionGhost.swift",
+        "sha256": "0e9763f1087b9ba03d920d7a3c66fa38868d7d55a8a4a7dd44b45ee01b8a77c3"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicSoundCue.swift",
+        "sha256": "848cd80a7bc9197cdb630117d388dddb89e6fc2fe834e9bb9740be2866bdfec2"
+      },
+      {
+        "path": "Sources/NxlvKit/ClassicStyleResolver.swift",
+        "sha256": "b9d555279baa1ee1ba6c6c362a66a048f2f9b260843f59d6cd9c84da69fd575c"
+      },
+      {
+        "path": "Sources/NxlvKit/ControllerBindings.swift",
+        "sha256": "8086ce65c3627a857e21a9e53d5f082fc6584b7f453432252b25f680ff0474ac"
+      },
+      {
+        "path": "Sources/NxlvKit/ControllerButtonEdge.swift",
+        "sha256": "fa770bf963c9ea05075c3b008118b39e12c9ea0a2cbeb317db2ee5c26db2ce94"
+      },
+      {
+        "path": "Sources/NxlvKit/CursorCamera.swift",
+        "sha256": "5decbbb1d5fea07fcbc554ea10112e193c214fea45e706b66405ce02f6cf4356"
+      },
+      {
+        "path": "Sources/NxlvKit/DeviceEffectResources.swift",
+        "sha256": "f8a9e5c1b64c8dcdd3177d681228913690e90faee0684592a64fa1db071ce17b"
+      },
+      {
+        "path": "Sources/NxlvKit/DifficultyCalibration.swift",
+        "sha256": "e1c457601155b171681227e7d14cf9fc5fb06144434ed7cb273b0a04b5f64066"
+      },
+      {
+        "path": "Sources/NxlvKit/DifficultyCorpus.swift",
+        "sha256": "294a34720fa720dba54646108d9ae135965a87ce40170ba69ee6f002092b97ba"
+      },
+      {
+        "path": "Sources/NxlvKit/DifficultyDiagnostics.swift",
+        "sha256": "3f4b1ef74e0906b301ad7e35599c7a5ee6eb6b64d84c2fd3f8717b99d8adc06e"
+      },
+      {
+        "path": "Sources/NxlvKit/DifficultyPerturbation.swift",
+        "sha256": "09710695e8c63512f0864ac97ff74b8891811bacf3ce25191928469aa7bd96b6"
+      },
+      {
+        "path": "Sources/NxlvKit/DifficultyProfile.swift",
+        "sha256": "a899019fcfbee2e1552f6a169850860d6e48cee5f2f936f6515abb46387b9ee8"
+      },
+      {
+        "path": "Sources/NxlvKit/DifficultyTechniques.swift",
+        "sha256": "1fb1e6caa6c364ba9e05a05b8c6918d5cc4f3eb9995063ab406bd79e37cf8a1a"
+      },
+      {
+        "path": "Sources/NxlvKit/DoubleTap.swift",
+        "sha256": "ed15dedd0b0a862ea9ebbca4fdda5ef098e0a9f1386055d0025e74dbda0e2f1b"
+      },
+      {
+        "path": "Sources/NxlvKit/ExplosionPixelSpray.swift",
+        "sha256": "0e9cebabeea923f1b918c9110c47e961420b4cf132665361774f3b5f58be6204"
+      },
+      {
+        "path": "Sources/NxlvKit/ExtraSkillRewards.swift",
+        "sha256": "e9a5873d437c718bd24cfbfd58b3492f02e3cd79123c57f1ae678b987288a65e"
+      },
+      {
+        "path": "Sources/NxlvKit/FLICMovie.swift",
+        "sha256": "02a50aab8ceb0c85943803005162396c36d40eb13f1b33a956b34b3f14d0e67a"
+      },
+      {
+        "path": "Sources/NxlvKit/FanLevelOrganisation.swift",
+        "sha256": "c443097bada21eddc0fac5252bca5f14fc491e79692954b256d1c95a7f11d0de"
+      },
+      {
+        "path": "Sources/NxlvKit/FanLevelReader.swift",
+        "sha256": "eabc9c0bab9207749eb979addb94a4d16db279999ce9b89e740ff998daa04ccc"
+      },
+      {
+        "path": "Sources/NxlvKit/FanPackUpdater.swift",
+        "sha256": "47ae7f9de3129195b8392a62b42b413183fefa8cc2a8238c3fd810052233fa4a"
+      },
+      {
+        "path": "Sources/NxlvKit/GameAssetCache.swift",
+        "sha256": "b2e13e79f34be271057f912dcfae13808b52074e738ec2355ab69db81d9115b8"
+      },
+      {
+        "path": "Sources/NxlvKit/GameplaySoundPosition.swift",
+        "sha256": "0b3be2732cde7df8b5cb1e972508710431cbed8530130b59d6d85fce08ac663d"
+      },
+      {
+        "path": "Sources/NxlvKit/GameplaySpeed.swift",
+        "sha256": "41977fc0ae89122fd9b405a197fd89633b93ab5b23c4e2d90e9320337eeaae5a"
+      },
+      {
+        "path": "Sources/NxlvKit/GameplayStartCountdown.swift",
+        "sha256": "db038b967e66ce2818599049847a7ad0daf837a8ce230d9ef01924f8dae6108f"
+      },
+      {
+        "path": "Sources/NxlvKit/GameplaySupplementSounds.swift",
+        "sha256": "f0e174a53a471a1b2a1b310acc65d95ecefa883f6b3ba5a776795352b46fa89c"
+      },
+      {
+        "path": "Sources/NxlvKit/GenesisFMPlayer.swift",
+        "sha256": "f0976df5e41c354f9a7ecb0a673878f4c9c48c982613320485d999b0071e714d"
+      },
+      {
+        "path": "Sources/NxlvKit/GenesisLevelDecoder.swift",
+        "sha256": "3730969facb0b55e3bb944131a07bec5e81ae8f36419fab84bfc0e998d022108"
+      },
+      {
+        "path": "Sources/NxlvKit/InterfaceLocalisation.swift",
+        "sha256": "383cdb437ed45105efca4de2987fd2a6013151d4afc53aeda7044b88e01ab9c5"
+      },
+      {
+        "path": "Sources/NxlvKit/LastSecondsWarning.swift",
+        "sha256": "ec80979d933edfa4f94939237353232d4fbbd28117e70f7f24979c763407f508"
+      },
+      {
+        "path": "Sources/NxlvKit/LearningJourney.swift",
+        "sha256": "c47526e5e980935181a2047448f60d4ad3d2532a5690db4824417f19920e698f"
+      },
+      {
+        "path": "Sources/NxlvKit/LearningRouteSafety.swift",
+        "sha256": "bc60b3454a616a71aa50117c31da9f6e02b3c7136c3d75a7093eb3b0274f744a"
+      },
+      {
+        "path": "Sources/NxlvKit/LemmingApproachTargeting.swift",
+        "sha256": "86d7075920e9f9f7b870e697122d2de51f784a66a65327dd43268785fa3800e8"
+      },
+      {
+        "path": "Sources/NxlvKit/LemmingSkillTargeting.swift",
+        "sha256": "f75d90989fdc411a26da516a067ff9439580b9c94363335edc9ade81066d3780"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2AirCollision.swift",
+        "sha256": "54bb3d65141c35134dcc31df398da090db62e4e19adaf60d9837952e8e5a3738"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2AirPhysics.swift",
+        "sha256": "2df065e0af761ff7f4127529b0cdd9a02c7d1d17eb5cb9a56e5bdddd1396d1df"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Ark.swift",
+        "sha256": "c997eca31682b79d248da47e4552a9a6428b3d36c158e6cf9fc39c78e72f7c9c"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Award.swift",
+        "sha256": "93438776cf9fb18e02a6a56ddb3c7313361ed0ce7c2258d95f4e1281d741838f"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Campaign.swift",
+        "sha256": "9538308d70658f453624c84b3c7093fabff641aff3deecd2ccd3567559ea07a0"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Chain.swift",
+        "sha256": "d505460a4727f6a54cf7e4a0c052394df58c2a799445204b9ed98474a95d8081"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2ClassicCampaign.swift",
+        "sha256": "9bd9ca5ea9ab15a39c76a51903f7bf6290e09a2044c71b8ca3c2d763599f805f"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Climbing.swift",
+        "sha256": "d94131ea24505ea34dde0e7e1ead287be9124a07fd09a3e630c64446caa08a16"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Controls.swift",
+        "sha256": "ae2316e1efd6fa15a9d8c18fba40b7dc7b9bf2430b25d74b890c0a850e4b2774"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Ending.swift",
+        "sha256": "75286b0d2422f6b3f3f944b86db068f82f0331bd88f6acaebd1bbbca6be284a0"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Explosion.swift",
+        "sha256": "c6d642e5da07c338947590524f4c668416a1115a9fe22727808dd2ac6f460cbb"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2FanPhysics.swift",
+        "sha256": "1beefee4d078401c683b1550ced62e8d2258b42f5412f4a849e4879c6b974b8e"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2FillParticle.swift",
+        "sha256": "815b5e1875cc57455066668896163cf919b8624fa2707a3fbeacd3d34acf2367"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2FrontEnd.swift",
+        "sha256": "3e02995fada8da1f69a921526f55c61854822d64be1b686b069325b76483d785"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2GAL.swift",
+        "sha256": "d54893a60f0057239aba4b6ec88704fb35d07a6b422c842c288077faecca8723"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2InteractiveObjects.swift",
+        "sha256": "199966e998db6efa3867656566dcbe91433caa756efdef7ce9ef765aa4e435b8"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Introduction.swift",
+        "sha256": "44c4eeb28ecce02427a9923c1a564c2a3a8fe9e2d3053e4b7a39749884c69503"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Level.swift",
+        "sha256": "ce27252562817008031f8000e6cdccd9e319f1da70b984dc5d57213b02bde160"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2MacArtwork.swift",
+        "sha256": "14499143827a7ea54ae6561b766ad03d4320df9d7826ec964498e933b7322930"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2MacRuleTables.swift",
+        "sha256": "d6677924309e073c37e18679b67c664021813ec30e0ca41c909af723bdb2cf41"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2MagnoBoots.swift",
+        "sha256": "1ecf0ad2adb9ec84fdb8632eedc1e2280e423a7796aadcf7fb704f8b8d9a90b3"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Objects.swift",
+        "sha256": "aed6ee120e7d04f0d37c9db6f7565c591b31aa26894fc6fb06311f6cdd96b6e9"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2PoleVault.swift",
+        "sha256": "eebca523ac83e1120803bd83d931f4d2e6bf32c8e6b3b7f6b15c2cb870e4b47a"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Practice.swift",
+        "sha256": "88cfc6cd5ff05af7d1c62bf4e6803534c3fa9b44720bcd6caf3c0bd815b5be6a"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Projectile.swift",
+        "sha256": "44a9006588ed50d90488877a3be5ee93011e35fd055fc1620303756d434970b3"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2RailMachine.swift",
+        "sha256": "3421fd7272f18cd706d4f734c09e0bd2496c50df2c694df2e9825ff8457ccf5d"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2ReplayWitness.swift",
+        "sha256": "7dc31438027c1472faa6695f2d71489a0d032bfd3473f8a011f0ace9ddab31d8"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Rope.swift",
+        "sha256": "660b3b677f008ba2208329885d4e3d44ca6a48e4e95a7405b822c908dfbb7c53"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Runtime.swift",
+        "sha256": "10e1609b0041eca3d7e2a047dfe81888821ee2daa9ef45b85f10f066ffb6b633"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Shimmy.swift",
+        "sha256": "d351e31b364176187a00b5d80ce63fd0eee6ff875962c8a04db3964819454368"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2SkiPhysics.swift",
+        "sha256": "a8b117be0ebd471aab90765e8263df8b197dac14eab78dc2689830308491f3bb"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2SkillRules.swift",
+        "sha256": "f5e639714f3239a0cff685d1361ae20693e36261789e00d82c1c8e6dcdcdae49"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2SoundBank.swift",
+        "sha256": "c538cbb3fb547b60ea67898d0b4945715a9e3d85116642b1b3a35f385dd7e1a9"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2SpecialGraphics.swift",
+        "sha256": "2aa2dec808a00f96476755adde6cc4228c8a3bb4557fd53d5716b0a48846cc7d"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Sprites.swift",
+        "sha256": "4b3135a7db84290a00a75d1a879d2a042c01152259084c3e534956a61648749b"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2StoneCollision.swift",
+        "sha256": "74aac8a63c6527fc28a0f35e33d7b83526899b6d72e032d8573b3009c54361b9"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Style.swift",
+        "sha256": "60b7ed25df5dac6c8ad97c4df2ba1fd2c8265877399fe7847ac93bc7e5dda0a2"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Superlem.swift",
+        "sha256": "55bbc60e0f5402e54203ba0775046a18953c7a3430d6b270b4055d23359596a6"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2TerrainMasks.swift",
+        "sha256": "febc070c827b03a0fd2ece7762e8ff4159dc38b15c5491a361a0fef76d136734"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2TimedTrap.swift",
+        "sha256": "18d1e5f7758e18c1f3e259b0597af212bb93e865239302a5f35085f2ca6f2eef"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Viewport.swift",
+        "sha256": "dec6f3f647740ff0c4c4a0c7205aa5da84ed6be497a2fc383fa2f730301f5054"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings2Walker.swift",
+        "sha256": "b71f3e272fad942629e9b8a2ac05a1e484a95da1b293f2bc9f45b5b646a38a8a"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3Brand.swift",
+        "sha256": "f26886792218a810f862a1da96ca8ca22a9ef2e2e3d1cb07ab203b770cedbd07"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3ClassicCampaign.swift",
+        "sha256": "ad3c54bcce6fef398b21c486b78928b0c3f81252ab982f54976067ea721a9340"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3Font.swift",
+        "sha256": "8a69edc4fb0b6caa060c14229eee5d80376201635c56bba36bcf59595d1bed93"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3Level.swift",
+        "sha256": "10c576ddf25fae20197dd987deaf09331f090b9addd009afd0e4d18da0f6174e"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3OriginalMovie.swift",
+        "sha256": "292bb33e33c03ef1b6b641a4a199847fee58167b52086bdf85e44ddc1557fbdc"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3Runtime.swift",
+        "sha256": "4fdcd119b72784cea0c977a3341cc2f669f6affc05552a3b0eb779901482d699"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3Scene.swift",
+        "sha256": "a06b932d33cc6d8caaab7f3fdbcc56cab333001781d3a18d54399c1ffca3bc3a"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3SoundBank.swift",
+        "sha256": "030687c40cd57e65663a12ce01a6cae7ba1fea4d0cd68204e4fb94a70b2d4e66"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3Sprites.swift",
+        "sha256": "595d6269eb4ddd4d38984bce166a1f67a31410ddf911553341c7e49f7ac6077a"
+      },
+      {
+        "path": "Sources/NxlvKit/Lemmings3Style.swift",
+        "sha256": "7d4248efcd7ff96bf015faf9f3c0aa8d572b7a69eff56cef92dd47ac14766a13"
+      },
+      {
+        "path": "Sources/NxlvKit/LemmingsSimulation.swift",
+        "sha256": "4667457a166fff23d5733dd38903250b57671dcff72dad8579dc16d83c489d1c"
+      },
+      {
+        "path": "Sources/NxlvKit/LevelCatalogue.swift",
+        "sha256": "160a041dd69300440872883616f4d6795e1ea21fa9c05682fcf2a2b942dedd3d"
+      },
+      {
+        "path": "Sources/NxlvKit/LevelPlaylist.swift",
+        "sha256": "b9e21963cd663dd4a7e3c65f0faa0fcac7ec5b1e53fa30cbeeb5a4540a3fcacd"
+      },
+      {
+        "path": "Sources/NxlvKit/LevelSkips.swift",
+        "sha256": "85e9ad08da5c0892cf6ad8cfae7d9ec2710add32d8d930b9a04d3d4d842c7f78"
+      },
+      {
+        "path": "Sources/NxlvKit/LixArtwork.swift",
+        "sha256": "afc3d18849acab95331b8e37470adf122dac924e6cf39669eaf346d3b7a72fe9"
+      },
+      {
+        "path": "Sources/NxlvKit/LixInterfaceArtwork.swift",
+        "sha256": "d875b4e9e079b98f45b94ea95fd14312d3cb7a2ef7d38b07e3de01cd3ca53c54"
+      },
+      {
+        "path": "Sources/NxlvKit/LixInterfaceText.swift",
+        "sha256": "66c06606125e6bc1e1d4e5d3758424e9d62ca5bb6077434d69fc228fea5afa5f"
+      },
+      {
+        "path": "Sources/NxlvKit/LixSceneArtwork.swift",
+        "sha256": "f7c750263edef0507efd8ae5048a2fee47793577158dfedfaf9cdc629231c07e"
+      },
+      {
+        "path": "Sources/NxlvKit/MenuThemeSelection.swift",
+        "sha256": "289c958a6415b4de2e85feb9d75babf95f4a0b35ffb297e39220f0214c847f32"
+      },
+      {
+        "path": "Sources/NxlvKit/ModernCampaignProgress.swift",
+        "sha256": "f238404c4a9650ab8730862c5e074050a560efbbb478ae0c10c3dfcd108e9b7f"
+      },
+      {
+        "path": "Sources/NxlvKit/ModernLemmingsEngine.swift",
+        "sha256": "61d3217d89d9fa7e56457c43fc2e7c69b5d9f30cfdd4365a243d38df48323c2b"
+      },
+      {
+        "path": "Sources/NxlvKit/MusicLibraryCatalogue.swift",
+        "sha256": "4c6c30dd1f93255a290784a0706cc7ba69af5239fc1853534fb5d292d20b611b"
+      },
+      {
+        "path": "Sources/NxlvKit/MusicLibraryInstaller.swift",
+        "sha256": "6612f4a46ba999c854d53e8861784a4c19431dae5d13a4c8cac87eae14b66ff8"
+      },
+      {
+        "path": "Sources/NxlvKit/MusicPlaybackCatalogue.swift",
+        "sha256": "44a8a7e3cdf0b0b6b941c30581ec59b8f625e24bee879218b6bc81f559e5af39"
+      },
+      {
+        "path": "Sources/NxlvKit/MusicRhythmCatalogue.swift",
+        "sha256": "15474f6f029d5c9126c24624047e240b95f90d3407564c1021c41861e897998c"
+      },
+      {
+        "path": "Sources/NxlvKit/MusicTimingCatalogue.swift",
+        "sha256": "5962caaffbbd8945734ed4e784e9c139bf76b9bd4db34117338cdc46075e9788"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixCompatibility.swift",
+        "sha256": "9ce3499f3ac8e3d732859d7472c4cc06ee0a58b63909af9bb5baf0dd48010513"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixDifficultyAnalysis.swift",
+        "sha256": "bd68949328aaad25c0adf4bbbd634769dae9d6bbe3ec9d8930094a790b2eba03"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixFinalState.swift",
+        "sha256": "d038b4088e3c8d086c143ef88ccb18d8162cd3b55f13a519b833925dc83bb1ed"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixLibrary.swift",
+        "sha256": "2715214ea29e25d30798c6fd1ba7c129b947944120efb0053428dac5378a3c1b"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixMacArtwork.swift",
+        "sha256": "fc74c0d09e100dc4e76ac6370f20bae820d4df7207e94211ebb3c7574052f12a"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixPack.swift",
+        "sha256": "f1bb3fe8ecff562b89779181083d1880d26d763745e14d8c922199ed43a66522"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixPickupGraphics.swift",
+        "sha256": "4d0b9ab76f5150686a20a0ae6f3b84019752727d99598ab070ffced7a04247f3"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixRenderOrder.swift",
+        "sha256": "fcf1a99c04a239a353d4e8ea5434f566ad7a769ba189030b9761be753b8cd38e"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixSceneFrame.swift",
+        "sha256": "a5d2a182abb973bcb08319574c718db340f679575efea353f94c04e17043c7ca"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixSimulation.swift",
+        "sha256": "6ed75c0104893de069207a8f38c09c6ea54a7f90ca5bc66acdb88e1ae4dfaa6c"
+      },
+      {
+        "path": "Sources/NxlvKit/NeoLemmixSoundCue.swift",
+        "sha256": "db36796adbea5b05d30f43eab45479025b881469e7e636a5e02daecd47b1c745"
+      },
+      {
+        "path": "Sources/NxlvKit/NxlvDocument.swift",
+        "sha256": "b6bb55457f3a9832056ceb97f0868a398b2a67a129caf28d84a1b4623947449e"
+      },
+      {
+        "path": "Sources/NxlvKit/NxlvLevel.swift",
+        "sha256": "95ea96d6ce0043dbb08c2a89f09631a4ece4628b7bf2eea1da332b62eada3e2a"
+      },
+      {
+        "path": "Sources/NxlvKit/NxlvRenderer.swift",
+        "sha256": "0ba5392acfc3b3716849128d99726434c213ab05e87faa70a096df487331d1af"
+      },
+      {
+        "path": "Sources/NxlvKit/NxlvStyleResolver.swift",
+        "sha256": "4a3ccfda0b2403b93bae295ffc61006ce7734d8c376131b49f850742a949ebcf"
+      },
+      {
+        "path": "Sources/NxlvKit/NxlvTypes.swift",
+        "sha256": "884ef9c5c4440a26c64227e8f1b40714a456d66e7cdc10e3a57f1ddfc8cf74b4"
+      },
+      {
+        "path": "Sources/NxlvKit/NxrpReplay.swift",
+        "sha256": "c070c8bbf9194567c20591f7999ba4aaec00c2f293670a690cffb4295b3cf39f"
+      },
+      {
+        "path": "Sources/NxlvKit/NxrpReplayPlayback.swift",
+        "sha256": "54ace523174fca285d645b3699334a5b9ee4ec2c7ff9c5a1ea791127c6d405b6"
+      },
+      {
+        "path": "Sources/NxlvKit/OPL2.swift",
+        "sha256": "d24109006cd4ba3fcc0781bc359b94908c95fcd14d8a81c99614300d887a6f93"
+      },
+      {
+        "path": "Sources/NxlvKit/OpenStarterContent.swift",
+        "sha256": "bbb1d262fc9472ef0844915e8b0a01497d1a428ee4e9558c4457cfe73a51a426"
+      },
+      {
+        "path": "Sources/NxlvKit/PlatformProfile.swift",
+        "sha256": "131433866598772dd07d8fd2ff24132c8b2ff5de47d3a6b006a48cc61e4d183f"
+      },
+      {
+        "path": "Sources/NxlvKit/PlayerControlSettings.swift",
+        "sha256": "7f841e938272e55aef255487e9d26d6fd2574988558f3a23b19b72a2c7d6a692"
+      },
+      {
+        "path": "Sources/NxlvKit/PortExclusivePack.swift",
+        "sha256": "f4d471069f59553819a5032854f798c421a841c189c0556f2d9a44982df3abc3"
+      },
+      {
+        "path": "Sources/NxlvKit/PrecisionZoomLedger.swift",
+        "sha256": "0da1e7194e8cb0c7ec53cfe18b182eae0d72e9a4e802b10892f0f896500a882b"
+      },
+      {
+        "path": "Sources/NxlvKit/PrecisionZoomLens.swift",
+        "sha256": "aa045f269251779244937497d6717396df00bd0c2a9ebf0cef2adb25f36e6bbf"
+      },
+      {
+        "path": "Sources/NxlvKit/PrecisionZoomScrollGesture.swift",
+        "sha256": "be6d211d8eda90713a3ef009c5f4cc4dce8c5f7918637dbf1c58790dbe881160"
+      },
+      {
+        "path": "Sources/NxlvKit/ProTrackerEnhancements.swift",
+        "sha256": "5e6c3777952fb172b2dc25536fc8460ea9931a79237e3fb383012b16605c208d"
+      },
+      {
+        "path": "Sources/NxlvKit/ProTrackerModule.swift",
+        "sha256": "df69dcbd51b9c6da66d1e732f1d6f636a9cc9682cede20aedb7607c11e49aa42"
+      },
+      {
+        "path": "Sources/NxlvKit/ProTrackerPercussion.swift",
+        "sha256": "b7c1f4082190b189fe137c46a19a517524c64329ce4624d8aa5a304318abcb7c"
+      },
+      {
+        "path": "Sources/NxlvKit/ProgressionPlaylist.swift",
+        "sha256": "4a6446aecea7c116b548a52933b61883043925e12505394ef91261902c78ba33"
+      },
+      {
+        "path": "Sources/NxlvKit/ReplayMoveNavigation.swift",
+        "sha256": "97895e4641d71f949a483bbd81ba9896e46207eee6fa1409c9405b0588b8f42f"
+      },
+      {
+        "path": "Sources/NxlvKit/RescueCelebration.swift",
+        "sha256": "50a3c757417324c0e9581ecb904aff6f3b5cfcea84a98e0d746ac173ea4fb256"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/de.lproj/Interface.strings",
+        "sha256": "ca56a70791b92afb56c7a02b9deab9d61d083891f3e7eaf3d42354d9ad01e072"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/de.lproj/Interface.stringsdict",
+        "sha256": "486d0ea1070babdb1eebd682df30e5489f95595f5cda5b388ae6bf89c20f8219"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/en.lproj/Interface.strings",
+        "sha256": "03ac87235d38ab0c9a9192a188a7953fc8ac7cd5edac38c50a5822a5fa2539a5"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/en.lproj/Interface.stringsdict",
+        "sha256": "7ee8f033b110bb088b24eaace70899a29242e71597f4ad1568d308ba4e2d8bab"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/es-419.lproj/Interface.strings",
+        "sha256": "a535e309d4baf00782817a391090cbb8a8a8efe04ae13b77319fd76907ee76a5"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/es-419.lproj/Interface.stringsdict",
+        "sha256": "cbae9505fbe9f593c1479a850a94ea53ce3c8ae158652d42452d9c87ce272cab"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/fr.lproj/Interface.strings",
+        "sha256": "578b20478bfb62971e1c6b9ba907aaed4232d516f3247ea8bda86dbccfe2f96a"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/fr.lproj/Interface.stringsdict",
+        "sha256": "2dc5f5c685aef06da8838378fbff01ff1a2e3d4e501e3812edc7d3918c000e84"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/it.lproj/Interface.strings",
+        "sha256": "c913f0d56b4d21750c6e39ce0563cf1839d593602d48b0ff33285f2810cefcfc"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/it.lproj/Interface.stringsdict",
+        "sha256": "af6f2f802f5f258dab68b08fbc114bfbb390e15588ba105c9be40d8ec7c44a1d"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/nb.lproj/Interface.strings",
+        "sha256": "6b61418bab36124ab28033153411d7d13b018fcd6284ebf550296e28f4538226"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/nb.lproj/Interface.stringsdict",
+        "sha256": "d96b68b4ea309565eed2cdb7287b83fdc50a58339c493d3d8b7f845713d92feb"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/nl.lproj/Interface.strings",
+        "sha256": "67002944a77b21fa3f11b87ef75efcd91bb0b387516165750f527836f715ace4"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/nl.lproj/Interface.stringsdict",
+        "sha256": "c6bcbe80be7f1e9f10ff10f2c857b300d037f6ed07aee16a7f2cef33d0909388"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/pt-BR.lproj/Interface.strings",
+        "sha256": "8b5eb1ea10e6519dc068048b50379d32e56c2a66a5776fc9676258f7db6f0f3e"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/pt-BR.lproj/Interface.stringsdict",
+        "sha256": "967792ecaa5646ea4874d374639dd56f36bf0ec3e6c9141d9814eb553766179e"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/ta.lproj/Interface.strings",
+        "sha256": "1ec6ad5d6f27007239c4b1554d98506539c8a8f8c971092752f1a620f5b1cb71"
+      },
+      {
+        "path": "Sources/NxlvKit/Resources/Localization.bundle/ta.lproj/Interface.stringsdict",
+        "sha256": "20478306132a658a57d3dea10b738d5c41201689ea723804d282ba3d1af5e73b"
+      },
+      {
+        "path": "Sources/NxlvKit/SNESAudioPlayer.swift",
+        "sha256": "a50aceb96c1f8fbae05e7a5a0cf7a95d6a0d32b643474deb424498e1cef2e86c"
+      },
+      {
+        "path": "Sources/NxlvKit/SNESLevelDecoder.swift",
+        "sha256": "6a96c0820974aa417067dd369876fb4f39a9a7096c9e3fb3620ebd0bd34d8564"
+      },
+      {
+        "path": "Sources/NxlvKit/SequelBinary.swift",
+        "sha256": "85e3e9c0a9c98a91553d5a07ebea499fb08f93b2afad2d6bd06a8078e09644fc"
+      },
+      {
+        "path": "Sources/NxlvKit/SequelBitmapFont.swift",
+        "sha256": "98d1dc159f766c19c7b3169557ec6ba199ad2ed0eb2c51a959fdc025d591d040"
+      },
+      {
+        "path": "Sources/NxlvKit/SkillShortcuts.swift",
+        "sha256": "f253eef6e47533b1654e610dc6a773735544cd301664fb2a83ea9ae6fce09484"
+      },
+      {
+        "path": "Sources/NxlvKit/SkillVocabulary.swift",
+        "sha256": "a1ab3f7944900b74da2ee9b146c1b0e31e313258462c52db719003e460ed6fac"
+      },
+      {
+        "path": "Sources/NxlvKit/SoundtrackCatalogue.swift",
+        "sha256": "dd2f52aefd518af9fcee333f041a799df3584e4b2c4522f8c8218f4a6fc510c5"
+      },
+      {
+        "path": "Sources/NxlvKit/TouchpadJog.swift",
+        "sha256": "651be71c302c3a2427e9861ec4e3a7d38def72346aa657a88d722cc44fd392e0"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyAchievementCollection.swift",
+        "sha256": "943905264f1919ffa3c5149d578cd246117f6b7619a878d0f6318820575105c4"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyAffinity.swift",
+        "sha256": "c783e9727c47a24733579f0318bbd5ddc9b5a0698717d40299c86d2740322b57"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyAttempt.swift",
+        "sha256": "532168c2654febf43901bf25d57869d8837d736b00c5203d20c3284b23dd2150"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyCelebration.swift",
+        "sha256": "d7e4ff3272876d2a47f34556ad2e065220fdf860e697dc3ac65af62e836e6ff2"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyHistory.swift",
+        "sha256": "6afc037e31de297b04b06d4a3719c3b1afc1a341d7dd070e3ae30e5b4ca3af3b"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyLeaderboards.swift",
+        "sha256": "9b5b23b41b8ef702956e27d8526ca593313c5a747bb181c279c9184d721b4f47"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyMaximum.swift",
+        "sha256": "91edfd8f9c4970c81708701ab4b6565e78b70e87e3fb7d227d58d10e67a78c84"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyOnlineScores.swift",
+        "sha256": "77cff2bbfcd87eb54b70487f57cab59d78f3b466aa42afc2c7a23f520cfbf6f6"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyPhilosophy.swift",
+        "sha256": "5cf7e0e8903952b0c8a49700cb45c2a1d47fbec37816df76138d366b9795b394"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyProofCatalogue.swift",
+        "sha256": "297f39a752e67ef73805d6d3ae07d30b48234b349b79b33f0696a93d678af7b2"
+      },
+      {
+        "path": "Sources/NxlvKit/TrolleyRescueGoals.swift",
+        "sha256": "669ac46406a098d75524d6d505eba86a041635d033c53ea32f8d84dd64f97bd8"
+      },
+      {
+        "path": "Sources/NxlvKit/UnifiedGameLibrary.swift",
+        "sha256": "055c6733be91d0e3d57daa3bdf3a69223290f653e9e7a1f146c47a93414f707b"
+      },
+      {
+        "path": "Sources/NxlvKit/VinylMotion.swift",
+        "sha256": "bf0404fddd05bafc6e37d2c6bed58bffa3186c9ddb8bfb50c618480059ed2126"
+      },
+      {
+        "path": "Sources/NxlvKit/ZipArchive.swift",
+        "sha256": "e35887afdaca200122973048eba56de21f21c5c980723cc0fbdb7082b604178c"
+      }
+    ]
+  },
+  "sourceAfterFingerprint": "73f26655040bdca8160cb5f2a9ac7c0f958073263defea565702346152866ac7",
+  "sharedSourcesUnchanged": true,
+  "publicationMetadataUnchanged": true,
+  "publicationManifestSHA256": "bcf23a3ea54cf0cde757bcd5a314780df2c8d3e898c27ae2157910a1dea75b71",
+  "compilerExitCode": 0,
+  "exitCode": 0
+}
