@@ -67,19 +67,32 @@ final class MobileCoreIOSSmokeTests: XCTestCase {
     @MainActor func testGameDataOffersSeparateImportRoutes() {
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
         app.launch()
 
-        for identifier in ["menu.welcomeOriginal", "menu.welcomeContinue", "menu.telemetryNo"] {
-            let welcomeAction = app.buttons[identifier]
-            if welcomeAction.waitForExistence(timeout: 2) { welcomeAction.tap() }
+        let settings = app.buttons["menu.settings"]
+        let classicImport = app.buttons["menu.import.classic"]
+        let welcomeAction = app.buttons.matching(NSPredicate(
+            format: "identifier == %@ AND label IN %@", "navigation.back", ["Continue", "Not now"]
+        )).firstMatch
+        for _ in 0..<3 {
+            let ready = NSPredicate { _, _ in
+                settings.exists || classicImport.exists || welcomeAction.exists
+            }
+            guard XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: ready, object: app)], timeout: 15) == .completed else {
+                XCTFail("Startup must show the main menu, import routes or a welcome action")
+                return
+            }
+            if settings.exists || classicImport.exists { break }
+            welcomeAction.tap()
         }
 
-        let classicImport = app.buttons["menu.import.classic"]
         if !classicImport.waitForExistence(timeout: 2) {
-            let settings = app.buttons["menu.settings"]
             XCTAssertTrue(settings.waitForExistence(timeout: 5))
             settings.tap()
-            let data = app.buttons["menu.data"]
+            let data = app.buttons.matching(NSPredicate(
+                format: "identifier IN %@", ["menu.data", "data"]
+            )).firstMatch
             XCTAssertTrue(data.waitForExistence(timeout: 5))
             data.tap()
         }
