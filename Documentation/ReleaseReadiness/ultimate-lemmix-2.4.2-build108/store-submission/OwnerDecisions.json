@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-18",
+  "source": "Owner reply in release-preparation chat",
+  "restoration": {
+    "ownerConfirmsRedistributionPermission": true,
+    "ownerStatement": "Yes; I can provide the permission records",
+    "scopeAsked": "Original game assets and included third-party recordings in the archive.org restoration bundle",
+    "supportingRecordsReceived": false,
+    "supportingRecordsReviewed": false,
+    "archiveSHA256": "8aedd8feb91247c61b4f0f8e6b2dd3d54b34035b1ea1cf75f06236354347f16c",
+    "archiveUnchanged": true,
+    "note": "This owner confirmation updates the earlier unresolved status. The original archive records retain the state at packaging time. No documentary verification is claimed."
+  },
+  "font": {
+    "choice": "Use project-owned pixel lettering until import",
+    "preparedPackagesAlreadyMatch": true
+  },
+  "appStoreConnect": {
+    "browserSignInVerified": true,
+    "appName": "Ultimate Lemmix",
+    "appleId": "6836347807",
+    "bundleIdentifier": "academy.glasscode.ultimatelemmix",
+    "createdPlatform": "macOS",
+    "recordCreated": true,
+    "detailsPageError": "Initial error resolved on retry",
+    "platformListingDecision": "awaiting owner choice",
+    "macVersion": "2.4.2",
+    "savedFields": [
+      "name",
+      "subtitle",
+      "Games/Puzzle category",
+      "third-party content-rights declaration",
+      "promotional text",
+      "description",
+      "keywords",
+      "support URL",
+      "version",
+      "copyright",
+      "sign-in not required",
+      "manual release"
+    ],
+    "gameCenter": "No leaderboards configured in the new record",
+    "buildsUploaded": false
+  },
+  "uploadedOrSubmitted": false
+}

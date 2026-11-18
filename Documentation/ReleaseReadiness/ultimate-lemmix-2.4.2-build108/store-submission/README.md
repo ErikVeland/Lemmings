@@ -71,16 +71,23 @@ Extract the ZIP. Select its `Resources` folder in **Restore original assets**.
 iPhone and iPad use Files. Apple TV uses the displayed private local-network
 transfer page. Keep the source ZIP for recovery if TV caches are purged.
 
-The bundle is ready for local import. Public redistribution permission for its
-original game content and third-party recordings remains unconfirmed. It has
-not been uploaded to archive.org or another host. Its rights record preserves
-that distinction; renaming files or making a remix does not establish permission.
+The bundle is ready for local import. The owner confirms redistribution permission
+for the original game assets and included third-party recordings. Supporting
+permission records have been offered but are not yet attached or reviewed.
+[Owner decisions](OwnerDecisions.json) records that confirmation. The verified ZIP
+is unchanged and retains its earlier packaging-time rights status. It has not
+been uploaded to archive.org or another host.
 
 ## Remaining submission work
 
-App Store Connect needs its own signed-in browser session. The open browser is
-at sign-in. The stored Xcode account already completed provisioning and local
-Store export.
+App Store Connect browser sign-in is verified. The new Ultimate Lemmix Mac record
+has Apple ID `6836347807` and bundle ID `academy.glasscode.ultimatelemmix`.
+The initial details-page error resolved on retry. Version 2.4.2 listing text,
+Games/Puzzle category and content rights are saved. Release is manual.
+The new record has no Game Center leaderboards configured yet.
+The stored Xcode account already completed provisioning and local Store export.
+The owner is choosing one cross-platform listing or separate platform listings.
+A single listing requires matching mobile app identifiers and new mobile packages.
 
 Complete these account and publication items before submitting:
 
