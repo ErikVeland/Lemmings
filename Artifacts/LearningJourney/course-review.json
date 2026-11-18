@@ -119,8 +119,8 @@
       "title": "Consolidate advanced route planning"
     },
     {
-      "end": 985,
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "end": 990.0,
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "id": "capstones",
       "requires": [
         "advanced-routes"
@@ -129,7 +129,7 @@
       "title": "Finish with the hardest combinations"
     }
   ],
-  "journeyVersion": "learning-30",
+  "journeyVersion": "learning-32",
   "lessons": [
     {
       "chapter": "foundations",
@@ -5131,136 +5131,6 @@
       "goal": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
       "identity": {
         "engine": "classic",
-        "levelID": "20:Crazy:1:0:1",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "Quote: \"That`s a good level\"",
-      "newPressurePeaks": [],
-      "placementReason": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-      "preparationExamples": [
-        {
-          "identity": {
-            "engine": "classic",
-            "levelID": "6:Tame:7:10:6",
-            "packID": "ohNoMoreLemmings-DLVEL-100"
-          },
-          "level": "Who`s That Lemming",
-          "step": 22
-        },
-        {
-          "identity": {
-            "engine": "classic",
-            "levelID": "4:Tame:5:10:4",
-            "packID": "ohNoMoreLemmings-DLVEL-100"
-          },
-          "level": "Snuggle up to a Lemming",
-          "step": 21
-        },
-        {
-          "identity": {
-            "engine": "classic",
-            "levelID": "115:Mayhem:26:8:4",
-            "packID": "lemmings-LEVEL-120"
-          },
-          "level": "The Steel Mines of Kessel",
-          "step": 76
-        }
-      ],
-      "pressureAxes": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 78.85,
-        "hatches": 0.0,
-        "minimumReleaseRate": 1,
-        "precision": 25,
-        "quotaDeadline": 65.68627450980391,
-        "rescue": 96.0,
-        "skillChains": 0
-      },
-      "pressureRises": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 0,
-        "hatches": 0,
-        "minimumReleaseRate": 0,
-        "precision": 25,
-        "quotaDeadline": 0,
-        "rescue": 81.714,
-        "skillChains": 0
-      },
-      "quotaTimingVerified": true,
-      "role": "practice",
-      "step": 78
-    },
-    {
-      "chapter": "small-budgets",
-      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
-      "goal": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-      "identity": {
-        "engine": "classic",
-        "levelID": "32:Crazy:13:0:4",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "level": "It`s a trade off",
-      "newPressurePeaks": [],
-      "placementReason": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-      "preparationExamples": [
-        {
-          "identity": {
-            "engine": "classic",
-            "levelID": "81:Taxing:22:4:6",
-            "packID": "lemmings-LEVEL-120"
-          },
-          "level": "Come on over to my place",
-          "step": 63
-        },
-        {
-          "identity": {
-            "engine": "classic",
-            "levelID": "26:Fun:27:4:6",
-            "packID": "lemmings-LEVEL-120"
-          },
-          "level": "Let's be careful out there",
-          "step": 53
-        },
-        {
-          "identity": {
-            "engine": "classic",
-            "levelID": "1:Tame:2:10:1",
-            "packID": "ohNoMoreLemmings-DLVEL-100"
-          },
-          "level": "Rent-a-Lemming",
-          "step": 19
-        }
-      ],
-      "pressureAxes": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 87.8,
-        "hatches": 0.0,
-        "minimumReleaseRate": 1,
-        "precision": 25,
-        "quotaDeadline": 42.84313725490196,
-        "rescue": 50.0,
-        "skillChains": 0
-      },
-      "pressureRises": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 8.95,
-        "hatches": 0,
-        "minimumReleaseRate": 0,
-        "precision": 0,
-        "quotaDeadline": 0,
-        "rescue": 0,
-        "skillChains": 0
-      },
-      "quotaTimingVerified": true,
-      "role": "recovery",
-      "step": 79
-    },
-    {
-      "chapter": "small-budgets",
-      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
-      "goal": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-      "identity": {
-        "engine": "classic",
         "levelID": "68:Wicked:9:1:2",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
@@ -5313,12 +5183,12 @@
         "minimumReleaseRate": 0,
         "precision": 0,
         "quotaDeadline": 0,
-        "rescue": 40.0,
+        "rescue": 75.714,
         "skillChains": 10
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 80
+      "step": 78
     },
     {
       "chapter": "small-budgets",
@@ -5358,7 +5228,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "How on Earth?",
-          "step": 80
+          "step": 78
         }
       ],
       "pressureAxes": {
@@ -5383,7 +5253,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 81
+      "step": 79
     },
     {
       "chapter": "small-budgets",
@@ -5448,7 +5318,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 82
+      "step": 80
     },
     {
       "chapter": "small-budgets",
@@ -5513,7 +5383,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 83
+      "step": 81
     },
     {
       "chapter": "small-budgets",
@@ -5535,7 +5405,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Chain with no name",
-          "step": 83
+          "step": 81
         },
         {
           "identity": {
@@ -5578,7 +5448,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 84
+      "step": 82
     },
     {
       "chapter": "small-budgets",
@@ -5643,7 +5513,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 85
+      "step": 83
     },
     {
       "chapter": "small-budgets",
@@ -5665,7 +5535,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Chain with no name",
-          "step": 83
+          "step": 81
         },
         {
           "identity": {
@@ -5708,7 +5578,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 86
+      "step": 84
     },
     {
       "chapter": "small-budgets",
@@ -5773,7 +5643,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 87
+      "step": 85
     },
     {
       "chapter": "small-budgets",
@@ -5838,7 +5708,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 88
+      "step": 86
     },
     {
       "chapter": "small-budgets",
@@ -5903,7 +5773,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 89
+      "step": 87
     },
     {
       "chapter": "small-budgets",
@@ -5925,7 +5795,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "24 hour Lemathon",
-          "step": 89
+          "step": 87
         },
         {
           "identity": {
@@ -5939,11 +5809,11 @@
         {
           "identity": {
             "engine": "classic",
-            "levelID": "32:Crazy:13:0:4",
+            "levelID": "59:Wild:20:4:7",
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
-          "level": "It`s a trade off",
-          "step": 79
+          "level": "Got anything....Lemmingy???",
+          "step": 61
         }
       ],
       "pressureAxes": {
@@ -5968,7 +5838,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 90
+      "step": 88
     },
     {
       "chapter": "small-budgets",
@@ -6033,7 +5903,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 91
+      "step": 89
     },
     {
       "chapter": "small-budgets",
@@ -6098,7 +5968,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 92
+      "step": 90
     },
     {
       "chapter": "small-budgets",
@@ -6120,7 +5990,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Chain with no name",
-          "step": 83
+          "step": 81
         },
         {
           "identity": {
@@ -6163,7 +6033,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 93
+      "step": 91
     },
     {
       "chapter": "small-budgets",
@@ -6185,7 +6055,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "At Home in a Cave",
-          "step": 88
+          "step": 86
         },
         {
           "identity": {
@@ -6228,7 +6098,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 94
+      "step": 92
     },
     {
       "chapter": "small-budgets",
@@ -6293,7 +6163,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 95
+      "step": 93
     },
     {
       "chapter": "small-budgets",
@@ -6315,7 +6185,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Mutiny On The Bounty",
-          "step": 84
+          "step": 82
         },
         {
           "identity": {
@@ -6324,7 +6194,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Anxiety",
-          "step": 93
+          "step": 91
         },
         {
           "identity": {
@@ -6333,7 +6203,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Chain with no name",
-          "step": 83
+          "step": 81
         }
       ],
       "pressureAxes": {
@@ -6358,7 +6228,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 96
+      "step": 94
     },
     {
       "chapter": "small-budgets",
@@ -6423,7 +6293,7 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 97
+      "step": 95
     },
     {
       "chapter": "worker-routes",
@@ -6488,7 +6358,7 @@
       },
       "quotaTimingVerified": true,
       "role": "introduction",
-      "step": 98
+      "step": 96
     },
     {
       "chapter": "worker-routes",
@@ -6519,7 +6389,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -6553,7 +6423,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 99
+      "step": 97
     },
     {
       "chapter": "worker-routes",
@@ -6618,7 +6488,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 100
+      "step": 98
     },
     {
       "chapter": "worker-routes",
@@ -6683,7 +6553,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 101
+      "step": 99
     },
     {
       "chapter": "worker-routes",
@@ -6748,7 +6618,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 102
+      "step": 100
     },
     {
       "chapter": "worker-routes",
@@ -6770,7 +6640,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Lemming Snowjourn",
-          "step": 101
+          "step": 99
         },
         {
           "identity": {
@@ -6813,7 +6683,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 103
+      "step": 101
     },
     {
       "chapter": "worker-routes",
@@ -6835,7 +6705,7 @@
             "packID": "xmasLemmings1992-LEVEL-4"
           },
           "level": "Jingle Lemming",
-          "step": 103
+          "step": 101
         },
         {
           "identity": {
@@ -6853,7 +6723,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Floating Lemming Flurry",
-          "step": 100
+          "step": 98
         }
       ],
       "pressureAxes": {
@@ -6878,7 +6748,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 104
+      "step": 102
     },
     {
       "chapter": "worker-routes",
@@ -6943,7 +6813,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 105
+      "step": 103
     },
     {
       "chapter": "worker-routes",
@@ -6983,7 +6853,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         }
       ],
       "pressureAxes": {
@@ -7008,7 +6878,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 106
+      "step": 104
     },
     {
       "chapter": "worker-routes",
@@ -7073,7 +6943,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 107
+      "step": 105
     },
     {
       "chapter": "worker-routes",
@@ -7138,7 +7008,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 108
+      "step": 106
     },
     {
       "chapter": "worker-routes",
@@ -7160,7 +7030,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -7169,7 +7039,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Inside the bone",
-          "step": 86
+          "step": 84
         },
         {
           "identity": {
@@ -7203,7 +7073,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 109
+      "step": 107
     },
     {
       "chapter": "worker-routes",
@@ -7225,7 +7095,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "DON`T PANIC",
-          "step": 91
+          "step": 89
         },
         {
           "identity": {
@@ -7234,7 +7104,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Inside the bone",
-          "step": 86
+          "step": 84
         },
         {
           "identity": {
@@ -7243,7 +7113,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Is this a circus?",
-          "step": 85
+          "step": 83
         }
       ],
       "pressureAxes": {
@@ -7268,7 +7138,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 110
+      "step": 108
     },
     {
       "chapter": "worker-routes",
@@ -7299,7 +7169,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -7333,7 +7203,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 111
+      "step": 109
     },
     {
       "chapter": "worker-routes",
@@ -7398,7 +7268,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 112
+      "step": 110
     },
     {
       "chapter": "worker-routes",
@@ -7420,7 +7290,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -7463,7 +7333,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 113
+      "step": 111
     },
     {
       "chapter": "worker-routes",
@@ -7485,7 +7355,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -7503,7 +7373,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "The Land of the Bizarre",
-          "step": 81
+          "step": 79
         }
       ],
       "pressureAxes": {
@@ -7528,7 +7398,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 114
+      "step": 112
     },
     {
       "chapter": "worker-routes",
@@ -7550,7 +7420,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Tribute to M.C.Escher",
-          "step": 112
+          "step": 110
         },
         {
           "identity": {
@@ -7559,7 +7429,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "It's Lemmingentry Watson",
-          "step": 97
+          "step": 95
         },
         {
           "identity": {
@@ -7568,7 +7438,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Up on the Rooftops",
-          "step": 92
+          "step": 90
         }
       ],
       "pressureAxes": {
@@ -7593,7 +7463,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 115
+      "step": 113
     },
     {
       "chapter": "worker-routes",
@@ -7658,7 +7528,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 116
+      "step": 114
     },
     {
       "chapter": "worker-routes",
@@ -7723,7 +7593,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 117
+      "step": 115
     },
     {
       "chapter": "worker-routes",
@@ -7745,7 +7615,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -7763,7 +7633,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         }
       ],
       "pressureAxes": {
@@ -7788,7 +7658,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 118
+      "step": 116
     },
     {
       "chapter": "worker-routes",
@@ -7810,7 +7680,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -7819,7 +7689,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Suicidal Tendencies",
-          "step": 118
+          "step": 116
         },
         {
           "identity": {
@@ -7828,7 +7698,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         }
       ],
       "pressureAxes": {
@@ -7853,7 +7723,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 119
+      "step": 117
     },
     {
       "chapter": "worker-routes",
@@ -7884,7 +7754,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -7918,7 +7788,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 120
+      "step": 118
     },
     {
       "chapter": "worker-routes",
@@ -7983,7 +7853,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 121
+      "step": 119
     },
     {
       "chapter": "worker-routes",
@@ -8048,7 +7918,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 122
+      "step": 120
     },
     {
       "chapter": "worker-routes",
@@ -8070,7 +7940,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -8088,7 +7958,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Chain with no name",
-          "step": 83
+          "step": 81
         }
       ],
       "pressureAxes": {
@@ -8113,7 +7983,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 123
+      "step": 121
     },
     {
       "chapter": "worker-routes",
@@ -8135,7 +8005,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -8153,7 +8023,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         }
       ],
       "pressureAxes": {
@@ -8178,7 +8048,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 124
+      "step": 122
     },
     {
       "chapter": "worker-routes",
@@ -8209,7 +8079,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -8218,7 +8088,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Mind the step.....",
-          "step": 99
+          "step": 97
         }
       ],
       "pressureAxes": {
@@ -8243,7 +8113,7 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 125
+      "step": 123
     },
     {
       "chapter": "precision",
@@ -8265,7 +8135,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -8274,7 +8144,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Happy New Year!",
-          "step": 124
+          "step": 122
         },
         {
           "identity": {
@@ -8308,7 +8178,7 @@
       },
       "quotaTimingVerified": true,
       "role": "introduction",
-      "step": 126
+      "step": 124
     },
     {
       "chapter": "precision",
@@ -8339,7 +8209,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Have an ice day",
-          "step": 120
+          "step": 118
         },
         {
           "identity": {
@@ -8348,7 +8218,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Inside the bone",
-          "step": 86
+          "step": 84
         }
       ],
       "pressureAxes": {
@@ -8373,7 +8243,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 127
+      "step": 125
     },
     {
       "chapter": "precision",
@@ -8395,7 +8265,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Mind the step.....",
-          "step": 99
+          "step": 97
         },
         {
           "identity": {
@@ -8413,7 +8283,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Almost Nearly Virtual Reality",
-          "step": 125
+          "step": 123
         }
       ],
       "pressureAxes": {
@@ -8438,7 +8308,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 128
+      "step": 126
     },
     {
       "chapter": "precision",
@@ -8469,7 +8339,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Marshmallow Land",
-          "step": 128
+          "step": 126
         },
         {
           "identity": {
@@ -8478,7 +8348,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Mind the step.....",
-          "step": 99
+          "step": 97
         }
       ],
       "pressureAxes": {
@@ -8503,7 +8373,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 129
+      "step": 127
     },
     {
       "chapter": "precision",
@@ -8525,7 +8395,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Climbing to the Top!",
-          "step": 129
+          "step": 127
         },
         {
           "identity": {
@@ -8568,7 +8438,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 130
+      "step": 128
     },
     {
       "chapter": "precision",
@@ -8633,7 +8503,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 131
+      "step": 129
     },
     {
       "chapter": "precision",
@@ -8655,7 +8525,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -8698,7 +8568,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 132
+      "step": 130
     },
     {
       "chapter": "precision",
@@ -8729,7 +8599,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Up on the Rooftops",
-          "step": 92
+          "step": 90
         },
         {
           "identity": {
@@ -8738,7 +8608,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Yo-yo Lem-lem",
-          "step": 82
+          "step": 80
         }
       ],
       "pressureAxes": {
@@ -8763,7 +8633,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 133
+      "step": 131
     },
     {
       "chapter": "precision",
@@ -8785,7 +8655,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -8794,7 +8664,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "DON`T PANIC",
-          "step": 91
+          "step": 89
         },
         {
           "identity": {
@@ -8803,7 +8673,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Spiral staircase",
-          "step": 119
+          "step": 117
         }
       ],
       "pressureAxes": {
@@ -8828,7 +8698,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 134
+      "step": 132
     },
     {
       "chapter": "precision",
@@ -8850,7 +8720,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
         },
         {
           "identity": {
@@ -8859,16 +8729,16 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Lemming about town",
-          "step": 117
+          "step": 115
         },
         {
           "identity": {
             "engine": "classic",
-            "levelID": "32:Crazy:13:0:4",
+            "levelID": "56:Wild:17:6:3",
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
-          "level": "It`s a trade off",
-          "step": 79
+          "level": "The Chain with no name",
+          "step": 81
         }
       ],
       "pressureAxes": {
@@ -8893,7 +8763,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 135
+      "step": 133
     },
     {
       "chapter": "precision",
@@ -8917,7 +8787,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Higgledy Piggledy",
-          "step": 127
+          "step": 125
         },
         {
           "identity": {
@@ -8926,7 +8796,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Marshmallow Land",
-          "step": 128
+          "step": 126
         },
         {
           "identity": {
@@ -8960,7 +8830,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 136
+      "step": 134
     },
     {
       "chapter": "precision",
@@ -8984,7 +8854,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Marshmallow Land",
-          "step": 128
+          "step": 126
         },
         {
           "identity": {
@@ -8993,7 +8863,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Happy New Year II!",
-          "step": 136
+          "step": 134
         },
         {
           "identity": {
@@ -9002,7 +8872,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Climbing to the Top!",
-          "step": 129
+          "step": 127
         }
       ],
       "pressureAxes": {
@@ -9027,7 +8897,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 137
+      "step": 135
     },
     {
       "chapter": "precision",
@@ -9058,7 +8928,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Chain with no name",
-          "step": 83
+          "step": 81
         },
         {
           "identity": {
@@ -9067,7 +8937,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Mutiny On The Bounty",
-          "step": 84
+          "step": 82
         }
       ],
       "pressureAxes": {
@@ -9092,7 +8962,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 138
+      "step": 136
     },
     {
       "chapter": "precision",
@@ -9114,7 +8984,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "A TOWERING PROBLEM",
-          "step": 133
+          "step": 131
         },
         {
           "identity": {
@@ -9123,7 +8993,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "The Land of the Bizarre",
-          "step": 81
+          "step": 79
         },
         {
           "identity": {
@@ -9132,7 +9002,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         }
       ],
       "pressureAxes": {
@@ -9157,7 +9027,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 139
+      "step": 137
     },
     {
       "chapter": "precision",
@@ -9184,20 +9054,20 @@
         {
           "identity": {
             "engine": "classic",
-            "levelID": "32:Crazy:13:0:4",
-            "packID": "ohNoMoreLemmings-DLVEL-100"
-          },
-          "level": "It`s a trade off",
-          "step": 79
-        },
-        {
-          "identity": {
-            "engine": "classic",
             "levelID": "51:Mega Drive Sunsoft:22:0:51",
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch right or left (Part two)",
-          "step": 134
+          "step": 132
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "1:Xmas:2:0:1",
+            "packID": "xmasLemmings1992-LEVEL-4"
+          },
+          "level": "Happy Holidays Mr Lemming!",
+          "step": 88
         }
       ],
       "pressureAxes": {
@@ -9222,7 +9092,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 140
+      "step": 138
     },
     {
       "chapter": "precision",
@@ -9244,7 +9114,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Yo-yo Lem-lem",
-          "step": 82
+          "step": 80
         },
         {
           "identity": {
@@ -9253,7 +9123,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "A TOWERING PROBLEM",
-          "step": 133
+          "step": 131
         },
         {
           "identity": {
@@ -9262,7 +9132,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Up on the Rooftops",
-          "step": 92
+          "step": 90
         }
       ],
       "pressureAxes": {
@@ -9287,7 +9157,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 141
+      "step": 139
     },
     {
       "chapter": "precision",
@@ -9318,7 +9188,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -9352,7 +9222,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 142
+      "step": 140
     },
     {
       "chapter": "precision",
@@ -9374,7 +9244,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Have an ice day",
-          "step": 120
+          "step": 118
         },
         {
           "identity": {
@@ -9417,7 +9287,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 143
+      "step": 141
     },
     {
       "chapter": "precision",
@@ -9439,7 +9309,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -9448,7 +9318,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
         },
         {
           "identity": {
@@ -9457,7 +9327,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "The Long Way Around",
-          "step": 111
+          "step": 109
         }
       ],
       "pressureAxes": {
@@ -9482,7 +9352,7 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 144
+      "step": 142
     },
     {
       "chapter": "hatches",
@@ -9515,7 +9385,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -9549,7 +9419,7 @@
       },
       "quotaTimingVerified": true,
       "role": "introduction",
-      "step": 145
+      "step": 143
     },
     {
       "chapter": "hatches",
@@ -9571,7 +9441,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         },
         {
           "identity": {
@@ -9580,7 +9450,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -9589,7 +9459,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Mutiny On The Bounty",
-          "step": 84
+          "step": 82
         }
       ],
       "pressureAxes": {
@@ -9614,7 +9484,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 146
+      "step": 144
     },
     {
       "chapter": "hatches",
@@ -9636,7 +9506,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -9645,7 +9515,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Separate Ways",
-          "step": 146
+          "step": 144
         },
         {
           "identity": {
@@ -9654,7 +9524,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         }
       ],
       "pressureAxes": {
@@ -9679,7 +9549,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 147
+      "step": 145
     },
     {
       "chapter": "hatches",
@@ -9746,7 +9616,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 148
+      "step": 146
     },
     {
       "chapter": "hatches",
@@ -9779,7 +9649,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Happy New Year!",
-          "step": 124
+          "step": 122
         },
         {
           "identity": {
@@ -9788,7 +9658,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         }
       ],
       "pressureAxes": {
@@ -9813,7 +9683,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 149
+      "step": 147
     },
     {
       "chapter": "hatches",
@@ -9844,7 +9714,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Almost Nearly Virtual Reality",
-          "step": 125
+          "step": 123
         },
         {
           "identity": {
@@ -9853,7 +9723,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Chain with no name",
-          "step": 83
+          "step": 81
         }
       ],
       "pressureAxes": {
@@ -9878,7 +9748,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 150
+      "step": 148
     },
     {
       "chapter": "hatches",
@@ -9896,20 +9766,11 @@
         {
           "identity": {
             "engine": "classic",
-            "levelID": "20:Crazy:1:0:1",
-            "packID": "ohNoMoreLemmings-DLVEL-100"
-          },
-          "level": "Quote: \"That`s a good level\"",
-          "step": 78
-        },
-        {
-          "identity": {
-            "engine": "classic",
             "levelID": "39:Mega Drive Sunsoft:10:0:39",
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Spiral staircase",
-          "step": 119
+          "step": 117
         },
         {
           "identity": {
@@ -9918,7 +9779,16 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "5:Frost:6:0:5",
+            "packID": "holidayLemmings1994-MACLEVL-32"
+          },
+          "level": "The Land of the Bizarre",
+          "step": 79
         }
       ],
       "pressureAxes": {
@@ -9943,7 +9813,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 151
+      "step": 149
     },
     {
       "chapter": "hatches",
@@ -9974,7 +9844,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -10008,7 +9878,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 152
+      "step": 150
     },
     {
       "chapter": "hatches",
@@ -10050,7 +9920,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "LeMming ToMato KetchUp fAcilitY",
-          "step": 152
+          "step": 150
         }
       ],
       "pressureAxes": {
@@ -10075,7 +9945,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 153
+      "step": 151
     },
     {
       "chapter": "hatches",
@@ -10115,7 +9985,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Scaling the Heights",
-          "step": 116
+          "step": 114
         }
       ],
       "pressureAxes": {
@@ -10140,7 +10010,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 154
+      "step": 152
     },
     {
       "chapter": "hatches",
@@ -10162,7 +10032,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -10171,7 +10041,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch right or left (Part two)",
-          "step": 134
+          "step": 132
         },
         {
           "identity": {
@@ -10205,7 +10075,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 155
+      "step": 153
     },
     {
       "chapter": "hatches",
@@ -10270,7 +10140,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 156
+      "step": 154
     },
     {
       "chapter": "hatches",
@@ -10292,7 +10162,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -10335,7 +10205,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 157
+      "step": 155
     },
     {
       "chapter": "hatches",
@@ -10366,7 +10236,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -10400,7 +10270,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 158
+      "step": 156
     },
     {
       "chapter": "hatches",
@@ -10431,7 +10301,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -10465,7 +10335,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 159
+      "step": 157
     },
     {
       "chapter": "hatches",
@@ -10487,7 +10357,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -10496,7 +10366,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Watch out, there`s traps about",
-          "step": 157
+          "step": 155
         },
         {
           "identity": {
@@ -10530,7 +10400,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 160
+      "step": 158
     },
     {
       "chapter": "hatches",
@@ -10552,7 +10422,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "The gate trap Lemmings.",
-          "step": 160
+          "step": 158
         },
         {
           "identity": {
@@ -10561,7 +10431,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "And then there were four....",
-          "step": 159
+          "step": 157
         },
         {
           "identity": {
@@ -10570,7 +10440,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Watch out, there`s traps about",
-          "step": 157
+          "step": 155
         }
       ],
       "pressureAxes": {
@@ -10595,7 +10465,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 161
+      "step": 159
     },
     {
       "chapter": "hatches",
@@ -10617,7 +10487,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -10635,7 +10505,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         }
       ],
       "pressureAxes": {
@@ -10660,7 +10530,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 162
+      "step": 160
     },
     {
       "chapter": "hatches",
@@ -10682,7 +10552,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -10691,7 +10561,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Move on in two separate groups.",
-          "step": 161
+          "step": 159
         },
         {
           "identity": {
@@ -10700,7 +10570,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Clouds of Lemmings",
-          "step": 106
+          "step": 104
         }
       ],
       "pressureAxes": {
@@ -10725,7 +10595,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 163
+      "step": 161
     },
     {
       "chapter": "hatches",
@@ -10747,7 +10617,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -10756,7 +10626,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Mutiny On The Bounty",
-          "step": 84
+          "step": 82
         },
         {
           "identity": {
@@ -10765,7 +10635,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Chain with no name",
-          "step": 83
+          "step": 81
         }
       ],
       "pressureAxes": {
@@ -10790,7 +10660,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 164
+      "step": 162
     },
     {
       "chapter": "hatches",
@@ -10812,7 +10682,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "And then there were four....",
-          "step": 159
+          "step": 157
         },
         {
           "identity": {
@@ -10821,7 +10691,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Plethora of Presents",
-          "step": 164
+          "step": 162
         },
         {
           "identity": {
@@ -10830,7 +10700,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         }
       ],
       "pressureAxes": {
@@ -10855,7 +10725,7 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 165
+      "step": 163
     },
     {
       "chapter": "combined-plans",
@@ -10877,7 +10747,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "There`s madness in the method",
-          "step": 142
+          "step": 140
         },
         {
           "identity": {
@@ -10920,7 +10790,7 @@
       },
       "quotaTimingVerified": true,
       "role": "introduction",
-      "step": 166
+      "step": 164
     },
     {
       "chapter": "combined-plans",
@@ -10942,7 +10812,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         },
         {
           "identity": {
@@ -10951,7 +10821,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Suicidal Tendencies",
-          "step": 118
+          "step": 116
         },
         {
           "identity": {
@@ -10960,7 +10830,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Down the tube",
-          "step": 139
+          "step": 137
         }
       ],
       "pressureAxes": {
@@ -10985,7 +10855,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 167
+      "step": 165
     },
     {
       "chapter": "combined-plans",
@@ -11007,7 +10877,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Lemming Learning Curve",
-          "step": 166
+          "step": 164
         },
         {
           "identity": {
@@ -11050,7 +10920,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 168
+      "step": 166
     },
     {
       "chapter": "combined-plans",
@@ -11090,7 +10960,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         }
       ],
       "pressureAxes": {
@@ -11115,7 +10985,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 169
+      "step": 167
     },
     {
       "chapter": "combined-plans",
@@ -11146,7 +11016,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "With a twist of lemming please",
-          "step": 169
+          "step": 167
         },
         {
           "identity": {
@@ -11180,7 +11050,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 170
+      "step": 168
     },
     {
       "chapter": "combined-plans",
@@ -11211,7 +11081,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -11220,7 +11090,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         }
       ],
       "pressureAxes": {
@@ -11245,7 +11115,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 171
+      "step": 169
     },
     {
       "chapter": "combined-plans",
@@ -11267,7 +11137,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Have an ice day",
-          "step": 120
+          "step": 118
         },
         {
           "identity": {
@@ -11276,7 +11146,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -11310,7 +11180,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 172
+      "step": 170
     },
     {
       "chapter": "combined-plans",
@@ -11350,7 +11220,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         }
       ],
       "pressureAxes": {
@@ -11375,7 +11245,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 173
+      "step": 171
     },
     {
       "chapter": "combined-plans",
@@ -11406,7 +11276,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -11415,7 +11285,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         }
       ],
       "pressureAxes": {
@@ -11440,7 +11310,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 174
+      "step": 172
     },
     {
       "chapter": "combined-plans",
@@ -11480,7 +11350,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         }
       ],
       "pressureAxes": {
@@ -11505,7 +11375,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 175
+      "step": 173
     },
     {
       "chapter": "combined-plans",
@@ -11527,7 +11397,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "They just keep on coming",
-          "step": 122
+          "step": 120
         },
         {
           "identity": {
@@ -11545,7 +11415,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Watch out, there`s traps about",
-          "step": 157
+          "step": 155
         }
       ],
       "pressureAxes": {
@@ -11570,7 +11440,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 176
+      "step": 174
     },
     {
       "chapter": "combined-plans",
@@ -11592,7 +11462,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -11635,7 +11505,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 177
+      "step": 175
     },
     {
       "chapter": "combined-plans",
@@ -11666,7 +11536,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -11675,7 +11545,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         }
       ],
       "pressureAxes": {
@@ -11700,7 +11570,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 178
+      "step": 176
     },
     {
       "chapter": "combined-plans",
@@ -11731,7 +11601,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Island of the Wicker people",
-          "step": 178
+          "step": 176
         },
         {
           "identity": {
@@ -11740,7 +11610,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         }
       ],
       "pressureAxes": {
@@ -11765,7 +11635,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 179
+      "step": 177
     },
     {
       "chapter": "combined-plans",
@@ -11796,7 +11666,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Perseverance",
-          "step": 173
+          "step": 171
         },
         {
           "identity": {
@@ -11830,7 +11700,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 180
+      "step": 178
     },
     {
       "chapter": "combined-plans",
@@ -11861,7 +11731,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -11870,7 +11740,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         }
       ],
       "pressureAxes": {
@@ -11895,7 +11765,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 181
+      "step": 179
     },
     {
       "chapter": "combined-plans",
@@ -11917,7 +11787,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Boiler Room",
-          "step": 108
+          "step": 106
         },
         {
           "identity": {
@@ -11926,7 +11796,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Up on the Rooftops",
-          "step": 92
+          "step": 90
         },
         {
           "identity": {
@@ -11960,7 +11830,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 182
+      "step": 180
     },
     {
       "chapter": "combined-plans",
@@ -11982,7 +11852,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -12025,7 +11895,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 183
+      "step": 181
     },
     {
       "chapter": "combined-plans",
@@ -12047,7 +11917,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -12065,7 +11935,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         }
       ],
       "pressureAxes": {
@@ -12090,7 +11960,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 184
+      "step": 182
     },
     {
       "chapter": "combined-plans",
@@ -12112,7 +11982,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -12155,7 +12025,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 185
+      "step": 183
     },
     {
       "chapter": "combined-plans",
@@ -12177,7 +12047,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Island of the Wicker people",
-          "step": 178
+          "step": 176
         },
         {
           "identity": {
@@ -12186,7 +12056,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "It`s the price you have to pay",
-          "step": 181
+          "step": 179
         },
         {
           "identity": {
@@ -12195,7 +12065,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "KEEP ON TRUCKING",
-          "step": 171
+          "step": 169
         }
       ],
       "pressureAxes": {
@@ -12220,7 +12090,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 186
+      "step": 184
     },
     {
       "chapter": "combined-plans",
@@ -12260,7 +12130,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         }
       ],
       "pressureAxes": {
@@ -12285,7 +12155,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 187
+      "step": 185
     },
     {
       "chapter": "combined-plans",
@@ -12307,7 +12177,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -12316,7 +12186,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -12325,7 +12195,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         }
       ],
       "pressureAxes": {
@@ -12350,7 +12220,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 188
+      "step": 186
     },
     {
       "chapter": "combined-plans",
@@ -12381,7 +12251,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -12390,7 +12260,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         }
       ],
       "pressureAxes": {
@@ -12415,7 +12285,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 189
+      "step": 187
     },
     {
       "chapter": "combined-plans",
@@ -12437,7 +12307,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -12455,7 +12325,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Across The Gap",
-          "step": 189
+          "step": 187
         }
       ],
       "pressureAxes": {
@@ -12480,7 +12350,7 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 190
+      "step": 188
     },
     {
       "chapter": "clocks",
@@ -12502,7 +12372,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -12511,7 +12381,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "LeMming ToMato KetchUp fAcilitY",
-          "step": 152
+          "step": 150
         },
         {
           "identity": {
@@ -12545,7 +12415,7 @@
       },
       "quotaTimingVerified": true,
       "role": "introduction",
-      "step": 191
+      "step": 189
     },
     {
       "chapter": "clocks",
@@ -12567,7 +12437,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Temple of Love",
-          "step": 175
+          "step": 173
         },
         {
           "identity": {
@@ -12576,7 +12446,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Spiral staircase",
-          "step": 119
+          "step": 117
         },
         {
           "identity": {
@@ -12585,7 +12455,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "KEEP ON TRUCKING",
-          "step": 171
+          "step": 169
         }
       ],
       "pressureAxes": {
@@ -12610,7 +12480,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 192
+      "step": 190
     },
     {
       "chapter": "clocks",
@@ -12632,7 +12502,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Lemming about town",
-          "step": 117
+          "step": 115
         },
         {
           "identity": {
@@ -12641,7 +12511,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Temple of Love",
-          "step": 175
+          "step": 173
         },
         {
           "identity": {
@@ -12650,7 +12520,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Chill out!",
-          "step": 177
+          "step": 175
         }
       ],
       "pressureAxes": {
@@ -12675,7 +12545,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 193
+      "step": 191
     },
     {
       "chapter": "clocks",
@@ -12697,7 +12567,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Is this a circus?",
-          "step": 85
+          "step": 83
         },
         {
           "identity": {
@@ -12706,7 +12576,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "KEEP ON TRUCKING",
-          "step": 171
+          "step": 169
         },
         {
           "identity": {
@@ -12715,7 +12585,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Water processing plant",
-          "step": 180
+          "step": 178
         }
       ],
       "pressureAxes": {
@@ -12740,7 +12610,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 194
+      "step": 192
     },
     {
       "chapter": "clocks",
@@ -12805,7 +12675,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 195
+      "step": 193
     },
     {
       "chapter": "clocks",
@@ -12827,7 +12697,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "All or Nothing",
-          "step": 144
+          "step": 142
         },
         {
           "identity": {
@@ -12836,7 +12706,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Climbing to the Top!",
-          "step": 129
+          "step": 127
         },
         {
           "identity": {
@@ -12845,7 +12715,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         }
       ],
       "pressureAxes": {
@@ -12870,7 +12740,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 196
+      "step": 194
     },
     {
       "chapter": "clocks",
@@ -12892,7 +12762,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "KEEP ON TRUCKING",
-          "step": 171
+          "step": 169
         },
         {
           "identity": {
@@ -12901,7 +12771,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -12910,7 +12780,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Watch out, there`s traps about",
-          "step": 157
+          "step": 155
         }
       ],
       "pressureAxes": {
@@ -12935,7 +12805,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 197
+      "step": 195
     },
     {
       "chapter": "clocks",
@@ -12966,7 +12836,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Poles Apart",
-          "step": 172
+          "step": 170
         },
         {
           "identity": {
@@ -12975,7 +12845,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         }
       ],
       "pressureAxes": {
@@ -13000,7 +12870,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 198
+      "step": 196
     },
     {
       "chapter": "clocks",
@@ -13022,7 +12892,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Just A Quicky",
-          "step": 186
+          "step": 184
         },
         {
           "identity": {
@@ -13031,7 +12901,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The ascending pillar scenario",
-          "step": 188
+          "step": 186
         },
         {
           "identity": {
@@ -13040,7 +12910,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Chill out!",
-          "step": 177
+          "step": 175
         }
       ],
       "pressureAxes": {
@@ -13065,7 +12935,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 199
+      "step": 197
     },
     {
       "chapter": "clocks",
@@ -13087,7 +12957,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "DON`T PANIC",
-          "step": 91
+          "step": 89
         },
         {
           "identity": {
@@ -13096,7 +12966,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "KEEP ON TRUCKING",
-          "step": 171
+          "step": 169
         },
         {
           "identity": {
@@ -13105,7 +12975,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch right or left (Part two)",
-          "step": 134
+          "step": 132
         }
       ],
       "pressureAxes": {
@@ -13130,7 +13000,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 200
+      "step": 198
     },
     {
       "chapter": "clocks",
@@ -13152,7 +13022,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Feel the heat!",
-          "step": 197
+          "step": 195
         },
         {
           "identity": {
@@ -13161,7 +13031,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "DON`T PANIC",
-          "step": 91
+          "step": 89
         },
         {
           "identity": {
@@ -13170,7 +13040,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Ice Station Lemming",
-          "step": 155
+          "step": 153
         }
       ],
       "pressureAxes": {
@@ -13195,7 +13065,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 201
+      "step": 199
     },
     {
       "chapter": "clocks",
@@ -13260,7 +13130,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 202
+      "step": 200
     },
     {
       "chapter": "clocks",
@@ -13282,7 +13152,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -13300,7 +13170,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Island of the Wicker people",
-          "step": 178
+          "step": 176
         }
       ],
       "pressureAxes": {
@@ -13325,7 +13195,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 203
+      "step": 201
     },
     {
       "chapter": "clocks",
@@ -13347,7 +13217,7 @@
             "packID": "xmasLemmings1991-LEVEL-4"
           },
           "level": "Merry Christmas Mr Lemming",
-          "step": 203
+          "step": 201
         },
         {
           "identity": {
@@ -13390,7 +13260,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 204
+      "step": 202
     },
     {
       "chapter": "clocks",
@@ -13412,7 +13282,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The ascending pillar scenario",
-          "step": 188
+          "step": 186
         },
         {
           "identity": {
@@ -13421,7 +13291,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -13430,7 +13300,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         }
       ],
       "pressureAxes": {
@@ -13455,7 +13325,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 205
+      "step": 203
     },
     {
       "chapter": "clocks",
@@ -13477,7 +13347,7 @@
             "packID": "xmasLemmings1992-LEVEL-4"
           },
           "level": "A Lemming Holiday",
-          "step": 205
+          "step": 203
         },
         {
           "identity": {
@@ -13495,7 +13365,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Izzie Wizzie lemmings get busy",
-          "step": 187
+          "step": 185
         }
       ],
       "pressureAxes": {
@@ -13520,7 +13390,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 206
+      "step": 204
     },
     {
       "chapter": "clocks",
@@ -13542,7 +13412,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -13551,7 +13421,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The ascending pillar scenario",
-          "step": 188
+          "step": 186
         },
         {
           "identity": {
@@ -13560,7 +13430,7 @@
             "packID": "xmasLemmings1992-LEVEL-4"
           },
           "level": "A Lemming Holiday",
-          "step": 205
+          "step": 203
         }
       ],
       "pressureAxes": {
@@ -13585,7 +13455,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 207
+      "step": 205
     },
     {
       "chapter": "clocks",
@@ -13616,7 +13486,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -13625,7 +13495,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         }
       ],
       "pressureAxes": {
@@ -13650,7 +13520,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 208
+      "step": 206
     },
     {
       "chapter": "clocks",
@@ -13672,7 +13542,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Feel the heat!",
-          "step": 197
+          "step": 195
         },
         {
           "identity": {
@@ -13681,7 +13551,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "KEEP ON TRUCKING",
-          "step": 171
+          "step": 169
         },
         {
           "identity": {
@@ -13690,7 +13560,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Watch out, there`s traps about",
-          "step": 157
+          "step": 155
         }
       ],
       "pressureAxes": {
@@ -13715,7 +13585,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 209
+      "step": 207
     },
     {
       "chapter": "clocks",
@@ -13737,7 +13607,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Tightrope City",
-          "step": 209
+          "step": 207
         },
         {
           "identity": {
@@ -13746,7 +13616,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Feel the heat!",
-          "step": 197
+          "step": 195
         },
         {
           "identity": {
@@ -13755,7 +13625,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Five Alive",
-          "step": 208
+          "step": 206
         }
       ],
       "pressureAxes": {
@@ -13780,7 +13650,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 210
+      "step": 208
     },
     {
       "chapter": "clocks",
@@ -13802,7 +13672,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -13811,7 +13681,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -13820,7 +13690,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Luvly Jubly",
-          "step": 191
+          "step": 189
         }
       ],
       "pressureAxes": {
@@ -13845,7 +13715,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 211
+      "step": 209
     },
     {
       "chapter": "clocks",
@@ -13867,7 +13737,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Izzie Wizzie lemmings get busy",
-          "step": 187
+          "step": 185
         },
         {
           "identity": {
@@ -13876,7 +13746,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -13910,7 +13780,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 212
+      "step": 210
     },
     {
       "chapter": "clocks",
@@ -13932,7 +13802,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Island of the Wicker people",
-          "step": 178
+          "step": 176
         },
         {
           "identity": {
@@ -13950,7 +13820,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         }
       ],
       "pressureAxes": {
@@ -13975,7 +13845,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 213
+      "step": 211
     },
     {
       "chapter": "clocks",
@@ -13997,7 +13867,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The ascending pillar scenario",
-          "step": 188
+          "step": 186
         },
         {
           "identity": {
@@ -14006,7 +13876,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Crankshaft",
-          "step": 185
+          "step": 183
         },
         {
           "identity": {
@@ -14015,7 +13885,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Temple of Love",
-          "step": 175
+          "step": 173
         }
       ],
       "pressureAxes": {
@@ -14040,7 +13910,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 214
+      "step": 212
     },
     {
       "chapter": "clocks",
@@ -14062,7 +13932,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Just A Quicky",
-          "step": 186
+          "step": 184
         },
         {
           "identity": {
@@ -14071,7 +13941,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The ascending pillar scenario",
-          "step": 188
+          "step": 186
         },
         {
           "identity": {
@@ -14080,7 +13950,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "KEEP ON TRUCKING",
-          "step": 171
+          "step": 169
         }
       ],
       "pressureAxes": {
@@ -14105,7 +13975,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 215
+      "step": 213
     },
     {
       "chapter": "clocks",
@@ -14127,7 +13997,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "ROCKY ROAD",
-          "step": 215
+          "step": 213
         },
         {
           "identity": {
@@ -14136,7 +14006,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Water processing plant",
-          "step": 180
+          "step": 178
         },
         {
           "identity": {
@@ -14145,7 +14015,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
         }
       ],
       "pressureAxes": {
@@ -14170,7 +14040,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 216
+      "step": 214
     },
     {
       "chapter": "clocks",
@@ -14192,7 +14062,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
         },
         {
           "identity": {
@@ -14201,7 +14071,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch right or left (Part two)",
-          "step": 134
+          "step": 132
         },
         {
           "identity": {
@@ -14210,7 +14080,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         }
       ],
       "pressureAxes": {
@@ -14235,7 +14105,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 217
+      "step": 215
     },
     {
       "chapter": "clocks",
@@ -14266,7 +14136,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -14275,7 +14145,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
         }
       ],
       "pressureAxes": {
@@ -14300,7 +14170,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 218
+      "step": 216
     },
     {
       "chapter": "clocks",
@@ -14322,7 +14192,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -14331,7 +14201,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Spiral staircase",
-          "step": 119
+          "step": 117
         },
         {
           "identity": {
@@ -14340,7 +14210,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "ONWARD AND UPWARD",
-          "step": 218
+          "step": 216
         }
       ],
       "pressureAxes": {
@@ -14365,7 +14235,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 219
+      "step": 217
     },
     {
       "chapter": "clocks",
@@ -14387,7 +14257,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -14396,7 +14266,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Triple Trouble",
-          "step": 162
+          "step": 160
         },
         {
           "identity": {
@@ -14405,7 +14275,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         }
       ],
       "pressureAxes": {
@@ -14430,7 +14300,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 220
+      "step": 218
     },
     {
       "chapter": "clocks",
@@ -14452,7 +14322,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "ONWARD AND UPWARD",
-          "step": 218
+          "step": 216
         },
         {
           "identity": {
@@ -14470,7 +14340,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Five Alive",
-          "step": 208
+          "step": 206
         }
       ],
       "pressureAxes": {
@@ -14495,7 +14365,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 221
+      "step": 219
     },
     {
       "chapter": "clocks",
@@ -14517,7 +14387,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -14526,7 +14396,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The ascending pillar scenario",
-          "step": 188
+          "step": 186
         },
         {
           "identity": {
@@ -14535,7 +14405,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Water processing plant",
-          "step": 180
+          "step": 178
         }
       ],
       "pressureAxes": {
@@ -14560,7 +14430,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 222
+      "step": 220
     },
     {
       "chapter": "clocks",
@@ -14582,7 +14452,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Feel the heat!",
-          "step": 197
+          "step": 195
         },
         {
           "identity": {
@@ -14591,7 +14461,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Tightrope City",
-          "step": 209
+          "step": 207
         },
         {
           "identity": {
@@ -14600,7 +14470,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "I have a cunning plan",
-          "step": 212
+          "step": 210
         }
       ],
       "pressureAxes": {
@@ -14625,7 +14495,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 223
+      "step": 221
     },
     {
       "chapter": "clocks",
@@ -14647,7 +14517,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "You Take the High Road",
-          "step": 220
+          "step": 218
         },
         {
           "identity": {
@@ -14656,7 +14526,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Triple Trouble",
-          "step": 162
+          "step": 160
         },
         {
           "identity": {
@@ -14665,7 +14535,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         }
       ],
       "pressureAxes": {
@@ -14690,7 +14560,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 224
+      "step": 222
     },
     {
       "chapter": "clocks",
@@ -14730,7 +14600,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Crankshaft",
-          "step": 185
+          "step": 183
         }
       ],
       "pressureAxes": {
@@ -14755,7 +14625,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 225
+      "step": 223
     },
     {
       "chapter": "clocks",
@@ -14777,7 +14647,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "DON`T PANIC",
-          "step": 91
+          "step": 89
         },
         {
           "identity": {
@@ -14786,7 +14656,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch right or left (Part two)",
-          "step": 134
+          "step": 132
         },
         {
           "identity": {
@@ -14795,7 +14665,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Tightrope City",
-          "step": 209
+          "step": 207
         }
       ],
       "pressureAxes": {
@@ -14820,7 +14690,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 226
+      "step": 224
     },
     {
       "chapter": "clocks",
@@ -14842,7 +14712,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "A Block from Home",
-          "step": 226
+          "step": 224
         },
         {
           "identity": {
@@ -14851,7 +14721,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "DON`T PANIC",
-          "step": 91
+          "step": 89
         },
         {
           "identity": {
@@ -14860,7 +14730,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "If at first you don`t succeed..",
-          "step": 201
+          "step": 199
         }
       ],
       "pressureAxes": {
@@ -14885,7 +14755,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 227
+      "step": 225
     },
     {
       "chapter": "clocks",
@@ -14907,7 +14777,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -14916,7 +14786,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "How do I dig up the way?",
-          "step": 121
+          "step": 119
         },
         {
           "identity": {
@@ -14925,7 +14795,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         }
       ],
       "pressureAxes": {
@@ -14950,7 +14820,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 228
+      "step": 226
     },
     {
       "chapter": "clocks",
@@ -14972,7 +14842,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "From The Boundary Line",
-          "step": 207
+          "step": 205
         },
         {
           "identity": {
@@ -14981,7 +14851,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -14990,7 +14860,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The ascending pillar scenario",
-          "step": 188
+          "step": 186
         }
       ],
       "pressureAxes": {
@@ -15015,7 +14885,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 229
+      "step": 227
     },
     {
       "chapter": "clocks",
@@ -15037,7 +14907,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "You Take the High Road",
-          "step": 220
+          "step": 218
         },
         {
           "identity": {
@@ -15046,7 +14916,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Lemmings in a situation",
-          "step": 229
+          "step": 227
         },
         {
           "identity": {
@@ -15055,7 +14925,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         }
       ],
       "pressureAxes": {
@@ -15080,7 +14950,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 230
+      "step": 228
     },
     {
       "chapter": "clocks",
@@ -15102,7 +14972,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Triple Trouble",
-          "step": 162
+          "step": 160
         },
         {
           "identity": {
@@ -15111,7 +14981,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Synchronised Lemming",
-          "step": 230
+          "step": 228
         },
         {
           "identity": {
@@ -15120,7 +14990,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         }
       ],
       "pressureAxes": {
@@ -15145,7 +15015,7 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 231
+      "step": 229
     },
     {
       "chapter": "advanced-routes",
@@ -15176,7 +15046,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "ONWARD AND UPWARD",
-          "step": 218
+          "step": 216
         },
         {
           "identity": {
@@ -15185,7 +15055,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Across The Gap",
-          "step": 189
+          "step": 187
         }
       ],
       "pressureAxes": {
@@ -15210,7 +15080,7 @@
       },
       "quotaTimingVerified": true,
       "role": "introduction",
-      "step": 232
+      "step": 230
     },
     {
       "chapter": "advanced-routes",
@@ -15232,7 +15102,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "THE SILENCE OF THE LEMMINGS",
-          "step": 219
+          "step": 217
         },
         {
           "identity": {
@@ -15241,7 +15111,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -15250,7 +15120,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "ONWARD AND UPWARD",
-          "step": 218
+          "step": 216
         }
       ],
       "pressureAxes": {
@@ -15275,7 +15145,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 233
+      "step": 231
     },
     {
       "chapter": "advanced-routes",
@@ -15297,7 +15167,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -15306,7 +15176,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -15315,7 +15185,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "ONWARD AND UPWARD",
-          "step": 218
+          "step": 216
         }
       ],
       "pressureAxes": {
@@ -15340,7 +15210,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 234
+      "step": 232
     },
     {
       "chapter": "advanced-routes",
@@ -15362,7 +15232,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -15371,7 +15241,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The ascending pillar scenario",
-          "step": 188
+          "step": 186
         },
         {
           "identity": {
@@ -15380,7 +15250,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "From The Boundary Line",
-          "step": 207
+          "step": 205
         }
       ],
       "pressureAxes": {
@@ -15405,7 +15275,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 235
+      "step": 233
     },
     {
       "chapter": "advanced-routes",
@@ -15427,7 +15297,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -15436,7 +15306,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -15445,7 +15315,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         }
       ],
       "pressureAxes": {
@@ -15470,7 +15340,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 236
+      "step": 234
     },
     {
       "chapter": "advanced-routes",
@@ -15492,7 +15362,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -15501,7 +15371,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Poles Apart",
-          "step": 172
+          "step": 170
         },
         {
           "identity": {
@@ -15510,7 +15380,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         }
       ],
       "pressureAxes": {
@@ -15535,7 +15405,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 237
+      "step": 235
     },
     {
       "chapter": "advanced-routes",
@@ -15557,7 +15427,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         },
         {
           "identity": {
@@ -15566,7 +15436,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -15575,7 +15445,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         }
       ],
       "pressureAxes": {
@@ -15600,7 +15470,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 238
+      "step": 236
     },
     {
       "chapter": "advanced-routes",
@@ -15622,7 +15492,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Island of the Wicker people",
-          "step": 178
+          "step": 176
         },
         {
           "identity": {
@@ -15631,7 +15501,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The ascending pillar scenario",
-          "step": 188
+          "step": 186
         },
         {
           "identity": {
@@ -15665,7 +15535,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 239
+      "step": 237
     },
     {
       "chapter": "advanced-routes",
@@ -15730,7 +15600,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 240
+      "step": 238
     },
     {
       "chapter": "advanced-routes",
@@ -15761,7 +15631,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         },
         {
           "identity": {
@@ -15770,7 +15640,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "ONWARD AND UPWARD",
-          "step": 218
+          "step": 216
         }
       ],
       "pressureAxes": {
@@ -15795,7 +15665,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 241
+      "step": 239
     },
     {
       "chapter": "advanced-routes",
@@ -15826,7 +15696,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -15835,7 +15705,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         }
       ],
       "pressureAxes": {
@@ -15860,7 +15730,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 242
+      "step": 240
     },
     {
       "chapter": "advanced-routes",
@@ -15925,7 +15795,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 243
+      "step": 241
     },
     {
       "chapter": "advanced-routes",
@@ -15956,7 +15826,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Fast Food Kitchen...",
-          "step": 156
+          "step": 154
         },
         {
           "identity": {
@@ -15965,7 +15835,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Creature Discomforts",
-          "step": 238
+          "step": 236
         }
       ],
       "pressureAxes": {
@@ -15990,7 +15860,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 244
+      "step": 242
     },
     {
       "chapter": "advanced-routes",
@@ -16012,7 +15882,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Feel the heat!",
-          "step": 197
+          "step": 195
         },
         {
           "identity": {
@@ -16021,7 +15891,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "KEEP ON TRUCKING",
-          "step": 171
+          "step": 169
         },
         {
           "identity": {
@@ -16030,7 +15900,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Far Side",
-          "step": 239
+          "step": 237
         }
       ],
       "pressureAxes": {
@@ -16055,7 +15925,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 245
+      "step": 243
     },
     {
       "chapter": "advanced-routes",
@@ -16077,7 +15947,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "A TOWERING PROBLEM",
-          "step": 133
+          "step": 131
         },
         {
           "identity": {
@@ -16086,7 +15956,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         },
         {
           "identity": {
@@ -16095,7 +15965,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "POOR WEE CREATURES!",
-          "step": 241
+          "step": 239
         }
       ],
       "pressureAxes": {
@@ -16120,7 +15990,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 246
+      "step": 244
     },
     {
       "chapter": "advanced-routes",
@@ -16160,7 +16030,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Have a nice day!",
-          "step": 242
+          "step": 240
         }
       ],
       "pressureAxes": {
@@ -16185,7 +16055,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 247
+      "step": 245
     },
     {
       "chapter": "advanced-routes",
@@ -16207,7 +16077,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Peak of Performance",
-          "step": 247
+          "step": 245
         },
         {
           "identity": {
@@ -16216,7 +16086,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Tribute to M.C.Escher",
-          "step": 112
+          "step": 110
         },
         {
           "identity": {
@@ -16225,7 +16095,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "With a twist of lemming please",
-          "step": 169
+          "step": 167
         }
       ],
       "pressureAxes": {
@@ -16250,7 +16120,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 248
+      "step": 246
     },
     {
       "chapter": "advanced-routes",
@@ -16272,7 +16142,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Temple of Love",
-          "step": 175
+          "step": 173
         },
         {
           "identity": {
@@ -16281,7 +16151,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Crankshaft",
-          "step": 185
+          "step": 183
         },
         {
           "identity": {
@@ -16315,7 +16185,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 249
+      "step": 247
     },
     {
       "chapter": "advanced-routes",
@@ -16337,7 +16207,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "LOoK BeFoRe YoU LeAp!",
-          "step": 153
+          "step": 151
         },
         {
           "identity": {
@@ -16380,7 +16250,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 250
+      "step": 248
     },
     {
       "chapter": "advanced-routes",
@@ -16402,7 +16272,7 @@
             "packID": "xmasLemmings1992-LEVEL-4"
           },
           "level": "The North Poles",
-          "step": 193
+          "step": 191
         },
         {
           "identity": {
@@ -16411,7 +16281,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Lemming about town",
-          "step": 117
+          "step": 115
         },
         {
           "identity": {
@@ -16420,7 +16290,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Temple of Love",
-          "step": 175
+          "step": 173
         }
       ],
       "pressureAxes": {
@@ -16445,7 +16315,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 251
+      "step": 249
     },
     {
       "chapter": "advanced-routes",
@@ -16467,7 +16337,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -16476,7 +16346,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Call in the bomb squad",
-          "step": 126
+          "step": 124
         },
         {
           "identity": {
@@ -16485,7 +16355,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         }
       ],
       "pressureAxes": {
@@ -16510,7 +16380,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 252
+      "step": 250
     },
     {
       "chapter": "advanced-routes",
@@ -16532,7 +16402,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "POOR WEE CREATURES!",
-          "step": 241
+          "step": 239
         },
         {
           "identity": {
@@ -16550,7 +16420,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Have a nice day!",
-          "step": 242
+          "step": 240
         }
       ],
       "pressureAxes": {
@@ -16575,7 +16445,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 253
+      "step": 251
     },
     {
       "chapter": "advanced-routes",
@@ -16597,7 +16467,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -16606,7 +16476,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Have a nice day!",
-          "step": 242
+          "step": 240
         },
         {
           "identity": {
@@ -16615,7 +16485,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         }
       ],
       "pressureAxes": {
@@ -16640,7 +16510,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 254
+      "step": 252
     },
     {
       "chapter": "advanced-routes",
@@ -16662,7 +16532,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
-          "step": 253
+          "step": 251
         },
         {
           "identity": {
@@ -16671,7 +16541,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -16680,7 +16550,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "It`s the price you have to pay",
-          "step": 181
+          "step": 179
         }
       ],
       "pressureAxes": {
@@ -16705,7 +16575,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 255
+      "step": 253
     },
     {
       "chapter": "advanced-routes",
@@ -16727,7 +16597,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -16736,7 +16606,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "THE SILENCE OF THE LEMMINGS",
-          "step": 219
+          "step": 217
         },
         {
           "identity": {
@@ -16745,7 +16615,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "DIGGING FOR VICTORY",
-          "step": 233
+          "step": 231
         }
       ],
       "pressureAxes": {
@@ -16770,7 +16640,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 256
+      "step": 254
     },
     {
       "chapter": "advanced-routes",
@@ -16792,7 +16662,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         },
         {
           "identity": {
@@ -16801,7 +16671,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Happy New Year!",
-          "step": 124
+          "step": 122
         },
         {
           "identity": {
@@ -16810,7 +16680,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         }
       ],
       "pressureAxes": {
@@ -16835,7 +16705,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 257
+      "step": 255
     },
     {
       "chapter": "advanced-routes",
@@ -16857,7 +16727,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         },
         {
           "identity": {
@@ -16866,7 +16736,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -16875,7 +16745,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         }
       ],
       "pressureAxes": {
@@ -16900,7 +16770,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 258
+      "step": 256
     },
     {
       "chapter": "advanced-routes",
@@ -16922,7 +16792,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch your step",
-          "step": 114
+          "step": 112
         },
         {
           "identity": {
@@ -16931,7 +16801,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Suicidal Tendencies",
-          "step": 118
+          "step": 116
         },
         {
           "identity": {
@@ -16940,7 +16810,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "The Land of the Bizarre",
-          "step": 81
+          "step": 79
         }
       ],
       "pressureAxes": {
@@ -16965,7 +16835,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 259
+      "step": 257
     },
     {
       "chapter": "advanced-routes",
@@ -16987,7 +16857,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "The Search for Lem",
-          "step": 258
+          "step": 256
         },
         {
           "identity": {
@@ -16996,7 +16866,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Have an ice day",
-          "step": 120
+          "step": 118
         },
         {
           "identity": {
@@ -17005,7 +16875,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Poles Apart",
-          "step": 172
+          "step": 170
         }
       ],
       "pressureAxes": {
@@ -17030,7 +16900,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 260
+      "step": 258
     },
     {
       "chapter": "advanced-routes",
@@ -17052,7 +16922,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -17061,7 +16931,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "One way digging to freedom",
-          "step": 235
+          "step": 233
         },
         {
           "identity": {
@@ -17070,7 +16940,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Exodus!",
-          "step": 183
+          "step": 181
         }
       ],
       "pressureAxes": {
@@ -17095,7 +16965,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 261
+      "step": 259
     },
     {
       "chapter": "advanced-routes",
@@ -17117,7 +16987,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Lemming Learning Curve",
-          "step": 166
+          "step": 164
         },
         {
           "identity": {
@@ -17126,7 +16996,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "The Search for Lem",
-          "step": 258
+          "step": 256
         },
         {
           "identity": {
@@ -17160,7 +17030,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 262
+      "step": 260
     },
     {
       "chapter": "advanced-routes",
@@ -17182,7 +17052,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Inside the bone",
-          "step": 86
+          "step": 84
         },
         {
           "identity": {
@@ -17191,7 +17061,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Lemming Learning Curve",
-          "step": 166
+          "step": 164
         },
         {
           "identity": {
@@ -17200,7 +17070,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Chain with no name",
-          "step": 83
+          "step": 81
         }
       ],
       "pressureAxes": {
@@ -17225,7 +17095,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 263
+      "step": 261
     },
     {
       "chapter": "advanced-routes",
@@ -17247,7 +17117,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Maybe not such a doddle",
-          "step": 113
+          "step": 111
         },
         {
           "identity": {
@@ -17256,7 +17126,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Here is Mr.Lemming's house",
-          "step": 98
+          "step": 96
         },
         {
           "identity": {
@@ -17265,7 +17135,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "The Search for Lem",
-          "step": 258
+          "step": 256
         }
       ],
       "pressureAxes": {
@@ -17290,7 +17160,7 @@
       },
       "quotaTimingVerified": true,
       "role": "recovery",
-      "step": 264
+      "step": 262
     },
     {
       "chapter": "advanced-routes",
@@ -17312,7 +17182,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Lemming Head",
-          "step": 252
+          "step": 250
         },
         {
           "identity": {
@@ -17330,7 +17200,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
-          "step": 253
+          "step": 251
         }
       ],
       "pressureAxes": {
@@ -17355,7 +17225,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 265
+      "step": 263
     },
     {
       "chapter": "advanced-routes",
@@ -17377,7 +17247,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Curse of the Pharaohs",
-          "step": 223
+          "step": 221
         },
         {
           "identity": {
@@ -17386,7 +17256,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Lend a helping hand....",
-          "step": 145
+          "step": 143
         },
         {
           "identity": {
@@ -17395,7 +17265,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         }
       ],
       "pressureAxes": {
@@ -17420,7 +17290,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 266
+      "step": 264
     },
     {
       "chapter": "advanced-routes",
@@ -17442,7 +17312,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Pillars of Hercules",
-          "step": 243
+          "step": 241
         },
         {
           "identity": {
@@ -17485,7 +17355,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 267
+      "step": 265
     },
     {
       "chapter": "advanced-routes",
@@ -17507,7 +17377,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -17516,7 +17386,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "One way digging to freedom",
-          "step": 235
+          "step": 233
         },
         {
           "identity": {
@@ -17525,7 +17395,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Oogilemming!",
-          "step": 267
+          "step": 265
         }
       ],
       "pressureAxes": {
@@ -17550,7 +17420,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 268
+      "step": 266
     },
     {
       "chapter": "advanced-routes",
@@ -17572,7 +17442,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Polar Expedition",
-          "step": 268
+          "step": 266
         },
         {
           "identity": {
@@ -17581,7 +17451,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -17590,7 +17460,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Lemmings in a situation",
-          "step": 229
+          "step": 227
         }
       ],
       "pressureAxes": {
@@ -17615,7 +17485,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 269
+      "step": 267
     },
     {
       "chapter": "advanced-routes",
@@ -17637,7 +17507,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Santus Lemmingus",
-          "step": 269
+          "step": 267
         },
         {
           "identity": {
@@ -17646,7 +17516,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Exodus!",
-          "step": 183
+          "step": 181
         },
         {
           "identity": {
@@ -17655,7 +17525,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Polar Expedition",
-          "step": 268
+          "step": 266
         }
       ],
       "pressureAxes": {
@@ -17680,7 +17550,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 270
+      "step": 268
     },
     {
       "chapter": "advanced-routes",
@@ -17702,7 +17572,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "2 Minutes before midnight",
-          "step": 194
+          "step": 192
         },
         {
           "identity": {
@@ -17711,7 +17581,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Feel the heat!",
-          "step": 197
+          "step": 195
         },
         {
           "identity": {
@@ -17720,7 +17590,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Ice Station Lemming",
-          "step": 155
+          "step": 153
         }
       ],
       "pressureAxes": {
@@ -17745,7 +17615,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 271
+      "step": 269
     },
     {
       "chapter": "advanced-routes",
@@ -17776,7 +17646,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "It's Boxing Day!",
-          "step": 143
+          "step": 141
         },
         {
           "identity": {
@@ -17785,7 +17655,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Steel Block Party",
-          "step": 260
+          "step": 258
         }
       ],
       "pressureAxes": {
@@ -17810,7 +17680,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 272
+      "step": 270
     },
     {
       "chapter": "advanced-routes",
@@ -17832,7 +17702,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         },
         {
           "identity": {
@@ -17841,7 +17711,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
         },
         {
           "identity": {
@@ -17850,7 +17720,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "SPAM,SPAM,SPAM,EGG AND LEMMING",
-          "step": 253
+          "step": 251
         }
       ],
       "pressureAxes": {
@@ -17875,7 +17745,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 273
+      "step": 271
     },
     {
       "chapter": "advanced-routes",
@@ -17897,7 +17767,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         },
         {
           "identity": {
@@ -17906,7 +17776,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Watch right or left (Part two)",
-          "step": 134
+          "step": 132
         },
         {
           "identity": {
@@ -17915,7 +17785,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Spiral staircase",
-          "step": 119
+          "step": 117
         }
       ],
       "pressureAxes": {
@@ -17940,7 +17810,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 274
+      "step": 272
     },
     {
       "chapter": "advanced-routes",
@@ -17962,7 +17832,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Steel Block Party",
-          "step": 260
+          "step": 258
         },
         {
           "identity": {
@@ -17971,7 +17841,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "It's Lemmingentry Watson",
-          "step": 97
+          "step": 95
         },
         {
           "identity": {
@@ -17980,7 +17850,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Maybe not such a doddle",
-          "step": 113
+          "step": 111
         }
       ],
       "pressureAxes": {
@@ -18005,7 +17875,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 275
+      "step": 273
     },
     {
       "chapter": "advanced-routes",
@@ -18027,7 +17897,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
         },
         {
           "identity": {
@@ -18036,7 +17906,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Suicidal Tendencies",
-          "step": 118
+          "step": 116
         },
         {
           "identity": {
@@ -18045,7 +17915,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Spiral staircase",
-          "step": 119
+          "step": 117
         }
       ],
       "pressureAxes": {
@@ -18070,7 +17940,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 276
+      "step": 274
     },
     {
       "chapter": "advanced-routes",
@@ -18092,7 +17962,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Postcard from Lemmingland",
-          "step": 184
+          "step": 182
         },
         {
           "identity": {
@@ -18101,7 +17971,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Upsidedown World",
-          "step": 174
+          "step": 172
         },
         {
           "identity": {
@@ -18110,7 +17980,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "No added colours or Lemmings",
-          "step": 190
+          "step": 188
         }
       ],
       "pressureAxes": {
@@ -18135,7 +18005,7 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 277
+      "step": 275
     },
     {
       "chapter": "advanced-routes",
@@ -18157,7 +18027,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Stepping Stones",
-          "step": 244
+          "step": 242
         },
         {
           "identity": {
@@ -18166,7 +18036,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Watch out, there`s traps about",
-          "step": 157
+          "step": 155
         },
         {
           "identity": {
@@ -18175,7 +18045,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Creature Discomforts",
-          "step": 238
+          "step": 236
         }
       ],
       "pressureAxes": {
@@ -18200,12 +18070,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 278
+      "step": 276
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "35:Mega Drive Sunsoft:6:0:35",
@@ -18213,7 +18083,7 @@
       },
       "level": "Libra",
       "newPressurePeaks": [],
-      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "placementReason": "Finish with special pacing, demanding coordination and precise timing.",
       "preparationExamples": [
         {
           "identity": {
@@ -18222,7 +18092,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Creature Discomforts",
-          "step": 238
+          "step": 236
         },
         {
           "identity": {
@@ -18231,7 +18101,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Doomsday",
-          "step": 232
+          "step": 230
         },
         {
           "identity": {
@@ -18265,12 +18135,12 @@
       },
       "quotaTimingVerified": true,
       "role": "introduction",
-      "step": 279
+      "step": 277
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "30:Blizzard:15:7:6",
@@ -18287,7 +18157,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "POOR WEE CREATURES!",
-          "step": 241
+          "step": 239
         },
         {
           "identity": {
@@ -18296,7 +18166,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Lemmings in a situation",
-          "step": 229
+          "step": 227
         },
         {
           "identity": {
@@ -18330,12 +18200,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 280
+      "step": 278
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "27:Hail:12:3:3",
@@ -18352,7 +18222,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Climbing to the Top!",
-          "step": 129
+          "step": 127
         },
         {
           "identity": {
@@ -18361,7 +18231,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Head for the Hills!",
-          "step": 137
+          "step": 135
         },
         {
           "identity": {
@@ -18370,7 +18240,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Marshmallow Land",
-          "step": 128
+          "step": 126
         }
       ],
       "pressureAxes": {
@@ -18395,12 +18265,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 281
+      "step": 279
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "22:Blizzard:7:6:6",
@@ -18417,7 +18287,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "A Block from Home",
-          "step": 226
+          "step": 224
         },
         {
           "identity": {
@@ -18426,7 +18296,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Climbing to the Top!",
-          "step": 129
+          "step": 127
         },
         {
           "identity": {
@@ -18435,7 +18305,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Marshmallow Land",
-          "step": 128
+          "step": 126
         }
       ],
       "pressureAxes": {
@@ -18460,12 +18330,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 282
+      "step": 280
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "16:Hail:1:2:0",
@@ -18482,7 +18352,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Great Lemming Caper",
-          "step": 261
+          "step": 259
         },
         {
           "identity": {
@@ -18491,7 +18361,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Polar Expedition",
-          "step": 268
+          "step": 266
         },
         {
           "identity": {
@@ -18500,7 +18370,7 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Exodus!",
-          "step": 183
+          "step": 181
         }
       ],
       "pressureAxes": {
@@ -18525,12 +18395,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 283
+      "step": 281
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "19:Hail:4:2:3",
@@ -18547,7 +18417,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         },
         {
           "identity": {
@@ -18556,7 +18426,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
         },
         {
           "identity": {
@@ -18565,7 +18435,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "The Next Lemeration",
-          "step": 273
+          "step": 271
         }
       ],
       "pressureAxes": {
@@ -18590,12 +18460,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 284
+      "step": 282
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "25:Blizzard:10:7:1",
@@ -18612,7 +18482,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Presents of Mind II",
-          "step": 271
+          "step": 269
         },
         {
           "identity": {
@@ -18621,7 +18491,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "2 Minutes before midnight",
-          "step": 194
+          "step": 192
         },
         {
           "identity": {
@@ -18630,7 +18500,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "HIGHLAND FLING",
-          "step": 132
+          "step": 130
         }
       ],
       "pressureAxes": {
@@ -18655,12 +18525,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 285
+      "step": 283
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "9:Frost:10:1:1",
@@ -18677,7 +18547,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The race against cliches",
-          "step": 227
+          "step": 225
         },
         {
           "identity": {
@@ -18686,7 +18556,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "A Block from Home",
-          "step": 226
+          "step": 224
         },
         {
           "identity": {
@@ -18695,7 +18565,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "DON`T PANIC",
-          "step": 91
+          "step": 89
         }
       ],
       "pressureAxes": {
@@ -18720,12 +18590,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 286
+      "step": 284
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "25:Hail:10:3:1",
@@ -18742,7 +18612,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Presents of Mind II",
-          "step": 271
+          "step": 269
         },
         {
           "identity": {
@@ -18751,7 +18621,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Synchronised Lemming",
-          "step": 230
+          "step": 228
         },
         {
           "identity": {
@@ -18760,7 +18630,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "You Take the High Road",
-          "step": 220
+          "step": 218
         }
       ],
       "pressureAxes": {
@@ -18785,12 +18655,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 287
+      "step": 285
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "61:Wicked:2:4:6",
@@ -18807,7 +18677,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "The Far Side",
-          "step": 239
+          "step": 237
         },
         {
           "identity": {
@@ -18816,7 +18686,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Stepping Stones",
-          "step": 244
+          "step": 242
         },
         {
           "identity": {
@@ -18825,7 +18695,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         }
       ],
       "pressureAxes": {
@@ -18850,12 +18720,12 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 288
+      "step": 286
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "18:Hail:3:2:2",
@@ -18872,7 +18742,7 @@
             "packID": "xmasLemmings1991-LEVEL-4"
           },
           "level": "Merry Christmas Mr Lemming",
-          "step": 203
+          "step": 201
         },
         {
           "identity": {
@@ -18881,7 +18751,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "ROCKY ROAD",
-          "step": 215
+          "step": 213
         },
         {
           "identity": {
@@ -18915,12 +18785,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 289
+      "step": 287
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "24:Blizzard:9:7:0",
@@ -18937,7 +18807,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Izzie Wizzie lemmings get busy",
-          "step": 187
+          "step": 185
         },
         {
           "identity": {
@@ -18955,7 +18825,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Across The Gap",
-          "step": 189
+          "step": 187
         }
       ],
       "pressureAxes": {
@@ -18980,12 +18850,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 290
+      "step": 288
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "64:Taxing:5:2:6",
@@ -18993,7 +18863,7 @@
       },
       "level": "The Prison!",
       "newPressurePeaks": [],
-      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "placementReason": "Finish with special pacing, demanding coordination and precise timing.",
       "preparationExamples": [
         {
           "identity": {
@@ -19002,7 +18872,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Izzie Wizzie lemmings get busy",
-          "step": 187
+          "step": 185
         },
         {
           "identity": {
@@ -19011,7 +18881,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "Lemmings...The Motion Picture",
-          "step": 290
+          "step": 288
         },
         {
           "identity": {
@@ -19045,12 +18915,12 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 291
+      "step": 289
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "58:Mega Drive Sunsoft:29:0:58",
@@ -19058,7 +18928,7 @@
       },
       "level": "I am A.T.",
       "newPressurePeaks": [],
-      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "placementReason": "Finish with special pacing, demanding coordination and precise timing.",
       "preparationExamples": [
         {
           "identity": {
@@ -19067,7 +18937,7 @@
             "packID": "xmasLemmings1992-LEVEL-4"
           },
           "level": "Happy Holidays Mr Lemming!",
-          "step": 90
+          "step": 88
         },
         {
           "identity": {
@@ -19076,7 +18946,7 @@
             "packID": "holidayLemmings1994-MACLEVL-32"
           },
           "level": "Get the Point?",
-          "step": 249
+          "step": 247
         },
         {
           "identity": {
@@ -19085,7 +18955,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "KEEP ON TRUCKING",
-          "step": 171
+          "step": 169
         }
       ],
       "pressureAxes": {
@@ -19110,12 +18980,12 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 292
+      "step": 290
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "22:Hail:7:2:6",
@@ -19132,7 +19002,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "The Stack",
-          "step": 251
+          "step": 249
         },
         {
           "identity": {
@@ -19141,7 +19011,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "And now, the end is near...",
-          "step": 270
+          "step": 268
         },
         {
           "identity": {
@@ -19150,7 +19020,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "AAAAAARRRRRRGGGGGGHHHHHH!!!!!!",
-          "step": 168
+          "step": 166
         }
       ],
       "pressureAxes": {
@@ -19175,12 +19045,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 293
+      "step": 291
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "7:Frost:8:0:7",
@@ -19197,7 +19067,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Feel the heat!",
-          "step": 197
+          "step": 195
         },
         {
           "identity": {
@@ -19206,7 +19076,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Tightrope City",
-          "step": 209
+          "step": 207
         },
         {
           "identity": {
@@ -19215,7 +19085,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "If at first you don`t succeed..",
-          "step": 201
+          "step": 199
         }
       ],
       "pressureAxes": {
@@ -19240,12 +19110,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 294
+      "step": 292
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Seasonal placement is provisional; human discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "21:Hail:6:2:5",
@@ -19271,16 +19141,16 @@
             "packID": "ohYesMoreLemmings-OHYES-60"
           },
           "level": "Rules to fall",
-          "step": 170
+          "step": 168
         },
         {
           "identity": {
             "engine": "classic",
-            "levelID": "32:Crazy:13:0:4",
+            "levelID": "29:Crazy:10:5:4",
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
-          "level": "It`s a trade off",
-          "step": 79
+          "level": "ROCKY VI",
+          "step": 215
         }
       ],
       "pressureAxes": {
@@ -19305,12 +19175,12 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 295
+      "step": 293
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "33:Crazy:14:1:5",
@@ -19327,7 +19197,7 @@
             "packID": "lemmings-LEVEL-120"
           },
           "level": "Have a nice day!",
-          "step": 242
+          "step": 240
         },
         {
           "identity": {
@@ -19336,7 +19206,7 @@
             "packID": "holidayLemmings1993-MACLEVL-32"
           },
           "level": "It Came Upon a Lemnight Clear",
-          "step": 234
+          "step": 232
         },
         {
           "identity": {
@@ -19370,12 +19240,12 @@
       },
       "quotaTimingVerified": true,
       "role": "practice",
-      "step": 296
+      "step": 294
     },
     {
       "chapter": "capstones",
       "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "identity": {
         "engine": "classic",
         "levelID": "62:Wicked:3:9:0",
@@ -19383,7 +19253,7 @@
       },
       "level": "This Corrosion",
       "newPressurePeaks": [],
-      "placementReason": "Owner-confirmed advanced route remains paired with Time waits for no Lemming at the end.",
+      "placementReason": "Keep this advanced route next to Time waits for no Lemming.",
       "preparationExamples": [
         {
           "identity": {
@@ -19410,7 +19280,7 @@
             "packID": "ohNoMoreLemmings-DLVEL-100"
           },
           "level": "Time waits for no Lemming",
-          "step": 296
+          "step": 294
         }
       ],
       "pressureAxes": {
@@ -19435,7 +19305,72 @@
       },
       "quotaTimingVerified": true,
       "role": "challenge",
-      "step": 297
+      "step": 295
+    },
+    {
+      "chapter": "capstones",
+      "discoveryAssessment": "Editorial chapter and role; novice discovery remains unmeasured",
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
+      "identity": {
+        "engine": "classic",
+        "levelID": "32:Crazy:13:0:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "level": "It`s a trade off",
+      "newPressurePeaks": [],
+      "placementReason": "The player reported pixel-perfect timing. Place this puzzle last.",
+      "preparationExamples": [
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "27:Crazy:8:3:5",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "KEEP ON TRUCKING",
+          "step": 169
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "81:Taxing:22:4:6",
+            "packID": "lemmings-LEVEL-120"
+          },
+          "level": "Come on over to my place",
+          "step": 63
+        },
+        {
+          "identity": {
+            "engine": "classic",
+            "levelID": "87:Havoc:8:1:7",
+            "packID": "ohNoMoreLemmings-DLVEL-100"
+          },
+          "level": "Lemming about town",
+          "step": 115
+        }
+      ],
+      "pressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 87.8,
+        "hatches": 0.0,
+        "minimumReleaseRate": 1,
+        "precision": 25,
+        "quotaDeadline": 42.84313725490196,
+        "rescue": 50.0,
+        "skillChains": 0
+      },
+      "pressureRises": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 16.675,
+        "hatches": 0,
+        "minimumReleaseRate": 0,
+        "precision": 0,
+        "quotaDeadline": 25.343,
+        "rescue": 0,
+        "skillChains": 0
+      },
+      "quotaTimingVerified": true,
+      "role": "challenge",
+      "step": 296
     }
   ],
   "meaning": "A complete editorial review with measured pressure and earlier practice examples. Course positions are ordinal. Small numerical position gaps do not prove human difficulty. Novel discovery and special pacing remain explicit human validation gaps.",

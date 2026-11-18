@@ -119,8 +119,8 @@
       "title": "Consolidate advanced route planning"
     },
     {
-      "end": 985,
-      "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "end": 990.0,
+      "goal": "Finish with special pacing, demanding coordination and precise timing.",
       "id": "capstones",
       "requires": [
         "advanced-routes"
@@ -1284,36 +1284,6 @@
       "role": "introduction",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "title": "Flow Control"
-    },
-    {
-      "chapter": "small-budgets",
-      "identity": {
-        "engine": "classic",
-        "levelID": "20:Crazy:1:0:1",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "position": 643.545,
-      "previousStep": 121,
-      "reason": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-      "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
-      "role": "practice",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "Quote: \"That`s a good level\""
-    },
-    {
-      "chapter": "small-budgets",
-      "identity": {
-        "engine": "classic",
-        "levelID": "32:Crazy:13:0:4",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "position": 647.091,
-      "previousStep": 157,
-      "reason": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-      "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
-      "role": "recovery",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "It`s a trade off"
     },
     {
       "chapter": "small-budgets",
@@ -3454,7 +3424,7 @@
       },
       "position": 940.0,
       "previousStep": 226,
-      "reason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "reason": "Finish with special pacing, demanding coordination and precise timing.",
       "replayRevision": "b073ef2e1143dd27ce817398587846c5c7cd17b10afba55fea35b2009bf4b571",
       "role": "introduction",
       "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
@@ -3484,7 +3454,7 @@
       },
       "position": 958.0,
       "previousStep": 227,
-      "reason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "reason": "Finish with special pacing, demanding coordination and precise timing.",
       "replayRevision": "c00e0cfa0f7937f0cb3d70b50152a5987d533cc0f5d922b7977ca21a86b6c39f",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -3499,7 +3469,7 @@
       },
       "position": 967.0,
       "previousStep": 185,
-      "reason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "reason": "Finish with special pacing, demanding coordination and precise timing.",
       "replayRevision": "6d38849c56ea3db544ecb89425667c8bbb1f6fccfcc9bb25fb145a7d46f06732",
       "role": "practice",
       "sourceRevision": "fc020d72e88706953d4737e1b5fa09f5b653d7a70e4e1c1fa1cfa5546a24a908",
@@ -3529,13 +3499,28 @@
       },
       "position": 985.0,
       "previousStep": 216,
-      "reason": "Owner-confirmed advanced route remains paired with Time waits for no Lemming at the end.",
+      "reason": "Keep this advanced route next to Time waits for no Lemming.",
       "replayRevision": "d3606325c07b09bb1ea31ce3bf0235ffa0bbc05749c26f3a956860bd7e966efe",
       "role": "challenge",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "title": "This Corrosion"
+    },
+    {
+      "chapter": "capstones",
+      "identity": {
+        "engine": "classic",
+        "levelID": "32:Crazy:13:0:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "position": 990.0,
+      "previousStep": 157,
+      "reason": "The player reported pixel-perfect timing. Place this puzzle last.",
+      "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
+      "role": "challenge",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "It`s a trade off"
     }
   ],
-  "meaning": "Full editorial review of the 227 retained lessons. Chapter goals and per-level roles describe intended learning progression, not novice playtest results. Placement positions are course ordinals, not measured human difficulty.",
+  "meaning": "Full editorial review of the 226 retained lessons. Chapter goals and per-level roles describe intended learning progression, not novice playtest results. Placement positions are course ordinals, not measured human difficulty.",
   "version": "course-plan-1"
 }

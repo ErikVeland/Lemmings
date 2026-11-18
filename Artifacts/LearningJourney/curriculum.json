@@ -12680,350 +12680,6 @@
     {
       "comparisons": [
         {
-          "distance": 2.2415,
-          "position": 15.0,
-          "reference": "Gentle/Tailor-made_for_blockers.nxlv"
-        },
-        {
-          "distance": 3.0271,
-          "position": 470.0,
-          "reference": "Zany/Got_anything..._Lemmingy___.nxlv"
-        },
-        {
-          "distance": 3.3162,
-          "position": 625.0,
-          "reference": "Manic/Just_a_Minute_(Part_Two).nxlv"
-        },
-        {
-          "distance": 3.4142,
-          "position": 515.0,
-          "reference": "Manic/Down_the_tube.nxlv"
-        },
-        {
-          "distance": 3.7057,
-          "position": 370.0,
-          "reference": "Zany/Flow_Control.nxlv"
-        }
-      ],
-      "context": {
-        "allowedLosses": 2,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 2,
-        "availableSkillTypes": 5,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 147.52941176470588,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "bomber"
-        ],
-        "firstQuotaTick": 2360,
-        "hatchCount": 1,
-        "initialHatchIntervalSeconds": 3.1176470588235294,
-        "jobChanges": 0,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 1,
-        "narrowActions": 1,
-        "peakAssignmentsInTwoSeconds": 1,
-        "peakAssignmentsPerSecond": 1,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 1,
-        "population": 50,
-        "probedAssignments": 2,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 41.1764705882353,
-        "remainingSecondsAtReplayEnd": 32.470588235294116,
-        "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
-        "required": 48,
-        "rescueFraction": 0.96,
-        "savedAboveRequirement": 0,
-        "scarceAvailableSkills": [
-          "bomber",
-          "climber",
-          "floater"
-        ],
-        "slowestHatchIntervalSeconds": 3.1176470588235294,
-        "sourceToolScarcity": 78.85,
-        "spareUsedSkills": {
-          "blocker": 3,
-          "bomber": 0
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 1,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 11,
-        "usedSkillUtilisation": {
-          "blocker": 0.25,
-          "bomber": 1.0
-        },
-        "usedSkills": {
-          "blocker": 1,
-          "bomber": 1
-        },
-        "workers": 2
-      },
-      "courseChapter": {
-        "end": 679,
-        "goal": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-        "id": "small-budgets",
-        "requires": [
-          "long-routes"
-        ],
-        "start": 640,
-        "title": "Solve smaller tool budgets"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 78.85,
-        "hatches": 0.0,
-        "minimumReleaseRate": 1,
-        "precision": 25,
-        "quotaDeadline": 65.68627450980391,
-        "rescue": 96.0,
-        "skillChains": 0
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "20:Crazy:1:0:1",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "learningRole": "practice",
-      "lesson": "Practise: Blocker + Bomber",
-      "level": "Quote: \"That`s a good level\"",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"20:Crazy:1:0:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 35,
-          "position": 650.0,
-          "reference": "Gentle/Tailor-made_for_blockers.nxlv",
-          "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 650.0
-        },
-        "courseChapter": "small-budgets",
-        "learningRole": "practice",
-        "lower": 643.545,
-        "position": 643.545,
-        "reference": "Gentle/Tailor-made_for_blockers.nxlv",
-        "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 643.545
-      },
-      "placementReason": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Amiga Lemmings",
-        "number": 3,
-        "ordinal": 3,
-        "population": 20,
-        "rank": "Gentle",
-        "rankIndex": 0,
-        "reference": "Gentle/Tailor-made_for_blockers.nxlv",
-        "required": 5,
-        "sha256": "98f3f735a1b9a9baae74aa414155b2cc3b5fb408b7151acdc4ce55792ebcfbcc",
-        "skills": {
-          "blocker": 10
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 28,
-        "timeLimitSeconds": null,
-        "title": "Tailor-made for blockers"
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "narrow measured timing",
-        "witness exhausts at least one used skill"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": []
-    },
-    {
-      "comparisons": [
-        {
-          "distance": 0.8306,
-          "position": 470.0,
-          "reference": "Zany/Got_anything..._Lemmingy___.nxlv"
-        },
-        {
-          "distance": 1.9842,
-          "position": 705.0,
-          "reference": "Lunatic/This_Corrosion.nxlv"
-        },
-        {
-          "distance": 2.5461,
-          "position": 170.0,
-          "reference": "Quirky/It's_Lemmingentry,_Watson.nxlv"
-        },
-        {
-          "distance": 2.7611,
-          "position": 490.0,
-          "reference": "Manic/The_Lemming_Funhouse.nxlv"
-        },
-        {
-          "distance": 2.9731,
-          "position": 515.0,
-          "reference": "Manic/Down_the_tube.nxlv"
-        }
-      ],
-      "context": {
-        "allowedLosses": 10,
-        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
-        "assignments": 4,
-        "availableSkillTypes": 5,
-        "canSlowReleaseBelowStartingRate": false,
-        "completionSeconds": 111.94117647058823,
-        "discoveryDifficulty": "unknown from replay",
-        "exhaustedUsedSkills": [
-          "digger",
-          "builder"
-        ],
-        "firstQuotaTick": 1894,
-        "hatchCount": 1,
-        "initialHatchIntervalSeconds": 3.1176470588235294,
-        "jobChanges": 0,
-        "maximumReleaseRate": 99,
-        "minimumReleaseRate": 1,
-        "narrowActions": 1,
-        "peakAssignmentsInTwoSeconds": 1,
-        "peakAssignmentsPerSecond": 1,
-        "peakAssignmentsPerTick": 1,
-        "peakDistinctWorkersPerSecond": 1,
-        "population": 20,
-        "probedAssignments": 4,
-        "quotaTimingVerified": true,
-        "remainingSeconds": 68.58823529411765,
-        "remainingSecondsAtReplayEnd": 68.05882352941177,
-        "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
-        "required": 10,
-        "rescueFraction": 0.5,
-        "savedAboveRequirement": 1,
-        "scarceAvailableSkills": [
-          "builder",
-          "climber",
-          "digger",
-          "floater"
-        ],
-        "slowestHatchIntervalSeconds": 3.1176470588235294,
-        "sourceToolScarcity": 87.8,
-        "spareUsedSkills": {
-          "builder": 0,
-          "digger": 0,
-          "miner": 2
-        },
-        "spatialToleranceMeasured": false,
-        "startingReleaseRate": 1,
-        "ticksWithMultipleAssignments": 0,
-        "timingProbeComplete": false,
-        "totalAvailableSkills": 8,
-        "usedSkillUtilisation": {
-          "builder": 1.0,
-          "digger": 1.0,
-          "miner": 0.3333333333333333
-        },
-        "usedSkills": {
-          "builder": 2,
-          "digger": 1,
-          "miner": 1
-        },
-        "workers": 4
-      },
-      "courseChapter": {
-        "end": 679,
-        "goal": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-        "id": "small-budgets",
-        "requires": [
-          "long-routes"
-        ],
-        "start": 640,
-        "title": "Solve smaller tool budgets"
-      },
-      "difficultyVerdict": null,
-      "humanPressureAxes": {
-        "assignmentDensity": 0,
-        "availableToolScarcity": 87.8,
-        "hatches": 0.0,
-        "minimumReleaseRate": 1,
-        "precision": 25,
-        "quotaDeadline": 42.84313725490196,
-        "rescue": 50.0,
-        "skillChains": 0
-      },
-      "identity": {
-        "engine": "classic",
-        "levelID": "32:Crazy:13:0:4",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "learningRole": "recovery",
-      "lesson": "Practise: Builder + Digger",
-      "level": "It`s a trade off",
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"32:Crazy:13:0:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 355.0,
-          "position": 730.0,
-          "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-          "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 730.0
-        },
-        "courseChapter": "small-budgets",
-        "learningRole": "recovery",
-        "lower": 647.091,
-        "position": 647.091,
-        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-        "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 647.091
-      },
-      "placementReason": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-      "purpose": "Later puzzle practice with community and variant evidence",
-      "reference": {
-        "author": "Oh No! More Lemmings",
-        "number": 30,
-        "ordinal": 94,
-        "population": 20,
-        "rank": "Zany",
-        "rankIndex": 2,
-        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-        "required": 19,
-        "sha256": "6b4654ac3cd6beba48c4214d4e692ce7d8e54e0cd74e8c7b85ab1d6fe8ee1039",
-        "skills": {
-          "blocker": 2,
-          "bomber": 1,
-          "builder": 6,
-          "digger": 1
-        },
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "spawnInterval": 53,
-        "timeLimitSeconds": null,
-        "title": "Got anything... Lemmingy???"
-      },
-      "requiredPreparation": [],
-      "risks": [
-        "incomplete timing probes",
-        "spatial tolerance unmeasured",
-        "narrow measured timing",
-        "witness exhausts at least one used skill"
-      ],
-      "teachingPhase": null,
-      "variantDifferences": []
-    },
-    {
-      "comparisons": [
-        {
           "distance": 2.0969,
           "position": 120.0,
           "reference": "Gentle/Rainbow_Island.nxlv"
@@ -45938,8 +45594,8 @@
         "workers": 9
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -45968,7 +45624,7 @@
       "level": "Libra",
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"35:Mega Drive Sunsoft:6:0:35\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
       "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "adjustment": "Finish with special pacing, demanding coordination and precise timing.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
           "basis": "solutionEstimate",
@@ -45996,7 +45652,7 @@
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 940.0
       },
-      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "placementReason": "Finish with special pacing, demanding coordination and precise timing.",
       "purpose": "Later puzzle practice with community and variant evidence",
       "reference": {
         "author": "Genesis Lemmings",
@@ -46102,8 +45758,8 @@
         "workers": 11
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -46233,8 +45889,8 @@
         "workers": 4
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -46365,8 +46021,8 @@
         "workers": 6
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -46515,8 +46171,8 @@
         "workers": 1
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -46665,8 +46321,8 @@
         "workers": 2
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -46804,8 +46460,8 @@
         "workers": 3
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -46946,8 +46602,8 @@
         "workers": 3
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -47086,8 +46742,8 @@
         "workers": 5
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -47263,8 +46919,8 @@
         "workers": 1
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -47414,8 +47070,8 @@
         "workers": 7
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -47558,8 +47214,8 @@
         "workers": 4
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -47723,8 +47379,8 @@
         "workers": 6
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -47753,7 +47409,7 @@
       "level": "The Prison!",
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"64:Taxing:5:2:6\", \"packID\": \"lemmings-LEVEL-120\"}",
       "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "adjustment": "Finish with special pacing, demanding coordination and precise timing.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
           "basis": "solutionEstimate",
@@ -47775,7 +47431,7 @@
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 958.0
       },
-      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "placementReason": "Finish with special pacing, demanding coordination and precise timing.",
       "purpose": "Later puzzle practice with community and variant evidence",
       "reference": {
         "author": "Amiga Lemmings",
@@ -47866,8 +47522,8 @@
         "workers": 31
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -47896,7 +47552,7 @@
       "level": "I am A.T.",
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"58:Mega Drive Sunsoft:29:0:58\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
       "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "adjustment": "Finish with special pacing, demanding coordination and precise timing.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
           "basis": "reduxClassicCounterpart",
@@ -47926,7 +47582,7 @@
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 967.0
       },
-      "placementReason": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "placementReason": "Finish with special pacing, demanding coordination and precise timing.",
       "purpose": "Later puzzle practice with community and variant evidence",
       "reference": {
         "author": "Genesis / SNES",
@@ -48020,8 +47676,8 @@
         "workers": 6
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -48154,8 +47810,8 @@
         "workers": 1
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -48275,8 +47931,8 @@
         "workers": 0
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -48426,8 +48082,8 @@
         "workers": 5
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -48576,8 +48232,8 @@
         "workers": 4
       },
       "courseChapter": {
-        "end": 985,
-        "goal": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
         "id": "capstones",
         "requires": [
           "advanced-routes"
@@ -48606,7 +48262,7 @@
       "level": "This Corrosion",
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"62:Wicked:3:9:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
       "placement": {
-        "adjustment": "Owner-confirmed advanced route remains paired with Time waits for no Lemming at the end.",
+        "adjustment": "Keep this advanced route next to Time waits for no Lemming.",
         "basis": "userPlaytest",
         "comparisonPlacement": {
           "adjustment": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
@@ -48629,7 +48285,7 @@
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 985.0
       },
-      "placementReason": "Owner-confirmed advanced route remains paired with Time waits for no Lemming at the end.",
+      "placementReason": "Keep this advanced route next to Time waits for no Lemming.",
       "purpose": "Later puzzle practice with community and variant evidence",
       "reference": {
         "author": "Oh No! More Lemmings",
@@ -48665,11 +48321,187 @@
         "different population",
         "Classic retains a time limit"
       ]
+    },
+    {
+      "comparisons": [
+        {
+          "distance": 0.8306,
+          "position": 470.0,
+          "reference": "Zany/Got_anything..._Lemmingy___.nxlv"
+        },
+        {
+          "distance": 1.9842,
+          "position": 705.0,
+          "reference": "Lunatic/This_Corrosion.nxlv"
+        },
+        {
+          "distance": 2.5461,
+          "position": 170.0,
+          "reference": "Quirky/It's_Lemmingentry,_Watson.nxlv"
+        },
+        {
+          "distance": 2.7611,
+          "position": 490.0,
+          "reference": "Manic/The_Lemming_Funhouse.nxlv"
+        },
+        {
+          "distance": 2.9731,
+          "position": 515.0,
+          "reference": "Manic/Down_the_tube.nxlv"
+        }
+      ],
+      "context": {
+        "allowedLosses": 10,
+        "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+        "assignments": 4,
+        "availableSkillTypes": 5,
+        "canSlowReleaseBelowStartingRate": false,
+        "completionSeconds": 111.94117647058823,
+        "discoveryDifficulty": "unknown from replay",
+        "exhaustedUsedSkills": [
+          "digger",
+          "builder"
+        ],
+        "firstQuotaTick": 1894,
+        "hatchCount": 1,
+        "initialHatchIntervalSeconds": 3.1176470588235294,
+        "jobChanges": 0,
+        "maximumReleaseRate": 99,
+        "minimumReleaseRate": 1,
+        "narrowActions": 1,
+        "peakAssignmentsInTwoSeconds": 1,
+        "peakAssignmentsPerSecond": 1,
+        "peakAssignmentsPerTick": 1,
+        "peakDistinctWorkersPerSecond": 1,
+        "population": 20,
+        "probedAssignments": 4,
+        "quotaTimingVerified": true,
+        "remainingSeconds": 68.58823529411765,
+        "remainingSecondsAtReplayEnd": 68.05882352941177,
+        "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
+        "required": 10,
+        "rescueFraction": 0.5,
+        "savedAboveRequirement": 1,
+        "scarceAvailableSkills": [
+          "builder",
+          "climber",
+          "digger",
+          "floater"
+        ],
+        "slowestHatchIntervalSeconds": 3.1176470588235294,
+        "sourceToolScarcity": 87.8,
+        "spareUsedSkills": {
+          "builder": 0,
+          "digger": 0,
+          "miner": 2
+        },
+        "spatialToleranceMeasured": false,
+        "startingReleaseRate": 1,
+        "ticksWithMultipleAssignments": 0,
+        "timingProbeComplete": false,
+        "totalAvailableSkills": 8,
+        "usedSkillUtilisation": {
+          "builder": 1.0,
+          "digger": 1.0,
+          "miner": 0.3333333333333333
+        },
+        "usedSkills": {
+          "builder": 2,
+          "digger": 1,
+          "miner": 1
+        },
+        "workers": 4
+      },
+      "courseChapter": {
+        "end": 990.0,
+        "goal": "Finish with special pacing, demanding coordination and precise timing.",
+        "id": "capstones",
+        "requires": [
+          "advanced-routes"
+        ],
+        "start": 940,
+        "title": "Finish with the hardest combinations"
+      },
+      "difficultyVerdict": null,
+      "humanPressureAxes": {
+        "assignmentDensity": 0,
+        "availableToolScarcity": 87.8,
+        "hatches": 0.0,
+        "minimumReleaseRate": 1,
+        "precision": 25,
+        "quotaDeadline": 42.84313725490196,
+        "rescue": 50.0,
+        "skillChains": 0
+      },
+      "identity": {
+        "engine": "classic",
+        "levelID": "32:Crazy:13:0:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "learningRole": "challenge",
+      "lesson": "Practise: Builder + Digger",
+      "level": "It`s a trade off",
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"32:Crazy:13:0:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "The player reported pixel-perfect timing. Place this puzzle last.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 355.0,
+          "position": 730.0,
+          "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+          "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 730.0
+        },
+        "courseChapter": "capstones",
+        "learningRole": "challenge",
+        "lower": 990.0,
+        "position": 990.0,
+        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+        "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 990.0
+      },
+      "placementReason": "The player reported pixel-perfect timing. Place this puzzle last.",
+      "purpose": "Later puzzle practice with community and variant evidence",
+      "reference": {
+        "author": "Oh No! More Lemmings",
+        "number": 30,
+        "ordinal": 94,
+        "population": 20,
+        "rank": "Zany",
+        "rankIndex": 2,
+        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+        "required": 19,
+        "sha256": "6b4654ac3cd6beba48c4214d4e692ce7d8e54e0cd74e8c7b85ab1d6fe8ee1039",
+        "skills": {
+          "blocker": 2,
+          "bomber": 1,
+          "builder": 6,
+          "digger": 1
+        },
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "spawnInterval": 53,
+        "timeLimitSeconds": null,
+        "title": "Got anything... Lemmingy???"
+      },
+      "requiredPreparation": [],
+      "risks": [
+        "incomplete timing probes",
+        "spatial tolerance unmeasured",
+        "narrow measured timing",
+        "witness exhausts at least one used skill"
+      ],
+      "teachingPhase": null,
+      "variantDifferences": []
     }
   ],
   "limits": "Course positions are editorial ordinals, not measured difficulty scores. Every transition has a measured pressure review and earlier practice examples, but insight and special pacing still need novice playtesting. An elaborate witness need not be the easiest route. Native quota timing removes replay shutdown delay; it does not prove a fastest solution.",
   "poolSize": 1721,
   "selectionPolicy": "Every retained lesson has a pinned chapter, learning role and placement reason in the complete course plan. Skills, generous combinations, tool budgets, worker routes, precision and separate entrances prepare the later combined pressures, clocks and capstones. Required rescue timing and successful tool use come from exact native playback. Player-reported walls retain later floors. New estimates cannot silently enter the authored course. No fixed-size padding.",
-  "targetSize": 297,
+  "targetSize": 296,
   "version": "curriculum-13"
 }

@@ -53,6 +53,7 @@ if [[ "${TEST_SCOPE:-all}" == playfield ]]; then
 fi
 if [[ "${TEST_SCOPE:-all}" == foundations ]]; then test_flags+=(-D FOUNDATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == foundations-review ]]; then test_flags+=(-D FOUNDATION_TESTS -D FOUNDATION_REVIEW_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == short-games ]]; then test_flags+=(-D FOUNDATION_TESTS -D FOUNDATION_REVIEW_TESTS -D SHORT_GAMES_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == quick-controls ]]; then test_flags+=(-D QUICK_CONTROLS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == typography ]]; then test_flags+=(-D TYPOGRAPHY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == extra-skills ]]; then test_flags+=(-D EXTRA_SKILL_TESTS); fi

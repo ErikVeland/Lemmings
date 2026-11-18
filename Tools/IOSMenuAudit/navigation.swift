@@ -36,10 +36,10 @@ extension MenuAudit {
             ("insights-token-empty", MobileInformationArt.insightsToken(length: 0)),
             ("insights-token", MobileInformationArt.insightsToken(length: 12)),
             ("insights-clear", MobileInformationArt.insightsClear()),
-            ("short-games-ready", ShortGamesArt.page(classicAvailable: true)),
-            ("short-games-missing", ShortGamesArt.page(classicAvailable: false,
+            ("short-games-ready", ShortGamesArt.page(available: ["classic", "classic-follow-up"], selected: "classic-follow-up")),
+            ("short-games-missing", ShortGamesArt.page(available: [],
                 subtitle: "Matching Classic game data unavailable")),
-            ("short-games-loading", ShortGamesArt.page(classicAvailable: false, loading: true)),
+            ("short-games-loading", ShortGamesArt.page(available: [], loading: true)),
         ]
         let entry = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fixture", levelID: "one"),
             catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
@@ -56,15 +56,16 @@ extension MenuAudit {
                   page.rows.filter({ $0.id == "journey" }).count == 1 else { throw invalidTargets(line: #line) }
             pages.append((name, page))
         }
-        let shortGames = ShortGamesArt.page(classicAvailable: true)
+        let shortGames = ShortGamesArt.page(available: ["classic", "classic-follow-up"], selected: "classic-follow-up")
         let completedJourney = MobileHomeArt.journeyPage(title: "Journey", completed: 1234,
             solved: 227, total: 227, revisit: 0, resume: nil, canContinue: false)
         guard completedJourney.footer.filter({ $0.primary && $0.enabled }).map(\.id) == ["home"],
               !completedJourney.footer.contains(where: { $0.id == "learningStart" }) else { throw invalidTargets(line: #line) }
-        guard shortGames.rows.count == 3, shortGames.rows.filter(\.enabled).map(\.id) == ["shortSelect.classic"],
+        guard shortGames.rows.count == 4,
+              shortGames.rows.filter(\.enabled).map(\.id) == ["shortSelect.classic", "shortSelect.classic-follow-up"],
               shortGames.footer.first?.isBackNavigation == true,
               shortGames.footer.last?.id == "shortPlay", shortGames.footer.last?.primary == true,
-              !ShortGamesArt.page(classicAvailable: false).footer.last!.enabled else { throw invalidTargets(line: #line) }
+              !ShortGamesArt.page(available: ["classic"], selected: "classic-follow-up").footer.last!.enabled else { throw invalidTargets(line: #line) }
         guard MobileInformationArt.effectsWelcome().backAction?.id == "welcomeOriginal",
               MobileInformationArt.telemetryConsent().backAction?.id == "telemetryNo",
               MobileInformationArt.whatsNew(version: "2.0").backAction?.id == "welcomeContinue",

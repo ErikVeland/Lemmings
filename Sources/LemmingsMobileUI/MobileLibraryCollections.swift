@@ -110,7 +110,10 @@ extension MobileLibraryViewController {
         case "nameDone": endNaming(commit: true)
         case "listDelete": deleteSelectedPlaylist()
         default:
-            if id.hasPrefix("shortSelect."), ["classic", "lemmings2"].contains(String(id.dropFirst(12))) { shortGamesSelection = String(id.dropFirst(12)); rebuild() }
+            if id.hasPrefix("shortSelect.") {
+                let selection = String(id.dropFirst("shortSelect.".count))
+                if shortGamesEntries[selection] != nil { shortGamesSelection = selection; rebuild() }
+            }
             else if id.hasPrefix("player."), case let key = String(id.dropFirst(7)), profiles.players.contains(where: { $0.id == key }) { switchPlayer(key) }
             else if id.hasPrefix("list."), let uuid = UUID(uuidString: String(id.dropFirst(5))) { openPlaylist(uuid) }
             else if id.hasPrefix("add."), let uuid = UUID(uuidString: String(id.dropFirst(4))) { addCurrentLevel(to: uuid) }

@@ -148,8 +148,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var shuffleBackID = "fanBack"
     var practiceChoice = 0
     var practiceSkills: [Lemmings2Runtime.Skill] = [.jumper, .runner, .builder, .basher, .digger, .climber, .floater, .roper]
-    var tribesShortGamesEntries: [MobileFavourites.Entry]?
-    var shortGamesEntries: [MobileFavourites.Entry]?
+    var shortGamesEntries: [String: [MobileFavourites.Entry]] = [:]
     var shortGamesSelection = "classic"
     var shortGamesPreparing = false
     var savedSeatsBackID = "hotSeat"

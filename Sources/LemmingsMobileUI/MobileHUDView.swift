@@ -109,6 +109,8 @@ import UIKit
     var counterStyle: ClassicCounterStyle = .game { didSet { if oldValue != counterStyle { setNeedsDisplay() } } }
     private var panelImage: CGImage?
     private var cachedPanel: MobilePixelFrame?
+    private var pressedPanelImage: CGImage?
+    private var cachedPressedPanel: MobilePixelFrame?
     private var displayCorners: GameControlCornerRadii?
     private let contourOutline = MobileHUDContourOutline()
     private let contourMask = UIView()
@@ -251,11 +253,12 @@ import UIKit
         speed: Double,
         endRunArmed: Bool,
         panel: MobilePixelFrame?,
+        pressedPanel: MobilePixelFrame? = nil,
         readOnly: Bool = false
     ) {
         let previousSnapshot = self.snapshot
         let skillsChanged = self.layout != layout || previousSnapshot?.skills != snapshot.skills
-            || self.selectedSkill != selectedSkill || cachedPanel != panel || self.readOnly != readOnly
+            || self.selectedSkill != selectedSkill || cachedPanel != panel || cachedPressedPanel != pressedPanel || self.readOnly != readOnly
         let presentationChanged = skillsChanged || self.paused != paused || self.speed != speed
             || self.endRunArmed != endRunArmed || drawnStatusDetails != statusDetails
             || previousSnapshot?.released != snapshot.released || previousSnapshot?.saved != snapshot.saved
@@ -296,6 +299,10 @@ import UIKit
         if cachedPanel != panel {
             cachedPanel = panel
             panelImage = panel.flatMap(Self.image)
+        }
+        if cachedPressedPanel != pressedPanel {
+            cachedPressedPanel = pressedPanel
+            pressedPanelImage = pressedPanel.flatMap(Self.image)
         }
         minimapView.frame = mapFrame ?? .zero
         minimapView.overlay = layout.portrait != nil || replayMapFrame != nil
@@ -409,7 +416,7 @@ import UIKit
         let cornerInsets = MobileSystemRegions.contentInsets(in: self)
         return MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                           paused: paused, speed: speed, endRunArmed: endRunArmed,
-                          panelImage: panelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails, replayLevel: replayLevel, shape: MobileSystemRegions.controlShape(in: self),
+                          panelImage: panelImage, pressedPanelImage: pressedPanelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails, replayLevel: replayLevel, shape: MobileSystemRegions.controlShape(in: self),
                           duoCorners: MobileSystemRegions.isFoldable(in: self), displayBounds: bounds,
                           displayCornerRadius: max(cornerInsets.top, cornerInsets.bottom), displayCornerRadii: displayCorners)
     }

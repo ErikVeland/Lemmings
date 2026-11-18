@@ -57,6 +57,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let playerPortrait: CGImage?
     private let counterStyle: ClassicCounterStyle
     private let panelImage: CGImage?
+    private let pressedPanelImage: CGImage?
     private let typography: GameMenuTypography?
     private let items: [Item]
     private let controlGroups: [CGRect]
@@ -72,7 +73,8 @@ public enum MobileHUDAction: Equatable, Sendable {
     private let bottomCornerGroups: (left: CGRect, right: CGRect)?
 
     public init(layout: MobileHUDLayout, snapshot: MobileGameSnapshot, selectedSkill: Int,
-                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil, replayLevel: MobileLevelSummary? = nil, shape: GameControlShape = .square, duoCorners: Bool = false, displayBounds: CGRect? = nil, displayCornerRadius: CGFloat? = nil, displayCornerRadii: GameControlCornerRadii? = nil) {
+                paused: Bool, speed: Double, endRunArmed: Bool, panelImage: CGImage?,
+                pressedPanelImage: CGImage? = nil, typography: GameMenuTypography?, counterStyle: ClassicCounterStyle = .game, skillIcons: [CGImage?] = [], readOnly: Bool = false, playerName: String? = nil, playerPortrait: CGImage? = nil, statusDetails: StatusDetails? = nil, replayLevel: MobileLevelSummary? = nil, shape: GameControlShape = .square, duoCorners: Bool = false, displayBounds: CGRect? = nil, displayCornerRadius: CGFloat? = nil, displayCornerRadii: GameControlCornerRadii? = nil) {
         self.displayBounds = duoCorners ? displayBounds : nil
         self.displayCornerRadius = displayCornerRadius
         self.displayCornerRadii = displayCornerRadii
@@ -88,6 +90,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         self.statusDetails = statusDetails
         self.replayLevel = replayLevel
         self.panelImage = panelImage; self.typography = typography
+        self.pressedPanelImage = pressedPanelImage
         items = Self.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                              paused: paused, speed: speed, endRunArmed: endRunArmed)
         let rates = items.filter { if case .releaseRate = $0.action { return true }; return false }
@@ -319,14 +322,11 @@ public enum MobileHUDAction: Equatable, Sendable {
         for item in items {
             switch item.action {
             case let .skill(index) where index == selectedSkill:
-                SkillPointerBadge.innerGlow(in: item.frame.insetBy(dx: 3, dy: 3), context: context)
-                outline(item.frame, context: context)
-            case .pause where paused:
-                outline(item.frame, context: context)
-            case .endRun where endRunArmed || snapshot.isEndingRun == true:
-                outline(item.frame, context: context)
-            case .speed where speed > 1:
-                outline(item.frame, context: context)
+                drawPressedPanelCell(item, panel: panel, context: context)
+            case .pause where paused,
+                 .endRun where endRunArmed || snapshot.isEndingRun == true,
+                 .speed where speed > 1:
+                drawPressedPanelCell(item, panel: panel, context: context)
             case .rewind, .stepBackward, .step, .menu:
                 if item.action == .step || item.action == .stepBackward || item.action == .rewind {
                     drawIconButton(item, context: context)
@@ -345,6 +345,21 @@ public enum MobileHUDAction: Equatable, Sendable {
                              y: panel.frame.minY + 21 * panel.scale,
                              width: 37 * panel.scale, height: 12 * panel.scale)
             drawGameLabel(time, in: box, context: context)
+        }
+    }
+
+    private func drawPressedPanelCell(_ item: Item, panel: MobilePanelMetrics, context: CGContext) {
+        guard !readOnly else { return }
+        if let pressedPanelImage {
+            context.saveGState()
+            context.clip(to: item.frame)
+            GameStoneArt.drawImage(pressedPanelImage, in: panel.frame, context: context)
+            context.restoreGState()
+        } else {
+            if case .skill = item.action {
+                SkillPointerBadge.innerGlow(in: item.frame.insetBy(dx: 3, dy: 3), context: context)
+            }
+            outline(item.frame, context: context)
         }
     }
 
@@ -481,12 +496,18 @@ public enum MobileHUDAction: Equatable, Sendable {
             context.saveGState()
             context.clip(to: well)
             if readOnly { context.setAlpha(0.35) }
-            if case let .skill(index) = item.action, let icon = skillIcons[safe: index] ?? nil {
+            let nativePanel = selected && !readOnly ? pressedPanelImage : panelImage
+            let nativeGlyph = pressedPanelImage == nil ? nil
+                : nativePanel.flatMap { Lemmings3PanelArt.skillGlyph(in: $0, index: index) }
+            if let icon = nativeGlyph ?? (skillIcons[safe: index] ?? nil) {
                 let art = CGRect(x: well.minX, y: visibleFrame.minY + 20, width: well.width, height: max(0, visibleFrame.height - 36))
                 let available = min(art.width / CGFloat(icon.width), max(0, frame.height - 36) / CGFloat(icon.height))
                 let fit = layout.isDiorama && available > 0
                     ? (available >= 1 ? floor(available) : 1 / ceil(1 / available)) : available
-                GameSkillSelectionArt.drawSprite(icon, in: CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2), y: SkillArtworkAlignment.originY(for: icon, scale: fit, centredIn: art), width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit), selected: selected, context: context)
+                let iconFrame = CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2),
+                    y: SkillArtworkAlignment.originY(for: icon, scale: fit, centredIn: art),
+                    width: CGFloat(icon.width) * fit, height: CGFloat(icon.height) * fit)
+                GameSkillSelectionArt.drawSprite(icon, in: iconFrame, selected: selected && nativeGlyph == nil, context: context)
             } else if layout.panel?.style != .lemmings3, let cell = item.sourceCell,
                let image = panelImage?.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
                 let available = CGRect(x: well.minX, y: visibleFrame.minY + 20, width: well.width, height: max(0, visibleFrame.height - 36))

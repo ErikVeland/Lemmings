@@ -561,6 +561,42 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
+    func testPressedSkillArtwork() throws {
+        timer?.invalidate()
+        canvas.startCountdown.cancel()
+        canvas.menuRows = nil
+        canvas.confinePointer = false
+        paused = true
+        selected = 0
+        refresh()
+        guard let window else { throw SequelDataError.invalid("Chronicles window unavailable") }
+        let before = L3RunRecovery.stateHash(game)
+        let group = canvas.skillGroupFrame
+        let cellWidth = group.width / 5
+        func skill(_ index: Int) throws -> Data {
+            let rect = CGRect(x: group.minX + CGFloat(index) * cellWidth, y: group.minY,
+                width: cellWidth, height: group.height).insetBy(dx: 8, dy: 8)
+            guard let bitmap = canvas.bitmapImageRepForCachingDisplay(in: rect) else {
+                throw SequelDataError.invalid("Chronicles skill render unavailable")
+            }
+            canvas.cacheDisplay(in: rect, to: bitmap)
+            guard let png = bitmap.representation(using: .png, properties: [:]) else {
+                throw SequelDataError.invalid("Chronicles skill render unavailable")
+            }
+            return png
+        }
+        let normal = try skill(2), neighbour = try skill(1), walker = try skill(0)
+        let point = canvas.convert(CGPoint(x: group.midX, y: group.midY), to: nil)
+        guard let click = NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [],
+            timestamp: 0, windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1) else {
+            throw SequelDataError.invalid("Chronicles skill click unavailable")
+        }
+        canvas.mouseDown(with: click)
+        try checkGameplayQuickControl(selected == 2 && L3RunRecovery.stateHash(game) == before,
+            "Chronicles skill target did not select Jumper on the paused playfield")
+        try checkGameplayQuickControl(try skill(2) != normal && skill(0) != walker && skill(1) == neighbour,
+            "Chronicles skill feedback did not stay inside the affected buttons")
+    }
     func testGameplayQuickControls() throws {
         timer?.invalidate(); timer = nil; paused = true
         canvas.startCountdown.cancel(); canvas.menuRows = nil; refresh()
@@ -2766,7 +2802,7 @@ import NxlvKit
         if !readOnlyReplay { art.text(L10n.text("MENU"), x: (gameMenuFrame.minX - screenOrigin.x) / zoom + 6,
             y: (gameMenuFrame.minY - screenOrigin.y) / zoom + 3, scale: 0.8) }
         art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-        for slot in readOnlyReplay ? [] : [selectedAction] + (fast ? [6] : []) + (paused ? [7] : []) {
+        for slot in readOnlyReplay ? [] : (fast ? [6] : []) + (paused ? [7] : []) {
             let left = CGFloat(Lemmings3Panel.edges[slot]), width = CGFloat(Lemmings3Panel.edges[slot + 1]) - left
             NSGraphicsContext.saveGraphicsState()
             NSBezierPath(rect: CGRect(x: left, y: 172, width: width, height: 40)).addClip()
@@ -2787,8 +2823,10 @@ import NxlvKit
         art.text(String(format: "%02d", seconds % 60), x: 187, y: 195, scale: 0.85)
         if let context = NSGraphicsContext.current?.cgContext,
            let pixels = bitmapCache.pixels(art.normal) {
+            let pressed = readOnlyReplay ? nil : bitmapCache.pixels(art.pressed)
             NSColor.black.setFill(); CGRect(x: 0, y: 172, width: 175, height: 40).fill()
             for index in 0..<5 {
+                let selected = !readOnlyReplay && index == selectedAction
                 let frame = local(skillFrame(index))
                 context.saveGState()
                 context.translateBy(x: frame.minX, y: frame.minY)
@@ -2797,12 +2835,9 @@ import NxlvKit
                 let displayGroup = CGRect(x: -CGFloat(index) * displayFrame.width, y: 0,
                     width: skillGroupFrame.width, height: skillGroupFrame.height)
                 GameControlGroupArt.draw(in: context, frame: displayFrame, group: displayGroup,
-                    selected: index == selectedAction, face: .skill(index))
+                    selected: selected, face: .skill(index))
                 context.restoreGState()
-                let source = CGRect(x: CGFloat(Lemmings3Panel.edges[index] + 3) * CGFloat(pixels.width) / 320,
-                    y: 3 * CGFloat(pixels.height) / 40, width: 29 * CGFloat(pixels.width) / 320,
-                    height: 34 * CGFloat(pixels.height) / 40)
-                if let icon = pixels.cropping(to: source) {
+                if let icon = Lemmings3PanelArt.skillGlyph(in: selected ? pressed ?? pixels : pixels, index: index) {
                     let box = frame.insetBy(dx: 4 / zoom, dy: 4 / zoom)
                     let fit = min(box.width * zoom / CGFloat(icon.width), box.height * zoom / CGFloat(icon.height))
                     let pixelScale = fit >= 1 ? floor(fit) : 1 / ceil(1 / fit)

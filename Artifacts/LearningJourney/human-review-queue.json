@@ -7182,7 +7182,7 @@
     ],
     "context": {
       "allowedLosses": 2,
-      "assignmentDemandEvidence": "Native-verified successful assignments before the rescue quota",
+      "assignmentDemandEvidence": "Recorded witness commands; quota timing is unmeasured",
       "assignments": 2,
       "availableSkillTypes": 5,
       "canSlowReleaseBelowStartingRate": false,
@@ -7191,7 +7191,7 @@
       "exhaustedUsedSkills": [
         "bomber"
       ],
-      "firstQuotaTick": 2360,
+      "firstQuotaTick": null,
       "hatchCount": 1,
       "initialHatchIntervalSeconds": 3.1176470588235294,
       "jobChanges": 0,
@@ -7204,8 +7204,8 @@
       "peakDistinctWorkersPerSecond": 1,
       "population": 50,
       "probedAssignments": 2,
-      "quotaTimingVerified": true,
-      "remainingSeconds": 41.1764705882353,
+      "quotaTimingVerified": false,
+      "remainingSeconds": 32.470588235294116,
       "remainingSecondsAtReplayEnd": 32.470588235294116,
       "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
       "required": 48,
@@ -7250,29 +7250,6 @@
       "packID": "ohNoMoreLemmings-DLVEL-100"
     },
     "pack": "Oh No! More Lemmings",
-    "placement": {
-      "adjustment": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-      "basis": "teachingCurriculum",
-      "comparisonPlacement": {
-        "basis": "solutionEstimate",
-        "lower": 35,
-        "position": 650.0,
-        "reference": "Gentle/Tailor-made_for_blockers.nxlv",
-        "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 650.0
-      },
-      "courseChapter": "small-budgets",
-      "learningRole": "practice",
-      "lower": 643.545,
-      "position": 643.545,
-      "reference": "Gentle/Tailor-made_for_blockers.nxlv",
-      "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 643.545
-    },
     "risks": [
       "incomplete timing probes",
       "spatial tolerance unmeasured",
@@ -7280,7 +7257,7 @@
       "witness exhausts at least one used skill"
     ],
     "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-    "status": "included in authored teaching curriculum; novice playtesting outstanding",
+    "status": "needs human discovery/variant review",
     "title": "Quote: \"That`s a good level\""
   },
   {
@@ -12734,7 +12711,7 @@
     },
     "pack": "Oh No! More Lemmings",
     "placement": {
-      "adjustment": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
+      "adjustment": "The player reported pixel-perfect timing. Place this puzzle last.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "basis": "solutionEstimate",
@@ -12746,15 +12723,15 @@
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 730.0
       },
-      "courseChapter": "small-budgets",
-      "learningRole": "recovery",
-      "lower": 647.091,
-      "position": 647.091,
+      "courseChapter": "capstones",
+      "learningRole": "challenge",
+      "lower": 990.0,
+      "position": 990.0,
       "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
       "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 647.091
+      "upper": 990.0
     },
     "risks": [
       "incomplete timing probes",
@@ -13558,7 +13535,7 @@
     },
     "pack": "Oh Yes! More Lemmings!",
     "placement": {
-      "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "adjustment": "Finish with special pacing, demanding coordination and precise timing.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "basis": "solutionEstimate",
@@ -20838,7 +20815,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+      "adjustment": "Finish with special pacing, demanding coordination and precise timing.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "basis": "solutionEstimate",

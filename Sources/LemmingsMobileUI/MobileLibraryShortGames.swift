@@ -36,12 +36,13 @@ extension MobileLibraryViewController {
         }
     }
     func shortGamesPage(subtitle: String) -> GameFrontEnd.Page {
-        ShortGamesArt.page(classicAvailable: shortGamesEntries != nil, tribesAvailable: tribesShortGamesEntries != nil, selected: shortGamesSelection, loading: shortGamesPreparing, subtitle: subtitle)
+        ShortGamesArt.page(available: Set(shortGamesEntries.keys), selected: shortGamesSelection,
+                           loading: shortGamesPreparing, subtitle: subtitle)
     }
 
     func openShortGames() {
-        shortGamesEntries = nil; tribesShortGamesEntries = nil; shortGamesSelection = "classic"
-        guard let catalogue, let sequence = ShortPlayCatalogue.sequence(id: "classic") else { return }
+        guard let catalogue else { return }
+        shortGamesEntries = [:]; shortGamesSelection = "classic"
         let ports = catalogue.portsRoot, folders = catalogue.fanFolders, journey = bundledJourney
         let tribesRoot = store?.resolvedDataDirectory(for: .lemmings2)
         let owner = profiles.activeID, scope = hotSeat?.scope
@@ -50,25 +51,26 @@ extension MobileLibraryViewController {
         learningTask?.cancel()
         learningTask = Task { [weak self] in
             let worker = Task.detached(priority: .utility) {
-                let classic = try? MobileShortPlayCatalogue.entries(sequence: sequence, journey: journey,
-                    catalogue: MobileCatalogue(portsRoot: ports, fanFolders: folders))
-                let tribes = tribesRoot.flatMap { try? Lemmings2ShortPlayMobileLibrary.entries(directory: $0) }
-                return (classic, tribes)
+                let catalogue = MobileCatalogue(portsRoot: ports, fanFolders: folders)
+                var entries: [String: [MobileFavourites.Entry]] = [:]
+                for sequence in ShortPlayCatalogue.sequences where sequence.engine == .classic {
+                    entries[sequence.id] = try? MobileShortPlayCatalogue.entries(sequence: sequence,
+                        journey: journey, catalogue: catalogue)
+                }
+                entries["lemmings2"] = tribesRoot.flatMap { try? Lemmings2ShortPlayMobileLibrary.entries(directory: $0) }
+                return entries
             }
-            let result = await worker.result
+            let entries = await worker.value
             guard let self, !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
             shortGamesPreparing = false
-            switch result {
-            case .success(let entries): shortGamesEntries = entries.0; tribesShortGamesEntries = entries.1
-            case .failure: notice = L10n.text("Matching Classic game data unavailable")
-            }
+            shortGamesEntries = entries
             if route == .shortGames { rebuild() }
         }
     }
 
     func playShortGame() {
         guard !shortGamesPreparing,
-              let entries = shortGamesSelection == "lemmings2" ? tribesShortGamesEntries : shortGamesEntries,
+              let entries = shortGamesEntries[shortGamesSelection],
               let sequence = ShortPlayCatalogue.sequence(id: shortGamesSelection),
               let id = playlists.create(name: sequence.title, entries: entries),
               let run = playlists.startRun(id, shuffle: false) else { return }

@@ -1395,49 +1395,13 @@
     ]
   },
   {
-    "demand": 643.545,
-    "level": "Quote: \"That`s a good level\"",
-    "newSkills": [],
-    "pressureWarnings": [],
-    "rawReplayScore": 271.7390853156293,
-    "rawReplayScoreChange": 22.67642425120357,
-    "referenceStep": 0.7089999999999919,
-    "reportedTooHard": false,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 78,
-    "variantDifferences": []
-  },
-  {
-    "demand": 647.091,
-    "level": "It`s a trade off",
-    "newSkills": [],
-    "pressureWarnings": [],
-    "rawReplayScore": 272.0327659874961,
-    "rawReplayScoreChange": 0.2936806718667526,
-    "referenceStep": 0.7092000000000098,
-    "reportedTooHard": false,
-    "risks": [
-      "incomplete timing probes",
-      "spatial tolerance unmeasured",
-      "narrow measured timing",
-      "witness exhausts at least one used skill"
-    ],
-    "step": 79,
-    "variantDifferences": []
-  },
-  {
     "demand": 650.636,
     "level": "How on Earth?",
     "newSkills": [],
     "pressureWarnings": [],
     "rawReplayScore": 327.66141699423207,
-    "rawReplayScoreChange": 55.62865100673599,
-    "referenceStep": 0.7089999999999919,
+    "rawReplayScoreChange": 78.59875592980632,
+    "referenceStep": 2.1271999999999935,
     "reportedTooHard": false,
     "risks": [
       "incomplete timing probes",
@@ -1445,7 +1409,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 80,
+    "step": 78,
     "variantDifferences": []
   },
   {
@@ -1462,7 +1426,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 81,
+    "step": 79,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1482,7 +1446,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 82,
+    "step": 80,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1501,7 +1465,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 83,
+    "step": 81,
     "variantDifferences": []
   },
   {
@@ -1520,7 +1484,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 84,
+    "step": 82,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1542,7 +1506,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 85,
+    "step": 83,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -1564,7 +1528,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 86,
+    "step": 84,
     "variantDifferences": []
   },
   {
@@ -1580,7 +1544,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 87,
+    "step": 85,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1599,7 +1563,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 88,
+    "step": 86,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1619,7 +1583,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 89,
+    "step": 87,
     "variantDifferences": []
   },
   {
@@ -1636,7 +1600,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 90,
+    "step": 88,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1660,7 +1624,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 91,
+    "step": 89,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1683,7 +1647,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 92,
+    "step": 90,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1705,7 +1669,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 93,
+    "step": 91,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -1726,7 +1690,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 94,
+    "step": 92,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1746,7 +1710,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 95,
+    "step": 93,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1766,7 +1730,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 96,
+    "step": 94,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1789,7 +1753,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 97,
+    "step": 95,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -1808,7 +1772,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 98,
+    "step": 96,
     "variantDifferences": []
   },
   {
@@ -1825,7 +1789,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 99,
+    "step": 97,
     "variantDifferences": []
   },
   {
@@ -1841,7 +1805,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 100,
+    "step": 98,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1861,7 +1825,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 101,
+    "step": 99,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1879,7 +1843,7 @@
     "risks": [
       "spatial tolerance unmeasured"
     ],
-    "step": 102,
+    "step": 100,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1897,7 +1861,7 @@
     "risks": [
       "spatial tolerance unmeasured"
     ],
-    "step": 103,
+    "step": 101,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1915,7 +1879,7 @@
     "risks": [
       "spatial tolerance unmeasured"
     ],
-    "step": 104,
+    "step": 102,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1934,7 +1898,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 105,
+    "step": 103,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1954,7 +1918,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 106,
+    "step": 104,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1973,7 +1937,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 107,
+    "step": 105,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -1996,7 +1960,7 @@
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 108,
+    "step": 106,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2018,7 +1982,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 109,
+    "step": 107,
     "variantDifferences": []
   },
   {
@@ -2037,7 +2001,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 110,
+    "step": 108,
     "variantDifferences": []
   },
   {
@@ -2055,7 +2019,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 111,
+    "step": 109,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2075,7 +2039,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 112,
+    "step": 110,
     "variantDifferences": []
   },
   {
@@ -2092,7 +2056,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 113,
+    "step": 111,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2114,7 +2078,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 114,
+    "step": 112,
     "variantDifferences": []
   },
   {
@@ -2131,7 +2095,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 115,
+    "step": 113,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2155,7 +2119,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 116,
+    "step": 114,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2180,7 +2144,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 117,
+    "step": 115,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2204,7 +2168,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 118,
+    "step": 116,
     "variantDifferences": []
   },
   {
@@ -2223,7 +2187,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 119,
+    "step": 117,
     "variantDifferences": []
   },
   {
@@ -2240,7 +2204,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 120,
+    "step": 118,
     "variantDifferences": []
   },
   {
@@ -2260,7 +2224,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 121,
+    "step": 119,
     "variantDifferences": []
   },
   {
@@ -2278,7 +2242,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 122,
+    "step": 120,
     "variantDifferences": []
   },
   {
@@ -2295,7 +2259,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 123,
+    "step": 121,
     "variantDifferences": []
   },
   {
@@ -2312,7 +2276,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 124,
+    "step": 122,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2331,7 +2295,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 125,
+    "step": 123,
     "variantDifferences": []
   },
   {
@@ -2348,7 +2312,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 126,
+    "step": 124,
     "variantDifferences": []
   },
   {
@@ -2366,7 +2330,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 127,
+    "step": 125,
     "variantDifferences": []
   },
   {
@@ -2383,7 +2347,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 128,
+    "step": 126,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2403,7 +2367,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 129,
+    "step": 127,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2425,7 +2389,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 130,
+    "step": 128,
     "variantDifferences": []
   },
   {
@@ -2443,7 +2407,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 131,
+    "step": 129,
     "variantDifferences": []
   },
   {
@@ -2464,7 +2428,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 132,
+    "step": 130,
     "variantDifferences": []
   },
   {
@@ -2484,7 +2448,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 133,
+    "step": 131,
     "variantDifferences": []
   },
   {
@@ -2505,7 +2469,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 134,
+    "step": 132,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -2524,7 +2488,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 135,
+    "step": 133,
     "variantDifferences": []
   },
   {
@@ -2542,7 +2506,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 136,
+    "step": 134,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2562,7 +2526,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 137,
+    "step": 135,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2584,7 +2548,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 138,
+    "step": 136,
     "variantDifferences": []
   },
   {
@@ -2604,7 +2568,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 139,
+    "step": 137,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2630,7 +2594,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 140,
+    "step": 138,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -2656,7 +2620,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 141,
+    "step": 139,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -2681,7 +2645,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 142,
+    "step": 140,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
@@ -2703,7 +2667,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 143,
+    "step": 141,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2727,7 +2691,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 144,
+    "step": 142,
     "variantDifferences": []
   },
   {
@@ -2746,7 +2710,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 145,
+    "step": 143,
     "variantDifferences": []
   },
   {
@@ -2763,7 +2727,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 146,
+    "step": 144,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2783,7 +2747,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 147,
+    "step": 145,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -2804,7 +2768,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 148,
+    "step": 146,
     "variantDifferences": []
   },
   {
@@ -2823,7 +2787,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 149,
+    "step": 147,
     "variantDifferences": []
   },
   {
@@ -2841,7 +2805,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 150,
+    "step": 148,
     "variantDifferences": []
   },
   {
@@ -2860,7 +2824,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 151,
+    "step": 149,
     "variantDifferences": []
   },
   {
@@ -2879,7 +2843,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 152,
+    "step": 150,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -2901,7 +2865,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 153,
+    "step": 151,
     "variantDifferences": []
   },
   {
@@ -2921,7 +2885,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 154,
+    "step": 152,
     "variantDifferences": []
   },
   {
@@ -2941,7 +2905,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 155,
+    "step": 153,
     "variantDifferences": []
   },
   {
@@ -2962,7 +2926,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 156,
+    "step": 154,
     "variantDifferences": []
   },
   {
@@ -2981,7 +2945,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 157,
+    "step": 155,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3005,7 +2969,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 158,
+    "step": 156,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3031,7 +2995,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 159,
+    "step": 157,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3057,7 +3021,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 160,
+    "step": 158,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
@@ -3082,7 +3046,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 161,
+    "step": 159,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3106,7 +3070,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 162,
+    "step": 160,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3131,7 +3095,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 163,
+    "step": 161,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3153,7 +3117,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 164,
+    "step": 162,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -3175,7 +3139,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 165,
+    "step": 163,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -3199,7 +3163,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 166,
+    "step": 164,
     "variantDifferences": []
   },
   {
@@ -3219,7 +3183,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 167,
+    "step": 165,
     "variantDifferences": []
   },
   {
@@ -3238,7 +3202,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 168,
+    "step": 166,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3262,7 +3226,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 169,
+    "step": 167,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3284,7 +3248,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 170,
+    "step": 168,
     "variantDifferences": []
   },
   {
@@ -3303,7 +3267,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 171,
+    "step": 169,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3328,7 +3292,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 172,
+    "step": 170,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3354,7 +3318,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 173,
+    "step": 171,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -3377,7 +3341,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 174,
+    "step": 172,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3404,7 +3368,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 175,
+    "step": 173,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3430,7 +3394,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 176,
+    "step": 174,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3455,7 +3419,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 177,
+    "step": 175,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -3478,7 +3442,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 178,
+    "step": 176,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3504,7 +3468,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 179,
+    "step": 177,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3529,7 +3493,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 180,
+    "step": 178,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3554,7 +3518,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 181,
+    "step": 179,
     "variantDifferences": []
   },
   {
@@ -3575,7 +3539,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 182,
+    "step": 180,
     "variantDifferences": [
       "Bundled Classic conversion of the Macintosh exclusive, rather than the original Macintosh engine.",
       "Classic conversion retains a four-minute time limit; Redux has no time limit."
@@ -3600,7 +3564,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 183,
+    "step": 181,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3625,7 +3589,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 184,
+    "step": 182,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3650,7 +3614,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 185,
+    "step": 183,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3676,7 +3640,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 186,
+    "step": 184,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3702,7 +3666,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 187,
+    "step": 185,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
@@ -3728,7 +3692,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 188,
+    "step": 186,
     "variantDifferences": []
   },
   {
@@ -3750,7 +3714,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 189,
+    "step": 187,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -3776,7 +3740,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 190,
+    "step": 188,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -3798,7 +3762,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 191,
+    "step": 189,
     "variantDifferences": []
   },
   {
@@ -3818,7 +3782,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 192,
+    "step": 190,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -3839,7 +3803,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 193,
+    "step": 191,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -3859,7 +3823,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 194,
+    "step": 192,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -3880,7 +3844,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 195,
+    "step": 193,
     "variantDifferences": []
   },
   {
@@ -3900,7 +3864,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 196,
+    "step": 194,
     "variantDifferences": []
   },
   {
@@ -3921,7 +3885,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 197,
+    "step": 195,
     "variantDifferences": []
   },
   {
@@ -3942,7 +3906,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 198,
+    "step": 196,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -3969,7 +3933,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 199,
+    "step": 197,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory"
@@ -3990,7 +3954,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 200,
+    "step": 198,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory"
@@ -4013,7 +3977,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 201,
+    "step": 199,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4039,7 +4003,7 @@
       "less than 30 seconds spare on the witness",
       "four or more assignments within two seconds"
     ],
-    "step": 202,
+    "step": 200,
     "variantDifferences": []
   },
   {
@@ -4056,7 +4020,7 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 203,
+    "step": 201,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -4075,7 +4039,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 204,
+    "step": 202,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -4095,7 +4059,7 @@
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 205,
+    "step": 203,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -4118,7 +4082,7 @@
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 206,
+    "step": 204,
     "variantDifferences": []
   },
   {
@@ -4139,7 +4103,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 207,
+    "step": 205,
     "variantDifferences": []
   },
   {
@@ -4163,7 +4127,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 208,
+    "step": 206,
     "variantDifferences": []
   },
   {
@@ -4183,7 +4147,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 209,
+    "step": 207,
     "variantDifferences": []
   },
   {
@@ -4203,7 +4167,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 210,
+    "step": 208,
     "variantDifferences": []
   },
   {
@@ -4220,7 +4184,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 211,
+    "step": 209,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -4246,7 +4210,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 212,
+    "step": 210,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4274,7 +4238,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 213,
+    "step": 211,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -4300,7 +4264,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 214,
+    "step": 212,
     "variantDifferences": []
   },
   {
@@ -4320,7 +4284,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 215,
+    "step": 213,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -4345,7 +4309,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 216,
+    "step": 214,
     "variantDifferences": []
   },
   {
@@ -4366,7 +4330,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 217,
+    "step": 215,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4394,7 +4358,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 218,
+    "step": 216,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4421,7 +4385,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 219,
+    "step": 217,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4451,7 +4415,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 220,
+    "step": 218,
     "variantDifferences": []
   },
   {
@@ -4473,7 +4437,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 221,
+    "step": 219,
     "variantDifferences": []
   },
   {
@@ -4495,7 +4459,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 222,
+    "step": 220,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4520,7 +4484,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 223,
+    "step": 221,
     "variantDifferences": []
   },
   {
@@ -4541,7 +4505,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 224,
+    "step": 222,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4569,7 +4533,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 225,
+    "step": 223,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population"
@@ -4590,7 +4554,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 226,
+    "step": 224,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -4615,7 +4579,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 227,
+    "step": 225,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence"
     ]
@@ -4641,7 +4605,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 228,
+    "step": 226,
     "variantDifferences": []
   },
   {
@@ -4664,7 +4628,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 229,
+    "step": 227,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4693,7 +4657,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 230,
+    "step": 228,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population"
@@ -4719,7 +4683,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 231,
+    "step": 229,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "Classic retains a time limit"
@@ -4741,7 +4705,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 232,
+    "step": 230,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4770,7 +4734,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 233,
+    "step": 231,
     "variantDifferences": []
   },
   {
@@ -4787,7 +4751,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 234,
+    "step": 232,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -4810,7 +4774,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 235,
+    "step": 233,
     "variantDifferences": []
   },
   {
@@ -4827,7 +4791,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 236,
+    "step": 234,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -4847,7 +4811,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 237,
+    "step": 235,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -4871,7 +4835,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 238,
+    "step": 236,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -4895,7 +4859,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 239,
+    "step": 237,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -4915,7 +4879,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 240,
+    "step": 238,
     "variantDifferences": []
   },
   {
@@ -4932,7 +4896,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 241,
+    "step": 239,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -4954,7 +4918,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 242,
+    "step": 240,
     "variantDifferences": []
   },
   {
@@ -4974,7 +4938,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 243,
+    "step": 241,
     "variantDifferences": []
   },
   {
@@ -4994,7 +4958,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 244,
+    "step": 242,
     "variantDifferences": []
   },
   {
@@ -5012,7 +4976,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 245,
+    "step": 243,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5033,7 +4997,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 246,
+    "step": 244,
     "variantDifferences": []
   },
   {
@@ -5050,7 +5014,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 247,
+    "step": 245,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5074,7 +5038,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 248,
+    "step": 246,
     "variantDifferences": []
   },
   {
@@ -5091,7 +5055,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 249,
+    "step": 247,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5113,7 +5077,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 250,
+    "step": 248,
     "variantDifferences": []
   },
   {
@@ -5135,7 +5099,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 251,
+    "step": 249,
     "variantDifferences": []
   },
   {
@@ -5152,7 +5116,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 252,
+    "step": 250,
     "variantDifferences": []
   },
   {
@@ -5169,7 +5133,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 253,
+    "step": 251,
     "variantDifferences": []
   },
   {
@@ -5189,7 +5153,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 254,
+    "step": 252,
     "variantDifferences": []
   },
   {
@@ -5207,7 +5171,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 255,
+    "step": 253,
     "variantDifferences": []
   },
   {
@@ -5223,7 +5187,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 256,
+    "step": 254,
     "variantDifferences": []
   },
   {
@@ -5243,7 +5207,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 257,
+    "step": 255,
     "variantDifferences": [
       "Classic has fewer available solution skills than Redux: basher"
     ]
@@ -5262,7 +5226,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 258,
+    "step": 256,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5282,7 +5246,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 259,
+    "step": 257,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5302,7 +5266,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 260,
+    "step": 258,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5325,7 +5289,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 261,
+    "step": 259,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different skill inventory",
@@ -5347,7 +5311,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 262,
+    "step": 260,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5367,7 +5331,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 263,
+    "step": 261,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5386,7 +5350,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 264,
+    "step": 262,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5406,7 +5370,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 265,
+    "step": 263,
     "variantDifferences": []
   },
   {
@@ -5425,7 +5389,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 266,
+    "step": 264,
     "variantDifferences": [
       "Classic rescue fraction exceeds Redux by more than ten percentage points"
     ]
@@ -5444,7 +5408,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 267,
+    "step": 265,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5464,7 +5428,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 268,
+    "step": 266,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5485,7 +5449,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 269,
+    "step": 267,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5511,7 +5475,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 270,
+    "step": 268,
     "variantDifferences": []
   },
   {
@@ -5530,7 +5494,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 271,
+    "step": 269,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5550,7 +5514,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 272,
+    "step": 270,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5571,7 +5535,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 273,
+    "step": 271,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5592,7 +5556,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 274,
+    "step": 272,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5613,7 +5577,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 275,
+    "step": 273,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5634,7 +5598,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 276,
+    "step": 274,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5658,7 +5622,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 277,
+    "step": 275,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -5679,7 +5643,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 278,
+    "step": 276,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
@@ -5702,7 +5666,7 @@
       "spatial tolerance unmeasured",
       "four or more assignments within two seconds"
     ],
-    "step": 279,
+    "step": 277,
     "variantDifferences": []
   },
   {
@@ -5720,7 +5684,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 280,
+    "step": 278,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5740,7 +5704,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 281,
+    "step": 279,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5760,7 +5724,7 @@
       "spatial tolerance unmeasured",
       "narrow measured timing"
     ],
-    "step": 282,
+    "step": 280,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5781,7 +5745,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 283,
+    "step": 281,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5802,7 +5766,7 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 284,
+    "step": 282,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5823,7 +5787,7 @@
       "narrow measured timing",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 285,
+    "step": 283,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5845,7 +5809,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 286,
+    "step": 284,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5867,7 +5831,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 287,
+    "step": 285,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5890,7 +5854,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 288,
+    "step": 286,
     "variantDifferences": []
   },
   {
@@ -5906,7 +5870,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 289,
+    "step": 287,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5925,7 +5889,7 @@
       "incomplete timing probes",
       "spatial tolerance unmeasured"
     ],
-    "step": 290,
+    "step": 288,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -5945,7 +5909,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 291,
+    "step": 289,
     "variantDifferences": []
   },
   {
@@ -5966,7 +5930,7 @@
       "witness exhausts at least one used skill",
       "four or more assignments within two seconds"
     ],
-    "step": 292,
+    "step": 290,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different rescue fraction",
@@ -5988,7 +5952,7 @@
       "less than 30 seconds spare on the witness",
       "witness exhausts at least one used skill"
     ],
-    "step": 293,
+    "step": 291,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -6007,7 +5971,7 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 294,
+    "step": 292,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -6026,7 +5990,7 @@
       "spatial tolerance unmeasured",
       "less than 30 seconds spare on the witness"
     ],
-    "step": 295,
+    "step": 293,
     "variantDifferences": [
       "Exact Classic seasonal source; Redux is comparison evidence only.",
       "Owner requested all unique Xmas/Holiday puzzles. Human discovery and placement remain unmeasured."
@@ -6048,7 +6012,7 @@
       "spatial tolerance unmeasured",
       "witness exhausts at least one used skill"
     ],
-    "step": 296,
+    "step": 294,
     "variantDifferences": []
   },
   {
@@ -6066,11 +6030,29 @@
       "narrow measured timing",
       "witness exhausts at least one used skill"
     ],
-    "step": 297,
+    "step": 295,
     "variantDifferences": [
       "Classic mechanics differ from NeoLemmix; title correspondence is not variant equivalence",
       "different population",
       "Classic retains a time limit"
     ]
+  },
+  {
+    "demand": 990.0,
+    "level": "It`s a trade off",
+    "newSkills": [],
+    "pressureWarnings": [],
+    "rawReplayScore": 272.0327659874961,
+    "rawReplayScoreChange": -70.81153501440781,
+    "referenceStep": 1.0,
+    "reportedTooHard": false,
+    "risks": [
+      "incomplete timing probes",
+      "spatial tolerance unmeasured",
+      "narrow measured timing",
+      "witness exhausts at least one used skill"
+    ],
+    "step": 296,
+    "variantDifferences": []
   }
 ]

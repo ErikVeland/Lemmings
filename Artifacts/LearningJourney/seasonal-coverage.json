@@ -1,6 +1,6 @@
 {
   "exactStateAliases": 2,
-  "journeyVersion": "learning-30",
+  "journeyVersion": "learning-32",
   "levels": [
     {
       "humanReviewPending": true,
@@ -17,7 +17,7 @@
         "packID": "xmasLemmings1991-LEVEL-4"
       },
       "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
-      "step": 203,
+      "step": 201,
       "title": "Merry Christmas Mr Lemming"
     },
     {
@@ -35,7 +35,7 @@
         "packID": "xmasLemmings1991-LEVEL-4"
       },
       "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
-      "step": 204,
+      "step": 202,
       "title": "Christmas Bonus"
     },
     {
@@ -53,7 +53,7 @@
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
       "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
-      "step": 296,
+      "step": 294,
       "title": "Time waits for no Lemming"
     },
     {
@@ -71,7 +71,7 @@
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
       "sourceRevision": "b8bf363cf18f1d91186c626d8056bfc0aeaf1d1a8e789f83b2579958902089e8",
-      "step": 297,
+      "step": 295,
       "title": "This Corrosion"
     },
     {
@@ -89,7 +89,7 @@
         "packID": "xmasLemmings1992-LEVEL-4"
       },
       "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
-      "step": 103,
+      "step": 101,
       "title": "Jingle Lemming"
     },
     {
@@ -107,7 +107,7 @@
         "packID": "xmasLemmings1992-LEVEL-4"
       },
       "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
-      "step": 90,
+      "step": 88,
       "title": "Happy Holidays Mr Lemming!"
     },
     {
@@ -125,7 +125,7 @@
         "packID": "xmasLemmings1992-LEVEL-4"
       },
       "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
-      "step": 205,
+      "step": 203,
       "title": "A Lemming Holiday"
     },
     {
@@ -143,7 +143,7 @@
         "packID": "xmasLemmings1992-LEVEL-4"
       },
       "sourceRevision": "62b793ae53f30cb131b2693f3383d550635425461187352fc7a500435284c7b7",
-      "step": 193,
+      "step": 191,
       "title": "The North Poles"
     },
     {
@@ -161,7 +161,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 129,
+      "step": 127,
       "title": "Climbing to the Top!"
     },
     {
@@ -179,7 +179,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 100,
+      "step": 98,
       "title": "Floating Lemming Flurry"
     },
     {
@@ -197,7 +197,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 104,
+      "step": 102,
       "title": "Holiday Mining"
     },
     {
@@ -215,7 +215,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 107,
+      "step": 105,
       "title": "Lemming Tracks in the Snow!"
     },
     {
@@ -233,7 +233,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 102,
+      "step": 100,
       "title": "Christmas South of the Equator"
     },
     {
@@ -251,7 +251,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 87,
+      "step": 85,
       "title": "Lemming Snowfall"
     },
     {
@@ -269,7 +269,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 101,
+      "step": 99,
       "title": "Lemming Snowjourn"
     },
     {
@@ -287,7 +287,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 106,
+      "step": 104,
       "title": "Clouds of Lemmings"
     },
     {
@@ -305,7 +305,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 226,
+      "step": 224,
       "title": "A Block from Home"
     },
     {
@@ -323,7 +323,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 105,
+      "step": 103,
       "title": "32 Lemmings Below Zero"
     },
     {
@@ -341,7 +341,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 88,
+      "step": 86,
       "title": "At Home in a Cave"
     },
     {
@@ -359,7 +359,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 147,
+      "step": 145,
       "title": "Presents of Mind"
     },
     {
@@ -377,7 +377,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 82,
+      "step": 80,
       "title": "Yo-yo Lem-lem"
     },
     {
@@ -395,7 +395,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 128,
+      "step": 126,
       "title": "Marshmallow Land"
     },
     {
@@ -413,7 +413,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 137,
+      "step": 135,
       "title": "Head for the Hills!"
     },
     {
@@ -431,7 +431,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 111,
+      "step": 109,
       "title": "The Long Way Around"
     },
     {
@@ -449,7 +449,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 267,
+      "step": 265,
       "title": "Oogilemming!"
     },
     {
@@ -467,7 +467,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 262,
+      "step": 260,
       "title": "Lemmings Up High"
     },
     {
@@ -485,7 +485,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 272,
+      "step": 270,
       "title": "Check Your Hints!"
     },
     {
@@ -503,7 +503,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 269,
+      "step": 267,
       "title": "Santus Lemmingus"
     },
     {
@@ -521,7 +521,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 234,
+      "step": 232,
       "title": "It Came Upon a Lemnight Clear"
     },
     {
@@ -539,7 +539,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 275,
+      "step": 273,
       "title": "A Single Lemming..."
     },
     {
@@ -557,7 +557,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 282,
+      "step": 280,
       "title": "Break on through..."
     },
     {
@@ -575,7 +575,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 271,
+      "step": 269,
       "title": "Presents of Mind II"
     },
     {
@@ -593,7 +593,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 290,
+      "step": 288,
       "title": "Lemmings...The Motion Picture"
     },
     {
@@ -611,7 +611,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 285,
+      "step": 283,
       "title": "The Wrath of Lem"
     },
     {
@@ -629,7 +629,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 258,
+      "step": 256,
       "title": "The Search for Lem"
     },
     {
@@ -647,7 +647,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 274,
+      "step": 272,
       "title": "The Voyage Home..."
     },
     {
@@ -665,7 +665,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 259,
+      "step": 257,
       "title": "The Final Frontier"
     },
     {
@@ -683,7 +683,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 264,
+      "step": 262,
       "title": "The Undiscovered Country"
     },
     {
@@ -701,7 +701,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 280,
+      "step": 278,
       "title": "The Needs of the Many..."
     },
     {
@@ -719,7 +719,7 @@
         "packID": "holidayLemmings1993-MACLEVL-32"
       },
       "sourceRevision": "9b8270f81c049e91081141c6091a69a62cb8610a45c023152015d74876ada07e",
-      "step": 273,
+      "step": 271,
       "title": "The Next Lemeration"
     },
     {
@@ -737,7 +737,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 94,
+      "step": 92,
       "title": "Chains of Command"
     },
     {
@@ -755,7 +755,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 115,
+      "step": 113,
       "title": "Ski Jump!"
     },
     {
@@ -773,7 +773,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 95,
+      "step": 93,
       "title": "CindyLand"
     },
     {
@@ -791,7 +791,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 146,
+      "step": 144,
       "title": "Separate Ways"
     },
     {
@@ -809,7 +809,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 211,
+      "step": 209,
       "title": "Lemming Reunification"
     },
     {
@@ -827,7 +827,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 81,
+      "step": 79,
       "title": "The Land of the Bizarre"
     },
     {
@@ -845,7 +845,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 124,
+      "step": 122,
       "title": "Happy New Year!"
     },
     {
@@ -863,7 +863,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 294,
+      "step": 292,
       "title": "Division Bell"
     },
     {
@@ -881,7 +881,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 96,
+      "step": 94,
       "title": "Quest for Kieran"
     },
     {
@@ -899,7 +899,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 286,
+      "step": 284,
       "title": "Four Play"
     },
     {
@@ -917,7 +917,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 113,
+      "step": 111,
       "title": "Maybe not such a doddle"
     },
     {
@@ -935,7 +935,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 143,
+      "step": 141,
       "title": "It's Boxing Day!"
     },
     {
@@ -953,7 +953,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 194,
+      "step": 192,
       "title": "2 Minutes before midnight"
     },
     {
@@ -971,7 +971,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 136,
+      "step": 134,
       "title": "Happy New Year II!"
     },
     {
@@ -989,7 +989,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 164,
+      "step": 162,
       "title": "Plethora of Presents"
     },
     {
@@ -1007,7 +1007,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 92,
+      "step": 90,
       "title": "Up on the Rooftops"
     },
     {
@@ -1025,7 +1025,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 283,
+      "step": 281,
       "title": "Go Thataway!"
     },
     {
@@ -1043,7 +1043,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 276,
+      "step": 274,
       "title": "Break On Through"
     },
     {
@@ -1061,7 +1061,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 289,
+      "step": 287,
       "title": "And a Happy New Year!"
     },
     {
@@ -1079,7 +1079,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 284,
+      "step": 282,
       "title": "Lemmintaschen?"
     },
     {
@@ -1097,7 +1097,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 249,
+      "step": 247,
       "title": "Get the Point?"
     },
     {
@@ -1115,7 +1115,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 295,
+      "step": 293,
       "title": "Surprise Package?"
     },
     {
@@ -1133,7 +1133,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 293,
+      "step": 291,
       "title": "Steel Ice Span"
     },
     {
@@ -1151,7 +1151,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 245,
+      "step": 243,
       "title": "Sir Edmund Hilemming"
     },
     {
@@ -1169,7 +1169,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 263,
+      "step": 261,
       "title": "Up, up, and away!"
     },
     {
@@ -1187,7 +1187,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 287,
+      "step": 285,
       "title": "Lemmy in the cold, cold ground"
     },
     {
@@ -1205,7 +1205,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 236,
+      "step": 234,
       "title": "Emmings!  (No L)"
     },
     {
@@ -1223,7 +1223,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 281,
+      "step": 279,
       "title": "Merry Christmaze"
     },
     {
@@ -1241,7 +1241,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 268,
+      "step": 266,
       "title": "Polar Expedition"
     },
     {
@@ -1259,7 +1259,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 237,
+      "step": 235,
       "title": "Rendezvous II"
     },
     {
@@ -1277,7 +1277,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 260,
+      "step": 258,
       "title": "Steel Block Party"
     },
     {
@@ -1295,7 +1295,7 @@
         "packID": "holidayLemmings1994-MACLEVL-32"
       },
       "sourceRevision": "e8253af9f5c99eebba38cb4a1211c3dfd0a8264dc22c94a13e6218fddbb65484",
-      "step": 247,
+      "step": 245,
       "title": "Peak of Performance"
     }
   ],

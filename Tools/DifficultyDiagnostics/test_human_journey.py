@@ -50,8 +50,11 @@ class GoldenPathAdmissionTests(unittest.TestCase):
         self.assertEqual(result['sourceEntries'], 72)
         self.assertEqual(result['uniqueSeasonalSourcesAdded'], 70)
         self.assertEqual(result['exactStateAliases'], 2)
-        self.assertTrue(all(level['nativeReplayPassed'] and level['step'] > 80 for level in result['levels']))
-        self.assertEqual({level['step'] for level in result['levels'] if level['identity'] != level['representedBy']}, {296, 297})
+        opening = journey.read(journey.OUT / 'seasonal-plan.json')['preservedOpening']
+        self.assertTrue(all(level['nativeReplayPassed'] and level['step'] > len(opening) for level in result['levels']))
+        total = len(manifest['lessons'])
+        self.assertEqual({level['step'] for level in result['levels'] if level['identity'] != level['representedBy']},
+                         {total - 2, total - 1})
 
     def test_a_duplicate_title_cannot_replace_an_exact_state_alias(self):
         manifest = journey.read(journey.ROOT / 'Resources/Progression/learning.json')

@@ -4,7 +4,8 @@ import Testing
 @testable import LemmingsAppCore
 
 @MainActor struct JourneyResumePersistenceTests {
-    @Test func olderImportedJourneyMigratesBeforeHomeLooksUpItsArchivedSession() throws {
+    @Test(arguments: ["learning-30", "learning-31"])
+    func importedJourneyResumesAfterTheEarlyTimingPuzzles(version: String) throws {
         let temporary = try AppStorage.temporary(named: "imported-journey-revision")
         defer { temporary.removeTemporaryFiles() }
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
@@ -16,14 +17,26 @@ import Testing
         let unrelated = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
             pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: Array(journey.lessons.prefix(2).map(\.entry)))
         try store.startRun(unrelated, hotSeatID: "another-seat")
+        let next = try #require(journey.lessons.first { $0.entry.identity.levelID == "68:Wicked:9:1:2" }?.entry)
+        let finale = try #require(journey.lessons.first { $0.entry.identity.levelID == "32:Crazy:13:0:4" }?.entry)
+        let retired = try LevelPlaylistEntry(identity: .init(engine: .classic, packID: finale.identity.packID,
+            levelID: "20:Crazy:1:0:1"), catalogueRevision: finale.catalogueRevision, sourceRevision: finale.sourceRevision,
+            packNameSnapshot: finale.packNameSnapshot, levelNameSnapshot: "Quote: \"That`s a good level\"", levelNumberSnapshot: 21)
+        var oldEntries = journey.lessons.map(\.entry).filter { $0.identity != finale.identity }
+        oldEntries.insert(finale, at: 77)
+        if version == "learning-30" { oldEntries.insert(retired, at: 77) }
         let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
-            pool: .init(id: "learning-23", summary: LearningJourney.title), entries: Array(journey.lessons.prefix(4).map(\.entry)), currentIndex: 1)
+            pool: .init(id: version, summary: LearningJourney.title), entries: oldEntries, currentIndex: 77)
         let snapshot = JourneySessionSnapshot(run: old, l2Progress: ["carry": Data([3])])
         try store.importJourneySession(snapshot, hotSeatID: "ekv-uva")
         try store.migrateLearningJourney(journey)
         let saved = try #require(store.resumableLearningJourney(hotSeatID: "ekv-uva"))
         #expect(saved.run.id == old.id && saved.run.currentIndex == old.currentIndex)
         #expect(saved.run.pool.id == LearningJourney.version)
+        #expect(saved.run.currentEntry == next)
+        #expect(saved.run.entries.last == finale)
+        #expect(Array(saved.run.entries.prefix(77)) == Array(old.entries.prefix(77)))
+        #expect(!saved.run.entries.contains { $0.identity == retired.identity })
         #expect(saved.l2Progress == ["carry": Data([3])])
         #expect(store.activeRun == unrelated && store.activeRunHotSeatID == "another-seat")
         let reopened = try LevelPlaylistStore(file: store.file)

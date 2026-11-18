@@ -8,6 +8,23 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
+## Chronicles controls and Classic Short Games — 5 November 2026
+
+Chronicles uses each tribe's original pressed skill art in the Mac deck and
+the wide and compact mobile HUDs. The wide mobile panel also uses the pressed
+art for Pause, fast-forward and End run. The HUD keeps the existing input
+frames and action routing. The shared mobile renderer covers iPhone, iPad,
+Duo and Apple TV.
+
+Classic follow-up adds original DOS Fun 6–10 to Short Games. Mac and mobile
+use their existing playlist and Hot Seat flows with the exact level order.
+See the [Short games route checks](ShortGames.md) for replay results and
+saved-run coverage.
+
+Muted offscreen renders check the pressed cells and nearby targets at phone,
+tablet and TV sizes. iOS and tvOS SDK compilation passes. Physical touch,
+controller and Siri Remote acceptance remain device checks.
+
 ## HUD target clearance — 5 November 2026
 
 The shared mobile HUD joins controls within each clear bank. It keeps targets

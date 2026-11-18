@@ -212,12 +212,15 @@ class CommunityJourneyTests(unittest.TestCase):
         course = journey.read(journey.OUT / 'course-plan.json')
         report = journey.read(journey.OUT / 'course-review.json')
         self.assertEqual(len(course['chapters']), 13)
-        self.assertEqual(len(course['lessons']), 227)
+        self.assertEqual(len(course['lessons']), 226)
         self.assertEqual(report, journey.course_review_document(self.manifest, self.plan))
-        for authored, lesson, review in zip(course['lessons'], self.manifest['lessons'], report['lessons']):
+        base_lessons = [lesson for lesson in self.manifest['lessons']
+                        if lesson['placement']['basis'] != 'seasonalCurriculum']
+        for authored, lesson in zip(course['lessons'], base_lessons, strict=True):
             self.assertEqual(journey.key(authored), journey.key(lesson))
             self.assertEqual(authored['sourceRevision'], lesson['entry']['sourceRevision'])
             self.assertEqual(authored['replayRevision'], lesson['placement']['replayRevision'])
+        for review in report['lessons']:
             self.assertTrue(review['placementReason'])
             self.assertTrue(review['goal'])
             self.assertTrue(all(example['step'] < review['step'] for example in review['preparationExamples']))
@@ -287,7 +290,9 @@ class CommunityJourneyTests(unittest.TestCase):
                                ('PoP YoR ToP!!!', 'hatches'), ('Just A Quicky', 'combined-plans')]:
             lesson = next(g for g in rows if g['level'] == title)
             self.assertEqual(lesson['courseChapter']['id'], chapter)
-        self.assertEqual([g['level'] for g in rows[-2:]], ['Time waits for no Lemming', 'This Corrosion'])
+        self.assertEqual([g['level'] for g in rows[-3:]],
+                         ['Time waits for no Lemming', 'This Corrosion', 'It`s a trade off'])
+        self.assertEqual(rows[77]['level'], 'How on Earth?')
 
     def test_estimated_additions_have_visible_interactive_objects(self):
         sources = {journey.key(r): r for r in self.resources}

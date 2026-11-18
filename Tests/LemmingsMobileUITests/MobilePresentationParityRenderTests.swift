@@ -12,6 +12,55 @@ import Testing
     private static let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
         .deletingLastPathComponent().deletingLastPathComponent()
 
+    @Test func chroniclesPressedArtworkIsClippedToTheActiveControls() throws {
+        let storage = try AppStorage.temporary(named: "chronicles-pressed-art")
+        defer { storage.removeTemporaryFiles() }
+        let library = try Lemmings3MobileLibrary(directory: Self.root.appendingPathComponent("Sources/Ports/LEM3CD"),
+            storage: MobileStorage(directory: storage.applicationSupport))
+        let session = try #require(try library.loadLevel(at: 0).session as? Lemmings3MobileSession)
+        let normal = try #require(session.panelFrame.flatMap(MobileBitmapRenderer.image))
+        let pressed = try #require(session.pressedPanelFrame.flatMap(MobileBitmapRenderer.image))
+        let snapshot = session.snapshot
+        let active: [MobileHUDAction] = [.skill(2), .pause, .speed, .endRun]
+        for (width, height, television) in [(320, 568, false), (834, 590, false), (1920, 1080, true)] {
+            let layout = MobileHUDLayout.make(container: .init(width: Double(width), height: Double(height)),
+                safeArea: .init(), hasRate: false, skillCount: snapshot.skills.count,
+                engineIdentifier: session.engineIdentifier, television: television)
+            let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: 2,
+                paused: true, speed: 2, endRunArmed: true)
+            func render(_ panel: CGImage, readOnly: Bool = false) throws -> CGContext {
+                let context = try #require(CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+                    bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+                let bounds = CGRect(x: 0, y: 0, width: width, height: height)
+                context.translateBy(x: 0, y: bounds.height)
+                context.scaleBy(x: 1, y: -1)
+                MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: 2, paused: true,
+                    speed: 2, endRunArmed: true, panelImage: normal, pressedPanelImage: panel,
+                    typography: nil, readOnly: readOnly).draw(in: context, bounds: bounds)
+                return context
+            }
+            let withPressed = try render(pressed)
+            let baseline = try render(normal)
+            let a = try #require(withPressed.data)
+            let b = try #require(baseline.data)
+            for target in targets {
+                let box = target.frame.insetBy(dx: 3, dy: 3).integral
+                #expect(target.frame.width >= 44 && target.frame.height >= 44)
+                let changed = (Int(box.minY)..<Int(box.maxY)).contains { row in
+                    let offset = row * withPressed.bytesPerRow + Int(box.minX) * 4
+                    return memcmp(a.advanced(by: offset), b.advanced(by: offset), Int(box.width) * 4) != 0
+                }
+                let usesPressed = layout.panel?.style == .lemmings3 ? active.contains(target.action) : target.action == .skill(2)
+                #expect(changed == usesPressed, "\(width)×\(height) \(target.action)")
+            }
+            #expect(active.allSatisfy { action in targets.contains { $0.action == action } })
+            let replayPressed = try render(pressed, readOnly: true)
+            let replayNormal = try render(normal, readOnly: true)
+            #expect(memcmp(try #require(replayPressed.data), try #require(replayNormal.data), width * height * 4) == 0)
+        }
+    }
+
     @Test func nativeSequelHighlightsUseTheLiveSpriteGeometry() throws {
         let temporary = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: temporary) }
@@ -52,7 +101,11 @@ import Testing
             MobileSequelMenuArt.movies(engine: "lemmings2"), MobileSequelMenuArt.movies(engine: "lemmings3"),
             MobileSequelMenuArt.movie(.tribesEnding, paused: false, finished: false, failure: nil),
             MobileSequelMenuArt.movie(.chronicles(.introduction), paused: true, finished: false, failure: nil),
-            ShortGamesArt.page(classicAvailable: true, tribesAvailable: true, selected: "lemmings2", loading: false, subtitle: "")]
+            ShortGamesArt.page(available: ["classic", "classic-follow-up", "lemmings2"], selected: "classic-follow-up")]
+        let shortGames = try #require(pages.last)
+        #expect(shortGames.rows.filter(\.selected).map(\.id) == ["shortSelect.classic-follow-up"])
+        #expect(shortGames.footer.last?.enabled == true)
+        #expect(ShortGamesArt.page(available: ["classic"], selected: "classic-follow-up").footer.last?.enabled == false)
         let output = Self.root.appendingPathComponent(".build/platform-parity/renders")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         for (width, height) in [(320, 568), (590, 834), (834, 590), (1920, 1080)] {

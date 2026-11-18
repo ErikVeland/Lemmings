@@ -90,9 +90,10 @@ public struct Lemmings3MobileSceneRenderer: Sendable {
         })
     }
 
-    static func panelFrame(directory: URL, tribe: Int) throws -> MobilePixelFrame {
+    static func panelFrame(directory: URL, tribe: Int, pressed: Bool = false) throws -> MobilePixelFrame {
         let graphics = directory.appendingPathComponent("GRAPHICS")
-        let raw = try Data(contentsOf: graphics.appendingPathComponent(String(format: "PAN%03d.RAW", tribe)))
+        let suffix = pressed ? "X" : ""
+        let raw = try Data(contentsOf: graphics.appendingPathComponent(String(format: "PAN%03d%@.RAW", tribe, suffix)))
         let colours = try Data(contentsOf: graphics.appendingPathComponent(String(format: "TRIBE%03d.PAL", tribe)))
         return try decodePanel(raw: raw, colours: colours)
     }

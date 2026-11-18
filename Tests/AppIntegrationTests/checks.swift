@@ -3767,7 +3767,7 @@ extension AppDelegate {
       && store.playlists == lists && store.activeRunL2Progress == carries
       && campaigns.isEqual(campaignDefaults()),
       "Browsing short games changed ownership, Journey progress, campaign saves or carry-over")
-    print("PASS exact Classic/L2 opening preflight, unavailable L3, six bitmap states and primary/Back targets; browsing preserves ownership and saves")
+    print("PASS exact Classic and Tribes routes, unavailable Chronicles route, bitmap states and input targets")
   }
 
   fileprivate func testPrecisionZoomWallet() throws {
@@ -8318,10 +8318,17 @@ Task { @MainActor in
     try await subject.testLevelHints()
     #endif
     try await subject.testShortGames()
-    try await subject.testAboutAndCountRecovery()
     #if FOUNDATION_REVIEW_TESTS
-    print("Anniversary short-game and heritage review integration tests passed.")
-    #else
+    let chronicles = try Lemmings3PlayWindow(root: BundledGameResources.lemmings3(),
+        selection: .init(tribe: .classic, level: 0), recordsCampaignProgress: false)
+    try chronicles.testPressedSkillArtwork()
+    chronicles.window?.orderOut(nil)
+    print("PASS Chronicles paused skill input and rendered feedback")
+    #endif
+    #if !SHORT_GAMES_TESTS
+    try await subject.testAboutAndCountRecovery()
+    #endif
+    #if !FOUNDATION_REVIEW_TESTS
     print("Anniversary foundation input, hints, results, sequences and heritage integration tests passed.")
     #endif
     #elseif EXTRA_SKILL_TESTS

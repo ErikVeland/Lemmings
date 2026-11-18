@@ -2102,6 +2102,7 @@ typealias MobileGameControllerBase = UIViewController
             speed: speed,
             endRunArmed: endRunArmedUntil > ProcessInfo.processInfo.systemUptime,
             panel: session.panelFrame,
+            pressedPanel: (session as? Lemmings3MobileSession)?.pressedPanelFrame,
             readOnly: session.isReadOnly
         )
         updatePlayfieldAccessibility(snapshot: snapshot, candidates: candidates)

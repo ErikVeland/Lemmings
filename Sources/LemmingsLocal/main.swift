@@ -4741,7 +4741,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func presentShortGames() {
-    let page = GameMenuPage(title: L10n.text("Short games"), subtitle: L10n.text("Five-level openings"))
+    let page = GameMenuPage(title: L10n.text("Short games"), subtitle: L10n.text("5 levels"))
     let carousel = LevelCoverFlowView(frame: page.body.bounds)
     carousel.autoresizingMask = [.width, .height]
     page.body.addSubview(carousel)

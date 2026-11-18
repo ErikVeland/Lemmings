@@ -660,7 +660,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public func makeReplayClone() -> (any MobileGameSession)? {
         let copy = Lemmings3MobileSession(runtime: initial, engineFingerprint: engineFingerprint,
             levelIdentifier: levelIdentifier, levelIndex: levelIndex, levelFingerprint: levelFingerprint,
-            panelFrame: panelFrame, directionPickerFrames: directionPickerFrames, renderer: renderer,
+            panelFrame: panelFrame, pressedPanelFrame: pressedPanelFrame,
+            directionPickerFrames: directionPickerFrames, renderer: renderer,
             ghostRenderer: ghostRenderer, soundBank: soundBank)
         copy.spriteProvider = spriteProvider
         copy.artworkRenderer = artworkRenderer
@@ -723,6 +724,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public let levelSize: MobileSize
     public let ticksPerSecond = Lemmings3Runtime.ticksPerSecond
     public let panelFrame: MobilePixelFrame?
+    public let pressedPanelFrame: MobilePixelFrame?
     public let directionPickerFrames: [MobilePixelFrame]
 
     public func skillCursorFrame(control: Int) -> MobilePixelFrame? {
@@ -795,6 +797,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         levelIndex: Int,
         levelFingerprint: String,
         panelFrame: MobilePixelFrame? = nil,
+        pressedPanelFrame: MobilePixelFrame? = nil,
         directionPickerFrames: [MobilePixelFrame] = [],
         renderer: Lemmings3MobileRenderer? = nil,
         ghostRenderer: Lemmings3MobileGhostRenderer? = nil,
@@ -809,6 +812,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
         self.levelIndex = levelIndex
         self.levelFingerprint = levelFingerprint
         self.panelFrame = panelFrame
+        self.pressedPanelFrame = pressedPanelFrame
         self.directionPickerFrames = directionPickerFrames
         self.renderer = renderer
         self.soundBank = soundBank

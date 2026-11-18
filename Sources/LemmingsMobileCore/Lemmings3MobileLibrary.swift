@@ -19,7 +19,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
     private let soundBank: Lemmings3SoundBank?
     private let progressLock = NSRecursiveLock()
     private let panelLock = NSLock()
-    private var panelFrames: [Int: MobilePixelFrame] = [:]
+    private var panelFrames: [Int: (normal: MobilePixelFrame, pressed: MobilePixelFrame?)] = [:]
     private let artLock = NSLock()
     private struct ArtBank {
         let style: Lemmings3Style
@@ -104,7 +104,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let level = try Lemmings3Level(data: levelData(at: index))
         let art = try artBank(for: tribe)
         let style = art.style
-        let panel = try panelFrame(for: tribe.spriteStyle)
+        let panel = try panels(for: tribe.spriteStyle)
         let permanent = try Lemmings3Objects(data: Data(contentsOf: objectURL(level.permanentObjectsReference, temporary: false)))
         let temporary = try Lemmings3Objects(data: Data(contentsOf: objectURL(level.temporaryObjectsReference, temporary: true)))
         let scene = try Lemmings3Scene(level: level, style: style, permanent: permanent, temporary: temporary)
@@ -176,7 +176,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         let session = Lemmings3MobileSession(runtime: runtime,
             engineFingerprint: Self.engineFingerprint,
             levelIdentifier: "lemmings3/\(fingerprint)", levelIndex: index,
-            levelFingerprint: fingerprint, panelFrame: panel,
+            levelFingerprint: fingerprint, panelFrame: panel.normal, pressedPanelFrame: panel.pressed,
             directionPickerFrames: try renderer.directionPickerFrames(), renderer: renderer.render,
             ghostRenderer: { runtime, highlight, ghosts in
                 try renderer.render(runtime, highlight: highlight, ghosts: ghosts)
@@ -242,13 +242,14 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
         return bank
     }
 
-    private func panelFrame(for tribe: Int) throws -> MobilePixelFrame {
+    private func panels(for tribe: Int) throws -> (normal: MobilePixelFrame, pressed: MobilePixelFrame?) {
         panelLock.lock()
         defer { panelLock.unlock() }
         if let cached = panelFrames[tribe] { return cached }
-        let frame = try Lemmings3MobileSceneRenderer.panelFrame(directory: directory, tribe: tribe)
-        panelFrames[tribe] = frame
-        return frame
+        let normal = try Lemmings3MobileSceneRenderer.panelFrame(directory: directory, tribe: tribe)
+        let pressed = try? Lemmings3MobileSceneRenderer.panelFrame(directory: directory, tribe: tribe, pressed: true)
+        panelFrames[tribe] = (normal, pressed)
+        return (normal, pressed)
     }
 
     private func objectURL(_ reference: Int, temporary: Bool) -> URL {

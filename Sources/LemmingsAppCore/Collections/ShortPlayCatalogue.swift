@@ -1,7 +1,7 @@
 import Foundation
 import NxlvKit
 
-/// Short optional campaign openings. These do not extend the Classic learning curriculum.
+/// Optional five-level campaign routes separate from the Classic Journey.
 public struct ShortPlaySequence: Identifiable, Sendable {
     public struct Level: Sendable {
         public let identity: LevelCatalogueIdentity
@@ -21,14 +21,15 @@ public struct ShortPlaySequence: Identifiable, Sendable {
     public var poolID: String { "short-play-v1:" + id }
     public var title: String {
         switch engine {
-        case .classic: return L10n.text("Classic opening")
+        case .classic: return id == "classic" ? L10n.text("Classic opening") : L10n.text("Classic follow-up")
         case .lemmings2: return L10n.text("The Tribes opening")
         case .lemmings3: return L10n.text("Chronicles opening")
         case .neolemmix: return L10n.text("Opening")
         }
     }
     public var caption: String {
-        engine == .classic ? L10n.text("Fun 1–5") : L10n.text("Classic tribe 1–5")
+        if engine == .classic { return id == "classic" ? L10n.text("Fun 1–5") : L10n.text("Fun 6–10") }
+        return L10n.text("Classic tribe 1–5")
     }
     /// L3 playlists need isolated reserve carry-over before this opening can start.
     public var supportsCarriedSequence: Bool { engine != .lemmings3 }
@@ -53,23 +54,30 @@ public struct ShortPlaySequence: Identifiable, Sendable {
 }
 
 public enum ShortPlayCatalogue {
+    /// Original DOS game data with executables and documents excluded from the revision.
+    public static let classicDataRevision = "e0cecc54d0821ee15e640d4a0878633638a7de75403362ca341502cc10c2d4f3"
+
+    private static func classicLevel(_ number: Int, archive: Int, section: Int, witness: String) -> ShortPlaySequence.Level {
+        .init(identity: .init(engine: .classic, packID: "lemmings-LEVEL-120", levelID: "\(number - 1):Fun:\(number):\(archive):\(section)"),
+              sourceRevision: "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+              fixture: String(format: "Tests/ClassicDOSCompletionTests/Fixtures/fun-%02d.json", number),
+              witnessSHA256: witness, levelSHA256: nil)
+    }
+
     public static let sequences: [ShortPlaySequence] = [
         .init(id: "classic", engine: .classic, levels: [
-            .init(identity: .init(engine: .classic, packID: "lemmings-LEVEL-120", levelID: "0:Fun:1:9:1"),
-                  sourceRevision: "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7", fixture: "Tests/ClassicDOSCompletionTests/Fixtures/fun-01.json",
-                  witnessSHA256: "2465bd0927556f786e0804f86d4884c105bbdd03043684163ed4bbe5851817a1", levelSHA256: nil),
-            .init(identity: .init(engine: .classic, packID: "lemmings-LEVEL-120", levelID: "1:Fun:2:9:5"),
-                  sourceRevision: "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7", fixture: "Tests/ClassicDOSCompletionTests/Fixtures/fun-02.json",
-                  witnessSHA256: "af565532453e78c49449688a9b375b5a62e298ae683f770794a1afb2504f90c6", levelSHA256: nil),
-            .init(identity: .init(engine: .classic, packID: "lemmings-LEVEL-120", levelID: "2:Fun:3:9:6"),
-                  sourceRevision: "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7", fixture: "Tests/ClassicDOSCompletionTests/Fixtures/fun-03.json",
-                  witnessSHA256: "5a5de0d60caeb6318b00ea76c5e2d35d804457958e8f1edf4bfe679dca4bb042", levelSHA256: nil),
-            .init(identity: .init(engine: .classic, packID: "lemmings-LEVEL-120", levelID: "3:Fun:4:9:2"),
-                  sourceRevision: "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7", fixture: "Tests/ClassicDOSCompletionTests/Fixtures/fun-04.json",
-                  witnessSHA256: "3093c495b7b9e04aa1cacdd1a56064c2fdde339e5a0dfcaed67f58c5e0c7bca9", levelSHA256: nil),
-            .init(identity: .init(engine: .classic, packID: "lemmings-LEVEL-120", levelID: "4:Fun:5:9:3"),
-                  sourceRevision: "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7", fixture: "Tests/ClassicDOSCompletionTests/Fixtures/fun-05.json",
-                  witnessSHA256: "1081f365263b5e98fdf3bac9c7f54f9f95cb5c4f5a51c258869e6f1d302fe3e0", levelSHA256: nil),
+            classicLevel(1, archive: 9, section: 1, witness: "2465bd0927556f786e0804f86d4884c105bbdd03043684163ed4bbe5851817a1"),
+            classicLevel(2, archive: 9, section: 5, witness: "af565532453e78c49449688a9b375b5a62e298ae683f770794a1afb2504f90c6"),
+            classicLevel(3, archive: 9, section: 6, witness: "5a5de0d60caeb6318b00ea76c5e2d35d804457958e8f1edf4bfe679dca4bb042"),
+            classicLevel(4, archive: 9, section: 2, witness: "3093c495b7b9e04aa1cacdd1a56064c2fdde339e5a0dfcaed67f58c5e0c7bca9"),
+            classicLevel(5, archive: 9, section: 3, witness: "1081f365263b5e98fdf3bac9c7f54f9f95cb5c4f5a51c258869e6f1d302fe3e0"),
+        ]),
+        .init(id: "classic-follow-up", engine: .classic, levels: [
+            classicLevel(6, archive: 9, section: 4, witness: "50c19af4e7be89ce7e81be7394c8e074c22ea85e9aa2fa4c87ac614e6032a01f"),
+            classicLevel(7, archive: 9, section: 7, witness: "482793d74cdd349dc82f469ec1e2a7caa6cd698dc3eacdf1a1de5073eb8d62fc"),
+            classicLevel(8, archive: 0, section: 6, witness: "1187207f784b0490d83b358ae9e43cc8a2c5a8165ca7672532a44755af2f0e80"),
+            classicLevel(9, archive: 1, section: 2, witness: "806b6420ecbfc7325529efc40eb646680d5423745342f6f895c5233ebb1e5488"),
+            classicLevel(10, archive: 3, section: 2, witness: "ceaa9e1aa054b9a6ec4c1d8378a63bec389653a63a0f0281275842d498086ed7"),
         ]),
         .init(id: "lemmings2", engine: .lemmings2, levels: [
             .init(identity: .init(engine: .lemmings2, packID: "tribes-0", levelID: "0:2be6334f0423ee3ac635946ee855aa8caa4bc8cdd53190c6f16d8cc7d806cc8e"),
@@ -109,7 +117,7 @@ public enum ShortPlayCatalogue {
 
     public static func sequence(id: String) -> ShortPlaySequence? { sequences.first { $0.id == id } }
 
-    /// A locked level is allowed only inside this exact, unshuffled opening snapshot.
+    /// A locked level is allowed only inside the exact, unshuffled route snapshot.
     public static func permitsLocked(_ entry: LevelPlaylistEntry, in run: LevelSequenceRun) -> Bool {
         guard case .playlist = run.source, run.algorithm == nil, run.seed == nil,
               let sequence = sequences.first(where: { $0.poolID == run.pool.id }),

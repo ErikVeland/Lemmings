@@ -15,8 +15,8 @@ struct ShortPlayCatalogueTests {
         }
     }
 
-    @Test func openingsPinExactWinningFixturesAndNeverClaimASequelCurriculum() throws {
-        #expect(ShortPlayCatalogue.sequences.map(\.engine) == [.classic, .lemmings2, .lemmings3])
+    @Test func routesPinExactWinningFixtures() throws {
+        #expect(ShortPlayCatalogue.sequences.map(\.id) == ["classic", "classic-follow-up", "lemmings2", "lemmings3"])
         for sequence in ShortPlayCatalogue.sequences {
             #expect(sequence.levels.count == 5)
             #expect(!sequence.poolID.hasPrefix("learning-"))
@@ -28,7 +28,9 @@ struct ShortPlayCatalogueTests {
                 if sequence.engine == .classic {
                     let expected = try #require(fixture["expected"] as? [String: Any])
                     #expect(expected["didWin"] as? Bool == true)
-                    #expect(level.identity.levelID.hasPrefix("\(index):Fun:\(index + 1):"))
+                    let number = try #require(fixture["number"] as? Int)
+                    #expect(number == (sequence.id == "classic" ? 1 : 6) + index)
+                    #expect(level.identity.levelID.hasPrefix("\(number - 1):Fun:\(number):"))
                     #expect(level.sourceRevision?.count == 64)
                 } else {
                     #expect(fixture["levelSHA256"] as? String == level.levelSHA256)
