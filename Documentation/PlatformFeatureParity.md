@@ -10,6 +10,29 @@ connected. Check the session, renderer, input route and persistence path.
 
 ## Lemmix Mac launch and lettering — 18 November 2026
 
+The local full-collection follow-up generates the starter data during packaging.
+It no longer assumes that ignored DAT files exist in a fresh checkout. Native
+loaders decode three starter levels, seven Classic campaigns, 120 Tribes levels
+and 90 Chronicles levels. All 794 NeoLemmix levels resolve their style folders
+after the local candidate adds the missing community styles. The 535 fan archives
+match the local collection byte for byte. Their catalogue contains 6,020 entries
+before duplicate and compatibility exclusions. These checks do not prove every
+level can be completed.
+
+Ultimate Lemmix now has an app-owned logo derived from the existing wordmark,
+with Lix characters. Its character preference is separate from Ultimate Lemmings.
+Mac and mobile resource imports preserve that preference. The asset-parity
+fixture explicitly selects Original artwork when it compares original assets.
+The shared logo frame check passes with original game data present. A separate
+product probe confirms that Ultimate Lemmings retains its original logo and
+character default. The Mac Home parade follows the selected character artwork.
+The NeoLemmix Home count updates even when a starter or imported Classic campaign
+cannot use the immutable catalogue cache. Mobile
+startup-logo packaging and physical-device acceptance remain separate work.
+Silent offscreen captures of the packaged Mac app show the new logo, Lix parade
+and populated counts at 2560 by 1408 and 900 by 620 points. At the compact size,
+scrolling exposes the profile and playlist controls with visible input targets.
+
 Local Mac builds include the original Lemmings lettering pack. The shared
 renderer retains bundled lettering after a resource import. Compact HUD labels,
 countdowns and the Mac widget use the same font family. The Lix artwork choice

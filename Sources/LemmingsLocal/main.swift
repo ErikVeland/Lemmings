@@ -2200,9 +2200,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.returnToLibrary()
       do {
         try GameResources.activate(bundleURL: installed.bundleURL, forceReload: true)
-        if GameResources.file("MacArtwork/lemmings/manifest.json") != nil {
-          GameArtworkSkin.setLixEnabled(false)
-        }
       } catch {
         GameScreen.shared.message(L10n.text("Cannot restore assets"),
           detail: L10n.text("Import the resource folder again."))
@@ -2507,7 +2504,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return left == right ? lhs.offset < rhs.offset : left < right
     }
     dataSets = loaded.map { ($0.set, $0.directory) }
-    if AppDistribution.isStore, !loaded.contains(where: { $0.set.title == .lemmings }),
+    if AppDistribution.isStore,
       let starter = GameStarterContent.directory(),
       let dataSet = try? GameStarterContent.dataSet(in: starter) {
       dataSets.insert((dataSet, starter), at: 0)
@@ -3200,8 +3197,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let discovery = await task.value
       guard let self, self.levelBrowserWarmGeneration == generation, !task.isCancelled else { return }
       self.levelBrowserWarmTask = nil
-      if let discovery, discovery.classic.allSatisfy({ $0.isVerified && $0.sourceFingerprint == nil }) {
-        self.preparedLevelBrowserDiscovery = discovery
+      if let discovery {
+        if discovery.classic.allSatisfy({ $0.isVerified && $0.sourceFingerprint == nil }) {
+          self.preparedLevelBrowserDiscovery = discovery
+        }
         self.neoCatalogueTotal = discovery.neoLemmix.reduce(0) { $0 + $1.pack.levels.count }
         if self.flow?.screen == .title { self.renderScreen() }
       }

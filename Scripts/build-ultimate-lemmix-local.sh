@@ -64,6 +64,28 @@ python3 -B "$project_dir/Tools/AlternativeAssets/prepare_original_font.py" --sou
 ditto "$project_dir/.build/personal-preview-assets/Fonts/OriginalLemmings" \
   "$app/Contents/Resources/Fonts/OriginalLemmings"
 /usr/libexec/PlistBuddy -c 'Add :UltimateLemmixPersonalPreview bool true' "$app/Contents/Info.plist"
+if [[ -n "${ULTIMATE_LEMMIX_LOCAL_GAME_RESOURCES:-}" ]]; then
+  for family in Ports NeoLemmix LevelPacks MacArtwork AmigaArtwork; do
+    [[ -d "$ULTIMATE_LEMMIX_LOCAL_GAME_RESOURCES/$family" ]] || { print -u2 "Missing local game resources: $family"; exit 1; }
+    ditto "$ULTIMATE_LEMMIX_LOCAL_GAME_RESOURCES/$family" "$app/Contents/Resources/$family"
+  done
+fi
+if [[ -n "${ULTIMATE_LEMMIX_LOCAL_CONTENT:-}" ]]; then
+  for family in NeoLemmix LevelPacks; do
+    [[ -d "$ULTIMATE_LEMMIX_LOCAL_CONTENT/$family" ]] || { print -u2 "Missing local level collection: $family"; exit 1; }
+    ditto "$ULTIMATE_LEMMIX_LOCAL_CONTENT/$family" "$app/Contents/Resources/$family"
+  done
+fi
+if [[ -n "${ULTIMATE_LEMMIX_LOCAL_NEO_STYLES:-}" ]]; then
+  [[ -d "$ULTIMATE_LEMMIX_LOCAL_NEO_STYLES" ]] || { print -u2 'Missing local NeoLemmix styles folder.'; exit 1; }
+  ditto "$ULTIMATE_LEMMIX_LOCAL_NEO_STYLES" "$app/Contents/Resources/NeoLemmix/styles"
+fi
+python3 -B "$project_dir/Tools/AlternativeAssets/prepare_open_starter.py" \
+  --output "$app/Contents/Resources/Ports/ultimate_lemmix_starter"
+python3 -B "$project_dir/Tools/AlternativeAssets/prepare_open_starter.py" \
+  --output "$app/Contents/Resources/Ports/ultimate_lemmix_starter" --check
+mkdir -p "$app/Contents/Resources/MenuArtwork"
+cp "$project_dir/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png" "$app/Contents/Resources/MenuArtwork/"
 (( resources_only )) && exit 0
 compiler_mode=build
 (( frontend_only )) && compiler_mode=frontend-only

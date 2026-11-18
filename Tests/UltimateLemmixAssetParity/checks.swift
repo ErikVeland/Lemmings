@@ -108,6 +108,8 @@ extension AppDelegate {
       throw AssetParityFailure(message: "The real importer completion callback is missing.")
     }
     ownedGameImport.parityFinishResourceImport(installed)
+    try parityRequire(GameArtworkSkin.lixEnabled, "Resource import changed the selected Lix characters.")
+    GameArtworkSkin.setLixEnabled(false)
     return installed
   }
 
@@ -121,7 +123,7 @@ extension AppDelegate {
     settings.shuffleGraphics = false
     settings.shuffleMusic = false
     settings.music = .silent
-    try parityRequire(!GameArtworkSkin.lixEnabled, "Original artwork was not selected after resource activation.")
+    try parityRequire(!GameArtworkSkin.lixEnabled, "The selected Original artwork was not retained.")
     apply(settings, forceArtworkRefresh: true)
     window.setContentSize(CGSize(width: 1120, height: 760))
     window.contentView?.layoutSubtreeIfNeeded()
@@ -283,6 +285,7 @@ Task { @MainActor in
     var installation: OwnedResourceLibrary.Installation?
     if phase == "reference" {
       try GameResources.activate(bundleURL: URL(fileURLWithPath: source), forceReload: true)
+      GameArtworkSkin.setLixEnabled(false)
     } else if phase == "reopen" {
       installation = try AppDistribution.ownedResourceLibrary.verifyInstalled()
       try parityRequire(installation != nil, "The installed bundle is missing after reopening.")

@@ -2150,6 +2150,23 @@ struct ReticleFeedback {
   }
 
   private func drawMarchingLemmings() {
+    if GameArtworkSkin.lixEnabled, LixArtworkRenderer.shared.isAvailable {
+      let scale = max(1.5, min(3, bounds.width / 900))
+      let spacing = 32 * scale
+      var x = -spacing + (CGFloat(overlayFrame) * scale / 3).truncatingRemainder(dividingBy: spacing)
+      var index = 0
+      while x < bounds.width {
+        if let frame = LixArtworkRenderer.shared.frame(activity: .walker,
+          animationFrame: overlayFrame / 4 + index * 3, facingLeft: false) {
+          frame.image.draw(in: CGRect(x: x, y: bounds.height - (frame.footY + 1) * scale,
+            width: frame.image.size.width * scale, height: frame.image.size.height * scale),
+            from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+            hints: [.interpolation: NSImageInterpolation.none.rawValue])
+        }
+        x += spacing; index += 1
+      }
+      return
+    }
     if let macArtwork = macArtwork ?? interfaceArtwork {
       let scale = max(1.5, min(3, bounds.width / 900))
       let spacing = 32 * scale
