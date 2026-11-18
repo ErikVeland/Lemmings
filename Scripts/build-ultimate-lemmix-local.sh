@@ -55,6 +55,15 @@ zsh "$project_dir/Scripts/build-app-icon.sh" "$app/Contents/Resources/AppIcon.ic
 cp "$project_dir/Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy" "$app/Contents/Resources/PrivacyInfo.xcprivacy"
 touch "$build_dir/resources-ready"
 fi
+font_source="${ULTIMATE_LEMMIX_ORIGINAL_FONT_SOURCE:-$project_dir}"
+if [[ ! -f "$font_source/.build/mac-artwork/export/lemmings/manifest.json" && -z "${ULTIMATE_LEMMIX_ORIGINAL_FONT_SOURCE:-}" ]]; then
+  common_git_dir="$(git -C "$project_dir" rev-parse --path-format=absolute --git-common-dir)"
+  font_source="${common_git_dir:h}"
+fi
+python3 -B "$project_dir/Tools/AlternativeAssets/prepare_original_font.py" --source-root "$font_source"
+ditto "$project_dir/.build/personal-preview-assets/Fonts/OriginalLemmings" \
+  "$app/Contents/Resources/Fonts/OriginalLemmings"
+/usr/libexec/PlistBuddy -c 'Add :UltimateLemmixPersonalPreview bool true' "$app/Contents/Info.plist"
 (( resources_only )) && exit 0
 compiler_mode=build
 (( frontend_only )) && compiler_mode=frontend-only

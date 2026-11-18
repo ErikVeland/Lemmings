@@ -2000,17 +2000,13 @@ struct ReticleFeedback {
     selectedSprite = (pixels, rect)
   }
 
+  private let bombCountdownRenderer = BombCountdownRenderer()
+
   private func drawCountdown(_ countdown: Int, above rect: CGRect) {
     let seconds = max(1, (countdown + ClassicDOSRules.ticksPerSecond - 1) / ClassicDOSRules.ticksPerSecond)
-    let text = "\(seconds)" as NSString
-    let attributes: [NSAttributedString.Key: Any] = [
-      .font: NSFont.monospacedDigitSystemFont(ofSize: 10 * viewport.zoom / 3, weight: .bold),
-      .foregroundColor: NSColor.white,
-    ]
-    let size = text.size(withAttributes: attributes)
-    text.draw(
-      at: CGPoint(x: rect.midX - size.width / 2, y: rect.minY - size.height),
-      withAttributes: attributes)
+    guard let context = NSGraphicsContext.current?.cgContext else { return }
+    bombCountdownRenderer.draw(seconds: seconds, above: CGPoint(x: rect.midX, y: rect.minY),
+      zoom: viewport.zoom, in: context)
   }
 
   private func drawCursor() {

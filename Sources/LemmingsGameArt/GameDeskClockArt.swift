@@ -75,12 +75,15 @@ public final class GameDeskClockArt: @unchecked Sendable {
         // Callers already pass MacArtwork/lemmings, including the widget extension.
         let resources = directory.deletingLastPathComponent().deletingLastPathComponent()
         let roots = [resources, Bundle.main.resourceURL].compactMap { $0 }
-        let clearedInterface = roots.lazy.compactMap { root -> ClassicMacUserInterface? in
-            guard let art = try? ClassicMacArtwork(directory: root.appendingPathComponent("Fonts/LixInterface")) else { return nil }
+        let fontDirectories = ["Fonts/OriginalLemmings", "Fonts/LixInterface"].flatMap { path in
+            roots.map { $0.appendingPathComponent(path) }
+        }
+        let bundledInterface = fontDirectories.lazy.compactMap { directory -> ClassicMacUserInterface? in
+            guard let art = try? ClassicMacArtwork(directory: directory) else { return nil }
             return ClassicMacUserInterface(artwork: art)
         }.first
         guard let interface = original.flatMap({ ClassicMacUserInterface(artwork: $0) })
-                ?? clearedInterface ?? GameArtworkResources.menuInterface,
+                ?? bundledInterface ?? GameArtworkResources.menuInterface,
               let small = interface.font(.small), let large = interface.font(.large) else { return nil }
         self.small = small
         self.large = large

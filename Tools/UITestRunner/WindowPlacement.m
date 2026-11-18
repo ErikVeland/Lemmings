@@ -42,6 +42,7 @@ static void RejectActivation(void) {
     Swap(self, @selector(constrainFrameRect:toScreen:), @selector(lemmingsTest_constrainFrameRect:toScreen:));
     Swap(self, @selector(orderWindow:relativeTo:), @selector(lemmingsTest_orderWindow:relativeTo:));
     Swap(self, @selector(makeKeyAndOrderFront:), @selector(lemmingsTest_makeKeyAndOrderFront:));
+    Swap(self, @selector(toggleFullScreen:), @selector(lemmingsTest_toggleFullScreen:));
 }
 - (void)lemmingsTest_setFrame:(NSRect)frame display:(BOOL)display {
     [self lemmingsTest_setFrame:TestFrame(frame) display:display];
@@ -59,6 +60,12 @@ static void RejectActivation(void) {
 - (void)lemmingsTest_makeKeyAndOrderFront:(id)sender {
     // Responder-chain tests still use real views. Desktop focus is opt-in.
     [self orderFront:sender];
+}
+- (void)lemmingsTest_toggleFullScreen:(id)sender {
+    // Full screen moves a window onto a display. Offscreen captures must stay hidden.
+    if ([self.delegate respondsToSelector:@selector(windowDidFailToEnterFullScreen:)]) {
+        [self.delegate windowDidFailToEnterFullScreen:self];
+    }
 }
 @end
 
