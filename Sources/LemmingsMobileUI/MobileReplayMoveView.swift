@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsGameArt
+import LemmingsAppCore
 import NxlvKit
 import UIKit
 
@@ -11,7 +12,7 @@ import UIKit
         isOpaque = false
         for (index, title) in [L10n.text("Previous move"), L10n.text("Next move")].enumerated() {
             let button = MobileFocusButton(type: .custom)
-            button.accessibilityLabel = title
+            button.accessibilityLabel = GamePresentationText.display(title)
             button.accessibilityIdentifier = "solutionMove." + String(index)
             button.addAction(UIAction { [weak self] _ in self?.onMove?(index == 0 ? -1 : 1) }, for: .gameActivation)
             addSubview(button); buttons.append(button)

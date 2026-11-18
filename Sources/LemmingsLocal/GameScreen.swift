@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import NxlvKit
 import LemmingsGameArt
 
@@ -12,7 +13,7 @@ import LemmingsGameArt
         super.init(frame: frame)
         setAccessibilityElement(true)
         setAccessibilityRole(.staticText)
-        setAccessibilityLabel(message)
+        setAccessibilityLabel(GamePresentationText.display(message))
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
@@ -353,7 +354,7 @@ import LemmingsGameArt
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
         setAccessibilitySubrole(.dialog)
-        setAccessibilityLabel(page.accessibilityLabel() ?? L10n.text("Game dialog"))
+        setAccessibilityLabel(GamePresentationText.display(page.accessibilityLabel() ?? L10n.text("Game dialog")))
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func draw(_ dirtyRect: NSRect) { GameStyle.fill(bounds, .black) }
@@ -403,7 +404,7 @@ import LemmingsGameArt
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
         setAccessibilitySubrole(.dialog)
-        setAccessibilityLabel(page.accessibilityLabel() ?? L10n.text("Game dialog"))
+        setAccessibilityLabel(GamePresentationText.display(page.accessibilityLabel() ?? L10n.text("Game dialog")))
         setAccessibilityChildren([page])
         page.autoresizingMask = []
     }
@@ -470,7 +471,7 @@ import LemmingsGameArt
         canvas = GameMenuCanvas(title: title, subtitle: subtitle)
         super.init(frame: .zero)
         setAccessibilityRole(.group)
-        setAccessibilityLabel(title)
+        setAccessibilityLabel(GamePresentationText.display(title))
         addSubview(canvas)
         appearance = NSAppearance(named: .darkAqua)
         body.frame = CGRect(x: 64, y: canvas.headerBottom, width: 992, height: max(120, 632 - canvas.headerBottom))
@@ -524,7 +525,7 @@ import LemmingsGameArt
     }
     func setDetail(_ detail: String) {
         canvas.detail = detail; canvas.isMessage = true; canvas.needsDisplay = true
-        canvas.setAccessibilityLabel(canvas.title + ". " + detail)
+        canvas.setAccessibilityLabel(GamePresentationText.display(canvas.title + ". " + detail))
     }
     var backTitle: String {
         get { back.title }
@@ -677,7 +678,7 @@ import LemmingsGameArt
         self.title = title; self.subtitle = subtitle
         super.init(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
         setAccessibilityRole(.group)
-        setAccessibilityLabel(title + ". " + subtitle)
+        setAccessibilityLabel(GamePresentationText.display(title + ". " + subtitle))
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func draw(_ dirtyRect: NSRect) {

@@ -10,12 +10,13 @@ public enum GameResources {
         let bundleURL: URL
         let resourceURL: URL?
         let revision: String
+        let hasRestoredOriginalAssets: Bool
     }
     private final class Storage: @unchecked Sendable {
         private let lock = NSLock()
         private var generation: UInt64 = 0
         private var value = Snapshot(bundleURL: Bundle.main.bundleURL,
-            resourceURL: Bundle.main.resourceURL, revision: Bundle.main.bundleURL.path + "#0")
+            resourceURL: Bundle.main.resourceURL, revision: Bundle.main.bundleURL.path + "#0", hasRestoredOriginalAssets: false)
         func read() -> Snapshot {
             lock.lock(); defer { lock.unlock() }
             return value
@@ -25,12 +26,14 @@ public enum GameResources {
             guard force || value.bundleURL != bundle.bundleURL else { return false }
             generation &+= 1
             value = Snapshot(bundleURL: bundle.bundleURL, resourceURL: bundle.resourceURL,
-                revision: bundle.bundleURL.standardizedFileURL.path + "#" + String(generation))
+                revision: bundle.bundleURL.standardizedFileURL.path + "#" + String(generation),
+                hasRestoredOriginalAssets: bundle.bundleIdentifier == "academy.glasscode.ultimatelemmix.owned-resources")
             return true
         }
     }
     private static let storage = Storage()
     public static var resourceURL: URL? { storage.read().resourceURL }
+    public static var hasRestoredOriginalAssets: Bool { storage.read().hasRestoredOriginalAssets }
     public static var revision: String { storage.read().revision }
     public static var bundle: Bundle { Bundle(url: storage.read().bundleURL) ?? .main }
     public static var hasFanCatalogue: Bool { file("LevelPacks/packs.json") != nil }

@@ -1045,7 +1045,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       _ menu: NSMenu, _ title: String, _ action: Selector, _ key: String = "",
       modifiers: NSEvent.ModifierFlags = [.command]
     ) -> NSMenuItem {
-      let item = NSMenuItem(title: title, action: action, keyEquivalent: key)
+      let item = NSMenuItem(title: GamePresentationText.display(title), action: action, keyEquivalent: key)
       item.keyEquivalentModifierMask = modifiers
       item.target = self
       menu.addItem(item)
@@ -1699,7 +1699,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
       next.attach(to: window)
       next.setAudioSettings(settings, muted: audioMuted)
-      window.title = Lemmings3Brand.current.displayName
+      window.title = GamePresentationText.display(Lemmings3Brand.current.displayName)
       window.resizeIncrements = NSSize(width: 1, height: 1)
       window.minSize = NSSize(width: 1050, height: 680)
       next.present()
@@ -1950,7 +1950,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     for rank in campaign.ranks {
       let submenu = NSMenu(title: rank)
       for (index, entry) in campaign.levels.enumerated() where entry.rank == rank {
-        let item = NSMenuItem(title: "\(entry.number). \(entry.level.title)",
+        let item = NSMenuItem(title: GamePresentationText.display("\(entry.number). \(entry.level.title)"),
           action: #selector(selectLevelFromMenu(_:)), keyEquivalent: "")
         item.target = self
         item.tag = index
@@ -2229,6 +2229,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   @objc private func resourcesDidChange() {
+    buildMenu()
     cancelLevelSelectionLoading()
     stopMenuWorkForGameplay()
     preparedLevelBrowserDiscovery = nil
@@ -7491,8 +7492,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard let flow else { return }
     playfield.overlayShowsSettingsButton = false
     if !sequelIsActive {
-      window.title = flow.screen == .title ? AppDistribution.name
-        : activeTitle?.displayName ?? campaign?.name ?? L10n.text("Lemmings")
+      window.title = GamePresentationText.display(flow.screen == .title ? AppDistribution.name
+        : activeTitle?.displayName ?? campaign?.name ?? L10n.text("Lemmings"))
     }
     if fanPlaying { return }
     playfield.overlaySavedCounts = nil

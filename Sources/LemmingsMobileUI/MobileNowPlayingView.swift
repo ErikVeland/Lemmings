@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsGameArt
+import LemmingsAppCore
 import LemmingsMobileCore
 import UIKit
 
@@ -34,7 +35,7 @@ import UIKit
         self.title = title; self.soundtrack = soundtrack
         shownAt = ProcessInfo.processInfo.systemUptime
         rebuildCard()
-        accessibilityLabel = title + ", " + soundtrack
+        accessibilityLabel = GamePresentationText.display(title + ", " + soundtrack)
         isHidden = false; alpha = reduceMotion ? 1 : 0
         setNeedsDisplay()
         if !reduceMotion {

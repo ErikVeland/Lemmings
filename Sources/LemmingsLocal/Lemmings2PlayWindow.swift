@@ -1821,6 +1821,10 @@ import NxlvKit
         return true
     }
     private func startIntroduction() {
+        guard !GamePresentationText.usesLemmixNames else {
+            GameScreen.shared.message(L10n.text("Introduction"), detail: L10n.text("Restore assets"))
+            return
+        }
         do {
             introduction = try Lemmings2Introduction(root:root,font:assets.font)
             music.suspendOutput(); show(.intro)
@@ -2136,6 +2140,11 @@ import NxlvKit
             } else if (40..<168).contains(y) { selectedSlot = (y - 40) / 16; front.needsDisplay = true }
         case .talisman:
             if campaign.isComplete {
+                if GamePresentationText.usesLemmixNames {
+                    if campaign.canLaunchArk, let onCampaignCompleted { onCampaignCompleted() }
+                    else { show(.map) }
+                    return
+                }
                 do {
                     ending = try Lemmings2Ending(root:root,assets:assets,golden:campaign.canLaunchArk)
                     playMusic("endtune"); show(.ending)
@@ -2161,10 +2170,18 @@ import NxlvKit
                        x: x + f.x, y: y + f.y, opaque: f.opaque)
         }
         func text(_ string: String, _ x: Int, _ y: Int, _ name: String = "INFO", centered: Bool = false) {
+            let string = GamePresentationText.display(string)
             front.text(string, font: assets.font, palette: palette(name), x: centered ? x - assets.font.width(string) / 2 : x, y: y)
         }
         switch screen {
-        case .menu: picture("MENU", palette("MENU"))
+        case .menu:
+            picture("MENU", palette("MENU"))
+            if GamePresentationText.usesLemmixNames, let context = NSGraphicsContext.current?.cgContext {
+                let heading = CGRect(x: 74, y: 0, width: 215, height: 107)
+                GameStoneArt.drawDetailedRock(in: context, frame: heading, pixel: 1)
+                GameControlText.draw(L10n.text("The Tribes"), in: heading.insetBy(dx: 8, dy: 8),
+                    alignment: .center, role: .title)
+            }
         case .practice:
             picture("ROCKWALL",palette("PRACTICE"))
             text(L10n.text("Select 8 skills to practice"),160,8,"PRACTICE",centered:true)
@@ -2366,6 +2383,7 @@ import NxlvKit
                   rect: NSRect(x: x, y: y, width: width, height: height))
     }
     func text(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], x: Int, y: Int) {
+        let text = GamePresentationText.display(text)
         let top = font.bitmap.verticalBounds(of: text).top
         let left = font.bitmap.horizontalBounds(of: text).left
         for placed in font.bitmap.layout(text) {
@@ -2375,12 +2393,14 @@ import NxlvKit
         }
     }
     func wrappedText(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], x: Int, y: Int, width: Int) {
+        let text = GamePresentationText.display(text)
         let pitch = max(13, font.bitmap.height(of: text) + 2)
         for (row, line) in font.bitmap.wrapped(text, toWidth: width).enumerated() {
             self.text(line, font: font, palette: palette, x: x, y: y + row * pitch)
         }
     }
     func fittedText(_ text: String, font: Lemmings2FrontEndFont, palette: [UInt8], rect: NSRect) {
+        let text = GamePresentationText.display(text)
         let lines = font.bitmap.wrapped(text, toWidth: Int(rect.width))
         guard !lines.isEmpty else { return }
         let width = max(1, lines.map(font.width).max() ?? 1)

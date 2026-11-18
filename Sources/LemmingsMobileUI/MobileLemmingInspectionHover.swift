@@ -42,7 +42,7 @@ import UIKit
         textScale = scale
         title = individual.title
         story = nextStory
-        accessibilityLabel = [title, story].joined(separator: "\n")
+        accessibilityLabel = GamePresentationText.display([title, story].joined(separator: "\n"))
         isHidden = false
         setNeedsDisplay()
     }

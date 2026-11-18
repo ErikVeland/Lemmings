@@ -90,7 +90,7 @@ struct PlayingTrack: Equatable {
         if currentURL != next.url {
             currentURL = next.url; track = next; shownAt = now; expired = false
             setAccessibilityElement(true); setAccessibilityRole(.group)
-            setAccessibilityLabel(next.title + ". " + next.soundtrack)
+            setAccessibilityLabel(GamePresentationText.display(next.title + ". " + next.soundtrack))
         }
         elapsed = now - shownAt
         if elapsed >= displayDuration { expired = true }

@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 /// Menu lettering drawn from the Macintosh release's own character sets.
@@ -64,7 +65,7 @@ public final class GameMenuTypography {
     public func font(_ face: Face) -> ClassicMacUserInterface.Font? { interface.font(face) }
 
     public func width(of text: String, face: Face, scale: Int) -> CGFloat {
-        CGFloat(font(face)?.width(of: text, scale: scale) ?? 0)
+        CGFloat(font(face)?.width(of: GamePresentationText.display(text), scale: scale) ?? 0)
     }
 
     public func height(face: Face, scale: Int) -> CGFloat {
@@ -84,7 +85,7 @@ public final class GameMenuTypography {
         context.interpolationQuality = .none
         context.setShouldAntialias(false)
         context.setAlpha(alpha)
-        for item in font.layout(text) {
+        for item in font.layout(GamePresentationText.display(text)) {
             guard let source = item.glyph else { continue }
             let countdown = scale == 4 && font.cellWidth == 16 && font.cellHeight == 20
                 ? GameLemmingsCountdownFace.frame(source, sequence: item.sequence) : nil
@@ -129,7 +130,7 @@ public final class GameMenuTypography {
 
     /// Reading text keeps its authored case. The Macintosh character sets carry lowercase letters.
     public static func menuText(_ value: String, preservesCase: Bool = false) -> String {
-        let folded = value.folding(options: [.widthInsensitive], locale: L10n.interface.locale)
+        let folded = GamePresentationText.display(value).folding(options: [.widthInsensitive], locale: L10n.interface.locale)
         let plain = (preservesCase ? folded.precomposedStringWithCanonicalMapping
                      : BitmapLatinGlyphs.uppercase(folded, locale: L10n.interface.locale))
             .replacingOccurrences(of: "—", with: "-").replacingOccurrences(of: "–", with: "-")
