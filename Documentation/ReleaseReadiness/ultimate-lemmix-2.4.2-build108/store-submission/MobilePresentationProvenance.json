@@ -1,0 +1,90 @@
+[
+  {
+    "platform": "ios",
+    "sourceSimulatorApp": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/ios-simulator/Build/Products/Debug-iphonesimulator/UltimateLemmixIOS.app",
+    "proofApp": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/UltimateLemmixIOS-Capture.app",
+    "configuration": "Debug-iphonesimulator",
+    "bundleID": "academy.glasscode.ultimatelemmix.integration-tests.screenshot.ios",
+    "sourceExecutableSHA256": "715343037fba6e98e7ecac69f0280ea9644a1b534d152f0c3cadeaf43d5d7f31",
+    "proofExecutableSHA256": "a6860e27cf1a9d4a8f089fad8ef00bc883294c9951650bdde4607f2a66cc2b29",
+    "sourceDebugLibrarySHA256": "bd2f1c8b7d42bbbe337b21159f2713adb5a3f02b482f0adb58b3f9608965d835",
+    "proofDebugLibrarySHA256": "bd2f1c8b7d42bbbe337b21159f2713adb5a3f02b482f0adb58b3f9608965d835",
+    "identicalFiles": 2333,
+    "differentFilesExceptCodeSignature": [
+      "UltimateLemmixIOS",
+      "Info.plist"
+    ],
+    "proofOnlyFilesExceptCodeSignature": [],
+    "infoChanges": {
+      "AnonymousTelemetryURL": {
+        "source": "https://glasscode.academy/lemmings-api",
+        "proof": null
+      },
+      "HostedRankingsURL": {
+        "source": "https://glasscode.academy/lemmings-api/rankings",
+        "proof": null
+      },
+      "CloudLibraryURL": {
+        "source": "https://glasscode.academy/lemmings-api/cloud",
+        "proof": null
+      },
+      "CloudLibraryCloudKitEnabled": {
+        "source": true,
+        "proof": false
+      },
+      "CFBundleIdentifier": {
+        "source": "academy.glasscode.ultimatelemmix.ios",
+        "proof": "academy.glasscode.ultimatelemmix.integration-tests.screenshot.ios"
+      },
+      "LemmingsCloudProgressEnabled": {
+        "source": true,
+        "proof": false
+      }
+    },
+    "removedProofPlugins": true
+  },
+  {
+    "platform": "tvos",
+    "sourceSimulatorApp": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/tvos-simulator/Build/Products/Debug-appletvsimulator/UltimateLemmixTVOS.app",
+    "proofApp": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/UltimateLemmixTVOS-Capture.app",
+    "configuration": "Debug-appletvsimulator",
+    "bundleID": "academy.glasscode.ultimatelemmix.integration-tests.screenshot.tvos",
+    "sourceExecutableSHA256": "0ae085df538080b2f334a510d26230bd2688eb59e57c484246b3851c45556a59",
+    "proofExecutableSHA256": "722ed2cd2758b20a57031b21a64666576e0160bbbdbe67b26e9683df0395f52f",
+    "sourceDebugLibrarySHA256": "8f50879afab231a5a96f96f59eab8e1f4f3efb34774f632e1abb29e0f4ac4c70",
+    "proofDebugLibrarySHA256": "8f50879afab231a5a96f96f59eab8e1f4f3efb34774f632e1abb29e0f4ac4c70",
+    "identicalFiles": 2329,
+    "differentFilesExceptCodeSignature": [
+      "UltimateLemmixTVOS",
+      "Info.plist"
+    ],
+    "proofOnlyFilesExceptCodeSignature": [],
+    "infoChanges": {
+      "AnonymousTelemetryURL": {
+        "source": "https://glasscode.academy/lemmings-api",
+        "proof": null
+      },
+      "HostedRankingsURL": {
+        "source": "https://glasscode.academy/lemmings-api/rankings",
+        "proof": null
+      },
+      "CloudLibraryURL": {
+        "source": "https://glasscode.academy/lemmings-api/cloud",
+        "proof": null
+      },
+      "CloudLibraryCloudKitEnabled": {
+        "source": true,
+        "proof": false
+      },
+      "LemmingsCloudProgressEnabled": {
+        "source": null,
+        "proof": false
+      },
+      "CFBundleIdentifier": {
+        "source": "academy.glasscode.ultimatelemmix.tvos",
+        "proof": "academy.glasscode.ultimatelemmix.integration-tests.screenshot.tvos"
+      }
+    },
+    "removedProofPlugins": true
+  }
+]

@@ -1284,3 +1284,30 @@ their frames contain original character names. Automatic introductions are skipp
 Ending transitions retain their completion callbacks when the movie is skipped.
 The manual movie page directs the player to Restore assets. This rule also applies
 to the mobile and TV original-media player.
+
+## Ultimate Lemmix Store preparation — 18 November 2026
+
+The clean resource profile retains current feature metadata, localization,
+stone controls, HD effects, Journey, Hot Seat, saved runs, hints and replay
+interfaces. It includes three authored starter puzzles. The Mac and iOS
+widgets and Apple TV Top Shelf remain separate signed extensions.
+
+The Mac starter renderer now forces Lix artwork when the current Classic scene
+has no native sprite bank. It retains the saved artwork choice and existing
+sprite anchors and input geometry. Mobile already uses that fallback.
+The original font remains selectable after owned-asset restoration; the clean
+base uses project pixel glyphs in the same fixed-cell renderer.
+
+A reviewed source-equivalence migration preserves the existing 609 rescue
+witnesses and 350 checked-hint entries. No new engine replay claims are made.
+The deliberate Apple TV flash-effect exception remains unchanged.
+
+The full restoration transport bundle passed native import and cold reopening
+with 23,591 resource files. All platforms select its extracted Resources folder;
+Apple TV uses the existing local browser transfer. Physical phone/tablet/TV
+transfer, signed widget reload, controller acceptance and cross-device hosted
+save recovery remain separate from these source and packaging checks.
+
+See the [Store submission evidence](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/store-submission/README.md)
+for the final package and service state. Public redistribution of the full
+restoration collection remains uncleared.

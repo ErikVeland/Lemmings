@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Require current candidate notes and a matching release-history entry."""
 
+import argparse
+import json
+import os
 from pathlib import Path
 import plistlib
 import re
@@ -12,7 +15,46 @@ def fail(message):
     raise ValueError(message)
 
 
-def validate(root: Path):
+def validate_lemmix(root: Path):
+    profile = json.loads((root / "Resources/Publishing/ultimate-lemmix.json").read_bytes())
+    version, platforms = profile["version"], profile["platforms"]
+    build = str(platforms["macos"]["build"])
+    notes_name = f"ReleaseNotes-UltimateLemmix-{version}-build{build}.md"
+    notes = (root / "Documentation" / notes_name).read_text()
+    required = [f"# Ultimate Lemmix {version}", f"Build: {build}",
+                f"Platform builds: Mac {build}, iPhone/iPad/Duo {platforms['ios']['build']}, Apple TV {platforms['tvos']['build']}"]
+    if notes.splitlines()[0:1] != required[:1] or any(notes.splitlines().count(line) != 1 for line in required):
+        fail("Ultimate Lemmix candidate notes must match its product version and platform builds.")
+    bases = [line.removeprefix("Release base: ") for line in notes.splitlines() if line.startswith("Release base: ")]
+    if len(bases) != 1 or any(line.startswith("Release commit:") for line in notes.splitlines()):
+        fail("Ultimate Lemmix candidate notes must contain one release base and no frozen release commit.")
+    subprocess.run(["git", "-C", str(root), "rev-parse", "--verify", bases[0] + "^{commit}"],
+                   check=True, capture_output=True)
+    index = "Documentation/UltimateLemmixReleaseNotes.md"
+    subprocess.run(["git", "-C", str(root), "ls-files", "--error-unmatch", "--", index],
+                   check=True, capture_output=True)
+    history = (root / index).read_text()
+    expected = (f"The current source version is **{version}** (Mac build {build}, "
+                f"iOS build {platforms['ios']['build']}, tvOS build {platforms['tvos']['build']}).")
+    if expected not in history or f"]({notes_name})" not in history:
+        fail("Ultimate Lemmix history must link its current version and build notes.")
+    info = plistlib.loads((root / platforms["macos"]["infoPlist"]).read_bytes())
+    if info["CFBundleShortVersionString"] != version or info["CFBundleVersion"] != build:
+        fail("Ultimate Lemmix Mac metadata differs from its publication profile.")
+    for platform in ("ios", "tvos"):
+        project = (root / platforms[platform]["project"] / "project.pbxproj").read_text()
+        if (set(re.findall(r"MARKETING_VERSION\s*=\s*([^;]+);", project)) != {version}
+                or set(re.findall(r"CURRENT_PROJECT_VERSION\s*=\s*([^;]+);", project)) != {str(platforms[platform]["build"])}):
+            fail("Ultimate Lemmix mobile metadata differs from its publication profile.")
+    welcome = (root / "Sources/LemmingsLocal/ReleaseWelcome.swift").read_text()
+    if f'static let lemmixNotesVersion = "{version}"' not in welcome:
+        fail("Ultimate Lemmix welcome notes must match its release version.")
+    return version, build, notes_name
+
+
+def validate(root: Path, edition="ultimate-lemmings"):
+    if edition == "ultimate-lemmix":
+        return validate_lemmix(root)
     with (root / "Resources/Info.plist").open("rb") as source:
         info = plistlib.load(source)
     version = info.get("CFBundleShortVersionString")
@@ -89,8 +131,12 @@ def validate(root: Path):
 
 if __name__ == "__main__":
     try:
-        version, build, notes_name = validate(Path(__file__).resolve().parents[2])
+        parser = argparse.ArgumentParser(description=__doc__)
+        parser.add_argument("--edition", choices=("ultimate-lemmings", "ultimate-lemmix"),
+                            default=os.environ.get("LEMMINGS_PUBLICATION_EDITION", "ultimate-lemmings"))
+        args = parser.parse_args()
+        version, build, notes_name = validate(Path(__file__).resolve().parents[2], args.edition)
         print(f"PASS current version history: {version} build {build} ({notes_name})")
-    except (OSError, ValueError) as error:
+    except (OSError, ValueError, subprocess.CalledProcessError) as error:
         print(f"FAILED: {error}", file=sys.stderr)
         raise SystemExit(1)

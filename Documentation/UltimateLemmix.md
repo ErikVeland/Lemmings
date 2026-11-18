@@ -2,9 +2,13 @@
 
 Ultimate Lemmix uses the full Ultimate Lemmings 2.4.2 application. Its baseline is
 `b294d3b7c298f549aad5faa36f92ba9bf23b7529`, which contains the published build 106
-source. The engine fingerprint matches the installed 2.4.2 application:
+source. The current source fingerprint is
+`c9abe4e0aab0410ab43923a4c9b8c5cced89f3e0792f091740b97b5be9c99d93`.
+A [source-equivalence record](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/store-submission/ReplaySourceEquivalence.json)
+retains 609 rescue witnesses and 350 hint entries from the original fingerprint
 `9a246f97fd42930d53c273a4bb9c45800f0379fd7326f7c65518d484ebfeeea5`.
-NxlvKit remains unchanged.
+The simulation sources match that baseline. Reviewed differences add import,
+starter content and presentation; they do not establish new replay evidence.
 
 Historical 0.1 Lemmix builds 1–4 used the older 1.8 checkout. They are not the
 full-game baseline and do not establish current feature parity.
@@ -91,3 +95,21 @@ before opening build 108. Automated checks used separate temporary storage.
 The requested existing project icon is retained. Its character rights require
 review. App Store signing, service provisioning, privacy and rights clearance
 remain release gates. This local build is not an approved Store release.
+
+## Store preparation on 18 November 2026
+
+The Store profile uses the current complete frontend and shared modules. It
+includes the authored starters, pinned Lix media, a CC0 Lix-derived icon, the
+project Lemmix logo and the project's pixel lettering. Original font and game
+media remain in the separate restoration bundle. Imported original artwork
+can replace the fallback after validation. Starter scenes retain their Lix
+artwork even when the player selects Original for restored campaigns.
+
+Game Center, cloud capabilities, the Mac/iOS Desk Clock widgets and Apple TV
+Top Shelf remain enabled. The privacy manifests declare the observed hosted
+identifiers, gameplay content and optional interaction analytics. The two
+products have separate release histories and version-history build gates.
+
+Use the [Store submission dossier](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/store-submission/README.md)
+for current signed outputs and remaining acceptance. Earlier local receipts
+above describe personal test builds; they do not establish Store clearance.

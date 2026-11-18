@@ -1,0 +1,69 @@
+{
+  "status": "passed-scoped-presentation-check",
+  "platform": "macOS arm64",
+  "candidateExecutableSHA256": "a19f6bbbf59ba5268f2b20869120b9f84d3a68f573aa8fb0d39ca80a52059701",
+  "sourceCandidateCodeStillMatches": true,
+  "capturedBeforeProcessExit": true,
+  "muted": true,
+  "offscreen": true,
+  "isolatedHome": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/isolated-home-live",
+  "isolatedApplicationSupport": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/isolated-storage-live",
+  "savedLixArtworkChoice": false,
+  "home": {
+    "visibleResult": "Home displays the Ultimate Lemmix logo and Classic 0/3 starter entry.",
+    "targetCount": 18,
+    "allRecordedTargetsInsideContent": true
+  },
+  "starter": {
+    "visibleResult": "First Steps displays six walking Lix actors, red brick terrain, open entrance, exit, skill bar and running HUD. OUT 6/6; TIME 2:46.",
+    "targetCount": 24,
+    "allRecordedTargetsInsideContent": true,
+    "runningPauseActionPresent": true
+  },
+  "interactionMethod": "Actual accessibility actions: Classic, First Steps, Continue, Resume, Resume. The first Resume cancels the offscreen countdown; the second starts play.",
+  "imageEncoding": [
+    {
+      "name": "Home",
+      "raw": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/Home.png",
+      "rawSHA256": "db76114603d2a25fb11ba8fd5480c75f359b7299b38bf4eec91357cbb33ec5c4",
+      "submission": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/submission/Home.png",
+      "submissionSHA256": "4b7c36b924947838b2d1ab270486e0f676b7ed428088df8856fbad790f252ba3",
+      "width": 2560,
+      "height": 1600,
+      "rawAlphaAll255": true,
+      "submissionColorType": 2,
+      "rgbPixelsExactMatch": true,
+      "rgbPixelSHA256": "e5a99a644561770eb7c166dad202c467d60b80903f2395cce914eadf630bf070",
+      "colorProfilePreserved": true
+    },
+    {
+      "name": "Starter",
+      "raw": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/Starter.png",
+      "rawSHA256": "2af902a6d5d9ee46292ebc3a594371c6f56cfd25ef9406329a2ce4700b9dc7de",
+      "submission": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/submission/Starter.png",
+      "submissionSHA256": "94a1ea6f5dd0b23df747010c4dc2685a8d9662a222c7f68e9e4afa36d5edc9de",
+      "width": 2560,
+      "height": 1600,
+      "rawAlphaAll255": true,
+      "submissionColorType": 2,
+      "rgbPixelsExactMatch": true,
+      "rgbPixelSHA256": "d7024c488fe57a49810d8fe9880928c8a19b5ab7118f0d9ee64bd1dcb7f73630",
+      "colorProfilePreserved": true
+    }
+  ],
+  "limits": [
+    "Scoped final arm64 presentation capture, not an engine replay suite.",
+    "Only the first Open Starter level was rendered.",
+    "Input frame containment and accessibility presses were checked; physical mouse, keyboard and controller input were not exercised.",
+    "This proof copy disables hosted services and Game Center. It does not establish service acceptance.",
+    "Intel runtime and physical mobile platforms were not exercised.",
+    "App Store upload and Apple review were not performed."
+  ],
+  "evidence": [
+    "proof-copy.json",
+    "Home.json",
+    "Starter.json",
+    "capture.log",
+    "submission-encoding.json"
+  ]
+}

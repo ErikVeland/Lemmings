@@ -8,6 +8,7 @@ import io
 import json
 from pathlib import Path
 import subprocess
+import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -92,13 +93,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--alternative-resources", type=Path, required=True)
+    parser.add_argument("--store", action="store_true")
     args = parser.parse_args()
+    sys.path.insert(0, str(ROOT / "Tools/AlternativeAssets"))
     specification = importlib.util.spec_from_file_location(
         "prepare_lemmix_base", ROOT / "Tools/AlternativeAssets/prepare_lemmix_base.py")
     module = importlib.util.module_from_spec(specification)
     specification.loader.exec_module(module)
-    module.prepare(args.output, args.alternative_resources)
-    subprocess.run(["zsh", ROOT / "Scripts/prepare-lix-interface.sh",
+    module.prepare(args.output, args.alternative_resources, store=args.store)
+    if not args.store:
+        subprocess.run(["zsh", ROOT / "Scripts/prepare-lix-interface.sh",
                     "--font", args.output / "Fonts/Lix/djvusans.ttf",
                     "--licence", args.output / "Licences/Lix-font-LICENSE.txt",
                     "--output", args.output / "Fonts/LixInterface"], check=True)

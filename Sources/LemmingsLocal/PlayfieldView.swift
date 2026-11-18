@@ -381,6 +381,11 @@ struct ReticleFeedback {
     didSet { sceneTick = nil; needsDisplay = true }
   }
   var lixSceneTheme: LixSceneArtwork.Theme = .brick { didSet { invalidateClassicScene() } }
+  /// Keeps the starter visible without changing the player's artwork choice.
+  var usesLixArtwork: Bool {
+    LixArtworkRenderer.shared.isAvailable
+      && (GameArtworkSkin.lixEnabled || (classicScene != nil && assets == nil))
+  }
   private var sceneUsesLix = false
   private var sceneTick: Int?
   private var sceneTerrainRevision: UInt64?
@@ -396,7 +401,7 @@ struct ReticleFeedback {
   #endif
 
   private func refreshClassicScene() {
-    let usesLix = GameArtworkSkin.lixEnabled && LixArtworkRenderer.shared.isAvailable
+    let usesLix = usesLixArtwork
     guard let classicScene, let session = session as? ClassicSession,
           sceneTick != session.currentTick || sceneTerrainRevision != session.terrainRevision || sceneUsesLix != usesLix else { return }
     if sceneUsesLix != usesLix { sceneTerrain = nil; sceneTerrainRevision = nil }
@@ -1845,7 +1850,7 @@ struct ReticleFeedback {
       return
     }
 
-    if GameArtworkSkin.lixEnabled,
+    if usesLixArtwork,
        let frame = LixArtworkRenderer.shared.frame(pose: lemming.pose, animationFrame: lemming.animationFrame,
          facingLeft: lemming.facingLeft, backpack: showClassicSkillBackpacks ? ClassicSkillBackpack.kind(for: lemming) : nil) {
       let origin = viewport.viewPoint(fromLevel: CGPoint(x: CGFloat(lemming.x) - frame.footX, y: CGFloat(lemming.y) - frame.footY))
@@ -2141,7 +2146,7 @@ struct ReticleFeedback {
   }
 
   private func drawMarchingLemmings() {
-    if GameArtworkSkin.lixEnabled, LixArtworkRenderer.shared.isAvailable {
+    if usesLixArtwork {
       let scale = max(1.5, min(3, bounds.width / 900))
       let spacing = 32 * scale
       var x = -spacing + (CGFloat(overlayFrame) * scale / 3).truncatingRemainder(dividingBy: spacing)
