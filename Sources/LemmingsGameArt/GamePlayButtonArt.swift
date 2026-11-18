@@ -69,13 +69,23 @@ public enum GamePlayButtonArt {
     }
     /// Supply deterministic stone when no imported artwork is installed.
     private static func generatedSources() -> Sources {
-        let patches = (0..<24).map { seed in
-            (0..<(patchSize * patchSize)).map { offset -> UInt8 in
-                let x = offset % patchSize, y = offset / patchSize
-                let broad = mix(UInt64(seed * 97 + (x / 5) * 13 + (y / 4) * 71))
-                let grain = mix(UInt64(seed * 401 + offset))
-                return UInt8(min(5, 1 + Int(broad % 3) + Int(grain % 3)))
+        var patches: [[UInt8]] = []
+        patches.reserveCapacity(24)
+        let pixelCount: Int = patchSize * patchSize
+        for seed in 0..<24 {
+            var patch: [UInt8] = []
+            patch.reserveCapacity(pixelCount)
+            for offset in 0..<pixelCount {
+                let x: Int = offset % patchSize
+                let y: Int = offset / patchSize
+                let broadInput: Int = seed * 97 + (x / 5) * 13 + (y / 4) * 71
+                let broad: UInt64 = mix(UInt64(broadInput))
+                let grainInput: Int = seed * 401 + offset
+                let grain: UInt64 = mix(UInt64(grainInput))
+                let tone: Int = 1 + Int(broad % 3) + Int(grain % 3)
+                patch.append(UInt8(min(5, tone)))
             }
+            patches.append(patch)
         }
         return Sources(panel: nil, patches: patches)
     }
