@@ -70,8 +70,10 @@ Compact slots can show the native 2× source at half logical size. Keep peer
 skill captions at one common scale, leave a gap between captions and keep
 speed text at the counter scale. Do not substitute the Lix UI font in local builds.
 Use measured font widths for multiline text.
-Lix HUD buttons use the authored skill, transport and checkbox sheets, plus
-Lix's button palette and backing rules. Match each input target to its visible button.
+Lix characters retain their authored skill and transport icons over the shared
+synthesised stone controls. Fit visible icon pixels, excluding transparent cell
+padding. Keep stone independent from character choice. Match each input target
+to its visible button.
 
 Use the shipped green and blue bitmap fonts for all interface text, including
 in-game notices and compact HUD labels. Lemming explosion countdowns use white

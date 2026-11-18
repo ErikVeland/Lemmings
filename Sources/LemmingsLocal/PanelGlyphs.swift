@@ -37,8 +37,8 @@ enum PanelGlyph: String {
   /// destination ones and leave the strokes uneven, which is exactly what a
   /// bitmap is here to avoid.
   @MainActor func image(fitting box: CGSize, transparentRock: Bool = false) -> NSImage? {
-    if let image = resourceTileImage(fitting: box) { return image }
     if let image = lixImage(fitting: box) { return image }
+    if let image = resourceTileImage(fitting: box) { return image }
     let size = pixelSize
     guard size.width > 0, size.height > 0 else { return nil }
     let steps = min(Int(box.width) / size.width, Int(box.height) / size.height)
@@ -49,8 +49,8 @@ enum PanelGlyph: String {
 
   /// Keep control silhouettes white over the original 1-bit rock.
   @MainActor func monochromeImage(fitting box: CGSize) -> NSImage? {
-    if let image = resourceTileImage(fitting: box) { return image }
     if let image = lixImage(fitting: box) { return image }
+    if let image = resourceTileImage(fitting: box) { return image }
     let steps = max(1, art.scale(fitting: box))
     let key = "\(GameArtworkResources.revision)-mono-\(rawValue)-\(steps)"
     if let hit = Self.cache[key] { return hit }
@@ -79,8 +79,8 @@ enum PanelGlyph: String {
    * Recreates the panel art at Macintosh scale without changing its logical size.
    */
   @MainActor func macImage(fitting box: CGSize, transparentRock: Bool = false) -> NSImage? {
-    if let image = resourceTileImage(fitting: box) { return image }
     if let image = lixImage(fitting: box) { return image }
+    if let image = resourceTileImage(fitting: box) { return image }
     let size = pixelSize
     guard size.width > 0, size.height > 0 else { return nil }
     let steps = min(Int(box.width) / size.width, Int(box.height) / size.height)
@@ -223,15 +223,11 @@ enum PanelGlyph: String {
     default: return nil
     }
     guard let frame = GameArtworkResources.lixInterface?.control(control),
-          let provider = CGDataProvider(data: frame.rgba as CFData),
-          let image = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8,
-            bitsPerPixel: 32, bytesPerRow: frame.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
-            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
-            decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
-    let fit = min(box.width / CGFloat(frame.width), box.height / CGFloat(frame.height))
+          let image = GameLixInterfaceArt.iconImage(frame) else { return nil }
+    let fit = min(box.width / CGFloat(image.width), box.height / CGFloat(image.height))
     guard fit > 0 else { return nil }
-    let scale = fit >= 1 ? floor(fit) : fit >= 0.5 ? 0.5 : fit
-    return NSImage(cgImage: image, size: CGSize(width: CGFloat(frame.width) * scale, height: CGFloat(frame.height) * scale))
+    let scale = fit >= 0.5 ? floor(fit * 2) / 2 : fit
+    return NSImage(cgImage: image, size: CGSize(width: CGFloat(image.width) * scale, height: CGFloat(image.height) * scale))
   }
 
   /// The glyph a button wears, or nil when the button carries wording instead.

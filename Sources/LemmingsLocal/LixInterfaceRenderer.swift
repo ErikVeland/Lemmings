@@ -1,5 +1,6 @@
 import AppKit
 import NxlvKit
+import LemmingsGameArt
 
 /**
  * Caches the pinned Lix interface pixels for native controls.
@@ -74,6 +75,12 @@ import NxlvKit
 
     private func image(_ frame: LixInterfaceArtwork.Frame, key: String) -> NSImage? {
         if let cached = images.object(forKey: key as NSString) { return cached }
+        if key.hasPrefix("control-") || key.hasPrefix("skill-"),
+           let bitmap = GameLixInterfaceArt.iconImage(frame) {
+            let image = NSImage(cgImage: bitmap, size: CGSize(width: bitmap.width, height: bitmap.height))
+            images.setObject(image, forKey: key as NSString, cost: frame.rgba.count)
+            return image
+        }
         guard let provider = CGDataProvider(data: frame.rgba as CFData),
               let bitmap = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8,
                 bitsPerPixel: 32, bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),
@@ -87,7 +94,7 @@ import NxlvKit
     private func draw(_ image: NSImage, in rect: CGRect) {
         guard rect.width > 0, rect.height > 0 else { return }
         let fit = min(rect.width / image.size.width, rect.height / image.size.height)
-        let scale = fit >= 1 ? floor(fit) : fit >= 0.5 ? 0.5 : fit
+        let scale = fit >= 0.5 ? floor(fit * 2) / 2 : fit
         let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
         image.draw(in: CGRect(x: floor(rect.midX - size.width / 2), y: floor(rect.midY - size.height / 2),
             width: size.width, height: size.height), from: .zero, operation: .sourceOver,

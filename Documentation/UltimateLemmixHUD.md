@@ -2,7 +2,9 @@
 
 The Classic gameplay HUD uses the original lettering in the personal preview
 and Lix's own UI font in clean builds. Both use actual Lix skill and transport
-icons. The shared button backing follows Lix's CC0 drawing rules and palette.
+icons. The shared buttons use synthesised stone, including Home and timeline
+controls. Transparent icon padding is removed before fitting. Half-step scaling
+uses the 2× artwork to fill each existing input target.
 
 ## Typography
 
@@ -37,9 +39,22 @@ Classic skill cells keep their visible bounds and input targets aligned.
 
 The primary Lemmings 2 and 3 panels still use their imported native artwork
 and font banks. Their shared timeline and speed controls use the Lix adapter.
-Home navigation rows retain their existing layout and fills.
+Home navigation rows retain their layout and use the shared stone sockets.
 
-## Verification
+## Current presentation — 18 November 2026
+
+The character choice no longer replaces stone with plain Lix button fills.
+`GamePlayButtonArt` retains its existing synthesis for imported artwork and
+has a deterministic generated fallback when those source banks are absent.
+Home settings and update icons use the full socket well.
+
+Lemmix restores HD effects and cinematic explosions once. It preserves motion
+and flash reductions, then respects later settings changes. Apple TV retains
+its existing cinematic and EDR limits. Rewind, speed trails, selection glows,
+Hot Seat, hints, modern controls and saved-run features use the shared frontend.
+No engine rule changes are part of this update.
+
+## Earlier verification
 
 The source checks cover four complete personal-window states: running,
 paused, Undo End Run and the narrow window. A separate clean-window case uses
