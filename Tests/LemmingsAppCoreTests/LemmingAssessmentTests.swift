@@ -6,9 +6,9 @@ import Testing
 
 @MainActor struct LemmingAssessmentTests {
     @Test func authoredStoriesAreTenWordsUniqueAndFrozen() {
-        let language = L10n.currentLanguagePreference
-        L10n.setLanguage(.english)
-        defer { L10n.setLanguage(language) }
+        let language = GameLocalisation.currentLanguagePreference
+        GameLocalisation.setLanguage(.english)
+        defer { GameLocalisation.setLanguage(language) }
         let stories = (0..<LemmingAssessmentCatalogue.count).map {
             let pair = LemmingAssessmentCatalogue.story(at: $0)
             #expect(!pair.0.isEmpty && !pair.1.isEmpty)

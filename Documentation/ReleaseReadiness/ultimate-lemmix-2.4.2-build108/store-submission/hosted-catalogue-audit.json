@@ -1,0 +1,2691 @@
+{
+  "checkedDate": "2026-11-19",
+  "decision": "preserve-live-catalogue",
+  "liveCatalogueChanged": false,
+  "sourceValidation": "Read-only catalogue schema, completed winning witnesses, all witness SHA-256 values and current source fingerprint passed. No engine replay rerun.",
+  "liveSHA256": "cef047ee50ba55776d52c07cd9d93edd8920160119a83e22f768392b856a9f61",
+  "currentSHA256": "a9c3db008b71e43895fcbd6d5a23245e55dfbf5e51a27795caf3ae6faaefa9a9",
+  "liveExactConditionRows": 512,
+  "currentExactConditionRows": 609,
+  "liveUniqueLevelIdentities": 501,
+  "currentUniqueLevelIdentities": 558,
+  "sameConditions": 438,
+  "unchangedSharedTargets": 429,
+  "raisedSharedTargets": [
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "0:1",
+      "title": "Mr Lemmy Lives Next Door",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "23f1415e083bc7b3134b8284c82939f354f26f11d8dfad447edd2c85a7580796",
+      "savedTarget": 13,
+      "previousSavedTarget": 1,
+      "rescueRequirement": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:0",
+      "title": "Quad Quirks on the Quay!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "5c1e49d14888ef78ca0f5157279f70cfb069f8e449155b5bb020415596f7a693",
+      "savedTarget": 42,
+      "previousSavedTarget": 29,
+      "rescueRequirement": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "2:0",
+      "title": "Audex Powder",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "15e799243b2abb8b13d4e9790f26a7a08ce9222e716d383742c9d015cc7af4c4",
+      "savedTarget": 59,
+      "previousSavedTarget": 47,
+      "rescueRequirement": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "2:4",
+      "title": "This Is The Pits !",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "9fe11984b0e179c3ef9068a3499e4e8eb06c6098fbb0dccfdf4de0d55178db3c",
+      "savedTarget": 57,
+      "previousSavedTarget": 2,
+      "rescueRequirement": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "4:6",
+      "title": "The Egypt Cottage!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "23e34b181647e50db8b5de43aa53a2bdf1367e698b41d49dd0438b834aca7ea2",
+      "savedTarget": 3,
+      "previousSavedTarget": 1,
+      "rescueRequirement": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:0",
+      "title": "LEMMING OF NOTTINGHAM",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "fdcf6af24738bde5e9b41bdf71941c1d94553921eb917bc4cf55c9383efa2d48",
+      "savedTarget": 2,
+      "previousSavedTarget": 1,
+      "rescueRequirement": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "7:1",
+      "title": "Swing/Roundabout Theory",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "57447e68657e4e979cecaa5fe9410afa106c6579a07a04078405fa65ccef6f15",
+      "savedTarget": 17,
+      "previousSavedTarget": 2,
+      "rescueRequirement": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:0",
+      "title": "Lem Me Out !",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "5b3d7149e6212e28b540beb364b0279609a2843e62f9329c8865ac25e8229849",
+      "savedTarget": 60,
+      "previousSavedTarget": 26,
+      "rescueRequirement": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:1",
+      "title": "Ice Ice Lemy",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "2293b0bc7c802874eefe2820f920aacca428f3bb669e0a4927d6d970a0a07ee2",
+      "savedTarget": 7,
+      "previousSavedTarget": 1,
+      "rescueRequirement": 1
+    }
+  ],
+  "addedConditions": {
+    "count": 171,
+    "lemmings2": 85,
+    "lemmings3": 86
+  },
+  "removedConditions": {
+    "count": 74,
+    "gameID": "lemmings3",
+    "replacedByV2": 70,
+    "withoutCurrentWinningTarget": [
+      {
+        "gameID": "lemmings3",
+        "packID": "chronicles",
+        "levelID": "107",
+        "title": "Shadow 7",
+        "population": 21,
+        "rulesetVersion": "l3-native-preview-v1",
+        "conditionSHA256": "b34c73b958ffa234bfcd810540313c395f2d48d5813d9022ca87f6fde09b2dd4",
+        "savedTarget": 10
+      },
+      {
+        "gameID": "lemmings3",
+        "packID": "chronicles",
+        "levelID": "213",
+        "title": "Egyptian 13",
+        "population": 21,
+        "rulesetVersion": "l3-native-preview-v1",
+        "conditionSHA256": "3b65fbc19aa097328b36fcda9591883f29217c5b230bff0c854a44074acb8546",
+        "savedTarget": 1
+      },
+      {
+        "gameID": "lemmings3",
+        "packID": "chronicles",
+        "levelID": "229",
+        "title": "Egyptian 29",
+        "population": 22,
+        "rulesetVersion": "l3-native-preview-v1",
+        "conditionSHA256": "ff50d6bc1c38f26ec3ebefd77a94c26b8c837a4dc49b7e7fbc349e802679e08d",
+        "savedTarget": 2
+      },
+      {
+        "gameID": "lemmings3",
+        "packID": "chronicles",
+        "levelID": "206",
+        "title": "Egyptian 6",
+        "population": 21,
+        "rulesetVersion": "l3-native-preview-v1",
+        "conditionSHA256": "0eb91f2316b9efc8f3abb4d00bcc76c162c2a9fe70bd8d043f3794e094ecc390",
+        "savedTarget": 11
+      }
+    ]
+  },
+  "newLemmings3LevelIDs": [
+    "121",
+    "122",
+    "123",
+    "124",
+    "125",
+    "126",
+    "127",
+    "128",
+    "129",
+    "130",
+    "224",
+    "227",
+    "26",
+    "27",
+    "28",
+    "30"
+  ],
+  "newLemmings2": {
+    "levelIdentities": 45,
+    "population60Rows": 44,
+    "population1Rows": 38,
+    "population2Rows": 2,
+    "population4Rows": 1
+  },
+  "currentEvidence": {
+    "populationProofs": 294,
+    "rescueRecords": 315,
+    "allCompletedAndWon": true,
+    "allWitnessHashesMatch": true,
+    "engineFingerprintMatches": true,
+    "engineFingerprint": "c9abe4e0aab0410ab43923a4c9b8c5cced89f3e0792f091740b97b5be9c99d93"
+  },
+  "starters": [
+    {
+      "title": "First Steps",
+      "population": 6,
+      "requiredSaved": 6,
+      "inEitherCatalogue": false,
+      "successfulClearStars": 3
+    },
+    {
+      "title": "Float to Safety",
+      "population": 3,
+      "requiredSaved": 3,
+      "inEitherCatalogue": false,
+      "successfulClearStars": 3
+    },
+    {
+      "title": "Over the Rise",
+      "population": 4,
+      "requiredSaved": 4,
+      "inEitherCatalogue": false,
+      "successfulClearStars": 3
+    }
+  ],
+  "starterReleaseBlocked": false,
+  "existingStarsChanged": false,
+  "productionRecordsQueried": false,
+  "appEngineChanged": false,
+  "engineTestsRun": false,
+  "added": [
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "0:5",
+      "title": "The Starry Threshold",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "4951f3889654d82dddd48d2caec65260d6cd370e2f3ad828df40c76479a9665c",
+      "savedTarget": 60
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "0:6",
+      "title": "So close but so far away",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "ad92d23e60a58bd7bda3455a94385e2ea86d1600ec04f1d66504dc1f6423ffe5",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "0:8",
+      "title": "Flying The Mad Pursuit",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "191e55e27063263579b495ae4c6c0aa95a16b08025fa17ff3828b2b4a0b5c810",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "0:8",
+      "title": "Flying The Mad Pursuit",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "cd772b5f86c74796cd48ad46cb3c04ff585bdb67a33217d41863f5c11f99835e",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:2",
+      "title": "THE LEMMINGS HAVE LANDED",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "36e4aab8b010d7e0cd6549d372af8064dfa662103c0b691e09510bf108cdac6b",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:2",
+      "title": "THE LEMMINGS HAVE LANDED",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "61b53e3ecde2f6cd4fe390ef1a87f240f56e6bb7a75f107daa35c4956fe7a4da",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:3",
+      "title": "The Vortex",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "3c9b2b920b4869dccf88ad9b075bac4235960efeec082ab7ce42ce76b131c3d4",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:3",
+      "title": "The Vortex",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "49d5c3721d97b376e91b5e59944ee72b6f54ec7669bd33e1ca9c273be99a5934",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:7",
+      "title": "Odyssey",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "501947d49d75a1abebf442167aa4ac929ac72909707bca2dc27dcb36fc2ce007",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:7",
+      "title": "Odyssey",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "441cf79216b3350361751d9095affcd345e911ea4ac0d97016cb288b89564024",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:8",
+      "title": "Inside The Steel Box",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "b11e82c5768241edca64e4e5cd91dfdb7336f71bc1db789cd1576d1254cd5698",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:8",
+      "title": "Inside The Steel Box",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "8085d50b264e67298882301a046ecfbbce13a5ccaab1fb394beba4e42edeeba3",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:9",
+      "title": "Frontier of surreality",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "75e835ad968021df58a739fa0f632bc26814090db9fd2b0a800500466eda79df",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "10:9",
+      "title": "Frontier of surreality",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "b7ac8f292feceaa8c089608b14cfc9b3f6902d08ccb4369e59a3b0ac2ac0fc56",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "11:7",
+      "title": "Run the Risk",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "7d422339be423d4048876065551525528ecbef39739cd9bf6db360b25def9f29",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "11:7",
+      "title": "Run the Risk",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "f3267e92ff0193e46803d619acd1f9d11d490786fc336ce25541c152d7a764ed",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "11:8",
+      "title": "The Nervous Network!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "ee71ba5239a452a6150ed079fe46174c912eec3778d62462c6f68b2bae0d74fe",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "11:8",
+      "title": "The Nervous Network!",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "ccf168c8c11516cc83cabdfa6a43a27bdfbac2dbb86f26c61982f5c05d26aa44",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "11:9",
+      "title": "Take up Archery",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "72b2687c4e83a74b3f68553689040f33754504a23db10f0341b858e74f7765f4",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "11:9",
+      "title": "Take up Archery",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "ba2831add18d1e16c9dc9f6e792fcdc64201a94c78e00080f4b1dc1566343e81",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:1",
+      "title": "The Barley Mow....",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "34eda44e9f5afe41354b5526b7dbdd7ce294e3ddef6190e313b36ac5d73168b2",
+      "savedTarget": 60
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:2",
+      "title": "Cannonball",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "b623ebb0163912cc0508034c7a24518512450fd20b8b4a9f7a3d67853aca2d67",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:2",
+      "title": "Cannonball",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "dec8304bf59674ae0137ef951cd81f817b6d2d733e84bad744c9cc150993b2a5",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:3",
+      "title": "Coastal Suction Function",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "990ab7c9e4150765f45a08551231a1a25505edd96254929f453bbc4a538f15c2",
+      "savedTarget": 60
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:3",
+      "title": "Coastal Suction Function",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "534ef13bba06773afc26a2b885a4f45d15a82ebd9a21b9e04a444c3cad9e36f0",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:6",
+      "title": "SAND IN YER SARNIES",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "e0fbd37824457e50003e555075f73763249333d5dfe2257b150c478010843686",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:6",
+      "title": "SAND IN YER SARNIES",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "4cd07671a1d87c0480a091bcf1857126632b29aa5da5f2fa82676daba5bc56f9",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:8",
+      "title": "Sand Blaster",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "86acffdaebfe3febd3767f01bdaab6a02d03eb044328b6900270336f7bc075ff",
+      "savedTarget": 2
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "1:8",
+      "title": "Sand Blaster",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "55bbc6d74f65f49326a315994d692f8137bb74b256bfc4719fc3062cf0aafd8f",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "3:3",
+      "title": "`Round the Blox!",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "1b0e5f516a598f4d19782c1cadaf5f62d783bce96f052ad480aea755c9f5a775",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "3:3",
+      "title": "`Round the Blox!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "1551144c8ae267f546098c61c78d482172129222b93030dc8828be638df693b8",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "3:8",
+      "title": "The Carpet Capers....",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "d964deb60bf4e355e1ad85840c20f1638efd346ee35ed116f0d53c63837522ff",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "3:8",
+      "title": "The Carpet Capers....",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "a43f43a78fea64e0e517d6483542e59978b8b4bab77dcf0a619a7c491a985799",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "4:8",
+      "title": "Wave Pathway",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "84837937862caa71062d886fbf1cf4b87185d78f4cc9ec82c8922f1b04d27dc7",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "4:8",
+      "title": "Wave Pathway",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "a2832d8f43c40eadba22c5f3b99b68ec5130c89cc62a26d5fe5e4a797bcca959",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "4:9",
+      "title": "Pyramid of Despair!",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "08d8511a97c866bfd2284f2555eaa90ce7aded9246f12a448bd2047296062c89",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "4:9",
+      "title": "Pyramid of Despair!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "28e1eb4e68fa5e547a1508cea71d4e176b7a19a96119102b2de4d51866b5c2dc",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:1",
+      "title": "WEE BEASTIES !!!",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "cf8c511f404ef71d3aac0631a0172fa92f7ae2c7b23a91a80f531789d4380276",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:1",
+      "title": "WEE BEASTIES !!!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "04291e4caef72f7887221422fa9f6423976e6875b6ced6141081a558f5f0fc6a",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:2",
+      "title": "Stop your ticklin` Jock!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "c72dc8912ab371327584853e9ffae2fb70a8ce28110371b71aece9b17b19a449",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:2",
+      "title": "Stop your ticklin` Jock!",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "8529d31d7829a0fd8cf878602998194508dccc00650594ff1ef8dca08095d38b",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:3",
+      "title": "A mere stone`s throw",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "16ce53bdd579b6cf1382992b3a291791577f1fc913ff63c6ae71707841936f71",
+      "savedTarget": 53
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:3",
+      "title": "A mere stone`s throw",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "b82e71f290774a1920c735e5d230757ee4def58d26abec8fdc0cf386afdb35d5",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:4",
+      "title": "DONALD WHARS YER LEMMING",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "b42dd06e2f4f678de9313fb2fe44fd186affad85dbdf97453f51403efe566c78",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:4",
+      "title": "DONALD WHARS YER LEMMING",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "5eaeee9674a108227c65d99208ed27e0124d35f9438382544cdfdfadd48059c8",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:6",
+      "title": "In memory of McAngus",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "7ed7a56d772c4f464d8126e5686f99f3344541d950503b63326c51108c23d5e8",
+      "savedTarget": 3
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:7",
+      "title": "The White Heather Club",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "7d6e3bac9f3d63a36fedaf61fc0548ec98988110238316607ef59e34d1090377",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:7",
+      "title": "The White Heather Club",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "7750df568fc5bc8458d97450099cf1cbf8d28d197774b1bd3b72b2b52e170ff7",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "5:9",
+      "title": "EAT MY SHRAPNEL !!",
+      "population": 4,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "7219d6b15d958116e85cde5e9628258ad3e000f1b9e298d47ab3424bb2c5eac3",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:1",
+      "title": "SIR! I KID YE NOT",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "1edd05447827f1e7ce7ec77f377405fa0858a720a0b1705c563c03c8d6c94e60",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:1",
+      "title": "SIR! I KID YE NOT",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "18fb0381a328701a3f2e641f2be734a32fd2de65a631cd00afd673f7281aafbf",
+      "savedTarget": 60
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:2",
+      "title": "ALL IN A KNIGHTS WORK!!",
+      "population": 2,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "6a195b30e52426f19493597a9242012755bd8a560abe54fccddd0c0914ea439c",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:2",
+      "title": "ALL IN A KNIGHTS WORK!!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "1e26e1fa3cb293725bab986bf33e8a56e0cef14c0e75d389105161ebb1635355",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:3",
+      "title": "WATCH THAT LAST STEP!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "88ec366fff8f42e2268a802cef6171e9f8e2ee2861c7f0c03f02546d01dcfe44",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:3",
+      "title": "WATCH THAT LAST STEP!",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "95880f2c983e132e0a667828a3a00e7edda21d1e76b1b9302566273b48ee180a",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:5",
+      "title": "Let`s play twister!",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "9d30c2c1d3a0b7a682d05adbc3d78432ab29ca06e1b4b4f00a7382fdf634554c",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:5",
+      "title": "Let`s play twister!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "4d56d4fba452743bd7ad0e1d2cf42474df0fc8fe2a4ab41a1aa9325abe186ed3",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:7",
+      "title": "What shall we do now?",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "1f645d93ba311f1f53834a0839b27f67973b5970a349980ff07a17da4b425d27",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:7",
+      "title": "What shall we do now?",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "5a585c7e6f4d80c77a7ac494357b24085753e2362412c616e8801066b3cc6800",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:9",
+      "title": "JUST JOUSTING AROUND",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "a05f28f1357d8f67444bf055711c5ac1bda9433e0af9833c61ec2a7aaab36b1c",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "6:9",
+      "title": "JUST JOUSTING AROUND",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "a1192974a849b9b993b230c7ad99e4f8de3272eb03e28e3fd7d17c8259079958",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "7:7",
+      "title": "The Laws of Tradition",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "42aae394a3968c0bd31d7269e94fdfe8e58cbfa5ef11f5c14bb6d5191ca15509",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "7:7",
+      "title": "The Laws of Tradition",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "61f091068a1739cfeffe4b214bf0c1d536ca40d2a43bb010ac1b422c7e3c2e54",
+      "savedTarget": 15
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "7:8",
+      "title": "22934",
+      "population": 2,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "f373a42bb2ecbef95368eb859027fb34a9c547dd852da56a724905d33cb85d1c",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "7:8",
+      "title": "22934",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "7d81eef88465c09df1e33968efbcd92fada55860cfa444a28e3a9be78ad27692",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:4",
+      "title": "Take Your Best Shot !",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "0e195f13000cca9612f6023eb9714d71185183a1aaa4d980a144f7332a4f6a3c",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:4",
+      "title": "Take Your Best Shot !",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "ab2d848b84439d91d80f480a4f4572ca3e5aa5d42eb4f563783e855a19e6b674",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:6",
+      "title": "SLIPPIN & SLIDING",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "76e3aa9ffebcd84ab771394a6a3e90a9cec7921d0e572b3b5af1786457904328",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:6",
+      "title": "SLIPPIN & SLIDING",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "eb6a1caeae3b77b7b72e31756c38e507d04b1d25ed3a18a648a45727cf49786b",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:8",
+      "title": "Its all up hill !",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "93b13f3cee60688ff3f9c5c88e5b7329dd9c38dd4700322a954d1355a88ee22c",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:8",
+      "title": "Its all up hill !",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "c1b9df27a820a944b4422bce799f0fd97a7f8150d3a29ba39e7c250684799310",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:9",
+      "title": "Stay Frosty",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "f9184267c4e61f48fb7d9994362cec967431081a427f584a50f46151ff397d42",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "8:9",
+      "title": "Stay Frosty",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "abb0e1f6cc7937db6bf1c74e184ebd66b48ca48b0c04ef0088e2e340a7c8a667",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:3",
+      "title": "The Pancake Factory.",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "ef66392988fbce42210c367651214a5f5e7c4277e52622f30c43ef862a3a98f5",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:3",
+      "title": "The Pancake Factory.",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "64f4430d609b93404bd868a19684aecbbafcdee3bd3d7f083db9399ea43bf849",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:4",
+      "title": "Swingadingding",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "98aca35a3777f31a12395558b16dd75a3e0009981888b31f8ff741ec6fc11670",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:4",
+      "title": "Swingadingding",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "210881aebf6263ba2bd921c1d36e142fd3a478e83c20abf8e7ca9430647b9c2e",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:6",
+      "title": "Fritbatter Frolics!",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "e46402f6e0183b6b46df782c9f52f6f8b5414a4576468aaafe7179739af0fae1",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:6",
+      "title": "Fritbatter Frolics!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "581b991537f117dcd8ebe893089920d0ea015e769afe7d592a9e6d37a4a9477c",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:7",
+      "title": "Goossen`s Inferno!",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "ce210e10baf7d39d02cd768261da3c9081c0ad9d9178eb075930dc4ba8111146",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:7",
+      "title": "Goossen`s Inferno!",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "363847911f98362923a19f734e69236dfb77b3e6295e13f95483714fb72f94a5",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:8",
+      "title": "SPINNY THANG....",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "a3262b93313c779f5171996601972ec2e3502c0791ffb843c4d7f3aeffd480dd",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:8",
+      "title": "SPINNY THANG....",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "2c0efe7e055a18cbb44c84b36fa7947d760da691ab9f68b2b5b3d5fd91ef7552",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:9",
+      "title": "Moonswings",
+      "population": 1,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "80442f1cad5f50946c9e26c2ae7c17c8fc907dacbade45719a812e59c64e353c",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings2",
+      "packID": "tribes",
+      "levelID": "9:9",
+      "title": "Moonswings",
+      "population": 60,
+      "rulesetVersion": "l2-native-v1",
+      "conditionSHA256": "926807c0d5d417f1117e92f12b31a14e91a89b87e93d56c5d0244a576130dbf4",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "1",
+      "title": "Classic 1",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "c52ebceb798ec9e1e18bbfab80427f66738c7997f6bbc9e122a4989aa64474cb",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "10",
+      "title": "Classic 10",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "5ff0acfde35c788a64986063acf519c9d0b74c6a89deb97d4d14dc117a9b638c",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "101",
+      "title": "Shadow 1",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "25a7614094c69747f566e72241e46618c8ffd3c5aa7c159ae2c8192f34dccf0f",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "102",
+      "title": "Shadow 2",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "2da98b4f05210e03bb5c572a45d84bc9f753cb0e3afe1a8b67b9f496fcf92cb5",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "103",
+      "title": "Shadow 3",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "d14b6a956c56c79114b65b9ced0f580507e5ddb38cbee44f96075aa5162cd2d4",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "104",
+      "title": "Shadow 4",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "07712ad7a5d82ab5e8bc958ba3561db96916dcea01b93d3ae49eca7967267f16",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "105",
+      "title": "Shadow 5",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "d4d6ec5181c5c8acd78ee6898693259a296ed3dccf2600da4ead3ba682da1085",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "106",
+      "title": "Shadow 6",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "a90398e4215b930712543dd7bbc568302e0f4dbad3be846398dc9065cb71af55",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "108",
+      "title": "Shadow 8",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "4b9afd07687864fa51151eb48369a7df739240d34d903e446de25afb50ebdfed",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "109",
+      "title": "Shadow 9",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "96fed88ffb31ede05ee5add135bdb4b6d5664d0836539d87491bbf2011c48457",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "11",
+      "title": "Classic 11",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "95137f8aca92894d937d0f1bb1878a31e5f1c4f70bd46014a3adffec6b8a4887",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "110",
+      "title": "Shadow 10",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "9e4a24940a37e9c19c04c696f9b45a16b275dbece69628cc4b60cd2de425f3a6",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "111",
+      "title": "Shadow 11",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "31b3783eda13106649bed00e0b63f726291683a2bd5106045b7eb4d13049d8a5",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "112",
+      "title": "Shadow 12",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "6adabcbe83c2901f57ef2419688bb22e1b095cdc5b9f2dd34a7c59dbdac0f45a",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "113",
+      "title": "Shadow 13",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "c8476b205ffef29036125ae1e29421bfdf692f26a7e1f29da614be6c383ba451",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "114",
+      "title": "Shadow 14",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "dbc376c934d3ce130583017ecaabc9574e33f8fa9bc328ad7b84dc0f3dffedf3",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "115",
+      "title": "Shadow 15",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "14878d852d196637167b81871f05ce0ac0511f117c4b4ef30ba93fa06c1a017d",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "116",
+      "title": "Shadow 16",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "72b4e36f79087babc9e6d916a73e8ab2ab0479f761112209d5369426e0556668",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "117",
+      "title": "Shadow 17",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "d67c3f15ce67a940350f213a317ef31f1d18455aea05dbb17c95a0f32111bde4",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "118",
+      "title": "Shadow 18",
+      "population": 28,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "5dfea1f6c35572fa871e9e08b0498ba5c680fb306e06a7eb1bc7d24abb008973",
+      "savedTarget": 18
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "119",
+      "title": "Shadow 19",
+      "population": 24,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "adceae7c25ee7fdac8af3430f0f7cc0ee94cb476204beb518a21e5aac349d545",
+      "savedTarget": 14
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "12",
+      "title": "Classic 12",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "e8fc76c86be0d046d5a45575d25615147e4a14a16f66a9041b2e714d14af0b9e",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "120",
+      "title": "Shadow 20",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "62b8b2c636df685c753dc60f6c979ca61efda8ab3621bf14bc9b2fa4e8d83685",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "121",
+      "title": "Shadow 21",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "99591cfeeed2d5f44a8021f375a193895e0dc674e18bff18b73d48a17c0fa5f5",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "122",
+      "title": "Shadow 22",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "e5afc2e92e90b2687413d26ab4376abd7a1d856a56641b5f151bed5944446787",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "123",
+      "title": "Shadow 23",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "4f5886deb282774cc929837371cacef05bb67840131f37bde81da4cce42f5a42",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "124",
+      "title": "Shadow 24",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "c384894a512ab7d8ef530b407edf011a39a0bf5a8c4bee33e064a737f112a0a4",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "125",
+      "title": "Shadow 25",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "4fad97d85d4f6e48c92f2f7741bbab7336ee9cfaefff138961a77fb71996c402",
+      "savedTarget": 3
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "126",
+      "title": "Shadow 26",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "ee44fdc17f29878f4d91e32d14445c3429ab51e1992117394388ffd9015af870",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "127",
+      "title": "Shadow 27",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "2a53d783f8156aca0b27d392221f91f362b02d0f8bf8a39b65e4db20565ddbad",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "128",
+      "title": "Shadow 28",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "c2d89e4d30acea9851efae3c2652a05c635e938b074c0801685bfaf241907619",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "129",
+      "title": "Shadow 29",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "7aea64914f521878e4f6ad9250a58c089882167593dfc51ef102f9a882fdffd9",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "13",
+      "title": "Classic 13",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "c8ec82c5af2a1ad16aecaf90b694113597b9ff9d50ab46a56a43db773dce812d",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "130",
+      "title": "Shadow 30",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "6b12e01287fe6b0ca5f79fd0663dcfe3fc215fc2f8d4f4c81eedb75193ed682a",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "14",
+      "title": "Classic 14",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "f94ba77de8762b9ce5a58220433ab0ea501c32595da13e46251753b08cd51621",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "15",
+      "title": "Classic 15",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "4b1061f753500c2cf02bc53f886e34607f948dc4aa968291f98cbcd8efd7237d",
+      "savedTarget": 13
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "16",
+      "title": "Classic 16",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "2e391916b296cb1fee791c4da0a09c31ee240175db35124dc344286366cb4d40",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "17",
+      "title": "Classic 17",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "4ddc99c78b0bad3605e29b23b519e7eed154c2c83e6ea08f2c00aa21bba00ee8",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "18",
+      "title": "Classic 18",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "27fbc18fdae4ca4584b4df29b48524bc5810cbd2a4521dfc68b9739c002472b0",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "19",
+      "title": "Classic 19",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "c27a6ea0716305e0e982429914d33bf2442b27207be2ebffc999eac875ef99c2",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "2",
+      "title": "Classic 2",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "82246bb7b31ed650e95574e93c714c5c2ed39bef470b3a63bda953301b7f23be",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "20",
+      "title": "Classic 20",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "8f1ac740fe4061dbcb96f181349951bdbee7dc9d797b1fab0b7d0d8d69eca8cd",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "201",
+      "title": "Egyptian 1",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "5ccc3c4e34a2cad7bd9b0e0a098eac80aa8f3666ba7372da00a75815490c3428",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "202",
+      "title": "Egyptian 2",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "6b97bc682df06e07f3ec6908fa85b758254780320250d01584cac33796e6825a",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "203",
+      "title": "Egyptian 3",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "ca462f229f9ce6089216c9b9ed9201058b92883a255d784f89ebede4a699677d",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "204",
+      "title": "Egyptian 4",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "0e34b5f59f13fe1f15700ce1742c7bdd0973ca93dfd5479fbb8b795ea7966cbb",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "205",
+      "title": "Egyptian 5",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "eaf8c16e05d53da9d520ac9a7474fc4fbc9bdb8db7022e267ec64715f5c98773",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "207",
+      "title": "Egyptian 7",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "eb945f71e04da5b44cffefee0bb455bc6405b9e9d7bbc86db49dbc6a2bde1c21",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "208",
+      "title": "Egyptian 8",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "f82b49d74dd55cc8cb224308548d4a1d3e52558bb6e39165ba3cd71c71a48fa1",
+      "savedTarget": 5
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "209",
+      "title": "Egyptian 9",
+      "population": 24,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "95da766aeb57b290e777705e25afbeb04243a6727d02e4c7e911ff06aba47ed5",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "21",
+      "title": "Classic 21",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "58928c9e5d3e2df9030ff42839d7225cdac412eb693472515fc87afedecfe82c",
+      "savedTarget": 2
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "210",
+      "title": "Egyptian 10",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "9e55e7cafc6b304af93ba0784d8d941bec745ea5e372445e8356c9ad9d66c97d",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "211",
+      "title": "Egyptian 11",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "7b40bbef143b1f041c5914781b8e9d9bcd3c9a1f593ac1f469d12331644e36f3",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "212",
+      "title": "Egyptian 12",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "056bd89a1e94143a513920392ac736a1702581cfb4bd3542f4415e7cf75ad389",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "214",
+      "title": "Egyptian 14",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "4e27f4d0612daf0c477dc2551b3cea7a78c0c7166815a0d1e27ad6907613feb5",
+      "savedTarget": 13
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "215",
+      "title": "Egyptian 15",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "5f16645b72ec67d84c73df359289a504660df7202b420b3eb9ac283f4bd6a922",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "216",
+      "title": "Egyptian 16",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "0d8f758f1add61d26135dcffc0c6e72cf739f6f7e463b27cf0f2db174d8015fe",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "217",
+      "title": "Egyptian 17",
+      "population": 24,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "367eecbe68cc9320a4357493b0645404135d9ab834e27e6be6f1cf9d78f00a87",
+      "savedTarget": 14
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "218",
+      "title": "Egyptian 18",
+      "population": 28,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "7689a4cf44db5d93d7dc52353c7031ab90cabad8d6ba73038dbb1c76d88a2188",
+      "savedTarget": 18
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "219",
+      "title": "Egyptian 19",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "ec472bb4ad7140cc72fba1b6701308c7d1e6afe68097d353414e9819986ce35d",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "22",
+      "title": "Classic 22",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "26c4c837f524d6cb89f25da273dd48769d96874df65164825016ab70f707eb9b",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "220",
+      "title": "Egyptian 20",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "a3eba3f9259c82abe6026174dfca091dddd2fb297fbb364ff5d1f9ac745bd59b",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "221",
+      "title": "Egyptian 21",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "ad48fc6a0e45d5e696d3c2e8264fa11a8eb868f8deb1ac243b97830df6594816",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "222",
+      "title": "Egyptian 22",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "001b5fe732fee61f53104dc9a693c775cd3be9c612884108348dd758f19b9e07",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "223",
+      "title": "Egyptian 23",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "59d7c2fcb05e76523807bd23fb1a3cc71cfead1d5a53d219642b3daf25ba0c67",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "224",
+      "title": "Egyptian 24",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "8d9c21d044ec8fddbd45b310526900319cbedfa0cb80f713947bf706e051adb4",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "225",
+      "title": "Egyptian 25",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "5d8d9832045b313e27d6e9c6067ee8aa08c9a531380caee671b74e55b3c294e4",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "226",
+      "title": "Egyptian 26",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "6a9898ed71838b097b69e31267992eb2cdde55fb919f614ae3254b85eea0fc5f",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "227",
+      "title": "Egyptian 27",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "e6b06793cb8ee57310a83cb15a6ec989ef62378923c7170fce9229ea75c8dfb4",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "228",
+      "title": "Egyptian 28",
+      "population": 24,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "368afd2bf61660d1b3e7b3b19d5ad20e1113823309b39f931faabda6920d57d6",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "23",
+      "title": "Classic 23",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "ff13af8e063fcf66ace83ec395997702cf8de49e1d8be1d4a74ee2bbc22c8ab2",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "230",
+      "title": "Egyptian 30",
+      "population": 26,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "e639d31a60516c61744266471bf1b7e416b3b958dc2453f196c4d0c25c4a1ec4",
+      "savedTarget": 16
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "24",
+      "title": "Classic 24",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "8686d0cf498a779d815b6569b910d84b9d4646699624aa2b6012c7f5a4f8ae35",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "25",
+      "title": "Classic 25",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "f3cf65c259e86d297b9cfc5d158ac0f89516e862d4c10acc89ae683dc3bef5dc",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "26",
+      "title": "Classic 26",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "102f5353935dc39d3d19daab7fd4ca6ad1e6d06bd67b443a38849170cc5f155f",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "27",
+      "title": "Classic 27",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "12faa6e53b85cd1e1c95523013a050e76b16c72828ed2e00e629d2da15b8fbbc",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "28",
+      "title": "Classic 28",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "bf9c9e1a25b34be2a43c8707e8f1c4921519143e99b3d0071783f07b365f8fd1",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "29",
+      "title": "Classic 29",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "3a488804e3d6b25a071fc4acede8a3702a77221d2cdd306618fa646d01fbc573",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "3",
+      "title": "Classic 3",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "6443038211ab7078f90553a67a335ea035f328467203f13a78d55f2df8764af8",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "30",
+      "title": "Classic 30",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "90d62fd821f56a4fc3800c3a5a93a4f85b87806d4badb49eaabd26256e33ccaa",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "4",
+      "title": "Classic 4",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "0d5cc947a753292bcdcb43b506a2d7859e49c8e4ab24e3e40ced6621976f12f6",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "5",
+      "title": "Classic 5",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "b93495972587bf677f2d279b02f70a5848c702339cedf72a09ad9153215f9828",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "6",
+      "title": "Classic 6",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "04e61e75f8d89fc312715286da56a0d60e6adf3b8c4f8398d10381c9ea2c67aa",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "7",
+      "title": "Classic 7",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "0422fe54839f2d5d6ae417a5440b50349317556e1fb8e99577c3aa41334131a6",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "8",
+      "title": "Classic 8",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "0efabb959ca9d2ebf2020d2c340a6f5520092d64fcfe7deead31381cdb39cc7a",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "9",
+      "title": "Classic 9",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v2",
+      "conditionSHA256": "bc93b22978062fc26d4792efdaceb3267f7a806c91c4d602261f359599c02003",
+      "savedTarget": 10
+    }
+  ],
+  "removed": [
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "1",
+      "title": "Classic 1",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "c0e6615ef07c5b61def30f68c5d701d04e49277ac6dce295b35b2447e902479e",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "10",
+      "title": "Classic 10",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "1f3b09752dedb8eede30e95d057afe3005ac40f36b44c3dcc5b2ab82ef03d5b1",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "101",
+      "title": "Shadow 1",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "2de6db1e213f561e7b14369e28d9660c556799d96ec949848b7f3b7119258bf5",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "102",
+      "title": "Shadow 2",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "8d2824abfe24f7cf4cb462adc98cd34b6bf7dab64014e67232510f849e7e86e8",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "103",
+      "title": "Shadow 3",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "c5dadae78787b08da4bdf15d7f100885429062a18addf35b45173d5c35d8c137",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "104",
+      "title": "Shadow 4",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "7061e4f1c9144d699c62b37f2cfb29ffc8bbde25019ead7b56445cadfc917c0c",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "105",
+      "title": "Shadow 5",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "a49a265b35d5f7dad8c96a78609f64ec98412b871bf9d9f3269446a3750af724",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "106",
+      "title": "Shadow 6",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "46cd4a7df5017fb5eabadb969c709c55ad8130bcbf01b9a8159304f97f72e7e2",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "107",
+      "title": "Shadow 7",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "b34c73b958ffa234bfcd810540313c395f2d48d5813d9022ca87f6fde09b2dd4",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "108",
+      "title": "Shadow 8",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "0106632bee5b0ea3d756adff8549061a7586c13d7fe100d1f62f95a0d85c2757",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "109",
+      "title": "Shadow 9",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "6ff6afe8ea95c1fb1a2566f9a438e010899b19d4391e583d79419656961aa772",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "11",
+      "title": "Classic 11",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "8d540e2c35acacce698c7b9f519ba47957d8ac315462aeb951e680148450b5d2",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "110",
+      "title": "Shadow 10",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "fe3dc40e1160a21b10dcb97051c0df69ccfff9085041d213ba93158359bda3d8",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "111",
+      "title": "Shadow 11",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "263bd778b07b91724bd67a59df7bc44bedb15da321c16614a1ebaf6dfacff8d4",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "112",
+      "title": "Shadow 12",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "a4ae2cc5fddfca96d373c204a982109afc037b1b24271482dd2e033d51af785a",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "113",
+      "title": "Shadow 13",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "3458d548c2b7b2badb08e876df988862dcb18f28b0df39b91d11d59845586d28",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "114",
+      "title": "Shadow 14",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "fe8e1d8f06ce5b3ac44b0dc496ec56b7b88fa7e84de1df87fce37754785ece0a",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "115",
+      "title": "Shadow 15",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "8c049042a06848bf91aa634ab8dd227468854dd8e3f48ad3bb727d44977cb881",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "116",
+      "title": "Shadow 16",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "c66a84656571e12ab3af52a2d01be65837cfdb00ba9c18c3d818cba1a0431e82",
+      "savedTarget": 8
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "117",
+      "title": "Shadow 17",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "951ba8d6a7760b756ac1016d577535825713b38ecfb5b500e63d84b8d23d919f",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "118",
+      "title": "Shadow 18",
+      "population": 28,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "9df1ba69a09668c9cfb1cfc76f6360f8cc85aee2da9c8e21b092d3c39ef0b081",
+      "savedTarget": 2
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "119",
+      "title": "Shadow 19",
+      "population": 24,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "3dd1a5f9fdece65aaeffb1ea54d56bf7892305007fbe2d5781c44ee856148780",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "12",
+      "title": "Classic 12",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "b738ab6f51276cd15b818d516cdc1e8bb72ee22edbd207129a1d760c149da2d3",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "120",
+      "title": "Shadow 20",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "3f129d3f7907ea2449b475cb8435ecf1e6bb1ddadd187253a3ed8a19a8c965fa",
+      "savedTarget": 3
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "13",
+      "title": "Classic 13",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "975ff11dc32c05d8e41cd6737ae5cd59e21a27337c5189c461b10743249c8160",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "14",
+      "title": "Classic 14",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "69b14f5c86bbda93956cb3d6692a4c5a471dfe7d0a48b11854cb66e745092f28",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "15",
+      "title": "Classic 15",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "b7c967f02db37a73837d84650238116fc781f05b61ae621e40bf8b0461956144",
+      "savedTarget": 13
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "16",
+      "title": "Classic 16",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "0aaddb4dacb5015bcf45463e88b05fe2ebd0f67204998ac7e96d744fb4a619eb",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "17",
+      "title": "Classic 17",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "45fc689745e34261e0eaed50b97c1998e48597ba5486acba658b4e228e4a9f9a",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "18",
+      "title": "Classic 18",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "1b5e2205c3e8e7ba38915d3de086dfb2494927ab5704d577babe70217201b5c2",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "19",
+      "title": "Classic 19",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "036a8e84894e04effc438237fecab73fdfcca8247f780acac2f02da57df9e14e",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "2",
+      "title": "Classic 2",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "110c9b8fbd58a083dfa741d92eb16f3d9f8b2901ff60e764a47762e124084262",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "20",
+      "title": "Classic 20",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "64af34099c50e28442593ebf1d3c766cf5dbb34c29e6e6276bd2ff9999968377",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "201",
+      "title": "Egyptian 1",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "24fd7738a413c18dd2ee7712eaf7e35c4cf8494d376ee05a40fd8e22546d6a70",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "202",
+      "title": "Egyptian 2",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "b3fb7ead470068dc6a95910620a9cdf36783ab3460104af5623b8e3aa7008e0c",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "203",
+      "title": "Egyptian 3",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "24c38629204f9f0ca165f6d0b96228b296c542c6dd0790379594190f136b6828",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "204",
+      "title": "Egyptian 4",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "aa2e7ddfc9bb41b8a1e7f597454295e94ef6304453a6ffabe89e66a3e768464b",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "205",
+      "title": "Egyptian 5",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "1750fb5ee9e0bec16ae2081c8a8487414cd7c7a40ea96ba439df771a4b72dd02",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "206",
+      "title": "Egyptian 6",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "0eb91f2316b9efc8f3abb4d00bcc76c162c2a9fe70bd8d043f3794e094ecc390",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "207",
+      "title": "Egyptian 7",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "e35b440032f6ac8baf21ce8bfe2688f414f65fcc750627786f9a76c8bfad796b",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "208",
+      "title": "Egyptian 8",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "d59bfde55787fc45a238595e14a457bba8015b8d7ea045cd9fbefa898553c68d",
+      "savedTarget": 5
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "209",
+      "title": "Egyptian 9",
+      "population": 24,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "13696979aa087d597eaeebbffc30dd4db89d259fa868df558dabcac7a180a2ba",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "21",
+      "title": "Classic 21",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "01b2de58d4c918b1110c6a3db3e4563775affe36524c85da755a2cc1867b19c6",
+      "savedTarget": 2
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "210",
+      "title": "Egyptian 10",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "b7ae33fe1e0910135e4207b855d44c71c54117aecaaa1662580f598c7081742a",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "211",
+      "title": "Egyptian 11",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "d040f4f6af2a5acdec76e3148efc1f11acb83fa53cdcaea2e1b5e9ab562e7ecc",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "212",
+      "title": "Egyptian 12",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "7b2fc4a502dd1ce292d4babf9836e26fa1b0a66ac20dbfd6fb7aa7c76a945e13",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "213",
+      "title": "Egyptian 13",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "3b65fbc19aa097328b36fcda9591883f29217c5b230bff0c854a44074acb8546",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "214",
+      "title": "Egyptian 14",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "c81d2fdf72cd700da53894052a2e2f5229038824296269fd0f5cc5d140c9536a",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "215",
+      "title": "Egyptian 15",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "8286b03580ff1ea289d674f1de11035546a24a465c20f175bda23aef53491f64",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "216",
+      "title": "Egyptian 16",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "c59cf4d20d0c6b1d1ab574bc79f6b8fc3ed31347e16ca6f518823abce5a6b28d",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "217",
+      "title": "Egyptian 17",
+      "population": 24,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "d8535b3773a26f742978ecacdfea25b85670f074b3e29368fbeaede92a2fc964",
+      "savedTarget": 4
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "218",
+      "title": "Egyptian 18",
+      "population": 28,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "aa7d4909ede90aa406d8ca4eb9362b087822c301f7d8f91a90e870c49125506f",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "219",
+      "title": "Egyptian 19",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "381d5b01eb75014a312539228b3c667f6eac18faae4334ed81798acd32131d06",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "22",
+      "title": "Classic 22",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "c4b950150c14261079cc363f886d1443fd253aa16aa0bb30975b92a157163b7f",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "220",
+      "title": "Egyptian 20",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "78985b477ddca2d07a9ee07f7c9828545847b328f7ab947e771c73113989cc64",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "221",
+      "title": "Egyptian 21",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "25e9d8a0aacfdd3b56c041cfdd801e1a2391899997a0d7b1bb79797cb1816447",
+      "savedTarget": 2
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "222",
+      "title": "Egyptian 22",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "30e170cf39b52485ec4eee5e17ddea8e62934ea840d83e63d2862d16b3607b44",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "223",
+      "title": "Egyptian 23",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "5d16c6b820dc04229703b69acd9fa8c49ad54255c2f586072e631255e3494b42",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "225",
+      "title": "Egyptian 25",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "387535505396c28e5b94c78b09aaf0b72ca01f1cd6a4062acd4061734996952d",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "226",
+      "title": "Egyptian 26",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "7c47a86b96cc408665905b7f017de0d61b08c7d8fcd109a2f487b2445e31dc9c",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "228",
+      "title": "Egyptian 28",
+      "population": 24,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "9990c99525dfde4fcf35af872d815d3c8ebe589ebd125770c16b1f1de532b563",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "229",
+      "title": "Egyptian 29",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "ff50d6bc1c38f26ec3ebefd77a94c26b8c837a4dc49b7e7fbc349e802679e08d",
+      "savedTarget": 2
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "23",
+      "title": "Classic 23",
+      "population": 23,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "ca0153d6a4668a0aa70e49b33aa0df3adeec2d4875c92a98e62adb3d7e6bd2e2",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "230",
+      "title": "Egyptian 30",
+      "population": 26,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "f5ced757b054e0ff13d55c80387fe9e11c58b255b1a34fe6a8fdbe4cb0b88179",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "24",
+      "title": "Classic 24",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "e65e9e8c4e37eb6be4c2f05e107274b3c702b48ff2bc62dd59aa47c00dc30a61",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "25",
+      "title": "Classic 25",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "4075d3e1d0958f43ba2fa0f808af55a6a49b975f829a4f40161bc9c708bba78e",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "29",
+      "title": "Classic 29",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "24b4cadbb001b31449f72a7ab9bb9b7e9cf8b55c679124336ba592d1a9ec85e5",
+      "savedTarget": 1
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "3",
+      "title": "Classic 3",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "1b3b36c24b1f6cf806b4703dd037eea89cb99a01dd473cd4f944d746b25d6879",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "4",
+      "title": "Classic 4",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "2e6a1094578c4c47f818a27c61ddebea7ad835e2d95143cc2c89c7f275956686",
+      "savedTarget": 12
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "5",
+      "title": "Classic 5",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "ccff22697163bccea20f3bf05470858244b00d18ca9b0f138b49f91611688405",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "6",
+      "title": "Classic 6",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "4cd6b09bdd700bc5325085e281801a051e4479e6e6b03f5bbbd53d57ba8e3cc1",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "7",
+      "title": "Classic 7",
+      "population": 20,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "caa01cfd2ceb60a6944997881c0392cd2ca543d4639dd90db19a5b050a3ae3d4",
+      "savedTarget": 10
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "8",
+      "title": "Classic 8",
+      "population": 22,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "3de756b1ea196829def92e2f594242cb687c0b9957c31876ad39514796a9ed14",
+      "savedTarget": 11
+    },
+    {
+      "gameID": "lemmings3",
+      "packID": "chronicles",
+      "levelID": "9",
+      "title": "Classic 9",
+      "population": 21,
+      "rulesetVersion": "l3-native-preview-v1",
+      "conditionSHA256": "6da112b90b40e6af7a980d4fc530638deb1db81284c0b04454044e328cdb7b4d",
+      "savedTarget": 10
+    }
+  ]
+}
