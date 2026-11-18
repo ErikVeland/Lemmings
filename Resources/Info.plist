@@ -33,9 +33,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.2</string>
+	<string>2.4.3</string>
 	<key>CFBundleVersion</key>
-	<string>97</string>
+	<string>107</string>
 	<key>CloudLibraryCloudKitEnabled</key>
 	<false/>
 	<key>CloudLibraryURL</key>
@@ -68,8 +68,18 @@
 	<integer>3600</integer>
 	<key>SUVerifyUpdateBeforeExtraction</key>
 	<true/>
-	<key>NSCalendarsUsageDescription</key><string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
-	<key>NSCalendarsFullAccessUsageDescription</key><string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
-	<key>CFBundleURLTypes</key><array><dict><key>CFBundleURLSchemes</key><array><string>ultimatelemmings</string></array></dict></array>
+	<key>NSCalendarsUsageDescription</key>
+	<string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>The Desk Clock shows your next event on the signpost. Lemmings cannot change your calendar.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ultimatelemmings</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

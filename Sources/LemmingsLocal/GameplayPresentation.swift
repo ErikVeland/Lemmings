@@ -1,13 +1,16 @@
+#if os(macOS)
 import AppKit
 import NxlvKit
+import LemmingsGameArt
 
 /// Afterimages follow moving actors. Solid sprites stay sharp.
 @MainActor final class SpeedTrails {
   static let maximumTrails = 24
   var multiplier: Double = 3
   private struct TrailKey: Hashable {
-    let direction: Int, pixelX: Int, pixelY: Int, tier: Int
+    let direction: Int, pixelX: Int, pixelY: Int, tier: Int, echoes: Int
     let mirrored: Bool
+    let sharp: Bool
     var motion: CGVector {
       let angle = CGFloat(direction) * .pi / 8
       let dx = cos(angle), dy = sin(angle)
@@ -36,6 +39,8 @@ import NxlvKit
   private final class SpriteTrails {
     let source: CGImage
     var images: [TrailKey: TrailImage] = [:]
+    var order: [TrailKey] = []
+    var byteCost = 0
     init(source: CGImage) { self.source = source }
   }
   private let sprites = NSCache<NSImage, SpriteTrails>()
@@ -43,12 +48,47 @@ import NxlvKit
   private var clip = CGRect.zero
   private var occupiedCells: UInt64 = 0
   private var lastTick: Int?
+  private var rewindOrigin: [Int: Actor] = [:]
+  private var rewindUntil: TimeInterval = 0
+  private var rewindExpiry: Task<Void, Never>?
+  var isRewinding: Bool { ProcessInfo.processInfo.systemUptime < rewindUntil }
+
+  /// Capture positions, without rendering or copying the playfield.
+  func prepareRewind(actors: [Actor]) {
+    rewindOrigin = Dictionary(uniqueKeysWithValues: actors.map { ($0.id, $0) })
+  }
+
+  /// A fresh impulse replaces the previous one, including during rapid key repeats.
+  func finishRewind(tick: Int, actors: [Actor], redraw: @escaping @MainActor () -> Void) {
+    let origin = rewindOrigin
+    reset()
+    lastTick = tick
+    for actor in actors {
+      guard let previous = origin[actor.id] else { continue }
+      let delta = CGVector(dx: actor.position.x - previous.position.x,
+                           dy: actor.position.y - previous.position.y)
+      guard delta != .zero else { continue }
+      currentPositions[actor.id] = MotionSample(actor: actor, steps: [], motion: delta,
+        direction: Self.direction(for: delta, retaining: nil))
+    }
+    rewindUntil = ProcessInfo.processInfo.systemUptime + 0.16
+    rewindExpiry = Task { [weak self] in
+      try? await Task.sleep(nanoseconds: 160_000_000)
+      guard !Task.isCancelled else { return }
+      self?.reset()
+      redraw()
+    }
+  }
   private var currentPositions: [Int: MotionSample] = [:]
   private(set) var drawnTrailCount = 0
 
-  init() { sprites.countLimit = 128 }
+  init() { sprites.countLimit = 128; sprites.totalCostLimit = 32 * 1024 * 1024 }
 
   func reset() {
+    rewindExpiry?.cancel()
+    rewindExpiry = nil
+    rewindUntil = 0
+    rewindOrigin.removeAll(keepingCapacity: true)
     drawingContext = nil
     occupiedCells = 0
     drawnTrailCount = 0
@@ -59,6 +99,8 @@ import NxlvKit
   /// Sample once per game tick, independently of live redraws and movie capture.
   func update(tick: Int, enabled: Bool, actors: [Actor]) {
     guard enabled else { reset(); return }
+    if isRewinding && tick == lastTick { return }
+    if rewindUntil > 0 { reset() }
     if let lastTick, tick < lastTick || tick - lastTick > 8 { reset() }
     if tick == lastTick {
       if actors.count == currentPositions.count,
@@ -131,7 +173,7 @@ import NxlvKit
 
   func drawBehind(actor: Int, sprite: NSImage, in rect: CGRect, motion: CGVector,
     pixelSize: CGSize, mirrored: Bool = false) {
-    guard let context = drawingContext, drawnTrailCount < Self.maximumTrails,
+    guard let context = drawingContext, drawnTrailCount < MacFXPerformance.shared.presentation.trailLimit,
       rect.width > 0, rect.height > 0, rect.intersects(clip),
       pixelSize.width > 0, pixelSize.height > 0,
       motion.dx != 0 || motion.dy != 0 else { return }
@@ -152,7 +194,8 @@ import NxlvKit
     }
     // Sixteen cached angles retain slopes without generating a texture for every velocity.
     let direction = currentPositions[actor]?.direction ?? Self.direction(for: motion, retaining: nil)
-    let speed = min(10, max(2, multiplier))
+    let sharp = isRewinding
+    let speed = sharp ? 3 : min(10, max(2, multiplier))
     let upper = Self.tiers.firstIndex(where: { $0 >= speed }) ?? 3
     let lower = max(0, upper - 1)
     let blend = upper == lower ? 1 : (speed - Self.tiers[lower]) / (Self.tiers[upper] - Self.tiers[lower])
@@ -165,12 +208,17 @@ import NxlvKit
       let key = TrailKey(direction: direction,
         pixelX: max(1, Int((pixelSize.width * CGFloat(cached.source.width) / rect.width).rounded())),
         pixelY: max(1, Int((pixelSize.height * CGFloat(cached.source.height) / rect.height).rounded())),
-        tier: tier, mirrored: mirrored)
+        tier: tier, echoes: MacFXPerformance.shared.presentation.trailEchoLimit, mirrored: mirrored, sharp: sharp)
       let trail: TrailImage
       if let existing = cached.images[key] { trail = existing }
       else {
         guard let image = Self.makeTrail(source: cached.source, key: key) else { continue }
-        cached.images[key] = image
+        if cached.order.count == 96, let removed = cached.images.removeValue(forKey: cached.order.removeFirst()) {
+          cached.byteCost -= removed.image.bytesPerRow * removed.image.height
+        }
+        cached.images[key] = image; cached.order.append(key)
+        cached.byteCost += image.image.bytesPerRow * image.image.height
+        sprites.setObject(cached, forKey: sprite, cost: cached.byteCost)
         trail = image
       }
       let scaleX = rect.width / CGFloat(cached.source.width)
@@ -193,7 +241,7 @@ import NxlvKit
   private static func makeTrail(source: CGImage, key: TrailKey) -> TrailImage? {
     let motion = key.motion
     let dx = motion.dx * CGFloat(key.pixelX), dy = motion.dy * CGFloat(key.pixelY)
-    let distances = Self.distances[key.tier]
+    let distances = Array((key.sharp ? [CGFloat(3), 8, 14] : Self.distances[key.tier]).prefix(key.echoes))
     let reach = distances.last! + 2 + CGFloat(key.tier)
     let paddingX = CGFloat(key.pixelX) * 5, paddingY = CGFloat(key.pixelY) * 5
     let width = source.width + Int(ceil(abs(dx) * reach) + 2 * paddingX)
@@ -204,17 +252,20 @@ import NxlvKit
     context.translateBy(x: 0, y: CGFloat(height))
     context.scaleBy(x: 1, y: -1)
     context.setBlendMode(.plusLighter)
-    context.interpolationQuality = .low
+    context.interpolationQuality = key.sharp ? .none : .low
     let origin = CGPoint(x: ceil(max(0, dx) * reach) + paddingX, y: ceil(max(0, dy) * reach) + paddingY)
     func echo(distance: CGFloat, stretch: CGFloat, alpha: CGFloat, offset: CGPoint) {
-      let rect = CGRect(x: origin.x - dx * distance - max(0, dx * stretch) + offset.x,
+      var rect = CGRect(x: origin.x - dx * distance - max(0, dx * stretch) + offset.x,
         y: origin.y - dy * distance - max(0, dy * stretch) + offset.y,
         width: CGFloat(source.width) + abs(dx * stretch),
         height: CGFloat(source.height) + abs(dy * stretch))
+      if key.sharp { rect.origin.x = rect.origin.x.rounded(); rect.origin.y = rect.origin.y.rounded() }
       context.saveGState()
       context.setAlpha(alpha)
-      context.setShadow(offset: .zero, blur: CGFloat(max(key.pixelX, key.pixelY)) * 0.7,
-        color: CGColor(red: 0.1, green: 0.7, blue: 1, alpha: 0.65))
+      if !key.sharp {
+        context.setShadow(offset: .zero, blur: CGFloat(max(key.pixelX, key.pixelY)) * 0.7,
+          color: CGColor(red: 0.1, green: 0.7, blue: 1, alpha: 0.65))
+      }
       context.translateBy(x: key.mirrored ? rect.maxX : rect.minX, y: rect.maxY)
       context.scaleBy(x: key.mirrored ? -1 : 1, y: -1)
       context.draw(source, in: CGRect(origin: .zero, size: rect.size))
@@ -225,7 +276,11 @@ import NxlvKit
     let samples: [(CGFloat, CGFloat)] = [(-1, 0.25), (0, 0.5), (1, 0.25)]
     let farAlpha: CGFloat = [0.18, 0.13, 0.09, 0.055][key.tier]
     for (index, distance) in distances.enumerated().reversed() {
-      let progress = CGFloat(index) / CGFloat(distances.count - 1)
+      let progress = CGFloat(index) / CGFloat(max(1, distances.count - 1))
+      if key.sharp {
+        echo(distance: distance, stretch: 0, alpha: [CGFloat(0.22), 0.12, 0.05][index], offset: .zero)
+        continue
+      }
       let blur = 0.25 + progress * (0.5 + CGFloat(key.tier) * 0.5)
       let alpha = 0.46 * pow(farAlpha / 0.46, progress)
       let stretch = 0.5 + progress * (1.5 + CGFloat(key.tier))
@@ -248,127 +303,210 @@ import NxlvKit
   }
 }
 
-/// A compact pixel face for installations without the Macintosh menu artwork.
+/// Prefer Lemmings lettering. The compact face is reserved for tiny HUD text or missing artwork.
 @MainActor enum GamePixelText {
-  private static let columns: [Character: [UInt8]] = [
-    "A":[126,9,9,9,126], "B":[127,73,73,73,54], "C":[62,65,65,65,34],
-    "D":[127,65,65,34,28], "E":[127,73,73,73,65], "F":[127,9,9,9,1],
-    "G":[62,65,73,73,122], "H":[127,8,8,8,127], "I":[0,65,127,65,0],
-    "J":[32,64,65,63,1], "K":[127,8,20,34,65], "L":[127,64,64,64,64],
-    "M":[127,2,12,2,127], "N":[127,4,8,16,127], "O":[62,65,65,65,62],
-    "P":[127,9,9,9,6], "Q":[62,65,81,33,94], "R":[127,9,25,41,70],
-    "S":[70,73,73,73,49], "T":[1,1,127,1,1], "U":[63,64,64,64,63],
-    "V":[31,32,64,32,31], "W":[63,64,56,64,63], "X":[99,20,8,20,99],
-    "Y":[3,4,120,4,3], "Z":[97,81,73,69,67], "z":[0,68,100,84,76],
-    "0":[62,81,73,69,62], "1":[0,66,127,64,0], "2":[98,81,73,73,70],
-    "3":[34,65,73,73,54], "4":[24,20,18,127,16], "5":[39,69,69,69,57],
-    "6":[60,74,73,73,48], "7":[1,113,9,5,3], "8":[54,73,73,73,54],
-    "9":[6,73,73,41,30], ":":[0,54,54,0,0], ".":[0,96,96,0,0],
-    "-" :[8,8,8,8,8], "+":[8,8,62,8,8], "/":[32,16,8,4,2],
-    "*" :[20,8,62,8,20], "%":[99,19,8,100,99], "(" :[0,28,34,65,0],
-    ")":[0,65,34,28,0], "'" :[0,3,0,0,0], "!" :[0,0,95,0,0],
-    ",":[0,64,48,0,0], "<":[8,20,34,65,0], ">":[0,65,34,20,8],
-    "∞" :[28,34,28,34,28], "💀":[14,123,63,123,14],
-    "?" :[2,1,81,9,6], "=" :[20,20,20,20,20]]
   static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3,
                    highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue,
-                   preservesCase: Bool = false, color: NSColor? = nil, alignment: NSTextAlignment = .center) {
-    if GameTypography.drawInterfaceText(text, in: rect, alignment: alignment, maxScale: maxScale,
-      palette: palette, highlighted: highlighted, preservesCase: preservesCase, color: color) { return }
+                   preservesCase: Bool = false, color: NSColor? = nil,
+                   numberPalette: MacInterfaceRenderer.Palette? = nil, alignment: NSTextAlignment = .center) {
+    if let context = NSGraphicsContext.current?.cgContext,
+       GameLemmingsTypography.draw(text, in: rect, height: min(rect.height, 7 * maxScale),
+        interface: GameMenuArtwork.renderer()?.interface,
+        palette: palette == .green ? .green : palette == .monochrome ? .monochrome : .blue,
+        alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
+        color: color?.cgColor, highlighted: highlighted,
+        numberPalette: numberPalette.map { $0 == .green ? .green : $0 == .monochrome ? .monochrome : .blue },
+        preservesCase: preservesCase, context: context) { return }
     let source = text.replacingOccurrences(of: "×", with: "X")
-    let normalized = preservesCase ? source : source.uppercased()
-    let scale = max(1, min(maxScale, floor(min(rect.height / 7, rect.width / CGFloat(max(1, normalized.count * 6))))))
-    let width = CGFloat(max(0, normalized.count * 6 - 1)) * scale
-    let start: CGFloat
-    switch alignment {
-    case .left, .natural, .justified: start = floor(rect.minX)
-    case .right: start = floor(rect.maxX - width)
-    default: start = floor(rect.midX - width / 2)
-    }
-    let top = floor(rect.midY - 3.5 * scale)
+    let normalized = preservesCase ? source.precomposedStringWithCanonicalMapping : BitmapLatinGlyphs.uppercase(source, locale: L10n.interface.locale)
+    let bounds = GamePixelTypography.verticalBounds(of: normalized)
+    let height = CGFloat(bounds.bottom - bounds.top)
+    let horizontal = GamePixelTypography.horizontalBounds(of: normalized)
+    let width = max(1, horizontal.right - horizontal.left)
+    let scale = max(1, min(maxScale, floor(min(rect.height / height, rect.width / CGFloat(width + 1)))))
+    let origin = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - CGFloat(width) * scale : rect.midX - CGFloat(width) * scale / 2
+    let start = floor(origin) - CGFloat(horizontal.left) * scale
+    let top = floor(rect.midY - height * scale / 2) - CGFloat(bounds.top) * scale
     let context = NSGraphicsContext.current?.cgContext
     context?.saveGState()
     context?.setShouldAntialias(false)
+    let device = context?.convertToDeviceSpace(CGSize(width: 1, height: 1)) ?? CGSize(width: 1, height: 1)
+    let borderX = 1 / max(1, abs(device.width)), borderY = 1 / max(1, abs(device.height))
+    context?.clip(to: rect.insetBy(dx: -borderX, dy: -borderY))
     defer { context?.restoreGState() }
-    (color ?? (palette == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
+    (color ?? (palette == .monochrome ? .white : palette == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
       : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1))).setFill()
-    let highlightedIndex = highlighted.flatMap { normalized.firstIndex(of: $0) }.map { normalized.distance(from: normalized.startIndex, to: $0) }
-    for (index, character) in normalized.enumerated() {
-      if highlighted != nil {
+    let layout = GamePixelTypography.layout(normalized)
+    if let context {
+      context.saveGState(); context.setBlendMode(.overlay); context.setFillColor(CGColor(gray: 0, alpha: 0.8))
+      context.beginPath()
+      for item in layout {
+        guard let glyph = item.glyph, let mask = GamePixelTypography.monochromeMask(forSequence: item.sequence) else { continue }
+        for x in 0..<glyph.width { for y in 0..<glyph.height where mask[y * glyph.width + x] != 0 {
+          context.addRect(CGRect(x: start + CGFloat(item.x + glyph.x + x) * scale,
+            y: top + CGFloat(glyph.y + y) * scale, width: scale, height: scale).insetBy(dx: -borderX, dy: -borderY))
+        } }
+      }
+      context.fillPath(); context.restoreGState()
+    }
+    let highlightedIndex = highlighted.flatMap { character in layout.firstIndex { $0.sequence.contains(character) } }
+    for (index, item) in layout.enumerated() {
+      if let numberPalette {
+        let ink = item.sequence.allSatisfy { $0.isNumber || $0 == "," } ? numberPalette : palette
+        (ink == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
+          : ink == .monochrome ? .white : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1)).setFill()
+      }
+      if highlighted != nil && palette != .monochrome {
         (index == highlightedIndex
           ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
           : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1)).setFill()
       }
-      for (x, column) in (columns[character] ?? []).enumerated() {
-        for y in 0..<7 where column & (1 << y) != 0 {
-          CGRect(x: start + CGFloat(index * 6 + x) * scale,
-            y: top + CGFloat(y) * scale, width: scale, height: scale).fill()
+      guard let glyph = item.glyph, let mask = GamePixelTypography.monochromeMask(forSequence: item.sequence) else { continue }
+      for x in 0..<glyph.width {
+        for y in 0..<glyph.height where mask[y * glyph.width + x] != 0 {
+          CGRect(x: start + CGFloat(item.x + glyph.x + x) * scale,
+            y: top + CGFloat(glyph.y + y) * scale, width: scale, height: scale).fill()
         }
       }
+    }
+    if palette == .monochrome, let highlightedIndex {
+      let item = layout[highlightedIndex]
+      NSColor.white.setFill()
+      CGRect(x: start + CGFloat(item.x) * scale,
+        y: min(rect.maxY - 1, top + height * scale + 1), width: CGFloat(max(1, item.advance - 1)) * scale, height: 1).fill()
     }
   }
 }
 
 struct PrecisionZoomStatus: Equatable {
-  var zoom = 0
   var superzoom = 0
+  var skips = 0
+  var extraSkills = 0
+  var bonusSkillUsed = false
   var active: PrecisionZoomKind?
   var isEmpty = true
 
-  init(zoom: Int = 0, superzoom: Int = 0, active: PrecisionZoomKind? = nil,
+  init(superzoom: Int = 0, skips: Int = 0, extraSkills: Int = 0, bonusSkillUsed: Bool = false, active: PrecisionZoomKind? = nil,
        isEmpty: Bool = true) {
-    self.zoom = zoom
     self.superzoom = superzoom
+    self.skips = skips
+    self.extraSkills = extraSkills
+    self.bonusSkillUsed = bonusSkillUsed
     self.active = active
     self.isEmpty = isEmpty
   }
 
   var accessibility: String {
     guard !isEmpty else { return "" }
-    let state = active.map { $0 == .zoom ? "Zoom active" : "Superzoom active" } ?? "Zoom off"
-    return "Zoom, \(zoom) remaining. Superzoom, \(superzoom) remaining. \(state)"
+    let state = active.map { $0 == .zoom ? L10n.text("Zoom active") : L10n.text("Superzoom active") } ?? L10n.text("Zoom off")
+    return L10n.text("Superzoom, \(superzoom) remaining. \(skips) Level Skips. \(extraSkills) Bonus skills. \(state)")
+      + (bonusSkillUsed ? ". " + L10n.text("Bonus skill used") : "")
   }
 
-  @MainActor func size(scale: CGFloat = 1) -> CGSize {
-    guard !isEmpty else { return .zero }
+  enum Badge: String, CaseIterable {
+    case superzoom, skips, bonusSkill
+
+    var glyph: PanelGlyph {
+      switch self {
+      case .superzoom: return .superzoom
+      case .skips: return .levelSkip
+      case .bonusSkill: return .bonusSkill
+      }
+    }
+    var title: String {
+      switch self {
+      case .superzoom: return L10n.text("Superzoom")
+      case .skips: return L10n.text("Level Skips")
+      case .bonusSkill: return L10n.text("Bonus skill")
+      }
+    }
+  }
+
+  func count(for badge: Badge) -> Int {
+    switch badge {
+    case .superzoom: return superzoom
+    case .skips: return skips
+    case .bonusSkill: return extraSkills
+    }
+  }
+
+  func help(for badge: Badge, bonusSkillHelp: String) -> String {
+    var lines = [L10n.text("\(count(for: badge)) remaining")]
+    switch badge {
+    case .superzoom:
+      if active == .superzoom { lines.append(L10n.text("Superzoom active")) }
+      lines += [L10n.text("2× Superzoom at cursor, 0.5× time"),
+        L10n.text("Each start spends one Superzoom use") + " (Shift-Z)"]
+    case .skips:
+      lines.append(L10n.text("Spend one Level Skip in the journey menu to move past a level."))
+    case .bonusSkill:
+      if bonusSkillUsed { lines.append(L10n.text("Bonus skill used")) }
+      lines.append(bonusSkillHelp)
+    }
+    return lines.filter { !$0.isEmpty }.joined(separator: "\n")
+  }
+
+  /// Drawing and hover help use the same counter bounds.
+  func badgeFrames(scale: CGFloat = 1) -> [(badge: Badge, frame: CGRect)] {
+    guard !isEmpty else { return [] }
     let scale = max(1, floor(scale))
-    let longest = max("z - \(zoom)".count, "Z - \(superzoom)".count)
-    let font = GameMenuArtwork.renderer()?.font(.small)
-    let cell = max(6 * scale, CGFloat(font?.cellWidth ?? 0))
-    let row = max(11 * scale, CGFloat(font?.cellHeight ?? 0) + (font == nil ? 0 : 4))
-    return CGSize(width: CGFloat(longest) * cell + 8 * scale, height: row * 2 + 2 * scale)
+    var x: CGFloat = 0
+    return Badge.allCases.map { badge in
+      let width = CGFloat(max(56, 36 + GamePixelTypography.width(of: String(count(for: badge))) * 2)) * scale
+      let frame = CGRect(x: x, y: 0, width: width, height: 32 * scale)
+      x = frame.maxX + 4 * scale
+      return (badge, frame)
+    }
+  }
+
+  func size(scale: CGFloat = 1) -> CGSize {
+    guard let last = badgeFrames(scale: scale).last else { return .zero }
+    return CGSize(width: last.frame.maxX, height: last.frame.height)
+  }
+
+  /// The owner converts the full badge row, including CRT projection, to its root view.
+  func badge(at point: CGPoint, in area: CGRect) -> (badge: Badge, frame: CGRect)? {
+    let size = size()
+    guard area.contains(point), size.width > 0 else { return nil }
+    return badgeFrames().compactMap { item in
+      let frame = CGRect(x: area.minX + item.frame.minX / size.width * area.width,
+        y: area.minY, width: item.frame.width / size.width * area.width, height: area.height)
+      return frame.contains(point) ? (badge: item.badge, frame: frame) : nil
+    }.first
   }
 
   @MainActor @discardableResult
-  func draw(at origin: CGPoint, scale: CGFloat = 1) -> CGSize {
-    guard !isEmpty else { return .zero }
-    let scale = max(1, floor(scale))
-    let rows = [("z - \(zoom)", PrecisionZoomKind.zoom),
-                ("Z - \(superzoom)", PrecisionZoomKind.superzoom)]
-    let badgeSize = size(scale: scale)
-    let width = badgeSize.width
-    let font = GameMenuArtwork.renderer()?.font(.small)
-    let rowHeight = max(11 * scale, CGFloat(font?.cellHeight ?? 0) + (font == nil ? 0 : 4))
-    for (index, row) in rows.enumerated() {
-      let rect = CGRect(x: origin.x, y: origin.y + CGFloat(index) * (rowHeight + 2 * scale),
-                        width: width, height: rowHeight)
-      NSColor.black.withAlphaComponent(0.8).setFill()
-      rect.fill()
-      if active == row.1 {
-        NSGraphicsContext.saveGraphicsState()
-        NSGraphicsContext.current?.cgContext.setShouldAntialias(false)
-        NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1).setStroke()
-        NSBezierPath(rect: rect.insetBy(dx: 0.5, dy: 0.5)).stroke()
-        NSGraphicsContext.restoreGraphicsState()
+  func draw(at origin: CGPoint, scale: CGFloat = 1, opacity: CGFloat = 1) -> CGSize {
+    let scale = max(1, floor(scale)), badgeSize = size(scale: scale)
+    guard !isEmpty, opacity > 0, let context = NSGraphicsContext.current?.cgContext else { return badgeSize }
+    context.saveGState()
+    context.setAlpha(opacity)
+    context.beginTransparencyLayer(auxiliaryInfo: nil)
+    defer { context.endTransparencyLayer(); context.restoreGState() }
+    for item in badgeFrames(scale: scale) {
+      let rect = item.frame.offsetBy(dx: origin.x, dy: origin.y)
+      let selected = item.badge == .superzoom ? active == .superzoom : item.badge == .bonusSkill && bonusSkillUsed
+      context.setFillColor(CGColor(gray: 0, alpha: 0.75))
+      context.fill(rect)
+      if selected {
+        context.setFillColor(CGColor(srgbRed: 0.6755, green: 0.8639, blue: 0.2804, alpha: 1))
+        context.fill(CGRect(x: rect.minX + 2 * scale, y: rect.midY - 4 * scale, width: 2 * scale, height: 8 * scale))
       }
-      let content = CGRect(x: rect.minX + 4 * scale,
-        y: rect.midY - CGFloat(font?.cellHeight ?? Int(7 * scale)) / 2,
-        width: rect.width - 8 * scale, height: CGFloat(font?.cellHeight ?? Int(7 * scale)))
-      GamePixelText.draw(row.0, in: content, maxScale: scale,
-        palette: active == row.1 ? .green : .blue, preservesCase: true)
+      let iconBox = CGRect(x: rect.minX + 6 * scale, y: rect.minY + 8 * scale, width: 16 * scale, height: 16 * scale)
+      if let image = item.badge.glyph.image(fitting: iconBox.size) {
+        image.draw(in: CGRect(x: floor(iconBox.midX - image.size.width / 2), y: floor(iconBox.midY - image.size.height / 2),
+          width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
+          fraction: count(for: item.badge) > 0 || selected ? 1 : 0.45, respectFlipped: true,
+          hints: [.interpolation: NSImageInterpolation.none.rawValue])
+      }
+      GamePixelText.draw(String(count(for: item.badge)),
+        in: CGRect(x: rect.minX + 28 * scale, y: rect.minY + 6 * scale,
+          width: rect.width - 34 * scale, height: 20 * scale), maxScale: 2 * scale,
+        palette: selected ? .green : .blue)
     }
     return badgeSize
   }
+
 }
 
 /// A non-interactive identity badge. The owner supplies the active attempt's player.
@@ -388,7 +526,7 @@ struct PrecisionZoomStatus: Equatable {
         guard self.initials != initials || self.portrait !== portrait else { return }
         self.initials = initials; self.portrait = portrait
         isHidden = initials == nil
-        setAccessibilityLabel(initials.map { "\($0)'s turn" })
+        setAccessibilityLabel(initials.map { L10n.text("\($0)'s turn") })
         needsDisplay = true
         NSAccessibility.post(element: self, notification: .valueChanged)
     }
@@ -405,11 +543,8 @@ struct PrecisionZoomStatus: Equatable {
             portrait.draw(in: CGRect(x: 4, y: 2, width: width, height: 28), from: .zero,
                 operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
         }
-        let text = CGRect(x: portrait == nil ? 4 : 36, y: 4,
-            width: bounds.width - (portrait == nil ? 8 : 40), height: 24)
-        if !GameTypography.drawInterfaceText(initials, in: text, maxScale: 1) {
-            GamePixelText.draw(initials, in: text)
-        }
+        GamePixelText.draw(initials, in: CGRect(x: portrait == nil ? 4 : 36, y: 4,
+            width: bounds.width - (portrait == nil ? 8 : 40), height: 24), palette: .green)
     }
 }
 
@@ -514,25 +649,26 @@ struct PrecisionZoomStatus: Equatable {
 
 /// A fresh level starts after three visible seconds. Explicit pause cancels it.
 @MainActor final class FreshLevelCountdown {
-    private(set) var remaining: Double? = nil
-    var isActive: Bool { remaining != nil }
-    var number: Int? { remaining.map { max(1, Int(ceil($0))) } }
-    func arm() { remaining = 3 }
-    func cancel() { remaining = nil }
+    private var countdown = GameplayStartCountdown()
+    var remaining: Double? { countdown.remaining }
+    var isActive: Bool { countdown.isActive }
+    var number: Int? { countdown.number }
+    func arm() { countdown.arm() }
+    func cancel() { countdown.cancel() }
     @discardableResult func advance(seconds: Double, visible: Bool) -> Bool {
-        guard visible, let remaining else { return false }
-        let next = remaining - max(0, seconds)
-        if next <= 0 { cancel(); return true }
-        self.remaining = next
-        return false
+        countdown.advance(seconds: seconds, visible: visible)
     }
     func draw(in bounds: CGRect) {
         guard let number else { return }
-        let rect = CGRect(x: floor(bounds.midX - 24), y: floor(bounds.midY - 28), width: 48, height: 56)
+        let rect = CGRect(x: floor(bounds.midX - 32), y: floor(bounds.midY - 40), width: 64, height: 80)
         NSColor.black.withAlphaComponent(0.75).setFill()
         rect.insetBy(dx: -8, dy: -8).fill()
-        if !GameTypography.drawInterfaceText(String(number), in: rect, maxScale: 6, palette: .green) {
-            GamePixelText.draw(String(number), in: rect, maxScale: 6, palette: .green)
+        if let context = NSGraphicsContext.current?.cgContext {
+            if !GameLemmingsTypography.draw(String(number), in: rect, height: rect.height,
+                interface: GameMenuArtwork.renderer()?.interface, face: .large, palette: .green, context: context) {
+                GamePixelText.draw(String(number), in: rect, maxScale: 6, palette: .green)
+            }
         }
     }
 }
+#endif

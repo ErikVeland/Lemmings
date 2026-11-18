@@ -224,7 +224,7 @@ public struct MobileContentStore: Sendable {
         if kind == .classic, let resources = bundledResources {
             let ports = resources.appendingPathComponent("Ports", isDirectory: true)
             let candidates = (try? manager.contentsOfDirectory(at: ports, includingPropertiesForKeys: nil,
-                                                              options: [.skipsHiddenFiles])) ?? []
+                                                              options: [])) ?? []
             let releases = candidates.filter { directory in
                 (try? manager.contentsOfDirectory(atPath: directory.path))?.contains { $0.lowercased() == "main.dat" } == true
             }.sorted { left, right in
@@ -313,7 +313,7 @@ public struct MobileContentStore: Sendable {
         guard let walker = manager.enumerator(
             at: source,
             includingPropertiesForKeys: [.isDirectoryKey, .isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey],
-            options: [.skipsHiddenFiles]
+            options: []
         ) else { throw MobileContentStoreError.unreadable }
         var budget = MobileContentImportBudget(maximumBytes: Self.maximumImportBytes)
         var entryCount = 0

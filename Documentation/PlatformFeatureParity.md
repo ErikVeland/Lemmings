@@ -8,6 +8,24 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
+## PR 33 integration repair — 18 November 2026
+
+The consolidated source had replaced current mobile controllers, HUD controls,
+audio-session handling and presentation interfaces with older versions.
+The repair restores these shared interfaces for iOS and tvOS and keeps the
+Lix artwork adapter and TV colour effect.
+
+The shared library owns Lix artwork types and the imported-resource state.
+Classic, Tribes and Chronicles retain timeline hints. TV fine targeting can
+select an already-assigned worker without changing its assignment state.
+Journey revision 32 and isolated integration-test checkpoints are restored.
+
+Local validation: 663 shared Swift regression tests and 115 release-tooling
+tests pass with muted audio. The Swift checks cover isolated journey import,
+reopen and offline/reconnect cases. Hosted CI validation is pending.
+Rendered input targets, physical devices and hosted sync services remain
+separate acceptance checks. No foreground test windows were opened.
+
 ## Ultimate Lemmix loaded assets — 17 November 2026
 
 Build 108 retains the full 2.4.2 application with unchanged NxlvKit. Complete

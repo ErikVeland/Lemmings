@@ -22,7 +22,7 @@ public enum MobileBookHomeArt {
         let showsTurnAtTop = page.homeNextPlayerIndex != nil
         var turnInitials = CGRect(x: left.minX + padding, y: subtitle.maxY + 4,
             width: leftWidth, height: showsTurnAtTop ? 22 : 0)
-        let start = max(showsTurnAtTop ? turnInitials.maxY : subtitle.maxY, libraryHeading.maxY) + 12
+        var start = max(showsTurnAtTop ? turnInitials.maxY : subtitle.maxY, libraryHeading.maxY) + 12
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
         let footerHeight = max(44, footer.map { GameTextLayout.height($0.title, width: leftWidth - 24) + 8 }.max() ?? 44)

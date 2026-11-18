@@ -19,44 +19,27 @@ import UIKit
     static var typography: GameMenuTypography? { refresh(); return cachedTypography }
 }
 
-    static func draw(
-        _ text: String,
-        in rect: CGRect,
-        palette: Palette = .blue,
-        maximumScale: CGFloat = 4,
-        alignment: NSTextAlignment = .center
-    ) {
-        guard let context = UIGraphicsGetCurrentContext(), rect.width > 0, rect.height > 0 else { return }
-        if MobileLixInterface.enabled && MobileLixInterface.text(text, in: rect,
-            colour: palette.colour, alignment: alignment, maximumScale: maximumScale) { return }
-        let normalized = text.uppercased().replacingOccurrences(of: "×", with: "X")
-        let naturalWidth = max(1, normalized.count * 6 - 1)
-        let scale = max(1, min(maximumScale, floor(min(rect.height / 7, rect.width / CGFloat(naturalWidth)))))
-        let drawnWidth = CGFloat(naturalWidth) * scale
-        let start: CGFloat
-        switch alignment {
-        case .left: start = rect.minX
-        case .right: start = rect.maxX - drawnWidth
-        default: start = rect.midX - drawnWidth / 2
-        }
-        let top = floor(rect.midY - 3.5 * scale)
-        context.saveGState()
-        context.setShouldAntialias(false)
-        context.setFillColor(palette.colour.cgColor)
-        for (index, character) in normalized.enumerated() {
-            guard let glyph = columns[character] else { continue }
-            for (x, column) in glyph.enumerated() {
-                for y in 0..<7 where column & (1 << y) != 0 {
-                    context.fill(CGRect(
-                        x: start + CGFloat(index * 6 + x) * scale,
-                        y: top + CGFloat(y) * scale,
-                        width: scale,
-                        height: scale
-                    ))
-                }
+@MainActor enum MobilePixelText {
+    enum Palette {
+        case blue, green, warning
+        var colour: UIColor {
+            switch self {
+            case .blue: return UIColor(red: 0.20, green: 0.50, blue: 1, alpha: 1)
+            case .green: return UIColor(red: 0.45, green: 1, blue: 0.10, alpha: 1)
+            case .warning: return UIColor(red: 1, green: 0.42, blue: 0.12, alpha: 1)
             }
         }
-        context.restoreGState()
+    }
+    static func draw(_ text: String, in rect: CGRect, palette: Palette = .blue,
+                     maximumScale: CGFloat = 4, alignment: NSTextAlignment = .center,
+                     face: GameMenuTypography.Face = .small, alpha: CGFloat = 1, bitmapOnly: Bool = false) {
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        if MobileLixInterface.enabled && MobileLixInterface.text(text, in: rect,
+            colour: palette.colour, alignment: alignment, maximumScale: maximumScale) { return }
+        GamePixelTypography.draw(text, in: rect, context: context, typography: MobileGameArt.typography,
+                                 palette: palette == .blue ? .blue : palette == .green ? .green : .warning, maximumScale: maximumScale,
+                                 alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
+                                 face: face, alpha: alpha, bitmapOnly: bitmapOnly)
     }
 }
 
@@ -65,6 +48,10 @@ import UIKit
     var palette = MobilePixelText.Palette.blue { didSet { setNeedsDisplay() } }
     var alignment = NSTextAlignment.center { didSet { setNeedsDisplay() } }
     var maximumScale: CGFloat = 4 { didSet { setNeedsDisplay() } }
+    var displayHeight: CGFloat? { didSet { setNeedsDisplay() } }
+    var preservesCase = false { didSet { setNeedsDisplay() } }
+    var face = GameMenuTypography.Face.small { didSet { setNeedsDisplay() } }
+    var wraps = false { didSet { setNeedsDisplay() } }
     var numberOfLines = 1 { didSet { setNeedsDisplay() } }
 
     override init(frame: CGRect) {
@@ -78,9 +65,20 @@ import UIKit
     required init?(coder: NSCoder) { nil }
 
     override func draw(_ rect: CGRect) {
-        if numberOfLines <= 1 {
+        if let displayHeight, let context = UIGraphicsGetCurrentContext(),
+           GameLemmingsTypography.draw(text, in: bounds, height: displayHeight,
+            interface: MobileGameArt.typography?.interface, face: face,
+            palette: palette == .blue ? .blue : palette == .warning ? .warning : .green,
+            alignment: alignment == .left ? .left : alignment == .right ? .right : .center, context: context) {
+            return
+        } else if wraps, let context = UIGraphicsGetCurrentContext(), let typography = MobileGameArt.typography {
+            GameTextLayout.draw(text, in: bounds, typography: typography, face: face,
+                palette: palette == .blue ? .blue : .green,
+                alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
+                preservesCase: preservesCase, context: context)
+        } else if numberOfLines <= 1 {
             MobilePixelText.draw(text, in: bounds, palette: palette,
-                                 maximumScale: maximumScale, alignment: alignment)
+                                 maximumScale: maximumScale, alignment: alignment, face: face)
         } else {
             if MobileLixInterface.enabled && MobileLixInterface.paragraph(text, in: bounds,
                 colour: palette.colour, alignment: alignment,
@@ -113,6 +111,8 @@ import UIKit
     var title = "" { didSet { accessibilityLabel = title; setNeedsDisplay() } }
     var isPrimary = false { didSet { setNeedsDisplay() } }
     var isSelectedState = false { didSet { updateAccessibility(); setNeedsDisplay() } }
+    var redNightVision = false { didSet { setNeedsDisplay() } }
+    var icon: GameFrontEnd.Action.Icon? { didSet { setNeedsDisplay() } }
     var isToggle = false { didSet { updateAccessibility(); setNeedsDisplay() } }
     var onPress: (() -> Void)?
     private var hasFocusRing = false
@@ -174,7 +174,14 @@ import UIKit
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         context.saveGState()
-        defer { context.restoreGState() }
+        defer {
+            if redNightVision {
+                context.setBlendMode(.multiply)
+                context.setFillColor(UIColor.red.cgColor)
+                context.fill(bounds)
+            }
+            context.restoreGState()
+        }
         context.setAlpha(isEnabled ? 1 : 0.45)
         let selected = isHighlighted || isSelectedState
         context.setShouldAntialias(false)
@@ -199,6 +206,10 @@ import UIKit
             context.setLineWidth(pixel)
             context.stroke(bounds.insetBy(dx: pixel * 3, dy: pixel * 3))
         }
+        if icon == .favourite {
+            GameStarArt.draw(in: bounds, earned: isSelectedState, context: context)
+            return
+        }
         var caption = bounds.insetBy(dx: 8, dy: 8)
         if isToggle {
             let size = min(24, bounds.height - 20)
@@ -222,6 +233,25 @@ import UIKit
             context.setLineDash(phase: 0, lengths: [4, 3])
             context.stroke(bounds.insetBy(dx: 4, dy: 4))
         }
+    }
+}
+/// The black page with the stone edging and moss cap the Mac menu pages use.
+@MainActor final class MobileMenuBackdrop: UIView {
+    var board = CGRect.zero { didSet { setNeedsDisplay() } }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .black
+        isOpaque = true
+        isUserInteractionEnabled = false
+        isAccessibilityElement = false
+    }
+
+    required init?(coder: NSCoder) { nil }
+
+    override func draw(_ rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext(), !board.isEmpty else { return }
+        GameMenuFrameArt.draw(in: context, board: board, shape: MobileSystemRegions.controlShape(in: self))
     }
 }
 #else

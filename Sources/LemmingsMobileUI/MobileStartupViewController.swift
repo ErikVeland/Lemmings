@@ -7,6 +7,12 @@ import UIKit
 
 /// Keep disk-backed controllers and services out of the system's first-frame path.
 @MainActor final class MobileStartupViewController: UIViewController {
+    private let configuration: LemmingsMobileConfiguration
+    init(configuration: LemmingsMobileConfiguration = .current) {
+        self.configuration = configuration
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) { nil }
     private let logo = UIImageView(image: UIImage(named: "StartupLogo"))
     private let hourglass = MobileStartupHourglass()
     private var content: UIViewController?
@@ -82,7 +88,7 @@ import UIKit
             controller.catalogue = catalogue
             controller.resourceNotice = resourceNotice
             #else
-            let controller = MobileLibraryViewController()
+            let controller = MobileLibraryViewController(configuration: configuration)
             controller.catalogue = catalogue
             if let resourceNotice { controller.notice = resourceNotice }
             #endif

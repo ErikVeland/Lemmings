@@ -13,6 +13,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 #endif
 
 @MainActor final class MobileLibraryViewController: UIViewController {
+    let configuration: LemmingsMobileConfiguration
+    init(configuration: LemmingsMobileConfiguration = .current) {
+        self.configuration = configuration
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) { nil }
+
     enum Route: Equatable {
         case home, support, family(MobileFamily), fanGroup([String]), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
@@ -151,7 +158,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var practiceChoice = 0
     var practiceSkills: [Lemmings2Runtime.Skill] = [.jumper, .runner, .builder, .basher, .digger, .climber, .floater, .roper]
     var tribesShortGamesEntries: [MobileFavourites.Entry]?
-    var shortGamesEntries: [MobileFavourites.Entry]?
+    var shortGamesEntries: [String: [MobileFavourites.Entry]] = [:]
     var shortGamesSelection = "classic"
     var shortGamesPreparing = false
     var savedSeatsBackID = "hotSeat"

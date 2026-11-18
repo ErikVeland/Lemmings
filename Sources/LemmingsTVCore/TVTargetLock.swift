@@ -21,8 +21,7 @@ public struct TVTargetLock: Sendable {
             let box = candidate.pointerBounds ?? .init(x: -6, y: -9, width: 12, height: 19)
             return box.contains(.init(x: level.x - candidate.point.x, y: level.y - candidate.point.y))
         }
-        let selectable = underPointer.filter { $0.assignment == .eligible }
-        let crowd = Self.alternateFacing(selectable.isEmpty ? underPointer : selectable)
+        let crowd = Self.alternateFacing(underPointer)
         guard crowd.count > 1 else { clear(); return nil }
         let previous = id ?? displayed?.id
         let current = crowd.firstIndex { $0.id == previous }

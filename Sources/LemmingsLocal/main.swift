@@ -2018,6 +2018,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       switch action {
       case .rewind, .backward: return session.supportsRewind && session.currentTick > 0
       case .forward: return !session.isComplete
+      case .hints: return true
       }
     }
     panel.timeline.perform = { [weak self] action in
@@ -2026,6 +2027,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .rewind: self.rewind(seconds: 2)
       case .backward: _ = self.stepBackward()
       case .forward: _ = self.stepForward()
+      case .hints: self.showLevelHints()
       }
     }
     panel.onMinimapPosition = { [weak self] point in

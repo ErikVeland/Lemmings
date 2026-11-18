@@ -1,4 +1,5 @@
 import AppKit
+import LemmingsGameArt
 import NxlvKit
 
 /// The same timeline buttons and hit regions serve all three game panels.
@@ -23,6 +24,9 @@ import NxlvKit
         }
     }
     var frame = CGRect.zero
+    var groupFrame: CGRect?
+    var monochrome = false
+    var rock: ((CGSize) -> NSImage?)?
     var enabled: (Action) -> Bool = { _ in false }
     var perform: (Action) -> Void = { _ in }
     private let accessibility = GameAccessibleElements()
@@ -48,10 +52,13 @@ import NxlvKit
                 LixInterfaceRenderer.shared.drawControl(control, in: box.insetBy(dx: 2, dy: 2), enabled: enabled(action))
                 continue
             }
-            GameStoneButton.draw(box, selected: false, pixel: 1,
-                backdrop: PanelGlyph.rock.image(fitting: box.size))
+            if let context = NSGraphicsContext.current?.cgContext {
+                let face: GamePlayButtonArt.Face = action == .rewind ? .rewind : action == .backward ? .stepBackward : .stepForward
+                GameControlGroupArt.draw(in: context, frame: box, group: groupFrame ?? frame,
+                    selected: false, face: face, monochrome: monochrome)
+            }
             let alpha: CGFloat = enabled(action) ? 1 : 0.3
-            if let image = action.glyph?.image(fitting: box.insetBy(dx: 4, dy: 4).size) {
+            if let image = (monochrome ? action.glyph?.monochromeImage(fitting: box.insetBy(dx: 4, dy: 4).size) : action.glyph?.image(fitting: box.insetBy(dx: 4, dy: 4).size)) {
                 image.draw(in: CGRect(x: box.midX - image.size.width / 2, y: box.midY - image.size.height / 2,
                     width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
                     fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])

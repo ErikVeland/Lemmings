@@ -321,6 +321,7 @@ import NxlvKit
             switch action {
             case .rewind, .backward: return game.tick > 0
             case .forward: return !game.isComplete || self.canStepForward
+            case .hints: return true
             }
         }
         canvas.timeline.perform = { [weak keyboard] action in
@@ -328,6 +329,7 @@ import NxlvKit
             case .rewind: keyboard?.rewind?()
             case .backward: keyboard?.step?(-1)
             case .forward: keyboard?.step?(1)
+            case .hints: keyboard?.hints?()
             }
         }
         keyboard.active = { [weak self] in self?.screen == .playing && self?.game?.isComplete == false }

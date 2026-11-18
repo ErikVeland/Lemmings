@@ -29,9 +29,9 @@ public struct LixSceneArtwork: Sendable {
         }
     }
 
-    struct Pixels: Sendable {
-        let width: Int, height: Int
-        let rgba: [UInt8]
+    public struct Pixels: Sendable {
+        public let width: Int, height: Int
+        public let rgba: [UInt8]
 
         func crop(x: Int, y: Int, width: Int, height: Int) throws -> Pixels {
             guard x >= 0, y >= 0, width > 0, height > 0,
@@ -49,25 +49,25 @@ public struct LixSceneArtwork: Sendable {
         }
     }
 
-    struct Area: Sendable, Equatable {
+    public struct Area: Sendable, Equatable {
         var x: Int, y: Int, width: Int, height: Int
-        var centreX: Int { x + width / 2 }
-        var centreY: Int { y + height / 2 }
+        public var centreX: Int { x + width / 2 }
+        public var centreY: Int { y + height / 2 }
     }
 
-    enum Kind { case hatch, goal, water, fire, trap }
+    public enum Kind { case hatch, goal, water, fire, trap }
 
-    struct Gadget: Sendable {
-        let rows: [[Pixels]]
-        let trigger: Area
-        let openingFrame: Int
-        var first: Pixels { rows[0][0] }
+    public struct Gadget: Sendable {
+        public let rows: [[Pixels]]
+        public let trigger: Area
+        public let openingFrame: Int
+        public var first: Pixels { rows[0][0] }
     }
 
-    let terrain: [Theme: Pixels]
-    let steel: Pixels
-    let hatches: [Theme: Gadget]
-    let goals: [Theme: Gadget]
+    public let terrain: [Theme: Pixels]
+    public let steel: Pixels
+    public let hatches: [Theme: Gadget]
+    public let goals: [Theme: Gadget]
     let water: Gadget
     let waterBody: Pixels
     let fire: Gadget
@@ -342,7 +342,7 @@ public struct LixSceneArtwork: Sendable {
         return Pixels(width: width, height: height, rgba: bytes)
     }
 
-    static func decodeGadget(_ data: Data, kind: Kind, definition: Data) throws -> Gadget {
+    public static func decodeGadget(_ data: Data, kind: Kind, definition: Data) throws -> Gadget {
         let sheet = try decode(data)
         guard definition.count <= 8_192, let text = String(data: definition, encoding: .utf8) else {
             throw DecodeError.invalidDefinition

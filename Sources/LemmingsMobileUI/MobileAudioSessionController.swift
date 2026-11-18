@@ -96,7 +96,6 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
     var onEvent: ((Event) -> Void)?
     private let observers = MobileNotificationObserverBag()
     private let requests: MobileAudioSessionRequests
-    private var delayedSuspendTask: Task<Void, Never>?
 
     init() {
         _ = Self.applicationObservers
@@ -133,25 +132,23 @@ final class MobileNotificationObserverBag: @unchecked Sendable {
         })
     }
 
-    func prepare() throws {
-        guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted" else { return }
-        let session = AVAudioSession.sharedInstance()
-        try session.setCategory(.ambient, mode: .default, options: [])
+    static func applySettings() {
+        _ = MobileAudioSessionWorkQueue.shared.enqueue({
+            guard MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
+            try await MobileAudioSessionWorker.shared.perform(.prepare)
+        }, completion: { _ in })
     }
 
-    func resume() throws {
-        guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted" else { return }
-        let session = AVAudioSession.sharedInstance()
-        try session.setCategory(.ambient, mode: .default, options: [])
-        try session.setActive(true)
+    func prepare() {
+        requests.prepare()
+    }
+
+    func resume(completion: @escaping @MainActor (Bool) -> Void) {
+        requests.resume(completion: completion)
     }
 
     func suspend() {
-        guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted" else { return }
-        try? AVAudioSession.sharedInstance().setActive(
-            false,
-            options: [.notifyOthersOnDeactivation]
-        )
+        requests.suspend()
     }
 
     private func handleInterruption(_ raw: UInt?) {

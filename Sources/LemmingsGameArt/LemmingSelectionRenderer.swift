@@ -4,16 +4,19 @@ import Metal
 
 /// Sprite coordinates are in the playfield after precision zoom, before CRT projection.
 public struct LemmingSelectionEffect {
-    public init(sprite: CGImage, rect: CGRect, clipRect: CGRect, mirrored: Bool = false,
-                facingLeft: Bool? = nil, bloom: Bool = true, time: TimeInterval? = nil) {
+    public init(sprite: CGImage, rect: CGRect, clipRect: CGRect, mirrored: Bool = false, bloom: Bool = true, time: TimeInterval? = nil, direction: Int = 0, directionTime: TimeInterval? = nil) {
         self.sprite = sprite; self.rect = rect; self.clipRect = clipRect
-        self.mirrored = mirrored; self.facingLeft = facingLeft; self.bloom = bloom; self.time = time
+        self.mirrored = mirrored; self.bloom = bloom; self.time = time; self.direction = direction; self.directionTime = directionTime
+    }
+    public init(sprite: CGImage, rect: CGRect, clipRect: CGRect, mirrored: Bool = false,
+                facingLeft: Bool?, bloom: Bool = true, time: TimeInterval? = nil) {
+        self.init(sprite: sprite, rect: rect, clipRect: clipRect, mirrored: mirrored, bloom: bloom,
+                  time: time, direction: facingLeft.map { $0 ? -1 : 1 } ?? 0, directionTime: time)
     }
     public var sprite: CGImage
     public var rect: CGRect
     public var clipRect: CGRect
     public var mirrored = false
-    public var facingLeft: Bool?
     public var bloom = true
     public var opacity: CGFloat = 1
     /// Golden rescue light uses the same sprite mask without a selection outline.
@@ -21,6 +24,14 @@ public struct LemmingSelectionEffect {
     /// Simulation time keeps the pulse in the game frame and holds it on pause.
     /// Nil holds the midpoint for reduced motion and reduced flashes.
     public var time: TimeInterval? = nil
+    /// Facing direction comes from the simulation, independently of sprite mirroring.
+    public var direction: Int = 0
+    /// Elapsed UI time since this actor was selected; nil is steady orange.
+    public var directionTime: TimeInterval? = nil
+    public static func directionPulse(at time: TimeInterval?) -> CGFloat {
+        CGFloat(time.map { 0.5 + 0.5 * cos($0 * 2 * .pi / 0.8) } ?? 1)
+    }
+    public var directionPulse: CGFloat { Self.directionPulse(at: directionTime) }
 
     public var glowGain: CGFloat {
         guard let time else { return 0.87 }
@@ -38,7 +49,6 @@ struct LemmingSelectionUniforms {
     var glass = SIMD4<Float>.zero
     var fade = SIMD4<Float>(1, 0, 0, 0)
     var marker = SIMD4<Float>.zero
-    var arrow = SIMD4<Float>.zero
 
     init(_ effect: LemmingSelectionEffect, sourceSize: CGSize, outputSize: CGSize) {
         rect = SIMD4(Float(effect.rect.minX), Float(effect.rect.minY), Float(effect.rect.width), Float(effect.rect.height))
@@ -47,8 +57,9 @@ struct LemmingSelectionUniforms {
         shape = SIMD4(Float(effect.sprite.width), Float(effect.sprite.height), Float(LemmingSelectionRenderer.padding), effect.mirrored ? 1 : 0)
         let diamond = LemmingSelectionRenderer.plumbobRect(for: effect)
         marker = SIMD4(Float(diamond.minX), Float(diamond.minY), Float(diamond.width), Float(diamond.height))
-        arrow.x = effect.facingLeft.map { $0 ? -1 : 1 } ?? 0
         fade.x = Float(min(1, max(0, effect.opacity)))
+        fade.y = Float(effect.direction.signum())
+        fade.z = Float(effect.directionPulse)
         style = effect.rescueAmount > 0
             ? SIMD4(Float(effect.rescueAmount) * 2.4, 1, 1, 0)
             : SIMD4(effect.bloom ? Float(effect.glowGain) : 0, 0, 0, 0)
@@ -243,7 +254,7 @@ struct LemmingSelectionUniforms {
     }
 
     /// Paint with the game frame. Selection never owns a surface or a timer.
-    public static func drawObvious(at point: CGPoint, scale: CGFloat, animated: Bool, context: CGContext) {
+    public static func drawObvious(at point: CGPoint, scale: CGFloat, animated: Bool, direction: Int = 0, pulseTime: TimeInterval? = nil, context: CGContext) {
         let pixel = max(1, floor(scale))
         let radius = max(8 * pixel, 7 * scale * 1.3)
         let alpha = CGFloat(0.62 + (animated ? 0.06 * sin(ProcessInfo.processInfo.systemUptime * .pi) : 0))
@@ -259,7 +270,8 @@ struct LemmingSelectionUniforms {
         }
         context.setShouldAntialias(false)
         drawPlumbob(in: CGRect(x: floor(point.x / pixel) * pixel - 4 * pixel,
-            y: floor(point.y / pixel) * pixel - 21 * pixel, width: 9 * pixel, height: 13 * pixel), context: context)
+            y: floor(point.y / pixel) * pixel - 21 * pixel, width: 9 * pixel, height: 13 * pixel), direction: direction,
+            time: animated ? (pulseTime ?? 0) : nil, context: context)
     }
 
     /// The diamond follows the actor's rendered sprite, including precision zoom.
@@ -272,32 +284,25 @@ struct LemmingSelectionUniforms {
     }
 
     /// Shared pixel facets for Obvious and Modern. No animation or input surface.
-    public static func drawPlumbob(in rect: CGRect, context: CGContext, facingLeft: Bool? = nil) {
+    public static func drawPlumbob(in rect: CGRect, direction: Int = 0, time: TimeInterval? = nil, context: CGContext) {
         let pixel = rect.width / 9
         let widths = [0, 1, 1, 2, 3, 4, 4, 3, 2, 2, 1, 1, 0]
         context.saveGState()
         defer { context.restoreGState() }
         context.setShouldAntialias(false)
+        let pulse = LemmingSelectionEffect.directionPulse(at: time)
         for y in 0..<13 { for x in (4 - widths[y])...(4 + widths[y]) {
             let edge = abs(x - 4) == widths[y] || y == 0 || y == 12
-            let colour: CGColor = edge ? CGColor(srgbRed: 0.04, green: 0.12, blue: 0.05, alpha: 1)
-                : x < 4 ? CGColor(srgbRed: 0.65, green: 1, blue: 0.36, alpha: 1)
-                : x == 4 ? CGColor(srgbRed: 0.3, green: 0.9, blue: 0.15, alpha: 1)
-                : CGColor(srgbRed: 0.08, green: 0.55, blue: 0.16, alpha: 1)
+            let shard = direction != 0 && (4...8).contains(y) && (direction < 0 ? x < 4 : x > 4) && !edge
+            let base: (CGFloat, CGFloat, CGFloat) = edge ? (0.04, 0.12, 0.05)
+                : x < 4 ? (0.65, 1, 0.36) : x == 4 ? (0.3, 0.9, 0.15) : (0.08, 0.55, 0.16)
+            let mix = shard ? pulse : 0
+            let colour = CGColor(srgbRed: base.0 + (1 - base.0) * mix,
+                green: base.1 + (0.38 - base.1) * mix, blue: base.2 + (0.03 - base.2) * mix, alpha: 1)
             context.setFillColor(colour)
             context.fill(CGRect(x: rect.minX + CGFloat(x) * pixel, y: rect.minY + CGFloat(y) * pixel,
                 width: pixel, height: pixel))
         } }
-        if let facingLeft {
-            let arrowPixels: [(Int, Int)] = facingLeft
-                ? [(1, 6), (2, 5), (2, 6), (2, 7), (3, 6)]
-                : [(5, 6), (6, 5), (6, 6), (6, 7), (7, 6)]
-            context.setFillColor(CGColor(srgbRed: 1, green: 0.48, blue: 0.08, alpha: 1))
-            for (x, y) in arrowPixels {
-                context.fill(CGRect(x: rect.minX + CGFloat(x) * pixel, y: rect.minY + CGFloat(y) * pixel,
-                    width: pixel, height: pixel))
-            }
-        }
     }
 
     public static func draw(_ effect: LemmingSelectionEffect, in context: CGContext) {
@@ -313,7 +318,7 @@ struct LemmingSelectionUniforms {
             context.restoreGState()
         }
         defer { if effect.rescueAmount == 0 {
-            drawPlumbob(in: plumbobRect(for: effect), context: context, facingLeft: effect.facingLeft)
+            drawPlumbob(in: plumbobRect(for: effect), direction: effect.direction, time: effect.directionTime, context: context)
         } }
         let deviceScale = abs(context.convertToDeviceSpace(CGSize(width: 1, height: 0)).width)
         let stroke = CGFloat(outlineWidth) / max(1, deviceScale)
@@ -362,7 +367,7 @@ struct LemmingSelectionUniforms {
     using namespace metal;
     struct SelectionVertex { float4 position [[position]]; };
     struct SelectionUniforms {
-        float4 rect, clip, dimensions, shape, style, glass, fade, marker, arrow;
+        float4 rect, clip, dimensions, shape, style, glass, fade, marker;
     };
     vertex SelectionVertex selection_vertex(uint id [[vertex_id]]) {
         float2 p[4] = {float2(-1,-1),float2(1,-1),float2(-1,1),float2(1,1)};
@@ -402,12 +407,11 @@ struct LemmingSelectionUniforms {
             const int widths[13] = {0,1,1,2,3,4,4,3,2,2,1,1,0};
             if (cell.y >= 0 && cell.y < 13 && abs(cell.x - 4) <= widths[cell.y]) {
                 bool edge = abs(cell.x - 4) == widths[cell.y] || cell.y == 0 || cell.y == 12;
-                bool arrow = u.arrow.x < 0
-                    ? ((cell.x == 1 && cell.y == 6) || (cell.x == 2 && abs(cell.y - 6) <= 1) || (cell.x == 3 && cell.y == 6))
-                    : (u.arrow.x > 0 && ((cell.x == 7 && cell.y == 6) || (cell.x == 6 && abs(cell.y - 6) <= 1) || (cell.x == 5 && cell.y == 6)));
-                if (arrow) return float4(float3(1,.48,.08) * glass, glass) * u.fade.x;
                 float3 colour = edge ? float3(.04,.12,.05) : cell.x < 4 ? float3(.65,1,.36)
                     : cell.x == 4 ? float3(.3,.9,.15) : float3(.08,.55,.16);
+                bool shard = !edge && cell.y >= 4 && cell.y <= 8 &&
+                    ((u.fade.y < 0 && cell.x < 4) || (u.fade.y > 0 && cell.x > 4));
+                if (shard) colour = mix(colour, float3(1,.38,.03), u.fade.z);
                 return float4(colour * glass, glass) * u.fade.x;
             }
         }

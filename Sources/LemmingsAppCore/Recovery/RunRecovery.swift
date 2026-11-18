@@ -352,10 +352,13 @@ public final class RunRecoveryStore: @unchecked Sendable {
     private var pendingSaves = 0
     public init(storage: AppStorage = .current(), directory: URL? = nil) {
         if let directory { self.directory = directory }
-        else {
+        else if storage.isIntegrationTestBuild {
+            self.directory = Self.integrationDirectory
+        } else {
             self.directory = storage.applicationSupport.appendingPathComponent("Checkpoints")
         }
     }
+    private static let integrationDirectory = FileManager.default.temporaryDirectory.appendingPathComponent("RunRecovery-" + UUID().uuidString)
     private func file(_ id: UUID) throws -> RunRecoveryFile {
         if let file = files[id] { return file }
         try loadRun(id)

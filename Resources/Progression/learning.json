@@ -4262,109 +4262,6 @@
     {
       "concepts": [
         "blocker",
-        "bomber"
-      ],
-      "demand": 643.545,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "6088904E-9F92-D830-FD25-8CC57E8699B4",
-        "identity": {
-          "engine": "classic",
-          "levelID": "20:Crazy:1:0:1",
-          "packID": "ohNoMoreLemmings-DLVEL-100"
-        },
-        "levelNameSnapshot": "Quote: \"That`s a good level\"",
-        "levelNumberSnapshot": 21,
-        "packNameSnapshot": "Oh No! More Lemmings",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
-      },
-      "focus": "Practise: Blocker + Bomber",
-      "intrinsicDemand": 271.7390853156293,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"20:Crazy:1:0:1\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 35,
-          "position": 650.0,
-          "reference": "Gentle/Tailor-made_for_blockers.nxlv",
-          "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 650.0
-        },
-        "courseChapter": "small-budgets",
-        "learningRole": "practice",
-        "lower": 643.545,
-        "position": 643.545,
-        "reference": "Gentle/Tailor-made_for_blockers.nxlv",
-        "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 643.545
-      },
-      "preparationGaps": [],
-      "score": 271.7390853156293,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
-        "builder",
-        "digger",
-        "miner"
-      ],
-      "demand": 647.091,
-      "entry": {
-        "catalogueRevision": "1.2-runtime-v2",
-        "id": "492FE220-85A4-ABA9-6A3F-FACC15FB1E37",
-        "identity": {
-          "engine": "classic",
-          "levelID": "32:Crazy:13:0:4",
-          "packID": "ohNoMoreLemmings-DLVEL-100"
-        },
-        "levelNameSnapshot": "It`s a trade off",
-        "levelNumberSnapshot": 33,
-        "packNameSnapshot": "Oh No! More Lemmings",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
-      },
-      "focus": "Practise: Builder + Digger",
-      "intrinsicDemand": 272.0327659874961,
-      "introduced": [],
-      "needsSupport": true,
-      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"32:Crazy:13:0:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
-      "placement": {
-        "adjustment": "Start with short, narrow skill choices; progress through two-skill routes to combined stock limits. Watson follows the budgeting practice as a chapter challenge.",
-        "basis": "teachingCurriculum",
-        "comparisonPlacement": {
-          "basis": "solutionEstimate",
-          "lower": 355.0,
-          "position": 730.0,
-          "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-          "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
-          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-          "upper": 730.0
-        },
-        "courseChapter": "small-budgets",
-        "learningRole": "recovery",
-        "lower": 647.091,
-        "position": 647.091,
-        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
-        "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
-        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-        "upper": 647.091
-      },
-      "preparationGaps": [],
-      "score": 272.0327659874961,
-      "stage": "Expert"
-    },
-    {
-      "concepts": [
-        "blocker",
         "builder"
       ],
       "demand": 650.636,
@@ -15489,7 +15386,7 @@
       "needsSupport": true,
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"35:Mega Drive Sunsoft:6:0:35\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
       "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "adjustment": "Finish with special pacing, demanding coordination and precise timing.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
           "basis": "solutionEstimate",
@@ -16040,7 +15937,7 @@
       "needsSupport": false,
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"64:Taxing:5:2:6\", \"packID\": \"lemmings-LEVEL-120\"}",
       "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "adjustment": "Finish with special pacing, demanding coordination and precise timing.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
           "basis": "solutionEstimate",
@@ -16091,7 +15988,7 @@
       "needsSupport": true,
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"58:Mega Drive Sunsoft:29:0:58\", \"packID\": \"ohYesMoreLemmings-OHYES-60\"}",
       "placement": {
-        "adjustment": "Reserve special pacing, demanding coordination and the owner-confirmed advanced routes for the end. Time waits for no Lemming and This Corrosion remain the closing pair.",
+        "adjustment": "Finish with special pacing, demanding coordination and precise timing.",
         "basis": "teachingCurriculum",
         "comparisonPlacement": {
           "basis": "reduxClassicCounterpart",
@@ -16332,7 +16229,7 @@
       "needsSupport": true,
       "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"62:Wicked:3:9:0\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
       "placement": {
-        "adjustment": "Owner-confirmed advanced route remains paired with Time waits for no Lemming at the end.",
+        "adjustment": "Keep this advanced route next to Time waits for no Lemming.",
         "basis": "userPlaytest",
         "comparisonPlacement": {
           "adjustment": "User playtest 2026-10-12: advanced routes and engine quirks belong near the end, outside Intermediate.",
@@ -16358,8 +16255,60 @@
       "preparationGaps": [],
       "score": 342.8443010019039,
       "stage": "Expert"
+    },
+    {
+      "concepts": [
+        "builder",
+        "digger",
+        "miner"
+      ],
+      "demand": 990.0,
+      "entry": {
+        "catalogueRevision": "1.2-runtime-v2",
+        "id": "492FE220-85A4-ABA9-6A3F-FACC15FB1E37",
+        "identity": {
+          "engine": "classic",
+          "levelID": "32:Crazy:13:0:4",
+          "packID": "ohNoMoreLemmings-DLVEL-100"
+        },
+        "levelNameSnapshot": "It`s a trade off",
+        "levelNumberSnapshot": 33,
+        "packNameSnapshot": "Oh No! More Lemmings",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+      },
+      "focus": "Practise: Builder + Digger",
+      "intrinsicDemand": 272.0327659874961,
+      "introduced": [],
+      "needsSupport": true,
+      "objective": "placement:{\"engine\": \"classic\", \"levelID\": \"32:Crazy:13:0:4\", \"packID\": \"ohNoMoreLemmings-DLVEL-100\"}",
+      "placement": {
+        "adjustment": "The player reported pixel-perfect timing. Place this puzzle last.",
+        "basis": "teachingCurriculum",
+        "comparisonPlacement": {
+          "basis": "solutionEstimate",
+          "lower": 355.0,
+          "position": 730.0,
+          "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+          "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
+          "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+          "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+          "upper": 730.0
+        },
+        "courseChapter": "capstones",
+        "learningRole": "challenge",
+        "lower": 990.0,
+        "position": 990.0,
+        "reference": "Zany/Got_anything..._Lemmingy___.nxlv",
+        "replayRevision": "dd376e8cfbea43901a8f196343725e12403a6e7d34deba0057f9be3f2875722f",
+        "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+        "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
+        "upper": 990.0
+      },
+      "preparationGaps": [],
+      "score": 272.0327659874961,
+      "stage": "Expert"
     }
   ],
   "placementPolicy": "teaching-curriculum-3",
-  "version": "learning-30"
+  "version": "learning-32"
 }
