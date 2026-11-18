@@ -25,10 +25,10 @@ final class FamiliarNamesPageTests: XCTestCase {
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         var windows: [NSWindow] = []
         defer { windows.forEach { $0.close() } }
-        let originalLanguage = L10n.currentLanguagePreference
-        defer { L10n.setLanguage(originalLanguage) }
-        for language in L10n.languageOptions where language != .system {
-            L10n.setLanguage(language)
+        let originalLanguage = GameLocalisation.currentLanguagePreference
+        defer { GameLocalisation.setLanguage(originalLanguage) }
+        for language in GameLocalisation.languageOptions where language != .system {
+            GameLocalisation.setLanguage(language)
             XCTAssertLessThanOrEqual(GameTextLayout.height(FamiliarNamesArt.privacy + "\n" + FamiliarNamesArt.retention,
                 width: 928, font: renderer.font(.small)), 108, language.rawValue)
             for size in [CGSize(width: 640, height: 480), CGSize(width: 1120, height: 720)] {
@@ -67,14 +67,14 @@ final class FamiliarNamesPageTests: XCTestCase {
                 }
                 try XCTUnwrap(bitmap.representation(using: .png, properties: [:])).write(to: output.appendingPathComponent("mac-\(language.rawValue)-\(Int(size.width)).png"))
                 let controls = DialogKeyboardNavigation().controls(in: page).compactMap { $0 as? NSButton }
-                try XCTUnwrap(controls.first { $0.title == L10n.text("Next") }).performClick(nil)
+                try XCTUnwrap(controls.first { $0.title == GameLocalisation.text("Next") }).performClick(nil)
                 let labels = page.body.subviews.flatMap(\.subviews).compactMap { $0 as? NSTextField }
                 XCTAssertTrue(labels.contains { $0.stringValue == "Robin" })
                 try XCTUnwrap(DialogKeyboardNavigation().controls(in: page).compactMap { $0 as? NSButton }
-                    .first { $0.title == L10n.text("Previous") }).performClick(nil)
+                    .first { $0.title == GameLocalisation.text("Previous") }).performClick(nil)
             }
         }
-        L10n.setLanguage(.english)
+        GameLocalisation.setLanguage(.english)
         let page = FamiliarNamesPage(store: store)
         page.field.stringValue = "Jo, JO, Anne Marie"; page.save()
         XCTAssertEqual(try store.names(), ["Jo", "Anne Marie"])

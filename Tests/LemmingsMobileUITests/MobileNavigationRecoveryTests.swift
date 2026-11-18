@@ -1,4 +1,5 @@
 #if os(iOS) || os(tvOS)
+import LemmingsAppCore
 import Foundation
 import Testing
 import UIKit
@@ -139,7 +140,7 @@ import LemmingsMobileCore
                 selectedSkill: game.selectedControl, paused: false, speed: 1, endRunArmed: false).first { $0.action == .pause })
             let point = CGPoint(x: target.inputFrame.midX, y: target.inputFrame.midY)
             let button = try #require(game.hud.hitTest(point, with: nil) as? UIControl)
-            #expect(button.accessibilityLabel == L10n.text("Pause"))
+            #expect(button.accessibilityLabel == GameLocalisation.text("Pause"))
             @MainActor func renderedButton(_ name: String) throws -> Data {
                 game.hud.layer.displayIfNeeded()
                 let image = UIGraphicsImageRenderer(size: target.inputFrame.size).image { context in
@@ -158,7 +159,7 @@ import LemmingsMobileCore
             let snapshot = game.session.snapshot
             button.sendActions(for: .touchDown)
             #expect(game.paused && game.session.snapshot == snapshot)
-            #expect(button.accessibilityLabel == L10n.text("Resume"))
+            #expect(button.accessibilityLabel == GameLocalisation.text("Resume"))
             let pausedImage = try renderedButton("paused")
             #expect(pausedImage != runningImage)
             #expect(game.hud.hitTest(point, with: nil) === button)
@@ -168,7 +169,7 @@ import LemmingsMobileCore
             #expect(game.paused)
             button.sendActions(for: .touchUpInside)
             #expect(!game.paused && game.session.snapshot == snapshot)
-            #expect(button.accessibilityLabel == L10n.text("Pause"))
+            #expect(button.accessibilityLabel == GameLocalisation.text("Pause"))
             #expect(try renderedButton("resumed") == runningImage)
         }
     }
@@ -215,7 +216,7 @@ import LemmingsMobileCore
             game.showControlsHelp()
             game.overlayCanvas.goBack()
             #expect(game.playState.phase == .ready)
-            #expect(game.overlayCanvas.page.footer.contains { $0.title == L10n.text("START") })
+            #expect(game.overlayCanvas.page.footer.contains { $0.title == GameLocalisation.text("START") })
             #expect(game.session.snapshot.tick == 0)
         }
     }
@@ -233,8 +234,8 @@ import LemmingsMobileCore
             game.viewDidLayoutSubviews()
             #expect(game.playState.phase == .ready)
             #expect(game.session.snapshot == snapshot)
-            #expect(game.overlayCanvas.page.footer.contains { $0.title == L10n.text(shared ? "READY" : "START") })
-            #expect(!game.overlayCanvas.page.footer.contains { $0.title == L10n.text("RESUME") })
+            #expect(game.overlayCanvas.page.footer.contains { $0.title == GameLocalisation.text(shared ? "READY" : "START") })
+            #expect(!game.overlayCanvas.page.footer.contains { $0.title == GameLocalisation.text("RESUME") })
         }
     }
 
@@ -259,7 +260,7 @@ import LemmingsMobileCore
             game.applyLifecycle(.becameActive)
             #expect(game.paused && !game.overlay.isHidden)
             #expect(game.isDisplayLinkPaused == GCController.controllers().isEmpty)
-            #expect(game.overlayCanvas.page.footer.contains { $0.title == L10n.text("RESUME") })
+            #expect(game.overlayCanvas.page.footer.contains { $0.title == GameLocalisation.text("RESUME") })
             game.resumePlay()
             #expect(!game.paused && !game.isDisplayLinkPaused)
             #expect(game.clock.advance(at: 1000) == 0)
@@ -329,7 +330,7 @@ import LemmingsMobileCore
             game.showControlsHelp()
             game.overlayCanvas.goBack()
             #expect(game.overlayCanvas.page.result)
-            #expect(!game.overlayCanvas.page.footer.contains { $0.title == L10n.text("RESUME") })
+            #expect(!game.overlayCanvas.page.footer.contains { $0.title == GameLocalisation.text("RESUME") })
             game.showRecoveryOverlay(title: "Fixture", retry: {})
             game.overlayCanvas.goBack()
             #expect(game.overlayCanvas.page.result)
@@ -343,7 +344,7 @@ import LemmingsMobileCore
             game.onRecordCompletion = { _ in ([], "Fixture save failure") }
             #expect(game.session.beginEndRun())
             game.pausePlay(showControls: true)
-            let menu = try #require(game.overlayCanvas.page.footer.first { $0.title == L10n.text("MENU") })
+            let menu = try #require(game.overlayCanvas.page.footer.first { $0.title == GameLocalisation.text("MENU") })
             game.overlayCanvas.onAction?(menu.id)
             #expect(exit == .menu)
         }
@@ -354,7 +355,7 @@ import LemmingsMobileCore
             var exited = false
             game.onExit = { _ in exited = true }
             game.leaveToLibrary()
-            #expect(game.overlayCanvas.page.backAction?.title == L10n.text("CANCEL"))
+            #expect(game.overlayCanvas.page.backAction?.title == GameLocalisation.text("CANCEL"))
             game.overlayCanvas.goBack()
             for _ in 0..<20 { await Task.yield() }
             #expect(!exited)

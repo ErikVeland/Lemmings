@@ -1,4 +1,5 @@
 #if os(iOS) || os(tvOS)
+import LemmingsAppCore
 import Foundation
 import Testing
 import UIKit
@@ -12,7 +13,7 @@ import NxlvKit
         for width: CGFloat in [320, 390, 844, 1024, 1920] {
             let host = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 700))
             let navigation = MobileNavigationView()
-            navigation.secondaryTitle = L10n.text("Pause menu")
+            navigation.secondaryTitle = GameLocalisation.text("Pause menu")
             navigation.frame = CGRect(x: 0, y: 0, width: width, height: navigation.shelfHeight)
             let scroll = MobileMenuScrollView(frame: CGRect(x: 0, y: navigation.shelfHeight,
                 width: width, height: 700 - navigation.shelfHeight))

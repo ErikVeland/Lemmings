@@ -1,4 +1,5 @@
 #if os(iOS) || os(tvOS)
+import LemmingsAppCore
 import Foundation
 import Testing
 import UIKit
@@ -69,10 +70,10 @@ import LemmingsMobileCore
             game.overlayCanvas.focusedID = "1"
             let source = game.overlayCanvas.page
             game.showHints(stage: 1)
-            for _ in 0..<200 where game.overlayCanvas.page.details.contains(L10n.text("Loading...")) {
+            for _ in 0..<200 where game.overlayCanvas.page.details.contains(GameLocalisation.text("Loading...")) {
                 try await Task.sleep(for: .milliseconds(5))
             }
-            #expect(!game.overlayCanvas.page.details.contains(L10n.text("Loading...")))
+            #expect(!game.overlayCanvas.page.details.contains(GameLocalisation.text("Loading...")))
             game.overlayCanvas.goBack()
             #expect(game.overlayCanvas.page == source)
             #expect(game.overlayCanvas.focusedID == "1")

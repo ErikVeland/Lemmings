@@ -1,4 +1,5 @@
 #if os(iOS) || os(tvOS)
+import LemmingsAppCore
 import Testing
 import UIKit
 import LemmingsGameArt
@@ -42,13 +43,13 @@ import NxlvKit
             }
         }
         #expect(rows[2].frame.width == selector.bounds.width)
-        #expect(rows[2].accessibilityValue == L10n.text("Off"))
+        #expect(rows[2].accessibilityValue == GameLocalisation.text("Off"))
         var presses = 0
         selector.onToggleGhost = { presses += 1; selector.ghostEnabled.toggle() }
         selector.observeNeutral()
         rows[2].sendActions(for: .gameActivation)
         #expect(presses == 1 && selector.ghostEnabled)
-        #expect(rows[2].accessibilityValue == L10n.text("On"))
+        #expect(rows[2].accessibilityValue == GameLocalisation.text("On"))
         #expect(rows[2].accessibilityTraits.contains(.selected))
         selector.isHidden = true
         rows[2].sendActions(for: .gameActivation)
