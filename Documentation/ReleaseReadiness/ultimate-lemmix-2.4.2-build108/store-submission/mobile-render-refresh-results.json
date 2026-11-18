@@ -1,0 +1,126 @@
+{
+  "candidate": "Ultimate Lemmix 2.4.2 (108)",
+  "frozenCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+  "mainBundleIdentifier": "academy.glasscode.ultimatelemmix",
+  "status": "archives-prepared-export-waits-for-credential-availability",
+  "exportAttempted": false,
+  "authenticationState": "Mac export reported unavailable Xcode credentials while the computer was locked. User unlock and Xcode account availability recheck are pending. This does not establish that any account was deleted.",
+  "uploaded": false,
+  "renderEquivalence": {
+    "bytes": 9600,
+    "sha256": "9483b3013bdaaaaafdebf56fced501c71cb8b4e99973f47c057241116ee28a78"
+  },
+  "history": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/Superseded/mobile-before-render-refactor-20261119-011923",
+  "resumeScript": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/resume-mobile-store-exports.sh",
+  "platforms": {
+    "ios": {
+      "archiveReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-archive-receipt.json",
+      "archiveReceiptSHA256": "6a34dac7fd7c957f73d4517f511150715fb97138200c65733556e56fb0502dc9",
+      "sourceFingerprint": "591aabf1c1ae27aff8960c9092c63e98eb4199529d6fe7b3830238cbf80d3f7e",
+      "sourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+      "sharedSourcesUnchanged": true,
+      "publicationMetadataUnchanged": true,
+      "compilerExitCode": 0,
+      "preparedArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-iOS-Store.xcarchive",
+      "preparationReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-iOS-Store.preparation.json",
+      "preparationReceiptSHA256": "5383d2e751e3c000e72203efbb3750e10119599183be60dcfde145e9fa73e7cc",
+      "entitlementsPreserved": true,
+      "resources": [
+        {
+          "bundle": ".",
+          "resourceCount": 2298
+        },
+        {
+          "bundle": "PlugIns/DeskClockWidget.appex",
+          "resourceCount": 1633
+        }
+      ],
+      "bundles": [
+        {
+          "bundleID": "academy.glasscode.ultimatelemmix",
+          "build": "108",
+          "version": "2.4.2",
+          "executableSHA256": "1011ae386d38a1bcd429b5c5abcb7cd6bb9d84d4a9956a4f393cca6d462f9432"
+        },
+        {
+          "bundleID": "academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+          "build": "108",
+          "version": "2.4.2",
+          "executableSHA256": "4fbd37dca7d1a06513117f6c40fc27810c12c6fafb4eb6ba945c08ba99223049"
+        }
+      ],
+      "exportCommand": [
+        "python3",
+        "Tools/Publication/mobile_store.py",
+        "export",
+        "--platform",
+        "ios",
+        "--resources",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-resources-submission",
+        "--archive",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-iOS-Store.xcarchive",
+        "--output",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-store-export",
+        "--temporary",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/temporary"
+      ],
+      "cachedProfilesOnly": true
+    },
+    "tvos": {
+      "archiveReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-archive-receipt.json",
+      "archiveReceiptSHA256": "88d63df3611b36feac27fa62cd9c14239e312cd801b8ec3a4827814d260809bb",
+      "sourceFingerprint": "591aabf1c1ae27aff8960c9092c63e98eb4199529d6fe7b3830238cbf80d3f7e",
+      "sourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+      "sharedSourcesUnchanged": true,
+      "publicationMetadataUnchanged": true,
+      "compilerExitCode": 0,
+      "preparedArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-tvOS-Store.xcarchive",
+      "preparationReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-tvOS-Store.preparation.json",
+      "preparationReceiptSHA256": "55de19d18e5429d74acc666c2eeab8eaccbf44d0765d0f7f65d60483019ec080",
+      "entitlementsPreserved": true,
+      "resources": [
+        {
+          "bundle": ".",
+          "resourceCount": 2298
+        },
+        {
+          "bundle": "PlugIns/TopShelf.appex",
+          "resourceCount": 0
+        }
+      ],
+      "bundles": [
+        {
+          "bundleID": "academy.glasscode.ultimatelemmix",
+          "build": "108",
+          "version": "2.4.2",
+          "executableSHA256": "788b17127df2cea34d5424af05ed17ebe4f6012297bb5a91bd54dcc743a0b4ca"
+        },
+        {
+          "bundleID": "academy.glasscode.ultimatelemmix.tvos.TopShelf",
+          "build": "108",
+          "version": "2.4.2",
+          "executableSHA256": "dc4d2992d6809d500ae2c0432f06ed9fcfa28e87eb63b4811df4baad183390e3"
+        }
+      ],
+      "exportCommand": [
+        "python3",
+        "Tools/Publication/mobile_store.py",
+        "export",
+        "--platform",
+        "tvos",
+        "--resources",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-resources-submission",
+        "--archive",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-tvOS-Store.xcarchive",
+        "--output",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-store-export",
+        "--temporary",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/temporary"
+      ],
+      "cachedProfilesOnly": true
+    }
+  },
+  "tests": "Skipped: presentation-only refactor; no engine changes.",
+  "accountOrKeychainMutations": false,
+  "priorHandoffIPAsUnchanged": true
+}

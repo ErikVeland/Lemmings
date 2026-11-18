@@ -197,3 +197,12 @@ This service-code update does not close that catalogue gap. No app engine code
 changed. The deployment receipt is `HostedActionReplayRelease.md` in the current
 Store submission dossier. This scoped service evidence does not establish live
 Game Center, every leaderboard or full cross-device cloud acceptance.
+
+## Service maintenance backup
+
+The 19 November ranking update retained a verified cold state backup in a
+root-only server directory. It has no automatic expiry. The public privacy
+notice and choices page now distinguish live-record removal from protected
+maintenance copies. This disclosure does not create a new retention policy
+or claim that the backup has been deleted. See HostedActionReplayRelease.md
+in the current Store submission dossier.

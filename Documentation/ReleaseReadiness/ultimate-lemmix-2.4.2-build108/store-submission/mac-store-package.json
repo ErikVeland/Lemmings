@@ -3,13 +3,13 @@
     "No App Store upload, processing or review is established by this package audit."
   ],
   "adHoc": false,
-  "appStoreAnalysis": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac/Export/AppStoreInfo.plist",
+  "appStoreAnalysis": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac-before-ci-compatibility-20261119/Export/AppStoreInfo.plist",
   "appStoreAnalysisErrors": [],
   "architectures": [
     "arm64",
     "x86_64"
   ],
-  "archive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac/Ultimate Lemmix.xcarchive",
+  "archive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac-before-ci-compatibility-20261119/Ultimate Lemmix.xcarchive",
   "binaries": {
     "Contents/Frameworks/libLemmingsAppCore.dylib": "6bc19b0d4c32052e8d99244ce75012acb5dfc197dc282db098644e05133fddd3",
     "Contents/Frameworks/libLemmingsAudio.dylib": "8c0a4800cb90431be1a260674c2d33af1d32249d130b704ed761053ff7e209f8",
@@ -30,6 +30,8 @@
     "x86_64/source-records/frontend.json": "3177c18b3afb19c2b2e9503df93c2f5aa5985c338d0a1d8a4b6774503c8ea9a1",
     "x86_64/source-records/shared.json": "3fbe65f5d44ec0d0c69ee72f004ac2da7a3d041af2128f881e9b63204325a142"
   },
+  "currentSourceRebuiltPackageReady": false,
+  "currentSourceRefresh": "mac-source-refresh.json",
   "exportCommand": [
     "xcodebuild",
     "-exportArchive",
@@ -42,13 +44,15 @@
     "-allowProvisioningUpdates"
   ],
   "exportExitCode": 0,
-  "exportLog": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac/export.log",
+  "exportLog": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac-before-ci-compatibility-20261119/export.log",
   "gitDirty": true,
   "gitHead": "7dd5340b9cec5bbb945c2f1da05e098d71cf35f5",
-  "package": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac/Export/Ultimate Lemmix.pkg",
+  "package": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac-before-ci-compatibility-20261119/Export/Ultimate Lemmix.pkg",
   "packageReadyForSubmission": true,
   "packageSHA256": "9010fcb80bd8c905dbdb402e8b9c24c4c937aeb0f165936f00baf61cfd448920",
   "packageSignature": "Package \"Ultimate Lemmix.pkg\":\n   Status: signed by a developer certificate issued by Apple (Development)\n   Certificate Chain:\n    1. 3rd Party Mac Developer Installer: Erik Veland (54WU29TRTY)\n       Expires: 2027-11-10 19:47:27 +0000\n       SHA256 Fingerprint:\n           77 F1 9B 03 85 8F 04 A7 5F AC A2 FA 06 80 BB 48 58 D9 4C 93 79 48 \n           F5 7F 7C 2E 96 C1 7F A2 F6 A8\n       ------------------------------------------------------------------------\n    2. Apple Worldwide Developer Relations Certification Authority\n       Expires: 2030-02-20 00:00:00 +0000\n       SHA256 Fingerprint:\n           DC F2 18 78 C7 7F 41 98 E4 B4 61 4F 03 D6 96 D8 9C 66 C6 60 08 D4 \n           24 4E 1B 99 16 1A AC 91 60 1F\n       ------------------------------------------------------------------------\n    3. Apple Root CA\n       Expires: 2035-02-09 21:40:36 +0000\n       SHA256 Fingerprint:\n           B0 B1 73 0E CB C7 FF 45 05 14 2C 49 F1 29 5E 6E DA 6B CA ED 7E 2C \n           68 C5 BE 91 B5 A1 10 01 F0 24\n\n",
+  "preservedPackageReason": "Retain the signed package while the refreshed archive awaits credential-access verification after the Mac is unlocked.",
+  "preservedPathNote": "Artifact paths point to the verified backup. exportCommand retains the actual historical command and its original paths.",
   "product": "ultimate-lemmix",
   "resourceManifestSHA256": "1f9b30b3daaf41c9c00ee637bd115d684d8cdd31cc022116bbf0ac258e1b6c61",
   "schemaVersion": 1,

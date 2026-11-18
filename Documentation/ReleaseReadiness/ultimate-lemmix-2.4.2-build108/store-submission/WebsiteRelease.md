@@ -70,7 +70,9 @@ now uses a darker text colour. The final audits include both corrections.
 Browser evidence is in the local ignored `Website/verification` directory.
 The route and build checks can be reproduced with Python's standard library.
 The final interactive browser pass is incomplete: input stopped taking effect
-in both the local preview and App Store Connect. Do not count those attempts as
+in both the local preview and App Store Connect. Computer control then confirmed
+that the Mac was locked. Repeat this pass after the owner unlocks it.
+Do not count those attempts as
 passed keyboard, gallery or Store-save checks. Earlier gallery selection worked,
 but it does not replace the final interaction pass.
 
