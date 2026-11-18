@@ -1,0 +1,209 @@
+{
+  "architecture": "arm64",
+  "buildExitCode": 0,
+  "buildSucceededMarker": true,
+  "checkout": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer zsh Apps/UltimateLemmixSupport/build.sh tvos -configuration Release -destination 'generic/platform=tvOS' -derivedDataPath .build/ultimate-lemmix-tvos-107 CURRENT_PROJECT_VERSION=108 CODE_SIGNING_ALLOWED=NO build",
+  "configuration": "Release",
+  "derivedData": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-107",
+  "destination": "generic/platform=tvOS",
+  "engineCompilerInvoked": false,
+  "engineDiffSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "engineSourceFingerprint": "9a246f97fd42930d53c273a4bb9c45800f0379fd7326f7c65518d484ebfeeea5",
+  "engineSourcesUnchangedFromBaseline": true,
+  "kind": "ultimate-lemmix-full-game-device-sdk-build",
+  "log": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/build.log",
+  "logSHA256": "2c17488d6cd36d52c687ed659b812bc016ae281c60ae7ddcc8fa2c5ed7856c88",
+  "preserved107App": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-107-preserved-before-108/UltimateLemmixTVOS.app",
+  "previous108Evidence": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/before-widget-import-refresh/final108build-evidence.json",
+  "products": [
+    {
+      "binarySHA256": "5d3682df60a7e56d05c155fa97d15025ba1bd622eab14cff06a2ff479bb3d4ad",
+      "embeddedProvisioningProfile": false,
+      "info": {
+        "AnonymousTelemetryURL": "https://glasscode.academy/lemmings-api",
+        "BuildMachineOSBuild": "25G76",
+        "CFBundleDevelopmentRegion": "en_AU",
+        "CFBundleDisplayName": "Ultimate Lemmix",
+        "CFBundleExecutable": "UltimateLemmixTVOS",
+        "CFBundleIcons": {
+          "CFBundlePrimaryIcon": "App Icon"
+        },
+        "CFBundleIdentifier": "academy.glasscode.ultimatelemmix.tvos",
+        "CFBundleInfoDictionaryVersion": "6.0",
+        "CFBundleLocalizations": [
+          "en",
+          "es-419",
+          "de",
+          "fr",
+          "pt-BR",
+          "it",
+          "nl",
+          "nb",
+          "ta"
+        ],
+        "CFBundleName": "UltimateLemmixTVOS",
+        "CFBundlePackageType": "APPL",
+        "CFBundleShortVersionString": "2.4.2",
+        "CFBundleSupportedPlatforms": [
+          "AppleTVOS"
+        ],
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLName": "academy.glasscode.ultimatelemmix.topshelf",
+            "CFBundleURLSchemes": [
+              "ultimatelemmix"
+            ]
+          }
+        ],
+        "CFBundleVersion": "108",
+        "CloudLibraryCloudKitEnabled": true,
+        "CloudLibraryURL": "https://glasscode.academy/lemmings-api/cloud",
+        "DTCompiler": "com.apple.compilers.llvm.clang.1_0",
+        "DTPlatformBuild": "24K122",
+        "DTPlatformName": "appletvos",
+        "DTPlatformVersion": "27.2",
+        "DTSDKBuild": "24K122",
+        "DTSDKName": "appletvos27.2",
+        "DTXcode": "2720",
+        "DTXcodeBuild": "27B52",
+        "GCSupportedGameControllers": [
+          {
+            "ProfileName": "ExtendedGamepad"
+          },
+          {
+            "ProfileName": "MicroGamepad"
+          },
+          {
+            "ProfileName": "DirectionalGamepad"
+          }
+        ],
+        "GCSupportsControllerUserInteraction": true,
+        "GCSupportsMultipleMicroGamepads": true,
+        "HostedRankingsURL": "https://glasscode.academy/lemmings-api/rankings",
+        "ITSAppUsesNonExemptEncryption": false,
+        "LSRequiresIPhoneOS": true,
+        "MinimumOSVersion": "17.0",
+        "NSLocalNetworkUsageDescription": "Transfer your game data, replay movies and recovery keys between Apple TV and another device on your local network.",
+        "TVTopShelfImage": {
+          "TVTopShelfPrimaryImage": "Top Shelf Image",
+          "TVTopShelfPrimaryImageWide": "Top Shelf Image Wide"
+        },
+        "UIApplicationSceneManifest": {
+          "UIApplicationSupportsMultipleScenes": false,
+          "UISceneConfigurations": {
+            "UIWindowSceneSessionRoleApplication": [
+              {
+                "UISceneConfigurationName": "Default Configuration",
+                "UISceneDelegateClassName": "UltimateLemmixTVOS.SceneDelegate"
+              }
+            ]
+          }
+        },
+        "UIApplicationSupportsIndirectInputEvents": true,
+        "UIDeviceFamily": [
+          3
+        ],
+        "UILaunchScreen": {
+          "UIColorName": "LaunchBackground"
+        },
+        "UIRequiredDeviceCapabilities": [
+          "arm64"
+        ],
+        "UltimateLemmixStore": true
+      },
+      "infoSHA256": "f12a23d4f3f58f7a7080bf21dc801046a750f8b9df527005b610a0e192de63e3",
+      "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/UltimateLemmixTVOS.app",
+      "scope": "app",
+      "signatureInspection": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/UltimateLemmixTVOS.app: code object is not signed at all",
+      "signed": false
+    },
+    {
+      "binarySHA256": "54804469f74d2c4b6760f098feec54b660232cadf81882dd3cd7898994aadfcf",
+      "embeddedProvisioningProfile": false,
+      "info": {
+        "BuildMachineOSBuild": "25G76",
+        "CFBundleDevelopmentRegion": "en_AU",
+        "CFBundleDisplayName": "Ultimate Lemmix",
+        "CFBundleExecutable": "TopShelf",
+        "CFBundleIdentifier": "academy.glasscode.ultimatelemmix.tvos.TopShelf",
+        "CFBundleInfoDictionaryVersion": "6.0",
+        "CFBundleName": "TopShelf",
+        "CFBundlePackageType": "XPC!",
+        "CFBundleShortVersionString": "2.4.2",
+        "CFBundleSupportedPlatforms": [
+          "AppleTVOS"
+        ],
+        "CFBundleVersion": "108",
+        "DTCompiler": "com.apple.compilers.llvm.clang.1_0",
+        "DTPlatformBuild": "24K122",
+        "DTPlatformName": "appletvos",
+        "DTPlatformVersion": "27.2",
+        "DTSDKBuild": "24K122",
+        "DTSDKName": "appletvos27.2",
+        "DTXcode": "2720",
+        "DTXcodeBuild": "27B52",
+        "MinimumOSVersion": "17.0",
+        "NSExtension": {
+          "NSExtensionPointIdentifier": "com.apple.tv-top-shelf",
+          "NSExtensionPrincipalClass": "TopShelf.ContentProvider"
+        },
+        "UIDeviceFamily": [
+          3
+        ],
+        "UIRequiredDeviceCapabilities": [
+          "arm64"
+        ],
+        "UltimateLemmixStore": true
+      },
+      "infoSHA256": "baa00f3cef8531a36dbcdd9779c568313b0949e81036a409cc3682e1c7bacaa6",
+      "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/UltimateLemmixTVOS.app/PlugIns/TopShelf.appex",
+      "scope": "top-shelf",
+      "signatureInspection": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/UltimateLemmixTVOS.app/PlugIns/TopShelf.appex: code object is not signed at all",
+      "signed": false
+    }
+  ],
+  "recordedAtUTC": "2026-11-17T10:20:26.013360+00:00",
+  "refreshScope": "Final MobileWidgetResources LemmingsMobileCore import. tvOS widget-service body remains a no-op.",
+  "resourceProfile": {
+    "fileCount": 2300,
+    "manifestSHA256": "87b13448571bb98269b4eee4b4efb34b2ae1311d56179af5548fe2d3d0601a29",
+    "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-mobile-clean-resources-107-r2",
+    "receiptMatchesProfile": true,
+    "receiptSHA256": "c93dc73fe7975c9f903424cfaa16f639650a2648e110250ee53ca4bb84ddc030",
+    "resourceHashMismatchPaths": [],
+    "trustedDataInventorySHA256": "dc07708a1b98d362e6c031112c988820ff69af549ece5672255c89b0d3f2e495"
+  },
+  "restrictedAttemptExitCode": 74,
+  "restrictedAttemptLog": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/restricted-attempt.log",
+  "restrictedAttemptReason": "Initial pre-identity build cache writes denied. Subsequent authorised builds used existing Xcode caches.",
+  "schemaVersion": 1,
+  "sourceBaseline": "b294d3b7c298f549aad5faa36f92ba9bf23b7529",
+  "sourceBranch": "codex/ultimate-lemmix-2.4.2",
+  "sourceChangesDuringBuild": [],
+  "sourceHashesAfter": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/source-hashes-after.json",
+  "sourceHashesAfterSHA256": "6755824516ed71630e5e2a2e5589bed6d0cce5fa721649e90677c89684d61cfe",
+  "sourceHashesBefore": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/source-hashes-before.json",
+  "sourceHashesBeforeSHA256": "6755824516ed71630e5e2a2e5589bed6d0cce5fa721649e90677c89684d61cfe",
+  "storeCompilationCondition": {
+    "actualGameArtCompilerInvocationCount": 3,
+    "compilerEvidenceLog": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/before-widget-import-refresh/build.log",
+    "compilerEvidenceLogSHA256": "28141a40fc4026fbec34a4479676d034ced2ae68bd874418ec27f0c780d8dd86",
+    "evidence": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-108/game-art-compiler-invocations.json",
+    "gameArtReusedUnchanged": true,
+    "globalXCConfig": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/Apps/UltimateLemmixSupport/Store.xcconfig",
+    "globalXCConfigSHA256": "3aaf9899a4c7cabf71f95624b723ac1ad1a33f23dc1555d27ab4c7f0f4fbdce3",
+    "name": "ULTIMATE_LEMMIX_STORE",
+    "packageGameArtVerified": true
+  },
+  "verificationLimits": {
+    "engine": "NxlvKit unchanged. Incremental build reuses existing engine objects.",
+    "mac": "Active Mac107 untouched.",
+    "network": "No fetch flags supplied. Existing resolved local dependencies used.",
+    "resources": "Receipt verifies copied resource hashes only. It does not prove all owned-pack runtime content or rights.",
+    "runtime": "Not run on a physical Apple TV or simulator. Rendering, remote/controller input, owned-resource import/relaunch, Top Shelf and full owned-pack parity remain unverified.",
+    "signing": "Unsigned compile only. No signing, export, upload or device installation.",
+    "tests": "Skipped. No automated tests, runtime checks, release audits, windows or audio.",
+    "widget": "Shared widget-resource code compile only. tvOS does not call WidgetKit. No App Group, widget-service or runtime acceptance claim."
+  }
+}

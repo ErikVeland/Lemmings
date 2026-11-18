@@ -1,0 +1,10 @@
+{
+  "checkedUTC": "2026-11-17T01:21:24.556365+00:00",
+  "appPath": ".build/ultimate-lemmix-personal-preview/Ultimate Lemmix.app",
+  "bundleIdentifier": "academy.glasscode.ultimatelemmix.personal-preview",
+  "launch": "user-authorised manual test",
+  "launchCommandExitCode": 0,
+  "confirmedPID": 1019,
+  "scope": "Launch and running process confirmed. Gameplay acceptance and audible playback not recorded.",
+  "windowAutomationPerformed": false
+}

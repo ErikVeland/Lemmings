@@ -13,7 +13,7 @@ import NxlvKit
     private var switchFrame: CGRect { CGRect(x: 0, y: 0, width: bounds.width, height: 48) }
     var onSelect: ((SolutionReplayMode) -> Void)?
     private var buttons: [SolutionSegmentButton] = []
-    static let typography = Bundle.main.resourceURL.flatMap { GameMenuTypography(directory: $0.appendingPathComponent("MacArtwork/lemmings")) }
+    static var typography: GameMenuTypography? { GameArtworkResources.menuInterface.map { GameMenuTypography(interface: $0) } }
     override var isFlipped: Bool { true }
     override init(frame: NSRect) {
         super.init(frame: frame)

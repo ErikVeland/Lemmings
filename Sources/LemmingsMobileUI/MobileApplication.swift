@@ -4,6 +4,19 @@ import LemmingsMobileCore
 import NxlvKit
 import UIKit
 
+/**
+ * Selects the app's content and player-data boundary.
+ */
+public enum LemmingsMobileConfiguration: Equatable, Sendable {
+    case preservation
+    case ultimateLemmix
+
+    public static var current: Self {
+        Bundle.main.object(forInfoDictionaryKey: "UltimateLemmixStore") as? Bool == true
+            ? .ultimateLemmix : .preservation
+    }
+}
+
 public enum LemmingsMobileApplication {
     #if os(iOS)
     @MainActor public static func openDeskClock(in root: UIViewController?) {
@@ -16,7 +29,7 @@ public enum LemmingsMobileApplication {
         library.presentDeskClock(reason: .widget)
     }
     #endif
-    @MainActor public static func makeRootViewController() -> UIViewController {
+    @MainActor public static func makeRootViewController(configuration: LemmingsMobileConfiguration = .current) -> UIViewController {
 #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--ui-test-l3-direction-picker")
             || ProcessInfo.processInfo.arguments.contains("--ui-test-accessible-targeting")
@@ -24,7 +37,7 @@ public enum LemmingsMobileApplication {
             return MobileInteractionUITestHarness.make()
         }
 #endif
-        return MobileStartupViewController()
+        return MobileStartupViewController(configuration: configuration)
     }
 }
 

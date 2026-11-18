@@ -23,7 +23,12 @@ public enum ClassicSceneFrame {
         return pixels
     }
 
-    public static func rgba(_ level: ClassicRenderedLevel, simulation: ClassicDOSSimulation, terrain: Data? = nil) -> Data {
+    public static func rgba(_ level: ClassicRenderedLevel, simulation: ClassicDOSSimulation, terrain: Data? = nil,
+                            lixArtwork: LixSceneArtwork? = nil,
+                            lixTheme: LixSceneArtwork.Theme = .brick) -> Data {
+        if let lixArtwork {
+            return lixArtwork.frame(level, simulation: simulation, theme: lixTheme, pixelScale: 1).rgba
+        }
         let solid = simulation.terrain.renderingSolidMask
         let visualTerrain = terrain ?? Data(terrainPixels(level, solid: solid))
         guard solid.count == level.solidMask.count, visualTerrain.count == solid.count * 4 else { return level.rgba }

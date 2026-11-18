@@ -106,6 +106,13 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                 }
                 continue
             }
+            if !MobileArtworkInstallation.nativeActorBodies.wrappedValue {
+                drawHeldProjectile(for: lemming, width: width, height: height,
+                    palette: runtime.configuration.palette, into: &rgba)
+                drawEquipment(for: lemming, width: width, height: height,
+                    palette: runtime.configuration.palette, into: &rgba)
+                continue
+            }
             if lemming.state == .walking, let walker {
                 let phase = Lemmings2Walker.phase(x: lemming.x, direction: lemming.direction)
                 let frame = walker.frames[phase]
@@ -139,16 +146,8 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
                            y: lemming.y + pose.offsetY + frame.y,
                            width: width, height: height, mirrored: pose.mirrored, into: &rgba)
 
-            if let held = lemming.heldProjectile,
-               let frames = animations[held.kind == .spear ? "SPEAR" : "STONE"],
-               frames.indices.contains(held.frame) {
-                let projectile = frames[held.frame]
-                let offset = held.kind == .spear ? 7 : 0
-                Self.composite(projectile, palette: runtime.configuration.palette,
-                               atX: held.x - offset + projectile.x,
-                               y: held.y - offset + projectile.y,
-                               width: width, height: height, into: &rgba)
-            }
+            drawHeldProjectile(for: lemming, width: width, height: height,
+                palette: runtime.configuration.palette, into: &rgba)
             drawEquipment(for: lemming, width: width, height: height, palette: runtime.configuration.palette,
                           into: &rgba)
             if let ticks = lemming.bombTicks,
@@ -164,6 +163,20 @@ public struct Lemmings2MobileSceneRenderer: Sendable {
             }
         }
         return try MobilePixelFrame(width: width * (macintosh ? 2 : 1), height: height * (macintosh ? 2 : 1), rgba: Data(rgba))
+    }
+
+    private func drawHeldProjectile(for lemming: Lemmings2Runtime.Lemming,
+                                    width: Int, height: Int, palette: [UInt8], into rgba: inout [UInt8]) {
+        if let held = lemming.heldProjectile,
+           let frames = animations[held.kind == .spear ? "SPEAR" : "STONE"],
+           frames.indices.contains(held.frame) {
+            let projectile = frames[held.frame]
+            let offset = held.kind == .spear ? 7 : 0
+            Self.composite(projectile, palette: palette,
+                           atX: held.x - offset + projectile.x,
+                           y: held.y - offset + projectile.y,
+                           width: width, height: height, into: &rgba)
+        }
     }
 
     private func drawEquipment(for lemming: Lemmings2Runtime.Lemming,

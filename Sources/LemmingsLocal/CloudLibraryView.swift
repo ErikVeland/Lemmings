@@ -8,7 +8,15 @@ import LemmingsGameArt
 
 @MainActor final class CloudLibraryView: NSView, GameDialogCustomNavigation, NSSearchFieldDelegate {
     let sync: CloudLibrarySync
-    private let typography: GameMenuTypography?
+    private var cachedTypography: GameMenuTypography?
+    private var typographyRevision = GameArtworkResources.revision
+    private var typography: GameMenuTypography? {
+        if typographyRevision != GameArtworkResources.revision || cachedTypography == nil {
+            typographyRevision = GameArtworkResources.revision
+            cachedTypography = GameArtworkResources.menuInterface.map { GameMenuTypography(interface: $0) }
+        }
+        return cachedTypography
+    }
     private let accessible = GameAccessibleElements()
     private var message = ""
     private var busy = false
@@ -25,7 +33,7 @@ import LemmingsGameArt
     override var acceptsFirstResponder: Bool { true }
     init(sync: CloudLibrarySync, typography: GameMenuTypography? = nil) {
         self.sync = sync
-        self.typography = typography ?? Bundle.main.resourceURL.flatMap { GameMenuTypography(directory: $0.appendingPathComponent("MacArtwork/lemmings")) }
+        self.cachedTypography = typography ?? GameArtworkResources.menuInterface.map { GameMenuTypography(interface: $0) }
         super.init(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
         codeField.delegate = self
         codeField.placeholderString = L10n.text("12-character code")

@@ -3,7 +3,7 @@ import Foundation
 import LemmingsMobileCore
 import NxlvKit
 
-/// Draws one Desk Clock state with the shipped Macintosh artwork.
+/// Draws one Desk Clock state with the Macintosh artwork or the cleared Lix artwork.
 ///
 /// Scene positions are classic pixels on a 208 x 149 scene. Mac frames have two pixels per classic
 /// pixel and draw at half size from their own origins. The context must have a top-left origin, as
@@ -37,7 +37,13 @@ public final class GameDeskClockArt: @unchecked Sendable {
 
     private struct Sprite {
         let image: CGImage
-        let frame: ClassicMacArtwork.Frame
+        let frame: Geometry
+    }
+    private struct Geometry { let x: Int, y: Int, width: Int, height: Int }
+    private struct Lix {
+        let artwork: LixArtwork
+        let scene: LixSceneArtwork
+        let hatch: LixSceneArtwork.Gadget
     }
     private struct Key: Hashable {
         let source: String
@@ -45,10 +51,11 @@ public final class GameDeskClockArt: @unchecked Sendable {
     }
     private enum Align { case left, center, right }
 
-    private let artwork: ClassicMacArtwork
+    private let artwork: ClassicMacArtwork?
+    private let lix: Lix?
     private let small: ClassicMacUserInterface.Font
     private let large: ClassicMacUserInterface.Font
-    /// An opaque 80 x 80 Mac-pixel tile cut from the rock piece, mirrored so that it repeats without seams.
+    /// An opaque 80 x 80 source-pixel tile from the selected rock artwork.
     private let texture: [UInt8]
     private let rockTile: CGImage
     /// A wider opaque strip from the same Macintosh rock, mirrored at its edges.
@@ -64,30 +71,75 @@ public final class GameDeskClockArt: @unchecked Sendable {
     private var dates: (calendar: Calendar, formatter: DateFormatter)?
 
     public init?(directory: URL) {
-        guard let artwork = try? ClassicMacArtwork(directory: directory),
-              let interface = ClassicMacUserInterface(artwork: artwork),
-              let small = interface.font(.small), let large = interface.font(.large),
-              let rock = artwork.frame(Self.groundsBank, 10),
-              let texture = Self.tile(from: rock),
-              let rockTile = Self.image(rgba: Data(texture), width: Self.textureSize, height: Self.textureSize),
-              let ground = Self.wideGroundTile(from: rock),
-              let groundTile = Self.image(rgba: Data(ground.rgba), width: ground.width, height: ground.height)
-        else { return nil }
-        self.artwork = artwork
+        let original = try? ClassicMacArtwork(directory: directory)
+        // Callers already pass MacArtwork/lemmings, including the widget extension.
+        let resources = directory.deletingLastPathComponent().deletingLastPathComponent()
+        let roots = [resources, Bundle.main.resourceURL].compactMap { $0 }
+        let clearedInterface = roots.lazy.compactMap { root -> ClassicMacUserInterface? in
+            guard let art = try? ClassicMacArtwork(directory: root.appendingPathComponent("Fonts/LixInterface")) else { return nil }
+            return ClassicMacUserInterface(artwork: art)
+        }.first
+        guard let interface = original.flatMap({ ClassicMacUserInterface(artwork: $0) })
+                ?? clearedInterface ?? GameArtworkResources.menuInterface,
+              let small = interface.font(.small), let large = interface.font(.large) else { return nil }
         self.small = small
         self.large = large
-        self.texture = texture
-        self.rockTile = rockTile
-        self.groundTile = groundTile
         let required = [(Self.lemmingsBank, 75), (Self.groundsBank, 3), (Self.objectsBank, 0), (Self.objectsBank, 16)]
-        guard required.allSatisfy({ artwork.frame($0.0, $0.1) != nil }) else { return nil }
-        let entering = ClassicMacArtwork.lemmingFrameIndex(pose: .exiting, left: false, tick: 0)
-        if let arch = artwork.frame(Self.objectsBank, 16).flatMap(Self.visibleCentre),
-           let lemming = artwork.frame(Self.lemmingsBank, entering).flatMap(Self.visibleCentre) {
-            exitingShift = Self.exit.x + arch - (CGFloat(DeskClockSimulation.exitX) - 8 + lemming)
+        if let original, required.allSatisfy({ original.frame($0.0, $0.1) != nil }),
+           let rock = original.frame(Self.groundsBank, 10), let texture = Self.tile(from: rock),
+           let rockTile = Self.image(rgba: Data(texture), width: Self.textureSize, height: Self.textureSize),
+           let ground = Self.wideGroundTile(from: rock),
+           let groundTile = Self.image(rgba: Data(ground.rgba), width: ground.width, height: ground.height) {
+            artwork = original
+            lix = nil
+            self.texture = texture
+            self.rockTile = rockTile
+            self.groundTile = groundTile
+            let entering = ClassicMacArtwork.lemmingFrameIndex(pose: .exiting, left: false, tick: 0)
+            if let arch = original.frame(Self.objectsBank, 16).flatMap(Self.visibleCentre),
+               let lemming = original.frame(Self.lemmingsBank, entering).flatMap(Self.visibleCentre) {
+                exitingShift = Self.exit.x + arch - (CGFloat(DeskClockSimulation.exitX) - 8 + lemming)
+            } else { exitingShift = 0 }
         } else {
+            guard let source = roots.lazy.compactMap(Self.lixSource).first,
+                  let rock = source.scene.terrain[.earth],
+                  let rockTile = Self.image(rgba: Data(rock.rgba), width: rock.width, height: rock.height) else { return nil }
+            artwork = nil
+            lix = source
+            texture = Self.repeatPixels(rock, width: Self.textureSize, height: Self.textureSize)
+            self.rockTile = rockTile
+            groundTile = rockTile
             exitingShift = 0
         }
+    }
+
+    private static func lixSource(_ resources: URL) -> Lix? {
+        let directory = resources.appendingPathComponent("AlternativeAssets/Lix")
+        let artwork = resources.standardizedFileURL == Bundle.main.resourceURL?.standardizedFileURL
+            ? GameArtworkResources.lixArtwork : try? LixArtwork(directory: directory)
+        guard let artwork, let scene = artwork.sceneArtwork else { return nil }
+        // This compact native Lix hatch fits the clock's existing 14-pixel spawn height.
+        let root = directory.appendingPathComponent("assets/images/matt/underworld/Hatch.H")
+        func read(_ suffix: String, limit: Int) -> Data? {
+            let url = URL(fileURLWithPath: root.path + suffix)
+            guard let values = try? url.resourceValues(forKeys: [.isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey]),
+                  values.isRegularFile == true, values.isSymbolicLink != true,
+                  let size = values.fileSize, size > 0, size <= limit else { return nil }
+            return try? Data(contentsOf: url)
+        }
+        guard let png = read(".png", limit: 2_000_000), let definition = read(".txt", limit: 8_192),
+              let hatch = try? LixSceneArtwork.decodeGadget(png, kind: .hatch, definition: definition) else { return nil }
+        return Lix(artwork: artwork, scene: scene, hatch: hatch)
+    }
+
+    private static func repeatPixels(_ image: LixSceneArtwork.Pixels, width: Int, height: Int) -> [UInt8] {
+        var pixels = [UInt8](repeating: 0, count: width * height * 4)
+        for y in 0..<height { for x in 0..<width {
+            let source = ((y % image.height) * image.width + x % image.width) * 4
+            let target = (y * width + x) * 4
+            pixels.replaceSubrange(target..<(target + 4), with: image.rgba[source..<(source + 4)])
+        } }
+        return pixels
     }
 
     /// The centre of a frame's opaque columns, in scene pixels from its drawing point.
@@ -462,7 +514,7 @@ public final class GameDeskClockArt: @unchecked Sendable {
                 let x = macX / 2
                 guard solid[y][x] else { continue }
                 var edge: [UInt8]?
-                if y < groundY {
+                if y < groundY && lix == nil {
                     if macY % 2 == 0 && !isSolid(x, y - 1) { edge = Self.lightEdge }
                     if macY % 2 == 1 && !isSolid(x, y + 1) { edge = Self.darkEdge }
                     if macX % 2 == 1 && !isSolid(x + 1, y) { edge = Self.darkEdge }
@@ -507,6 +559,27 @@ public final class GameDeskClockArt: @unchecked Sendable {
         case .ohNo: (pose, tick, footOffset) = (.ohNo, min(15, lemming.tick), -10)
         }
         let left = lemming.facingLeft && ![.block, .ohNo].contains(lemming.state)
+        if let lix {
+            let activity: LixArtwork.Activity
+            switch pose {
+            case .walking: activity = .walker
+            case .falling: activity = .faller
+            case .umbrellaOpening, .floating: activity = .floater
+            case .blocking: activity = .blocker
+            case .exiting: activity = .exiter
+            case .digging: activity = .digger
+            case .building: activity = .builder
+            case .ohNo: activity = .imploder
+            default: activity = .walker
+            }
+            if let frame = lix.artwork.frame(activity: activity, animationFrame: tick, facingLeft: left),
+               let sprite = lixSprite(source: "actor:\(activity.rawValue):\(frame.index):\(left)",
+                 pixels: frame.rgba, geometry: Geometry(x: -frame.footX, y: -frame.footY,
+                     width: frame.width, height: frame.height)) {
+                draw(sprite, at: CGPoint(x: lemming.x, y: lemming.y), in: context)
+            }
+            return
+        }
         let index = ClassicMacArtwork.lemmingFrameIndex(pose: pose, left: left, tick: tick)
         let shift = lemming.state == .exit ? exitingShift : 0
         drawSprite(bank: Self.lemmingsBank, index: index,
@@ -561,15 +634,55 @@ public final class GameDeskClockArt: @unchecked Sendable {
     }
 
     private func sprite(bank: Int, index: Int) -> Sprite? {
-        guard let frame = artwork.frame(bank, index) else { return nil }
+        if let lix { return lixSprite(bank: bank, index: index, source: lix) }
+        guard let frame = artwork?.frame(bank, index) else { return nil }
         return cached(Key(source: "\(bank):\(index)", tint: nil), frame: frame)
+    }
+
+    private func lixSprite(bank: Int, index: Int, source: Lix) -> Sprite? {
+        if bank == Self.groundsBank, index == 3, let rock = source.scene.terrain[.earth] {
+            if let cached = sprites[Key(source: "lix:ground", tint: nil)] { return cached }
+            let geometry = Geometry(x: 0, y: 0, width: 140, height: 44)
+            return lixSprite(source: "ground", pixels: Self.repeatPixels(rock, width: 140, height: 44), geometry: geometry)
+        }
+        if bank == Self.objectsBank, (0...9).contains(index) {
+            let sequence = source.hatch.rows[0]
+            let frame = index == 0 ? sequence.count - 1 : (index - 1) * max(0, sequence.count - 1) / 8
+            let image = sequence[frame]
+            return lixSprite(source: "hatch:\(frame)", pixels: image.rgba,
+                geometry: Geometry(x: 46 - source.hatch.trigger.centreX, y: 28 - source.hatch.trigger.centreY,
+                    width: image.width, height: image.height))
+        }
+        // The full Lix goal includes its flame. Draw it once at the existing flame seam.
+        if bank == Self.objectsBank, (10...15).contains(index), let goal = source.scene.goals[.brick] {
+            let sequence = goal.rows[0], frame = (index - 10) % goal.rows[0].count
+            let image = sequence[frame]
+            return lixSprite(source: "goal:\(frame)", pixels: image.rgba,
+                geometry: Geometry(x: 50 - goal.trigger.centreX, y: 46 - goal.trigger.centreY,
+                    width: image.width, height: image.height))
+        }
+        if bank == Self.lemmingsBank, index == 75,
+           let frame = source.artwork.frame(activity: .imploder, animationFrame: 3, facingLeft: false) {
+            return lixSprite(source: "blast", pixels: frame.rgba,
+                geometry: Geometry(x: 32 - frame.footX, y: 52 - frame.footY, width: frame.width, height: frame.height))
+        }
+        return nil
+    }
+
+    private func lixSprite(source: String, pixels: [UInt8], geometry: Geometry) -> Sprite? {
+        let key = Key(source: "lix:" + source, tint: nil)
+        if let cached = sprites[key] { return cached }
+        let sprite = Self.image(rgba: Data(pixels), width: geometry.width, height: geometry.height)
+            .map { Sprite(image: $0, frame: geometry) }
+        sprites[key] = sprite
+        return sprite
     }
 
     private func cached(_ key: Key, frame: ClassicMacArtwork.Frame) -> Sprite? {
         if let sprite = sprites[key] { return sprite }
         var image = Self.image(rgba: frame.rgba, width: frame.width, height: frame.height)
         if let tint = key.tint, let plain = image { image = Self.tinted(plain, colour: tint) }
-        let sprite = image.map { Sprite(image: $0, frame: frame) }
+        let sprite = image.map { Sprite(image: $0, frame: Geometry(x: frame.x, y: frame.y, width: frame.width, height: frame.height)) }
         sprites[key] = sprite
         return sprite
     }

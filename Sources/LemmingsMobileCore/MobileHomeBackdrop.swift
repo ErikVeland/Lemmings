@@ -58,6 +58,7 @@ public actor MobileHomeBackdropLoader {
         func scenery(_ library: any MobileGameLibrary, index: Int) throws -> MobileHomeBackdrop {
             try Task.checkCancellation()
             let session = try library.loadLevel(at: index).session
+            MobileArtworkInstallation.install(on: session)
             session.applySettings(settings)
             try Task.checkCancellation()
             var result = try MobileHomeBackdrop(session: session)

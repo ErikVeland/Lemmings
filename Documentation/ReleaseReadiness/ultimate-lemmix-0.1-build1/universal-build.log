@@ -1,0 +1,81 @@
+PASS Lix graphics: 1421 inventoried files, output /Users/erikveland/Lemmings/.build/alternative-assets/lix
+Verified 6 CC0 tracks, 21,716,759 bytes. No audio played.
+Verified Ultimate Lemmix resources: 1432 files, 15,199,729 bytes. Integration helper: included.
+/Users/erikveland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:47:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+45 |         scroll.hasHorizontalScroller = false
+46 |         scroll.drawsBackground = false
+47 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+48 |         scroll.scrollerStyle = .overlay
+49 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/erikveland/Lemmings/Sources/LemmingsLocal/main.swift:5934:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5932 |       openPanel.canChooseFiles = true
+5933 |       openPanel.canChooseDirectories = false
+5934 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5935 |       openPanel.message = "Choose a NeoLemmix level file."
+5936 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/erikveland/Lemmings/Sources/LemmingsLocal/main.swift:7215:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7213 |       openPanel.canChooseFiles = true
+7214 |       openPanel.canChooseDirectories = false
+7215 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7216 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7217 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/erikveland/Lemmings/Sources/LemmingsLocal/main.swift:7716:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7714 |     keyboard.controllerRewindHeld = { [weak self] held in
+7715 |       guard let self else { return }
+7716 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7717 |       else if self.rewindHeld { self.endContinuousRewind() }
+7718 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+/Users/erikveland/Lemmings/Sources/LemmingsLocal/ReleaseWelcome.swift:47:28: warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+45 |         scroll.hasHorizontalScroller = false
+46 |         scroll.drawsBackground = false
+47 |         scroll.contentView.copiesOnScroll = false
+   |                            `- warning: 'copiesOnScroll' was deprecated in macOS 11.0: Setting this property has no effect.  NSClipView will always minimize the area of the document view that is invalidated.  To force invalidation of the document view, use -[NSView setNeedsDisplayInRect:]. [#DeprecatedDeclaration]
+48 |         scroll.scrollerStyle = .overlay
+49 |         scroll.setAccessibilityLabel("Release notes")
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+/Users/erikveland/Lemmings/Sources/LemmingsLocal/main.swift:5934:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5932 |       openPanel.canChooseFiles = true
+5933 |       openPanel.canChooseDirectories = false
+5934 |       openPanel.allowedFileTypes = ["nxlv"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+5935 |       openPanel.message = "Choose a NeoLemmix level file."
+5936 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/erikveland/Lemmings/Sources/LemmingsLocal/main.swift:7215:17: warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7213 |       openPanel.canChooseFiles = true
+7214 |       openPanel.canChooseDirectories = false
+7215 |       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
+     |                 `- warning: 'allowedFileTypes' was deprecated in macOS 12.0: Use -allowedContentTypes instead [#DeprecatedDeclaration]
+7216 |       openPanel.message = "Choose a Macintosh Lemmings disk image."
+7217 |       guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+
+/Users/erikveland/Lemmings/Sources/LemmingsLocal/main.swift:7710:22: warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7708 |     keyboard.controllerRewindHeld = { [weak self] held in
+7709 |       guard let self else { return }
+7710 |       if held { self.beginContinuousRewind() }
+     |                      `- warning: result of call to 'beginContinuousRewind(preservingOrigin:advanceImmediately:)' is unused [#NoUsage]
+7711 |       else if self.rewindHeld { self.endContinuousRewind() }
+7712 |     }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+[#NoUsage]: <https://docs.swift.org/compiler/documentation/diagnostics/no-usage>
+/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-universal/Ultimate Lemmix.app/Contents/Frameworks/libNxlvKit.dylib: replacing existing signature
+/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-universal/Ultimate Lemmix.app: replacing existing signature
+PASS Lix graphics: 1421 inventoried files, output /Users/erikveland/Lemmings/.build/alternative-assets/lix
+Verified 6 CC0 tracks, 21,716,759 bytes. No audio played.
+Verified Ultimate Lemmix resources: 1432 files, 15,199,729 bytes. Integration helper: included.
+Verified signed store candidate: /Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-universal/Ultimate Lemmix.app
+swift-driver version: 1.168.6 Ad-hoc local validation build. This is not a Mac App Store submission archive.
+/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-universal/Ultimate Lemmix.app

@@ -16,6 +16,8 @@ public struct GameFrontEnd {
         public enum Group: Int, CaseIterable, Sendable { case level, playback, inspection, preferences }
         /// Related tools share a section across pause and replay pages.
         public var group: Group = .level
+        /// List tools with different row values occupy separate toolbar rows.
+        public var listToolRow: Int = 0
         public var id: String
         public var title: String
         public var enabled: Bool
@@ -37,13 +39,14 @@ public struct GameFrontEnd {
         }
         public init(_ id: String, _ title: String, enabled: Bool = true,
                     primary: Bool = false, selected: Bool = false, portrait: Int? = nil, backNavigation: Bool? = nil,
-                    gameLogo: GameLogo? = nil, icon: Icon? = nil) {
+                    gameLogo: GameLogo? = nil, icon: Icon? = nil, listToolRow: Int = 0) {
             self.id = id; self.title = title; self.enabled = enabled
             self.primary = primary; self.selected = selected
             self.portrait = portrait
             self.backNavigation = backNavigation
             self.gameLogo = gameLogo
             self.icon = icon
+            self.listToolRow = listToolRow
         }
     }
     public struct Page: Equatable, Sendable {

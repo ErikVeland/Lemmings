@@ -344,7 +344,6 @@ public final class RunRecoveryFile {
 
 /// One serial writer keeps disk work off the game clock. Forced saves drain it on exit.
 public final class RunRecoveryStore: @unchecked Sendable {
-    private static let integrationDirectory = FileManager.default.temporaryDirectory.appendingPathComponent("RunRecovery-\(UUID().uuidString)")
     public let directory: URL
     private let queue = DispatchQueue(label: "academy.glasscode.lemmings.checkpoints", qos: .utility)
     private var files: [UUID: RunRecoveryFile] = [:]
@@ -359,6 +358,7 @@ public final class RunRecoveryStore: @unchecked Sendable {
             self.directory = storage.applicationSupport.appendingPathComponent("Checkpoints")
         }
     }
+    private static let integrationDirectory = FileManager.default.temporaryDirectory.appendingPathComponent("RunRecovery-" + UUID().uuidString)
     private func file(_ id: UUID) throws -> RunRecoveryFile {
         if let file = files[id] { return file }
         try loadRun(id)

@@ -7,9 +7,17 @@ public final class GameUnfoldArt {
     public let frames: [CGImage]
 
     public init?(directory: URL) {
-        guard let artwork = try? ClassicMacArtwork(directory: directory) else { return nil }
+        let artwork = try? ClassicMacArtwork(directory: directory)
         frames = (0..<8).compactMap { tick in
-            guard let frame = artwork.lemming(pose: .walking, left: false, tick: tick),
+            if GameArtworkSkin.lixEnabled || artwork == nil,
+               let frame = GameArtworkResources.lixArtwork?.frame(activity: .walker, animationFrame: tick, facingLeft: false),
+               let provider = CGDataProvider(data: Data(frame.rgba) as CFData) {
+                return CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8, bitsPerPixel: 32,
+                    bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                    bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+                    decode: nil, shouldInterpolate: false, intent: .defaultIntent)
+            }
+            guard let frame = artwork?.lemming(pose: .walking, left: false, tick: tick),
                   let provider = CGDataProvider(data: frame.rgba as CFData) else { return nil }
             return CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8, bitsPerPixel: 32,
                            bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),

@@ -1,0 +1,24 @@
+UI test windows: offscreen; audio: muted
+PASS full-window hud, original bitmap HUD lettering, actual Lix sockets/icons and 19 native input targets
+UI test windows: offscreen; audio: muted
+PASS full-window hud-paused, original bitmap HUD lettering, actual Lix sockets/icons and 19 native input targets
+UI test windows: offscreen; audio: muted
+PASS full-window hud-undo, original bitmap HUD lettering, actual Lix sockets/icons and 19 native input targets
+UI test windows: offscreen; audio: muted
+PASS full-window hud-small, original bitmap HUD lettering, actual Lix sockets/icons and 19 native input targets
+UI test windows: offscreen; audio: muted
+PASS original-font home and COMMUNITY LEVELS 5051 native target; 487 packs
+UI test windows: offscreen; audio: muted
+PASS original-font settings and required Lix character state
+UI test windows: offscreen; audio: muted
+PASS native community home action, 487-pack browser, original lettering and Browse target
+UI test windows: offscreen; audio: muted
+PASS native starter 1, complete brick Lix scene at 2×, actor and unchanged physics; mean scene 120.67 ms
+UI test windows: offscreen; audio: muted
+PASS native starter 2, complete earth Lix scene at 2×, actor and unchanged physics; mean scene 114.38 ms
+UI test windows: offscreen; audio: muted
+PASS native starter 3, complete wood Lix scene at 2×, actor and unchanged physics; mean scene 140.22 ms
+UI test windows: offscreen; audio: muted
+PASS production preparation/render/start for 0001-geooPk0.zip: Simple warm-up
+UI test windows: offscreen; audio: muted
+PASS full-window hud, licensed Lix HUD lettering, actual Lix sockets/icons and 19 native input targets

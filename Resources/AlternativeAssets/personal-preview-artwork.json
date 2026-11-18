@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "id": "ultimate-lemmix-personal-artwork-v1",
+  "kind": "original-game-artwork-dependencies",
+  "personalPreviewOnly": true,
+  "redistributionCleared": false,
+  "officialCampaignsIncluded": false,
+  "files": [
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/GROUND0O.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/GROUND0O.DAT",
+      "bytes": 1056,
+      "sha256": "86ecce12dea563b97d07339028780a0a50fc2cc75a67f682bf4d9aff8cf4b24a"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/GROUND1O.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/GROUND1O.DAT",
+      "bytes": 1056,
+      "sha256": "baf7a2ea30b07d2dc7968a5fb590987b3775840c57e6268437d3dce969b64d65"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/GROUND2O.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/GROUND2O.DAT",
+      "bytes": 1056,
+      "sha256": "52e62aeefd6cd548690c02af6474936c5e16112e115ca7808c3748e500a9412d"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/GROUND3O.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/GROUND3O.DAT",
+      "bytes": 1056,
+      "sha256": "f4df8579a30cb55dae4a06f606e0453cb0931219efadf3e9465d681a43a2722c"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/GROUND4O.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/GROUND4O.DAT",
+      "bytes": 1056,
+      "sha256": "9669ee978e5adf5f8d5bfeb80ccc5d6c20e75e32f55e2a5c1c738f64af8faa91"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/MAIN.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/MAIN.DAT",
+      "bytes": 56472,
+      "sha256": "2aec688c334e60322998811a8b6f9d5c13f8090b46ca6c2a6cb1c8db3b733545"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/VGAGR0.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/VGAGR0.DAT",
+      "bytes": 24464,
+      "sha256": "9bd5ae2e0aed013bd369a469ac14afeb1beb22524fc820920d6e38766ea48680"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/VGAGR1.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/VGAGR1.DAT",
+      "bytes": 32966,
+      "sha256": "bf49fc528b68d00c5738b6e7cd9244812bc74b0fc03ea9f862009a11009149e5"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/VGAGR2.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/VGAGR2.DAT",
+      "bytes": 22290,
+      "sha256": "f8305e71295c5909ee7692e4391aae65443298faef4d96e5fe17b24afa0eadcc"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/VGAGR3.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/VGAGR3.DAT",
+      "bytes": 22775,
+      "sha256": "19d3e2ba0db60bf855d8ce83459f53d83a2048763124932f533eb1c42f7809d9"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/VGAGR4.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/VGAGR4.DAT",
+      "bytes": 28692,
+      "sha256": "40a99d3d9540609da9d6a74c07a832786818aed361326e37c01a909a1615921d"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/VGASPEC0.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/VGASPEC0.DAT",
+      "bytes": 28655,
+      "sha256": "a647110ca059fd18917e8a289668167a3a77975ca1096d7f7fdd9557fee95ce0"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/VGASPEC1.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/VGASPEC1.DAT",
+      "bytes": 18567,
+      "sha256": "b0a8ce1a8888feda8720c7df1222911ae9241f3acbfd42adda243bd5ba5a2306"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/VGASPEC2.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/VGASPEC2.DAT",
+      "bytes": 23284,
+      "sha256": "602fde697bb49df8d86fd800643cc3439a4f136223af0bf1ee46e2bff5e0e3cd"
+    },
+    {
+      "source": "Sources/Ports/lemmings_dos_1991-07-30/VGASPEC3.DAT",
+      "path": "Ports/lemmings_dos_1991-07-30/VGASPEC3.DAT",
+      "bytes": 34827,
+      "sha256": "918f21db3a16741f1a58b06bcef2b4ff63dc16f0e8746d0393dc023ea57cb2d4"
+    },
+    {
+      "source": "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232/GROUND0O.DAT",
+      "path": "Ports/oh_no_more_lemmings_dos-1991-11-14_2232/GROUND0O.DAT",
+      "bytes": 1056,
+      "sha256": "cf20b1b41df38cb00fa013570dd58515391093920f362c8b6983c0d559d8bc90"
+    },
+    {
+      "source": "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232/GROUND1O.DAT",
+      "path": "Ports/oh_no_more_lemmings_dos-1991-11-14_2232/GROUND1O.DAT",
+      "bytes": 1056,
+      "sha256": "b816bcbc093b7f680e91d35e2626887cdb1befca0f33a4eb1d741a833a6907d9"
+    },
+    {
+      "source": "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232/GROUND2O.DAT",
+      "path": "Ports/oh_no_more_lemmings_dos-1991-11-14_2232/GROUND2O.DAT",
+      "bytes": 1056,
+      "sha256": "5f5e25e1566ff69c452cd25ecb5d4a0336972816b759ad13137491613c445a20"
+    },
+    {
+      "source": "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232/GROUND3O.DAT",
+      "path": "Ports/oh_no_more_lemmings_dos-1991-11-14_2232/GROUND3O.DAT",
+      "bytes": 1056,
+      "sha256": "4ca95fb12914bf2889ea7c60b316b2975faeb4772c0489fe4ba2e7d317de99d8"
+    },
+    {
+      "source": "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232/MAIN.DAT",
+      "path": "Ports/oh_no_more_lemmings_dos-1991-11-14_2232/MAIN.DAT",
+      "bytes": 112780,
+      "sha256": "8eb0aec9f370031e347b0299fb75151f1005ddc9f458a11dab52fec424205489"
+    },
+    {
+      "source": "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232/VGAGR0.DAT",
+      "path": "Ports/oh_no_more_lemmings_dos-1991-11-14_2232/VGAGR0.DAT",
+      "bytes": 18104,
+      "sha256": "7b6bebb5dec8780414e99a917215fd22642883d1158c5fb7e91395b93b68a6c8"
+    },
+    {
+      "source": "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232/VGAGR1.DAT",
+      "path": "Ports/oh_no_more_lemmings_dos-1991-11-14_2232/VGAGR1.DAT",
+      "bytes": 25902,
+      "sha256": "1603b61ad0862fc317b78053398bca4652c286a89c4f5fab71cec797d77a698b"
+    },
+    {
+      "source": "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232/VGAGR2.DAT",
+      "path": "Ports/oh_no_more_lemmings_dos-1991-11-14_2232/VGAGR2.DAT",
+      "bytes": 32778,
+      "sha256": "11703175849fa4ef4a825add3ce4bd748a88fac09d8d0cd919c2ae40b9aabbed"
+    },
+    {
+      "source": "Sources/Ports/oh_no_more_lemmings_dos-1991-11-14_2232/VGAGR3.DAT",
+      "path": "Ports/oh_no_more_lemmings_dos-1991-11-14_2232/VGAGR3.DAT",
+      "bytes": 20298,
+      "sha256": "0ca865820d868502b8a1da9c1a1a6e86e3d797e3bf6af33c568881b720f0ee1f"
+    },
+    {
+      "source": ".build/local/Ultimate Lemmings.app/Contents/Resources/Ports/holiday_native_1994/GROUND2O.DAT",
+      "path": "Ports/holiday_native_1994/GROUND2O.DAT",
+      "bytes": 1056,
+      "sha256": "f8b9e9295209251244fc0c437c294787e32091b25975f0788315cbaaaec855e0"
+    },
+    {
+      "source": ".build/local/Ultimate Lemmings.app/Contents/Resources/Ports/holiday_native_1994/MAIN.DAT",
+      "path": "Ports/holiday_native_1994/MAIN.DAT",
+      "bytes": 59992,
+      "sha256": "0e4e6bb3a367a3e7694abf6ed86b4a1963079a5cea4b6f3726622aa265bb14ed"
+    },
+    {
+      "source": ".build/local/Ultimate Lemmings.app/Contents/Resources/Ports/holiday_native_1994/VGAGR2.DAT",
+      "path": "Ports/holiday_native_1994/VGAGR2.DAT",
+      "bytes": 33123,
+      "sha256": "11e455f49be9f2e38b5b4d57bd09eda1f3a300d326e8c59d5750e43c924b7b3b"
+    },
+    {
+      "source": "Sources/Ports/xmas_dos_XmasLemmingsV1.9/GROUND0O.DAT",
+      "path": "Ports/xmas_dos_XmasLemmingsV1.9/GROUND0O.DAT",
+      "bytes": 1056,
+      "sha256": "cf20b1b41df38cb00fa013570dd58515391093920f362c8b6983c0d559d8bc90"
+    },
+    {
+      "source": "Sources/Ports/xmas_dos_XmasLemmingsV1.9/GROUND2O.DAT",
+      "path": "Ports/xmas_dos_XmasLemmingsV1.9/GROUND2O.DAT",
+      "bytes": 1056,
+      "sha256": "f8b9e9295209251244fc0c437c294787e32091b25975f0788315cbaaaec855e0"
+    },
+    {
+      "source": "Sources/Ports/xmas_dos_XmasLemmingsV1.9/MAIN.DAT",
+      "path": "Ports/xmas_dos_XmasLemmingsV1.9/MAIN.DAT",
+      "bytes": 59992,
+      "sha256": "0e4e6bb3a367a3e7694abf6ed86b4a1963079a5cea4b6f3726622aa265bb14ed"
+    },
+    {
+      "source": "Sources/Ports/xmas_dos_XmasLemmingsV1.9/VGAGR0.DAT",
+      "path": "Ports/xmas_dos_XmasLemmingsV1.9/VGAGR0.DAT",
+      "bytes": 17957,
+      "sha256": "0ce44ff9b4831ac6f62174bc6dea7819fc91137dbb55309fb813bb6d914990d7"
+    },
+    {
+      "source": "Sources/Ports/xmas_dos_XmasLemmingsV1.9/VGAGR2.DAT",
+      "path": "Ports/xmas_dos_XmasLemmingsV1.9/VGAGR2.DAT",
+      "bytes": 33123,
+      "sha256": "11e455f49be9f2e38b5b4d57bd09eda1f3a300d326e8c59d5750e43c924b7b3b"
+    },
+    {
+      "source": "Sources/Ports/xmas_dos_XmasLemmingsV1.9a1/GROUND2O.DAT",
+      "path": "Ports/xmas_dos_XmasLemmingsV1.9a1/GROUND2O.DAT",
+      "bytes": 1056,
+      "sha256": "f8b9e9295209251244fc0c437c294787e32091b25975f0788315cbaaaec855e0"
+    },
+    {
+      "source": "Sources/Ports/xmas_dos_XmasLemmingsV1.9a1/MAIN.DAT",
+      "path": "Ports/xmas_dos_XmasLemmingsV1.9a1/MAIN.DAT",
+      "bytes": 59992,
+      "sha256": "0e4e6bb3a367a3e7694abf6ed86b4a1963079a5cea4b6f3726622aa265bb14ed"
+    },
+    {
+      "source": "Sources/Ports/xmas_dos_XmasLemmingsV1.9a1/VGAGR2.DAT",
+      "path": "Ports/xmas_dos_XmasLemmingsV1.9a1/VGAGR2.DAT",
+      "bytes": 33123,
+      "sha256": "11e455f49be9f2e38b5b4d57bd09eda1f3a300d326e8c59d5750e43c924b7b3b"
+    }
+  ]
+}

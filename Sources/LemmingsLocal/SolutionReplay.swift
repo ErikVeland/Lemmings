@@ -344,7 +344,11 @@ import LemmingsGameArt
         guard let id else { return }; automaticTracking = false; followedID = id; updateTracking(); refresh()
     }
     private func focusUnassigned(_ direction: Int) {
-        follow(assignmentFocus.next(activeIDs: playback.session.lemmings.map(\.id), direction: direction))
+        let lemmings = playback.session.lemmings
+        follow(assignmentFocus.next(
+            activeIDs: lemmings.map(\.id),
+            facingLeftIDs: Set(lemmings.filter(\.facingLeft).map(\.id)),
+            direction: direction))
     }
     private func pan(_ dx: Double, _ dy: Double) {
         automaticTracking = false; followedID = nil

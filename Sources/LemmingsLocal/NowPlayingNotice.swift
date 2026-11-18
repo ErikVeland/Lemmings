@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import LemmingsAudio
 import LemmingsGameArt
 import NxlvKit
@@ -12,13 +13,13 @@ struct PlayingTrack: Equatable {
 
 @MainActor enum PlayingTrackMetadata {
     private static var cached: [URL: PlayingTrack] = [:]
-    private static let root = Bundle.main.resourceURL?.appendingPathComponent("Music")
+    private static let root = GameResources.resourceURL?.appendingPathComponent("Music")
     private static let catalogue = root.flatMap { SoundtrackCatalogue.load(at: $0) }
     private static let libraries = MusicLibrary.catalogue(at: root)
 
     static func track(url: URL, fallbackTitle: String? = nil) -> PlayingTrack {
         if let value = cached[url] { return value }
-        if let macRoot = Bundle.main.resourceURL?.appendingPathComponent("MacMusic"),
+        if let macRoot = GameResources.resourceURL?.appendingPathComponent("MacMusic"),
            let relative = SoundtrackPlayer.relativePath(url, under: macRoot), ClassicMacMusicLibrary.requiredPaths.contains(relative) {
             let family = relative.split(separator: "/").first.map(String.init) ?? "classic"
             let gameID = family == "xmas" ? "holiday" : family

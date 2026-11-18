@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+PASS Lix source decode, alpha, anchors, mirroring, timing bounds and malformed-input checks

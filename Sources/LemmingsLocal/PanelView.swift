@@ -142,12 +142,20 @@ enum PanelButton: Equatable {
   /// outlives a level, because the bar shows status on the menus too.
   var interfaceArtwork: ClassicMacArtwork? {
     didSet {
-      macInterface = interfaceArtwork
+      interfaceRevision = GameArtworkResources.revision
+      selectedInterface = interfaceArtwork
         .flatMap(ClassicMacUserInterface.init(artwork:))
         .map(MacInterfaceRenderer.init(interface:))
+      needsDisplay = true
     }
   }
-  private var macInterface: MacInterfaceRenderer?
+  private var interfaceRevision = GameArtworkResources.revision
+  private var selectedInterface: MacInterfaceRenderer?
+  private var macInterface: MacInterfaceRenderer? {
+    interfaceRevision == GameArtworkResources.revision
+      ? (selectedInterface ?? GameMenuArtwork.renderer()) : GameMenuArtwork.renderer()
+  }
+
   var panelImage: CGImage?
   var neoSprites: NeoLemmixSpriteSet?
   var terrainImage: CGImage?
@@ -221,7 +229,7 @@ enum PanelButton: Equatable {
 
   /// The baked artwork describes DOS skill identities, not just eight slots.
   private var usesClassicSkin: Bool {
-    panelImage != nil && session is ClassicSession
+    !GameArtworkSkin.usesLixInterface && panelImage != nil && session is ClassicSession
   }
 
   override var isFlipped: Bool { true }
@@ -862,6 +870,25 @@ enum PanelButton: Equatable {
     let well: CGRect
     if case .skill = button { well = skillArtworkFrame(frame) }
     else { well = GameStoneButton.well(frame, pixel: pixel) }
+    if GameArtworkSkin.usesLixInterface, let context = NSGraphicsContext.current?.cgContext {
+      switch button {
+      case .skill(let index):
+        if let skill = session?.skills[safe: index], let activity = lixSkill(skill.name),
+           GameLixInterfaceArt.drawSkill(activity, in: well, context: context, enabled: skill.isInfinite || skill.count > 0) { return }
+      case .fastForward where variableSpeedEnabled: break
+      default:
+        let control: LixInterfaceArtwork.Control
+        switch button {
+        case .rateDown: control = .rateDecrease
+        case .rateUp: control = .rateIncrease
+        case .pause: control = isPaused ? .play : .pause
+        case .nuke: control = session?.canUndoNuke == true ? .undo : .nuke
+        case .fastForward: control = .fastForward
+        case .skill: return
+        }
+        if GameLixInterfaceArt.drawControl(control, in: well, context: context, selected: selected, enabled: isEnabled(button)) { return }
+      }
+    }
     switch button {
     case .skill(let index):
       guard let skill = session?.skills[safe: index] else { return }
@@ -902,6 +929,24 @@ enum PanelButton: Equatable {
           width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
       }
+    }
+  }
+
+  private func lixSkill(_ name: String) -> LixArtwork.Activity? {
+    switch name.lowercased() {
+    case "walker": .walker
+    case "jumper": .jumper
+    case "climber": .climber
+    case "floater", "glider": .floater
+    case "bomber": .imploder
+    case "blocker": .blocker
+    case "builder": .builder
+    case "platformer": .platformer
+    case "basher", "fencer": .basher
+    case "miner": .miner
+    case "digger": .digger
+    case "stoner", "stacker": .cuber
+    default: nil
     }
   }
 

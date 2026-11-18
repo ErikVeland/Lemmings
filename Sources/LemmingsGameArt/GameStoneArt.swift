@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 /// Rounded contours follow Duo's display while retaining crisp bitmap edges.
@@ -124,8 +125,17 @@ public enum GameStoneArt {
 
     /// The Macintosh background rock also supplies the original 1-bit button texture.
     /// Cache its colour pixels with restrained opacity, using the existing artwork bank.
-    private static let rock: CGImage? = {
-        guard let directory = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings"),
+    private struct Rock: @unchecked Sendable { let image: CGImage? }
+    private static let rocks = GameAssetCache<Rock>(capacity: 2)
+    private static var rock: CGImage? {
+        let key = GameResources.revision
+        if let cached = rocks.value(for: key) { return cached.image }
+        let image = loadRock()
+        rocks.insert(Rock(image: image), for: key)
+        return image
+    }
+    private static func loadRock() -> CGImage? {
+        guard let directory = GameResources.directory("MacArtwork/lemmings"),
               let data = try? Data(contentsOf: directory.appendingPathComponent("manifest.json")),
               let manifest = try? JSONDecoder().decode(RockManifest.self, from: data),
               let bank = manifest.names.first(where: { $0.value == "Charset2" })?.key,
@@ -144,7 +154,7 @@ public enum GameStoneArt {
             bitsPerPixel: 32, bytesPerRow: frame.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
             bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
             provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
-    }()
+    }
 
     /// Grain stays at one source pixel per logical pixel, independent of button size and bevel.
     /// Continue the original background tile across large wells without enlarging its pixels.
@@ -181,6 +191,8 @@ public enum GameStoneArt {
 
     /// Bevel, rim and well. A caller may paint artwork into the well before `drawAccent`.
     public static func drawSocket(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat, monochrome: Bool = false, shape: GameControlShape = .square) {
+        if !monochrome, GameArtworkSkin.usesLixInterface,
+           GameLixInterfaceArt.drawButton(in: context, frame: frame, selected: selected, shape: shape) { return }
         let light = monochrome ? CGColor(gray: 1, alpha: 1) : Self.light
         let stone = monochrome ? CGColor(gray: 1, alpha: 1) : Self.stone
         let shadow = monochrome ? CGColor(gray: 0, alpha: 1) : Self.shadow

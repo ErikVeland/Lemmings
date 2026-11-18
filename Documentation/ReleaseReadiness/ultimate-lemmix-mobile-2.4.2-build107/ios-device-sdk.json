@@ -1,0 +1,95 @@
+{
+  "architecture": "arm64",
+  "builds": [
+    {
+      "exitCode": 0,
+      "log": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-107-build.log",
+      "logSHA256": "b2786e57f3089f747417fb933185660cd9c9b634df117368da5850ff3a0f902e",
+      "purpose": "full-current-source-device-sdk-build"
+    },
+    {
+      "exitCode": 0,
+      "log": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-107-resources-r2-build.log",
+      "logSHA256": "f75abfbb4a7ea3d2257e6c2b13dcf62dd715b27602923f3834f22d0cd4e0a261",
+      "purpose": "mobile-guide-r2-incremental-resource-refresh"
+    }
+  ],
+  "checkout": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer zsh Apps/UltimateLemmixSupport/build.sh ios -configuration Release -destination 'generic/platform=iOS' -derivedDataPath \"$PWD/.build/ultimate-lemmix-ios-107\" CODE_SIGNING_ALLOWED=NO build",
+  "configuration": "Release",
+  "destination": "generic/platform=iOS",
+  "engineSourceFingerprint": "9a246f97fd42930d53c273a4bb9c45800f0379fd7326f7c65518d484ebfeeea5",
+  "engineSourcesUnchangedFromBaseline": true,
+  "kind": "ultimate-lemmix-full-game-device-sdk-build",
+  "products": [
+    {
+      "binarySHA256": "40292bf9134db96868e9a8ef121ea9b930a3014cd29cf6b258d31c3ebaf146f3",
+      "binaryUnchangedByGuideRefresh": true,
+      "build": "107",
+      "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios",
+      "copiedResourceCount": 2300,
+      "displayName": "Ultimate Lemmix",
+      "embeddedProvisioningProfile": false,
+      "minimumOSVersion": "16.0",
+      "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-107/Build/Products/Release-iphoneos/UltimateLemmixIOS.app",
+      "platform": "iphoneos",
+      "resourceReceiptSHA256": "c93dc73fe7975c9f903424cfaa16f639650a2648e110250ee53ca4bb84ddc030",
+      "scope": "app",
+      "sdk": "iphoneos27.2",
+      "signed": false,
+      "version": "2.4.2"
+    },
+    {
+      "binarySHA256": "560c8d49bc16389535cd2f835ed9116b6de9eac743fc7ead39cd50a7570b8d5b",
+      "binaryUnchangedByGuideRefresh": true,
+      "build": "107",
+      "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+      "copiedResourceCount": 1636,
+      "displayName": "Desk Clock",
+      "embeddedProvisioningProfile": false,
+      "minimumOSVersion": "16.0",
+      "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-107/Build/Products/Release-iphoneos/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex",
+      "platform": "iphoneos",
+      "resourceReceiptSHA256": "c6269466e4320249ea6d5cec7efef3e92e4b31a2d0911325af8a82051c63ac24",
+      "scope": "widget",
+      "sdk": "iphoneos27.2",
+      "signed": false,
+      "version": "2.4.2"
+    }
+  ],
+  "recordedAtUTC": "2026-11-17T06:00:06.407582+00:00",
+  "resourceProfile": {
+    "copiedFilesVerifiedAgainstProfile": true,
+    "fileCount": 2300,
+    "manifestSHA256": "87b13448571bb98269b4eee4b4efb34b2ae1311d56179af5548fe2d3d0601a29",
+    "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-mobile-clean-resources-107-r2",
+    "trustedDataInventorySHA256": "dc07708a1b98d362e6c031112c988820ff69af549ece5672255c89b0d3f2e495"
+  },
+  "schemaVersion": 1,
+  "sourceBaseline": "b294d3b7c298f549aad5faa36f92ba9bf23b7529",
+  "sourceBranch": "codex/ultimate-lemmix-2.4.2",
+  "storeCompilationCondition": {
+    "actualSwiftCompilerInvocations": {
+      "DeskClockWidget": true,
+      "LemmingsAppCore": true,
+      "LemmingsAudio": true,
+      "LemmingsGameArt": true,
+      "LemmingsMobileCore": true,
+      "LemmingsMobileUI": true,
+      "LemmingsTVCore": true,
+      "NxlvKit": true,
+      "UltimateLemmixIOS": true
+    },
+    "name": "ULTIMATE_LEMMIX_STORE",
+    "packageGameArtVerified": true
+  },
+  "verificationLimits": {
+    "appStoreSubmission": "Not attempted.",
+    "codeSigning": "Disabled with CODE_SIGNING_ALLOWED=NO. No distribution profile or signed-device installation was attempted.",
+    "mac": "Existing Mac build107 app was not changed or relaunched.",
+    "rights": "Resource-profile checks do not establish redistribution rights. The requested project icon retains its documented rights-review gate.",
+    "runtime": "Not run on a physical device or simulator.",
+    "simulatorBuild": "Skipped for this device-SDK iteration.",
+    "tests": "No automated test suites or release audit loops. No engine source changes."
+  }
+}

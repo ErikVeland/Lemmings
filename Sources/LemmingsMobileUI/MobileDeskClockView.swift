@@ -1,5 +1,6 @@
 #if os(iOS)
 import LemmingsGameArt
+import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
@@ -7,8 +8,14 @@ import UIKit
 /// The idle clock scene. A 30 fps display link advances the simulation and draws it with the Macintosh
 /// artwork into a bitmap at two pixels per classic pixel; the layer scales it with whole pixels.
 @MainActor final class MobileDeskClockView: UIView {
-    private static let artwork: GameDeskClockArt? = Bundle.main.resourceURL.flatMap {
-        GameDeskClockArt(directory: $0.appendingPathComponent("MacArtwork/lemmings"))
+    private static var artworkRevision = ""
+    private static var cachedArtwork: GameDeskClockArt?
+    private static var artwork: GameDeskClockArt? {
+        if artworkRevision != MobileLixArtwork.revision {
+            artworkRevision = MobileLixArtwork.revision
+            cachedArtwork = GameResources.resourceURL.flatMap { GameDeskClockArt(directory: $0.appendingPathComponent("MacArtwork/lemmings")) }
+        }
+        return cachedArtwork
     }
     private static let density = 2
     // A full-screen image is replaced every frame. Keep its backing store bounded on large

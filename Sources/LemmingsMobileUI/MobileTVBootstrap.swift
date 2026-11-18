@@ -7,6 +7,7 @@ import UIKit
 
 @MainActor final class MobileTVBootstrap: UIViewController {
     var catalogue: MobileCatalogue?
+    var resourceNotice: String?
     private let canvas = MobileMenuCanvas()
     private let scrollView = UIScrollView()
     private var content: UIViewController?
@@ -65,6 +66,7 @@ import UIKit
         guard content == nil else { return }
         let library = MobileLibraryViewController()
         library.catalogue = catalogue
+        if let resourceNotice { library.notice = resourceNotice }
         addChild(library)
         library.view.frame = view.bounds
         view.addSubview(library.view)

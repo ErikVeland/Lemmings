@@ -39,14 +39,17 @@ class CommunityJourneyTests(unittest.TestCase):
     def test_real_tutorials_are_not_replaced_by_low_scoring_fan_puzzles(self):
         titles = [r['entry']['levelNameSnapshot'] for r in self.manifest['lessons'][:8]]
         self.assertEqual(titles, ['Just dig!', 'Cellbash', 'Only floaters can survive this', 'Tailor-made for blockers',
-                                 'Now use miners and climbers', 'You need bashers this time',
+                                 'Honey, I Saved The Lemmings', 'You need bashers this time',
                                  'A task for blockers and bombers', 'Builders will help you here'])
         self.assertTrue(all(l['stage'] == 'Fun' for l in self.manifest['lessons'][:8]))
+        miners = next(l for l in self.manifest['lessons'] if l['entry']['levelNameSnapshot'] == 'Now use miners and climbers')
+        self.assertEqual(miners['stage'], 'Expert')
 
-    def test_full_rescue_does_not_automatically_make_a_tutorial_difficult(self):
+    def test_full_rescue_tutorial_is_staged_in_expert(self):
         goal = next(g for g in self.plan['lessons'] if g['level'] == 'Now use miners and climbers')
         self.assertEqual(goal['context']['rescueFraction'], 1)
-        self.assertLess(goal['placement']['position'], 180)
+        self.assertGreaterEqual(goal['placement']['position'], 600)
+        self.assertEqual(goal['courseChapter']['id'], 'capstones')
 
     def test_release_rate_is_measured_without_claiming_discovery(self):
         row, replay, source = self.fixture()
@@ -276,16 +279,18 @@ class CommunityJourneyTests(unittest.TestCase):
         scarce = journey.solution_context(row, replay, source)
         self.assertGreater(scarce['sourceToolScarcity'], plentiful['sourceToolScarcity'])
 
-    def test_slow_single_skill_rescue_practice_precedes_strict_combinations(self):
+    def test_every_full_rescue_level_is_reserved_for_expert(self):
         rows = self.plan['lessons']
-        index = next(i for i, g in enumerate(rows) if g['level'] == 'We all fall down')
-        context = rows[index]['context']
-        self.assertGreaterEqual(index, 30)
-        self.assertLess(index, 45)
-        self.assertEqual(context['minimumReleaseRate'], 1)
-        self.assertEqual(set(context['usedSkills']), {'digger'})
-        self.assertEqual(context['jobChanges'], 0)
-        self.assertEqual(context['rescueFraction'], 1)
+        full_rescue = [lesson for lesson in rows if lesson['context']['allowedLosses'] == 0]
+        self.assertGreater(len(full_rescue), 0)
+        for lesson in full_rescue:
+            self.assertGreaterEqual(lesson['placement']['position'], 600, lesson['level'])
+            self.assertEqual(journey.stage(lesson['placement']['position']), 'Expert', lesson['level'])
+        no_loss = next(g for g in rows if g['level'] == 'We all fall down')
+        self.assertEqual(no_loss['context']['minimumReleaseRate'], 1)
+        self.assertEqual(set(no_loss['context']['usedSkills']), {'digger'})
+        self.assertEqual(no_loss['context']['jobChanges'], 0)
+        self.assertEqual(no_loss['placement']['position'], 971)
         for title, chapter in [("It's Lemmingentry Watson", 'small-budgets'),
                                ('PoP YoR ToP!!!', 'hatches'), ('Just A Quicky', 'combined-plans')]:
             lesson = next(g for g in rows if g['level'] == title)
@@ -323,13 +328,34 @@ class CommunityJourneyTests(unittest.TestCase):
 
     def test_beginner_section_is_authored_generous_practice_before_puzzles(self):
         beginner = [l for l in self.manifest['lessons'] if l['stage'] == 'Fun']
-        self.assertEqual(len(beginner), 30)
+        self.assertEqual(len(beginner), 29)
         self.assertEqual(sum(':Tame:' in l['entry']['identity']['levelID'] for l in beginner), 20)
         for lesson in self.manifest['lessons']:
             self.assertGreaterEqual(lesson['demand'], journey.teaching_floor(lesson['entry']))
         names = [l['entry']['levelNameSnapshot'] for l in self.manifest['lessons']]
         self.assertLess(names.index('Honey, I Saved The Lemmings'), names.index('PoP YoR ToP!!!'))
         self.assertGreater(names.index("It's Lemmingentry Watson"), 44)
+
+    def test_open_route_practice_extends_intermediate_before_restricted_stock(self):
+        rows = self.plan['lessons']
+        open_route = [lesson for lesson in rows if 360 <= lesson['placement']['position'] < 420]
+        self.assertEqual(len(open_route), 7)
+        for lesson in open_route:
+            context = lesson['context']
+            self.assertGreaterEqual(context['availableSkillTypes'], 8, lesson['level'])
+            self.assertGreaterEqual(context['totalAvailableSkills'], 80, lesson['level'])
+            self.assertLess(context['rescueFraction'], .9, lesson['level'])
+            self.assertGreater(context['allowedLosses'], 0, lesson['level'])
+            self.assertEqual(journey.stage(lesson['placement']['position']), 'Intermediate')
+        self.assertEqual(journey.stage(420), 'Difficult')
+        drops = next(lesson for lesson in rows if lesson['level'] == 'Lemming Drops')
+        self.assertEqual(drops['placement']['position'], 415)
+        self.assertEqual(drops['context']['totalAvailableSkills'], 190)
+        self.assertEqual(drops['context']['allowedLosses'], 24)
+        self.assertEqual(drops['courseChapter']['id'], 'open-routes')
+        thin_stock = next(lesson for lesson in rows if lesson['level'] == 'King of the castle')
+        self.assertEqual(thin_stock['context']['availableSkillTypes'], 1)
+        self.assertGreater(thin_stock['placement']['position'], open_route[-1]['placement']['position'])
 
     def test_teaching_plan_rejects_stricter_resources_and_stale_witnesses(self):
         plan = journey.read(journey.OUT / 'teaching-plan.json')['lessons']

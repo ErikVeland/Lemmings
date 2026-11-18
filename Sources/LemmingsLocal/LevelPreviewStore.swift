@@ -2,6 +2,8 @@
 import CryptoKit
 import Foundation
 import NxlvKit
+import LemmingsAppCore
+import LemmingsGameArt
 
 /// Top-to-bottom RGBA8 scenery. Browser previews use a fixed 320 by 160 crop.
 struct LevelPreviewBitmap: Sendable {
@@ -25,7 +27,8 @@ enum LevelPreviewSource: Sendable {
         pack: URL,
         entry: FanLevelLibrary.Entry,
         archiveFingerprint: String,
-        portsRoot: URL)
+        portsRoot: URL,
+        ownedClassicRoots: [URL] = [])
     case neolemmix(
         level: URL,
         styles: URL,
@@ -44,10 +47,11 @@ enum LevelPreviewSource: Sendable {
         case let .classic(dataSet, root, levelIndex, sourceFingerprint):
             return ["classic", root.standardizedFileURL.path, dataSet.identifierKey,
                     String(levelIndex), sourceFingerprint ?? "bundled"].joined(separator: "\u{0}")
-        case let .fanClassic(pack, entry, archiveFingerprint, portsRoot):
+        case let .fanClassic(pack, entry, archiveFingerprint, portsRoot, ownedClassicRoots):
             return ["fan-classic", pack.standardizedFileURL.path, entry.file,
                     String(entry.section ?? -1), archiveFingerprint,
-                    portsRoot.standardizedFileURL.path].joined(separator: "\u{0}")
+                    portsRoot.standardizedFileURL.path,
+                    ownedClassicRoots.map { $0.standardizedFileURL.path + ":" + (FanLevelLibrary.directoryFingerprint($0) ?? "missing") }.joined(separator: "|")].joined(separator: "\u{0}")
         case let .neolemmix(level, styles, expectedSourceRevision):
             return ["neolemmix", level.standardizedFileURL.path,
                     styles.standardizedFileURL.path, expectedSourceRevision]
@@ -74,7 +78,7 @@ enum LevelPreviewSource: Sendable {
                 throw LevelPreviewError.levelUnavailable
             }
             return revision
-        case let .fanClassic(_, _, archiveFingerprint, _):
+        case let .fanClassic(_, _, archiveFingerprint, _, _):
             return archiveFingerprint
         case .neolemmix:
             guard let dependency = try LevelPreviewRenderer.dependencyFingerprint(for: self) else {
@@ -96,7 +100,7 @@ enum LevelPreviewSource: Sendable {
 
 /// A revision-aware request for a reproducible level preview.
 struct LevelPreviewRequest: Sendable {
-    static let currentRendererRevision = "level-preview-rgba-1"
+    static let currentRendererRevision = "level-preview-rgba-2-lix"
 
     let identity: LevelCatalogueIdentity
     let catalogueRevision: String
@@ -116,7 +120,7 @@ struct LevelPreviewRequest: Sendable {
     }
 
     var artworkKey: String {
-        [rendererRevision, catalogueRevision, identity.engine.rawValue,
+        [rendererRevision, GameArtworkResources.revision, GameArtworkSkin.lixEnabled ? "lix" : "original", catalogueRevision, identity.engine.rawValue,
          identity.packID, identity.levelID, source.cacheIdentity]
             .joined(separator: "\u{0}")
     }
@@ -372,12 +376,12 @@ private enum LevelPreviewRenderer {
                 root: root,
                 levelIndex: levelIndex,
                 sourceFingerprint: sourceFingerprint, fullScene: fullScene)
-        case let .fanClassic(pack, entry, archiveFingerprint, portsRoot):
+        case let .fanClassic(pack, entry, archiveFingerprint, portsRoot, ownedClassicRoots):
             bitmap = try renderFanClassic(
                 pack: pack,
                 entry: entry,
                 archiveFingerprint: archiveFingerprint,
-                portsRoot: portsRoot, fullScene: fullScene)
+                portsRoot: portsRoot, ownedClassicRoots: ownedClassicRoots, fullScene: fullScene)
         case let .neolemmix(level, styles, expectedSourceRevision):
             bitmap = try renderNeoLemmix(
                 levelURL: level,
@@ -537,7 +541,8 @@ private enum LevelPreviewRenderer {
             artworkRoot = root
             fallbackRoot = nil
         }
-        let ground = try ClassicGroundSet.load(
+        let starter = GameStarterContent.isStarter(directory: root)
+        let ground = try starter ? GameStarterContent.groundSet(in: root) : ClassicGroundSet.load(
             style: entry.level.groundStyle,
             from: artworkRoot,
             fallbackDirectory: fallbackRoot)
@@ -550,7 +555,9 @@ private enum LevelPreviewRenderer {
             level: entry.level,
             ground: ground,
             special: special,
-            mechanics: ClassicDOSMechanics(title: dataSet.title, rank: entry.rank), fullScene: fullScene)
+            mechanics: ClassicDOSMechanics(title: dataSet.title, rank: entry.rank),
+            theme: starter ? ([LixSceneArtwork.Theme.brick, .earth, .wood][min(2, levelIndex)]) : .brick,
+            fullScene: fullScene)
         try validateDirectory(root, dataSet: dataSet, fingerprint: sourceFingerprint)
         return bitmap
     }
@@ -560,6 +567,7 @@ private enum LevelPreviewRenderer {
         entry: FanLevelLibrary.Entry,
         archiveFingerprint: String,
         portsRoot: URL,
+        ownedClassicRoots: [URL],
         fullScene: Bool
     ) throws -> LevelPreviewBitmap {
         guard FanLevelLibrary.archiveMatches(pack, fingerprint: archiveFingerprint) else {
@@ -571,12 +579,14 @@ private enum LevelPreviewRenderer {
             styleName: styleName,
             portsRoot: portsRoot,
             pack: pack,
-            entry: entry)
+            entry: entry,
+            ownedClassicRoots: ownedClassicRoots)
         let special = try FanLevelLibrary.specialGraphic(
             for: level,
             entry: entry,
             pack: pack,
-            portsRoot: portsRoot)
+            portsRoot: portsRoot,
+            ownedClassicRoots: ownedClassicRoots)
         try Task.checkCancellation()
         let bitmap = try classicBitmap(
             level: level,
@@ -608,6 +618,7 @@ private enum LevelPreviewRenderer {
         special: ClassicSpecialGraphic?,
         mechanics: ClassicDOSMechanics,
         objectSemantics: ClassicObjectSemantics = .dos,
+        theme: LixSceneArtwork.Theme = .brick,
         fullScene: Bool
     ) throws -> LevelPreviewBitmap {
         let rendered = try ClassicLevelRenderer.render(
@@ -619,7 +630,10 @@ private enum LevelPreviewRenderer {
             level: level,
             renderedLevel: rendered,
             mechanics: mechanics)
-        let rgba = ClassicSceneFrame.rgba(rendered, simulation: simulation)
+        let rgba = GameArtworkSkin.lixEnabled
+            ? ClassicLixSceneFrame.build(rendered, simulation: simulation, theme: theme, pixelScale: 1)?.rgba
+                ?? ClassicSceneFrame.rgba(rendered, simulation: simulation)
+            : ClassicSceneFrame.rgba(rendered, simulation: simulation)
         return try crop(
             rgba: rgba,
             sourceWidth: rendered.width,

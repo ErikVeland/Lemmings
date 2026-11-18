@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import LemmingsAppCore
+import LemmingsGameArt
 import NxlvKit
 
 /// Settings stay inside the game. Language choices preview without changing the active game.
@@ -17,6 +18,7 @@ import NxlvKit
   private var presetPopUp: NSPopUpButton?
   private var experiencePopUp: NSPopUpButton?
   private var graphicsPopUp: NSPopUpButton?
+  private var artworkSkinPopUp: NSPopUpButton?
   private var counterStylePopUp: NSPopUpButton?
   private var depthPopUp: NSPopUpButton?
   private var displayPopUp: NSPopUpButton?
@@ -514,6 +516,12 @@ import NxlvKit
     for profile in PlatformProfile.all { preset.addItem(withTitle: profile.name) }
     presetPopUp = preset
 
+    let artwork = popUp(#selector(artworkSkinChanged))
+    artwork.addItems(withTitles: [L10n.text("Original"), L10n.text("Lix")])
+    artwork.menu?.autoenablesItems = false
+    artwork.setAccessibilityLabel(L10n.text("Artwork"))
+    artworkSkinPopUp = artwork
+    refreshArtworkSkin()
     let graphics = popUp(#selector(graphicsChanged))
     let depth = popUp(#selector(depthChanged))
     for option in ClassicColorDepth.allCases { depth.addItem(withTitle: option.displayName) }
@@ -533,6 +541,7 @@ import NxlvKit
     sequelArtworkCheck = sequel
     sequel.state = SequelArtworkPreference.enabled ? .on : .off
     return groupedPane([
+      (L10n.text("Presentation"), [(L10n.text("Artwork"), artwork)]),
       (L10n.text("Machine preset"), [(L10n.text("Machine"), preset)]),
       (L10n.text("Classic artwork"), [(L10n.text("Artwork"), graphics), (L10n.text("Colour Depth"), depth), (L10n.text("Shuffle"), shuffle), (L10n.text("Counters"), counters)]),
       (L10n.text("Sequel artwork"), [(L10n.text("Lemmings 2 + 3"), sequel)]),
@@ -542,6 +551,29 @@ import NxlvKit
   @objc private func sequelArtworkChanged(_ sender: NSButton) {
     SequelArtworkPreference.setEnabled(sender.state == .on)
     changed()
+  }
+
+  private func refreshArtworkSkin() {
+    let original = GameArtworkResources.originalInterfaceAvailable || AppDistribution.hasOwnedGames
+    let lix = GameArtworkResources.lixAvailable
+    artworkSkinPopUp?.item(at: 0)?.isEnabled = original
+    artworkSkinPopUp?.item(at: 1)?.isEnabled = lix
+    artworkSkinPopUp?.isEnabled = original || lix
+    artworkSkinPopUp?.selectItem(at: GameArtworkSkin.lixEnabled || !original ? 1 : 0)
+  }
+
+  @objc private func artworkSkinChanged(_ sender: NSPopUpButton) {
+    let lix = sender.indexOfSelectedItem == 1
+    let available = lix ? GameArtworkResources.lixAvailable
+      : GameArtworkResources.originalInterfaceAvailable || AppDistribution.hasOwnedGames
+    guard available, GameArtworkSkin.setLixEnabled(lix) else { refreshArtworkSkin(); return }
+    refreshArtworkSkin()
+    if let page { redrawArtwork(page) }
+  }
+
+  private func redrawArtwork(_ view: NSView) {
+    view.needsDisplay = true
+    view.subviews.forEach(redrawArtwork)
   }
 
   @objc private func counterStyleChanged(_ sender: NSPopUpButton) {
@@ -744,6 +776,7 @@ import NxlvKit
   /// Refills the source lists and reselects what is chosen.
   private func rebuildSources() {
     refreshLanguageControls()
+    refreshArtworkSkin()
     experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     graphicsPopUp?.removeAllItems()
     counterStylePopUp?.selectItem(at: ClassicCounterStyle.allCases.firstIndex(of: settings.counterStyle) ?? 0)

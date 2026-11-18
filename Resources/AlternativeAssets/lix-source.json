@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "lix-graphics",
+  "version": "0.10.36",
+  "repository": "https://github.com/SimonN/LixD",
+  "revision": "f1e805048fe439a4a0e9cc650c613713ababac8b",
+  "archive": {
+    "url": "https://codeload.github.com/SimonN/LixD/tar.gz/f1e805048fe439a4a0e9cc650c613713ababac8b",
+    "filename": "lix-f1e805048fe439a4a0e9cc650c613713ababac8b.tar.gz",
+    "root": "LixD-f1e805048fe439a4a0e9cc650c613713ababac8b",
+    "bytes": 6081876,
+    "sha256": "f6b91657c0b55483957875575813aff5d6e607c369c1a80d8573b9ff4b8655ec"
+  },
+  "licence": {
+    "spdx": "CC0-1.0",
+    "sourcePath": "doc/copying.txt",
+    "sha256": "2d086a16ad111d8e1316a9967a9743186b1d728ff6485854a2664002db524a4f",
+    "scope": "Sprites, menu icons and tileset graphics, plus selected source references.",
+    "authors": "Simon Naarmann; Matt C.; geoo; Proxima; Amanda (NaOH); Raymanni; other upstream contributors."
+  },
+  "excluded": ["data/fonts/", "data/images/appwindowicon.png", "data/images/lix_logo.svg", "levels/", "data/sound/", "music/", "executables"],
+  "expected": {"interfacePNGs": 54, "tilesetPNGs": 1285, "tileDefinitions": 68},
+  "references": [
+    "src/graphic/cutbit.d",
+    "src/graphic/internal/names.d",
+    "src/graphic/internal/recol.d",
+    "src/net/ac.d",
+    "src/net/style.d",
+    "src/tile/tilelib.d",
+    "src/tile/terrain.d",
+    "src/tile/gadtile.d"
+  ],
+  "compatibility": "Prepared source artwork only. Native engine sprite mapping, animation timing, recolouring, object triggers and terrain-mask integration remain unverified."
+}

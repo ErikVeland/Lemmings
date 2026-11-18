@@ -46,6 +46,18 @@ import LemmingsMobileCore
     }
 
     #if os(tvOS)
+    @Test func modalCoversGameplayAndOwnsTheTopView() async throws {
+        try await withGame { game in
+            game.showOverlay(title: "Pause", actions: [("Resume", {}), ("Cancel", {})])
+            game.view.layoutIfNeeded()
+            #expect(game.overlay.frame == game.view.bounds)
+            #expect(game.view.subviews.last === game.overlay)
+            let point = CGPoint(x: 10, y: game.view.bounds.maxY - 10)
+            let hit = game.view.hitTest(point, with: nil)
+            #expect(hit === game.overlay || hit?.isDescendant(of: game.overlay) == true)
+        }
+    }
+
     @Test func controllerSkillBurstsDrawOnceWithoutWaitingForPhysics() async throws {
         var renders = 0
         try await withGame(rendered: { renders += 1 }) { game in

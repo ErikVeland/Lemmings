@@ -302,7 +302,12 @@ import NxlvKit
     private(set) var portrait = 0
     private var replaceInitials = true
     private var artwork: ClassicMacArtwork?
-    var font: MacInterfaceRenderer?
+    private var fontRevision = GameResources.revision
+    private var selectedFont: MacInterfaceRenderer?
+    var font: MacInterfaceRenderer? {
+        get { fontRevision == GameResources.revision ? (selectedFont ?? GameMenuArtwork.renderer()) : GameMenuArtwork.renderer() }
+        set { fontRevision = GameResources.revision; selectedFont = newValue }
+    }
     var background: CGImage?
     private var portraits: [Int: NSImage] = [:]
     private var buttons: [(String, CGRect, () -> Void)] = []
@@ -357,9 +362,7 @@ import NxlvKit
     override var acceptsFirstResponder: Bool { true }
     override init(frame: NSRect) {
         super.init(frame: frame)
-        if let url = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings") {
-            useArtwork(try? ClassicMacArtwork(directory: url))
-        }
+        useArtwork(GameArtworkResources.originalArtwork)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     func useArtwork(_ artwork: ClassicMacArtwork?) {
@@ -377,6 +380,7 @@ import NxlvKit
                 y: (bounds.height - max(720, pageContentHeight) * scale) / 2 + max(0, 720 - pageContentHeight) * scale)
     }
     override func draw(_ dirtyRect: NSRect) {
+        if fontRevision != GameResources.revision { useArtwork(GameArtworkResources.originalArtwork) }
         NSColor.black.setFill(); bounds.fill(); buttons = []; disabledButtons = []; primaryButtonIndex = nil; accessibleText = []; achievementHints = []
         if let background {
             let image = NSImage(cgImage: background, size: CGSize(width: background.width, height: background.height))
@@ -601,10 +605,18 @@ import NxlvKit
         guard let report else { page(.records); return }
         drawGameResult(report)
     }
+    private var portraitUsesLix = GameArtworkSkin.lixEnabled
     func portraitImage(_ index: Int) -> NSImage? {
+        if portraitUsesLix != GameArtworkSkin.lixEnabled { portraitUsesLix = GameArtworkSkin.lixEnabled; portraits.removeAll() }
         if let cached = portraits[index] { return cached }
         let poses: [ClassicLemmingPose] = [.walking, .climbing, .floating, .building, .bashing, .mining, .digging, .blocking]
-        guard poses.indices.contains(index), let frame = artwork?.lemming(pose: poses[index], left: false, tick: 3),
+        guard poses.indices.contains(index) else { return nil }
+        if GameArtworkSkin.lixEnabled || artwork == nil,
+           let frame = LixArtworkRenderer.shared.frame(pose: poses[index], animationFrame: 3, facingLeft: false) {
+            portraits[index] = frame.image
+            return frame.image
+        }
+        guard let frame = artwork?.lemming(pose: poses[index], left: false, tick: 3),
               let provider = CGDataProvider(data: frame.rgba as CFData),
               let cg = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8, bitsPerPixel: 32,
                 bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),

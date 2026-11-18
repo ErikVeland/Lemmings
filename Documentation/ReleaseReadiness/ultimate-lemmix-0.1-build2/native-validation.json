@@ -1,0 +1,124 @@
+{
+  "status": "pass",
+  "checkedUTC": "2026-11-17T01:18:47.536994+00:00",
+  "windows": "offscreen",
+  "audio": "muted",
+  "storage": "isolated per-process defaults, records, checkpoints, playlists and owned-game directory",
+  "nativeScopes": [
+    "home",
+    "settings",
+    "browser",
+    "starter",
+    "starter2",
+    "starter3",
+    "fan"
+  ],
+  "communityPacks": 487,
+  "communityLevels": 5051,
+  "runtimeCore": {
+    "path": ".build/ultimate-lemmix-app-store-lix-scene-universal/Ultimate Lemmix.app/Contents/Frameworks/libNxlvKit.dylib",
+    "sha256": "408816cf58094d48328190b01da083a81248956d267d3640799a2b7c3c832987",
+    "matchesPackagedAudit": true,
+    "optimised": true
+  },
+  "unchangedFrontendSourcesMatchingPackage": 95,
+  "frontendSourceProof": ".build/personal-preview-app-tests/frontend-source-proof.json",
+  "nativeLog": ".build/personal-preview-app-tests/final-run.log",
+  "mobileLog": ".build/lix-artwork-packaged-core-checks.log",
+  "sceneMeanMilliseconds": {
+    "brick": 2.46,
+    "earth": 2.32,
+    "wood": 1.92
+  },
+  "timingMethod": "Five scene frames from consecutive copied simulation ticks on this Mac; excludes full view composition and device frame-rate acceptance.",
+  "checks": [
+    "Original menu bitmap font metrics and rendered home/Settings/community browser",
+    "Community home action, 5051 label, native home geometry and browser input target",
+    "All three starter Lix terrain/hatch/exit scenes at 2x with native actors",
+    "Representative community level production preparation/render/start",
+    "Same-tick original/Lix scene round-trip and unchanged simulation state",
+    "Mobile real-pack 2x actor/reticle anchors, all starter wins, checkpoints and real bomber implosion pixels"
+  ],
+  "captures": [
+    {
+      "path": ".build/personal-preview-app-tests/final-captures/personal-community-browser.png",
+      "bytes": 116786,
+      "sha256": "16753338e32067fcb2d1ea6e95c1d04eace02c0df521523668a885a1ce2a95c4",
+      "width": 2240,
+      "height": 1520
+    },
+    {
+      "path": ".build/personal-preview-app-tests/final-captures/personal-community-gameplay.png",
+      "bytes": 126994,
+      "sha256": "8f9aa0d24d768cf6e5fc840c2550e41ba4dbd4e59ede7c5a021a7db5f2cc3bf2",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-app-tests/final-captures/personal-community-lix-restored.png",
+      "bytes": 126994,
+      "sha256": "8f9aa0d24d768cf6e5fc840c2550e41ba4dbd4e59ede7c5a021a7db5f2cc3bf2",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-app-tests/final-captures/personal-community-original.png",
+      "bytes": 80201,
+      "sha256": "e21ae4c2923b7bde7577b0e1929c5b49984b35cd293a5b0c0dc270b7d146e725",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-app-tests/final-captures/personal-home.png",
+      "bytes": 109561,
+      "sha256": "4edfc0213e9d233fb6d402c8e32906a52dc0297efc7d0385ada1853eb4e52676",
+      "width": 2240,
+      "height": 1520
+    },
+    {
+      "path": ".build/personal-preview-app-tests/final-captures/personal-settings.png",
+      "bytes": 120140,
+      "sha256": "25b7d30bb7b6111da2a0c1f70122f681ef0196f60061a7f993e5b84e19d17c07",
+      "width": 2240,
+      "height": 1520
+    },
+    {
+      "path": ".build/personal-preview-app-tests/final-captures/personal-starter-lix-2.png",
+      "bytes": 79472,
+      "sha256": "ee2df95a855517b3f8133d3e1a0e4ab1d7e128926d9964366f470a7f3ba5308a",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-app-tests/final-captures/personal-starter-lix-3.png",
+      "bytes": 91097,
+      "sha256": "6b71f703b7fbecdaf26825d44d52afa11a13125425fa280392445eb98ba71002",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-app-tests/final-captures/personal-starter-lix.png",
+      "bytes": 72933,
+      "sha256": "9811224aeed1da220b994208991cc1bf6876c0688691839b5bd4173aebf4cfb4",
+      "width": 2240,
+      "height": 1236
+    }
+  ],
+  "limits": [
+    "Original lettering is original commercial game artwork for the personal preview only; it is not store-cleared.",
+    "Native harness exercises production frontend sources and exact packaged core; it is not a direct launch of the signed app.",
+    "Mobile rendering checks run on this Mac; physical iOS/tvOS gameplay remains unverified.",
+    "The native community gameplay case is representative; the separate root corpus checker covers the full selected corpus."
+  ],
+  "visualReview": {
+    "status": "pass",
+    "checkedUTC": "2026-11-17T01:19:15.555778+00:00",
+    "capturesInspected": 9,
+    "notes": [
+      "Original lettering is readable on home, Settings and the community browser.",
+      "All three starter scenes show actual detailed Lix terrain, hatches and exits.",
+      "The earth hatch roof is fully within the canvas.",
+      "The community original/Lix round-trip retains the same authored geometry and native actor position."
+    ]
+  }
+}

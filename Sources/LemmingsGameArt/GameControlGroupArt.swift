@@ -99,6 +99,13 @@ public enum GameControlGroupArt {
         defer { context.restoreGState() }
         context.setShouldAntialias(false)
         context.clip(to: frame)
+        if !monochrome, GameArtworkSkin.usesLixInterface {
+            context.addPath(path(in: group, bottomLeft: bottomLeft, bottomRight: bottomRight,
+                screenEdges: screenEdges, topLeft: topLeft, topRight: topRight,
+                screenRadius: screenRadius, cornerRadii: cornerRadii))
+            context.clip()
+            if GameLixInterfaceArt.drawButton(in: context, frame: frame, selected: selected) { return }
+        }
         let brightSpace = CGColorSpace(name: CGColorSpace.extendedLinearSRGB)!
         let bright = CGColor(colorSpace: brightSpace, components: [1.6, 2.0, 1.4, 1])!
         context.setFillColor(monochrome ? CGColor(gray: 1, alpha: 1)

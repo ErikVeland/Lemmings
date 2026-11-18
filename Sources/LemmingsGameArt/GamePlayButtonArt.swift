@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 /// Distinct gameplay faces, based on the Macintosh panel rather than the quiet menu texture.
@@ -57,8 +58,17 @@ public enum GamePlayButtonArt {
     // These are the six rock colours in the original Macintosh panel, darkest first.
     private static let palette: [UInt32] = [0x220000, 0x442222, 0x662222, 0x884444, 0xaa4444, 0xcc6666]
 
-    private static let sources: Sources? = {
-        guard let root = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings"),
+    private struct SourceValue: Sendable { let sources: Sources? }
+    private static let sourceGenerations = GameAssetCache<SourceValue>(capacity: 2)
+    private static var sources: Sources? {
+        let key = GameResources.revision
+        if let cached = sourceGenerations.value(for: key) { return cached.sources }
+        let source = loadSources()
+        sourceGenerations.insert(SourceValue(sources: source), for: key)
+        return source
+    }
+    private static func loadSources() -> Sources? {
+        guard let root = GameResources.directory("MacArtwork/lemmings"),
               let data = try? Data(contentsOf: root.appendingPathComponent("manifest.json")),
               let manifest = try? JSONDecoder().decode(Manifest.self, from: data),
               let panelBank = manifest.names.first(where: { $0.value == "Charset2" })?.key,
@@ -92,12 +102,12 @@ public enum GamePlayButtonArt {
             }
         }
         return patches.isEmpty ? nil : Sources(panel: panel, patches: patches)
-    }()
+    }
 
     /// A persistent face at native grain density. Larger faces extend the synthesis, never tile it.
     public static func image(for face: Face, width: Int, height: Int) -> CGImage? {
         guard width > 0, height > 0, width <= 2048, height <= 2048, let sources else { return nil }
-        let key = "\(face.seed):\(width):\(height)"
+        let key = "\(GameResources.revision):\(face.seed):\(width):\(height)"
         if let hit = cache.value(for: key) { return hit.image }
         // Padding makes synthesis independent of the visible crop when a button is resized.
         let columns = (width + strideSize - 1) / strideSize + 1
@@ -170,6 +180,7 @@ public enum GamePlayButtonArt {
     /// Paint inside the existing socket before its selection marker and glyphs.
     public static func drawFace(in context: CGContext, frame: CGRect, selected: Bool,
                                 pixel: CGFloat, face: Face) {
+        if GameArtworkSkin.usesLixInterface { return }
         let well = GameStoneArt.well(frame, pixel: pixel)
         guard well.width.isFinite, well.height.isFinite, well.width > 0, well.height > 0,
               well.width <= 2048, well.height <= 2048,

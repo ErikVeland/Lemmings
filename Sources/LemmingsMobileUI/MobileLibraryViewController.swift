@@ -13,6 +13,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 #endif
 
 @MainActor final class MobileLibraryViewController: UIViewController {
+    let configuration: LemmingsMobileConfiguration
+    init(configuration: LemmingsMobileConfiguration = .current) {
+        self.configuration = configuration
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) { nil }
+
     enum Route: Equatable {
         case home, support, family(MobileFamily), fanGroup([String]), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
@@ -124,6 +131,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         store?.resolvedDataDirectory(for: .neoLemmix) != nil
     }
     private var selectedImportKind: MobileGameDataKind = .classic
+    private var importingResources = false
+    private var restoringResources = false
     var checkpointStore: MobileCheckpointStore?
     var library: (any MobileGameLibrary)?
     var catalogue: MobileCatalogue?
@@ -148,6 +157,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var shuffleBackID = "fanBack"
     var practiceChoice = 0
     var practiceSkills: [Lemmings2Runtime.Skill] = [.jumper, .runner, .builder, .basher, .digger, .climber, .floater, .roper]
+    var tribesShortGamesEntries: [MobileFavourites.Entry]?
     var shortGamesEntries: [String: [MobileFavourites.Entry]] = [:]
     var shortGamesSelection = "classic"
     var shortGamesPreparing = false
@@ -866,6 +876,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let key = profiles.activeID + ":" + homeBackdropName + ":" + (preferred.map { "\($0.kind.rawValue):\($0.pack ?? ""): \($0.level)" }
             ?? recent.map { $0.pack + ":" + $0.level } ?? "random")
             + String(describing: mobileSettings.classic.graphics) + String(describing: mobileSettings.classic.colorDepth)
+            + ":" + MobileLixArtwork.revision
             + (catalogue?.portsRoot.path ?? "") + (classic?.path ?? "") + native.values.map(\.path).sorted().joined(separator: ":")
         guard homeBackdropKey != key else { return }
         homeBackdropTask?.cancel(); homeBackdropKey = key
@@ -1095,7 +1106,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.preview = nil
         case .data:
             canvas.page = .init(title: L10n.text("Game Data"), subtitle: subtitle,
-                                rows: MobileGameDataKind.allCases.map { kind in
+                                rows: [.init("import.resources", L10n.text("Restore original assets"), enabled: !loading)]
+                                + MobileGameDataKind.allCases.map { kind in
                                     let installed = store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: kind).path) } ?? false
                                     let action = installed ? L10n.text("Replace") : L10n.text("Import")
                                     return .init("import." + kind.rawValue,
@@ -1159,6 +1171,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     func navigate(_ next: Route) {
+        guard !restoringResources else { return }
         let position = NavigationPosition(route: route, offset: scrollView.contentOffset, focus: canvas.focusedID)
         let returning = navigationHistory.lastIndex { $0.route == next }
         let restore: NavigationPosition?
@@ -1228,6 +1241,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
     func handle(_ id: String) {
+        guard !restoringResources else { return }
         if handleL2Practice(id) { return }
         if handleCloudSync(id) { return }
         if handleWelcome(id) || handleInsights(id) { return }
@@ -1273,6 +1287,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 scrollView.setContentOffset(CGPoint(x: source.offset.x, y: min(source.offset.y, maximum)), animated: false)
                 if let focus = source.focus { canvas.focusAction(focus) }
             }
+            if route == .levels { selectLevel(selectedIndex) }
         #if os(iOS)
         case "deskClock": presentDeskClock(reason: .menu)
         #endif
@@ -1288,6 +1303,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             #endif
         case "data": navigate(.data)
+        case "import.resources": chooseResourceData()
         case "import": chooseGameData(for: .classic)
         case "import.classic": chooseGameData(for: .classic)
         case "import.lemmings2": chooseGameData(for: .lemmings2)
@@ -1361,6 +1377,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     private func checkForFanPacks() {
         guard !fanUpdating, let catalogue else { return }
+        if MobileResourceAccess.isStore && !GameResources.hasFanCatalogue {
+            fanUpdateStatus = L10n.text("No reviewed downloads")
+            rebuild()
+            return
+        }
         fanUpdating = true
         fanUpdateStatus = "CHECKING..."
         rebuild()
@@ -1527,7 +1548,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private func reloadLibrary() {
         homeBackdropTask?.cancel(); homeBackdropTask = nil; homeBackdropKey = nil
         let store = store
-        let directory = Bundle.main.resourceURL?.appendingPathComponent("BetaGameData", isDirectory: true)
+        let directory = GameResources.resourceURL?.appendingPathComponent("BetaGameData", isDirectory: true)
         openLibrary({ try store?.loadLibrary(bundledDirectory: directory) }) { [self] loaded in
             library = loaded
             if let classic = loaded as? ClassicMobileLibrary {
@@ -1647,12 +1668,29 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
     private func chooseGameData(for kind: MobileGameDataKind) {
+        importingResources = false
         selectedImportKind = kind
         #if os(tvOS)
         MobileTVFileTransfer.importFiles(from: self, directory: true) { [weak self] url in self?.receiveGameData(url) }
         #else
         let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder], asCopy: false)
         picker.delegate = self; picker.allowsMultipleSelection = false
+        present(picker, animated: true)
+        #endif
+    }
+
+    private func chooseResourceData() {
+        guard !loading, game == nil else { return }
+        importingResources = true
+        #if os(tvOS)
+        MobileTVFileTransfer.importFiles(from: self, directory: true, name: L10n.text("owned resource folder"),
+                                        maximumBytes: 8 * 1_024 * 1_024 * 1_024, maximumEntries: 50_000) { [weak self] source in
+            self?.receiveGameData(source)
+        }
+        #else
+        let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder], asCopy: false)
+        picker.delegate = self
+        picker.allowsMultipleSelection = false
         present(picker, animated: true)
         #endif
     }
@@ -1663,6 +1701,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     #endif
     func receiveGameData(_ source: URL) {
+        if importingResources { receiveResources(source); return }
         guard let store else { return }
         let kind = selectedImportKind
         loading = true; rebuild()
@@ -1681,6 +1720,59 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             switch result {
             case .success: notice = ""; reloadLibrary()
             case let .failure(error): notice = error.localizedDescription; rebuild()
+            }
+        }
+    }
+
+    private func receiveResources(_ source: URL) {
+        guard !restoringResources, game == nil, let resources = MobileResourceAccess.library else { return }
+        restoringResources = true
+        libraryTask?.cancel(); libraryTask = nil; libraryGeneration = UUID()
+        stopMenuPreviews(); previewGeneration = UUID()
+        homeBackdropTask?.cancel(); homeBackdropTask = nil; homeBackdropKey = nil
+        #if os(tvOS)
+        topShelfTask?.cancel(); topShelfTask = nil
+        #endif
+        fanCountsTask?.cancel(); fanCountsTask = nil; fanCountGeneration = UUID()
+        shuffleTask?.cancel(); shuffleTask = nil
+        learningTask?.cancel(); learningTask = nil
+        loading = true
+        rebuild()
+        let accessed = source.startAccessingSecurityScopedResource()
+        Task {
+            defer {
+                restoringResources = false
+                if accessed { source.stopAccessingSecurityScopedResource() }
+                #if os(tvOS)
+                MobileTVFileTransfer.removeImportedFiles(source)
+                #endif
+            }
+            do {
+                let installed = try await Task.detached(priority: .userInitiated) {
+                    try resources.install(directory: source)
+                }.value
+                try GameResources.activate(bundleURL: installed.bundleURL, forceReload: true)
+                if GameArtworkResources.originalInterfaceAvailable {
+                    GameArtworkSkin.setLixEnabled(false)
+                    if mobileSettings.soundtrack == "Lix" {
+                        MobileMusic.shared.soundtrack = "Original"
+                    }
+                }
+                MobileLixArtwork.activate()
+                MobileWidgetResources.publish()
+                let support = try? FileManager.default.url(for: MobileStorage.localDirectory, in: .userDomainMask,
+                                                           appropriateFor: nil, create: false)
+                catalogue = await MobileCatalogueLoader().load(resources: GameResources.resourceURL, support: support)
+                library = nil; currentPack = nil; activeRun = nil
+                previewLoader = nil; selectedPreview = nil; selectedIndex = 0
+                preparingLevel = false; loading = false; restoringResources = false
+                notice = ""
+                navigate(.home)
+                reloadLibrary()
+            } catch {
+                loading = false
+                notice = error.localizedDescription
+                rebuild()
             }
         }
     }

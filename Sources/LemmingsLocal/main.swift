@@ -7,7 +7,9 @@ import LemmingsGameArt
 import LemmingsMobileCore
 import WidgetKit
 import NxlvKit
+#if !ULTIMATE_LEMMIX_STORE
 import Sparkle
+#endif
 
 let displayInterval = 1.0 / 60.0
 let contentPathKey = "ClassicDataDirectory"
@@ -57,8 +59,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private let gamePicker = GamePopUpButton()
   private var assets: ClassicMainDATAssets?
   private var macArtworkCache: [String: ClassicMacArtwork] = [:]
-  private lazy var neoMacArtwork = Bundle.main.resourceURL.map { NeoLemmixMacArtwork(resources: $0) }
-  private lazy var neoClassicSprites = Bundle.main.resourceURL.flatMap {
+  private lazy var neoMacArtwork = GameResources.resourceURL.map { NeoLemmixMacArtwork(resources: $0) }
+  private lazy var neoClassicSprites = GameResources.resourceURL.flatMap {
     try? ClassicMainDATAssets.load(from: $0.appendingPathComponent("Ports/lemmings_dos_1991-07-30"))
   }
   private var contentDirectory: URL?
@@ -67,7 +69,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var currentNeoStylesRoot: URL?
   /// The bundled CE packs come first, so a player's copy cannot replace them.
   private var neoLemmixSources: [NeoLemmixLibrary.Source] {
-    [try? BundledGameResources.neoLemmix()].compactMap { $0 }
+    [try? BundledGameResources.neoLemmix(in: GameResources.bundle)].compactMap { $0 }
       + [neoLevelsDirectory.map { NeoLemmixLibrary.Source(levelsRoot: $0, stylesRoot: stylesDirectory) }]
         .compactMap { $0 }
   }
@@ -189,6 +191,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var classicContent: NSView?
   private var sequelCompletion: [ClassicTitle: Int] = [:]
   private var settingsWindow: SettingsWindow?
+  private lazy var ownedGameImport = OwnedGameImportWindow(
+    library: OwnedGameLibrary(root: AppDistribution.ownedGamesDirectory),
+    resourceLibrary: AppDistribution.ownedResourceLibrary)
   private var settings = ClassicSettings()
   private var settingsProfileID: String?
   private var audioMuted = false
@@ -289,6 +294,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let sourceFingerprint: String?
     let sourceRevision: String?
     let isVerified: Bool
+    var canonicalPackID: String? = nil
   }
   private struct LevelBrowserDiscovery: Sendable {
     let classic: [LevelBrowserClassicSource]
@@ -329,7 +335,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private struct PreparedClassicArtwork: Sendable {
     let grounds: [Int: ClassicGroundSet]
     let specials: [Int: ClassicSpecialGraphic]
-    let assets: ClassicMainDATAssets
+    let assets: ClassicMainDATAssets?
     let directory: URL
     let portArtworkFamily: String?
   }
@@ -689,6 +695,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   func applicationWillTerminate(_ notification: Notification) {
     saveRunCheckpoint(immediately: true); ClassicRouteRecorder.flush(); ArcadeStore.shared.flushPendingSaves()
+    UserResourceAccess.shared.stopAll()
   }
 
   private let cloudTransport = AppleGameProgressTransport()
@@ -807,6 +814,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     wasExistingPlayer = UserDefaults.standard.bool(forKey: EffectsWelcome.choiceKey)
       || UserDefaults.standard.object(forKey: settingsKey) != nil
     traceLaunch("begin")
+    if AppDistribution.isStore { UserResourceAccess.shared.restore() }
+    if let installed = try? AppDistribution.ownedResourceLibrary.refreshBaseIfNeeded() {
+      try? GameResources.activate(bundleURL: installed.bundleURL)
+    }
+    AppDistribution.publishDeskClockArtwork()
     // Start scheduled update checks without waiting for the menu action.
     updates.onChange = { [weak self] in
       guard let self else { return }
@@ -834,6 +846,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     NotificationCenter.default.addObserver(self, selector: #selector(resumeAudioOutput),
       name: .AVAudioEngineConfigurationChange, object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(musicLibrariesChanged), name: MusicLibrary.changed, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(resourcesDidChange), name: GameResources.changed, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(artworkSkinChanged), name: GameArtworkSkin.changed, object: nil)
     NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(suspendAudioOutput),
       name: NSWorkspace.willSleepNotification, object: nil)
     NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(wakeAudioOutput),
@@ -850,7 +864,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     restoreSettings()
     AnonymousTelemetry.shared.recordActiveDay()
-    if !UserDefaults.standard.bool(forKey: "PreferMacArtworkV1") {
+    if GameResources.file("MacArtwork/lemmings/manifest.json") != nil,
+      !UserDefaults.standard.bool(forKey: "PreferMacArtworkV1") {
       settings.graphics = .macintosh
       UserDefaults.standard.set(true, forKey: "PreferMacArtworkV1")
       if let data = try? JSONEncoder().encode(settings) { UserDefaults.standard.set(data, forKey: settingsKey) }
@@ -865,7 +880,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     if let saved = UserDefaults.standard.string(forKey: musicPathKey) {
       music.loadLibrary(at: URL(fileURLWithPath: saved, isDirectory: true))
-    } else if let bundled = BundledGameResources.music("lemmings_music_mod") {
+    } else if let bundled = BundledGameResources.music("lemmings_music_mod", in: GameResources.bundle) {
       music.loadLibrary(at: bundled)
     }
     loadSoundtracks()
@@ -887,7 +902,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // Enter full screen while the window is still unordered, so the player never
     // sees the windowed state. launchingFullScreen makes this one transition
     // instant; a later toggle by the player keeps the normal animation.
-    if !window.styleMask.contains(.fullScreen) {
+    #if APP_INTEGRATION_TESTS
+    let permitsLaunchFullScreen = ProcessInfo.processInfo.environment["LEMMINGS_TEST_WINDOWS"] == "foreground"
+    #else
+    let permitsLaunchFullScreen = true
+    #endif
+    if permitsLaunchFullScreen && !window.styleMask.contains(.fullScreen) {
       launchingFullScreen = true
       traceLaunch("fullscreen-requested")
       window.toggleFullScreen(nil)
@@ -945,7 +965,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     mainMenu.addItem(appItem)
 
     let appMenu = NSMenu()
-    let aboutItem = NSMenuItem(title: L10n.text("About Ultimate Lemmings"),
+    let aboutItem = NSMenuItem(title: L10n.text("About \(AppDistribution.name)"),
       action: #selector(showAbout), keyEquivalent: "")
     aboutItem.target = self
     appMenu.addItem(aboutItem)
@@ -1001,7 +1021,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     appMenu.addItem(settingsItem)
     appMenu.addItem(.separator())
     appMenu.addItem(
-      withTitle: L10n.text("Quit Ultimate Lemmings"),
+      withTitle: L10n.text("Quit \(AppDistribution.name)"),
       action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
     appItem.submenu = appMenu
 
@@ -1282,16 +1302,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func settingsOptions() -> ClassicSettingsOptions {
     let macImage = UserDefaults.standard.string(forKey: macImageKey)
     let hasMac = (macImage.map { FileManager.default.fileExists(atPath: $0) } ?? false)
-      || Bundle.main.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("MacArtwork/lemmings/manifest.json").path) } == true
+      || GameResources.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("MacArtwork/lemmings/manifest.json").path) } == true
     return ClassicSettingsOptions.available(
       hasDOSData: !dataSets.isEmpty,
-      hasAmigaDisk: Bundle.main.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("AmigaArtwork/lemmings/manifest.json").path) } == true,
+      hasAmigaDisk: GameResources.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("AmigaArtwork/lemmings/manifest.json").path) } == true,
       hasMacintoshDisk: hasMac,
       moduleCount: music.library.count,
       remixFolders: soundtrackLibrary.keys.sorted(),
       hasSoundtracks: dj.hasTracks,
       hasMacintoshMusic: macintoshMusic != nil,
-      hasMacintoshMonochromeArtwork: Bundle.main.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("MacArtwork/monochrome/lemmings/manifest.json").path) } == true)
+      hasMacintoshMonochromeArtwork: GameResources.resourceURL.map { FileManager.default.fileExists(atPath: $0.appendingPathComponent("MacArtwork/monochrome/lemmings/manifest.json").path) } == true)
   }
 
   @objc private func showSettings() {
@@ -1549,7 +1569,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
                             sequenceRunID: UUID? = nil,
                             sequenceIdentity: LevelCatalogueIdentity? = nil) -> Bool {
     do {
-      let selectedRoot = try root ?? BundledGameResources.lemmings2()
+      let selectedRoot = try root ?? AppDistribution.lemmings2()
       let next = try recovered ?? Lemmings2PlayWindow(
         root: selectedRoot,
         recovery: recovery,
@@ -1622,7 +1642,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
                             sequenceIdentity: LevelCatalogueIdentity? = nil) -> Bool {
     do {
       let next = try recovered ?? Lemmings3PlayWindow(
-        root: root ?? BundledGameResources.lemmings3(),
+        root: root ?? AppDistribution.lemmings3(),
         recovery: recovery,
         selection: selection,
         expectedLevelID: expectedLevelID,
@@ -1799,7 +1819,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     window.contentView = classicContent ?? plainRoot
     window.resizeIncrements = NSSize(width: 1, height: 1)
     window.minSize = NSSize(width: 900, height: 620)
-    window.title = L10n.text("Ultimate Lemmings")
+    window.title = AppDistribution.name
     window.makeFirstResponder(playfield)
     applyAudioSettings()
     try? effects.start()
@@ -1825,10 +1845,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func refreshSequelProgress() {
     let wins = GameProgressPreferences.learning(profileID: ArcadeStore.shared.records.activeProfileID,
       sessionID: ArcadeStore.shared.hotSeatID).completed.union(homeLearningEntries().map(\.identity))
-    if let root = try? BundledGameResources.lemmings2() {
+    if let root = try? AppDistribution.lemmings2() {
       sequelCompletion[.lemmings2TheTribes] = Lemmings2PlayWindow.savedCompletion(root: root, journeyWins: wins)
     }
-    if let root = try? BundledGameResources.lemmings3() {
+    if let root = try? AppDistribution.lemmings3() {
       sequelCompletion[.lemmings3TheChronicles] = Lemmings3PlayWindow.savedCompletion(root: root, journeyWins: wins)
     }
     rebuildLibrary()
@@ -1845,8 +1865,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         let count = savedFlow.ranks.reduce(0) { $0 + savedFlow.passedCount(inRank: $1.name) }
         return .init(title: title, total: entry.set.campaign.levels.count, passed: count)
       }
-      let available = title == .lemmings2TheTribes ? (try? BundledGameResources.lemmings2()) != nil
-        : title == .lemmings3TheChronicles ? (try? BundledGameResources.lemmings3()) != nil : false
+      let available = title == .lemmings2TheTribes ? (try? AppDistribution.lemmings2()) != nil
+        : title == .lemmings3TheChronicles ? (try? AppDistribution.lemmings3()) != nil : false
       // The menu is set in the game's own fixed-width font, so a row holds
       // only a short note. One word says as much as a sentence here.
       let detail = title == .lemmings2TheTribes ? L10n.text("COMPLETE")
@@ -1998,6 +2018,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       switch action {
       case .rewind, .backward: return session.supportsRewind && session.currentTick > 0
       case .forward: return !session.isComplete
+      case .hints: return true
       }
     }
     panel.timeline.perform = { [weak self] action in
@@ -2006,6 +2027,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .rewind: self.rewind(seconds: 2)
       case .backward: _ = self.stepBackward()
       case .forward: _ = self.stepForward()
+      case .hints: self.showLevelHints()
       }
     }
     panel.onMinimapPosition = { [weak self] point in
@@ -2051,7 +2073,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self?.panel.handlePointerUp(); self?.playfield.clearPointer()
       self?.nativeL2Window?.releasePointerForMenu()
     }
-    window.title = L10n.text("Ultimate Lemmings")
+    window.title = AppDistribution.name
     plainRoot = root
     window.contentView = root
     // Size the window to its screen and mark it full-screen capable before it is
@@ -2157,8 +2179,84 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   // MARK: - Content
 
+  private func showOwnedGameImport() {
+    ownedGameImport.onInstalled = { [weak self] game, directory in
+      guard let self else { return }
+      self.returnToLibrary()
+      self.loadContent()
+      self.refreshSequelProgress()
+      if game == .classic, let index = self.dataSets.firstIndex(where: { $0.directory == directory }) {
+        self.gamePicker.selectItem(at: index)
+        self.selectDataSet()
+      }
+      self.renderScreen()
+    }
+    ownedGameImport.onResourcesInstalled = { [weak self] installed in
+      guard let self else { return }
+      self.returnToLibrary()
+      do {
+        try GameResources.activate(bundleURL: installed.bundleURL, forceReload: true)
+        if GameResources.file("MacArtwork/lemmings/manifest.json") != nil {
+          GameArtworkSkin.setLixEnabled(false)
+        }
+      } catch {
+        GameScreen.shared.message(L10n.text("Cannot restore assets"),
+          detail: L10n.text("Import the resource folder again."))
+      }
+    }
+    ownedGameImport.show(owner: window)
+  }
+
+  @objc private func artworkSkinChanged() {
+    apply(settings, forceArtworkRefresh: true)
+    configureFrontEndArtwork()
+    GameScreen.shared.reattach()
+    renderScreen()
+    AppDistribution.publishDeskClockArtwork()
+  }
+
+  @objc private func resourcesDidChange() {
+    cancelLevelSelectionLoading()
+    stopMenuWorkForGameplay()
+    preparedLevelBrowserDiscovery = nil
+    Task { await LevelPreviewStore.shared.removeAll() }
+    macArtworkCache.removeAll()
+    loadedArtworkDirectory = nil
+    neoMacArtwork = GameResources.resourceURL.map { NeoLemmixMacArtwork(resources: $0) }
+    neoClassicSprites = GameResources.resourceURL.flatMap {
+      try? ClassicMainDATAssets.load(from: $0.appendingPathComponent("Ports/lemmings_dos_1991-07-30"))
+    }
+    macintoshMusic = GameResources.resourceURL.flatMap {
+      ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic"))
+    }
+    menuTheme = nil
+    music.stop(); soundtrack.stop(); dj.stop()
+    loadSoundtracks()
+    if let modules = BundledGameResources.music("lemmings_music_mod", in: GameResources.bundle) {
+      music.loadLibrary(at: modules)
+    }
+    if GameResources.file("MacArtwork/lemmings/manifest.json") != nil {
+      settings.graphics = .macintosh
+      if BundledGameResources.macintoshSoundImage(in: GameResources.bundle) != nil { settings.sound = .macintoshResources }
+      if settings.music == .remix(name: "Lix") { settings.music = .adaptiveDJ }
+    }
+    settings = settingsOptions().correcting(settings)
+    apply(settings, forceArtworkRefresh: true)
+    loadSoundEffects(for: settings.sound)
+    loadContent()
+    settingsWindow?.update(options: settingsOptions(), settings: settings)
+    FanLevelLibrary.Progress.seedBundledCounts()
+    fanUpdateTask?.cancel()
+    fanUpdateTask = nil
+    startFanUpdates()
+    AppDistribution.publishDeskClockArtwork()
+    GameScreen.shared.reattach()
+    renderScreen()
+  }
+
   @objc private func chooseContent() {
     guard allowNavigationAwayFromSequence() else { return }
+    if AppDistribution.isStore { showOwnedGameImport(); return }
     Task { @MainActor in
       guard let url = await pickDirectory(L10n.text("Choose the directory holding LEVEL000.DAT and MAIN.DAT."))
       else { return }
@@ -2183,7 +2281,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     openPanel.canChooseFiles = false
     openPanel.allowsMultipleSelection = false
     openPanel.message = message
-    return await GameScreen.shared.chooseFile(openPanel)
+    return await chooseResourceFile(openPanel)
+  }
+
+  private func chooseResourceFile(_ panel: NSOpenPanel) async -> URL? {
+    guard let url = await GameScreen.shared.chooseFile(panel) else { return nil }
+    if AppDistribution.isStore, !UserResourceAccess.shared.remember(url) {
+      setStatus(L10n.text("Access was not saved. Select this file or folder again after restarting."))
+    }
+    return url
   }
 
   /// Directories the player has imported, newest last.
@@ -2212,6 +2318,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return entry.set.identifierKey
     }
     if let cached = dataSetIdentityCache[directory.path] { return cached }
+    if let alias = ClassicSourceIdentity.canonicalAlias(for: entry.set, directory: directory) {
+      dataSetIdentityCache[directory.path] = alias.packID
+      return alias.packID
+    }
     let source = ArcadeStore.fingerprint(Data(directory.path.utf8))
     let encoder = JSONEncoder()
     encoder.outputFormatting = [.sortedKeys]
@@ -2344,9 +2454,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
       directories = [legacy]
       gameDirectories = directories
     }
-    let bundled = BundledGameResources.classicDirectories()
+    let bundled = BundledGameResources.classicDirectories(in: GameResources.bundle)
     directories = bundled + directories.filter { !bundled.contains($0) }
-    guard !directories.isEmpty else {
+    if AppDistribution.isStore {
+      for directory in AppDistribution.ownedDirectories(for: .classic) where !directories.contains(directory) {
+        directories.append(directory)
+      }
+    }
+    guard !directories.isEmpty || AppDistribution.isStore else {
       showLibraryWithoutClassicData(
         L10n.text("Add a game folder, or open a .nxlv level."))
       return
@@ -2388,11 +2503,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return left == right ? lhs.offset < rhs.offset : left < right
     }
     dataSets = loaded.map { ($0.set, $0.directory) }
+    if AppDistribution.isStore, !loaded.contains(where: { $0.set.title == .lemmings }),
+      let starter = GameStarterContent.directory(),
+      let dataSet = try? GameStarterContent.dataSet(in: starter) {
+      dataSets.insert((dataSet, starter), at: 0)
+    }
 
     // The port-exclusive pack is built from levels held in memory rather than
     // scanned from a folder, so it is appended after the scan instead of being
     // discovered by it. Each rank resolves artwork from its source release.
-    if let root = Bundle.main.resourceURL?.appendingPathComponent("Ports", isDirectory: true) {
+    if let root = GameResources.resourceURL?.appendingPathComponent("Ports", isDirectory: true) {
       let amigaRoot = root.appendingPathComponent("amiga_extracted", isDirectory: true)
       if let pack = try? PortExclusivePack.dataSet(amigaRoot: amigaRoot, portsRoot: root),
         pack.campaign.levels.count > 0 {
@@ -2403,7 +2523,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     gamePicker.removeAllItems()
     for entry in dataSets {
       gamePicker.addItem(
-        withTitle: "\(entry.set.name) (\(entry.set.campaign.levels.count))")
+        withTitle: "\(GameStarterContent.isStarter(directory: entry.directory) ? GameStarterContent.displayName : entry.set.name) (\(entry.set.campaign.levels.count))")
     }
     guard !dataSets.isEmpty else {
       showLibraryWithoutClassicData(
@@ -2452,7 +2572,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// release is the only one whose character set is decoded, so its lettering
   /// is what every menu uses. Without it the menus fall back to a system font.
   private func configureFrontEndArtwork() {
-    guard let resources = Bundle.main.resourceURL else { return }
+    guard let resources = GameResources.resourceURL else { return }
     // The menus keep their lettering whatever is selected, which is the whole
     // point of holding this separately from the level artwork. Selecting a pack
     // with no Macintosh artwork of its own, or a release whose data is missing,
@@ -2529,7 +2649,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         folder = "holiday_lemmings_music_mod"
       default: folder = "lemmings_music_mod"
       }
-      if let bundled = BundledGameResources.music(folder) { music.loadLibrary(at: bundled) }
+      if let bundled = BundledGameResources.music(folder, in: GameResources.bundle) { music.loadLibrary(at: bundled) }
     }
 
     campaign = entry.set.campaign
@@ -2613,7 +2733,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return dataSets[gamePicker.indexOfSelectedItem].set.title
   }
   private var seasonalMusic: Bool { SoundtrackPlayer.isSeasonal(musicTitle) }
-  private lazy var macintoshMusic: ClassicMacMusicLibrary? = Bundle.main.resourceURL
+  private lazy var macintoshMusic: ClassicMacMusicLibrary? = GameResources.resourceURL
     .flatMap { ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic")) }
   /// One main theme plays on the menus for the whole launch.
   private var menuTheme: MenuThemeSelection.Choice?
@@ -2691,7 +2811,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     var newSpecials: [Int: ClassicSpecialGraphic] = [:]
     for style in styles { newGrounds[style] = try ClassicGroundSet.load(style: style, from: directory, fallbackDirectory: fallbackDirectory) }
     for index in specialIndices { newSpecials[index + 1] = try ClassicSpecialGraphic.load(index: index, from: directory, fallbackDirectory: fallbackDirectory) }
-    let newAssets = try ClassicMainDATAssets.load(from: fallbackDirectory ?? directory)
+    let newAssets = GameStarterContent.isStarter(directory: directory)
+      ? nil : try ClassicMainDATAssets.load(from: fallbackDirectory ?? directory)
     let result = PreparedClassicArtwork(
       grounds: newGrounds,
       specials: newSpecials,
@@ -2839,9 +2960,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
     artworkLevel = level
     artworkGroundOverride = groundOverride
     artworkSpecialOverride = specialOverride
+    if GameArtworkSkin.lixEnabled {
+      switch level.title {
+      case "Float to Safety": playfield.lixSceneTheme = .earth
+      case "Over the Rise": playfield.lixSceneTheme = .wood
+      default: playfield.lixSceneTheme = .brick
+      }
+      return
+    }
     guard [.macintosh, .macintoshMonochrome, .amiga].contains(activeGraphics),
       groundOverride != nil || dataSets.indices.contains(gamePicker.indexOfSelectedItem),
-      let resources = Bundle.main.resourceURL else { return }
+      let resources = GameResources.resourceURL else { return }
     let source = activeGraphics == .amiga ? "AmigaArtwork"
       : activeGraphics == .macintoshMonochrome ? "MacArtwork/monochrome" : "MacArtwork"
     let root = resources.appendingPathComponent(source)
@@ -2944,7 +3073,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
             self.window.attachedSheet == nil else { return }
       levelBrowserLoadTask = nil
       levelBrowserDiscoveryTask = nil
-      if discovery.classic.allSatisfy(\.isVerified) { preparedLevelBrowserDiscovery = discovery }
+      if discovery.classic.allSatisfy({ $0.isVerified && $0.sourceFingerprint == nil }) {
+        preparedLevelBrowserDiscovery = discovery
+      }
       rebuildLevelCatalogue(discovery)
       if showsJourney { presentLearningJourney(start: true); return }
       if showsPlaylists {
@@ -2967,24 +3098,25 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func makeLevelBrowserDiscoveryTask() -> Task<LevelBrowserDiscovery?, Never> {
-    let bundledClassic = Set(BundledGameResources.classicDirectories().map {
+    let bundledClassic = Set(BundledGameResources.classicDirectories(in: GameResources.bundle).map {
       $0.resolvingSymlinksInPath().standardizedFileURL
     })
-    let bundledPorts = Bundle.main.resourceURL?
+    let bundledPorts = GameResources.resourceURL?
       .appendingPathComponent("Ports", isDirectory: true)
       .resolvingSymlinksInPath().standardizedFileURL
     let classic = dataSets.map {
       let directory = $0.directory.resolvingSymlinksInPath().standardizedFileURL
       let verified = bundledClassic.contains(directory)
         || ($0.set.title == .ohYesMoreLemmings && directory == bundledPorts)
+        || GameStarterContent.isStarter(directory: directory)
       return LevelBrowserClassicSource(dataSet: $0.set, directory: $0.directory,
         sourceFingerprint: nil, sourceRevision: nil, isVerified: verified)
     }
-    let lemmings2Root = try? BundledGameResources.lemmings2()
+    let lemmings2Root = try? AppDistribution.lemmings2()
     let lemmings2Progress = lemmings2Root.flatMap {
       Lemmings2PlayWindow.browserProgressData(root: $0)
     }
-    let lemmings3Root = try? BundledGameResources.lemmings3()
+    let lemmings3Root = try? AppDistribution.lemmings3()
     let lemmings3Progress = lemmings3Root.map {
       Lemmings3PlayWindow.browserProgressData(root: $0)
     } ?? [:]
@@ -3001,12 +3133,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
             return nil
           }
           if source.isVerified {
+            let alias = ClassicSourceIdentity.canonicalAlias(for: source.dataSet, directory: source.directory)
             return LevelBrowserClassicSource(
               dataSet: source.dataSet,
               directory: source.directory,
-              sourceFingerprint: nil,
+              sourceFingerprint: GameAssetCache<String>.bundledKey(source.directory) == nil && alias == nil ? before : nil,
               sourceRevision: before,
-              isVerified: true)
+              isVerified: true,
+              canonicalPackID: alias?.packID)
           }
           guard
                 let dataSet = try? ClassicDataSet.detect(directory: source.directory),
@@ -3014,12 +3148,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
                   for: dataSet.title, root: source.directory),
                 fingerprint == before
           else { return nil }
+          let alias = ClassicSourceIdentity.canonicalAlias(for: dataSet, directory: source.directory)
+          guard FanLevelLibrary.classicSourceRevision(for: dataSet.title, root: source.directory) == fingerprint
+          else { return nil }
           return LevelBrowserClassicSource(
             dataSet: dataSet,
             directory: source.directory,
             sourceFingerprint: fingerprint,
             sourceRevision: fingerprint,
-            isVerified: false)
+            isVerified: alias != nil,
+            canonicalPackID: alias?.packID)
         }
         guard !Task.isCancelled else { return nil }
         let neoLemmix = NeoLemmixLibrary.discover(neoLemmixSources)
@@ -3058,7 +3196,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let discovery = await task.value
       guard let self, self.levelBrowserWarmGeneration == generation, !task.isCancelled else { return }
       self.levelBrowserWarmTask = nil
-      if let discovery, discovery.classic.allSatisfy(\.isVerified) {
+      if let discovery, discovery.classic.allSatisfy({ $0.isVerified && $0.sourceFingerprint == nil }) {
         self.preparedLevelBrowserDiscovery = discovery
         self.neoCatalogueTotal = discovery.neoLemmix.reduce(0) { $0 + $1.pack.levels.count }
         if self.flow?.screen == .title { self.renderScreen() }
@@ -3087,7 +3225,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.rebuildLevelCatalogue(discovery)
       var preferred = recent.flatMap { self.levelPreviewRequests[$0.identity] }
       if preferred == nil, let recent, let pack = self.levelBrowserFanPacks[recent.identity.packID],
-         let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports") {
+         let ports = GameResources.resourceURL?.appendingPathComponent("Ports") {
         let catalogueRevision = Self.levelCatalogueRevision
         preferred = await Task.detached(priority: .utility) {
           guard let revision = FanLevelLibrary.archiveFingerprint(pack),
@@ -3095,7 +3233,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
                   $0.file + "#\($0.section ?? -1)" == recent.identity.levelID
                 }) else { return nil as LevelPreviewRequest? }
           return LevelPreviewRequest(identity: recent.identity, catalogueRevision: catalogueRevision,
-            source: .fanClassic(pack: pack, entry: entry, archiveFingerprint: revision, portsRoot: ports))
+            source: .fanClassic(pack: pack, entry: entry, archiveFingerprint: revision, portsRoot: ports,
+              ownedClassicRoots: AppDistribution.ownedDirectories(for: .classic)))
         }.value
       }
       // Missing or changed imports fall back to scenery that can still be rendered.
@@ -3146,11 +3285,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
     for source in discovery.classic {
       let dataSet = source.dataSet
+      let packName = GameStarterContent.isStarter(directory: source.directory) ? GameStarterContent.displayName : dataSet.name
       let sourceFingerprint = source.sourceFingerprint
       guard let sourceRevision = source.sourceRevision else { continue }
       let sourceID = ArcadeStore.fingerprint(
         Data(source.directory.standardizedFileURL.path.utf8))
-      let packID = sourceFingerprint.map { "imported:" + $0 + ":" + sourceID }
+      let packID = source.canonicalPackID ?? sourceFingerprint.map { "imported:" + $0 + ":" + sourceID }
         ?? dataSet.identifierKey
       let status: LevelContentStatus = source.isVerified ? .complete : .unverified
       var browserFlow = ClassicGameFlow(campaign: dataSet.campaign)
@@ -3178,7 +3318,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
             sourceFingerprint: sourceRevision))
         return LevelCatalogueEntry(
           identity: identity,
-          packName: dataSet.name,
+          packName: packName,
           levelName: level.level.title.isEmpty ? L10n.text("Level \(index + 1)") : level.level.title,
           number: index + 1,
           status: status,
@@ -3186,11 +3326,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
             ? .available : .locked)
       }
       let pack = LevelCataloguePack(
-        engine: .classic, id: packID, name: dataSet.name,
+        engine: .classic, id: packID, name: packName,
         status: status, levels: levels)
       packs.append(pack)
-      levelBrowserPackFamilies[browserPackKey(pack)] =
-        HomeContentFamily.family(for: dataSet.title, kind: dataSet.kind)
+      levelBrowserPackFamilies[browserPackKey(pack)] = GameStarterContent.isStarter(directory: source.directory)
+        ? .classic : HomeContentFamily.family(for: dataSet.title, kind: dataSet.kind)
     }
 
     for neoEntry in discovery.neoLemmix {
@@ -3773,7 +3913,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       levelPreviewRequests[identity] = nil
     }
     levelBrowserFanEntries[pack.id] = discovery.entries
-    let portsRoot = Bundle.main.resourceURL?.appendingPathComponent("Ports")
+    let portsRoot = GameResources.resourceURL?.appendingPathComponent("Ports")
     let levels = discovery.entries.enumerated().map { index, entry in
       let identity = LevelCatalogueIdentity(
         engine: .classic,
@@ -3788,7 +3928,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
             pack: url,
             entry: entry,
             archiveFingerprint: discovery.fingerprint,
-            portsRoot: portsRoot))
+            portsRoot: portsRoot,
+            ownedClassicRoots: AppDistribution.ownedDirectories(for: .classic)))
       }
       return LevelCatalogueEntry(
         identity: identity,
@@ -3923,8 +4064,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard currentNxlvURL == nil, dataSets.indices.contains(index), dataSets[index].set.campaign.levels.indices.contains(levelIndex) else { return nil }
     let source = dataSets[index], level = source.set.campaign.levels[levelIndex]
     guard let revision = FanLevelLibrary.classicSourceRevision(for: source.set.title, root: source.directory) else { return nil }
-    let bundled = BundledGameResources.classicDirectories().contains { $0.resolvingSymlinksInPath() == source.directory.resolvingSymlinksInPath() }
-      || (source.set.title == .ohYesMoreLemmings && source.directory.lastPathComponent == "Ports")
+    let bundled = !dataSetID(source).contains(":source-")
     let packID = bundled ? source.set.identifierKey : "imported:" + revision + ":" + ArcadeStore.fingerprint(Data(source.directory.standardizedFileURL.path.utf8))
     return try? LevelPlaylistEntry(identity: .init(engine: .classic, packID: packID,
       levelID: "\(levelIndex):\(level.rank):\(level.number):\(level.archiveFile):\(level.archiveSection)"),
@@ -4741,7 +4881,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func presentShortGames() {
-    let page = GameMenuPage(title: L10n.text("Short games"), subtitle: L10n.text("5 levels"))
+    let page = GameMenuPage(title: L10n.text("Short games"), subtitle: L10n.text("Five-level openings"))
     let carousel = LevelCoverFlowView(frame: page.body.bounds)
     carousel.autoresizingMask = [.width, .height]
     page.body.addSubview(carousel)
@@ -5905,11 +6045,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
         campaignLevel.level,
         groundSet: ground,
         specialGraphic: prepared.specials[campaignLevel.level.specialStyle])
-      _ = try ClassicDOSSimulation(
-        level: campaignLevel.level,
-        renderedLevel: rendered,
-        mainDATAssets: prepared.assets,
-        mechanics: ClassicDOSMechanics(title: dataSet.title, rank: campaignLevel.rank))
+      if let assets = prepared.assets {
+        _ = try ClassicDOSSimulation(
+          level: campaignLevel.level, renderedLevel: rendered, mainDATAssets: assets,
+          mechanics: ClassicDOSMechanics(title: dataSet.title, rank: campaignLevel.rank))
+      } else {
+        _ = try ClassicDOSSimulation(
+          level: campaignLevel.level, renderedLevel: rendered,
+          mechanics: ClassicDOSMechanics(title: dataSet.title, rank: campaignLevel.rank))
+      }
       try Task.checkCancellation()
       if let expectedFingerprint,
          FanLevelLibrary.classicSourceRevision(for: dataSet.title, root: directory) != expectedFingerprint {
@@ -5928,7 +6072,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     entry: FanLevelLibrary.Entry,
     packName: String,
     expectedFingerprint: String,
-    portsRoot: URL
+    portsRoot: URL,
+    ownedClassicRoots: [URL] = []
   ) -> LevelBrowserFanPreparation {
     do {
       try Task.checkCancellation()
@@ -5941,11 +6086,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
         styleName: styleName,
         portsRoot: portsRoot,
         pack: pack,
-        entry: entry)
+        entry: entry,
+        ownedClassicRoots: ownedClassicRoots)
       let special = try FanLevelLibrary.specialGraphic(
-        for: level, entry: entry, pack: pack, portsRoot: portsRoot)
-      let assets = try ClassicMainDATAssets.load(
-        from: portsRoot.appendingPathComponent("lemmings_dos_1991-07-30"))
+        for: level, entry: entry, pack: pack, portsRoot: portsRoot,
+        ownedClassicRoots: ownedClassicRoots)
+      let assets = try FanLevelLibrary.mainDATAssets(portsRoot: portsRoot, ownedClassicRoots: ownedClassicRoots)
       let rendered = try ClassicLevelRenderer.render(
         level, groundSet: ground, specialGraphic: special,
         objectSemantics: .forFanLevel(level, groundSet: ground))
@@ -6111,7 +6257,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         }
       }
     case let .fan(pack, fanEntry, archiveFingerprint):
-      guard let portsRoot = Bundle.main.resourceURL?.appendingPathComponent("Ports") else {
+      guard let portsRoot = GameResources.resourceURL?.appendingPathComponent("Ports") else {
         playMusicForCurrentLevel()
         GameScreen.shared.message(entry.levelName,
           detail: L10n.text("The Classic graphics library is not available."))
@@ -6125,7 +6271,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
           entry: fanEntry,
           packName: entry.packName,
           expectedFingerprint: archiveFingerprint,
-          portsRoot: portsRoot)
+          portsRoot: portsRoot,
+          ownedClassicRoots: AppDistribution.ownedDirectories(for: .classic))
         guard !Task.isCancelled else { return }
         await MainActor.run { [weak self] in
           guard let self, self.levelBrowserLaunchID == launchID,
@@ -6428,6 +6575,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let wins = Set(lessons.map(\.identity))
     let imported = dataSets.filter {
       $0.set.kind == .scanned && $0.set.title != .ohYesMoreLemmings
+        && !GameStarterContent.isStarter(directory: $0.directory)
     }.reduce(
       into: (passed: 0, total: 0)
     ) { result, entry in
@@ -6461,15 +6609,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let installed = library.entries.filter {
       family.titles.contains($0.title) && $0.available
     }
-    guard !installed.isEmpty else {
+    let starters = family == .classic ? dataSets.filter { GameStarterContent.isStarter(directory: $0.directory) } : []
+    guard !installed.isEmpty || !starters.isEmpty else {
       return family.displayName.uppercased() + "  — NO DATA"
     }
     let wins = Set(homeLearningEntries().map(\.identity))
     let passed = installed.reduce(0) { count, item in
       guard let index = nonFanQuestDataSetIndex(for: item.title) else { return count + item.passed }
       return count + homeClassicPassedCount(for: dataSets[index], journeyWins: wins)
-    }
-    let total = installed.reduce(0) { $0 + $1.total }
+    } + starters.reduce(0) { $0 + homeClassicPassedCount(for: $1, journeyWins: wins) }
+    let total = installed.reduce(0) { $0 + $1.total } + starters.reduce(0) { $0 + $1.set.campaign.levels.count }
     let status = family == .lemmings3 ? "  — BETA" : ""
     return "\(family.displayName.uppercased())  \(passed)/\(total)\(status)"
   }
@@ -6561,8 +6710,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     measureFanPacks()
     let existing = fanPacks, destination = FanLevelLibrary.downloadFolder
     fanUpdateTask = Task { [weak self] in
-      let outcome = await FanLevelUpdates().check(existing: existing, destination: destination)
-      guard let self else { return }
+      let outcome = await FanLevelUpdates().check(existing: existing, destination: destination,
+        allowedPackIDs: AppDistribution.isStore && !GameResources.hasFanCatalogue ? [] : nil)
+      guard !Task.isCancelled, let self else { return }
       FanLevelLibrary.Progress.mergeCounts(outcome.counts)
       self.fanUpdateStatus = outcome.status
       let selected = self.fanPacks.indices.contains(self.fanChoice) ? self.fanPacks[self.fanChoice] : nil
@@ -6593,7 +6743,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       panel.canChooseFiles = false
       panel.canChooseDirectories = true
       panel.message = L10n.text("Choose the folder holding the level packs.")
-      guard let url = await GameScreen.shared.chooseFile(panel) else { return }
+      guard let url = await chooseResourceFile(panel) else { return }
       UserDefaults.standard.set(url.path, forKey: FanLevelLibrary.folderKey)
       showFanLevels()
     }
@@ -6723,7 +6873,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         let loaded = try FanLevelLibrary.level(
           entry, in: pack, includeTextSteel: fanTextSteel)
         level = loaded.0
-        guard let ports = Bundle.main.resourceURL?.appendingPathComponent("Ports") else { return }
+        guard let ports = GameResources.resourceURL?.appendingPathComponent("Ports") else { return }
         ground = try FanLevelLibrary.groundSet(
           for: level,
           styleName: loaded.1,
@@ -6731,16 +6881,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
           pack: fanPackGraphics ? pack : nil,
           entry: entry,
           useLocalStyles: fanLocalStyles,
-          useHolidayStyles: fanHolidayStyles)
-        let directory = ports.appendingPathComponent("lemmings_dos_1991-07-30")
-        if fanPackGraphics {
-          special = try FanLevelLibrary.specialGraphic(
-            for: level, entry: entry, pack: pack, portsRoot: ports)
-        } else {
-          special = level.specialStyle == 0 ? nil : try ClassicSpecialGraphic.load(
-            index: level.specialStyle - 1, from: directory)
-        }
-        fanAssets = try ClassicMainDATAssets.load(from: directory)
+          useHolidayStyles: fanHolidayStyles,
+          ownedClassicRoots: AppDistribution.ownedDirectories(for: .classic))
+        special = try FanLevelLibrary.specialGraphic(for: level,
+          entry: fanPackGraphics ? entry : nil, pack: fanPackGraphics ? pack : nil, portsRoot: ports,
+          ownedClassicRoots: AppDistribution.ownedDirectories(for: .classic))
+        fanAssets = try FanLevelLibrary.mainDATAssets(portsRoot: ports,
+          ownedClassicRoots: AppDistribution.ownedDirectories(for: .classic))
       }
       let packName = FanLevelLibrary.displayName(of: pack)
       fanPlaying = true
@@ -6909,7 +7056,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       openPanel.canChooseDirectories = false
       openPanel.allowedFileTypes = ["nxlv"]
       openPanel.message = L10n.text("Choose a NeoLemmix level file.")
-      guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+      guard let url = await chooseResourceFile(openPanel) else { return }
       if sequelIsActive { returnToLibrary() }
       loadNxlv(url)
     }
@@ -7119,8 +7266,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let gadgetSounds = NeoLemmixSoundCue.gadgetSounds(for: rendered.gadgets, resolution: resolution)
       effects.loadNeoLemmixSounds(names: Set(gadgetSounds.values),
         soundDirectory: stylesDirectory.deletingLastPathComponent().appendingPathComponent("sound"),
-        amigaDirectory: Bundle.main.resourceURL?.appendingPathComponent("Ports/amiga_extracted/lemmings"),
-        fallbackSoundDirectory: Bundle.main.resourceURL?.appendingPathComponent("NeoLemmix/sound"))
+        amigaDirectory: GameResources.resourceURL?.appendingPathComponent("Ports/amiga_extracted/lemmings"),
+        fallbackSoundDirectory: GameResources.resourceURL?.appendingPathComponent("NeoLemmix/sound"))
       adopt(
         NeoLemmixSession(
           simulation: simulation, width: rendered.width, height: rendered.height,
@@ -7211,7 +7358,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         startingSkills: TrolleyCapture.skills(new.skills), timeLimitSeconds: new.remainingSeconds.map(Double.init))
     if let classic = new as? ClassicSession {
       ArcadeStore.shared.prepareSolutionTarget(initial: classic.initialSimulation, conditions: conditions,
-          resources: Bundle.main.resourceURL, buildVersion: TrolleyCapture.buildVersion)
+          resources: GameResources.resourceURL, buildVersion: TrolleyCapture.buildVersion)
     }
     arcadeLevel = ArcadeLevel(id: gameID + ":" + stableID,
         title: currentNxlvURL?.deletingPathExtension().lastPathComponent ?? artworkLevel?.title ?? L10n.text("Lemmings"),
@@ -7329,7 +7476,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard let flow else { return }
     playfield.overlayShowsSettingsButton = false
     if !sequelIsActive {
-      window.title = flow.screen == .title ? L10n.text("Ultimate Lemmings")
+      window.title = flow.screen == .title ? AppDistribution.name
         : activeTitle?.displayName ?? campaign?.name ?? L10n.text("Lemmings")
     }
     if fanPlaying { return }
@@ -8302,7 +8449,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       openPanel.canChooseDirectories = false
       openPanel.allowedFileTypes = ["dsk", "img", "dmg", "hfs"]
       openPanel.message = L10n.text("Choose a Macintosh Lemmings disk image.")
-      guard let url = await GameScreen.shared.chooseFile(openPanel) else { return }
+      guard let url = await chooseResourceFile(openPanel) else { return }
       UserDefaults.standard.set(url.path, forKey: macImageKey)
       loadSoundEffects(from: url)
     }
@@ -8311,9 +8458,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// The Macintosh release names its sounds, so they bind without guessing.
   private func loadSoundEffects(from url: URL) {
     do {
-      let amiga = Bundle.main.resourceURL?.appendingPathComponent("Ports/amiga_extracted/lemmings")
+      let amiga = GameResources.resourceURL?.appendingPathComponent("Ports/amiga_extracted/lemmings")
       let loaded = try effects.loadMacintoshSounds(imageURL: url, amigaFallbackDirectory: amiga,
-        supplementDirectory: Bundle.main.resourceURL?.appendingPathComponent("Sounds"))
+        supplementDirectory: GameResources.resourceURL?.appendingPathComponent("Sounds"))
       setStatus(L10n.text("Loaded \(loaded.count) sound effects."))
     } catch {
       setStatus(L10n.text("Sound effects: \(error)"))
@@ -8328,13 +8475,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     switch source {
     case .macintoshResources:
       let custom = UserDefaults.standard.string(forKey: macImageKey).map { URL(fileURLWithPath: $0) }
-      guard let image = custom ?? BundledGameResources.macintoshSoundImage() else { return }
+      guard let image = custom ?? BundledGameResources.macintoshSoundImage(in: GameResources.bundle) else { return }
       loadSoundEffects(from: image)
     case .amigaVoices:
-      guard let root = Bundle.main.resourceURL else { return }
+      guard let root = GameResources.resourceURL else { return }
       let directory = root.appendingPathComponent("Ports/amiga_extracted/lemmings")
       do {
-        let loaded = try effects.loadAmigaSounds(directory: directory, macintoshFallbackImage: BundledGameResources.macintoshSoundImage(),
+        let loaded = try effects.loadAmigaSounds(directory: directory, macintoshFallbackImage: BundledGameResources.macintoshSoundImage(in: GameResources.bundle),
           supplementDirectory: root.appendingPathComponent("Sounds"))
         setStatus(L10n.text("Loaded \(loaded.count) Amiga sound effects."))
       } catch {
@@ -8368,8 +8515,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
   /// The player adds these. A folder of Amiga rips, a console version or a
   /// remix all work the same way, and each appears in the settings by name.
   private func loadSoundtracks() {
-    guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
+    guard let root = GameResources.resourceURL?.appendingPathComponent("Music") else { return }
     soundtrackLibrary = SoundtrackPlayer.soundtracks(at: root)
+    if let resources = Bundle.main.resourceURL {
+      var tracks: [URL] = []
+      for path in ["Music", "AlternativeAssets/Music"] {
+        let directory = resources.appendingPathComponent(path)
+        for (name, files) in SoundtrackPlayer.soundtracks(at: directory)
+          where name == "Lix" || name.hasPrefix("Lix/") {
+          tracks += files.filter { $0.standardizedFileURL.path.hasPrefix(directory.standardizedFileURL.path + "/") }
+        }
+      }
+      if !tracks.isEmpty { soundtrackLibrary["Lix"] = Array(Set(tracks)).sorted { $0.path < $1.path } }
+    }
     reloadDJLibrary()
 
   }
@@ -8382,7 +8540,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func reloadDJLibrary() {
-    guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
+    guard let root = GameResources.resourceURL?.appendingPathComponent("Music") else { return }
     dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root,
       includeOtherSoundtracks: settings.djIncludesOtherSoundtracks, seasonal: seasonalMusic), catalogueRoot: root)
   }
@@ -8391,7 +8549,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard phase == .playing, session?.isComplete == false, !isPaused, !audioMuted,
           !userPausedMusic, settings.music != .silent, settings.musicVolume > 0,
           NSApp.isActive, !GameScreen.shared.isPresented else { return }
-    guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
+    guard let root = GameResources.resourceURL?.appendingPathComponent("Music") else { return }
     var pools = SoundtrackPlayer.djSoundtracks(at: root, seasonal: false)
     for (name, urls) in SoundtrackPlayer.djSoundtracks(at: root, seasonal: true) { pools[name, default: []].append(contentsOf: urls) }
     dj.load(soundtracks: pools, catalogueRoot: root)
@@ -8457,6 +8615,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let identity = arcadeRunID.uuidString + String(describing: activeMusic)
     guard startedMusicIdentity != identity else { return }
     startedMusicIdentity = identity
+    if activeMusic == .remix(name: "Lix"),
+      LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
+        position: max(0, picker.indexOfSelectedItem), identity: identity) {
+      music.stop(); soundtrack.stop()
+      return
+    }
     // The saved run may contain only the remaining or revisited lessons.
     // Use the full journey's position so a new session keeps the score order.
     let journeyPosition = isLearningJourneyActive && sequencePlayingIdentity != nil
@@ -8469,6 +8633,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let game = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
     if isLearningJourneyActive {
       if playLearningJourneyMusic(assignedName: assignedName, game: game, position: position) { return }
+      if AppDistribution.isStore,
+        LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
+          position: position, identity: identity) {
+        music.stop(); soundtrack.stop()
+        return
+      }
       startedMusicIdentity = nil
       setStatus(L10n.text("Assigned music unavailable: \(assignedName)"))
       return
@@ -8476,7 +8646,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if activeMusic == .adaptiveDJ {
       reloadDJLibrary()
       let folder = seasonalMusic ? "holiday_lemmings_music_mod" : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
-      let module = BundledGameResources.music(folder)?.appendingPathComponent(assignedName + ".mod")
+      let module = BundledGameResources.music(folder, in: GameResources.bundle)?.appendingPathComponent(assignedName + ".mod")
       let fallback = module.flatMap { FileManager.default.isReadableFile(atPath: $0.path) ? $0 : nil }
       let game = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
       let position = currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0
@@ -8485,6 +8655,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if dj.startJourney(trackID: game + "." + assignedName.lowercased(), cycle: cycle,
         identity: arcadeRunID.uuidString, fallback: fallback,
         includeAlternates: settings.djIncludesOtherSoundtracks) {
+        music.stop(); soundtrack.stop()
+        return
+      }
+      if AppDistribution.isStore,
+        LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
+          position: position, identity: identity) {
         music.stop(); soundtrack.stop()
         return
       }
@@ -8503,7 +8679,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // back to the module instead of substituting an unrelated song.
     let trackGame = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
     if case let .remix(name) = activeMusic, let tracks = soundtrackLibrary[name],
-       let musicRoot = Bundle.main.resourceURL?.appendingPathComponent("Music"),
+       let musicRoot = GameResources.resourceURL?.appendingPathComponent("Music"),
        let index = tracks.firstIndex(where: { SoundtrackPlayer.matches($0,
           trackID: trackGame + "." + assignedName.lowercased(), root: musicRoot) }) {
       music.stop()
@@ -8517,10 +8693,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
     let directory = !seasonalMusic ? UserDefaults.standard.string(forKey: musicPathKey)
       .map { URL(fileURLWithPath: $0, isDirectory: true) } : nil
-    guard let root = directory ?? BundledGameResources.music(folder) else { music.stop(); return }
+    guard let root = directory ?? BundledGameResources.music(folder, in: GameResources.bundle) else { music.stop(); return }
     music.loadLibrary(at: root)
     guard !music.library.isEmpty else { music.stop(); return }
-    let bundled = BundledGameResources.music(folder)?.appendingPathComponent(assignedName + ".mod")
+    let bundled = BundledGameResources.music(folder, in: GameResources.bundle)?.appendingPathComponent(assignedName + ".mod")
     let url = music.library.first(where: { $0.deletingPathExtension().lastPathComponent.lowercased() == assignedName.lowercased() }) ?? bundled
     if let url, music.play(url: url) != nil {
       do {
@@ -8533,7 +8709,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     } else {
       music.stop()
-      if let root = Bundle.main.resourceURL?.appendingPathComponent("Music"),
+      if let root = GameResources.resourceURL?.appendingPathComponent("Music"),
          let recording = SoundtrackPlayer.recording(trackID: trackGame + "." + assignedName.lowercased(), root: root) {
         soundtrack.load([recording])
         if soundtrack.play(index: 0) != nil { return }
@@ -8553,7 +8729,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     legacyMusicHandoffReversing = false
     dj.stop()
     guard settings.menuMusic else { music.stop(); soundtrack.stop(); return }
-    let musicRoot = Bundle.main.resourceURL?.appendingPathComponent("Music")
+    if settings.music == .remix(name: "Lix")
+      || (AppDistribution.isStore && BundledGameResources.music("lemmings_music_mod", in: GameResources.bundle) == nil
+        && macintoshMusic == nil),
+      LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
+        position: 0, identity: identity, menu: true) {
+      music.stop(); soundtrack.stop()
+      return
+    }
+    let musicRoot = GameResources.resourceURL?.appendingPathComponent("Music")
     let theme = menuTheme ?? MenuThemeSelection.choose(macintoshAvailable: macintoshMusic != nil,
       otherVersions: musicRoot.map(MenuThemeSelection.otherVersions(at:)) ?? [])
     menuTheme = theme
@@ -8569,7 +8753,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     // Any recording that fails to open falls back to the Amiga intro.
     soundtrack.stop()
-    guard let intro = BundledGameResources.music("lemmings_music_mod")?.appendingPathComponent("intro.mod"),
+    guard let intro = BundledGameResources.music("lemmings_music_mod", in: GameResources.bundle)?.appendingPathComponent("intro.mod"),
           music.play(url: intro) != nil else { music.stop(); return }
     do {
       try music.start()
@@ -8582,7 +8766,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func playLearningJourneyMusic(assignedName: String, game: String, position: Int) -> Bool {
     dj.setCelebrationAlternates(settings.djIncludesOtherSoundtracks)
-    let musicRoot = Bundle.main.resourceURL?.appendingPathComponent("Music")
+    let musicRoot = GameResources.resourceURL?.appendingPathComponent("Music")
     dj.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
     reloadDJLibrary()
     let handoffInProgress = legacyMusicHandoffTask != nil
@@ -8590,7 +8774,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if activeMusic == .adaptiveDJ {
       let folder = seasonalMusic ? "holiday_lemmings_music_mod"
         : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
-      let module = BundledGameResources.music(folder)?.appendingPathComponent(assignedName + ".mod")
+      let module = BundledGameResources.music(folder, in: GameResources.bundle)?.appendingPathComponent(assignedName + ".mod")
       let fallback = module.flatMap { FileManager.default.isReadableFile(atPath: $0.path) ? $0 : nil }
       let cycle = fanPlaying ? position / LevelMusicSelection.classic.count
         : LevelMusicSelection.cycle(index: position, titles: picker.itemTitles,
@@ -8618,11 +8802,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
         : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
       let directory = !seasonalMusic ? UserDefaults.standard.string(forKey: musicPathKey)
         .map { URL(fileURLWithPath: $0, isDirectory: true) } : nil
-      if let root = directory ?? BundledGameResources.music(folder) {
+      if let root = directory ?? BundledGameResources.music(folder, in: GameResources.bundle) {
         music.loadLibrary(at: root)
         selected = music.library.first(where: {
           $0.deletingPathExtension().lastPathComponent.lowercased() == assignedName.lowercased()
-        }) ?? BundledGameResources.music(folder)?.appendingPathComponent(assignedName + ".mod")
+        }) ?? BundledGameResources.music(folder, in: GameResources.bundle)?.appendingPathComponent(assignedName + ".mod")
       }
     }
     if selected == nil, let musicRoot {

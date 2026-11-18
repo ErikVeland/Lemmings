@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+PASS pinned Lix font pixels, metrics, palette, complete paragraph fitting, bounds and unavailable-glyph rejection

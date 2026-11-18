@@ -38,12 +38,12 @@ let package = Package(
         ),
         .target(
             name: "LemmingsAudio",
-            dependencies: ["NxlvKit"],
+            dependencies: ["NxlvKit", "LemmingsAppCore"],
             path: "Sources/LemmingsAudio"
         ),
         .target(
             name: "LemmingsGameArt",
-            dependencies: ["NxlvKit", "LemmingsMobileCore", "LemmingsTVCore"],
+            dependencies: ["NxlvKit", "LemmingsAppCore", "LemmingsMobileCore", "LemmingsTVCore"],
             path: "Sources/LemmingsGameArt"
         ),
         .target(

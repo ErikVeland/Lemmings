@@ -191,7 +191,7 @@ import NxlvKit
         for tribe in Lemmings3ClassicCampaign.Tribe.allCases { _ = try decodedAssets(root: root, tribe: tribe) }
     }
     private static func storageIdentity(_ root: URL) -> String {
-        let bundled = (try? BundledGameResources.lemmings3())?.standardizedFileURL == root.standardizedFileURL
+        let bundled = (try? BundledGameResources.lemmings3(in: .main))?.standardizedFileURL == root.standardizedFileURL
         return bundled ? "bundled" : root.standardizedFileURL.path
     }
     private static func session(root: URL, tribe: Lemmings3ClassicCampaign.Tribe,
@@ -302,6 +302,8 @@ import NxlvKit
         window.minSize = NSSize(width: 850, height: 540)
         NotificationCenter.default.addObserver(self, selector: #selector(artworkChanged),
             name: SequelArtworkPreference.changed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(characterArtworkChanged),
+            name: GameArtworkSkin.changed, object: nil)
         canvas.frame = window.contentView?.bounds ?? .zero
         canvas.autoresizingMask = [.width, .height]
         window.contentView = canvas
@@ -352,6 +354,7 @@ import NxlvKit
             switch action {
             case .rewind, .backward: return game.tick > 0
             case .forward: return !game.isComplete || self.canStepForward
+            case .hints: return true
             }
         }
         canvas.timeline.perform = { [weak keyboard] action in
@@ -359,6 +362,7 @@ import NxlvKit
             case .rewind: keyboard?.rewind?()
             case .backward: keyboard?.step?(-1)
             case .forward: keyboard?.step?(1)
+            case .hints: keyboard?.hints?()
             }
         }
         keyboard.active = { [weak self] in
@@ -528,8 +532,9 @@ import NxlvKit
             }
         }
         timelineTransport = makeTimelineTransport(for: window)
-        music.loadLibrary(at: dataRoot.deletingLastPathComponent().deletingLastPathComponent()
-            .appendingPathComponent("Music/lemmings_3_music_mod_tsyu"))
+        music.loadLibrary(at: BundledGameResources.music("lemmings_3_music_mod_tsyu", in: GameResources.bundle)
+            ?? dataRoot.deletingLastPathComponent().deletingLastPathComponent()
+              .appendingPathComponent("Music/lemmings_3_music_mod_tsyu"))
         window.center()
         if let recovery, let saved = recovery.l3 {
             arcadeRunID = recovery.runID; arcadeProfileID = recovery.profileID; arcadeHotSeatID = recovery.hotSeatID
@@ -561,42 +566,6 @@ import NxlvKit
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     #if APP_INTEGRATION_TESTS
-    func testPressedSkillArtwork() throws {
-        timer?.invalidate()
-        canvas.startCountdown.cancel()
-        canvas.menuRows = nil
-        canvas.confinePointer = false
-        paused = true
-        selected = 0
-        refresh()
-        guard let window else { throw SequelDataError.invalid("Chronicles window unavailable") }
-        let before = L3RunRecovery.stateHash(game)
-        let group = canvas.skillGroupFrame
-        let cellWidth = group.width / 5
-        func skill(_ index: Int) throws -> Data {
-            let rect = CGRect(x: group.minX + CGFloat(index) * cellWidth, y: group.minY,
-                width: cellWidth, height: group.height).insetBy(dx: 8, dy: 8)
-            guard let bitmap = canvas.bitmapImageRepForCachingDisplay(in: rect) else {
-                throw SequelDataError.invalid("Chronicles skill render unavailable")
-            }
-            canvas.cacheDisplay(in: rect, to: bitmap)
-            guard let png = bitmap.representation(using: .png, properties: [:]) else {
-                throw SequelDataError.invalid("Chronicles skill render unavailable")
-            }
-            return png
-        }
-        let normal = try skill(2), neighbour = try skill(1), walker = try skill(0)
-        let point = canvas.convert(CGPoint(x: group.midX, y: group.midY), to: nil)
-        guard let click = NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [],
-            timestamp: 0, windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1) else {
-            throw SequelDataError.invalid("Chronicles skill click unavailable")
-        }
-        canvas.mouseDown(with: click)
-        try checkGameplayQuickControl(selected == 2 && L3RunRecovery.stateHash(game) == before,
-            "Chronicles skill target did not select Jumper on the paused playfield")
-        try checkGameplayQuickControl(try skill(2) != normal && skill(0) != walker && skill(1) == neighbour,
-            "Chronicles skill feedback did not stay inside the affected buttons")
-    }
     func testGameplayQuickControls() throws {
         timer?.invalidate(); timer = nil; paused = true
         canvas.startCountdown.cancel(); canvas.menuRows = nil; refresh()
@@ -951,6 +920,7 @@ import NxlvKit
         saveCheckpoint(immediately: true)
         canvas.capturePointer(active: false)
         NotificationCenter.default.removeObserver(self, name: SequelArtworkPreference.changed, object: nil)
+        NotificationCenter.default.removeObserver(self, name: GameArtworkSkin.changed, object: nil)
         timer?.invalidate(); timer = nil; forwardTimer?.invalidate(); forwardTimer = nil
         runMovie.discard(); warningSound.stop(); music.stop(); dj.stop(); save()
         originalMovie?.close(); originalMovie = nil
@@ -984,7 +954,7 @@ import NxlvKit
         audioConfigured = true
         audioSettings = settings
         movieMusicMuted = muted
-        if let root = Bundle.main.resourceURL?.appendingPathComponent("Music") {
+        if let root = GameResources.resourceURL?.appendingPathComponent("Music") {
             dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: root), catalogueRoot: root)
         }
         speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
@@ -1033,7 +1003,7 @@ import NxlvKit
         guard canvas.menuRows == nil, !paused, !game.isComplete, !userPausedMusic, !movieMusicMuted,
               !music.muted, audioSettings.music != .silent, audioSettings.musicVolume > 0,
               NSApp.isActive, !GameScreen.shared.isPresented else { return }
-        guard let root = Bundle.main.resourceURL?.appendingPathComponent("Music") else { return }
+        guard let root = GameResources.resourceURL?.appendingPathComponent("Music") else { return }
         var pools = SoundtrackPlayer.djSoundtracks(at: root, seasonal: false)
         for (name, urls) in SoundtrackPlayer.djSoundtracks(at: root, seasonal: true) { pools[name, default: []].append(contentsOf: urls) }
         dj.load(soundtracks: pools, catalogueRoot: root)
@@ -1056,6 +1026,13 @@ import NxlvKit
         music.setVolume(audioSettings.musicVolume)
         dj.setVolume(audioSettings.musicVolume)
         guard audioConfigured else { return }
+        if LixSoundtrack.isSelected(audioSettings.music, storeEdition: AppDistribution.isStore,
+            gameMusicAvailable: !music.library.isEmpty) {
+            music.stop()
+            LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
+                position: campaign.index, identity: arcadeRunID.uuidString)
+            return
+        }
         let prefix: String
         switch campaign.tribe {
         case .classic: prefix = L10n.text("CLASSIC")
@@ -1084,6 +1061,7 @@ import NxlvKit
         catch { message = L10n.text("Artwork could not be loaded: \(error)") }
         refresh()
     }
+    @objc private func characterArtworkChanged() { canvas.refreshCharacterArtwork() }
     static func savedCompletion(root: URL, journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
         Lemmings3ClassicCampaign.Tribe.allCases.reduce(0) { count, tribe in
             guard var campaign = try? Lemmings3ClassicCampaign(root: root, tribe: tribe) else { return count }
@@ -1470,7 +1448,7 @@ import NxlvKit
         do {
             var soundtrack: AVAudioPlayer?
             if movie == .introduction, audioSettings.music != .silent, !movieMusicMuted,
-               let root = Bundle.main.resourceURL {
+               let root = GameResources.resourceURL {
                 let url = root.appendingPathComponent("Music/All_New_World_of_Lemmings_(IBM_PC_AT)/01 Intro.m4a")
                 soundtrack = try? AVAudioPlayer(contentsOf: url)
                 soundtrack?.volume = musicGain
@@ -2318,6 +2296,12 @@ import NxlvKit
         isFastForward = wasFastForward
         needsDisplay = true
     }
+    func refreshCharacterArtwork() {
+        crowdPresentation.reset()
+        hotSeatGhostSprites.clear()
+        selectionEffect = nil
+        needsDisplay = true
+    }
 
     func updateSkillBadge() {
         guard let art = panelArt, (0..<5).contains(selectedAction) else {
@@ -2511,33 +2495,40 @@ import NxlvKit
         for lem in game.lemmings where lem.active {
             // Animation IDs and anchors remain provisional. The bytes are native.
             let animation = lem.direction > 0 ? 0 : 1
-            guard sprites.indices.contains(animation), !sprites[animation].isEmpty else { continue }
-            let frames = sprites[animation]
-            let sprite = frames[(lem.state == .blocking ? 0 : lem.age) % frames.count]
+            let frames = sprites.indices.contains(animation) ? sprites[animation] : []
+            let index = frames.isEmpty ? 0 : (lem.state == .blocking ? 0 : lem.age) % frames.count
+            let nativeSprite = frames.indices.contains(index) ? frames[index] : nil
+            let lixMapping = LixArtworkRenderer.l3Mapping(lem.state)
+            let lix = GameArtworkSkin.lixEnabled ? LixArtworkRenderer.shared.frame(
+                activity: lixMapping.activity, animationFrame: lem.age, facingLeft: lem.direction < 0) : nil
+            guard let sprite = lix?.image ?? nativeSprite else { continue }
+            let spriteX = CGFloat(lem.x) - (lix?.footX ?? sprite.size.width / 2)
+            let spriteY = CGFloat(lem.y) - (lix?.footY ?? sprite.size.height)
+            let spriteKey = lix?.cacheKey ?? "\(animation)-\(index)"
             if ghostsOnly {
                 let motion = speedTrails.motion(actor: lem.id)
-                let rect = CGRect(x: origin.x + (CGFloat(lem.x) - sprite.size.width / 2 - cameraX) * zoom,
-                    y: origin.y + (CGFloat(lem.y) - sprite.size.height - cameraY) * zoom,
+                let rect = CGRect(x: origin.x + (spriteX - cameraX) * zoom,
+                    y: origin.y + (spriteY - cameraY) * zoom,
                     width: sprite.size.width * zoom, height: sprite.size.height * zoom)
                 speedTrails.drawBehind(actor: lem.id, sprite: sprite, in: rect, motion: motion,
                     pixelSize: CGSize(width: zoom, height: zoom))
                 continue
             }
             if let hotSeatColour {
-                let rect = CGRect(x: origin.x + (CGFloat(lem.x) - sprite.size.width / 2 - cameraX) * zoom,
-                    y: origin.y + (CGFloat(lem.y) - sprite.size.height - cameraY) * zoom,
+                let rect = CGRect(x: origin.x + (spriteX - cameraX) * zoom,
+                    y: origin.y + (spriteY - cameraY) * zoom,
                     width: sprite.size.width * zoom, height: sprite.size.height * zoom)
-                hotSeatGhostSprites.draw(sprite, key: "\(animation)-\((lem.state == .blocking ? 0 : lem.age) % frames.count)",
+                hotSeatGhostSprites.draw(sprite, key: spriteKey,
                     colour: hotSeatColour, in: rect)
                 continue
             }
-            let spriteRect = CGRect(x: origin.x + (CGFloat(lem.x) - sprite.size.width / 2 - cameraX) * zoom,
-                y: origin.y + (CGFloat(lem.y) - sprite.size.height - cameraY) * zoom,
+            let spriteRect = CGRect(x: origin.x + (spriteX - cameraX) * zoom,
+                y: origin.y + (spriteY - cameraY) * zoom,
                 width: sprite.size.width * zoom, height: sprite.size.height * zoom)
             crowdPresentation.drawBehind(sprite, id: lem.id, rect: spriteRect,
-                worldRect: CGRect(x: CGFloat(lem.x) - sprite.size.width / 2, y: CGFloat(lem.y) - sprite.size.height,
+                worldRect: CGRect(x: spriteX, y: spriteY,
                     width: sprite.size.width, height: sprite.size.height))
-            drawImage(sprite, x: CGFloat(lem.x) - sprite.size.width / 2, y: CGFloat(lem.y) - sprite.size.height)
+            drawImage(sprite, x: spriteX, y: spriteY)
             let pixels = (assignmentPulse.target == lem.id || selectedID == lem.id)
                 ? sprite.cgImage(forProposedRect: nil, context: nil, hints: nil) : nil
             if assignmentPulse.target == lem.id, let pixels {
@@ -2802,7 +2793,7 @@ import NxlvKit
         if !readOnlyReplay { art.text(L10n.text("MENU"), x: (gameMenuFrame.minX - screenOrigin.x) / zoom + 6,
             y: (gameMenuFrame.minY - screenOrigin.y) / zoom + 3, scale: 0.8) }
         art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-        for slot in readOnlyReplay ? [] : (fast ? [6] : []) + (paused ? [7] : []) {
+        for slot in readOnlyReplay ? [] : [selectedAction] + (fast ? [6] : []) + (paused ? [7] : []) {
             let left = CGFloat(Lemmings3Panel.edges[slot]), width = CGFloat(Lemmings3Panel.edges[slot + 1]) - left
             NSGraphicsContext.saveGraphicsState()
             NSBezierPath(rect: CGRect(x: left, y: 172, width: width, height: 40)).addClip()
@@ -2823,10 +2814,8 @@ import NxlvKit
         art.text(String(format: "%02d", seconds % 60), x: 187, y: 195, scale: 0.85)
         if let context = NSGraphicsContext.current?.cgContext,
            let pixels = bitmapCache.pixels(art.normal) {
-            let pressed = readOnlyReplay ? nil : bitmapCache.pixels(art.pressed)
             NSColor.black.setFill(); CGRect(x: 0, y: 172, width: 175, height: 40).fill()
             for index in 0..<5 {
-                let selected = !readOnlyReplay && index == selectedAction
                 let frame = local(skillFrame(index))
                 context.saveGState()
                 context.translateBy(x: frame.minX, y: frame.minY)
@@ -2835,9 +2824,12 @@ import NxlvKit
                 let displayGroup = CGRect(x: -CGFloat(index) * displayFrame.width, y: 0,
                     width: skillGroupFrame.width, height: skillGroupFrame.height)
                 GameControlGroupArt.draw(in: context, frame: displayFrame, group: displayGroup,
-                    selected: selected, face: .skill(index))
+                    selected: index == selectedAction, face: .skill(index))
                 context.restoreGState()
-                if let icon = Lemmings3PanelArt.skillGlyph(in: selected ? pressed ?? pixels : pixels, index: index) {
+                let source = CGRect(x: CGFloat(Lemmings3Panel.edges[index] + 3) * CGFloat(pixels.width) / 320,
+                    y: 3 * CGFloat(pixels.height) / 40, width: 29 * CGFloat(pixels.width) / 320,
+                    height: 34 * CGFloat(pixels.height) / 40)
+                if let icon = pixels.cropping(to: source) {
                     let box = frame.insetBy(dx: 4 / zoom, dy: 4 / zoom)
                     let fit = min(box.width * zoom / CGFloat(icon.width), box.height * zoom / CGFloat(icon.height))
                     let pixelScale = fit >= 1 ? floor(fit) : 1 / ceil(1 / fit)

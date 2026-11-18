@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "failures": [],
+  "contentID": "145686716edb83924d1e56dbeaa2b37b3311ae69aecc10546a5f3eb1b1bbc8ac",
+  "coverage": "Current frontend against source and restored resources. This does not run the unmodified baseline executable.",
+  "limits": [
+    "No unmodified baseline executable UI comparison",
+    "No UIKit, tvOS, physical-device, hosted-service or audible-audio acceptance",
+    "Folder-picker controls captured; import uses the real library API directly"
+  ]
+}

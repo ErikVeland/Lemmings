@@ -52,6 +52,20 @@ public struct TVPreferences: Codable, Equatable, Sendable {
 
 public enum TVCameraMode: Int, CaseIterable, Sendable { case overview, play, precision }
 
+/// Holds play briefly, then eases the clock to full speed after Resume.
+public enum TVResumeRamp {
+    public static let inputGrace = 0.12
+    public static let duration = 0.55
+    private static let minimumRate = 0.12
+
+    public static func multiplier(elapsed: Double) -> Double {
+        guard elapsed.isFinite, elapsed > inputGrace else { return 0 }
+        let progress = min(1, (elapsed - inputGrace) / duration)
+        let eased = progress * progress * (3 - 2 * progress)
+        return minimumRate + (1 - minimumRate) * eased
+    }
+}
+
 /// Capture on the gameplay actor, then encode without reading the live session again.
 public struct TVCheckpointDraft: Sendable {
     public let metadata: MobileCheckpointEnvelope
@@ -258,11 +272,11 @@ public struct TVGameCapabilities: Equatable, Sendable {
     /// Cycling locks an actor ID, so crossings cannot silently select a neighbour.
     public func cycleTarget(_ delta: Int) {
         guard canInteract, delta != 0 else { return }
-        let candidates = session.targetCandidates(for: selectedControl).filter { $0.assignment == .eligible }.sorted { $0.id < $1.id }
-        guard !candidates.isEmpty else { lockedActor = nil; target = nil; return }
-        let current = candidates.firstIndex { $0.id == target?.id }
-        let index = current.map { ($0 + (delta < 0 ? -1 : 1) + candidates.count) % candidates.count } ?? (delta < 0 ? candidates.count - 1 : 0)
-        focus(candidates[index])
+        guard let candidate = TVTargetLock.nextEligible(
+            session.targetCandidates(for: selectedControl), after: target?.id, direction: delta) else {
+            lockedActor = nil; target = nil; return
+        }
+        focus(candidate)
     }
 
     public func focusLast() {

@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+PASS full-window hud-paused, original bitmap HUD lettering, actual Lix sockets/icons and 19 native input targets

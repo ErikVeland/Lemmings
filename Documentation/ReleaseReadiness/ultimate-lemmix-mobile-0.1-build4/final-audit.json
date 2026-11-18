@@ -1,0 +1,101 @@
+{
+  "app": "Ultimate Lemmix",
+  "binaryOriginBuild": "3",
+  "build": "4",
+  "buildMethod": "resource-and-icon-refresh-with-source-verified-binary-reuse",
+  "compiledSourceInputsVerifiedPerPlatform": 190,
+  "date": "2026-11-17T03:06:37.480652+00:00",
+  "freshAssetCataloguesCompiled": 4,
+  "historicalBuild3FilesVerifiedUnchanged": 20,
+  "iconRightsReviewRequired": true,
+  "independentRefreshAuditsPassed": true,
+  "limits": [
+    "Mobile player-facing content remains Classic-only.",
+    "No simulator runtime was available.",
+    "UIKit, device input, Siri Remote focus, VoiceOver, networking and thermal acceptance remain open.",
+    "The project icon remains subject to rights review. Signing, TestFlight and App Store review remain open."
+  ],
+  "mobilePackagingTestsPassed": 21,
+  "physicalDeviceTested": false,
+  "platforms": [
+    "ios",
+    "tvos"
+  ],
+  "refreshTool": {
+    "path": "Tools/Build/refresh_mobile.py",
+    "sha256": "dabcc4b807898e03aedaaefc568c860af808739ae889d8e9b45ae001466ec842"
+  },
+  "reviewArtefacts": [
+    {
+      "binaryReused": true,
+      "bytes": 23922365,
+      "compiledInputFilesVerified": 190,
+      "crcVerified": true,
+      "executableSHA256": "9ea8663e1ad5f8b3f9cbc9736d1256ab72eb3e798979ddb2339b35bdc4fff228",
+      "fileHashesVerified": true,
+      "freshAssetsSHA256": "bdf98145f11b648cda202c83bb215274b38c3f888cef9ed6cac07d9d8ab29bd7",
+      "installableWithoutSigning": false,
+      "kind": "device",
+      "path": ".build/ultimate-lemmix-ios-build4/Ultimate-Lemmix-ios-0.1-build4-unsigned.ipa",
+      "platform": "ios",
+      "resourceBytes": 33257396,
+      "resourceFiles": 1959,
+      "sha256": "c03d354af18e805748d3168cacfd934687dcdb73f2c999a6eb5f2aa7b44ac6e6"
+    },
+    {
+      "binaryReused": true,
+      "bytes": 24899325,
+      "compiledInputFilesVerified": 190,
+      "crcVerified": true,
+      "executableSHA256": "8de616459fa6f8529909a10536207d3c78773260a318f55fd4f92ce5e25d8cb5",
+      "fileHashesVerified": true,
+      "freshAssetsSHA256": "bdf98145f11b648cda202c83bb215274b38c3f888cef9ed6cac07d9d8ab29bd7",
+      "installableWithoutSigning": null,
+      "kind": "simulator",
+      "path": ".build/ultimate-lemmix-ios-build4/Ultimate-Lemmix-ios-0.1-build4-simulator.zip",
+      "platform": "ios",
+      "resourceBytes": 33257396,
+      "resourceFiles": 1959,
+      "sha256": "dd3e9d10d4d926d6ccd99c757a7061fbf05621e9a9f59ef5cd8d7c1ec1533f1d"
+    },
+    {
+      "binaryReused": true,
+      "bytes": 29099689,
+      "compiledInputFilesVerified": 190,
+      "crcVerified": true,
+      "executableSHA256": "28f12c89314b5c15902ce8a067836496983db100d5a3819df0a2c51c731d90b7",
+      "fileHashesVerified": true,
+      "freshAssetsSHA256": "785e34af3414aecabecc36868990d0f6960576030a9b8da416868e7eb1b292a7",
+      "installableWithoutSigning": false,
+      "kind": "device",
+      "path": ".build/ultimate-lemmix-tvos-build4/Ultimate-Lemmix-tvos-0.1-build4-unsigned.ipa",
+      "platform": "tvos",
+      "resourceBytes": 33257396,
+      "resourceFiles": 1959,
+      "sha256": "738341835a6f1d584fc865f8b883ec9a09dcbd4401003b15a8106af7151a1541"
+    },
+    {
+      "binaryReused": true,
+      "bytes": 30097745,
+      "compiledInputFilesVerified": 190,
+      "crcVerified": true,
+      "executableSHA256": "bfacf76cf3174fe48c2e4a4b18420629f28ea8ebff403ec8cea1448d113eed12",
+      "fileHashesVerified": true,
+      "freshAssetsSHA256": "785e34af3414aecabecc36868990d0f6960576030a9b8da416868e7eb1b292a7",
+      "installableWithoutSigning": null,
+      "kind": "simulator",
+      "path": ".build/ultimate-lemmix-tvos-build4/Ultimate-Lemmix-tvos-0.1-build4-simulator.zip",
+      "platform": "tvos",
+      "resourceBytes": 33257396,
+      "resourceFiles": 1959,
+      "sha256": "bb1a7d7d370b23f622adf7e3d725be59254ad2efc9a3cb75bb6b908c7f59ab38"
+    }
+  ],
+  "runtimeTested": false,
+  "schemaVersion": 1,
+  "signed": false,
+  "submissionReady": false,
+  "swiftRecompiled": false,
+  "uploaded": false,
+  "version": "0.1"
+}

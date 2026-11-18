@@ -984,7 +984,7 @@ public enum MobileHUDAction: Equatable, Sendable {
     private static func glyphImage(_ glyph: PanelGlyphArt, fitting box: CGSize, transparentRock: Bool = false) -> (image: CGImage, size: CGSize)? {
         let steps = glyph.scale(fitting: box)
         guard steps >= 1 else { return nil }
-        let key = "\(glyph.rawValue)-\(steps)-\(transparentRock)"
+        let key = "\(GameArtworkResources.revision)-\(GameArtworkSkin.usesLixInterface)-\(glyph.rawValue)-\(steps)-\(transparentRock)"
         if let hit = glyphCache[key] { return hit }
         guard let image = glyph.cgImage(scale: steps, transparentRock: transparentRock) else { return nil }
         let size = CGSize(width: CGFloat(image.width) / (glyph.isOriginalTile ? 2 : 1), height: CGFloat(image.height))

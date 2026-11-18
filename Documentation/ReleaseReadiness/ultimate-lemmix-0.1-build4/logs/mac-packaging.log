@@ -1,0 +1,14 @@
+PASS Lix graphics: 1421 inventoried files, output /Users/erikveland/Lemmings/.build/alternative-assets/lix
+Verified 6 CC0 tracks, 21,716,759 bytes. No audio played.
+PASS Lix graphics: 1421 inventoried files, output /Users/erikveland/Lemmings/.build/alternative-assets/lix
+Verified 6 CC0 tracks, 21,716,759 bytes. No audio played.
+Compiling frozen build4 frontend: x86_64
+Compiling frozen build4 frontend: arm64
+PASS frontend compilation: x86_64
+PASS frontend compilation: arm64
+/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-build4-universal/Ultimate Lemmix.app/Contents/Frameworks/libNxlvKit.dylib: replacing existing signature
+/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-build4-universal/Ultimate Lemmix.app: replacing existing signature
+PASS clean build4 exact source/code/resource/signature/archive audit.
+/Users/erikveland/Lemmings/.build/ultimate-lemmix-personal-preview-build4/Ultimate Lemmix.app/Contents/Frameworks/libNxlvKit.dylib: replacing existing signature
+/Users/erikveland/Lemmings/.build/ultimate-lemmix-personal-preview-build4/Ultimate Lemmix.app: replacing existing signature
+PASS personal build4 reused verified frontend/core; exact private profile audit.

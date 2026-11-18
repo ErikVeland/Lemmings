@@ -1,0 +1,46 @@
+{
+  "profile": "personal-local-preview-only",
+  "sourceSnapshotVerified": true,
+  "appAudit": {
+    "resources": {
+      "files": 2679,
+      "bytes": 43383266,
+      "manifestSHA256": "6a111ec5a60865a7c3ffa0c942ae15f48663074cfa85993f7977c50dcdec569d"
+    },
+    "binaries": {
+      "Contents/MacOS/UltimateLemmix": {
+        "architectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "sha256": "a0895dabb2e13a11711401c540c8728ee0ebacb8614c943f98e0991deb6b699c"
+      },
+      "Contents/Frameworks/libNxlvKit.dylib": {
+        "architectures": [
+          "x86_64",
+          "arm64"
+        ],
+        "sha256": "4fdc649d6141027a423a4d3108cfab015580d32f48aae88e73940cec59bfe2b2"
+      }
+    },
+    "signature": {
+      "flags": 2,
+      "hardenedRuntime": false,
+      "entitlements": {
+        "com.apple.security.app-sandbox": true,
+        "com.apple.security.files.bookmarks.app-scope": true,
+        "com.apple.security.files.user-selected.read-write": true,
+        "com.apple.security.network.client": true
+      }
+    }
+  },
+  "reviewArchive": {
+    "path": "Ultimate-Lemmix-0.1-build4-personal-macOS.zip",
+    "bytes": 38807443,
+    "sha256": "f4b8edf3887b495c3d1b9980e7d9956b1cb1d7b8e3c003065e1034e2b75ed598",
+    "crcVerified": true,
+    "bundleFileHashesVerified": true
+  },
+  "communityLevels": 5051,
+  "redistributionCleared": false
+}

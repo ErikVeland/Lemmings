@@ -11,7 +11,7 @@ import NxlvKit
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
     static let notesVersion = "2.4.3"
-    static var subtitle: String { L10n.text("Your next level is ready.") }
+    static var subtitle: String { GameReleaseCopy.invitation }
     static var sections: [(String, String)] {
         [
             (L10n.text("Chronicles controls"), L10n.text("Selecting a skill in Chronicles shows the original pressed artwork.")),

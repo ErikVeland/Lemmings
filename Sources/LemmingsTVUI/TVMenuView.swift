@@ -1,12 +1,23 @@
 #if os(tvOS)
 import LemmingsGameArt
+import LemmingsAppCore
 import NxlvKit
 import UIKit
 
 @MainActor enum TVArtwork {
-    static let directory = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings")
-    static let typography = directory.flatMap { GameMenuTypography(directory: $0) }
-    static let portraits = directory.flatMap { GamePortraitArt(directory: $0) }
+    private static var key = ""
+    private static var cachedTypography: GameMenuTypography?
+    private static var cachedPortraits: GamePortraitArt?
+    static var revision: String { MobileLixArtwork.revision }
+    static var directory: URL? { GameResources.resourceURL?.appendingPathComponent("MacArtwork/lemmings") }
+    private static func refresh() {
+        guard key != revision else { return }
+        key = revision
+        cachedTypography = GameArtworkResources.menuInterface.map { GameMenuTypography(interface: $0) }
+        cachedPortraits = directory.flatMap { GamePortraitArt(directory: $0) }
+    }
+    static var typography: GameMenuTypography? { refresh(); return cachedTypography }
+    static var portraits: GamePortraitArt? { refresh(); return cachedPortraits }
 }
 
 /// Focusable native targets sit over the same rectangles used by the bitmap renderer.
@@ -41,9 +52,8 @@ import UIKit
         generation += 1
         activationArmed = false
         buttons.forEach { $0.removeFromSuperview() }
-        initialFocus = page.footer.first(where: { ["cancel"].contains($0.id) })?.id
+        initialFocus = (page.rows + page.orderedFooter).first(where: { $0.primary && $0.enabled })?.id
             ?? preferredActionID
-            ?? (page.rows + page.orderedFooter).first(where: { $0.primary && $0.enabled })?.id
             ?? (page.rows + page.orderedFooter).first(where: \.enabled)?.id
         focusedID = initialFocus
         let ticket = generation

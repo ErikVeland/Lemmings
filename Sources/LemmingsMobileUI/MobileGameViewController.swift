@@ -338,6 +338,8 @@ typealias MobileGameControllerBase = UIViewController
         playerProfile = profiles.players.first { $0.id == settingsProfileID } ?? profiles.active
         self.summary = summary
         self.session = session
+        MobileLixArtwork.activate()
+        MobileLixArtwork.install(on: session)
         self.checkpointStore = checkpointStore
         runID = restoredCheckpoint?.runID ?? UUID()
         selectedControl = min(

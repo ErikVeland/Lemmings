@@ -1,5 +1,6 @@
 import AVFoundation
 import NxlvKit
+import LemmingsAppCore
 
 /// Plays a soundtrack made of ordinary audio files.
 ///
@@ -139,7 +140,7 @@ import NxlvKit
 
   /// Installed libraries carry their own playback hashes after AAC encoding.
   static public func playbackProfile(for url: URL,
-      musicRoot: URL? = Bundle.main.resourceURL?.appendingPathComponent("Music")) -> MusicPlaybackCatalogue.Entry? {
+      musicRoot: URL? = GameResources.resourceURL?.appendingPathComponent("Music")) -> MusicPlaybackCatalogue.Entry? {
     var roots = [musicRoot].compactMap { $0 } + MusicLibrary.installedRoots()
     var parent = url.deletingLastPathComponent()
     for _ in 0..<8 {

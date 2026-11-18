@@ -46,6 +46,11 @@ import UIKit
 
     func refresh(force: Bool = false) {
         guard let game = experience else { return }
+        MobileLixArtwork.activate()
+        MobileLixArtwork.install(on: game.session)
+        if artworkRevision != TVArtwork.revision {
+            artworkRevision = TVArtwork.revision; sourceTick = -1; cachedRenderer = nil
+        }
         if force || sourceTick != game.session.snapshot.tick || sourceTarget != game.target?.id || sourceControl != game.selectedControl {
             do {
                 let frame = try game.session.render(highlight: game.target)
@@ -67,7 +72,14 @@ import UIKit
         setNeedsDisplay()
     }
 
-    private let renderer = TVPlayfieldArt(typography: TVArtwork.typography, portraits: TVArtwork.portraits)
+    private var artworkRevision = ""
+    private var cachedRenderer: TVPlayfieldArt?
+    private var renderer: TVPlayfieldArt {
+        if let cachedRenderer { return cachedRenderer }
+        let value = TVPlayfieldArt(typography: TVArtwork.typography, portraits: TVArtwork.portraits)
+        cachedRenderer = value
+        return value
+    }
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext(), let game = experience else { return }
         renderer.ownerName = ownerName; renderer.ownerPortrait = ownerPortrait; renderer.cameraAdjustment = cameraAdjustment

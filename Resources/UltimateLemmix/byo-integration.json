@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "ultimate-lemmix-owned-assets-v1",
+  "requiresPlayerFiles": true,
+  "containsCommercialAssets": false,
+  "containsExecutableCode": false,
+  "networkAccess": false,
+  "downloads": [],
+  "rawGameImport": {
+    "families": [
+      "Classic DOS",
+      "Lemmings 2 DOS",
+      "Lemmings 3 DOS"
+    ],
+    "scope": "Game data and the files present in that selected game folder."
+  },
+  "originalPresentation": {
+    "action": "Restore original assets\u2026",
+    "sources": [
+      "A player-supplied Ultimate Lemmings.app",
+      "A prepared preservation asset folder"
+    ],
+    "relativeFolders": [
+      "Ports",
+      "MacArtwork",
+      "AmigaArtwork",
+      "NeoLemmix",
+      "Music",
+      "Sounds",
+      "LevelPacks",
+      "About",
+      "MenuArtwork",
+      "MacMusic",
+      "Localization.bundle",
+      "Cursors",
+      "Fonts/OriginalLemmings"
+    ],
+    "sourceAppExecuted": false,
+    "originalCursors": "Read-only recovery from the selected app, accepted only by exact image hashes."
+  },
+  "installation": "Validated data is copied into owned Application Support storage. The installed app is unchanged.",
+  "trustedMetadata": "Current application metadata, proof identities, privacy settings and the cleared alternative assets are retained from this app.",
+  "limits": {
+    "maximumBytes": 8589934592,
+    "maximumFileBytes": 1073741824,
+    "maximumEntries": 50000,
+    "maximumDepth": 32,
+    "symbolicLinks": "rejected"
+  },
+  "permissions": "Select only local assets you are entitled to use. This guide grants no redistribution rights."
+}

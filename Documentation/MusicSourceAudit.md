@@ -58,6 +58,11 @@ The conversion report records 359 conversions and 0 failures. See [conversion de
 
 ## Remixes and existing material
 
+The 12 November 2026 [alternative asset preparation](AlternativeAssets.md#existing-fan-remix-audit)
+records the current redistribution assessment. Source presence and successful
+conversion do not establish App Store permission. The separate alternative
+pack includes selected CC0 Lix music and excludes these existing remix files.
+
 The remix folder now contains 17 Original and six Oh No! MandelSoft OGG tracks, their 23 converted M4A files, a CoLD SToRAGE March of the Greentops M4A, and an Amigamer Medieval Lemmings MP3. These are installed source assets, superseding the earlier candidate-only notes. A lossless output container does not restore information lost in OGG/MP3 sources. Filename identity and catalogue grouping are not an independent authorship or permission audit.
 
 The earlier 73 Amiga modules and 12 CoLD SToRAGE WAV recordings remain. Demo/prototype modules stay distinct from released-game music. The composer album remains a selection, not the complete Amiga score.

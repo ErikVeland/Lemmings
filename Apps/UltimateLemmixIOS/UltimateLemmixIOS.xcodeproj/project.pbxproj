@@ -1,0 +1,646 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		100000000000000000000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000011 /* AppDelegate.swift */; };
+		100000000000000000000002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000013 /* PrivacyInfo.xcprivacy */; };
+		100000000000000000000003 /* LemmingsMobileUI in Frameworks */ = {isa = PBXBuildFile; productRef = 100000000000000000000081 /* LemmingsMobileUI */; };
+		100000000000000000000004 /* LaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000014 /* LaunchTests.swift */; };
+		100000000000000000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000016 /* Assets.xcassets */; };
+		100000000000000000000006 /* MobileCoreIOSSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000017 /* MobileCoreIOSSmokeTests.swift */; };
+		100000000000000000000007 /* LemmingsMobileCore in Frameworks */ = {isa = PBXBuildFile; productRef = 100000000000000000000082 /* LemmingsMobileCore */; };
+		DC2200000000000000000001 /* ../DeskClockWidget/DeskClockWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC220000000000000000000A /* ../DeskClockWidget/DeskClockWidget.swift */; };
+		DC2200000000000000000002 /* LemmingsMobileCore in Frameworks */ = {isa = PBXBuildFile; productRef = DC2200000000000000000050 /* LemmingsMobileCore */; };
+		DC2200000000000000000003 /* LemmingsGameArt in Frameworks */ = {isa = PBXBuildFile; productRef = DC2200000000000000000051 /* LemmingsGameArt */; };
+		DC2200000000000000000004 /* DeskClockWidget.appex in Embed clock widget */ = {isa = PBXBuildFile; fileRef = DC220000000000000000000B /* DeskClockWidget.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DC2200000000000000000005 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000013 /* PrivacyInfo.xcprivacy */; };
+		E63010300000000000000001 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E63010300000000000000002 /* LaunchScreen.storyboard */; };
+		A77100000000000000000011 /* LemmingsGameArt in Frameworks */ = {isa = PBXBuildFile; productRef = A77100000000000000000012 /* LemmingsGameArt */; };
+		A77100000000000000000013 /* StoreBuildGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77100000000000000000014 /* StoreBuildGuard.swift */; };
+		A77200000000000000000001 /* LaunchURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77200000000000000000002 /* LaunchURL.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		100000000000000000000091 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 100000000000000000000060 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 100000000000000000000050;
+			remoteInfo = UltimateLemmixIOS;
+		};
+		DC220000000000000000005A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 100000000000000000000060 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DC2200000000000000000032;
+			remoteInfo = DeskClockWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DC2200000000000000000017 /* Embed clock widget */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DC2200000000000000000004 /* DeskClockWidget.appex in Embed clock widget */,
+			);
+			name = "Embed clock widget";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		100000000000000000000010 /* UltimateLemmixIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UltimateLemmixIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		100000000000000000000011 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../SharedAppleMobile/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
+		100000000000000000000012 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		100000000000000000000013 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		100000000000000000000014 /* LaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../SharedAppleMobile/UITests/LaunchTests.swift; sourceTree = SOURCE_ROOT; };
+		100000000000000000000015 /* UltimateLemmixIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UltimateLemmixIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		100000000000000000000016 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		100000000000000000000017 /* MobileCoreIOSSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../SharedAppleMobile/UITests/MobileCoreIOSSmokeTests.swift; sourceTree = SOURCE_ROOT; };
+		DC220000000000000000000A /* ../DeskClockWidget/DeskClockWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../DeskClockWidget/DeskClockWidget.swift; sourceTree = SOURCE_ROOT; };
+		DC220000000000000000000B /* DeskClockWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DeskClockWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E63010300000000000000002 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A77100000000000000000010 /* Store.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ../UltimateLemmixSupport/Store.xcconfig; sourceTree = SOURCE_ROOT; };
+		A77100000000000000000014 /* StoreBuildGuard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../SharedAppleMobile/StoreBuildGuard.swift; sourceTree = SOURCE_ROOT; };
+		A77200000000000000000002 /* LaunchURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../SharedAppleMobile/LaunchURL.swift; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		100000000000000000000020 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				100000000000000000000003 /* LemmingsMobileUI in Frameworks */,
+				A77100000000000000000011 /* LemmingsGameArt in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		100000000000000000000021 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				100000000000000000000007 /* LemmingsMobileCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC2200000000000000000014 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC2200000000000000000002 /* LemmingsMobileCore in Frameworks */,
+				DC2200000000000000000003 /* LemmingsGameArt in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		100000000000000000000030 = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000031 /* . */,
+				100000000000000000000032 /* UITests */,
+				100000000000000000000033 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		100000000000000000000031 /* . */ = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000011 /* AppDelegate.swift */,
+				A77200000000000000000002 /* LaunchURL.swift */,
+				A77100000000000000000014 /* StoreBuildGuard.swift */,
+				100000000000000000000016 /* Assets.xcassets */,
+				E63010300000000000000002 /* LaunchScreen.storyboard */,
+				100000000000000000000012 /* Info.plist */,
+				100000000000000000000013 /* PrivacyInfo.xcprivacy */,
+				DC220000000000000000000A /* ../DeskClockWidget/DeskClockWidget.swift */,
+			);
+			path = .;
+			sourceTree = "<group>";
+		};
+		100000000000000000000032 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000014 /* LaunchTests.swift */,
+				100000000000000000000017 /* MobileCoreIOSSmokeTests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+		100000000000000000000033 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				100000000000000000000010 /* UltimateLemmixIOS.app */,
+				100000000000000000000015 /* UltimateLemmixIOSUITests.xctest */,
+				DC220000000000000000000B /* DeskClockWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		100000000000000000000050 /* UltimateLemmixIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 100000000000000000000070 /* Build configuration list for PBXNativeTarget "UltimateLemmixIOS" */;
+			buildPhases = (
+				B23F3AD7E6F441D68E3A0101 /* Release version history */,
+				100000000000000000000040 /* Sources */,
+				100000000000000000000020 /* Frameworks */,
+				100000000000000000000042 /* Resources */,
+				100000000000000000000044 /* Beta content */,
+				DC2200000000000000000017 /* Embed clock widget */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DC220000000000000000005B /* PBXTargetDependency */,
+			);
+			name = UltimateLemmixIOS;
+			packageProductDependencies = (
+				100000000000000000000081 /* LemmingsMobileUI */,
+				A77100000000000000000012 /* LemmingsGameArt */,
+			);
+			productName = UltimateLemmixIOS;
+			productReference = 100000000000000000000010 /* UltimateLemmixIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		100000000000000000000051 /* UltimateLemmixIOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 100000000000000000000071 /* Build configuration list for PBXNativeTarget "UltimateLemmixIOSUITests" */;
+			buildPhases = (
+				100000000000000000000041 /* Sources */,
+				100000000000000000000021 /* Frameworks */,
+				100000000000000000000043 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				100000000000000000000092 /* PBXTargetDependency */,
+			);
+			name = UltimateLemmixIOSUITests;
+			packageProductDependencies = (
+				100000000000000000000082 /* LemmingsMobileCore */,
+			);
+			productName = UltimateLemmixIOSUITests;
+			productReference = 100000000000000000000015 /* UltimateLemmixIOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		DC2200000000000000000032 /* DeskClockWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC2200000000000000000046 /* Build configuration list for PBXNativeTarget "DeskClockWidget" */;
+			buildPhases = (
+				DC2200000000000000000015 /* Sources */,
+				DC2200000000000000000014 /* Frameworks */,
+				DC2200000000000000000018 /* Resources */,
+				DC2200000000000000000016 /* Clock artwork */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DeskClockWidget;
+			packageProductDependencies = (
+				DC2200000000000000000050 /* LemmingsMobileCore */,
+				DC2200000000000000000051 /* LemmingsGameArt */,
+			);
+			productName = DeskClockWidget;
+			productReference = DC220000000000000000000B /* DeskClockWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		100000000000000000000060 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					100000000000000000000050 = {
+						CreatedOnToolsVersion = 16.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
+					};
+					100000000000000000000051 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 100000000000000000000050;
+					};
+					DC2200000000000000000032 = {
+						CreatedOnToolsVersion = 16.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 100000000000000000000072 /* Build configuration list for PBXProject "UltimateLemmixIOS" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 100000000000000000000030;
+			packageReferences = (
+				100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */,
+			);
+			productRefGroup = 100000000000000000000033 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				100000000000000000000050 /* UltimateLemmixIOS */,
+				100000000000000000000051 /* UltimateLemmixIOSUITests */,
+				DC2200000000000000000032 /* DeskClockWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		100000000000000000000042 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E63010300000000000000001 /* LaunchScreen.storyboard in Resources */,
+				100000000000000000000005 /* Assets.xcassets in Resources */,
+				100000000000000000000002 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		100000000000000000000043 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC2200000000000000000018 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC2200000000000000000005 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		100000000000000000000044 /* Beta content */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = ();
+			name = "Clean full-game resources";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../UltimateLemmixSupport/copy_resources.py\" --source \"$ULTIMATE_LEMMIX_RESOURCES_DIR\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\" --scope app\n";
+		};
+		B23F3AD7E6F441D68E3A0101 /* Release version history */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = ();
+			name = "Optional release history check";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${ULTIMATE_LEMMIX_RELEASE_CHECKS:-0}\" = 1 ]; then\n  zsh \"$SRCROOT/../../Scripts/check-release-history.sh\"\nfi\n";
+		};
+		DC2200000000000000000016 /* Clock artwork */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = ();
+			name = "Cleared clock artwork";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"$SRCROOT/../UltimateLemmixSupport/copy_resources.py\" --source \"$ULTIMATE_LEMMIX_RESOURCES_DIR\" --destination \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\" --scope widget\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		100000000000000000000040 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				100000000000000000000001 /* AppDelegate.swift in Sources */,
+				A77200000000000000000001 /* LaunchURL.swift in Sources */,
+				A77100000000000000000013 /* StoreBuildGuard.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		100000000000000000000041 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				100000000000000000000004 /* LaunchTests.swift in Sources */,
+				100000000000000000000006 /* MobileCoreIOSSmokeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC2200000000000000000015 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A77100000000000000000013 /* StoreBuildGuard.swift in Sources */,
+				DC2200000000000000000001 /* ../DeskClockWidget/DeskClockWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		100000000000000000000092 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 100000000000000000000050 /* UltimateLemmixIOS */;
+			targetProxy = 100000000000000000000091 /* PBXContainerItemProxy */;
+		};
+		DC220000000000000000005B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DC2200000000000000000032 /* DeskClockWidget */;
+			targetProxy = DC220000000000000000005A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		100000000000000000000100 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77100000000000000000010 /* Store.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		100000000000000000000101 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77100000000000000000010 /* Store.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		100000000000000000000102 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77100000000000000000010 /* Store.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = UltimateLemmixIOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 108;
+				DEVELOPMENT_TEAM = 54WU29TRTY;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				IOS_LOCAL_CLASSIC_DATA_DIR = "$(SRCROOT)/../../Sources/Ports/lemmings_dos_1991-07-30";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.4.3;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		100000000000000000000103 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77100000000000000000010 /* Store.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = UltimateLemmixIOS.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 108;
+				DEVELOPMENT_TEAM = 54WU29TRTY;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.4.3;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		100000000000000000000104 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77100000000000000000010 /* Store.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = UltimateLemmixIOS;
+			};
+			name = Debug;
+		};
+		100000000000000000000105 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77100000000000000000010 /* Store.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = UltimateLemmixIOS;
+			};
+			name = Release;
+		};
+		DC2200000000000000000064 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77100000000000000000010 /* Store.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = DeskClockWidget/DeskClockWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 108;
+				DEVELOPMENT_TEAM = 54WU29TRTY;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DeskClockWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.4.3;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios.DeskClockWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DC2200000000000000000065 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77100000000000000000010 /* Store.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = DeskClockWidget/DeskClockWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 108;
+				DEVELOPMENT_TEAM = 54WU29TRTY;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DeskClockWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.4.3;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios.DeskClockWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		100000000000000000000070 /* Build configuration list for PBXNativeTarget "UltimateLemmixIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				100000000000000000000102 /* Debug */,
+				100000000000000000000103 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		100000000000000000000071 /* Build configuration list for PBXNativeTarget "UltimateLemmixIOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				100000000000000000000104 /* Debug */,
+				100000000000000000000105 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		100000000000000000000072 /* Build configuration list for PBXProject "UltimateLemmixIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				100000000000000000000100 /* Debug */,
+				100000000000000000000101 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC2200000000000000000046 /* Build configuration list for PBXNativeTarget "DeskClockWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC2200000000000000000064 /* Debug */,
+				DC2200000000000000000065 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		100000000000000000000081 /* LemmingsMobileUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */;
+			productName = LemmingsMobileUI;
+		};
+		100000000000000000000082 /* LemmingsMobileCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */;
+			productName = LemmingsMobileCore;
+		};
+		DC2200000000000000000050 /* LemmingsMobileCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */;
+			productName = LemmingsMobileCore;
+		};
+		DC2200000000000000000051 /* LemmingsGameArt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */;
+			productName = LemmingsGameArt;
+		};
+		A77100000000000000000012 /* LemmingsGameArt */ = {isa = XCSwiftPackageProductDependency; package = 100000000000000000000080 /* XCLocalSwiftPackageReference "../.." */; productName = LemmingsGameArt; };
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 100000000000000000000060 /* Project object */;
+}

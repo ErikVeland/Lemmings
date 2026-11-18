@@ -13,6 +13,7 @@
 		100000000000000000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000016 /* Assets.xcassets */; };
 		200000000000000000000001 /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200000000000000000000011 /* ContentProvider.swift */; };
 		200000000000000000000002 /* TopShelf.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 200000000000000000000010 /* TopShelf.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A77200000000000000000001 /* LaunchURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77200000000000000000002 /* LaunchURL.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,14 +42,15 @@
 
 /* Begin PBXFileReference section */
 		100000000000000000000010 /* UltimateLemmingsTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UltimateLemmingsTV.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		100000000000000000000011 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		100000000000000000000011 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../SharedAppleMobile/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		100000000000000000000012 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		100000000000000000000013 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		100000000000000000000016 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		200000000000000000000010 /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		200000000000000000000011 /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
+		200000000000000000000011 /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../SharedAppleMobile/TopShelf/ContentProvider.swift; sourceTree = SOURCE_ROOT; };
 		200000000000000000000012 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		200000000000000000000013 /* TopShelf.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TopShelf.entitlements; sourceTree = "<group>"; };
+		A77200000000000000000002 /* LaunchURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../SharedAppleMobile/LaunchURL.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				100000000000000000000011 /* AppDelegate.swift */,
+				A77200000000000000000002 /* LaunchURL.swift */,
 				100000000000000000000016 /* Assets.xcassets */,
 				100000000000000000000012 /* Info.plist */,
 				100000000000000000000013 /* PrivacyInfo.xcprivacy */,
@@ -116,7 +119,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 100000000000000000000070 /* Build configuration list for PBXNativeTarget "UltimateLemmingsTV" */;
 			buildPhases = (
-				B23F3AD7E6F441D68E3A0102 /* Release version history */,
 				100000000000000000000040 /* Sources */,
 				100000000000000000000020 /* Frameworks */,
 				100000000000000000000042 /* Resources */,
@@ -215,18 +217,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		B23F3AD7E6F441D68E3A0102 /* Release version history */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = ();
-			inputPaths = ();
-			name = "Release version history";
-			outputPaths = ();
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "zsh \"$SRCROOT/../../Scripts/check-release-history.sh\"\n";
-		};
 		100000000000000000000044 /* Beta content */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -325,6 +315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				100000000000000000000001 /* AppDelegate.swift in Sources */,
+				A77200000000000000000001 /* LaunchURL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

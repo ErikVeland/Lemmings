@@ -10,7 +10,7 @@
     },
     {
       "end": 355,
-      "goal": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "goal": "Combine familiar skills before stricter budgets. Levels that require every lemming to survive are reserved for Expert, after the player has learned the full skill set.",
       "id": "combinations",
       "requires": [
         "foundations"
@@ -119,8 +119,8 @@
       "title": "Consolidate advanced route planning"
     },
     {
-      "end": 990.0,
-      "goal": "Finish with special pacing, demanding coordination and precise timing.",
+      "end": 985,
+      "goal": "Finish with special pacing, demanding coordination and the owner-confirmed advanced routes. Full-rescue levels follow earlier skill and route practice. Time waits for no Lemming and This Corrosion remain the closing pair.",
       "id": "capstones",
       "requires": [
         "advanced-routes"
@@ -194,16 +194,16 @@
       "chapter": "foundations",
       "identity": {
         "engine": "classic",
-        "levelID": "3:Fun:4:9:2",
-        "packID": "lemmings-LEVEL-120"
+        "levelID": "16:Tame:17:12:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
       },
       "position": 20,
-      "previousStep": 5,
+      "previousStep": 12,
       "reason": "One skill at a time, then repeat it with generous tools and rescue margins.",
-      "replayRevision": "3093c495b7b9e04aa1cacdd1a56064c2fdde339e5a0dfcaed67f58c5e0c7bca9",
+      "replayRevision": "f5f4b7b193ff189141e7aa7728128aa8bb7f8ad31ecb38b38fa943e36b6e8d20",
       "role": "practice",
-      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-      "title": "Now use miners and climbers"
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Honey, I Saved The Lemmings"
     },
     {
       "chapter": "foundations",
@@ -294,21 +294,6 @@
       "role": "practice",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "title": "New Lemmings On The Block"
-    },
-    {
-      "chapter": "foundations",
-      "identity": {
-        "engine": "classic",
-        "levelID": "16:Tame:17:12:0",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "position": 66,
-      "previousStep": 12,
-      "reason": "One skill at a time, then repeat it with generous tools and rescue margins.",
-      "replayRevision": "f5f4b7b193ff189141e7aa7728128aa8bb7f8ad31ecb38b38fa943e36b6e8d20",
-      "role": "practice",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "Honey, I Saved The Lemmings"
     },
     {
       "chapter": "foundations",
@@ -589,7 +574,7 @@
       },
       "position": 180.0,
       "previousStep": 36,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "41fcd30f4adb503083da9bb19f22a4fb7f98ff60a3b08ddf26373d2e4b91680a",
       "role": "introduction",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -604,26 +589,11 @@
       },
       "position": 192.5,
       "previousStep": 34,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "ceaa9e1aa054b9a6ec4c1d8378a63bec389653a63a0f0281275842d498086ed7",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "title": "Smile if you love lemmings"
-    },
-    {
-      "chapter": "combinations",
-      "identity": {
-        "engine": "classic",
-        "levelID": "12:Fun:13:1:6",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "position": 205.0,
-      "previousStep": 203,
-      "reason": "A slow repeat-digger exercise with a full rescue target belongs after basic skill practice, not among late route-discovery puzzles. One familiar skill changes the rescue goal without adding several new demands.",
-      "replayRevision": "bb0f4c00aa4224340a22bea69d90c601d9b796a226101035c8cdfbc6306a576e",
-      "role": "practice",
-      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-      "title": "We all fall down"
     },
     {
       "chapter": "combinations",
@@ -634,7 +604,7 @@
       },
       "position": 217.5,
       "previousStep": 31,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "12e339442a8d3798c3b7556881c50ba8fd7b4c4318ed6d3de8d118a8972bc9d0",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -649,7 +619,7 @@
       },
       "position": 230.0,
       "previousStep": 37,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "e9dbfc847f4fca7b6b950314a667061e9e9d929033a1562423401f918b77337b",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -664,7 +634,7 @@
       },
       "position": 242.5,
       "previousStep": 42,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "bd04d797766fc1f01f8465da4d91bf84f92aa1edf3a841aa5bb09c55de026b57",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -679,7 +649,7 @@
       },
       "position": 255.0,
       "previousStep": 39,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "a4cfc8e8a04d4f98f32b3ba3e0a1c7099ab50d2be55e262393cf3e434fb20f03",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -694,7 +664,7 @@
       },
       "position": 267.5,
       "previousStep": 40,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "4d69a9347d5a219997ae28503fe69293ef29def750a7f003d8e12e82e78a1690",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -709,7 +679,7 @@
       },
       "position": 280.0,
       "previousStep": 41,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "7359e9a60df8912414a91493f4cf3256fd9768e3efdb514547bce2186348ffd4",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -724,7 +694,7 @@
       },
       "position": 292.5,
       "previousStep": 38,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "2bd21f87cfdca610d6a96d730f4ebf4024a10f8ab4e0642b01a7260da2452679",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -739,7 +709,7 @@
       },
       "position": 305.0,
       "previousStep": 35,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "3a90d40344d96b56bab874715c1334304604d4da7acdd07c35dff188245e068d",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -754,7 +724,7 @@
       },
       "position": 317.5,
       "previousStep": 32,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "1187207f784b0490d83b358ae9e43cc8a2c5a8165ca7672532a44755af2f0e80",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -769,7 +739,7 @@
       },
       "position": 330.0,
       "previousStep": 33,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "806b6420ecbfc7325529efc40eb646680d5423745342f6f895c5233ebb1e5488",
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -784,7 +754,7 @@
       },
       "position": 345,
       "previousStep": 43,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "bac121a8f199375e390e157e57cfc656b3edb0ae1878e97c578c94e844a8744b",
       "role": "recovery",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -799,7 +769,7 @@
       },
       "position": 355,
       "previousStep": 44,
-      "reason": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "reason": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "replayRevision": "422dccaeef83807f0b3687c04e9523eca766f75a0b0cb46768360ff186774227",
       "role": "recovery",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
@@ -899,6 +869,21 @@
       "chapter": "open-routes",
       "identity": {
         "engine": "classic",
+        "levelID": "42:Tricky:13:8:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "position": 415,
+      "previousStep": 189,
+      "reason": "Add a broad-skill route with 190 tools and a 70% rescue target before the first player-reported wall and scarce-stock puzzles.",
+      "replayRevision": "b2fc6d0523448653df71fed46e2485417b4b82bc3b7967a11eee07cfc4c0acc8",
+      "role": "recovery",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Lemming Drops"
+    },
+    {
+      "chapter": "open-routes",
+      "identity": {
+        "engine": "classic",
         "levelID": "11:Fun:12:0:7",
         "packID": "lemmings-LEVEL-120"
       },
@@ -939,36 +924,6 @@
       "role": "recovery",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "title": "Careless clicking costs lives"
-    },
-    {
-      "chapter": "budgets",
-      "identity": {
-        "engine": "classic",
-        "levelID": "43:Wild:4:7:2",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "position": 462.143,
-      "previousStep": 47,
-      "reason": "Reduce spare tools and introduce deliberate timing in familiar routes. End with two hatches, a 50% rescue target and spare construction tools.",
-      "replayRevision": "6037b6162facbe8529ab6dd436b9eabb66b55127b0fccf6fd6197da34716b8b7",
-      "role": "practice",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "Meeting Adjourned"
-    },
-    {
-      "chapter": "budgets",
-      "identity": {
-        "engine": "classic",
-        "levelID": "51:Wild:12:3:6",
-        "packID": "ohNoMoreLemmings-DLVEL-100"
-      },
-      "position": 473.214,
-      "previousStep": 49,
-      "reason": "Reduce spare tools and introduce deliberate timing in familiar routes. End with two hatches, a 50% rescue target and spare construction tools.",
-      "replayRevision": "e179f99a86db1b7d72073249fb078e88e8706bffd0a973b52f76f7fabe9553f9",
-      "role": "practice",
-      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
-      "title": "SNOW JOKE"
     },
     {
       "chapter": "budgets",
@@ -1049,21 +1004,6 @@
       "chapter": "budgets",
       "identity": {
         "engine": "classic",
-        "levelID": "67:Taxing:8:3:1",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "position": 539.643,
-      "previousStep": 57,
-      "reason": "Reduce spare tools and introduce deliberate timing in familiar routes. End with two hatches, a 50% rescue target and spare construction tools.",
-      "replayRevision": "e73f6a63378af31cf9fb7c334fe34525139b6a619a95ccba39c99a36298807e0",
-      "role": "practice",
-      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-      "title": "The Art Gallery"
-    },
-    {
-      "chapter": "budgets",
-      "identity": {
-        "engine": "classic",
         "levelID": "81:Taxing:22:4:6",
         "packID": "lemmings-LEVEL-120"
       },
@@ -1089,21 +1029,6 @@
       "role": "practice",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "title": "Lemmingology"
-    },
-    {
-      "chapter": "budgets",
-      "identity": {
-        "engine": "classic",
-        "levelID": "42:Tricky:13:8:3",
-        "packID": "lemmings-LEVEL-120"
-      },
-      "position": 572.857,
-      "previousStep": 189,
-      "reason": "Reduce spare tools and introduce deliberate timing in familiar routes. End with two hatches, a 50% rescue target and spare construction tools.",
-      "replayRevision": "b2fc6d0523448653df71fed46e2485417b4b82bc3b7967a11eee07cfc4c0acc8",
-      "role": "practice",
-      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
-      "title": "Lemming Drops"
     },
     {
       "chapter": "budgets",
@@ -3479,10 +3404,85 @@
       "chapter": "capstones",
       "identity": {
         "engine": "classic",
+        "levelID": "3:Fun:4:9:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "position": 969,
+      "previousStep": 5,
+      "reason": "The full-rescue target leaves no spare lives. Place this level in Expert after the player has practised miners, climbers and the wider skill set.",
+      "replayRevision": "3093c495b7b9e04aa1cacdd1a56064c2fdde339e5a0dfcaed67f58c5e0c7bca9",
+      "role": "challenge",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "Now use miners and climbers"
+    },
+    {
+      "chapter": "capstones",
+      "identity": {
+        "engine": "classic",
+        "levelID": "12:Fun:13:1:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "position": 971,
+      "previousStep": 203,
+      "reason": "The full-rescue target leaves no spare lives. Keep this single-skill route after the player has practised the full skill set, in Expert.",
+      "replayRevision": "bb0f4c00aa4224340a22bea69d90c601d9b796a226101035c8cdfbc6306a576e",
+      "role": "challenge",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "We all fall down"
+    },
+    {
+      "chapter": "capstones",
+      "identity": {
+        "engine": "classic",
+        "levelID": "43:Wild:4:7:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "position": 973,
+      "previousStep": 47,
+      "reason": "The full-rescue target leaves no spare lives. Place this constrained multi-hatch route in Expert after the player has practised rescue and tool management.",
+      "replayRevision": "6037b6162facbe8529ab6dd436b9eabb66b55127b0fccf6fd6197da34716b8b7",
+      "role": "challenge",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "Meeting Adjourned"
+    },
+    {
+      "chapter": "capstones",
+      "identity": {
+        "engine": "classic",
+        "levelID": "67:Taxing:8:3:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "position": 975,
+      "previousStep": 57,
+      "reason": "The full-rescue target leaves no spare lives. Place this route in Expert after the player has practised rescue and tool management.",
+      "replayRevision": "e73f6a63378af31cf9fb7c334fe34525139b6a619a95ccba39c99a36298807e0",
+      "role": "challenge",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
+      "title": "The Art Gallery"
+    },
+    {
+      "chapter": "capstones",
+      "identity": {
+        "engine": "classic",
+        "levelID": "51:Wild:12:3:6",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "position": 977,
+      "previousStep": 49,
+      "reason": "Its severe rescue, tool-scarcity and deadline pressures follow the full-rescue practice and challenges in Expert.",
+      "replayRevision": "e179f99a86db1b7d72073249fb078e88e8706bffd0a973b52f76f7fabe9553f9",
+      "role": "challenge",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+      "title": "SNOW JOKE"
+    },
+    {
+      "chapter": "capstones",
+      "identity": {
+        "engine": "classic",
         "levelID": "33:Crazy:14:1:5",
         "packID": "ohNoMoreLemmings-DLVEL-100"
       },
-      "position": 976.0,
+      "position": 980,
       "previousStep": 215,
       "reason": "Owner-confirmed advanced route remains at the end, after ordinary timing, resource and coordination practice.",
       "replayRevision": "3b40b8b19130ce0d8dc8fbade7850f91c1ed81b7fb6df0f10fa6be2a0fbb9b54",

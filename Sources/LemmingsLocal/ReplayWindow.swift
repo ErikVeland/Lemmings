@@ -367,13 +367,9 @@ import UniformTypeIdentifiers
       return element
     }
   }
-  private var font: MacInterfaceRenderer?
+  private var font: MacInterfaceRenderer? { GameMenuArtwork.renderer() }
   override init(frame: NSRect) {
     super.init(frame: frame)
-    if let url = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings"),
-       let artwork = try? ClassicMacArtwork(directory: url), let ui = ClassicMacUserInterface(artwork: artwork) {
-      font = MacInterfaceRenderer(interface: ui)
-    }
     setAccessibilityLabel(L10n.text("Replay controls. Space plays or pauses. Minus and plus change speed. S saves a movie. Escape closes."))
   }
   required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }

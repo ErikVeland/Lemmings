@@ -1,0 +1,28 @@
+{
+  "copiedBytes" : 22619285,
+  "copiedFiles" : 1402,
+  "fallbackSHA256" : "b389f1e388c2bc701ecc5abe55a905b6bd1989ccd4f0de6e771806fe56d060a8",
+  "group" : "\/Users\/erikveland\/.codex\/worktrees\/ultimate-lemmix-full-game\/Lemmings\/.build\/desk-clock-resource-tests\/56E33DCE-3962-4B79-8A7A-8FF559DE0F5B",
+  "nativePixelComparisons" : 18,
+  "pixelSHA256" : {
+    "ios-large-calm" : "dd41e1114c0cb6c8302dc3d92976427a48247cf059631330a11561cf7343080d",
+    "ios-large-nuke" : "38f114b3f6ebe1f6dfe1e7f166fe9447fcb5b8ff280e63861b95ebfbce951232",
+    "ios-large-soon" : "ba38b7d81ed1204b16c2fdae590d27c6888939556ca5e1b5582db9975b7ee739",
+    "ios-medium-calm" : "d3e308f0a3381f95c3a49de917236bf0f37d49e5716b1d51fb23741cc0c89932",
+    "ios-medium-nuke" : "66db3ba45c614e0c29dc64af697e649950dd13abdade4f2fdc89af5e30a29337",
+    "ios-medium-soon" : "adabc643b50df84e70119dbfd3307b21f71d24635e0978ad69ea888738d5bb02",
+    "ios-small-calm" : "8320a159ccd30a472cd5840f93aa0e858e12cb3329dfac34fce1c0bbdca4f1b7",
+    "ios-small-nuke" : "1f2c26cfe910151aca43355702e858357268db5a92f5576787bc37c707db5dad",
+    "ios-small-soon" : "432c1c6c252f7eae8456f1938a0fcc6f10dfbb95c7f8cc8b8796acde5947f13d",
+    "mac-large-calm" : "eb9633a6b5707f9fa5d380308c3983abaaa9ec4bc5ba99e9bb433b49c2241b55",
+    "mac-large-nuke" : "22a68e9d69d1333b485445406cbb91898ec392c5d40214a45c001883a5439c93",
+    "mac-large-soon" : "fd7069cf8342087d6dd48beb2553344a45add995d68f9e47878314384667e030",
+    "mac-medium-calm" : "f7437b25c0c2a3f991582771d16fdd8d77e926f930b22e166271e4ed63ba825b",
+    "mac-medium-nuke" : "664f8c2c4ec86b4dc4d5972523a148164a5c9f97c530cd434501110fc28374f0",
+    "mac-medium-soon" : "8679a7128df18f2e3df98e8d1681e7394dafd2f5d760c83df6ef9dc80331aa0b",
+    "mac-small-calm" : "97d2c5a78654d2d20cd13add15de00ad332b6d8ae4d3decd084483d5695b7c17",
+    "mac-small-nuke" : "21e5c918ee60ac6f5e87b6071699c9ed6dc259e3fa4a9676d8ff821fa34bca91",
+    "mac-small-soon" : "94acf24e63b8a95c5a1e014d3c60b363bbf833ed764f461fe9d4afbc1f530e18"
+  },
+  "productionContainerAccessed" : false
+}

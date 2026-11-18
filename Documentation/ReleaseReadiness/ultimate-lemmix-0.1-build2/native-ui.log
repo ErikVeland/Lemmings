@@ -1,0 +1,14 @@
+UI test windows: offscreen; audio: muted
+PASS original-font home and COMMUNITY LEVELS 5051 native target; 487 packs
+UI test windows: offscreen; audio: muted
+PASS original-font settings and required Lix character state
+UI test windows: offscreen; audio: muted
+PASS native community home action, 487-pack browser, original lettering and Browse target
+UI test windows: offscreen; audio: muted
+PASS native starter 1, complete brick Lix scene at 2×, actor and unchanged physics; mean scene 2.46 ms
+UI test windows: offscreen; audio: muted
+PASS native starter 2, complete earth Lix scene at 2×, actor and unchanged physics; mean scene 2.32 ms
+UI test windows: offscreen; audio: muted
+PASS native starter 3, complete wood Lix scene at 2×, actor and unchanged physics; mean scene 1.92 ms
+UI test windows: offscreen; audio: muted
+PASS production preparation/render/start for 0001-geooPk0.zip: Simple warm-up

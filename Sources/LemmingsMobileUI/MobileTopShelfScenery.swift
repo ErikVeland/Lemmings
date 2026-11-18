@@ -1,6 +1,7 @@
 #if os(tvOS)
 @preconcurrency import AVFoundation
 import LemmingsGameArt
+import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 import TVServices
@@ -118,7 +119,7 @@ enum MobileTopShelfScenery {
     private struct Logo { let image: CGImage; let frame: CGRect }
     private static func logo(holiday: Bool) -> Logo? {
         let family = !holiday ? "lemmings" : Int.random(in: 0..<5) == 0 ? "holiday" : "xmas"
-        guard let directory = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/" + family),
+        guard let directory = GameResources.resourceURL?.appendingPathComponent("MacArtwork/" + family),
               let artwork = try? ClassicMacArtwork(directory: directory),
               let original = ClassicMacUserInterface(artwork: artwork)?.logo,
               let image = GameMenuLogo.image(for: original) else { return nil }

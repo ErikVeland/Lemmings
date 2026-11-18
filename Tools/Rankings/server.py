@@ -224,34 +224,44 @@ class Store:
     def board(self, key, category, assisted, page=0):
         integer(page, 0, 10000)
         if category in CAREER:
-            sql = """WITH bests AS (SELECT player,level_key,MAX(stars) best FROM runs
+            ranked = """WITH bests AS (SELECT player,level_key,MAX(stars) best FROM runs
                      WHERE assisted=? AND won=1 GROUP BY player,level_key),
                      scores AS (SELECT player, """ + CAREER[category] + """ score, SUM(best) stars, COUNT(*) clears,
                                 SUM(best=3) perfect FROM bests GROUP BY player),
-                     ranked AS (SELECT ROW_NUMBER() OVER(ORDER BY score DESC,player) rank,* FROM scores)
-                     SELECT ranked.*,players.name FROM ranked JOIN players ON players.id=ranked.player
-                     ORDER BY rank LIMIT 6 OFFSET ?"""
+                     ranked AS (SELECT RANK() OVER(ORDER BY score DESC) rank,* FROM scores) """
+            sql = ranked + """SELECT ranked.*,players.name FROM ranked JOIN players ON players.id=ranked.player
+                     ORDER BY rank,ranked.player LIMIT 6 OFFSET ?"""
+            leader_sql = ranked + """SELECT ranked.*,players.name FROM ranked JOIN players ON players.id=ranked.player
+                         WHERE ranked.rank=1 ORDER BY ranked.player"""
             args = (int(assisted), page * 5)
+            leader_args = (int(assisted),)
         else:
             if category not in BOARDS or not re.fullmatch("[a-f0-9]{64}", key or ""):
                 raise ValueError("Unknown board")
             order, eligible = BOARDS[category]
-            sql = """WITH candidates AS (SELECT *,ROW_NUMBER() OVER(PARTITION BY player ORDER BY """ + order + """,submitted,id) choice
+            rank_order = order.split(",", 1)[0]
+            ranked = """WITH candidates AS (SELECT *,ROW_NUMBER() OVER(PARTITION BY player ORDER BY """ + order + """,submitted,id) choice
                      FROM runs WHERE board_key=? AND assisted=? AND """ + eligible + """),
-                     ranked AS (SELECT ROW_NUMBER() OVER(ORDER BY """ + order + """,submitted,id) rank,*
-                     FROM candidates WHERE choice=1)
-                     SELECT ranked.*,players.name FROM ranked JOIN players ON players.id=ranked.player
-                     ORDER BY rank LIMIT 6 OFFSET ?"""
+                     ranked AS (SELECT RANK() OVER(ORDER BY """ + rank_order + """) rank,*
+                     FROM candidates WHERE choice=1) """
+            sql = ranked + """SELECT ranked.*,players.name FROM ranked JOIN players ON players.id=ranked.player
+                     ORDER BY rank,""" + order + """,ranked.submitted,ranked.id LIMIT 6 OFFSET ?"""
+            leader_sql = ranked + """SELECT ranked.*,players.name FROM ranked JOIN players ON players.id=ranked.player
+                         WHERE ranked.rank=1 ORDER BY ranked.""" + rank_order.split()[0] + """ """ + rank_order.split()[1] + """,
+                         ranked.submitted,ranked.id"""
             args = (key, int(assisted), page * 5)
+            leader_args = (key, int(assisted))
         with self.db() as db:
             rows = db.execute(sql, args).fetchall()
-        return {"entries": [{"rank": r["rank"], "name": r["name"],
-                            "score": r["score"] if category in CAREER else r["milliseconds"] if category.startswith("fastest") else r["skills"] if category == "leastSkills" else r["saved"],
-                            "runID": None if category in CAREER else r["id"],
-                            "replay": False if category in CAREER else r["replay_bytes"] > 0,
-                            "actionReplay": False if category in CAREER else r["rank"] <= 10 and r["action_bytes"] > 0,
-                            **({"stars": r["stars"], "clears": r["clears"], "perfect": r["perfect"]} if category in CAREER else {})}
-                            for r in rows[:5]],
+            leaders = db.execute(leader_sql, leader_args).fetchall() if page == 0 else []
+        def entry(r):
+            return {"rank": r["rank"], "name": r["name"],
+                    "score": r["score"] if category in CAREER else r["milliseconds"] if category.startswith("fastest") else r["skills"] if category == "leastSkills" else r["saved"],
+                    "runID": None if category in CAREER else r["id"],
+                    "replay": False if category in CAREER else r["replay_bytes"] > 0,
+                    "actionReplay": False if category in CAREER else r["rank"] <= 10 and r["action_bytes"] > 0,
+                    **({"stars": r["stars"], "clears": r["clears"], "perfect": r["perfect"]} if category in CAREER else {})}
+        return {"entries": [entry(r) for r in rows[:5]], "leaders": [entry(r) for r in leaders],
                 "page": page, "hasMore": len(rows) > 5, "verification": "community"}
 
     def top_ten(self, rid):

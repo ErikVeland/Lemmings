@@ -2845,7 +2845,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "A slow repeat-digger exercise with a full rescue target belongs after basic skill practice, not among late route-discovery puzzles. One familiar skill changes the rescue goal without adding several new demands.",
+      "adjustment": "The full-rescue target leaves no spare lives. Keep this single-skill route after the player has practised the full skill set, in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "basis": "solutionEstimate",
@@ -2857,15 +2857,15 @@
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 820.0
       },
-      "courseChapter": "combinations",
-      "learningRole": "practice",
-      "lower": 205.0,
-      "position": 205.0,
+      "courseChapter": "capstones",
+      "learningRole": "challenge",
+      "lower": 971,
+      "position": 971,
       "reference": "Zany/KEEP_ON_TRUCKING.nxlv",
       "replayRevision": "bb0f4c00aa4224340a22bea69d90c601d9b796a226101035c8cdfbc6306a576e",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 205.0
+      "upper": 971
     },
     "risks": [
       "incomplete timing probes",
@@ -3317,7 +3317,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
@@ -4757,15 +4757,15 @@
       },
       "courseChapter": "foundations",
       "learningRole": "practice",
-      "lower": 66,
-      "position": 66,
+      "lower": 20,
+      "position": 20,
       "previousBasis": "solutionEstimate",
       "previousPosition": 385.0,
       "reference": "Gentle/Downwardly_Mobile_Lemmings.nxlv",
       "replayRevision": "f5f4b7b193ff189141e7aa7728128aa8bb7f8ad31ecb38b38fa943e36b6e8d20",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 66
+      "upper": 20
     },
     "risks": [
       "spatial tolerance unmeasured"
@@ -4972,7 +4972,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
@@ -5925,7 +5925,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
@@ -10096,7 +10096,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
@@ -10548,7 +10548,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
@@ -10906,7 +10906,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
@@ -12966,8 +12966,8 @@
       },
       "courseChapter": "capstones",
       "learningRole": "practice",
-      "lower": 976.0,
-      "position": 976.0,
+      "lower": 980,
+      "position": 980,
       "pressureWarnings": [
         "near-full rescue with several exhausted used skill stocks"
       ],
@@ -12975,7 +12975,7 @@
       "replayRevision": "3b40b8b19130ce0d8dc8fbade7850f91c1ed81b7fb6df0f10fa6be2a0fbb9b54",
       "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 976.0
+      "upper": 980
     },
     "risks": [
       "incomplete timing probes",
@@ -14320,7 +14320,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Repeat longer bridge construction before constrained combinations. The exact native route uses only builders, keeps spare builders and a rescue margin, and has no measured narrow action or worker skill changes. Editorial bridge selection; not a novice playtest.",
@@ -15778,7 +15778,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Reduce spare tools and introduce deliberate timing in familiar routes. End with two hatches, a 50% rescue target and spare construction tools.",
+      "adjustment": "Add a broad-skill route with 190 tools and a 70% rescue target before the first player-reported wall and scarce-stock puzzles.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "basis": "solutionEstimate",
@@ -15790,15 +15790,15 @@
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 810.0
       },
-      "courseChapter": "budgets",
-      "learningRole": "practice",
-      "lower": 572.857,
-      "position": 572.857,
+      "courseChapter": "open-routes",
+      "learningRole": "recovery",
+      "lower": 415,
+      "position": 415,
       "reference": "Gentle/The_Crankshaft.nxlv",
       "replayRevision": "b2fc6d0523448653df71fed46e2485417b4b82bc3b7967a11eee07cfc4c0acc8",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 572.857
+      "upper": 415
     },
     "risks": [
       "incomplete timing probes",
@@ -21424,7 +21424,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Reduce spare tools and introduce deliberate timing in familiar routes. End with two hatches, a 50% rescue target and spare construction tools.",
+      "adjustment": "The full-rescue target leaves no spare lives. Place this route in Expert after the player has practised rescue and tool management.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "basis": "solutionEstimate",
@@ -21436,15 +21436,15 @@
         "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
         "upper": 545.0
       },
-      "courseChapter": "budgets",
-      "learningRole": "practice",
-      "lower": 539.643,
-      "position": 539.643,
+      "courseChapter": "capstones",
+      "learningRole": "challenge",
+      "lower": 975,
+      "position": 975,
       "reference": "Gentle/Careless_clicking_costs_lives.nxlv",
       "replayRevision": "e73f6a63378af31cf9fb7c334fe34525139b6a619a95ccba39c99a36298807e0",
       "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7",
       "sourceURL": "https://www.lemmingsforums.net/index.php?topic=4374.0",
-      "upper": 539.643
+      "upper": 975
     },
     "risks": [
       "incomplete timing probes",
@@ -23063,7 +23063,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Repeat longer bridge construction before constrained combinations. The exact native route uses only builders, keeps spare builders and a rescue margin, and has no measured narrow action or worker skill changes. Editorial bridge selection; not a novice playtest.",
@@ -24496,7 +24496,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
@@ -26238,7 +26238,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",
@@ -28265,7 +28265,7 @@
     },
     "pack": "Lemmings",
     "placement": {
-      "adjustment": "Combine known skills before restricting the tool budget. Include a slow, single-skill full-rescue exercise and finish with familiar building practice.",
+      "adjustment": "Combine familiar skills before stricter budgets. Full-rescue levels follow earlier skill and route practice in Expert.",
       "basis": "teachingCurriculum",
       "comparisonPlacement": {
         "adjustment": "Generous original Fun skill inventory before restricted-stock puzzles. Editorial teaching placement; novice discovery remains unmeasured.",

@@ -20,9 +20,7 @@ swiftc -O -swift-version 6 -parse-as-library -emit-module -emit-library \
   -o "$build_dir/libNxlvKit.dylib" "$build_dir"/source/*.swift
 swiftc -O -swift-version 6 -parse-as-library -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" Tools/DifficultyDiagnostics/ExpandFanEvidence.swift \
-  Sources/LemmingsLocal/GameAssetCache.swift \
-  Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift \
-  Sources/LemmingsLocal/FanLevelLibrary.swift \
+  Sources/LemmingsLocal/GameAssetCache.swift Sources/LemmingsLocal/GameResources.swift Sources/LemmingsLocal/FanLevelLibrary.swift \
   -o "$build_dir/ExpandFanEvidence"
 FAN_REACTIVE_SEARCH=1 FAN_APPROXIMATE_SEARCH=1 "$build_dir/ExpandFanEvidence" "$resources_dir" \
   "$project_dir/Artifacts/ClassicProgression/audit.json" "$output_dir"

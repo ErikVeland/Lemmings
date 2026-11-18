@@ -90,8 +90,9 @@ actor FanLevelUpdates {
     guard offset == end else { throw Failure.invalidArchive }
   }
 
-  func check(existing: [URL], destination: URL) async -> Outcome {
+  func check(existing: [URL], destination: URL, allowedPackIDs: Set<Int>? = nil) async -> Outcome {
     var outcome = Outcome()
+    guard allowedPackIDs?.isEmpty != true else { return outcome }
     var known = Set(existing.compactMap(FanLevelLibrary.packID))
     // A page containing only installed packs ends the catch-up scan. Fresh
     // releases appear first, so an ordinary launch needs just one small request.
@@ -104,7 +105,7 @@ actor FanLevelUpdates {
         let packs = try Self.catalogue(data)
         let missing = packs.filter { !known.contains($0.id) }
         if missing.isEmpty { break }
-        for pack in missing {
+        for pack in missing where allowedPackIDs?.contains(pack.id) != false {
           try Task.checkCancellation()
           do {
             try await Task.sleep(nanoseconds: delay)

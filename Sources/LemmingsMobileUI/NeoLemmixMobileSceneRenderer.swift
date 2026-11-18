@@ -2,6 +2,7 @@ import CoreGraphics
 import Foundation
 import ImageIO
 import LemmingsMobileCore
+import LemmingsGameArt
 import NxlvKit
 
 /**
@@ -85,8 +86,7 @@ final class NeoLemmixMobileSceneRenderer {
             selectedID: nil, highlightedID: highlight?.id)
         var crowd = MobileCrowdShadow()
         for lemming in ordered where lemming.action != .removed && SceneRasterContext.drawActors.wrappedValue {
-            guard let frame = sprites.frame(action: lemming.action, direction: lemming.direction,
-                animationFrame: lemming.animationFrame, traits: lemming.traits) else { continue }
+            guard let frame = actorFrame(lemming) else { continue }
             if lemming.action != .exploding {
                 pixels.withUnsafeMutableBytes { destination in
                     crowd.cast(spriteWidth: frame.width, spriteHeight: frame.height,
@@ -108,10 +108,9 @@ final class NeoLemmixMobileSceneRenderer {
 
     func spriteHighlight(_ simulation: NeoLemmixSimulation, actor: Int) -> MobileSpriteHighlight? {
         guard let lemming = simulation.lemmings.first(where: { $0.id == actor && $0.canReceiveSkills }),
-              let frame = sprites.frame(action: lemming.action, direction: lemming.direction,
-                animationFrame: lemming.animationFrame, traits: lemming.traits) else { return nil }
+              let frame = actorFrame(lemming) else { return nil }
         let traits = lemming.traits.map(\.rawValue).sorted().joined(separator: ",")
-        let key = "neo-\(lemming.action)-\(lemming.direction)-\(lemming.animationFrame)-\(traits)"
+        let key = "\(MobileLixArtwork.revision)/neo-\(lemming.action)-\(lemming.direction)-\(lemming.animationFrame)-\(traits)"
         let pixels: MobilePixelFrame
         if let cached = highlightFrames[key] { pixels = cached }
         else {
@@ -124,6 +123,20 @@ final class NeoLemmixMobileSceneRenderer {
             rect: .init(x: Double(lemming.position.x - frame.footX), y: Double(lemming.position.y - frame.footY),
                 width: Double(frame.width), height: Double(frame.height)), cacheKey: key, time: nil,
             direction: lemming.direction.rawValue)
+    }
+
+    private func actorFrame(_ lemming: NeoLemmixLemming) -> NeoLemmixMobileSpriteFrame? {
+        // Custom actions and zombie/neutral palettes retain the player's native style art.
+        if MobileLixArtwork.isEnabled, !lemming.traits.contains(.zombie), !lemming.traits.contains(.neutral),
+           let activity = MobileLixArtwork.activity(named: lemming.action.rawValue),
+           let sprite = MobileLixArtwork.sprite(activity: activity,
+             foot: .init(x: Double(lemming.position.x), y: Double(lemming.position.y)),
+             animationFrame: lemming.animationFrame, facingLeft: lemming.direction == .left, scale: 1) {
+            return .init(rgba: [UInt8](sprite.frame.rgba), width: sprite.frame.width, height: sprite.frame.height,
+                footX: Int(Double(lemming.position.x) - sprite.rect.x), footY: Int(Double(lemming.position.y) - sprite.rect.y))
+        }
+        return sprites.frame(action: lemming.action, direction: lemming.direction,
+            animationFrame: lemming.animationFrame, traits: lemming.traits)
     }
 
     private static func composite(_ frame: NeoLemmixMobileSpriteFrame, atX x: Int, y: Int,

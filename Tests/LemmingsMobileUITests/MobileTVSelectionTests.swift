@@ -9,6 +9,17 @@ import LemmingsGameArt
 }
 
 @MainActor struct MobileTVSelectionTests {
+    @Test func menuStartsOnThePrimaryActionInsteadOfCancel() throws {
+        let canvas = MobileMenuCanvas(frame: CGRect(x: 0, y: 0, width: 1920, height: 1080))
+        canvas.page = GameFrontEnd.Page(title: "Confirm", footer: [
+            .init("cancel", "Cancel"), .init("continue", "Continue", primary: true)
+        ])
+        canvas.layoutIfNeeded()
+        let primary = try #require(canvas.subviews.compactMap { $0 as? UIButton }
+            .first { $0.accessibilityIdentifier == "menu.continue" })
+        #expect(canvas.preferredFocusEnvironments.first === primary)
+    }
+
     @Test func nativeSelectActivatesReadyAfterRebuildWithoutProfilePolling() throws {
         let canvas = MobileMenuCanvas(frame: CGRect(x: 0, y: 0, width: 1920, height: 1080))
         canvas.requiresNeutralActivation = true

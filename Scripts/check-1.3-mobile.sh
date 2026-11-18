@@ -39,10 +39,11 @@ grep -q 'TARGETED_DEVICE_FAMILY = "1,2"' \
 grep -q 'MTKView' Sources/LemmingsMobileUI/MobileCRTView.swift
 grep -q 'MobileCheckpointStore' Sources/LemmingsMobileCore/MobileCheckpoint.swift
 grep -q 'AppIcon-1024.png' Apps/UltimateLemmingsIOS/Assets.xcassets/AppIcon.appiconset/Contents.json
-grep -q 'import LemmingsMobileCore' Apps/UltimateLemmingsIOS/UITests/MobileCoreIOSSmokeTests.swift
+grep -q 'import LemmingsMobileCore' Apps/SharedAppleMobile/UITests/MobileCoreIOSSmokeTests.swift
 
 for source in Sources/LemmingsMobileCore/*.swift Sources/LemmingsMobileUI/*.swift \
-  Apps/UltimateLemmingsIOS/AppDelegate.swift Apps/UltimateLemmingsIOS/UITests/*.swift; do
+  Apps/SharedAppleMobile/AppDelegate.swift Apps/SharedAppleMobile/LaunchURL.swift \
+  Apps/SharedAppleMobile/UITests/*.swift; do
   swiftc -frontend -parse "$source"
 done
 

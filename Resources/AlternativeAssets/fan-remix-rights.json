@@ -1,0 +1,1082 @@
+{
+  "schemaVersion": 1,
+  "auditDate": "2026-11-12",
+  "scope": "Existing local Sources/Music/Remixes recordings only. The audit covers App Store app bundling and app-managed content downloads.",
+  "reviewState": "evidence audit. Human review of music permissions pending",
+  "releaseApproval": false,
+  "statusDefinitions": {
+    "include": "Verified permission covers all required rights and the intended distribution. No existing remix meets this status in this audit.",
+    "conditional": "Some creator permission exists. The listed scope or underlying-rights conditions remain unresolved. Do not ship yet.",
+    "pending": "Required permission or the meaning of the available terms remains unresolved. Do not ship yet.",
+    "exclude": "The available terms do not permit the intended distribution. Reassess only when new permission is recorded."
+  },
+  "rules": [
+    "A classical or traditional composition does not itself clear a modern arrangement or recording.",
+    "Classical instrumentation does not establish a public-domain composition.",
+    "A local file, credit, purchase or free download does not establish app redistribution permission.",
+    "A format conversion preserves the source rights restrictions.",
+    "File hashes identify the audited local bytes. They do not prove ownership or permission.",
+    "Only include entries may enter a cleared distribution pack after human review."
+  ],
+  "localEvidence": [
+    "Documentation/MusicSourceAudit.md",
+    "Documentation/MusicInventory.md",
+    "Sources/Music/catalogue.json"
+  ],
+  "limitations": [
+    "This audit records public terms and local identities. It is not a legal opinion or release approval.",
+    "No rights holder was contacted. No private permission record was supplied for this audit.",
+    "Local source bytes were not compared with fresh creator downloads.",
+    "No composition is classified as public domain without a separate per-track and territory review.",
+    "This manifest does not change current app packaging or playback."
+  ],
+  "summary": {
+    "groups": 6,
+    "recordings": 34,
+    "localFiles": 66,
+    "recordingsByStatus": {
+      "include": 0,
+      "conditional": 32,
+      "pending": 1,
+      "exclude": 1
+    },
+    "filesByStatus": {
+      "include": 0,
+      "conditional": 64,
+      "pending": 1,
+      "exclude": 1
+    },
+    "approvedRecordings": []
+  },
+  "sources": [
+    {
+      "id": "mandelsoft-2018-initial",
+      "url": "https://www.lemmingsforums.net/index.php?topic=3921.0",
+      "title": "The Soundtrack of Lemmings, re-done in FL Studio",
+      "publisher": "MandelSoft",
+      "locator": "Opening post, 19 July 2018, edited 14 October 2018",
+      "checkedOn": "2026-11-12",
+      "evidenceType": "creator-statement",
+      "permissionExcerpt": "Feel free to use them in your level packs (with credits of course) or just as a replacement for the soundtrack.",
+      "provenanceSummary": "MandelSoft describes FL Studio arrangements derived partly from Windows MIDI. The Oh No! versions use some melody lines from Minim.",
+      "scopeAssessment": "The post grants a specific use. It does not expressly address native app distribution, commercial use or third-party rights."
+    },
+    {
+      "id": "mandelsoft-2018-additions",
+      "url": "https://www.lemmingsforums.net/index.php?topic=3921.0",
+      "title": "The Soundtrack of Lemmings, re-done in FL Studio",
+      "publisher": "MandelSoft",
+      "locator": "Reply #8, 14 October 2018, 17:09:50, edited 17:26:21",
+      "checkedOn": "2026-11-12",
+      "evidenceType": "creator-statement",
+      "permissionSummary": "MandelSoft offers the special-level and five Paintball arrangements for custom level packs. He also approves listing the music on NeoLemmix.",
+      "scopeAssessment": "No express native app or commercial redistribution grant was found in this post."
+    },
+    {
+      "id": "cold-storage-bandcamp",
+      "url": "https://coldstorage.bandcamp.com/track/lemmings-march-of-the-greentops",
+      "title": "Lemmings [ March of the Greentops ]",
+      "publisher": "CoLD SToRAGE",
+      "locator": "Track credits and licence section",
+      "checkedOn": "2026-11-12",
+      "evidenceType": "creator-release-page",
+      "releaseDate": "2011-07-21",
+      "licenceLabel": "all rights reserved",
+      "scopeAssessment": "The page offers listening and purchase downloads. It does not grant redistribution inside a game or downloadable game pack."
+    },
+    {
+      "id": "amigaremix-listing",
+      "url": "https://www.amigaremix.com/?p=36",
+      "title": "Lemmings:Tribes - Medieval Lemmings Remix",
+      "publisher": "AmigaRemix artist-submitted release listing",
+      "locator": "AmiGamer entry dated 28 August 2006",
+      "checkedOn": "2026-11-12",
+      "evidenceType": "artist-release-listing",
+      "releaseDate": "2006-08-28",
+      "provenanceSummary": "The entry credits AmiGamer as remixer and Brian Johnston, Raymond Usher and David Whittaker as original composers.",
+      "scopeAssessment": "The listing identifies the release. It does not provide a track-specific app redistribution grant."
+    },
+    {
+      "id": "amigaremix-faq",
+      "url": "https://www.amigaremix.com/faq",
+      "title": "Frequently asked questions",
+      "publisher": "AmigaRemix",
+      "locator": "Answer about permitted music use",
+      "checkedOn": "2026-11-12",
+      "evidenceType": "distributor-policy",
+      "permissionSummary": "Personal listening is permitted. Public redistribution, commercial use and monetisation require agreement with the remixer and original composer. Attribution is also required.",
+      "scopeAssessment": "This is a distributor policy, not an individual licence from each rights holder."
+    },
+    {
+      "id": "amigaremix-guidelines",
+      "url": "https://www.amigaremix.com/info",
+      "title": "Guidelines",
+      "publisher": "AmigaRemix",
+      "locator": "Music rights and use bullets",
+      "checkedOn": "2026-11-12",
+      "evidenceType": "distributor-policy",
+      "permissionSummary": "The page uses public-domain wording, but also reserves original and recording rights and gives conditions for public use.",
+      "scopeAssessment": "The wording conflicts with the clearer FAQ. Do not treat it as a CC0 dedication or an unconditional redistribution licence."
+    }
+  ],
+  "groups": [
+    {
+      "id": "mandelsoft-original",
+      "creator": "MandelSoft",
+      "localDirectory": "Sources/Music/Remixes/orig_music_mandelsoft",
+      "status": "conditional",
+      "distributionApproved": false,
+      "evidenceIds": [
+        "mandelsoft-2018-initial"
+      ],
+      "rights": {
+        "composition": "pending-per-track-verification",
+        "arrangement": "specific-use-permission, upstream MIDI rights unresolved",
+        "recording": "specific-use-permission, app redistribution scope unresolved"
+      },
+      "requiredActions": [
+        "Confirm that the creator permits app bundling, optional downloads and the intended commercial or free distribution.",
+        "Confirm each composition and any upstream arrangement rights for the target territories.",
+        "Record creator credit and any additional attribution conditions."
+      ]
+    },
+    {
+      "id": "mandelsoft-ohno",
+      "creator": "MandelSoft",
+      "localDirectory": "Sources/Music/Remixes/ohno_music_mandelsoft",
+      "status": "conditional",
+      "distributionApproved": false,
+      "evidenceIds": [
+        "mandelsoft-2018-initial",
+        "mandelsoft-2018-additions"
+      ],
+      "rights": {
+        "composition": "pending-per-track-verification",
+        "arrangement": "specific-use-permission, Minim and game arrangement rights unresolved",
+        "recording": "specific-use-permission, app redistribution scope unresolved"
+      },
+      "requiredActions": [
+        "Confirm the intended app and download distribution scope with the creator.",
+        "Resolve the original compositions and any reused melody arrangement rights.",
+        "Credit MandelSoft and record any required upstream credits."
+      ]
+    },
+    {
+      "id": "mandelsoft-special",
+      "creator": "MandelSoft",
+      "localDirectory": "Sources/Music/Remixes/orig_special_music_mandelsoft",
+      "status": "conditional",
+      "distributionApproved": false,
+      "evidenceIds": [
+        "mandelsoft-2018-additions"
+      ],
+      "rights": {
+        "composition": "pending-game-composition-clearance",
+        "arrangement": "specific-use-permission, upstream rights unresolved",
+        "recording": "specific-use-permission, app redistribution scope unresolved"
+      },
+      "requiredActions": [
+        "Confirm the intended app and download distribution scope with the creator.",
+        "Resolve rights to each original special-level composition and any upstream arrangement."
+      ]
+    },
+    {
+      "id": "mandelsoft-paintball",
+      "creator": "MandelSoft",
+      "localDirectory": "Sources/Music/Remixes/paintball_music_mandelsoft",
+      "status": "conditional",
+      "distributionApproved": false,
+      "evidenceIds": [
+        "mandelsoft-2018-additions"
+      ],
+      "rights": {
+        "composition": "pending-game-composition-clearance",
+        "arrangement": "specific-use-permission, upstream rights unresolved",
+        "recording": "specific-use-permission, app redistribution scope unresolved"
+      },
+      "requiredActions": [
+        "Confirm the intended app and download distribution scope with the creator.",
+        "Verify the five numbered files against the named source cues and resolve underlying rights."
+      ]
+    },
+    {
+      "id": "cold-storage-greentops",
+      "creator": "CoLD SToRAGE",
+      "localPath": "Sources/Music/Remixes/CoLD SToRAGE - Lemmings - March of the Greentops -.m4a",
+      "status": "exclude",
+      "distributionApproved": false,
+      "evidenceIds": [
+        "cold-storage-bandcamp"
+      ],
+      "rights": {
+        "composition": "not-cleared-for-this-app",
+        "arrangement": "not-cleared-for-this-app",
+        "recording": "all-rights-reserved, no app redistribution grant found"
+      },
+      "requiredActions": [
+        "Get an express licence that covers the selected recording, composition and intended app and download distribution."
+      ]
+    },
+    {
+      "id": "amigamer-medieval",
+      "creator": "AmiGamer",
+      "localPath": "Sources/Music/Remixes/amigamer_-_lemmingstribes_-_medieval_lemmings_remix_-_amigaremix_01812.mp3",
+      "status": "pending",
+      "distributionApproved": false,
+      "evidenceIds": [
+        "amigaremix-listing",
+        "amigaremix-faq",
+        "amigaremix-guidelines"
+      ],
+      "rights": {
+        "composition": "pending-rights-holder-agreement",
+        "arrangement": "pending-creator-agreement",
+        "recording": "pending-creator-agreement"
+      },
+      "requiredActions": [
+        "Resolve the conflicting distributor wording with track-specific rights evidence.",
+        "Record agreement covering both the remix recording and underlying composition for the intended distribution."
+      ]
+    }
+  ],
+  "tracks": [
+    {
+      "id": "lemmings2.medieval",
+      "catalogueTitle": "Medieval Tribe",
+      "groupId": "amigamer-medieval",
+      "status": "pending",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/amigamer_-_lemmingstribes_-_medieval_lemmings_remix_-_amigaremix_01812.mp3",
+          "role": "playback",
+          "bytes": 8135327,
+          "sha256": "936249d54695121fb7500337b24e3db871dff5c16a7c766f1381a2c203af3655"
+        }
+      ]
+    },
+    {
+      "id": "classic.march-of-the-greentops",
+      "catalogueTitle": "CoLD SToRAGE - Lemmings - March of the Greentops -",
+      "groupId": "cold-storage-greentops",
+      "status": "exclude",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/CoLD SToRAGE - Lemmings - March of the Greentops -.m4a",
+          "role": "playback",
+          "bytes": 5916206,
+          "sha256": "bfa9e1250eddaef8ad811f158dd406a4b309b96290d0777abca9d1dde7133832"
+        }
+      ]
+    },
+    {
+      "id": "ohno.mandelsoft-ohno_01",
+      "catalogueTitle": "ohno_01",
+      "groupId": "mandelsoft-ohno",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_01.m4a",
+          "role": "playback",
+          "bytes": 16023107,
+          "sha256": "b29f6152613440887f75eb60f5e2aa2a2de2d0524555b0e2cb60e0b0a93528ba"
+        },
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_01.ogg",
+          "role": "source",
+          "bytes": 1769438,
+          "sha256": "3b3770b9f4c23ff9c43f5a29864d32625db16212c04d0022738d40d04c56cf7b"
+        }
+      ]
+    },
+    {
+      "id": "ohno.mandelsoft-ohno_02",
+      "catalogueTitle": "ohno_02",
+      "groupId": "mandelsoft-ohno",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_02.m4a",
+          "role": "playback",
+          "bytes": 9872040,
+          "sha256": "edffde83bc4e3ffb3763b64dc018fcd9ab85c6be085ec5f049d18101059c3baa"
+        },
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_02.ogg",
+          "role": "source",
+          "bytes": 1114197,
+          "sha256": "379552c8ad3de382a4ab7ccb8399595f479341673f26c7c34350ec0a8af3b564"
+        }
+      ]
+    },
+    {
+      "id": "ohno.mandelsoft-ohno_03",
+      "catalogueTitle": "ohno_03",
+      "groupId": "mandelsoft-ohno",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_03.m4a",
+          "role": "playback",
+          "bytes": 12014900,
+          "sha256": "ec7396851239d9526d18ba22a54fc27f600d95ee3d4f67a4a068eab5749123ff"
+        },
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_03.ogg",
+          "role": "source",
+          "bytes": 1416538,
+          "sha256": "9f774a08c7440ff4193dcf42ffeb0e3dc12fd7535ab167f1df21eeec48feb572"
+        }
+      ]
+    },
+    {
+      "id": "ohno.mandelsoft-ohno_04",
+      "catalogueTitle": "ohno_04",
+      "groupId": "mandelsoft-ohno",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_04.m4a",
+          "role": "playback",
+          "bytes": 10458789,
+          "sha256": "6ffd78af8fa237f95871e4bae40c367e6dd9eabbbaa0cb8d46560c4510d76f45"
+        },
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_04.ogg",
+          "role": "source",
+          "bytes": 1275660,
+          "sha256": "abc58cba60f766233db33ba15633aa2c33002138eaa61d79237c9cf38711849b"
+        }
+      ]
+    },
+    {
+      "id": "ohno.mandelsoft-ohno_05",
+      "catalogueTitle": "ohno_05",
+      "groupId": "mandelsoft-ohno",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_05.m4a",
+          "role": "playback",
+          "bytes": 28022936,
+          "sha256": "c3bf756ccab10fbd4fb696b16f469e999ca117728a62359d20bfb0814b3b15a3"
+        },
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_05.ogg",
+          "role": "source",
+          "bytes": 3188599,
+          "sha256": "eef3ac681cb63cf08dad37dbcb7605c6b3e563b36415924a96b30ef20af82ddb"
+        }
+      ]
+    },
+    {
+      "id": "ohno.mandelsoft-ohno_06",
+      "catalogueTitle": "ohno_06",
+      "groupId": "mandelsoft-ohno",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_06.m4a",
+          "role": "playback",
+          "bytes": 16198217,
+          "sha256": "0194ef3115970838c47216ec1e695f0162901911a14558cdc4b8e8c15c217115"
+        },
+        {
+          "path": "Sources/Music/Remixes/ohno_music_mandelsoft/ohno_06.ogg",
+          "role": "source",
+          "bytes": 1973432,
+          "sha256": "f125e066f9526bcb8276c9f01ca7d2dfce01c3b7120c6240976006b36bb817aa"
+        }
+      ]
+    },
+    {
+      "id": "classic.cancan",
+      "catalogueTitle": "Can-Can",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_06.m4a",
+          "role": "playback",
+          "bytes": 11171887,
+          "sha256": "f1b38e448f5bff4c3609810e0de26e7a301098dde709fbdc2d181bc1dba1f147"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_06.ogg",
+          "role": "source",
+          "bytes": 1358691,
+          "sha256": "23785f8c7433d7e00a2439c17087723c132dd1edfd77ccc034aa90ae8e2897f7"
+        }
+      ]
+    },
+    {
+      "id": "classic.doggie",
+      "catalogueTitle": "How Much Is That Doggie in the Window",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_12.m4a",
+          "role": "playback",
+          "bytes": 7755522,
+          "sha256": "01b808dd0fbbb259ee7853b2704dbf47fb7eba063d720500757e2bb8fe430969"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_12.ogg",
+          "role": "source",
+          "bytes": 989427,
+          "sha256": "b521efd5c6f4fca59be78104276706230cc33c34eb449b1412bb750b7f720e62"
+        }
+      ]
+    },
+    {
+      "id": "classic.lemming1",
+      "catalogueTitle": "Lemming 1",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_01.m4a",
+          "role": "playback",
+          "bytes": 21513526,
+          "sha256": "6b56711bdc662c0b8bc9a5d14028efb19b12e29abdeffea6f4daaf83379be8be"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_01.ogg",
+          "role": "source",
+          "bytes": 2523286,
+          "sha256": "e4680eebc73a0f5db52a8480f3dbae95568338076ae86376915d14486abf2248"
+        }
+      ]
+    },
+    {
+      "id": "classic.lemming2",
+      "catalogueTitle": "Lemming 2",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_02.m4a",
+          "role": "playback",
+          "bytes": 21734207,
+          "sha256": "09052ba6d18f584f3520b6858aa8b689b00206291bcdd9ff7aa224d69426db1f"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_02.ogg",
+          "role": "source",
+          "bytes": 2556880,
+          "sha256": "127f9308e86b7bfc79e7c57722bf4ec5f36778628dc5a85719891346ff7e845c"
+        }
+      ]
+    },
+    {
+      "id": "classic.lemming3",
+      "catalogueTitle": "Lemming 3",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_03.m4a",
+          "role": "playback",
+          "bytes": 13526524,
+          "sha256": "16ea2c73a95df899346a5c04dc183ce939ba7a4a66b960ab8384eb1081de84f2"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_03.ogg",
+          "role": "source",
+          "bytes": 1735883,
+          "sha256": "a4860edf5e908ab8fbdb687f075c4c7af89a4b4d3ee2761ba4e5a3fe9eb0e55d"
+        }
+      ]
+    },
+    {
+      "id": "classic.mountain",
+      "catalogueTitle": "Coming Round the Mountain",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_04.m4a",
+          "role": "playback",
+          "bytes": 11951893,
+          "sha256": "0fcd8ebf4fcd4566b4db949e4d11313ce12eb7bcf8532992d49bb5e68364188f"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_04.ogg",
+          "role": "source",
+          "bytes": 1402669,
+          "sha256": "fd9a6157b54910afadbfbf3c3f26e51ccb29db66fb562193c53e714e76b815ae"
+        }
+      ]
+    },
+    {
+      "id": "classic.tenlemmings",
+      "catalogueTitle": "Ten Lemmings",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_05.m4a",
+          "role": "playback",
+          "bytes": 13359552,
+          "sha256": "e33a24823bac9bb9491573f60e1a2158af35c1ebbcaf2e9008a8d371b3546cac"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_05.ogg",
+          "role": "source",
+          "bytes": 1596999,
+          "sha256": "d0364d0baf0b95df4df7dfd09cd4171f9f46e5f1c57c8be2bb4d799fbbaf3e19"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim1",
+      "catalogueTitle": "Rainbow Islands",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_07.m4a",
+          "role": "playback",
+          "bytes": 21864048,
+          "sha256": "e53947d7ff7ec659a9be7ad3cfdb0dd3991b907e285c11c280d7167d6850d495"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_07.ogg",
+          "role": "source",
+          "bytes": 2678288,
+          "sha256": "d32e978c42ab1ac1bd2c1b4f22eb153f4b0b080e3e50fc12e445ec68418ef0df"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim10",
+      "catalogueTitle": "Forest Green",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_17.m4a",
+          "role": "playback",
+          "bytes": 12518546,
+          "sha256": "f31b9af513b01ef572deccdaaa47bf40a081914867716f93b2b8b5432d65ccd3"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_17.ogg",
+          "role": "source",
+          "bytes": 1460978,
+          "sha256": "050373df51b5b7031fcae26b75072c48aad10780c16409e7b0c5a106fc9c6baf"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim2",
+      "catalogueTitle": "Smile if You Love Lemmings",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_08.m4a",
+          "role": "playback",
+          "bytes": 21274648,
+          "sha256": "a778254a039e4781879bb95f4bf6f09d343ab98333080c5d968f58da61492cbb"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_08.ogg",
+          "role": "source",
+          "bytes": 2841500,
+          "sha256": "f0a336f11c426cecb71ad3bf95018426ee3f0332e525a728de0c17b70b25d273"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim3",
+      "catalogueTitle": "Lend a Helping Hand",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_09.m4a",
+          "role": "playback",
+          "bytes": 14234142,
+          "sha256": "aba80afa15a89576e55fee4dad159dabbcfadf1bff56f15f2c967c6b490b2c90"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_09.ogg",
+          "role": "source",
+          "bytes": 1868429,
+          "sha256": "b5f20dcc617d2972494c6ec5dc75a18c628c9b6323eaa0076f22cc5e9f0b69e1"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim4",
+      "catalogueTitle": "Postcard from Lemmingland",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_10.m4a",
+          "role": "playback",
+          "bytes": 17914340,
+          "sha256": "59b9f1d8919bfaecf4f4b84d91e4c90ae64dac8e9fa66c43dba446625bb06a71"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_10.ogg",
+          "role": "source",
+          "bytes": 2241715,
+          "sha256": "9d4a8af7de3d5f1b5b60e9b185366659f93068d0aa1515532571011e9e4f0bac"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim5",
+      "catalogueTitle": "Mind the Step",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_11.m4a",
+          "role": "playback",
+          "bytes": 16976680,
+          "sha256": "777971eb4110e670bf02cbbc978b95b426f9d4fc13db3704f2b2d2bae339bc17"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_11.ogg",
+          "role": "source",
+          "bytes": 2140366,
+          "sha256": "1b7468a9188054c4f126f19d1cd79c8a317136bba3158e697d9655c0d167da4d"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim6",
+      "catalogueTitle": "Dance of the Reed Flutes",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_13.m4a",
+          "role": "playback",
+          "bytes": 17799984,
+          "sha256": "a833d59fe86f041a493253483508793e407d0c9aa242cc7299915ab29477e800"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_13.ogg",
+          "role": "source",
+          "bytes": 2139905,
+          "sha256": "e4138f8245c413922ead7eb5693670e0e44f613244952f40fc5348516548a7f6"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim7",
+      "catalogueTitle": "Turkish March",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_14.m4a",
+          "role": "playback",
+          "bytes": 15566474,
+          "sha256": "6f07f0ba4e5ec88268ab2a8434101246a31cbcb380fa96d0502319db55624dc4"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_14.ogg",
+          "role": "source",
+          "bytes": 1945978,
+          "sha256": "60ec42b88b3b9deb1ff7669beceb3ba33ac6dae0792393ebec63fc0f2c814f5a"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim8",
+      "catalogueTitle": "Dance of the Little Swans",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_15.m4a",
+          "role": "playback",
+          "bytes": 15532710,
+          "sha256": "afa8994a6d278a91c61ffbb0ba6617739fd14b83757398cc628fb776a8febd54"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_15.ogg",
+          "role": "source",
+          "bytes": 1946431,
+          "sha256": "05d0f0d3410226e010cfec00038965a85f44fe52f4d36286791d591c282f3248"
+        }
+      ]
+    },
+    {
+      "id": "classic.tim9",
+      "catalogueTitle": "London Bridge Is Falling Down",
+      "groupId": "mandelsoft-original",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_16.m4a",
+          "role": "playback",
+          "bytes": 12799043,
+          "sha256": "b5b2d04df8219782123b3946841594b05181a1abba13d469d31217737874ffa7"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_music_mandelsoft/orig_16.ogg",
+          "role": "source",
+          "bytes": 1557388,
+          "sha256": "726c47059263f3b167c4691062faaf8a64bbc2e08c3d077739812a631a4207bf"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_01",
+      "catalogueTitle": "Paintball 01 (MandelSoft)",
+      "groupId": "mandelsoft-paintball",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_01.m4a",
+          "role": "playback",
+          "bytes": 27008613,
+          "sha256": "a5186b83ab4367ff97cc651d39940fb24d897d0d0bd4feef9df82b886dbced34"
+        },
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_01.ogg",
+          "role": "source",
+          "bytes": 3159377,
+          "sha256": "57580398bd01b6f19c7cfa31cbcc638d7d43f1767f5a2968fefb9e57cdfc76c6"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_02",
+      "catalogueTitle": "Paintball 02 (MandelSoft)",
+      "groupId": "mandelsoft-paintball",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_02.m4a",
+          "role": "playback",
+          "bytes": 36570949,
+          "sha256": "8b82b2cf9e7fcc42456f3ff85aacd0a1b7cecc0d79bfc528f0ecc976353c9bb2"
+        },
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_02.ogg",
+          "role": "source",
+          "bytes": 4049238,
+          "sha256": "d11ac81229357d785b2241df90bdd349418eb52a34797a84e13fcab4cb60de27"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_03",
+      "catalogueTitle": "Paintball 03 (MandelSoft)",
+      "groupId": "mandelsoft-paintball",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_03.m4a",
+          "role": "playback",
+          "bytes": 38064646,
+          "sha256": "2d2b0565823c5c6d21e4a2de23568621fd856920478cafb73e53c9e43befeadc"
+        },
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_03.ogg",
+          "role": "source",
+          "bytes": 4307062,
+          "sha256": "02771005ea269f4982cb6e142525b52f198c2ec77eac88e46c1c5d80bfce3a13"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_04",
+      "catalogueTitle": "Paintball 04 (MandelSoft)",
+      "groupId": "mandelsoft-paintball",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_04.m4a",
+          "role": "playback",
+          "bytes": 23006209,
+          "sha256": "f111c4e8098e38918d7e431a79bb55ed06cd684d47e853c9c776b400bfe8139e"
+        },
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_04.ogg",
+          "role": "source",
+          "bytes": 2834335,
+          "sha256": "fd74b46c1b25465f6f36b6f311f2eb1572034ffbe2320579a5e82737c8fad18e"
+        }
+      ]
+    },
+    {
+      "id": "paintball.mandelsoft-lpb_05",
+      "catalogueTitle": "Paintball 05 (MandelSoft)",
+      "groupId": "mandelsoft-paintball",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_05.m4a",
+          "role": "playback",
+          "bytes": 23870023,
+          "sha256": "ded9a1a58be169c2df50e68976969dd38aebcd471bc674925820476db8fe693a"
+        },
+        {
+          "path": "Sources/Music/Remixes/paintball_music_mandelsoft/lpb_05.ogg",
+          "role": "source",
+          "bytes": 2835046,
+          "sha256": "62ca4cb9b389b4e3ebab5d8372e5efc65875b38b3eed397ccf57613508031ed5"
+        }
+      ]
+    },
+    {
+      "id": "classic.awesome",
+      "catalogueTitle": "Awesome",
+      "groupId": "mandelsoft-special",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_special_music_mandelsoft/awesome.m4a",
+          "role": "playback",
+          "bytes": 14389452,
+          "sha256": "4c618b1b63ada2384c0d053e7b53a5a5d7fc1ca83ff63a13f96771cfca960c0a"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_special_music_mandelsoft/awesome.ogg",
+          "role": "source",
+          "bytes": 1606302,
+          "sha256": "83894f384682d89711fd23908776e761a03a7cb014c43018635ae1b931520738"
+        }
+      ]
+    },
+    {
+      "id": "classic.beasti",
+      "catalogueTitle": "Shadow of the Beast",
+      "groupId": "mandelsoft-special",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_special_music_mandelsoft/beasti.m4a",
+          "role": "playback",
+          "bytes": 21142346,
+          "sha256": "3461a5d1325fab5147bd9cfc71ef2384d39cd0c2692db4ff6c515442831a2333"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_special_music_mandelsoft/beasti.ogg",
+          "role": "source",
+          "bytes": 2557422,
+          "sha256": "04c95dd0fcd98eb8dcc5b58ccfcc409e09713632333a0b116d7db431030b9ac5"
+        }
+      ]
+    },
+    {
+      "id": "classic.beastii",
+      "catalogueTitle": "Shadow of the Beast II",
+      "groupId": "mandelsoft-special",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_special_music_mandelsoft/beastii.m4a",
+          "role": "playback",
+          "bytes": 16935053,
+          "sha256": "7476af45c2a08e6a5898ec85939876a9b23d837ee298faea203d8b1f25c542bf"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_special_music_mandelsoft/beastii.ogg",
+          "role": "source",
+          "bytes": 2109465,
+          "sha256": "93883dcde2d4ef0f7c7d3b7a056f4dae581ec43f809c8933f21370fd94d89af2"
+        }
+      ]
+    },
+    {
+      "id": "classic.menace",
+      "catalogueTitle": "Menace",
+      "groupId": "mandelsoft-special",
+      "status": "conditional",
+      "distributionApproved": false,
+      "compositionClearance": "pending",
+      "arrangementClearance": "see-group-rights",
+      "recordingClearance": "see-group-rights",
+      "sourceByteMatch": "not-verified-against-creator-download",
+      "files": [
+        {
+          "path": "Sources/Music/Remixes/orig_special_music_mandelsoft/menace.m4a",
+          "role": "playback",
+          "bytes": 21154463,
+          "sha256": "9ba7ecec5ac805bc150df695f3f5f9365ecf5b0775f377e1b05630c4a5a95715"
+        },
+        {
+          "path": "Sources/Music/Remixes/orig_special_music_mandelsoft/menace.ogg",
+          "role": "source",
+          "bytes": 2365619,
+          "sha256": "842b825f45f2f1300e3972133e51727384d6a298fdc0ee700e89728821033e80"
+        }
+      ]
+    }
+  ]
+}

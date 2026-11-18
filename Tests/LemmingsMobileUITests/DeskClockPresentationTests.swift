@@ -259,24 +259,18 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
     @Test func settingsListsDeskClockOnlyInTheMenu() {
         let id = "settingsGroup." + MobileSettingsGroup.deskClock.rawValue
         #expect(MobileSettingsArt.groups().rows.contains { $0.id == id })
+        #expect(!MobileSettingsArt.groups(deskClockAvailable: false).rows.contains { $0.id == id })
         #expect(!MobileSettingsArt.groups(inGame: true).rows.contains { $0.id == id })
         #expect(!MobileSettingsArt.groups(television: true).rows.contains { $0.id == id })
     }
 
-    @Test func redNightVisionSettingHasAVisibleToggleAndNightBoundary() {
-        var settings = MobileSettings()
-        let key = "setting.deskClockRedNight"
-        let off = MobileSettingsArt.page(.deskClock, settings: settings).rows.first { $0.id == key }
-        #expect(off?.toggleValue == false)
-        settings.deskClock.redNightVision = true
-        let on = MobileSettingsArt.page(.deskClock, settings: settings).rows.first { $0.id == key }
-        #expect(on?.toggleValue == true)
-        let view = MobileDeskClockView(settings: settings)
-        let calendar = Calendar.current
-        let night = calendar.date(from: DateComponents(year: 2026, month: 10, day: 23, hour: 23))!
-        let day = calendar.date(from: DateComponents(year: 2026, month: 10, day: 23, hour: 12))!
-        #expect(view.isRedNightVisionActive(at: night))
-        #expect(!view.isRedNightVisionActive(at: day))
+    @Test func hotSeatGhostSettingUsesStoredVisibility() {
+        for visible in [false, true] {
+            let page = MobileSettingsArt.page(.gameplay, settings: .init(), ghostsVisible: visible)
+            let toggle = page.rows.first { $0.id == "setting.hotSeatGhosts" }
+            #expect(toggle?.selected == visible)
+            #expect(toggle?.toggleValue == visible)
+        }
     }
 
     @Test func accessibilityLabelReadsTimeAndEvent() {

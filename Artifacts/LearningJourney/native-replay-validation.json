@@ -2760,6 +2760,29 @@
     }
   },
   {
+    "detail": "48/48 saved at tick 2508; exact final state verified",
+    "firstQuotaTick": 2360,
+    "identity": {
+      "engine": "classic",
+      "levelID": "20:Crazy:1:0:1",
+      "packID": "ohNoMoreLemmings-DLVEL-100"
+    },
+    "passed": true,
+    "replayRevision": "b027b13d324af72e91045558dbb6e60ee55b35149b19dc7c7e8f1db140dd5deb",
+    "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25",
+    "title": "Quote: \"That`s a good level\"",
+    "toolsRemainingAtQuota": {
+      "basher": 0,
+      "blocker": 3,
+      "bomber": 0,
+      "builder": 0,
+      "climber": 1,
+      "digger": 4,
+      "floater": 1,
+      "miner": 0
+    }
+  },
+  {
     "detail": "50/50 saved at tick 969; exact final state verified",
     "firstQuotaTick": 969,
     "identity": {

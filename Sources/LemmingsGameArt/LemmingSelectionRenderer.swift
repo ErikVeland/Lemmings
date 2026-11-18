@@ -8,6 +8,11 @@ public struct LemmingSelectionEffect {
         self.sprite = sprite; self.rect = rect; self.clipRect = clipRect
         self.mirrored = mirrored; self.bloom = bloom; self.time = time; self.direction = direction; self.directionTime = directionTime
     }
+    public init(sprite: CGImage, rect: CGRect, clipRect: CGRect, mirrored: Bool = false,
+                facingLeft: Bool?, bloom: Bool = true, time: TimeInterval? = nil) {
+        self.init(sprite: sprite, rect: rect, clipRect: clipRect, mirrored: mirrored, bloom: bloom,
+                  time: time, direction: facingLeft.map { $0 ? -1 : 1 } ?? 0, directionTime: time)
+    }
     public var sprite: CGImage
     public var rect: CGRect
     public var clipRect: CGRect

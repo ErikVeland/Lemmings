@@ -1,5 +1,6 @@
 import Foundation
 import NxlvKit
+import LemmingsAppCore
 
 /// Optional soundtrack libraries and the rhythm loops that ride beside recordings.
 public enum MusicLibrary {
@@ -10,7 +11,7 @@ public enum MusicLibrary {
             .appendingPathComponent("Ultimate Lemmings/MusicLibraries", isDirectory: true)
     }
 
-    public static func catalogue(at musicRoot: URL? = Bundle.main.resourceURL?.appendingPathComponent("Music")) -> MusicLibraryCatalogue? {
+    public static func catalogue(at musicRoot: URL? = GameResources.resourceURL?.appendingPathComponent("Music")) -> MusicLibraryCatalogue? {
         guard let url = musicRoot?.appendingPathComponent("libraries.json"), let data = try? Data(contentsOf: url) else { return nil }
         return try? MusicLibraryCatalogue(data: data)
     }
@@ -25,7 +26,7 @@ public enum MusicLibrary {
 
     public static func hash(_ url: URL) throws -> String { try MusicLibraryStore.hash(url) }
 
-    public static func rhythmURL(for source: URL, musicRoot: URL? = Bundle.main.resourceURL?.appendingPathComponent("Music")) -> URL? {
+    public static func rhythmURL(for source: URL, musicRoot: URL? = GameResources.resourceURL?.appendingPathComponent("Music")) -> URL? {
         for root in [musicRoot].compactMap({ $0 }) + installedRoots() {
             let prefix = root.standardizedFileURL.path + "/"
             guard source.standardizedFileURL.path.hasPrefix(prefix),

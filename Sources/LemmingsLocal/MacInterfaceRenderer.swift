@@ -5,21 +5,104 @@ import NxlvKit
 
 /// Text roles use the shipped glyphs. Size follows purpose, never word length.
 @MainActor enum GameTypography {
+  private static var fontRevision: String?
+  private static var loadedLixFont: LixInterfaceText?
+  private static var lixFont: LixInterfaceText? {
+    let revision = GameResources.revision
+    if fontRevision != revision {
+      fontRevision = revision
+      loadedLixFont = GameResources.directory("Fonts/Lix").flatMap { try? LixInterfaceText(directory: $0) }
+      interfaceLines.removeAllObjects()
+    }
+    return loadedLixFont
+  }
+  private static let interfaceLines = NSCache<NSString, NSImage>()
+
   enum Role {
     case title, heading, body
     var face: ClassicMacUserInterface.Face { self == .title ? .large : .small }
     var palette: MacInterfaceRenderer.Palette { self == .body ? .blue : .green }
   }
 
+  /**
+   * Uses source lettering for compact controls, with native 2× glyphs at half logical size when needed.
+   */
+  static func drawInterfaceText(_ value: String, in rect: CGRect, alignment: NSTextAlignment = .center,
+    maxScale: CGFloat = 3, palette: MacInterfaceRenderer.Palette = .blue,
+    highlighted: Character? = nil, preservesCase: Bool = false, color: NSColor? = nil) -> Bool {
+    guard rect.width > 0, rect.height > 0 else { return true }
+    let source = value.replacingOccurrences(of: "×", with: "X")
+      .replacingOccurrences(of: "∞", with: "*").replacingOccurrences(of: "💀", with: "X")
+    let text = preservesCase ? source : MacInterfaceRenderer.menuText(source)
+    if text.isEmpty { return true }
+    if let renderer = GameMenuArtwork.renderer(), let font = renderer.font(.small), font.covers(text) {
+      let natural = max(1, renderer.width(of: text, face: .small, scale: 1))
+      let fit = min(rect.width / natural, rect.height / CGFloat(font.cellHeight))
+      let scale = fit >= 1 ? min(max(1, maxScale), floor(fit)) : 0.5
+      let capacity = max(1, Int(rect.width / (CGFloat(font.cellWidth) * scale)))
+      let line = text.count <= capacity ? text : String(text.prefix(capacity))
+      let width = renderer.width(of: line, face: .small, scale: 1) * scale
+      let x = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - width : rect.midX - width / 2
+      let y = rect.midY - CGFloat(font.cellHeight) * scale / 2
+      NSGraphicsContext.saveGraphicsState()
+      defer { NSGraphicsContext.restoreGraphicsState() }
+      guard let context = NSGraphicsContext.current?.cgContext else { return true }
+      context.translateBy(x: x.rounded(), y: y.rounded())
+      context.scaleBy(x: scale, y: scale)
+      if let color { context.beginTransparencyLayer(auxiliaryInfo: nil); context.setFillColor(color.cgColor) }
+      renderer.draw(line, face: .small, at: .zero, scale: 1, palette: palette)
+      if let highlighted, let index = line.firstIndex(of: highlighted) {
+        let offset = CGFloat(line.distance(from: line.startIndex, to: index) * font.cellWidth)
+        renderer.draw(String(highlighted), face: .small, at: CGPoint(x: offset, y: 0), scale: 1, palette: .green)
+      }
+      if let color {
+        context.setBlendMode(.sourceIn)
+        context.setFillColor(color.cgColor)
+        context.fill(CGRect(x: 0, y: 0, width: width / scale, height: CGFloat(font.cellHeight)))
+        context.endTransparencyLayer()
+      }
+      return true
+    }
+    guard let lixFont else { return false }
+    let tint = (color ?? (palette == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)
+      : NSColor(calibratedRed: 0.2, green: 0.5, blue: 1, alpha: 1))).usingColorSpace(.deviceRGB) ?? .white
+    let rgb = [tint.redComponent, tint.greenComponent, tint.blueComponent].map { UInt8(max(0, min(255, ($0 * 255).rounded()))) }
+    let desired = min(28, max(8, Int(min(rect.height - 3, 12 * maxScale))))
+    for size in stride(from: desired, through: 8, by: -1) {
+      let key = "\(size):\(rgb):\(text)" as NSString
+      let image: NSImage
+      if let cached = interfaceLines.object(forKey: key) { image = cached }
+      else {
+        guard let line = lixFont.frame(text, pixelSize: size, red: rgb[0], green: rgb[1], blue: rgb[2]),
+              let provider = CGDataProvider(data: line.rgba as CFData),
+              let cg = CGImage(width: line.width, height: line.height, bitsPerComponent: 8,
+                bitsPerPixel: 32, bytesPerRow: line.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+                decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return false }
+        image = NSImage(cgImage: cg, size: CGSize(width: line.width, height: line.height))
+        interfaceLines.totalCostLimit = 4 * 1024 * 1024
+        interfaceLines.setObject(image, forKey: key, cost: line.rgba.count)
+      }
+      guard image.size.width <= rect.width && image.size.height <= rect.height || size == 8 else { continue }
+      let x = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - image.size.width : rect.midX - image.size.width / 2
+      NSGraphicsContext.saveGraphicsState()
+      rect.clip()
+      image.draw(in: CGRect(x: x.rounded(), y: (rect.midY - image.size.height / 2).rounded(),
+        width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
+        fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
+      NSGraphicsContext.restoreGraphicsState()
+      return true
+    }
+    return false
+  }
+
   static func annotation(_ text: String, at point: CGPoint, palette: MacInterfaceRenderer.Palette = .green) {
     let text = MacInterfaceRenderer.menuText(text)
     if let renderer = GameMenuArtwork.renderer(), renderer.font(.small)?.covers(text) == true {
       renderer.draw(text, face: .small, at: CGPoint(x: point.x.rounded(), y: point.y.rounded()), scale: 1, palette: palette)
-    } else {
-      let bounds = GamePixelTypography.verticalBounds(of: text)
-      let horizontal = GamePixelTypography.horizontalBounds(of: text)
-      GamePixelText.draw(text, in: CGRect(x: point.x + CGFloat(horizontal.left), y: point.y + CGFloat(bounds.top),
-        width: CGFloat(GamePixelTypography.width(of: text)), height: CGFloat(bounds.bottom - bounds.top)), maxScale: 1, palette: palette)
+    } else if !drawInterfaceText(text, in: CGRect(x: point.x, y: point.y,
+      width: CGFloat(text.count * 8), height: 18), alignment: .left, maxScale: 1, palette: palette) {
+      GamePixelText.draw(text, in: CGRect(x: point.x, y: point.y, width: CGFloat(text.count * 6), height: 7), maxScale: 1, palette: palette)
     }
   }
 }

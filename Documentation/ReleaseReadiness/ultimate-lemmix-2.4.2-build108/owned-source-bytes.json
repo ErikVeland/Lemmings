@@ -1,0 +1,19 @@
+{
+  "sourceFilesVerified": 17740,
+  "ownedFiles": 17742,
+  "omittedFiles": 32,
+  "recoveredCursorFiles": [
+    "Cursors/original-cross.png",
+    "Cursors/original-reticule.png"
+  ],
+  "bytes": 2265742871,
+  "contentID": "04e7481bfaaa2ba6448543e824d2e804acfdf2e25531a043a1ddfb0c863229b3",
+  "seconds": 6.587784875,
+  "bundleURL": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/asset-parity-import/real/Library/Versions/04e7481bfaaa2ba6448543e824d2e804acfdf2e25531a043a1ddfb0c863229b3/PreservationResources.bundle",
+  "baselineContentID": "145686716edb83924d1e56dbeaa2b37b3311ae69aecc10546a5f3eb1b1bbc8ac",
+  "baselineOwnedManifestMatches": true,
+  "baselineBundleURL": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/asset-parity-import/real/Library/Versions/145686716edb83924d1e56dbeaa2b37b3311ae69aecc10546a5f3eb1b1bbc8ac/PreservationResources.bundle",
+  "appCoreSourceFreezeSHA256": "c734c2bfeb1e4cbcd5fa173ed52b5a64278370124335e22a0d4803ebd8166bf7",
+  "importerSHA256": "e52e9fe70e3a2f4443db5cd367a4db3722cc27908719a42db69c6170d18f58a2",
+  "engineLibrarySHA256": "5cb45fd9e0cdb35c86c9aa154263761688e5500c92fb5c8592fff2996e58a418"
+}

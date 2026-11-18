@@ -110,9 +110,13 @@ public struct MobileSpriteHighlight: Sendable {
     public let rect: MobileRect
     public let cacheKey: String
     public let time: Double?
-    public let direction: Int
-    public init(frame: MobilePixelFrame, rect: MobileRect, cacheKey: String, time: Double?, direction: Int = 0) {
-        self.frame = frame; self.rect = rect; self.cacheKey = cacheKey; self.time = time; self.direction = direction
+    public let facingLeft: Bool
+    public var direction: Int { facingLeft ? -1 : 1 }
+    public init(frame: MobilePixelFrame, rect: MobileRect, cacheKey: String, time: Double?, direction: Int) {
+        self.init(frame: frame, rect: rect, cacheKey: cacheKey, time: time, facingLeft: direction < 0)
+    }
+    public init(frame: MobilePixelFrame, rect: MobileRect, cacheKey: String, time: Double?, facingLeft: Bool = false) {
+        self.frame = frame; self.rect = rect; self.cacheKey = cacheKey; self.time = time; self.facingLeft = facingLeft
     }
 }
 

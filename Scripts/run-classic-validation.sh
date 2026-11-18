@@ -25,7 +25,7 @@ swiftc -O -swift-version 6 -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" -o "$build_dir/Audit" \
   "$project_dir/Tools/ClassicValidation/main.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
-  "$project_dir/Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameResources.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift"
 audit_status=0
 "$build_dir/Audit" "$resources" "$output" "$fixtures" || audit_status=$?

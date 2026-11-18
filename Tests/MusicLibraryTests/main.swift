@@ -17,29 +17,48 @@ try FileManager.default.createDirectory(at: temporary, withIntermediateDirectori
 Task {
     do {
         defer { try? FileManager.default.removeItem(at: temporary) }
-        let installer = MusicLibraryInstaller()
-        let installed = temporary.appendingPathComponent("Installed")
-        try await installer.install(pack, archive: archive, to: installed)
-        try check(MusicLibrary.isInstalled(pack, in: installed), "Verified pack did not become installed")
-        try check(MusicLibrary.installedRoots(in: installed).count == 1, "Installed music was not discoverable")
-        for file in pack.files {
-            let hash = try MusicLibrary.hash(installed.appendingPathComponent(pack.id).appendingPathComponent(file.path))
-            try check(hash == file.sha256, "Installed file differs from its manifest")
+        let metadataOnly = CommandLine.arguments.contains("--metadata-only")
+        if metadataOnly {
+            let bundle = temporary.appendingPathComponent("OwnedMusic.bundle")
+            let music = bundle.appendingPathComponent("Contents/Resources/Music")
+            try FileManager.default.createDirectory(at: music, withIntermediateDirectories: true)
+            try data.write(to: music.appendingPathComponent("libraries.json"))
+            let info: [String: Any] = ["CFBundleIdentifier": "academy.glasscode.music-overlay-tests",
+                "CFBundleName": "Owned Music", "CFBundleVersion": "1", "CFBundlePackageType": "BNDL"]
+            try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0)
+                .write(to: bundle.appendingPathComponent("Contents/Info.plist"))
+            try await MainActor.run { try GameResources.activate(bundleURL: bundle) }
+            try check(MusicLibrary.catalogue()?.packs.count == 18, "The default music catalogue ignored the active resource bundle")
+            try await MainActor.run { try GameResources.activate(bundleURL: nil) }
+            try check(MusicLibrary.catalogue(at: music)?.packs.count == 18, "An explicit music root changed after restoring bundled resources")
+            print("PASS active resource-bundle catalogue and explicit-root restoration")
         }
-        try await installer.install(pack, archive: archive, to: installed)
-        try check(MusicLibrary.isInstalled(pack, in: installed), "Atomic replacement lost the installed pack")
-        let corrupt = temporary.appendingPathComponent("corrupt.zip")
-        var corruptData = try Data(contentsOf: archive); corruptData[0] ^= 1
-        try corruptData.write(to: corrupt)
-        var rejected = false
-        do { try await installer.install(pack, archive: corrupt, to: installed) } catch { rejected = true }
-        try check(rejected && MusicLibrary.isInstalled(pack, in: installed), "A corrupt update damaged the installed library")
+        if !metadataOnly {
+            let installer = MusicLibraryInstaller()
+            let installed = temporary.appendingPathComponent("Installed")
+            try await installer.install(pack, archive: archive, to: installed)
+            try check(MusicLibrary.isInstalled(pack, in: installed), "Verified pack did not become installed")
+            try check(MusicLibrary.installedRoots(in: installed).count == 1, "Installed music was not discoverable")
+            for file in pack.files {
+                let hash = try MusicLibrary.hash(installed.appendingPathComponent(pack.id).appendingPathComponent(file.path))
+                try check(hash == file.sha256, "Installed file differs from its manifest")
+            }
+            try await installer.install(pack, archive: archive, to: installed)
+            try check(MusicLibrary.isInstalled(pack, in: installed), "Atomic replacement lost the installed pack")
+            let corrupt = temporary.appendingPathComponent("corrupt.zip")
+            var corruptData = try Data(contentsOf: archive); corruptData[0] ^= 1
+            try corruptData.write(to: corrupt)
+            var rejected = false
+            do { try await installer.install(pack, archive: corrupt, to: installed) } catch { rejected = true }
+            try check(rejected && MusicLibrary.isInstalled(pack, in: installed), "A corrupt update damaged the installed library")
+            print("PASS complete index, verified installation, source hashes, atomic replacement and corrupt-update preservation")
+        }
         var payload = try JSONSerialization.jsonObject(with: data) as! [String: Any]
         var packs = payload["packs"] as! [[String: Any]]
         var files = packs[0]["files"] as! [[String: Any]]
         for bad in ["../outside", "Music/../../outside", "Music/a/../b", "Music//b", "/absolute", "Music/a\\b"] {
             files[0]["path"] = bad; packs[0]["files"] = files; payload["packs"] = packs
-            rejected = false
+            var rejected = false
             do { _ = try MusicLibraryCatalogue(data: JSONSerialization.data(withJSONObject: payload)) } catch { rejected = true }
             try check(rejected, "Unsafe library path was accepted: \(bad)")
         }
@@ -61,8 +80,7 @@ Task {
         try check(MusicLibrary.rhythmURL(for: track, musicRoot: music) == loop, "A re-encoded file lost its rhythm loop")
         try rhythm(playback: String(repeating: "b", count: 64))
         try check(MusicLibrary.rhythmURL(for: track, musicRoot: music) == nil, "A changed file kept its rhythm loop")
-        print("PASS complete index, verified installation, source hashes, atomic replacement and corrupt-update preservation")
-        print("PASS unsafe path rejection and installed-library discovery")
+        print("PASS unsafe library path rejection")
         print("PASS rhythm loops follow re-encoded playback hashes")
         exit(0)
     } catch {

@@ -1,7 +1,7 @@
 # Modern Lemmings release plan
 
-See the [roadmap through 3.0](Roadmap.md) for historical milestones and the
-proposed product sequence. This plan retains the detailed platform and release gates.
+Engineering snapshot: 5 October 2026. App Store content decision: 12 November
+2026. This plan does not announce an official release.
 
 The [release schedule](ReleaseSchedule.md), adopted 26 October 2026, supersedes
 older delivery orders and routine Mac test requirements: Mac first, then iOS,
@@ -64,6 +64,93 @@ milestone retains these requirements:
 
 The source includes remapping, language preview, profile switching, checkpoint recovery and privacy consent. Remaining acceptance includes human language review, physical input, accessibility, service failures, migration and device journeys. Implementation alone does not close those checks.
 
+## App Store content distribution
+
+Decision recorded 12 November 2026. The release objective is both lawful
+distribution and zero configuration. Existing reference archives, including
+Archive.org downloads, remain feasible candidates for assessment. This decision
+does not establish legal clearance or App Store acceptance.
+
+Zero configuration means a fresh install reaches advertised gameplay without
+manual file selection, folder selection, URL entry, browser visits, extra
+accounts or extraction. One Download action that shows the size and asks for
+consent is acceptable. A manual-import workflow can remain available, but cannot
+satisfy this release objective.
+
+### Candidate routes
+
+| Route | Player journey | Required evidence |
+| --- | --- | --- |
+| Bundled original content | Install, then play. | A legal basis covering the store bundle and all included material. |
+| Bundled open replacement content | Install, then play. | Verified asset terms, independent branding and cleared levels. See the [Lix preparation](AlternativeAssets.md). |
+| Direct original-archive download | Install, choose Download, then play. The app fetches and imports the original archive. | A legal basis covering the exact source, retrieval and intended use, plus applicable source-service terms. |
+| Original demo or freeware download | Install, choose Download, then play the cleared demo or freeware scope. | Original release terms or another reviewed legal basis covering the intended use. Demo or freeware labels alone do not establish this. |
+
+The bundled open-content route now has a separate local
+[Ultimate Lemmix candidate](UltimateLemmix.md), with character selection,
+three original starter levels and an asset-free BYO helper. Its build and
+resource evidence do not establish store acceptance. Original-archive download
+routes remain candidates pending review.
+
+A review can establish an
+applicable licence, rights-holder permission, public-domain status or another
+specific legal basis. Missing permission evidence is an unresolved question,
+not a finding that an archive is unlawful. Public availability, prior research
+use and player consent do not establish rights by themselves.
+
+The locally retained sources identify the Archive.org items
+[`XmasLemmings`](https://archive.org/details/XmasLemmings) and
+[`Xmas_Lemmings`](https://archive.org/details/Xmas_Lemmings). These are source
+locators, not clearance records. Exact Archive.org acquisition links for the
+full Classic, Lemmings 2 and Lemmings 3 reference inputs remain unverified.
+
+### Release conditions
+
+1. Record each proposed pack's exact source item, file, version, download size,
+   archive hash, installed-content hashes and compatible engine. Keep licence
+   evidence and the legal review outcome with that record.
+2. Review the intended retrieval, local copying, extraction, conversion and
+   content use. Record any platform, territory, monetisation or demo limits.
+   Check compositions, recordings and community contributions separately where
+   required. Do not infer full-campaign rights from a demo release.
+3. Clear the app name, icon, store media and bundled launch interface separately.
+   Optional content downloads do not resolve rights in those materials.
+4. Reuse typed content boundaries and staged installation with validation and
+   rollback. Keep native engine updates in App Store builds. Original archive
+   executables remain inert and are not executed by the native interpreter.
+5. Reject changed or corrupt content. Do not silently switch to an unreviewed
+   mirror. Verify cancellation, interruption, retry, low storage and host
+   failure without losing installed content or saved progress.
+6. Verify the complete fresh-install journey on each advertised platform and
+   engine. State any first-download network requirement. Installed content must
+   remain playable offline. An offline first launch must retain a clear retry
+   action without requiring manual configuration.
+7. Keep one primary next action, accessible download states and concise failure
+   actions. Reuse the shipped pixel controls. Verify the rendered states and
+   input targets before accepting the flow.
+8. Give App Review access through the normal player journey to every advertised
+   content route. Record rights review, technical verification and store
+   acceptance separately. Each must pass before release.
+
+Classic, Lemmings 2 and Lemmings 3 share the installation requirements when
+advertised. Their engine and platform limits still apply. Shared mobile
+contracts do not establish player-facing sequel support. The
+[2.0 mobile gates](2.0Roadmap.md#external-acceptance-gates) remain required.
+
+A Mac App Store edition needs a separate configuration with sandboxing and
+App Store updates instead of Sparkle. Existing Developer ID notarisation does
+not establish store acceptance. Explain the native interpreter and its content
+download routes in the review notes.
+
+These remain release conditions. The local store candidate implements bundled
+open content and player-owned folder import. It does not download original game
+data. No clearance decision, physical-device acceptance or store submission is
+claimed by this plan update.
+Use [Apple's App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
+sections 2.4.5, 4.2.3(ii), 4.7 and 5.2, and the
+[Internet Archive rights guidance](https://archivesupport.zendesk.com/hc/en-us/articles/360014759692-Rights)
+as review inputs. Archive.org does not guarantee an item's copyright status.
+
 ## Platform plan
 
 | Platform | Starting point | Next demonstrable result |
@@ -110,4 +197,8 @@ from future builds and use [release scope](ReleaseScope.md) for current claims.
 
 Prepare the [evaluation brief](PartnerEvaluation.md) with an approved demonstration build. The pitch is preservation plus usability, backed by repeatable evidence. A rights holder should be able to inspect the feature set, original behaviour, source and asset provenance, platform plan and unresolved work without relying on marketing claims.
 
-Agree the official product scope and asset distribution with the rights holder before a public release. Keep the original asset inventory and third-party notices separate from claims about the port's own code. No outreach, store submission or public publishing is part of this audit.
+Establish lawful product scope and asset distribution before a public release.
+Record the basis under the [content-distribution conditions](#release-conditions).
+Keep the original asset inventory and third-party notices separate from claims
+about the port's own code. This plan update does not include outreach, store
+submission or public publishing.

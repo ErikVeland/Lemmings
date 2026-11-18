@@ -9,6 +9,7 @@ swiftc -swift-version 6 -warnings-as-errors -framework AppKit \
   -module-cache-path "$build_dir/ModuleCache" \
   -o "$build_dir/tests" \
   "$project_dir/Sources/LemmingsLocal/DialogKeyboardNavigation.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameResources.swift" \
   "$project_dir/Sources/LemmingsLocal/GameCursor.swift" \
   "$project_dir/Tests/DialogCursorTests/main.swift"
 python3 "$project_dir/Tools/UITestRunner/run.py" "$build_dir/tests"

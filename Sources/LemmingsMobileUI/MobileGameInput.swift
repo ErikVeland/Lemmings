@@ -229,10 +229,15 @@ extension MobileGameViewController {
             viewport.resize(viewport.viewSize)
             playfieldView.gameViewport = viewport
         case .focusUnassigned(let direction):
+#if os(tvOS)
+            guard let candidate = TVTargetLock.nextEligible(
+                session.targetCandidates(for: selectedControl), after: highlightedTarget?.id, direction: direction) else { return }
+#else
             let candidates = session.targetCandidates(for: selectedControl).filter { $0.assignment == .eligible }.sorted { $0.id < $1.id }
             guard !candidates.isEmpty else { return }
             let current = candidates.firstIndex { $0.id == highlightedTarget?.id } ?? (direction > 0 ? -1 : 0)
             let candidate = candidates[(current + direction + candidates.count) % candidates.count]
+#endif
             let point = playfieldView.gameViewport.viewPoint(fromLevel: candidate.point)
             aim(at: point)
             #if os(tvOS)

@@ -11,14 +11,13 @@ swiftc -swift-version 6 -warnings-as-errors -target "$(uname -m)-apple-macos12.3
   -o "$build_dir/libNxlvKit.dylib" "$project_dir"/Sources/NxlvKit/*.swift
 
 # Keep signal checks beside the private audio graph, without exposing test APIs.
-cat "$project_dir/Sources/LemmingsAudio/BufferedAudioSource.swift" \
-  "$project_dir/Sources/LemmingsAudio/AdaptiveDJPlayer.swift" \
-  "$project_dir/Sources/LemmingsAudio/MusicLibrary.swift" \
-  "$project_dir/Sources/LemmingsAudio/MusicRewindBuffer.swift" \
-  "$project_dir/Sources/LemmingsAudio/MusicFileDeck.swift" \
-  "$project_dir/Sources/LemmingsAudio/ModuleMusicPlayer.swift" \
-  "$project_dir/Sources/LemmingsAudio/SoundtrackPlayer.swift" \
-  "$project_dir/Sources/LemmingsAudio/VinylRamp.swift" \
+cat "$project_dir/Sources/LemmingsLocal/GameResources.swift" \
+  "$project_dir/Sources/LemmingsLocal/AdaptiveDJPlayer.swift" \
+  "$project_dir/Sources/LemmingsLocal/MusicLibrary.swift" \
+  "$project_dir/Sources/LemmingsLocal/MusicFileDeck.swift" \
+  "$project_dir/Sources/LemmingsLocal/MusicPlayer.swift" \
+  "$project_dir/Sources/LemmingsLocal/SoundtrackPlayer.swift" \
+  "$project_dir/Sources/LemmingsLocal/VinylRamp.swift" \
   "$project_dir/Tests/AdaptiveDJPlaybackTests/main.swift" > "$build_dir/main.swift"
 # The shared audio files join this single module here.
 sed -i '' '/^import LemmingsAudio$/d' ""$build_dir/main.swift""

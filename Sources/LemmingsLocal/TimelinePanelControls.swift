@@ -1,19 +1,17 @@
-#if os(macOS)
 import AppKit
 import LemmingsGameArt
-#if canImport(NxlvKit)
 import NxlvKit
-#endif
 
 /// The same timeline buttons and hit regions serve all three game panels.
 @MainActor final class TimelinePanelControls {
     enum Action: Int, CaseIterable {
-        case rewind, backward, forward
+        case rewind, backward, forward, hints
         var label: String {
             switch self {
-            case .rewind: return L10n.text("Rewind two seconds")
-            case .backward: return L10n.text("Step backward one tick")
-            case .forward: return L10n.text("Step forward one tick")
+            case .rewind: return "Rewind two seconds"
+            case .backward: return "Step backward one tick"
+            case .forward: return "Step forward one tick"
+            case .hints: return "Level hints (H)"
             }
         }
         var glyph: PanelGlyph? {
@@ -21,11 +19,11 @@ import NxlvKit
             case .rewind: return .rewind
             case .backward: return .stepBackward
             case .forward: return .stepForward
+            case .hints: return nil
             }
         }
     }
     var frame = CGRect.zero
-    /// Optional enclosing deck contour; hit regions remain within `frame`.
     var groupFrame: CGRect?
     var monochrome = false
     var rock: ((CGSize) -> NSImage?)?
@@ -34,40 +32,41 @@ import NxlvKit
     private let accessibility = GameAccessibleElements()
 
     func rect(for action: Action) -> CGRect {
-        let unit = frame.width / CGFloat(Action.allCases.count)
+        let unit = frame.width / 4.5
         return CGRect(x: frame.minX + CGFloat(action.rawValue) * unit, y: frame.minY,
-                      width: unit, height: frame.height)
+                      width: (action == .hints ? unit * 1.5 : unit) - 2, height: frame.height)
     }
     func draw() {
         NSColor.black.setFill(); frame.fill()
         for action in Action.allCases {
             let box = rect(for: action)
-            let face: GamePlayButtonArt.Face
-            switch action {
-            case .rewind: face = .rewind
-            case .backward: face = .stepBackward
-            case .forward: face = .stepForward
+            if LixInterfaceRenderer.shared.isEnabled {
+                let control: LixInterfaceArtwork.Control
+                switch action {
+                case .rewind: control = .rewind
+                case .backward: control = .stepBackward
+                case .forward: control = .stepForward
+                case .hints: control = .help
+                }
+                LixInterfaceRenderer.shared.drawButton(box, enabled: enabled(action))
+                LixInterfaceRenderer.shared.drawControl(control, in: box.insetBy(dx: 2, dy: 2), enabled: enabled(action))
+                continue
             }
             if let context = NSGraphicsContext.current?.cgContext {
+                let face: GamePlayButtonArt.Face = action == .rewind ? .rewind : action == .backward ? .stepBackward : .stepForward
                 GameControlGroupArt.draw(in: context, frame: box, group: groupFrame ?? frame,
                     selected: false, face: face, monochrome: monochrome)
             }
-            let alpha: CGFloat = monochrome ? 1 : enabled(action) ? 1 : 0.3
-            let size = box.insetBy(dx: 10, dy: 8).size
-            if let image = monochrome ? action.glyph?.monochromeImage(fitting: size) : action.glyph?.image(fitting: size) {
+            let alpha: CGFloat = enabled(action) ? 1 : 0.3
+            if let image = (monochrome ? action.glyph?.monochromeImage(fitting: box.insetBy(dx: 4, dy: 4).size) : action.glyph?.image(fitting: box.insetBy(dx: 4, dy: 4).size)) {
                 image.draw(in: CGRect(x: box.midX - image.size.width / 2, y: box.midY - image.size.height / 2,
                     width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
                     fraction: alpha, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-            }
-            if monochrome && !enabled(action), let context = NSGraphicsContext.current?.cgContext {
-                context.saveGState()
-                context.setFillColor(CGColor(gray: 0, alpha: 1))
-                for y in Int(box.minY + 4)..<max(Int(box.minY + 4), Int(box.maxY - 4)) {
-                    for x in stride(from: Int(box.minX + 4) + y % 2, to: Int(box.maxX - 4), by: 2) {
-                        context.fill(CGRect(x: x, y: y, width: 1, height: 1))
-                    }
-                }
-                context.restoreGState()
+            } else {
+                NSGraphicsContext.saveGraphicsState()
+                NSGraphicsContext.current?.cgContext.setAlpha(alpha)
+                GamePixelText.draw("HINT", in: box.insetBy(dx: 4, dy: 4), maxScale: 2)
+                NSGraphicsContext.restoreGraphicsState()
             }
         }
     }
@@ -91,4 +90,3 @@ import NxlvKit
         }
     }
 }
-#endif

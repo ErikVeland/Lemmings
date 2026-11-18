@@ -4,6 +4,8 @@ import LemmingsGameArt
 import NxlvKit
 import LemmingsMobileCore
 import UIKit
+import CoreImage
+import CoreImage.CIFilterBuiltins
 
 @MainActor final class MobilePlayfieldView: UIView, UIGestureRecognizerDelegate {
     #if os(tvOS)
@@ -114,6 +116,13 @@ import UIKit
     private let failureSurface = MobileBitmapSurface()
     private let bitmapClip = CALayer()
     private let bitmapLayer = CALayer()
+    private var artworkRevision = ""
+    #if os(tvOS)
+    private var filteredBitmapSource: CGImage?
+    private var filteredBitmapAmount: CGFloat = -1
+    private var filteredBitmap: CGImage?
+    private static let failureMoodContext = CIContext()
+    #endif
     private var layerBitmap: CGImage?
     private let overlay = MobilePlayfieldOverlay()
     private let failureMood = FailureMoodTransition()
@@ -185,6 +194,9 @@ import UIKit
             guard let self else { return }
             self.failureAmount = value
             self.tube?.failureAmount = value
+            #if os(tvOS)
+            self.layoutBitmap()
+            #endif
             self.setNeedsDisplay()
         }
         #if os(iOS)
@@ -441,6 +453,10 @@ import UIKit
     }
 
     func update(frame: MobilePixelFrame) throws {
+        if artworkRevision != MobileLixArtwork.revision {
+            artworkRevision = MobileLixArtwork.revision
+            sprites.removeAll()
+        }
         guard let image = MobileBitmapRenderer.image(frame) else { throw MobileSessionError.frameUnavailable }
         bitmap = image
         tubeSignature = nil
@@ -560,7 +576,12 @@ import UIKit
         failureLayer.isHidden = true
         failureSurface.release()
         if flat, let bitmap, bitmapUsesLayer, content.width > 0, content.height > 0 {
-            if layerBitmap !== bitmap { bitmapLayer.contents = bitmap; layerBitmap = bitmap }
+            #if os(tvOS)
+            let displayBitmap = failureMoodBitmap(bitmap, amount: failureAmount)
+            #else
+            let displayBitmap = bitmap
+            #endif
+            if layerBitmap !== displayBitmap { bitmapLayer.contents = displayBitmap; layerBitmap = displayBitmap }
             let scaleX = gameViewport.zoom * gameViewport.pixelAspect, scaleY = gameViewport.zoom
             bitmapClip.frame = CGRect(x: content.x, y: content.y, width: content.width, height: content.height)
             let scene = bitmapRect ?? MobileRect(x: 0, y: 0, width: gameViewport.levelSize.width, height: gameViewport.levelSize.height)
@@ -576,6 +597,32 @@ import UIKit
         overlay.isHidden = !showsOverlay
         if showsOverlay { overlay.setNeedsDisplay() }
     }
+
+    #if os(tvOS)
+    private func failureMoodBitmap(_ source: CGImage, amount: CGFloat) -> CGImage {
+        guard amount > 0 else {
+            filteredBitmapSource = nil
+            filteredBitmapAmount = -1
+            filteredBitmap = nil
+            return source
+        }
+        if filteredBitmapSource === source, filteredBitmapAmount == amount, let filteredBitmap {
+            return filteredBitmap
+        }
+        let input = CIImage(cgImage: source)
+        let filter = CIFilter.colorControls()
+        filter.inputImage = input
+        filter.saturation = FailureMoodArt.saturation(amount)
+        filter.brightness = 0
+        let output = filter.outputImage ?? input
+        let extent = input.extent
+        let result = Self.failureMoodContext.createCGImage(output, from: extent) ?? source
+        filteredBitmapSource = source
+        filteredBitmapAmount = amount
+        filteredBitmap = result
+        return result
+    }
+    #endif
 
     private var hasOverlayContent: Bool {
         targetMarker != nil || (displaySettings.lemmingSelectionStyle == .obvious && selectionPoint != nil) || selectionSprite != nil

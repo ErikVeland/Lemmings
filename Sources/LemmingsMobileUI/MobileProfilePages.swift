@@ -158,7 +158,7 @@ extension MobileLibraryViewController {
 
     func deleteActivePlayer() {
         guard canDeleteActivePlayer else { return }
-        if !confirmingDelete { confirmingDelete = true; canvas.focusedID = "playerDeleteCancel"; rebuild(); return }
+        if !confirmingDelete { confirmingDelete = true; canvas.focusedID = nil; rebuild(); return }
         deleteEditedPlayer()
     }
 

@@ -308,11 +308,12 @@ import LemmingsGameArt
   static func draw(_ text: String, in rect: CGRect, maxScale: CGFloat = 3,
                    highlighted: Character? = nil, palette: MacInterfaceRenderer.Palette = .blue,
                    preservesCase: Bool = false, color: NSColor? = nil,
-                   numberPalette: MacInterfaceRenderer.Palette? = nil) {
+                   numberPalette: MacInterfaceRenderer.Palette? = nil, alignment: NSTextAlignment = .center) {
     if let context = NSGraphicsContext.current?.cgContext,
        GameLemmingsTypography.draw(text, in: rect, height: min(rect.height, 7 * maxScale),
         interface: GameMenuArtwork.renderer()?.interface,
         palette: palette == .green ? .green : palette == .monochrome ? .monochrome : .blue,
+        alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
         color: color?.cgColor, highlighted: highlighted,
         numberPalette: numberPalette.map { $0 == .green ? .green : $0 == .monochrome ? .monochrome : .blue },
         preservesCase: preservesCase, context: context) { return }
@@ -323,7 +324,8 @@ import LemmingsGameArt
     let horizontal = GamePixelTypography.horizontalBounds(of: normalized)
     let width = max(1, horizontal.right - horizontal.left)
     let scale = max(1, min(maxScale, floor(min(rect.height / height, rect.width / CGFloat(width + 1)))))
-    let start = floor(rect.midX - CGFloat(width) * scale / 2) - CGFloat(horizontal.left) * scale
+    let origin = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - CGFloat(width) * scale : rect.midX - CGFloat(width) * scale / 2
+    let start = floor(origin) - CGFloat(horizontal.left) * scale
     let top = floor(rect.midY - height * scale / 2) - CGFloat(bounds.top) * scale
     let context = NSGraphicsContext.current?.cgContext
     context?.saveGState()

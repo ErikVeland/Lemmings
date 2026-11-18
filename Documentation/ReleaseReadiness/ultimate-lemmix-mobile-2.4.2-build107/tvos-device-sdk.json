@@ -1,0 +1,94 @@
+{
+  "architecture": "arm64",
+  "builds": [
+    {
+      "exitCode": 0,
+      "log": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-107-device.log",
+      "logSHA256": "9038c6462bb7c62e67925d6290d689d648d1f2f5f6a569823760c17c5923d02a",
+      "purpose": "full-current-source-device-sdk-build"
+    },
+    {
+      "exitCode": 0,
+      "log": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-107-final-device.log",
+      "logSHA256": "e975d5b8b4eac6b7d2ec59adc9b963d0967e8190c84931119797d97f0eaac687",
+      "purpose": "mobile-guide-r2-incremental-resource-refresh"
+    }
+  ],
+  "checkout": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer zsh Apps/UltimateLemmixSupport/build.sh tvos -configuration Release -destination 'generic/platform=tvOS' -derivedDataPath .build/ultimate-lemmix-tvos-107 CODE_SIGNING_ALLOWED=NO build",
+  "configuration": "Release",
+  "destination": "generic/platform=tvOS",
+  "engineSourceFingerprint": "9a246f97fd42930d53c273a4bb9c45800f0379fd7326f7c65518d484ebfeeea5",
+  "engineSourcesUnchangedFromBaseline": true,
+  "kind": "ultimate-lemmix-full-game-device-sdk-build",
+  "products": [
+    {
+      "binarySHA256": "ced3319f46adc049bdad539d6666a84fe14b855fd58ee22c25329c6bb3d9a632",
+      "binaryUnchangedByGuideRefresh": true,
+      "build": "107",
+      "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos",
+      "copiedResourceCount": 2300,
+      "displayName": "Ultimate Lemmix",
+      "embeddedProvisioningProfile": false,
+      "minimumOSVersion": "17.0",
+      "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-107/Build/Products/Release-appletvos/UltimateLemmixTVOS.app",
+      "platform": "appletvos",
+      "resourceReceiptSHA256": "c93dc73fe7975c9f903424cfaa16f639650a2648e110250ee53ca4bb84ddc030",
+      "scope": "app",
+      "sdk": "appletvos27.2",
+      "signed": false,
+      "version": "2.4.2"
+    },
+    {
+      "binarySHA256": "54804469f74d2c4b6760f098feec54b660232cadf81882dd3cd7898994aadfcf",
+      "build": "107",
+      "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos.TopShelf",
+      "displayName": "Ultimate Lemmix",
+      "embeddedProvisioningProfile": false,
+      "minimumOSVersion": "17.0",
+      "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-tvos-107/Build/Products/Release-appletvos/UltimateLemmixTVOS.app/PlugIns/TopShelf.appex",
+      "platform": "appletvos",
+      "scope": "top-shelf",
+      "sdk": "appletvos27.2",
+      "signed": false,
+      "version": "2.4.2"
+    }
+  ],
+  "recordedAtUTC": "2026-11-17T06:02:21.775660+00:00",
+  "resourceProfile": {
+    "fileCount": 2300,
+    "manifestSHA256": "87b13448571bb98269b4eee4b4efb34b2ae1311d56179af5548fe2d3d0601a29",
+    "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-mobile-clean-resources-107-r2",
+    "receiptMatchesProfile": true,
+    "trustedDataInventorySHA256": "dc07708a1b98d362e6c031112c988820ff69af549ece5672255c89b0d3f2e495",
+    "writtenByVerifiedResourceCopyPhase": true
+  },
+  "schemaVersion": 1,
+  "sourceBaseline": "b294d3b7c298f549aad5faa36f92ba9bf23b7529",
+  "sourceBranch": "codex/ultimate-lemmix-2.4.2",
+  "storeCompilationCondition": {
+    "actualSwiftCompilerInvocations": {
+      "LemmingsAppCore": true,
+      "LemmingsAudio": true,
+      "LemmingsGameArt": true,
+      "LemmingsMobileCore": true,
+      "LemmingsMobileUI": true,
+      "LemmingsTVCore": true,
+      "LemmingsTVUI": true,
+      "NxlvKit": true,
+      "TopShelf": true,
+      "UltimateLemmixTVOS": true
+    },
+    "name": "ULTIMATE_LEMMIX_STORE",
+    "packageGameArtVerified": true
+  },
+  "verificationLimits": {
+    "appStoreSubmission": "Not attempted.",
+    "codeSigning": "Disabled with CODE_SIGNING_ALLOWED=NO. No distribution profile or signed-device installation was attempted.",
+    "mac": "Existing Mac build107 app was not changed or relaunched.",
+    "rights": "Resource-profile checks do not establish redistribution rights. The requested project icon retains its documented rights-review gate.",
+    "runtime": "Not run on a physical device or simulator. Input, rendering, owned-asset import/relaunch, Top Shelf and hosted services still need acceptance.",
+    "simulatorBuild": "Skipped for this device-SDK iteration.",
+    "tests": "No automated test suites or release audit loops. No engine source changes."
+  }
+}

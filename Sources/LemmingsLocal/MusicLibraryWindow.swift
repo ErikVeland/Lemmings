@@ -93,7 +93,7 @@ import NxlvKit
 
     private func size(_ bytes: Int64) -> String { ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file) }
     private func bundled(_ pack: MusicLibraryCatalogue.Pack) -> Bool {
-        guard let root = Bundle.main.resourceURL else { return false }
+        guard let root = GameResources.resourceURL else { return false }
         return pack.files.filter { !$0.path.hasSuffix(".json") }.allSatisfy { FileManager.default.isReadableFile(atPath: root.appendingPathComponent($0.path).path) }
     }
     private var downloadable: [MusicLibraryCatalogue.Pack] { packs.filter { !bundled($0) && !MusicLibrary.isInstalled($0, in: directory) } }

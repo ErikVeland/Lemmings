@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "identifier": "ultimate-lemmix-open-starter-v1",
+  "name": "Open Starter",
+  "origin": "Project-authored puzzles and independent geometry. No original game payload.",
+  "presentation": "CC0 Lix artwork, packaged separately; these files carry geometry and triggers only.",
+  "engine": "Existing unmodified Classic DAT, level, ground and simulation loaders",
+  "levelFilePrefix": "LEVEL",
+  "levels": [
+    {
+      "title": "First Steps",
+      "population": 6,
+      "requiredToSave": 6,
+      "floorY": 112,
+      "hatchY": 66,
+      "requiredSkill": null
+    },
+    {
+      "title": "Float to Safety",
+      "population": 3,
+      "requiredToSave": 3,
+      "floorY": 136,
+      "hatchY": 16,
+      "requiredSkill": "floater"
+    },
+    {
+      "title": "Over the Rise",
+      "population": 4,
+      "requiredToSave": 4,
+      "floorY": 130,
+      "hatchY": 80,
+      "requiredSkill": "climber"
+    }
+  ],
+  "files": [
+    {
+      "path": "GROUND0O.DAT",
+      "bytes": 1056,
+      "sha256": "3e2abf438f827a31ccdd7bdfb90b01cd7b5859f51d94d703fa85c194ad792043"
+    },
+    {
+      "path": "LEVEL000.DAT",
+      "bytes": 6207,
+      "sha256": "220730774faeb51c40ef46d9a496539232eacf996b5c5457a8d150a408a56872"
+    },
+    {
+      "path": "VGAGR0.DAT",
+      "bytes": 1390,
+      "sha256": "de982848a5ae523746486d62e7bb2bc22b347b839ccb4a0aba1c2455602081d9"
+    }
+  ]
+}

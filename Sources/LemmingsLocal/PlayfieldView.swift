@@ -358,12 +358,20 @@ struct ReticleFeedback {
   /// ends, so the front end holds its own reference.
   var interfaceArtwork: ClassicMacArtwork? {
     didSet {
-      macInterface = interfaceArtwork
+      interfaceRevision = GameArtworkResources.revision
+      selectedInterface = interfaceArtwork
         .flatMap(ClassicMacUserInterface.init(artwork:))
-        .map(MacInterfaceRenderer.init(interface:)) ?? GameMenuArtwork.renderer()
+        .map(MacInterfaceRenderer.init(interface:))
+      needsDisplay = true
     }
   }
-  private var macInterface: MacInterfaceRenderer? = GameMenuArtwork.renderer()
+  private var interfaceRevision = GameArtworkResources.revision
+  private var selectedInterface: MacInterfaceRenderer?
+  private var macInterface: MacInterfaceRenderer? {
+    interfaceRevision == GameArtworkResources.revision
+      ? (selectedInterface ?? GameMenuArtwork.renderer()) : GameMenuArtwork.renderer()
+  }
+
   var macScene: ClassicMacScene? { didSet { invalidateClassicScene() } }
   var classicScene: ClassicRenderedLevel? {
     didSet { invalidateClassicScene() }
@@ -372,6 +380,8 @@ struct ReticleFeedback {
   var neoScene: NxlvRenderedLevel? {
     didSet { sceneTick = nil; needsDisplay = true }
   }
+  var lixSceneTheme: LixSceneArtwork.Theme = .brick { didSet { invalidateClassicScene() } }
+  private var sceneUsesLix = false
   private var sceneTick: Int?
   private var sceneTerrainRevision: UInt64?
   private var sceneTerrain: Data?
@@ -386,8 +396,22 @@ struct ReticleFeedback {
   #endif
 
   private func refreshClassicScene() {
+    let usesLix = GameArtworkSkin.lixEnabled && LixArtworkRenderer.shared.isAvailable
     guard let classicScene, let session = session as? ClassicSession,
-          sceneTick != session.currentTick || sceneTerrainRevision != session.terrainRevision else { return }
+          sceneTick != session.currentTick || sceneTerrainRevision != session.terrainRevision || sceneUsesLix != usesLix else { return }
+    if sceneUsesLix != usesLix { sceneTerrain = nil; sceneTerrainRevision = nil }
+    sceneUsesLix = usesLix
+    if usesLix, let frame = LixArtworkRenderer.shared.sceneFrame(classicScene, simulation: session.simulation, theme: lixSceneTheme),
+       let provider = CGDataProvider(data: frame.rgba as CFData),
+       let image = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8,
+         bitsPerPixel: 32, bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+         bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+         decode: nil, shouldInterpolate: false, intent: .defaultIntent) {
+      imageScale = Double(frame.pixelScale)
+      levelImage = image; arrowGlints = nil
+      sceneTick = session.currentTick; sceneTerrainRevision = session.terrainRevision
+      return
+    }
     #if PERFORMANCE_TESTS
     let sceneStarted = ProcessInfo.processInfo.systemUptime
     defer { sceneRenderSeconds += ProcessInfo.processInfo.systemUptime - sceneStarted }
@@ -1830,6 +1854,28 @@ struct ReticleFeedback {
       return
     }
 
+    if GameArtworkSkin.lixEnabled,
+       let frame = LixArtworkRenderer.shared.frame(pose: lemming.pose, animationFrame: lemming.animationFrame,
+         facingLeft: lemming.facingLeft, backpack: showClassicSkillBackpacks ? ClassicSkillBackpack.kind(for: lemming) : nil) {
+      let origin = viewport.viewPoint(fromLevel: CGPoint(x: CGFloat(lemming.x) - frame.footX, y: CGFloat(lemming.y) - frame.footY))
+      var rect = CGRect(origin: origin, size: CGSize(width: frame.image.size.width * viewport.zoom, height: frame.image.size.height * viewport.zoom))
+      var fraction: CGFloat = 1
+      if lemming.pose == .explosion { (rect, fraction) = bombPop(rect, tick: lemming.animationFrame, singleFrameArtwork: false) }
+      guard rect.intersects(bounds), fraction > 0.01 else { return }
+      if ghostsOnly {
+        speedTrails.drawBehind(actor: lemming.id, sprite: frame.image, in: rect, motion: motion,
+          pixelSize: CGSize(width: viewport.zoom, height: viewport.zoom))
+        return
+      }
+      if let hotSeatColour { hotSeatGhostSprites.draw(frame.image, key: frame.cacheKey, colour: hotSeatColour, in: rect, pixelScale: 2); return }
+      if solutionGhost { drawGhostSprite(frame.image, key: frame.cacheKey, in: rect); return }
+      drawSprite(frame.image, key: frame.cacheKey, in: rect, alpha: fraction, actor: lemming.pose == .explosion ? nil : lemming.id)
+      captureSelectionSprite(for: lemming, key: frame.cacheKey, sprite: frame.image, in: rect)
+      drawAssignmentPulse(for: lemming, key: frame.cacheKey, sprite: frame.image, in: rect)
+      if lemming.pose == .explosion { drawBombCore(in: rect, tick: lemming.animationFrame, actor: lemming.id) }
+      if let countdown = lemming.countdown { drawCountdown(countdown, above: rect) }
+      return
+    }
     guard let assets, !palette.isEmpty else { return }
     let direction: ClassicSpriteDirection = lemming.facingLeft ? .left : .right
     let pose = lemming.pose

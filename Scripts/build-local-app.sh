@@ -2,6 +2,9 @@
 set -euo pipefail
 
 project_dir="${0:A:h:h}"
+export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
+export PATH="$DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/bin:$PATH"
+python3 "$project_dir/Tools/Publication/publication.py" check --metadata-only
 build_dir="${LEMMINGS_BUILD_DIR:-$project_dir/.build/local}"
 build_dir="${build_dir:A}"
 mkdir -p "$build_dir/ClangModuleCache" "$build_dir/ModuleCache"
@@ -45,7 +48,6 @@ mkdir -p "$contents_dir/MacOS" "$contents_dir/Resources" "$contents_dir/Framewor
 sparkle_framework="$(SPARKLE_FRAMEWORK_PATH="${SPARKLE_FRAMEWORK_PATH:-}" \
   LEMMINGS_BUILD_ROOT="$build_dir/dependencies" \
   zsh "$project_dir/Scripts/ensure-sparkle.sh")"
-sparkle_framework_dir="${sparkle_framework:h}"
 
 shared_modules=(LemmingsMobileCore LemmingsGameArt LemmingsAudio LemmingsAppCore LemmingsTVCore)
 library_inputs=()
@@ -55,32 +57,9 @@ for architecture in "${architectures[@]}"; do
   module_dir="$architecture_dir/modules"
   mkdir -p "$module_dir"
   target="$architecture-apple-macosx$deployment_target"
-  # Below macOS 13 the Swift driver links libswiftCompatibility56. The Command Line
-  # Tools ship that library for arm64 only, so the Intel slice is linked without it.
-  # Its fixes apply to the Swift 5.6 concurrency runtime. The compiler still rejects
-  # any API newer than the deployment target.
-  compatibility=()
-  [[ "$architecture" == x86_64 ]] && compatibility=(-runtime-compatibility-version none)
-
-  swiftc -swift-version 6 "$swift_optimization" -target "$target" "${compatibility[@]}" -parse-as-library \
-    -module-cache-path "$build_dir/ModuleCache" \
-    -emit-module -emit-library \
-    -module-name NxlvKit \
-    -emit-module-path "$module_dir/NxlvKit.swiftmodule" \
-    -Xlinker -install_name -Xlinker @rpath/libNxlvKit.dylib -Xlinker -w \
-    -o "$architecture_dir/libNxlvKit.dylib" \
-    "$project_dir"/Sources/NxlvKit/*.swift
-  zsh "$project_dir/Scripts/build-shared-modules.sh" "$module_dir" "$architecture_dir" \
-    "$target" "$swift_optimization" -module-cache-path "$build_dir/ModuleCache"
-
-  swiftc -swift-version 6 "$swift_optimization" -target "$target" "${compatibility[@]}" \
-    -module-cache-path "$build_dir/ModuleCache" \
-    -I "$module_dir" -L "$architecture_dir" -lNxlvKit "${shared_modules[@]/#/-l}" \
-    -F "$sparkle_framework_dir" -framework Sparkle \
-    -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
-    -Xlinker -rpath -Xlinker @executable_path/../Frameworks -Xlinker -w \
-    -o "$architecture_dir/LemmingsLocal" \
-    "$project_dir"/Sources/LemmingsLocal/*.swift
+  zsh "$project_dir/Scripts/build-mac-sources.sh" --edition ultimate-lemmings \
+    --build-dir "$build_dir" --target "$target" --optimization="$swift_optimization" \
+    --sparkle-framework "$sparkle_framework"
 
   library_inputs+=("$architecture_dir/libNxlvKit.dylib")
   executable_inputs+=("$architecture_dir/LemmingsLocal")
@@ -111,7 +90,7 @@ zsh "$project_dir/Scripts/build-app-icon.sh" "$contents_dir/Resources/AppIcon.ic
 zsh "$project_dir/Scripts/index-fan-levels.sh" "$build_dir/$(uname -m)"
 zsh "$project_dir/Scripts/bundle-game-data.sh" "$contents_dir/Resources" all
 
-zsh "$project_dir/Scripts/build-desk-clock-mac-widget.sh" "$app_dir" "$build_dir" "${architectures[@]}"
+ULTIMATE_LEMMIX_STORE=0 zsh "$project_dir/Scripts/build-desk-clock-mac-widget.sh" "$app_dir" "$build_dir" "${architectures[@]}"
 
 # Seal the finished bundle after resources are copied. Capability builds use
 # an Apple identity and matching provisioning profile.

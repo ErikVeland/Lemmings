@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import LemmingsAudio
+import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
@@ -59,6 +60,22 @@ import AVFAudio
         MobileAudioEventLog.start()
         connectFailureMusic()
         audioObservers.append(NotificationCenter.default.addObserver(
+            forName: GameResources.changed, object: nil, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                let requestedMenu = self.requestedMenu
+                self.stop()
+                self.cachedSoundtrackNames = nil
+                self.menuTheme = nil
+                self.macintoshMusic = GameResources.resourceURL.flatMap {
+                    ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic"))
+                }
+                self.applySettings()
+                self.setMenu(visible: requestedMenu.visible, active: requestedMenu.active)
+            }
+        })
+        audioObservers.append(NotificationCenter.default.addObserver(
             forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main
         ) { [weak self] _ in
             MainActor.assumeIsolated {
@@ -97,9 +114,9 @@ import AVFAudio
     }
 
     private var settings: MobileSettings { cachedSettings }
-    private var musicRoot: URL? { Bundle.main.resourceURL?.appendingPathComponent("Music") }
+    private var musicRoot: URL? { GameResources.resourceURL?.appendingPathComponent("Music") }
     /// The rendered Macintosh SONG bank, as in the Mac app.
-    let macintoshMusic = Bundle.main.resourceURL.flatMap { ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic")) }
+    private(set) var macintoshMusic = GameResources.resourceURL.flatMap { ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic")) }
     private var isTestAudioMuted: Bool { ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted" }
 
     var soundtrackNames: [String] {
@@ -110,7 +127,10 @@ import AVFAudio
     }
     func invalidateSoundtrackNames() { cachedSoundtrackNames = nil }
     var soundtrack: String {
-        get { soundtrackNames.contains(settings.soundtrack) ? settings.soundtrack : "Original" }
+        get {
+            if settings.soundtrack == "Original", !hasOriginalMusic, soundtrackNames.contains("Lix") { return "Lix" }
+            return soundtrackNames.contains(settings.soundtrack) ? settings.soundtrack : "Original"
+        }
         set {
             var value = settings; value.soundtrack = newValue
             value.classic.music = Self.source(soundtrack: newValue)
@@ -126,7 +146,24 @@ import AVFAudio
     static let macintosh = "Macintosh"
     /// The shared setting that matches a mobile soundtrack choice.
     static func source(soundtrack: String) -> ClassicMusicSource {
-        soundtrack == "Adaptive DJ" ? .adaptiveDJ : soundtrack == macintosh ? .macintoshMIDI : .amigaModules
+        if soundtrack == "Lix" { return .remix(name: "Lix") }
+        return soundtrack == "Adaptive DJ" ? .adaptiveDJ : soundtrack == macintosh ? .macintoshMIDI : .amigaModules
+    }
+
+    private var hasOriginalMusic: Bool {
+        macintoshMusic != nil || ["lemmings_music_mod", "lemmings_2_music_mod_tsyu", "lemmings_3_music_mod_tsyu"]
+            .contains { BundledGameResources.music($0, in: GameResources.bundle) != nil }
+    }
+
+    private func playLix(index: Int, identity: String, menu: Bool = false) -> Bool {
+        guard LixSoundtrack.start(player: dj, resources: Bundle.main.resourceURL,
+            position: index, identity: identity, menu: menu) else { return false }
+        module.stop(); recordings.stop()
+        usingDJ = true; usingRecording = false; playing = identity
+        dj.onTrackChange = { [weak self] _ in self?.announce(self?.dj.currentURL, soundtrack: "Lix") }
+        announce(dj.currentURL, soundtrack: "Lix")
+        applyOutputState()
+        return true
     }
     func cycleSoundtrack() {
         let names = soundtrackNames
@@ -211,6 +248,7 @@ import AVFAudio
         paused = false; inactive = false; resultComplete = false
         speed = 1; rewinding = false; pitch = GameplayMusicPitch(); lastPitchCents = nil
         applyPitch()
+        if (soundtrack == "Lix" || !hasOriginalMusic), playLix(index: 0, identity: menuKey, menu: true) { return }
         let recording: URL? = switch theme {
         case .macintoshLemming1: macintoshMusic?.root.appendingPathComponent("classic/lemming1.m4a")
         case let .recording(path): musicRoot?.appendingPathComponent(path)
@@ -226,7 +264,7 @@ import AVFAudio
         }
         // Any recording that fails to open falls back to the Amiga intro.
         recordings.stop(); usingRecording = false
-        guard let intro = BundledGameResources.music("lemmings_music_mod")?.appendingPathComponent("intro.mod") else { return }
+        guard let intro = BundledGameResources.music("lemmings_music_mod", in: GameResources.bundle)?.appendingPathComponent("intro.mod") else { return }
         do {
             try module.start()
             guard module.play(url: intro) != nil else { return }
@@ -243,6 +281,7 @@ import AVFAudio
         guard playing != key else { return }
         lastPitchCents = nil
         let position = context.scorePosition ?? index
+        if soundtrack == "Lix", playLix(index: position, identity: key) { return }
         let tune = MobileMusicAssignment.tune(identifier: identifier, index: position, title: title)
         compositionID = tune.game + "." + tune.track.lowercased()
         let cycle = MobileMusicAssignment.cycle(tune: tune, index: position, titles: context.titles, isFan: context.isFan)
@@ -285,7 +324,10 @@ import AVFAudio
             applyOutputState(); return
         }
         recordings.stop(); usingRecording = false
-        guard let source else { return }
+        guard let source else {
+            _ = playLix(index: position, identity: key)
+            return
+        }
         do {
             try module.start()
             guard module.play(url: source) != nil else { return }
@@ -300,7 +342,7 @@ import AVFAudio
     }
 
     private func moduleURL(_ tune: MobileMusicAssignment.Tune) -> URL? {
-        guard let root = BundledGameResources.music(tune.folder) else { return nil }
+        guard let root = BundledGameResources.music(tune.folder, in: GameResources.bundle) else { return nil }
         return (try? FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil))?.first {
             $0.deletingPathExtension().lastPathComponent.lowercased() == tune.track.lowercased()
                 && $0.pathExtension.lowercased() == "mod"

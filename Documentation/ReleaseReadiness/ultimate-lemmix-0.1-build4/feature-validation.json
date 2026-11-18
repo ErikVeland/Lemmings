@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-17",
+  "nativeValidation": "validation.json",
+  "nativeScopes": 17,
+  "windowMode": "offscreen",
+  "audio": "muted",
+  "retainedCaptures": 36,
+  "sourceDelta": "Native harness retains only a redundant unmutated local shadow binding removed from final production main.swift.",
+  "focusedChecks": {
+    "personalCorpusPolicy": 9,
+    "canonicalReleaseIdentity": 13,
+    "ownedFanGraphics": 12,
+    "permittedFanUpdates": 3,
+    "completeFanRegression": {
+      "passLines": 932,
+      "exitCode": 0
+    },
+    "resourceAccess": "Synthetic bookmark persistence, stale refresh, balanced access and failure reporting passed.",
+    "musicRouting": "Lix selection and game-music availability fallback passed without audio.",
+    "cursor": "Exact Lix cross/target pixels at three scales; protected original pointers excluded from Store compilation."
+  },
+  "limits": [
+    "Actual fullscreen menu-bar reveal remains a normal user-app check.",
+    "Live sandbox file-picker access and relaunch persistence need manual validation.",
+    "Private community corpus totals do not establish gameplay certification or distribution permission.",
+    "512 previous-engine proof targets and 350 checked hint decks fail closed until current replay proof exists.",
+    "App Store signing, rights, privacy, accessibility, listening and physical-device acceptance remain open."
+  ],
+  "playerData": "Existing review bundle identifier retained; five player record/checkpoint files copied to a local backup before launch. No originals changed by automation."
+}

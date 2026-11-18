@@ -74,6 +74,7 @@ public actor MobileMenuPreviewLoader {
     private var library: (any MobileGameLibrary)?
     private var frames: [Int: MobileMenuPreview] = [:]
     private var previewSettings: ClassicSettings?
+    private var artworkRevision = ""
     private var prepared: [Int: MobileLevelContent] = [:]
     private var recent: [Int] = []
 
@@ -98,6 +99,7 @@ public actor MobileMenuPreviewLoader {
         try cancellation.check()
         let content = try prepared.removeValue(forKey: index) ?? opened.loadLevel(at: index)
         try cancellation.check()
+        MobileArtworkInstallation.install(on: content.session)
         content.session.applySettings(settings)
         try cancellation.check()
         if let checkpoint, !allowUnrelatedCheckpoint || checkpoint.levelIdentifier == content.session.levelIdentifier {
@@ -121,9 +123,10 @@ public actor MobileMenuPreviewLoader {
     private func loadOnWorker(_ index: Int, settings: ClassicSettings,
                               cancellation: MobilePreparationCancellation) throws -> MobileMenuPreview {
         try cancellation.check()
-        if previewSettings != settings {
+        if previewSettings != settings || artworkRevision != MobileArtworkInstallation.revision {
             frames.removeAll()
             previewSettings = settings
+            artworkRevision = MobileArtworkInstallation.revision
         }
         if let cached = frames[index] { return cached }
         let opened = try library ?? makeLibrary()
@@ -132,6 +135,7 @@ public actor MobileMenuPreviewLoader {
         let content = try prepared[index] ?? opened.loadLevel(at: index)
         try cancellation.check()
         let session = content.session
+        MobileArtworkInstallation.install(on: session)
         session.applySettings(settings)
         try cancellation.check()
         let preview = MobileMenuPreview(frame: try session.render(highlight: nil),

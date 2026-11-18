@@ -11,9 +11,12 @@ swiftc -swift-version 6 -warnings-as-errors -parse-as-library -emit-module -emit
   "$project_dir/Sources/NxlvKit/MusicRhythmCatalogue.swift" \
   "$project_dir/Sources/NxlvKit/MusicTimingCatalogue.swift" \
   "$project_dir/Sources/NxlvKit/SoundtrackCatalogue.swift"
-cat "$project_dir/Sources/LemmingsAudio/MusicLibrary.swift" \
+cat "$project_dir/Sources/LemmingsLocal/GameResources.swift" \
+  "$project_dir/Sources/LemmingsLocal/MusicLibrary.swift" \
   "$project_dir/Tests/MusicLibraryTests/main.swift" > "$build_dir/main.swift"
 swiftc -swift-version 6 -warnings-as-errors -I "$build_dir/modules" -L "$build_dir" -lNxlvKit \
   -Xlinker -rpath -Xlinker "$build_dir" "$build_dir/main.swift" -o "$build_dir/tests"
-"$build_dir/tests" "$project_dir"
-python3 "$project_dir/Tests/MusicLibraryTests/check-packs.py"
+"$build_dir/tests" "$project_dir" "$@"
+if [[ "${1:-}" != --metadata-only ]]; then
+  python3 "$project_dir/Tests/MusicLibraryTests/check-packs.py"
+fi

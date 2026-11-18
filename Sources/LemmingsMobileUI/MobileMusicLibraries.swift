@@ -22,7 +22,7 @@ import NxlvKit
     private var allRequestedPacks: Set<String>?
 
     var catalogue: MusicLibraryCatalogue? {
-        guard let url = Bundle.main.resourceURL?.appendingPathComponent("Music/libraries.json"),
+        guard let url = GameResources.resourceURL?.appendingPathComponent("Music/libraries.json"),
               let data = try? Data(contentsOf: url) else { return nil }
         return try? MusicLibraryCatalogue(data: data)
     }
@@ -34,7 +34,7 @@ import NxlvKit
     }
 
     func isBundled(_ pack: MusicLibraryCatalogue.Pack) -> Bool {
-        guard let root = Bundle.main.resourceURL else { return false }
+        guard let root = GameResources.resourceURL else { return false }
         return pack.files.filter { !$0.path.hasSuffix(".json") }.allSatisfy {
             FileManager.default.isReadableFile(atPath: root.appendingPathComponent($0.path).path)
         }
