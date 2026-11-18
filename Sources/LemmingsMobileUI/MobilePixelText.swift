@@ -44,7 +44,7 @@ import UIKit
 }
 
 @MainActor final class MobilePixelLabel: UIView {
-    var text = "" { didSet { accessibilityLabel = text; setNeedsDisplay() } }
+    var text = "" { didSet { accessibilityLabel = GamePresentationText.display(text); setNeedsDisplay() } }
     var palette = MobilePixelText.Palette.blue { didSet { setNeedsDisplay() } }
     var alignment = NSTextAlignment.center { didSet { setNeedsDisplay() } }
     var maximumScale: CGFloat = 4 { didSet { setNeedsDisplay() } }
@@ -83,7 +83,7 @@ import UIKit
             if MobileLixInterface.enabled && MobileLixInterface.paragraph(text, in: bounds,
                 colour: palette.colour, alignment: alignment,
                 maximumScale: maximumScale, maximumLines: numberOfLines) {
-                accessibilityLabel = text
+                accessibilityLabel = GamePresentationText.display(text)
                 return
             }
             let capacity = max(1, Int(bounds.width / (6 * max(1, maximumScale))))
@@ -103,12 +103,12 @@ import UIKit
                     maximumScale: maximumScale, alignment: alignment)
             }
         }
-        accessibilityLabel = text
+        accessibilityLabel = GamePresentationText.display(text)
     }
 }
 
 @MainActor final class MobilePixelButton: UIControl {
-    var title = "" { didSet { accessibilityLabel = title; setNeedsDisplay() } }
+    var title = "" { didSet { accessibilityLabel = GamePresentationText.display(title); setNeedsDisplay() } }
     var isPrimary = false { didSet { setNeedsDisplay() } }
     var isSelectedState = false { didSet { updateAccessibility(); setNeedsDisplay() } }
     var redNightVision = false { didSet { setNeedsDisplay() } }

@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import NxlvKit
 
 /// Original Mode-X panel pixels and the shipped fixed-width FONT bank.
@@ -57,7 +58,7 @@ import NxlvKit
         extendedGlyphs = extended
     }
     func text(_ value: String, x: CGFloat, y: CGFloat, scale: CGFloat = 1) {
-        let text = BitmapLatinGlyphs.uppercase(value, locale: L10n.interface.locale)
+        let text = BitmapLatinGlyphs.uppercase(GamePresentationText.display(value), locale: L10n.interface.locale)
         let top = font.bitmap.verticalBounds(of: text).top
         let left = font.bitmap.horizontalBounds(of: text).left
         for placed in font.bitmap.layout(text) {

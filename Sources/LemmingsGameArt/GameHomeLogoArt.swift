@@ -33,6 +33,7 @@ public final class GameHomeLogoArt: @unchecked Sendable {
     }
 
     public func image(_ game: GameFrontEnd.GameLogo) -> CGImage? {
+        guard !GamePresentationText.usesLemmixNames else { return nil }
         if game == .lemmings3, (brand ?? .current) == .chronicles { return chronicles }
         return images[game]
     }

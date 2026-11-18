@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import LemmingsGameArt
 import NxlvKit
 
@@ -188,7 +189,7 @@ import NxlvKit
 
   func width(of text: String, face: ClassicMacUserInterface.Face, scale: Int) -> CGFloat {
     guard let font = interface.font(face) else { return 0 }
-    return CGFloat(font.width(of: text, scale: scale))
+    return CGFloat(font.width(of: GamePresentationText.display(text), scale: scale))
   }
 
   func height(face: ClassicMacUserInterface.Face, scale: Int) -> CGFloat {
@@ -206,6 +207,7 @@ import NxlvKit
     _ text: String, face: ClassicMacUserInterface.Face, at origin: CGPoint, scale: Int,
     alpha: CGFloat = 1, palette: Palette = .blue
   ) {
+    let text = GamePresentationText.display(text)
     guard let font = interface.font(face) else { return }
     if scale != 2 && scale != 4, let (image, bounds, _) = lineImage(text, face: face, font: font, palette: palette) {
       let frame = CGRect(x: origin.x + bounds.minX * CGFloat(scale),

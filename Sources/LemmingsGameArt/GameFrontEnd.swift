@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 import LemmingsMobileCore
 
@@ -7,7 +8,7 @@ import LemmingsMobileCore
 public struct GameFrontEnd {
     public enum GameLogo: String, Equatable, Sendable { case lemmings2, lemmings3 }
     public struct TextRun: Equatable, Sendable {
-        public var text: String
+        @GameDisplayText public var text: String
         public var palette: GameMenuTypography.Palette
         public init(_ text: String, _ palette: GameMenuTypography.Palette) { self.text = text; self.palette = palette }
     }
@@ -19,7 +20,7 @@ public struct GameFrontEnd {
         /// List tools with different row values occupy separate toolbar rows.
         public var listToolRow: Int = 0
         public var id: String
-        public var title: String
+        @GameDisplayText public var title: String
         public var enabled: Bool
         public var primary: Bool
         public var selected: Bool
@@ -50,8 +51,8 @@ public struct GameFrontEnd {
         }
     }
     public struct Page: Equatable, Sendable {
-        public var title: String
-        public var subtitle: String
+        @GameDisplayText public var title: String
+        @GameDisplayText public var subtitle: String
         public var home: Bool
         public var homeInitials: String
         public var homeNextPlayerIndex: Int? = nil

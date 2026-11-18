@@ -86,7 +86,7 @@ import UIKit
         var elements: [Any] = []
         for (text, box) in [(page.title, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
             let element = UIAccessibilityElement(accessibilityContainer: self)
-            element.accessibilityLabel = text; element.accessibilityTraits = .staticText
+            element.accessibilityLabel = GamePresentationText.display(text); element.accessibilityTraits = .staticText
             element.accessibilityFrameInContainerSpace = box.applying(transform); elements.append(element)
         }
         accessibilityElements = elements + buttons

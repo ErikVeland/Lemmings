@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 #if canImport(NxlvKit)
 import NxlvKit
 #endif
@@ -121,7 +122,7 @@ import NxlvKit
         heading.alignment = .left; detail.alignment = .left
         addSubview(heading); addSubview(detail)
         setAccessibilityRole(.group)
-        setAccessibilityLabel(title)
+        setAccessibilityLabel(GamePresentationText.display(title))
         if pinned {
             let button = GameActionButton(title: L10n.text("Close"), primary: false) { [weak self] in self?.onClose?() }
             close = button; addSubview(button)

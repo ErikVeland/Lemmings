@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import NxlvKit
 import LemmingsGameArt
 
@@ -60,7 +61,7 @@ import LemmingsGameArt
             })
         }
         resultActionRow(actions, y: achievementFooterY)
-        setAccessibilityLabel(award.title + ". " + award.detail)
+        setAccessibilityLabel(GamePresentationText.display(award.title + ". " + award.detail))
         registerAchievementText(award.title, rect: heading)
         registerAchievementText(award.detail, rect: body)
     }

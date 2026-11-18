@@ -1435,6 +1435,10 @@ import NxlvKit
         canvas.needsDisplay = true
     }
     private func showOriginalMovies() {
+        guard !GamePresentationText.usesLemmixNames else {
+            GameScreen.shared.message(L10n.text("Original movies"), detail: L10n.text("Restore assets"))
+            return
+        }
         let page = GameMenuPage(title: L10n.text("Original movies"), subtitle: Lemmings3Brand.current.displayName)
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         for (index, movie) in OriginalMoviePlayer.Movie.allCases.enumerated() {
@@ -1446,6 +1450,13 @@ import NxlvKit
                                    returnsToGameWhenFinished: Bool = false,
                                    automaticExitDestination: String = L10n.text("the game"),
                                    afterDismiss: (() -> Void)? = nil) {
+        guard !GamePresentationText.usesLemmixNames else {
+            if !returnsToGameWhenFinished {
+                GameScreen.shared.message(L10n.text("Original movies"), detail: L10n.text("Restore assets"))
+            }
+            afterDismiss?()
+            return
+        }
         do {
             var soundtrack: AVAudioPlayer?
             if movie == .introduction, audioSettings.music != .silent, !movieMusicMuted,

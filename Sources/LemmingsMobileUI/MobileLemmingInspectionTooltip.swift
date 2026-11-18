@@ -36,7 +36,7 @@ import UIKit
         let y = point.y < available.midY ? available.maxY - size.height : available.minY
         frame = CGRect(origin: CGPoint(x: x, y: y), size: size)
         canvas.frame = bounds
-        accessibilityLabel = ([page.title] + page.details).joined(separator: ", ")
+        accessibilityLabel = GamePresentationText.display(([page.title] + page.details).joined(separator: ", "))
         isHidden = false
     }
 

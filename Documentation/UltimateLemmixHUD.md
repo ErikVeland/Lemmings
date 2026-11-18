@@ -81,3 +81,31 @@ records the clean/personal Mac, iOS and tvOS source snapshots and six archives.
 The separate [manual review copy](ReleaseReadiness/ultimate-lemmix-0.1-build3/manual-review-launch.json)
 was opened with its own sandbox and preferences. It preserves the canonical
 resource bytes and does not share saved games with the earlier personal app.
+
+## Names before asset restoration
+
+Ultimate Lemmix uses shortened campaign names until the player restores original
+assets. Examples include Classic, Holiday, The Tribes and Chronicles. Character
+labels use Lemmix for both singular and plural forms. The shared presentation
+rule covers localised text, bitmap measurement and drawing, and accessibility
+labels. It also covers native Mac menus, window titles and sequel text renderers.
+
+Home uses text in place of the original sequel logos. The native Tribes menu
+covers its original title image with a stone heading. The custom Ultimate Lemmix
+logo remains the product logo.
+
+A validated owned-resource bundle activates the original names and sequel logos.
+The personal build's bundled level collection does not activate this state.
+Changing character artwork does not activate it either. Removing the active
+resource bundle returns to the Lemmix names. Ultimate Lemmings keeps its names.
+Level identifiers, save keys, resource paths, filenames and links retain their
+functional spelling.
+
+Mac render evidence and remaining platform checks are recorded in
+[the naming evidence](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/naming-local.json).
+
+Original sequel story movies remain unavailable before asset restoration because
+their frames contain original character names. Automatic introductions are skipped.
+Ending transitions retain their completion callbacks when the movie is skipped.
+The manual movie page directs the player to Restore assets. This rule also applies
+to the mobile and TV original-media player.

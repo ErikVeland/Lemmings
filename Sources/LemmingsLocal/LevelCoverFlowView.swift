@@ -1,14 +1,15 @@
 #if os(macOS)
 import AppKit
 import LemmingsGameArt
+import LemmingsAppCore
 import NxlvKit
 
 /// One card in the presentation layer. The typed catalogue remains the launch source.
 struct LevelCoverFlowItem: Equatable, Sendable {
     let id: String
-    let title: String
-    let subtitle: String
-    let detail: String
+    @GameDisplayText var title: String
+    @GameDisplayText var subtitle: String
+    @GameDisplayText var detail: String
     let availability: LevelAvailability
     let artworkKey: String?
     let availabilityLabel: String?

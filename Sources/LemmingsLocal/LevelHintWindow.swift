@@ -116,7 +116,7 @@ import NxlvKit
         page.body.addSubview(content)
         revealedTier = 0
         let previous = page.addSecondaryAction(L10n.text("Previous")) {}
-        previous.setAccessibilityLabel(L10n.text("Previous hint"))
+        previous.setAccessibilityLabel(GamePresentationText.display(L10n.text("Previous hint")))
         previous.isEnabled = false
         let next = page.addPrimaryAction(deck.checked ? L10n.text("Reveal the approach") : L10n.text("Make a small plan")) {}
         // No Return shortcut: repeated help keys must not uncover another tier.
@@ -259,7 +259,7 @@ import NxlvKit
             : ""
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
-        setAccessibilityLabel(presentation.title)
+        setAccessibilityLabel(GamePresentationText.display(presentation.title))
         setAccessibilityValue(presentation.accessibilityText)
         setAccessibilityHelp(L10n.text("Left and right arrows change hints. Up and down arrows scroll the text."))
         resetScroll = true

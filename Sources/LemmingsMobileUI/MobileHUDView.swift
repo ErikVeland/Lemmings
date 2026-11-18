@@ -3,6 +3,7 @@ import NxlvKit
 import LemmingsGameArt
 import LemmingsMobileCore
 import UIKit
+import LemmingsAppCore
 
 /// The level overview with its current camera window.
 @MainActor final class MobileMinimapView: UIView {
@@ -284,7 +285,7 @@ import UIKit
         let lines = MobileHUDRenderer.televisionStatusLines(snapshot: snapshot, details: statusDetails,
             engineIdentifier: statusDetails?.engineIdentifier ?? (layout.panel?.style == .lemmings3 ? "lemmings3" : "classic"),
             paused: paused, speed: speed)
-        statusIdentity.accessibilityLabel = lines.joined(separator: ". ")
+        statusIdentity.accessibilityLabel = GamePresentationText.display(lines.joined(separator: ". "))
             .replacingOccurrences(of: statusDetails?.deathCounter ?? "💀", with: statusDetails?.accessibility ?? "")
         if let replayLevel {
             statusIdentity.accessibilityLabel = [L10n.text("Replay, \(replayLevel.locationLabel), \(replayLevel.title)"),
@@ -340,7 +341,7 @@ import UIKit
                 if button.superview !== self { addSubview(button) }
                 button.frame = inputFrame
             }
-            button.accessibilityLabel = item.accessibilityLabel
+            button.accessibilityLabel = GamePresentationText.display(item.accessibilityLabel)
             button.accessibilityTraits = item.action == .skill(selectedSkill)
                 ? [.button, .selected] : .button
             button.isEnabled = isEnabled(item.action)
@@ -438,7 +439,7 @@ import UIKit
             let button = MobileHUDButton(kind: kind)
             button.frame = item.inputFrame
             button.backgroundColor = .clear
-            button.accessibilityLabel = item.accessibilityLabel
+            button.accessibilityLabel = GamePresentationText.display(item.accessibilityLabel)
             button.accessibilityTraits = item.action == .skill(selectedSkill)
                 ? [.button, .selected]
                 : .button
@@ -580,7 +581,7 @@ import UIKit
                                   y: CGFloat(index / 3) * extent,
                                   width: extent, height: extent)
             button.backgroundColor = .clear
-            button.accessibilityLabel = cell.label
+            button.accessibilityLabel = GamePresentationText.display(cell.label)
             button.accessibilityTraits = .button
             button.accessibilityIdentifier = "game.l3.direction.\(cell.direction.map { $0.rawValue.lowercased() } ?? "cancel")"
             var configuration = UIButton.Configuration.plain()
