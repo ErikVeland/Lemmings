@@ -38,6 +38,14 @@ responsive(CAPTURES / 'simulator-captures/submission/AppleTV-Home.png', 'tv', [9
 logo = REPO / 'Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png'
 shutil.copy2(logo, ASSETS / 'logo.png')
 record(logo, ['logo.png'], 'Unmodified current product logo.')
+logo_outputs = []
+original_logo = Image.open(logo).convert('RGBA')
+for width in (480, 960):
+    target = ASSETS / f'logo-{width}.webp'
+    original_logo.resize((width, round(original_logo.height * width / original_logo.width)),
+                         Image.Resampling.LANCZOS).save(target, quality=90, method=6)
+    logo_outputs.append(target.name)
+record(logo, logo_outputs, 'Proportional responsive conversion of the current logo. No redrawing.')
 icon = REPO / 'Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png'
 Image.open(icon).resize((96, 96), Image.Resampling.NEAREST).save(ASSETS / 'favicon.png')
 record(icon, ['favicon.png'], 'Nearest-neighbour resize of clean Store icon.')
