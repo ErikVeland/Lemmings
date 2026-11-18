@@ -2,25 +2,34 @@
 
 Checked 19 November 2026. Version 2.4.2, build 108 on Mac, iOS and tvOS.
 
-All three local Store packages are signed and pass Apple's local package
-analysis. No build has been uploaded, processed by App Store Connect, submitted
-for review or published.
+The retained Store packages are signed and passed Apple's local package analysis.
+Fresh archives include the later compiler-compatibility correction. Their final
+exports await credential-access checks after the owner unlocks the Mac.
+No build has been uploaded, processed by App Store Connect, submitted for review
+or published. These are preparation artifacts, not a completed submission.
 
 ## Packages
 
-| Platform | Final package | Verification |
+| Platform | Retained Handoff package | Verification |
 | --- | --- | --- |
-| Mac, Apple silicon and Intel | `20261118/mac/Export/Ultimate Lemmix.pkg` | [Mac receipt](mac-store-package.json) |
-| iPhone and iPad | `20261119/ios-store-export/UltimateLemmixIOS.ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
-| Apple TV | `20261119/tvos-store-export/UltimateLemmixTVOS.ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
+| Mac, Apple silicon and Intel | `Mac/Ultimate Lemmix 2.4.2 (108).pkg` | [Mac receipt](mac-store-package.json) |
+| iPhone and iPad | `iOS/Ultimate Lemmix 2.4.2 (108).ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
+| Apple TV | `Apple TV/Ultimate Lemmix 2.4.2 (108).ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
 
-The date prefixes select `/Volumes/Games/CodexBuilds/UltimateLemmix-Store-DATE`.
-The Mac package is unchanged. Both new mobile packages use the shared main ID
+Paths start at `/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff`.
+All three signed packages are retained unchanged. Both mobile packages use the shared main ID
 `academy.glasscode.ultimatelemmix`, with their distinct extensions retained.
 The separate-ID mobile packages are superseded and remain outside the handoff
 in the dated build archive.
-The `Handoff` folder contains copies of the final packages, checksums and review
-material. A Downloads shortcut points to that folder.
+The `Handoff` folder contains the signed packages, checksums and review material.
+A Downloads shortcut points to that folder.
+
+Fresh archives use source `1ac19c638e3f62dd48f7d4dedf17b285b961b079`.
+Their development signatures, resources and entitlements passed local checks.
+See [Mac archive refresh](MacSourceRefresh.md) and
+[mobile archive refresh](MobileRenderRefresh.md).
+Retry exports after credential access is confirmed. Another compilation is not required.
+Replace the retained packages only after export and exact package verification pass.
 
 The Mac package contains both architectures, all six shared libraries and Desk
 Clock widget. iOS retains its Desk Clock widget; TV retains Top Shelf. Every
@@ -88,7 +97,8 @@ Mac, iOS and tvOS: Apple ID `6836347807`, main bundle ID
 `academy.glasscode.ultimatelemmix`. All three platform records exist. Mac version
 2.4.2 listing text, Games/Puzzle category and content rights are saved. Release
 is manual. The iOS and tvOS draft-version saves are not verified because browser
-controls stopped responding. Do not treat their requested version 2.4.2 as saved.
+controls stopped responding while the Mac was locked.
+Do not treat their requested version 2.4.2 as saved.
 The new record has no Game Center leaderboards configured yet.
 
 The website is built locally for `https://lemmings.glasscode.academy`.
@@ -96,6 +106,9 @@ Cloudflare sign-in, DNS and TLS setup remain pending. The site and its privacy
 URL are not verified live. The contact address `erik@veland.au` is verified from
 the published GenErik DJ site. Saving that address to App Review fields remains
 separate from verifying the address itself.
+
+First, unlock the Mac and verify Xcode credential access. Export and verify the
+refreshed Mac package, then the mobile packages.
 
 Complete these account and publication items before submitting:
 
