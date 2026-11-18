@@ -54,6 +54,9 @@ PY
 if [[ "${ULTIMATE_LEMMIX_STORE:-0}" == 1 ]]; then
   mkdir -p "$widget/Contents/Resources/Fonts" "$widget/Contents/Resources/AlternativeAssets" "$widget/Contents/Resources/Licences"
   rsync -a "$app_dir/Contents/Resources/Fonts/LixInterface" "$widget/Contents/Resources/Fonts/"
+  if [[ -d "$app_dir/Contents/Resources/Fonts/OriginalLemmings" ]]; then
+    rsync -a "$app_dir/Contents/Resources/Fonts/OriginalLemmings" "$widget/Contents/Resources/Fonts/"
+  fi
   rsync -a "$app_dir/Contents/Resources/Fonts/Lix" "$widget/Contents/Resources/Fonts/"
   rsync -a "$app_dir/Contents/Resources/AlternativeAssets/Lix" "$widget/Contents/Resources/AlternativeAssets/"
   cp "$app_dir/Contents/Resources/Licences/Lix-font-LICENSE.txt" "$widget/Contents/Resources/Licences/"
