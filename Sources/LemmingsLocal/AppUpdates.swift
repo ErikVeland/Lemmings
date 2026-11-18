@@ -1,20 +1,6 @@
 #if os(macOS)
 import AppKit
-#if ULTIMATE_LEMMIX_STORE
-/**
- * Leaves application updates to the store while retaining the frontend contract.
- */
-@MainActor final class AppUpdates: NSObject {
-    var onChange: (() -> Void)?
-    let availableVersion: String? = nil
-    let isDownloaded = false
-    let isDownloading = false
-    let isUpdateRequested = false
-    var isBusy: Bool { false }
-    func start() {}
-    func showUpdate() {}
-}
-#else
+#if !ULTIMATE_LEMMIX_STORE
 import Sparkle
 #endif
 
@@ -26,6 +12,9 @@ import Sparkle
     var onChange: (() -> Void)?
     let availableVersion: String? = nil
     let isDownloaded = false
+    let isDownloading = false
+    let isUpdateRequested = false
+    var isBusy: Bool { false }
 
     func start() { onChange?() }
 
