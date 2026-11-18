@@ -161,7 +161,12 @@ public enum GameStoneArt {
     public static func drawDetailedRock(in context: CGContext, frame: CGRect, pixel: CGFloat, selected: Bool = false) {
         let inner = well(frame, pixel: pixel)
         guard inner.width.isFinite, inner.height.isFinite, inner.minX.isFinite, inner.minY.isFinite,
-              inner.width > 0, inner.height > 0, let image = rock else { return }
+              inner.width > 0, inner.height > 0 else { return }
+        if GameArtworkSkin.usesLixInterface {
+            GamePlayButtonArt.drawFace(in: context, frame: frame, selected: selected, pixel: pixel, face: .hints)
+            return
+        }
+        guard let image = rock else { return }
         let width = CGFloat(image.width), height = CGFloat(image.height)
         context.saveGState()
         defer { context.restoreGState() }
@@ -191,8 +196,6 @@ public enum GameStoneArt {
 
     /// Bevel, rim and well. A caller may paint artwork into the well before `drawAccent`.
     public static func drawSocket(in context: CGContext, frame: CGRect, selected: Bool, pixel: CGFloat, monochrome: Bool = false, shape: GameControlShape = .square) {
-        if !monochrome, GameArtworkSkin.usesLixInterface,
-           GameLixInterfaceArt.drawButton(in: context, frame: frame, selected: selected, shape: shape) { return }
         let light = monochrome ? CGColor(gray: 1, alpha: 1) : Self.light
         let stone = monochrome ? CGColor(gray: 1, alpha: 1) : Self.stone
         let shadow = monochrome ? CGColor(gray: 0, alpha: 1) : Self.shadow

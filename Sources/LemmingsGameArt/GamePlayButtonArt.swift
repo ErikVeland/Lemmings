@@ -49,7 +49,7 @@ public enum GamePlayButtonArt {
         let rgba: [UInt8]
     }
     private struct Sources: Sendable {
-        let panel: Pixels
+        let panel: Pixels?
         let patches: [[UInt8]]
     }
     private struct Raster: @unchecked Sendable { let image: CGImage }
@@ -63,10 +63,23 @@ public enum GamePlayButtonArt {
     private static var sources: Sources? {
         let key = GameResources.revision
         if let cached = sourceGenerations.value(for: key) { return cached.sources }
-        let source = loadSources()
+        let source = loadSources() ?? generatedSources()
         sourceGenerations.insert(SourceValue(sources: source), for: key)
         return source
     }
+    /// Supply deterministic stone when no imported artwork is installed.
+    private static func generatedSources() -> Sources {
+        let patches = (0..<24).map { seed in
+            (0..<(patchSize * patchSize)).map { offset -> UInt8 in
+                let x = offset % patchSize, y = offset / patchSize
+                let broad = mix(UInt64(seed * 97 + (x / 5) * 13 + (y / 4) * 71))
+                let grain = mix(UInt64(seed * 401 + offset))
+                return UInt8(min(5, 1 + Int(broad % 3) + Int(grain % 3)))
+            }
+        }
+        return Sources(panel: nil, patches: patches)
+    }
+
     private static func loadSources() -> Sources? {
         guard let root = GameResources.directory("MacArtwork/lemmings"),
               let data = try? Data(contentsOf: root.appendingPathComponent("manifest.json")),
@@ -148,7 +161,7 @@ public enum GamePlayButtonArt {
         var rgba = [UInt8](repeating: 255, count: width * height * 4)
         for y in 0..<height {
             for x in 0..<width {
-                let colour = originalRock(in: sources.panel, face: face, x: x, y: y)
+                let colour = sources.panel.flatMap { originalRock(in: $0, face: face, x: x, y: y) }
                     ?? palette[Int(field[y * workWidth + x])]
                 let p = (y * width + x) * 4
                 rgba[p] = UInt8((colour >> 16) & 255)
@@ -180,7 +193,6 @@ public enum GamePlayButtonArt {
     /// Paint inside the existing socket before its selection marker and glyphs.
     public static func drawFace(in context: CGContext, frame: CGRect, selected: Bool,
                                 pixel: CGFloat, face: Face) {
-        if GameArtworkSkin.usesLixInterface { return }
         let well = GameStoneArt.well(frame, pixel: pixel)
         guard well.width.isFinite, well.height.isFinite, well.width > 0, well.height > 0,
               well.width <= 2048, well.height <= 2048,

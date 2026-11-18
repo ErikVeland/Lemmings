@@ -118,7 +118,8 @@ import LemmingsAppCore
               (try? url.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true else { continue }
         guard let trackPath = relativePath(url, under: directory), !sourceOnly.contains(trackPath) else { continue }
         let relative = (trackPath as NSString).deletingLastPathComponent
-        let classic = relative == "lemmings_music_mod" || relative.hasPrefix("CoLD SToRAGE - Lemmings - the original AMIGA")
+        let classic = relative == "lemmings_music_mod" || relative == "Traditional Remixes"
+          || relative.hasPrefix("CoLD SToRAGE - Lemmings - the original AMIGA")
         let entry = catalogue?.entry(path: trackPath)
         let isHoliday = entry.map { $0.track.game == "holiday" } ?? isSeasonal(trackPath)
         guard isHoliday == seasonal else { continue }

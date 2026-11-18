@@ -1,5 +1,35 @@
 # Cross-platform feature parity
 
+## Lemmix stone controls, icons and effects — 18 November 2026
+
+Shared stone sockets now remain active with Lix characters. Home rows, gameplay
+sockets and timeline controls use the same texture renderer. A generated fallback
+works without imported Mac artwork. Lix skill and transport icons fit their
+visible pixels instead of their transparent source cells. Input bounds stay intact.
+
+Mac and mobile Lemmix restore added HD effects once, without clearing accessibility
+reductions. Later preference changes remain intact. Apple TV keeps its existing
+effects budget. Classic, Tribes and Chronicles retain the shared rewind, ghosts,
+Hot Seat, hints and modern controls. Engine source is unchanged.
+
+The local Mac packaging option `ULTIMATE_LEMMIX_LOCAL_REMIX_SOURCE` includes six
+credited MandelSoft traditional and classical remixes. Their catalogue identities
+remain distinct from Lix compositions. Automatic fallback can select these remixes;
+an explicit Lix choice still selects Lix music. A stale Amiga music choice switches
+to Adaptive DJ when its tracks are absent. Shared mobile playback supports the
+same catalogue when installed. This local option does not change hosted packs or
+public release approval. See [music source evidence](MusicSourceAudit.md).
+
+The arm64 Mac build and strict signature check pass. Silent offscreen captures
+verify the full Home screen and compact footer targets. A focused native check
+verifies icon sizes, generated stone, music selection and effects restoration.
+The [local build record](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/stone-hd-local.json)
+identifies the app and retained evidence. Broad suites, Intel and notarisation
+were skipped for this manual candidate.
+Mobile touch, TV focus, physical HDR output and audible playback require manual
+acceptance. Local checks remain offscreen and muted.
+
+
 Source audit: 26 October 2026, Australia/Brisbane. This register describes the
 working checkout. It does not establish availability in an installed release.
 

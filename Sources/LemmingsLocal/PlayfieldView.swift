@@ -1404,7 +1404,7 @@ struct ReticleFeedback {
         settings,
         selected: hovered,
         pixel: pixel)
-      let well = GameStoneButton.well(settings, pixel: pixel).insetBy(dx: 2 * pixel, dy: 2 * pixel)
+      let well = GameStoneButton.well(settings, pixel: pixel)
       if let image = PanelGlyph.settings.image(fitting: well.size) {
         image.draw(
           in: CGRect(
@@ -1422,7 +1422,7 @@ struct ReticleFeedback {
     if let update = overlayUpdateButtonFrame(layout) {
       let pixel = max(1, floor(scale))
       GameStoneButton.draw(update, selected: cursorViewPoint.map(update.contains) ?? false, pixel: pixel)
-      let well = GameStoneButton.well(update, pixel: pixel).insetBy(dx: 2 * pixel, dy: 2 * pixel)
+      let well = GameStoneButton.well(update, pixel: pixel)
       let glyph: PanelGlyph = overlayUpdateIsBusy ? .hourglass : .download
       if let image = glyph.image(fitting: well.size) {
         image.draw(in: CGRect(x: floor(well.midX - image.size.width / 2), y: floor(well.midY - image.size.height / 2),
@@ -1440,16 +1440,7 @@ struct ReticleFeedback {
         x: row.minX, y: row.minY, width: row.width, height: lineHeight))
       let chosen = index == overlayHighlight
       if overlayHighlight != nil {
-        (chosen
-          ? NSColor(calibratedRed: 0.18, green: 0.27, blue: 0.12, alpha: 1)
-          : NSColor(calibratedWhite: 0.07, alpha: 1)).setFill()
-        row.fill()
-        (chosen
-          ? NSColor(calibratedRed: 0.70, green: 0.84, blue: 0.29, alpha: 1)
-          : NSColor(calibratedWhite: 0.29, alpha: 1)).setStroke()
-        let outline = NSBezierPath(rect: row.insetBy(dx: 0.5, dy: 0.5))
-        outline.lineWidth = max(1, scale)
-        outline.stroke()
+        GameStoneButton.draw(row, selected: chosen, pixel: max(1, floor(scale)))
       }
       drawMenuGameText(line, in: row.insetBy(dx: 14 * scale, dy: 0),
         face: menuFace, scale: menuScale, wrap: lineHeight > rowHeight)

@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-18",
+  "product": "ultimate-lemmix",
+  "version": "2.4.2",
+  "build": 108,
+  "architecture": "arm64",
+  "scope": "local manual build",
+  "app": "/Users/veland/Downloads/Ultimate Lemmix 2.4.2 build108 restored.app",
+  "executableSHA256": "7ef6430322607a2f750ebe0a0996fd16e5c517068b9909434ab2ad270a36f32a",
+  "signature": "codesign --verify --deep --strict passed",
+  "engineChanges": false,
+  "sourceChecks": [
+    "six remix source hashes and readable audio metadata",
+    "six remixes available to Adaptive DJ",
+    "explicit Lix selection retained",
+    "HD restoration occurs once",
+    "motion and flash reductions retained",
+    "later effects preferences retained",
+    "generated stone works without imported artwork",
+    "generated texture remains stable on resize"
+  ],
+  "renderChecks": [
+    "40, 64 and 96 point icons",
+    "opening screen visible before quit",
+    "2560 by 1408 Home layout",
+    "900 by 620 scrolled Home footer input targets",
+    "packaged startup selects Adaptive DJ and enables HD effects"
+  ],
+  "evidenceRoot": "/Volumes/Games/CodexBuilds/lemmix-stone-hd-proof",
+  "evidence": {
+    "render-final.log": "ece47d6bd320fee7eb4435c94f970e938333e8ab3643129095067b2499d65748",
+    "home-final.log": "fa31c7436161215fd4a28182ccb624f48c040642c0ecf0d69b953c6a61d67694",
+    "compact-final.log": "f02a866c2bfc194137e3d16f61fdaad6946fbce88b9e402519189d480e6098a6",
+    "icons-final.png": "cf5f2de80166a714a3e807aecc87b600614acdfcbbd79fd77510fd2e6be67b00",
+    "home-final.png": "35f315436535d36d5df5b08264de1fe40451f97d08d1eec2d567917b74ae5163",
+    "compact-final.png": "5aded72b011fb2a1eb24b5dedb29d62826933eab5af7af2ec0e79dc7cdfe565c"
+  },
+  "music": {
+    "schemaVersion": 1,
+    "scope": "local-manual-build",
+    "creator": "MandelSoft",
+    "permissionSource": "https://www.lemmingsforums.net/index.php?topic=3921.0",
+    "permissionScope": "Credited level packs and replacement soundtracks.",
+    "publicReleaseApproval": false,
+    "files": [
+      {
+        "id": "classic.cancan",
+        "title": "Can-Can",
+        "path": "Music/Traditional Remixes/orig_06.m4a",
+        "sha256": "f1b38e448f5bff4c3609810e0de26e7a301098dde709fbdc2d181bc1dba1f147",
+        "bytes": 11171887
+      },
+      {
+        "id": "classic.mountain",
+        "title": "Coming Round the Mountain",
+        "path": "Music/Traditional Remixes/orig_04.m4a",
+        "sha256": "0fcd8ebf4fcd4566b4db949e4d11313ce12eb7bcf8532992d49bb5e68364188f",
+        "bytes": 11951893
+      },
+      {
+        "id": "classic.tim6",
+        "title": "Dance of the Reed Flutes",
+        "path": "Music/Traditional Remixes/orig_13.m4a",
+        "sha256": "a833d59fe86f041a493253483508793e407d0c9aa242cc7299915ab29477e800",
+        "bytes": 17799984
+      },
+      {
+        "id": "classic.tim7",
+        "title": "Turkish March",
+        "path": "Music/Traditional Remixes/orig_14.m4a",
+        "sha256": "6f07f0ba4e5ec88268ab2a8434101246a31cbcb380fa96d0502319db55624dc4",
+        "bytes": 15566474
+      },
+      {
+        "id": "classic.tim8",
+        "title": "Dance of the Little Swans",
+        "path": "Music/Traditional Remixes/orig_15.m4a",
+        "sha256": "afa8994a6d278a91c61ffbb0ba6617739fd14b83757398cc628fb776a8febd54",
+        "bytes": 15532710
+      },
+      {
+        "id": "classic.tim9",
+        "title": "London Bridge Is Falling Down",
+        "path": "Music/Traditional Remixes/orig_16.m4a",
+        "sha256": "b5b2d04df8219782123b3946841594b05181a1abba13d469d31217737874ffa7",
+        "bytes": 12799043
+      }
+    ]
+  },
+  "skipped": [
+    "broad test suites",
+    "release audits",
+    "Intel build",
+    "notarisation",
+    "physical HDR display acceptance",
+    "audible music playback",
+    "iOS and tvOS builds and device acceptance"
+  ]
+}
