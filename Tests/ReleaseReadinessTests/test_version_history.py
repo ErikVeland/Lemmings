@@ -38,6 +38,8 @@ class VersionHistoryTests(unittest.TestCase):
             'static let notesVersion = "2.3"\n'
         )
         subprocess.run(["git", "init", "-q", str(root)], check=True)
+        # Prevent detached maintenance from writing during fixture cleanup.
+        subprocess.run(["git", "-C", str(root), "config", "maintenance.auto", "false"], check=True)
         subprocess.run(["git", "-C", str(root), "config", "user.email", "test@example.invalid"], check=True)
         subprocess.run(["git", "-C", str(root), "config", "user.name", "Test"], check=True)
         subprocess.run(["git", "-C", str(root), "add", "."], check=True)
