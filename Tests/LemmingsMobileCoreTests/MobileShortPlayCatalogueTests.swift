@@ -5,7 +5,15 @@ import NxlvKit
 @testable import LemmingsMobileCore
 
 struct MobileShortPlayCatalogueTests {
-    @Test @MainActor func classicFollowUpLoadsInOrderAndResumesAtTheNextLevel() throws {
+    private static var hasClassicData: Bool {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        return FileManager.default.fileExists(atPath: root
+            .appendingPathComponent("Sources/Ports/lemmings_dos_1991-07-30/MAIN.DAT").path)
+    }
+
+    @Test(.enabled(if: hasClassicData, "Requires the owner's original DOS data"))
+    @MainActor func classicFollowUpLoadsInOrderAndResumesAtTheNextLevel() throws {
         let sequence = try #require(ShortPlayCatalogue.sequence(id: "classic-follow-up"))
         let storage = try AppStorage.temporary(named: "classic-follow-up")
         defer { storage.removeTemporaryFiles() }
