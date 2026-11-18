@@ -3,13 +3,16 @@
 Start with the [developer handover](DeveloperHandover.md) for an asset-free
 source build, isolated verification, ownership map and dependency inventory.
 
-`main` is the combined development branch for the Mac and iOS apps. It can
+`main` is the combined development branch for both editions on Mac, iOS and tvOS. It can
 contain unreleased work. Release tags identify shipped source. Read the
 [release scope](ReleaseScope.md) before making compatibility claims.
+Implement each feature once in the shared modules. Use the
+[publication profiles](SharedPublishing.md) to select assets and distribution
+settings when building either edition from the same revision.
 
 ## Branches and unfinished work
 
-Use `feature/` branches when work needs an isolated checkout. Keep a branch
+Use `codex/` branches when work needs an isolated checkout. Keep a branch
 focused on one change. Merge its code, tests and required evidence into `main`
 together. Delete merged local branches after preserving any unfinished work.
 
@@ -29,6 +32,10 @@ revision. Preserve packaged notes and acceptance evidence cited by a release
 gate. Do not rewrite historical input manifests to match a newer checkout.
 
 ## Shared Mac build modules
+
+`Scripts/build-publication.sh` is the common entry point for both editions on
+all three platforms. `Scripts/build-mac-sources.sh` owns their Mac source list
+and cache validation. Existing Mac packaging scripts call this helper.
 
 `Scripts/build-shared-modules.sh` builds the libraries imported by the Mac app.
 Build `NxlvKit` first, then call the helper with the module directory, library

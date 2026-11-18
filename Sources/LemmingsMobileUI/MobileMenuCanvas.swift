@@ -223,9 +223,7 @@ import UIKit
     private let pauseShelfShield = UIView()
     var requiresNeutralActivation = false
     private var tvActivation = TVActivationGate()
-    private static let portraits = Bundle.main.resourceURL.flatMap {
-        GamePortraitArt(directory: $0.appendingPathComponent("MacArtwork/lemmings"))
-    }
+    private static var portraits: GamePortraitArt? { MobileGameArt.portraits }
 
     override init(frame: CGRect) {
         super.init(frame: frame)

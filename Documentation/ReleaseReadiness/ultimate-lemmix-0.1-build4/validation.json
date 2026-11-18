@@ -1,0 +1,119 @@
+{
+  "status": "pass",
+  "windowMode": "offscreen",
+  "audio": "muted",
+  "scopes": {
+    "clean": [
+      "menus",
+      "starter-browser",
+      "home",
+      "hud"
+    ],
+    "personal": [
+      "menus",
+      "starter-browser",
+      "home",
+      "browser",
+      "settings",
+      "starter",
+      "starter2",
+      "starter3",
+      "fan",
+      "hud",
+      "hud-paused",
+      "hud-undo",
+      "hud-small"
+    ]
+  },
+  "totalScopes": 17,
+  "checks": [
+    "native menu hierarchy and all existing feature targets",
+    "real Command-comma Settings dispatch",
+    "real Command-Shift-P player and Command-Shift-B records dispatch",
+    "native Hot Seat and play-insights actions",
+    "Original/Modern cursor selection and persistence through init/update/action",
+    "Classic and shared sequel modified-shortcut pass-through",
+    "restored eight home families with Classic3 and clean no-packs/private5051 counts",
+    "valid bundled learning journey and recovery fingerprint",
+    "three generated starter thumbnails and browser Start target",
+    "starter briefing/gameplay and exact paused checkpoint save/validated restore",
+    "three native 2x Lix scenes and unchanged physics",
+    "representative production fan preparation/render/start and reversible artwork choice",
+    "full HUD states with 19 native input targets"
+  ],
+  "sourceProof": "frontend-source-proof.json",
+  "coreSHA256": "4fdc649d6141027a423a4d3108cfab015580d32f48aae88e73940cec59bfe2b2",
+  "captureSHA256": {
+    "captures/clean/clean-hud-panel.png": "22feb629fb4e9b503b2a29b8c3aec35a6b8c9a935fde7058ed62dd3aa1654f32",
+    "captures/clean/clean-hud-window.png": "ec8747b35db8e4444ec4a270f1ad57adbe2c07ffbaae5c8f001f78a0faaec84f",
+    "captures/clean/personal-home.png": "15f67e0d1d50fc07f87f093fa582e6a27674aa9ff8d0618b6cb50a6f6ac46d1c",
+    "captures/clean/personal-native-menu-b-window.png": "71a233854439a538ae16cf45c01b140a6114b222cb36b6f422360389148671ac",
+    "captures/clean/personal-native-menu-hot-seat-window.png": "e3dc35b5185519fa5f5a6cfd0462866aa3ca488871bbe28c690b75d5eebc4922",
+    "captures/clean/personal-native-menu-insights-window.png": "b1f1797b713704c2067fe4b7c4e65f787a92d592c4d3cd9c38c66f06d2647586",
+    "captures/clean/personal-native-menu-p-window.png": "ae1509e49dd923bad237067f4062cfe880523aa8ce0ed8f71aea6c1c06e54a9a",
+    "captures/clean/personal-native-menu-settings-window.png": "9ae742c526e3e34c33d8b3b2fab144096de0410867e043230cecd0dd42dc66ec",
+    "captures/clean/personal-restored-home-window.png": "15f67e0d1d50fc07f87f093fa582e6a27674aa9ff8d0618b6cb50a6f6ac46d1c",
+    "captures/clean/personal-restored-starter-browser-window.png": "d3136b13f3719128ea2615cee4cd657835b519dd26c5d8126a48d51d8e081c9d",
+    "captures/clean/personal-restored-starter-start-window.png": "5037d3663ef447c0ec9034496d61124acab4efcf415c0bb4bd0d63347de323c5",
+    "captures/personal/personal-community-browser.png": "070a87c16dd88bb86a28244b7638fff6f59fba69f63bc3bd4f1a4ee81cbfe60a",
+    "captures/personal/personal-community-gameplay.png": "0bee9ed6b40dee66a5fc4a7faa29b6d80f643763859a43b7b881b7a3cb4029d9",
+    "captures/personal/personal-community-lix-restored.png": "0bee9ed6b40dee66a5fc4a7faa29b6d80f643763859a43b7b881b7a3cb4029d9",
+    "captures/personal/personal-community-original.png": "7147dc27330924917aef4e4ecd5a630dfd9e25405cd5ef2344e0572faf2e743b",
+    "captures/personal/personal-home.png": "f7022d24ccb3af96c6e30a2c99b2b1226c555dcdd6f456d4731f2096a1dd145b",
+    "captures/personal/personal-hud-panel.png": "6d67995cbdc41ddb813485803a2d4770a484c3d3ae1ec7fc0796ea5a44a74aed",
+    "captures/personal/personal-hud-paused-panel.png": "ae986ba89560422f8d9f66796a3927636da272a63af5eea96a2533b87cb13df3",
+    "captures/personal/personal-hud-paused-window.png": "253f3f355edea62940484121715bd14cbd6e0579c0d152649f1d214a26a39670",
+    "captures/personal/personal-hud-small-panel.png": "34a67bf348915d12184c6d19701954a06633ed7f8b87866d688ce98af55abc0e",
+    "captures/personal/personal-hud-small-window.png": "d04176965a3373858a38cc8e1080b6ed5ca9a2e08ff7d5182731e71bc11ee9a9",
+    "captures/personal/personal-hud-undo-panel.png": "1ccf3a64d490eb8f1e07ef4796957bc72e7bdeef17f9c97151481bc5cd222db5",
+    "captures/personal/personal-hud-undo-window.png": "3aa00cc0a081241839f26f342375dfdcd5510570ec6bd4bade08037b26d10873",
+    "captures/personal/personal-hud-window.png": "41c37c0ea37f95016b80c1845c354ce8d0ac3553389807184d61b50faf470c74",
+    "captures/personal/personal-native-menu-b-window.png": "df159a329c9c4d49f6b133d3166e9a589def2202bacdb829c2f0115000f7c383",
+    "captures/personal/personal-native-menu-hot-seat-window.png": "7159b3483802f0924918cb1f4511c59dbd885af1865afe2c26bad3ba7f41d97f",
+    "captures/personal/personal-native-menu-insights-window.png": "b77a433b44a11b5a1960f4429d9b9f75640d20d0d193121d57fc3c0fcdde2312",
+    "captures/personal/personal-native-menu-p-window.png": "b23e0dc2e940572ca75e0897956e1cd05723bd1824a4b17564c560b140d1a09a",
+    "captures/personal/personal-native-menu-settings-window.png": "4de8797e892da03fd7c4eb98e6c7886b6cac7bcba7a93851ebc246ff0f38f844",
+    "captures/personal/personal-restored-home-window.png": "f7022d24ccb3af96c6e30a2c99b2b1226c555dcdd6f456d4731f2096a1dd145b",
+    "captures/personal/personal-restored-starter-browser-window.png": "20c18100f239d1643dd78c416e062ffba8b0d2c97a0172d97fab7b9f611c9c78",
+    "captures/personal/personal-restored-starter-start-window.png": "5328a438fa2ed9d912dd06701b7528dfc80fb3dfff582a226245d123c6b819e8",
+    "captures/personal/personal-settings.png": "7c17a8e4f4b6e2c88f29fcf8c83bae739f287cbb9d7d40808987111766353411",
+    "captures/personal/personal-starter-lix-2.png": "f34b60b0f4175316b6945cd2ab5b64fe64079be2dab2985e7e8cc7428307edb9",
+    "captures/personal/personal-starter-lix-3.png": "7bea27d75d984357d1cd08c8816d9d0de7dadf51306669ebb2f6e719d2a6e200",
+    "captures/personal/personal-starter-lix.png": "2284dd7ce50909f73d810223108cdee9a140d5a81d8a6428906d8b6313228f90"
+  },
+  "relatedProofs": [
+    "../pointer-capture-tests/validation.json",
+    "../clean-cursor-tests/validation.json",
+    "../starter-preview-tests/validation.json",
+    "../dialog-cursor-tests.log"
+  ],
+  "limits": [
+    "Native full-screen menu-bar reveal still requires the normal user app check; no foreground automation or real cursor warp was used.",
+    "Live L2/L3 gameplay was not launched in this suite; shared capture/input consumers were inspected and the common native policy was tested.",
+    "The browser capture can precede the final asynchronous thumbnail paint; all three requested bitmap outputs passed exact Lix-scene comparisons separately.",
+    "The legacy clean-home log label says original-font; its clean guard explicitly requires no original font renderer and uses bundled licensed Lix text.",
+    "Compiled main retains only the unused unmutated shadow binding removed from final main, as recorded in source proof."
+  ],
+  "userAppAndSaves": "No running review app or real player saves changed.",
+  "captureInspection": {
+    "fullSize": [
+      "clean restored home",
+      "clean Settings with Original selected",
+      "clean starter browser",
+      "clean starter Start/gameplay",
+      "both licensed cursor frames"
+    ],
+    "contactSheet": [
+      "clean and personal profiles",
+      "clean and personal records",
+      "clean and personal Hot Seat",
+      "clean and personal play insights",
+      "clean full HUD",
+      "personal narrow HUD",
+      "personal fan browser",
+      "personal starter browser"
+    ],
+    "contactSheetSHA256": "161c04e2889a5d74fed4e9d6056bae6873388d1258fc9e4e94b4cc38d1971296",
+    "notes": "All inspected layouts are present and readable. Personal starter browser paints all three thumbnail images; the clean capture preceded the final async image update."
+  }
+}

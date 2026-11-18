@@ -7,25 +7,41 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
     public let directory: URL
     public let dataSet: ClassicDataSet
     public let levels: [MobileLevelSummary]
-    public var displayName: String { dataSet.name }
+    public let isStarter: Bool
+    public var displayName: String { isStarter ? GameStarterContent.displayName : dataSet.name }
 
-    private let assets: ClassicMainDATAssets
+    private let assets: ClassicMainDATAssets?
     private var grounds: [Int: ClassicGroundSet] = [:]
     private var specials: [Int: ClassicSpecialGraphic] = [:]
 
     public init(directory: URL) throws {
         self.directory = directory
-        dataSet = try ClassicDataSet.detect(directory: directory)
-        assets = try ClassicMainDATAssets.load(from: directory)
-        let packName = dataSet.name
+        isStarter = GameStarterContent.isStarter(directory: directory)
+        if isStarter {
+            dataSet = try GameStarterContent.dataSet(in: directory)
+            assets = nil
+        } else {
+            dataSet = try ClassicDataSet.detect(directory: directory)
+            assets = try ClassicMainDATAssets.load(from: directory)
+        }
+        let packName = isStarter ? GameStarterContent.displayName : dataSet.name
+        let origin: MobileLevelSummary.Origin = isStarter ? .unspecified : .official
         levels = dataSet.campaign.levels.enumerated().map { index, item in
             MobileLevelSummary(
                 index: index,
                 rank: item.rank,
                 number: item.number,
-                title: item.level.title, origin: .official, packName: packName
+                title: item.level.title, origin: origin, packName: packName
             )
         }
+    }
+
+    /**
+     * Opens only the pinned authored levels when the player has no original data.
+     */
+    public static func authoredStarter(in resourceURL: URL? = GameResources.resourceURL) throws -> ClassicMobileLibrary? {
+        guard let directory = GameStarterContent.directory(in: resourceURL) else { return nil }
+        return try ClassicMobileLibrary(directory: directory)
     }
 
     public func canSkipLevel(at index: Int) -> Bool {
@@ -39,7 +55,8 @@ public final class ClassicMobileLibrary: MobileGameLibrary {
     public func checkpointLevelIdentifier(at index: Int) throws -> String? {
         guard dataSet.campaign.levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let entry = dataSet.campaign.levels[index]
-        return "\(dataSet.identifierKey)/\(entry.rank)/\(entry.number)"
+        let source = isStarter ? GameStarterContent.identifier : dataSet.identifierKey
+        return "\(source)/\(entry.rank)/\(entry.number)"
     }
 
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
@@ -114,7 +131,14 @@ public final class ClassicMobileSession: MobileGameSession {
     private let terrainLease = RuntimePixelCacheLease()
     private var terrainFrame: Data?
     private var cachedPanelFrame: MobilePixelFrame?
-    public var renderScale: Double { nativeScene == nil ? 1 : 2 }
+    public var needsArtworkProvider: Bool { assets == nil }
+    public var artworkProvider: (any ClassicMobileArtworkProvider)? {
+        didSet { cachedRender = nil; terrainFrame = nil; spriteFrames.removeAll(); ghostFrames.removeAll() }
+    }
+    public var renderScale: Double {
+        if let artworkProvider, artworkProvider.isEnabled { return Double(artworkProvider.renderScale) }
+        return nativeScene == nil ? 1 : 2
+    }
     public var spriteActorIDs: [Int] { simulation.lemmings.compactMap { $0.isActive ? $0.id : nil } }
     public var activeLemmingCount: Int { simulation.activeCount }
     public var minimapActorPoints: [MobilePoint] {
@@ -125,7 +149,13 @@ public final class ClassicMobileSession: MobileGameSession {
     }
     public var bombCountdowns: [MobileBombCountdown] {
         simulation.lemmings.filter(\.isActive).compactMap { lemming in
-            guard let ticks = lemming.bomberCountdown, let assets else { return nil }
+            guard let ticks = lemming.bomberCountdown else { return nil }
+            if let artworkProvider, artworkProvider.isEnabled,
+               let sprite = spriteHighlight(lemming) {
+                return .init(id: lemming.id, seconds: max(1, (ticks + ClassicDOSRules.ticksPerSecond - 1) / ClassicDOSRules.ticksPerSecond),
+                    anchor: .init(x: sprite.rect.x + sprite.rect.width / 2, y: sprite.rect.y))
+            }
+            guard let assets else { return nil }
             let pose = Self.pose(for: lemming.action)
             let direction: ClassicSpriteDirection = lemming.direction == .left ? .left : .right
             guard let animation = assets.animation(for: pose, direction: direction)
@@ -259,7 +289,7 @@ public final class ClassicMobileSession: MobileGameSession {
         level: ClassicLevel,
         ground: ClassicGroundSet,
         special: ClassicSpecialGraphic?,
-        assets: ClassicMainDATAssets,
+        assets: ClassicMainDATAssets?,
         mechanics: ClassicDOSMechanics,
         objectSemantics: ClassicObjectSemantics,
         clock: ClassicDOSClock = .dos,
@@ -271,8 +301,14 @@ public final class ClassicMobileSession: MobileGameSession {
         let rendered = try ClassicLevelRenderer.render(
             level, groundSet: ground, specialGraphic: special, objectSemantics: objectSemantics)
         try Task.checkCancellation()
-        let simulation = try ClassicDOSSimulation(
-            level: level, renderedLevel: rendered, mainDATAssets: assets, mechanics: mechanics, clock: clock)
+        let simulation: ClassicDOSSimulation
+        if let assets {
+            simulation = try ClassicDOSSimulation(
+                level: level, renderedLevel: rendered, mainDATAssets: assets, mechanics: mechanics, clock: clock)
+        } else {
+            simulation = try ClassicDOSSimulation(
+                level: level, renderedLevel: rendered, mechanics: mechanics, clock: clock)
+        }
         try Task.checkCancellation()
         let palette = try ClassicLemmingPalette.inLevelVGA(terrainPalette: ground.terrainPalette)
         return MobileLevelContent(
@@ -297,7 +333,7 @@ public final class ClassicMobileSession: MobileGameSession {
         levelIndex: Int,
         startX: Int = 0,
         authoredLevel: ClassicLevel? = nil, ground: ClassicGroundSet? = nil,
-        artworkFamily: String? = nil, artworkMatch: ClassicMacPieceMatch? = nil, artworkRoot: URL? = Bundle.main.resourceURL
+        artworkFamily: String? = nil, artworkMatch: ClassicMacPieceMatch? = nil, artworkRoot: URL? = GameResources.resourceURL
     ) {
         self.authoredLevel = authoredLevel
         self.ground = ground
@@ -344,6 +380,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public var panelFrame: MobilePixelFrame? {
+        if artworkProvider?.isEnabled == true { return nil }
         if let cachedPanelFrame { return cachedPanelFrame }
         guard let panel = assets?.panel else { return nil }
         cachedPanelFrame = try? MobilePixelFrame(
@@ -494,7 +531,7 @@ public final class ClassicMobileSession: MobileGameSession {
         let floater: Bool
     }
     private var spriteFrames: [SpriteKey: MobileSpriteHighlight] = [:]
-    private var cachedRender: (selection: MobileTargetSelection?, region: SceneRasterContext.Viewport?, actors: Bool, frame: MobilePixelFrame)?
+    private var cachedRender: (selection: MobileTargetSelection?, region: SceneRasterContext.Viewport?, actors: Bool, artworkRevision: String, frame: MobilePixelFrame)?
     public var ghostSolutionEnabled = false { didSet { cachedRender = nil } }
     public var hasGhostSolution: Bool { solutionGhost != nil }
     public var ghostSolutionTick: Int? { solutionGhost?.simulation.tickCount }
@@ -578,12 +615,15 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
-        if let cachedRender, cachedRender.selection == highlight, cachedRender.region == SceneRasterContext.viewport, cachedRender.actors == SceneRasterContext.drawActors.wrappedValue { return cachedRender.frame }
+        let artworkRevision = artworkProvider?.revision ?? "native"
+        if let cachedRender, cachedRender.selection == highlight, cachedRender.region == SceneRasterContext.viewport,
+           cachedRender.actors == SceneRasterContext.drawActors.wrappedValue, cachedRender.artworkRevision == artworkRevision { return cachedRender.frame }
         guard let renderedLevel else { throw MobileSessionError.frameUnavailable }
-        let scale = nativeScene == nil ? 1 : 2
+        let activeArtwork = artworkProvider.flatMap { $0.isEnabled ? $0 : nil }
+        let scale = activeArtwork?.renderScale ?? (nativeScene == nil ? 1 : 2)
         let width = renderedLevel.width * scale, height = renderedLevel.height * scale
         if !terrainLease.reserve(bytes: width * height * 4) { terrainFrame = nil }
-        if terrainFrame == nil {
+        if activeArtwork == nil, terrainFrame == nil {
             terrainFrame = nativeScene?.terrainFrame(terrain: simulation.terrain)
                 ?? ClassicSceneFrame.terrainRGBA(renderedLevel, terrain: simulation.terrain)
         }
@@ -594,21 +634,26 @@ public final class ClassicMobileSession: MobileGameSession {
         #else
         let wantsGlints = settings?.hdEffectsEnabled != false && settings?.colorDepth != .amigaOCS
         #endif
-        let native = nativeScene.map { scene in
+        let native = (activeArtwork == nil ? nativeScene : nil).map { scene in
             wantsGlints ? scene.rgbaWithArrowGlints(simulation: simulation, terrain: terrainFrame)
                 : (rgba: scene.rgba(simulation: simulation, terrain: terrainFrame), glints: nil)
         }
-        var pixels = native?.rgba
-            ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame)
+        var pixels: Data
+        if let activeArtwork {
+            guard let frame = activeArtwork.scene(renderedLevel, simulation: simulation) else { throw MobileSessionError.frameUnavailable }
+            pixels = frame.rgba
+        } else {
+            pixels = native?.rgba ?? ClassicSceneFrame.rgba(renderedLevel, simulation: simulation, terrain: terrainFrame)
+        }
         if SceneRasterContext.drawActors.wrappedValue {
             drawSolutionGhost(into: &pixels, width: width, height: height, scale: scale)
             drawHotSeatGhosts(into: &pixels, width: width, height: height, scale: scale)
-            if assets != nil, palette.count >= 8 {
+            if activeArtwork != nil || (assets != nil && palette.count >= 8) {
                 var crowdShadow = MobileCrowdShadow()
                 for lemming in simulation.lemmings where lemming.isActive {
                     if lemming.action == .exploding,
                        !ExplosionPixelSpray.popIsVisible(age: lemming.animationFrame,
-                           enhanced: settings?.hdEffectsEnabled != false, singleFrameArtwork: true) { continue }
+                           enhanced: settings?.hdEffectsEnabled != false, singleFrameArtwork: activeArtwork == nil) { continue }
                     if let sprite = spriteHighlight(lemming) {
                         if lemming.action != .exploding {
                             pixels.withUnsafeMutableBytes { destination in
@@ -645,7 +690,7 @@ public final class ClassicMobileSession: MobileGameSession {
             }
         }
         let frame = try MobilePixelFrame(width: width, height: height, rgba: pixels, arrowGlints: native?.glints)
-        cachedRender = (highlight, SceneRasterContext.viewport, SceneRasterContext.drawActors.wrappedValue, frame)
+        cachedRender = (highlight, SceneRasterContext.viewport, SceneRasterContext.drawActors.wrappedValue, artworkRevision, frame)
         if !terrainLease.reserve(bytes: width * height * 4) { terrainFrame = nil }
         return frame
     }
@@ -709,6 +754,7 @@ public final class ClassicMobileSession: MobileGameSession {
                 assets: assets, palette: palette, levelIdentifier: levelIdentifier, levelIndex: levelIndex,
                 startX: Int(initialCameraOrigin.x), authoredLevel: authoredLevel, ground: ground,
                 artworkFamily: artworkFamily, artworkMatch: artworkMatch, artworkRoot: artworkRoot)
+            copy.artworkProvider = artworkProvider
             copy.playbackReplay = playbackReplay; copy.playbackEvents = playbackEvents
             copy.playbackEndTick = playbackEndTick
             copy.resetReplay()
@@ -815,6 +861,7 @@ public final class ClassicMobileSession: MobileGameSession {
         let result = ClassicMobileSession(simulation: start, renderedLevel: renderedLevel,
             assets: assets, palette: palette, levelIdentifier: levelIdentifier, levelIndex: levelIndex,
             startX: Int(initialCameraOrigin.x), authoredLevel: authoredLevel, ground: ground, artworkFamily: artworkFamily, artworkMatch: artworkMatch, artworkRoot: artworkRoot)
+        result.artworkProvider = artworkProvider
         if let settings { result.applySettings(settings) }
         result.playbackReplay = replay
         result.playbackEvents = Dictionary(grouping: replay.events, by: \.tick)
@@ -868,6 +915,7 @@ public final class ClassicMobileSession: MobileGameSession {
     }
 
     public func skillCursorFrame(control: Int) -> MobilePixelFrame? {
+        if let artworkProvider, artworkProvider.isEnabled { return artworkProvider.skill(control: control) }
         let poses: [ClassicLemmingPose] = [.climbing, .floating, .ohNo, .blocking, .building, .bashing, .mining, .digging]
         guard poses.indices.contains(control), let assets, palette.count >= 8 else { return nil }
         let pose = poses[control]
@@ -941,6 +989,21 @@ public final class ClassicMobileSession: MobileGameSession {
     public func releaseTransientResources() { terrainLease.release(); terrainFrame = nil; cachedPanelFrame = nil; ghostFrames.removeAll(); spriteFrames.removeAll(); cachedRender = nil }
 
     private func spriteHighlight(_ lemming: ClassicDOSLemming) -> MobileSpriteHighlight? {
+        if let artworkProvider, artworkProvider.isEnabled,
+           let source = artworkProvider.sprite(lemming, simulation: simulation) {
+            let scale = artworkProvider.renderScale
+            let pack = settings?.showClassicSkillBackpacks == true
+                ? Self.backpackPixels(source.frame.rgba, width: source.frame.width, height: source.frame.height,
+                    lemming: lemming, pose: Self.pose(for: lemming.action), scale: scale)
+                : (pixels: [UInt8](source.frame.rgba), width: source.frame.width, padding: 0)
+            guard let frame = try? MobilePixelFrame(width: pack.width, height: source.frame.height, rgba: Data(pack.pixels)) else { return nil }
+            return .init(frame: frame,
+                rect: .init(x: source.rect.x - Double(pack.padding) / Double(scale), y: source.rect.y,
+                    width: Double(pack.width) / Double(scale), height: source.rect.height),
+                cacheKey: source.cacheKey + "/\(settings?.showClassicSkillBackpacks == true)/\(lemming.hasClimber)/\(lemming.hasFloater)",
+                time: settings?.reduceMotion == true || settings?.reduceFlashes == true ? nil : source.time,
+                direction: source.direction)
+        }
         guard let assets else { return nil }
         let pose = Self.pose(for: lemming.action)
         let left = lemming.direction == .left

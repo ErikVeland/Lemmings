@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "kind": "existing-project-icon",
+  "source": "Resources/AppIcon/AppIcon.png",
+  "bytes": 2267404,
+  "sha256": "8abf2d50610c09c39daafeea8a06b60422ea71be0fc49ca6e4eaca9ce234117b",
+  "width": 1254,
+  "height": 1254,
+  "opaque": true,
+  "readme": "Resources/AppIcon/README.md",
+  "readmeSHA256": "06619a84420d38e97c62af79b4557af1e72504a028e07cdbc1fb85fe1da28ec6",
+  "cc0": false,
+  "redistributionCleared": false,
+  "rightsReviewRequired": true,
+  "basis": "Explicit user request to retain the existing project icon. README records AI-assisted editing of a recognisable Lemmings character."
+}

@@ -122,6 +122,7 @@ if [[ "$2" == all || "$2" == l2 ]]; then
 fi
 
 python3 "$project_dir/Tools/TrolleyVerification/catalogue.py" bundle "$resources_dir/Trolley"
+zsh "$project_dir/Scripts/bundle-alternative-resources.sh" "$resources_dir"
 
 mkdir -p "$resources_dir/GameCenter"
 cp "$project_dir/Resources/GameCenter/leaderboards.json" "$resources_dir/GameCenter/leaderboards.json"

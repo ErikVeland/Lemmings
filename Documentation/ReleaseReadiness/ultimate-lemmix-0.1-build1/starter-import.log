@@ -1,0 +1,5 @@
+PASS starter route 1: 6 rescued at tick 424
+PASS starter route 2: 3 rescued at tick 389
+PASS starter route 3: 4 rescued at tick 466
+PASS imports: all engines, staged rejection, rollback, tamper detection, byte limits and hidden links
+PASS open starter and player-owned import checks

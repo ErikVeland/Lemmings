@@ -1,0 +1,529 @@
+{
+  "schemaVersion": 1,
+  "version": "0.1",
+  "build": "3",
+  "allFourFinalAuditsPassed": true,
+  "candidates": [
+    {
+      "candidate": "clean-macOS",
+      "sourceSnapshotVerified": true,
+      "sourceFiles": 258,
+      "buildEvidence": {
+        "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-build3-universal/build-evidence.json",
+        "sha256": "612bc6a68733fc1f13fc336a49d502ed4eb8b57edea87f753e853f69b04252c9"
+      },
+      "finalAuditLog": {
+        "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-build3-universal/final-audit.log",
+        "sha256": "c2a36afd20882fbc3c0285e1f4ac80fb7e12d25519769be196cde8b217fc0982"
+      },
+      "products": [
+        {
+          "kind": "universal",
+          "appPath": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-build3-universal/Ultimate Lemmix.app",
+          "bundleIdentifier": "academy.glasscode.ultimatelemmix",
+          "displayName": "Ultimate Lemmix",
+          "version": "0.1",
+          "build": "3",
+          "reviewArchive": {
+            "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-build3-universal/Ultimate-Lemmix-0.1-build3-macOS.zip",
+            "bytes": 27321337,
+            "sha256": "637cf5a437bc7f6ee1aeca32a870f39d52117ebed03ecb7c6782f4f4a5110ca2",
+            "crcVerified": true,
+            "bundleFileHashesVerified": true
+          },
+          "resources": null,
+          "binary": {
+            "Contents/MacOS/UltimateLemmix": {
+              "architectures": [
+                "x86_64",
+                "arm64"
+              ],
+              "sha256": "f4135becfc4b0d863d6ced26179930356d2e41c621e4b93d2ff55cc453521896",
+              "dependencies": [
+                "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+                "/System/Library/Frameworks/AVFoundation.framework/Versions/A/AVFoundation",
+                "/System/Library/Frameworks/Metal.framework/Versions/A/Metal",
+                "/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore",
+                "@rpath/libNxlvKit.dylib",
+                "/usr/lib/libSystem.B.dylib",
+                "/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio",
+                "/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork",
+                "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+                "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+                "/System/Library/Frameworks/CoreMedia.framework/Versions/A/CoreMedia",
+                "/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo",
+                "/System/Library/Frameworks/CryptoKit.framework/Versions/A/CryptoKit",
+                "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+                "/System/Library/Frameworks/GameController.framework/Versions/A/GameController",
+                "/System/Library/Frameworks/GameKit.framework/Versions/A/GameKit",
+                "/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO",
+                "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+                "/usr/lib/libobjc.A.dylib",
+                "/usr/lib/swift/libswiftAVFoundation.dylib",
+                "/usr/lib/swift/libswiftCore.dylib",
+                "/usr/lib/swift/libswiftCoreAudio.dylib",
+                "/usr/lib/swift/libswiftCoreFoundation.dylib",
+                "/usr/lib/swift/libswiftCoreImage.dylib",
+                "/usr/lib/swift/libswiftCoreMIDI.dylib",
+                "/usr/lib/swift/libswiftDarwin.dylib",
+                "/usr/lib/swift/libswiftDispatch.dylib",
+                "/usr/lib/swift/libswiftGLKit.dylib",
+                "/usr/lib/swift/libswiftGameplayKit.dylib",
+                "/usr/lib/swift/libswiftIOKit.dylib",
+                "/usr/lib/swift/libswiftMetal.dylib",
+                "/usr/lib/swift/libswiftMetalKit.dylib",
+                "/usr/lib/swift/libswiftModelIO.dylib",
+                "/usr/lib/swift/libswiftOSLog.dylib",
+                "/usr/lib/swift/libswiftObjectiveC.dylib",
+                "/usr/lib/swift/libswiftQuartzCore.dylib",
+                "/usr/lib/swift/libswiftSceneKit.dylib",
+                "/usr/lib/swift/libswiftSpatial.dylib",
+                "/usr/lib/swift/libswiftSpriteKit.dylib",
+                "/usr/lib/swift/libswiftUniformTypeIdentifiers.dylib",
+                "/usr/lib/swift/libswiftXPC.dylib",
+                "/usr/lib/swift/libswift_Concurrency.dylib",
+                "/usr/lib/swift/libswiftos.dylib",
+                "/usr/lib/swift/libswiftsimd.dylib",
+                "/usr/lib/swift/libswiftAppKit.dylib",
+                "/usr/lib/swift/libswiftCoreGraphics.dylib",
+                "/usr/lib/swift/libswiftCoreMedia.dylib",
+                "/usr/lib/swift/libswiftFoundation.dylib",
+                "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+                "/System/Library/Frameworks/AVFoundation.framework/Versions/A/AVFoundation",
+                "/System/Library/Frameworks/Metal.framework/Versions/A/Metal",
+                "/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore",
+                "@rpath/libNxlvKit.dylib",
+                "/usr/lib/libSystem.B.dylib",
+                "/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio",
+                "/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork",
+                "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+                "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+                "/System/Library/Frameworks/CoreMedia.framework/Versions/A/CoreMedia",
+                "/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo",
+                "/System/Library/Frameworks/CryptoKit.framework/Versions/A/CryptoKit",
+                "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+                "/System/Library/Frameworks/GameController.framework/Versions/A/GameController",
+                "/System/Library/Frameworks/GameKit.framework/Versions/A/GameKit",
+                "/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO",
+                "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+                "/usr/lib/libc++.1.dylib",
+                "/usr/lib/libobjc.A.dylib",
+                "/usr/lib/swift/libswiftAVFoundation.dylib",
+                "/usr/lib/swift/libswiftCore.dylib",
+                "/usr/lib/swift/libswiftCoreAudio.dylib",
+                "/usr/lib/swift/libswiftCoreFoundation.dylib",
+                "/usr/lib/swift/libswiftCoreImage.dylib",
+                "/usr/lib/swift/libswiftCoreMIDI.dylib",
+                "/usr/lib/swift/libswiftDarwin.dylib",
+                "/usr/lib/swift/libswiftDispatch.dylib",
+                "/usr/lib/swift/libswiftGLKit.dylib",
+                "/usr/lib/swift/libswiftGameplayKit.dylib",
+                "/usr/lib/swift/libswiftIOKit.dylib",
+                "/usr/lib/swift/libswiftMetal.dylib",
+                "/usr/lib/swift/libswiftMetalKit.dylib",
+                "/usr/lib/swift/libswiftModelIO.dylib",
+                "/usr/lib/swift/libswiftOSLog.dylib",
+                "/usr/lib/swift/libswiftObjectiveC.dylib",
+                "/usr/lib/swift/libswiftQuartzCore.dylib",
+                "/usr/lib/swift/libswiftSceneKit.dylib",
+                "/usr/lib/swift/libswiftSpatial.dylib",
+                "/usr/lib/swift/libswiftSpriteKit.dylib",
+                "/usr/lib/swift/libswiftUniformTypeIdentifiers.dylib",
+                "/usr/lib/swift/libswiftXPC.dylib",
+                "/usr/lib/swift/libswift_Concurrency.dylib",
+                "/usr/lib/swift/libswiftos.dylib",
+                "/usr/lib/swift/libswiftsimd.dylib",
+                "/usr/lib/swift/libswiftAppKit.dylib",
+                "/usr/lib/swift/libswiftCoreGraphics.dylib",
+                "/usr/lib/swift/libswiftCoreMedia.dylib",
+                "/usr/lib/swift/libswiftFoundation.dylib"
+              ]
+            },
+            "Contents/Frameworks/libNxlvKit.dylib": {
+              "architectures": [
+                "x86_64",
+                "arm64"
+              ],
+              "sha256": "4fdc649d6141027a423a4d3108cfab015580d32f48aae88e73940cec59bfe2b2",
+              "dependencies": [
+                "@rpath/libNxlvKit.dylib",
+                "/usr/lib/libSystem.B.dylib",
+                "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+                "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+                "/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText",
+                "/System/Library/Frameworks/CryptoKit.framework/Versions/A/CryptoKit",
+                "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+                "/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO",
+                "/usr/lib/libobjc.A.dylib",
+                "/usr/lib/swift/libswiftCore.dylib",
+                "/usr/lib/swift/libswiftCoreFoundation.dylib",
+                "/usr/lib/swift/libswiftDarwin.dylib",
+                "/usr/lib/swift/libswiftDispatch.dylib",
+                "/usr/lib/swift/libswiftIOKit.dylib",
+                "/usr/lib/swift/libswiftMetal.dylib",
+                "/usr/lib/swift/libswiftObjectiveC.dylib",
+                "/usr/lib/swift/libswiftUniformTypeIdentifiers.dylib",
+                "/usr/lib/swift/libswiftXPC.dylib",
+                "/usr/lib/swift/libswift_Concurrency.dylib",
+                "/usr/lib/swift/libswiftos.dylib",
+                "/usr/lib/swift/libswiftCoreGraphics.dylib",
+                "/usr/lib/swift/libswiftFoundation.dylib",
+                "@rpath/libNxlvKit.dylib",
+                "/usr/lib/libSystem.B.dylib",
+                "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+                "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+                "/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText",
+                "/System/Library/Frameworks/CryptoKit.framework/Versions/A/CryptoKit",
+                "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+                "/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO",
+                "/usr/lib/libc++.1.dylib",
+                "/usr/lib/libobjc.A.dylib",
+                "/usr/lib/swift/libswiftCore.dylib",
+                "/usr/lib/swift/libswiftCoreFoundation.dylib",
+                "/usr/lib/swift/libswiftDarwin.dylib",
+                "/usr/lib/swift/libswiftDispatch.dylib",
+                "/usr/lib/swift/libswiftIOKit.dylib",
+                "/usr/lib/swift/libswiftMetal.dylib",
+                "/usr/lib/swift/libswiftObjectiveC.dylib",
+                "/usr/lib/swift/libswiftUniformTypeIdentifiers.dylib",
+                "/usr/lib/swift/libswiftXPC.dylib",
+                "/usr/lib/swift/libswift_Concurrency.dylib",
+                "/usr/lib/swift/libswiftos.dylib",
+                "/usr/lib/swift/libswiftCoreGraphics.dylib",
+                "/usr/lib/swift/libswiftFoundation.dylib"
+              ]
+            }
+          },
+          "lixFont": {
+            "path": "Fonts/Lix/djvusans.ttf",
+            "bytes": 528156,
+            "sha256": "5cde0409cd6f6dff89fefb5349c90b92b62fd27de0fe3a577fb4036d5eeb4f71",
+            "noticePath": "Licences/Lix-font-LICENSE.txt",
+            "noticeBytes": 4772,
+            "noticeSHA256": "6b07a2a6b192d39baeca18f3491d7c25a1999ba11384588e0ed0f063a856bfb8",
+            "licence": "Bitstream-Vera AND LicenseRef-Arev-Fonts",
+            "cc0": false,
+            "modified": false
+          }
+        }
+      ],
+      "originalLemmingsArtworkIncluded": false,
+      "communityCorpusIncluded": false,
+      "submissionReady": false,
+      "uploaded": false,
+      "distribution": "ad-hoc local validation",
+      "signature": {
+        "flags": 2,
+        "hardenedRuntime": false,
+        "entitlements": {
+          "com.apple.security.app-sandbox": true,
+          "com.apple.security.files.user-selected.read-write": true
+        }
+      },
+      "resourceFiles": 1435
+    },
+    {
+      "candidate": "personal-macOS",
+      "sourceSnapshotVerified": true,
+      "sourceFiles": 277,
+      "buildEvidence": {
+        "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-personal-preview-build3/build-evidence.json",
+        "sha256": "26e7059793d418abc653ea67dc84e4b39fcd275a95efedd1ee066837f2ff1b4b"
+      },
+      "finalAuditLog": {
+        "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-personal-preview-build3/final-audit.log",
+        "sha256": "af51852d1051ed89092e1c8077c3cefd92ea51970ea14a37772faab1f557ed39"
+      },
+      "products": [
+        {
+          "kind": "universal",
+          "appPath": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-personal-preview-build3/Ultimate Lemmix.app",
+          "bundleIdentifier": "academy.glasscode.ultimatelemmix.personal-preview",
+          "displayName": "Ultimate Lemmix",
+          "version": "0.1",
+          "build": "3",
+          "reviewArchive": {
+            "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-personal-preview-build3/Ultimate-Lemmix-0.1-build3-personal-macOS.zip",
+            "bytes": 32705288,
+            "sha256": "db7ad85a5a63c2ed3305a791236b3aab5d672b6ad87a42b6686e630511522259",
+            "crcVerified": true,
+            "bundleFileHashesVerified": true
+          },
+          "resources": {
+            "files": 2154,
+            "bytes": 21482159,
+            "manifestSHA256": "e9edd18aec45551d0cbfa8673c6a3dcbe6b84d2e1a72006e3f757c1db751e5ff"
+          },
+          "binary": {
+            "Contents/MacOS/UltimateLemmix": {
+              "architectures": [
+                "x86_64",
+                "arm64"
+              ],
+              "sha256": "5f23708aaebd4542fce08b640ec5f6afb53b544e5f9bb394d8e4201edf2dcd74"
+            },
+            "Contents/Frameworks/libNxlvKit.dylib": {
+              "architectures": [
+                "x86_64",
+                "arm64"
+              ],
+              "sha256": "4fdc649d6141027a423a4d3108cfab015580d32f48aae88e73940cec59bfe2b2"
+            }
+          },
+          "lixFont": {
+            "path": "Fonts/Lix/djvusans.ttf",
+            "bytes": 528156,
+            "sha256": "5cde0409cd6f6dff89fefb5349c90b92b62fd27de0fe3a577fb4036d5eeb4f71",
+            "noticePath": "Licences/Lix-font-LICENSE.txt",
+            "noticeBytes": 4772,
+            "noticeSHA256": "6b07a2a6b192d39baeca18f3491d7c25a1999ba11384588e0ed0f063a856bfb8",
+            "licence": "Bitstream-Vera AND LicenseRef-Arev-Fonts",
+            "cc0": false,
+            "modified": false
+          }
+        }
+      ],
+      "originalLemmingsArtworkIncluded": true,
+      "communityCorpusIncluded": true,
+      "submissionReady": false,
+      "uploaded": false,
+      "distribution": "personal-local-preview-only",
+      "signature": {
+        "flags": 2,
+        "hardenedRuntime": false,
+        "entitlements": {
+          "com.apple.security.app-sandbox": true,
+          "com.apple.security.files.user-selected.read-write": true
+        }
+      },
+      "resourceFiles": 2154,
+      "compiledAgain": false,
+      "coreMode": "archive-verified-core-and-frontend-reuse",
+      "originalFontGlyphs": 188,
+      "communityPacks": 487,
+      "communityLevels": 5051,
+      "redistributionCleared": false,
+      "archiveMediaExtras": 88,
+      "archiveExecutableNamedExtras": 0
+    },
+    {
+      "candidate": "iOS",
+      "sourceSnapshotVerified": true,
+      "sourceFiles": 223,
+      "buildEvidence": {
+        "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-ios-build3/build-evidence.json",
+        "sha256": "46f30b8705a0b88674d91b41c31461140c2b90aa36a8376643574fa56d9ef1a5"
+      },
+      "finalAuditLog": {
+        "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-ios-build3/final-audit.log",
+        "sha256": "9ffa66df7f976a1401299a4de90c44fa2b8d72f988aea48fe5e2278ea71a1a6b"
+      },
+      "products": [
+        {
+          "kind": "device",
+          "appPath": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-ios-build3/UltimateLemmixIOS.xcarchive/Products/Applications/UltimateLemmix.app",
+          "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios",
+          "displayName": "Ultimate Lemmix",
+          "version": "0.1",
+          "build": "3",
+          "reviewArchive": {
+            "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-ios-build3/Ultimate-Lemmix-ios-0.1-build3-unsigned.ipa",
+            "bytes": 17608370,
+            "sha256": "a25d6a8e03944477b43aa093ff5bbe69657b3b06151e0747ddedb8f12a40d00e",
+            "crcVerified": true,
+            "fileHashesVerified": true,
+            "installableWithoutSigning": false
+          },
+          "resources": {
+            "resourceFiles": 1434,
+            "resourceBytes": 15727626,
+            "resourceManifestSHA256": "3bd6bf064b9ddb7398465980e234bad9990cdfdc0dc723ddd6703b7ac3ff5fcd",
+            "displayName": "Ultimate Lemmix",
+            "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios"
+          },
+          "binary": {
+            "architectures": [
+              "arm64"
+            ],
+            "executableSHA256": "9ea8663e1ad5f8b3f9cbc9736d1256ab72eb3e798979ddb2339b35bdc4fff228",
+            "sparkleIncluded": false
+          },
+          "lixFont": {
+            "path": "Fonts/Lix/djvusans.ttf",
+            "bytes": 528156,
+            "sha256": "5cde0409cd6f6dff89fefb5349c90b92b62fd27de0fe3a577fb4036d5eeb4f71",
+            "noticePath": "Licences/Lix-font-LICENSE.txt",
+            "noticeBytes": 4772,
+            "noticeSHA256": "6b07a2a6b192d39baeca18f3491d7c25a1999ba11384588e0ed0f063a856bfb8",
+            "licence": "Bitstream-Vera AND LicenseRef-Arev-Fonts",
+            "cc0": false,
+            "modified": false
+          }
+        },
+        {
+          "kind": "simulator",
+          "appPath": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-ios-build3/derived-data/Build/Products/Release-iphonesimulator/UltimateLemmix.app",
+          "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios",
+          "displayName": "Ultimate Lemmix",
+          "version": "0.1",
+          "build": "3",
+          "reviewArchive": {
+            "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-ios-build3/Ultimate-Lemmix-ios-0.1-build3-simulator.zip",
+            "bytes": 18610357,
+            "sha256": "5cbf3305abc6ebb842f18d9697d2225775863861b0b70e694cad7ac17951db75",
+            "crcVerified": true,
+            "fileHashesVerified": true,
+            "installableWithoutSigning": null
+          },
+          "resources": {
+            "resourceFiles": 1434,
+            "resourceBytes": 15727626,
+            "resourceManifestSHA256": "3bd6bf064b9ddb7398465980e234bad9990cdfdc0dc723ddd6703b7ac3ff5fcd",
+            "displayName": "Ultimate Lemmix",
+            "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios"
+          },
+          "binary": {
+            "architectures": [
+              "arm64"
+            ],
+            "executableSHA256": "8de616459fa6f8529909a10536207d3c78773260a318f55fd4f92ce5e25d8cb5",
+            "sparkleIncluded": false
+          },
+          "lixFont": {
+            "path": "Fonts/Lix/djvusans.ttf",
+            "bytes": 528156,
+            "sha256": "5cde0409cd6f6dff89fefb5349c90b92b62fd27de0fe3a577fb4036d5eeb4f71",
+            "noticePath": "Licences/Lix-font-LICENSE.txt",
+            "noticeBytes": 4772,
+            "noticeSHA256": "6b07a2a6b192d39baeca18f3491d7c25a1999ba11384588e0ed0f063a856bfb8",
+            "licence": "Bitstream-Vera AND LicenseRef-Arev-Fonts",
+            "cc0": false,
+            "modified": false
+          }
+        }
+      ],
+      "originalLemmingsArtworkIncluded": false,
+      "communityCorpusIncluded": false,
+      "submissionReady": false,
+      "uploaded": false,
+      "distribution": "unsigned local review",
+      "installableWithoutSigning": false
+    },
+    {
+      "candidate": "tvOS",
+      "sourceSnapshotVerified": true,
+      "sourceFiles": 251,
+      "buildEvidence": {
+        "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-tvos-build3/build-evidence.json",
+        "sha256": "ccaf766ca9a9ca7e7969e94cfe08c1994d6a99dc660f6197ac20b6defb3329f7"
+      },
+      "finalAuditLog": {
+        "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-tvos-build3/final-audit.log",
+        "sha256": "8f81d523b5284eddd1f29faf89b5fe795e2c20e584158b50aa570393b5eb2c5f"
+      },
+      "products": [
+        {
+          "kind": "device",
+          "appPath": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-tvos-build3/UltimateLemmixTVOS.xcarchive/Products/Applications/UltimateLemmix.app",
+          "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos",
+          "displayName": "Ultimate Lemmix",
+          "version": "0.1",
+          "build": "3",
+          "reviewArchive": {
+            "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-tvos-build3/Ultimate-Lemmix-tvos-0.1-build3-unsigned.ipa",
+            "bytes": 17659653,
+            "sha256": "1180a351e743787b82c4bb717c75299300c83d06ab8afcd30f5b946b624e6a98",
+            "crcVerified": true,
+            "fileHashesVerified": true,
+            "installableWithoutSigning": false
+          },
+          "resources": {
+            "resourceFiles": 1434,
+            "resourceBytes": 15727626,
+            "resourceManifestSHA256": "3bd6bf064b9ddb7398465980e234bad9990cdfdc0dc723ddd6703b7ac3ff5fcd",
+            "displayName": "Ultimate Lemmix",
+            "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos"
+          },
+          "binary": {
+            "architectures": [
+              "arm64"
+            ],
+            "executableSHA256": "28f12c89314b5c15902ce8a067836496983db100d5a3819df0a2c51c731d90b7",
+            "sparkleIncluded": false
+          },
+          "lixFont": {
+            "path": "Fonts/Lix/djvusans.ttf",
+            "bytes": 528156,
+            "sha256": "5cde0409cd6f6dff89fefb5349c90b92b62fd27de0fe3a577fb4036d5eeb4f71",
+            "noticePath": "Licences/Lix-font-LICENSE.txt",
+            "noticeBytes": 4772,
+            "noticeSHA256": "6b07a2a6b192d39baeca18f3491d7c25a1999ba11384588e0ed0f063a856bfb8",
+            "licence": "Bitstream-Vera AND LicenseRef-Arev-Fonts",
+            "cc0": false,
+            "modified": false
+          }
+        },
+        {
+          "kind": "simulator",
+          "appPath": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-tvos-build3/derived-data/Build/Products/Release-appletvsimulator/UltimateLemmix.app",
+          "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos",
+          "displayName": "Ultimate Lemmix",
+          "version": "0.1",
+          "build": "3",
+          "reviewArchive": {
+            "path": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-tvos-build3/Ultimate-Lemmix-tvos-0.1-build3-simulator.zip",
+            "bytes": 18666108,
+            "sha256": "cb498feb974b5ce5ff777840069edaaf482a8fca7b91f217624c5a579fefd74f",
+            "crcVerified": true,
+            "fileHashesVerified": true,
+            "installableWithoutSigning": null
+          },
+          "resources": {
+            "resourceFiles": 1434,
+            "resourceBytes": 15727626,
+            "resourceManifestSHA256": "3bd6bf064b9ddb7398465980e234bad9990cdfdc0dc723ddd6703b7ac3ff5fcd",
+            "displayName": "Ultimate Lemmix",
+            "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos"
+          },
+          "binary": {
+            "architectures": [
+              "arm64"
+            ],
+            "executableSHA256": "bfacf76cf3174fe48c2e4a4b18420629f28ea8ebff403ec8cea1448d113eed12",
+            "sparkleIncluded": false
+          },
+          "lixFont": {
+            "path": "Fonts/Lix/djvusans.ttf",
+            "bytes": 528156,
+            "sha256": "5cde0409cd6f6dff89fefb5349c90b92b62fd27de0fe3a577fb4036d5eeb4f71",
+            "noticePath": "Licences/Lix-font-LICENSE.txt",
+            "noticeBytes": 4772,
+            "noticeSHA256": "6b07a2a6b192d39baeca18f3491d7c25a1999ba11384588e0ed0f063a856bfb8",
+            "licence": "Bitstream-Vera AND LicenseRef-Arev-Fonts",
+            "cc0": false,
+            "modified": false
+          }
+        }
+      ],
+      "originalLemmingsArtworkIncluded": false,
+      "communityCorpusIncluded": false,
+      "submissionReady": false,
+      "uploaded": false,
+      "distribution": "unsigned local review",
+      "installableWithoutSigning": false
+    }
+  ],
+  "launchedByPackaging": false,
+  "uploaded": false,
+  "submissionReady": false,
+  "preservedOpenBuild2": {
+    "path": "/Users/erikveland/Lemmings/.build/build3-running-build2-protection.json",
+    "sha256": "335eee9e1922ff507084b53ee6ddebd05b6d50f477db862f563840820fa8b31a"
+  },
+  "fontSourceRecord": {
+    "path": "/Users/erikveland/Lemmings/Resources/AlternativeAssets/lix-font-source.json",
+    "sha256": "fcb76cf61f2bfe0eb15c0d1f0e58f49c19a03dd0dc1e818e627260b0ec2b8f5d"
+  },
+  "nativeRenderingEvidence": "Recorded separately by the final offscreen, muted HUD harness.",
+  "UIKitRenderedAndFocusAcceptance": "Not established by these unsigned compilation and packaging checks."
+}

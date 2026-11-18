@@ -1,14 +1,14 @@
 {
   "candidatePool": 1721,
   "chapters": 13,
-  "editorialCoursePlacements": 214,
+  "editorialCoursePlacements": 215,
   "estimatedPlacements": 0,
   "fan": 2,
   "largestReferenceGap": 4.0,
-  "levels": 296,
+  "levels": 297,
   "limits": "Course positions are editorial ordinals, not measured difficulty scores. Every transition has a measured pressure review and earlier practice examples, but insight and special pacing still need novice playtesting. An elaborate witness need not be the easiest route. Native quota timing removes replay shutdown delay; it does not prove a fastest solution.",
-  "nativeQuotaTimings": 296,
-  "official": 294,
+  "nativeQuotaTimings": 297,
+  "official": 295,
   "pendingReview": 1636,
   "placementPolicy": "teaching-curriculum-3",
   "pressureFlaggedRoutes": 122,
@@ -16,9 +16,9 @@
   "seasonalPlacementsPendingHumanReview": 70,
   "stages": {
     "Difficult": 22,
-    "Expert": 229,
+    "Expert": 230,
     "Fun": 30,
     "Intermediate": 15
   },
-  "version": "learning-32"
+  "version": "learning-30"
 }

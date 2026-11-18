@@ -21,6 +21,10 @@ actor Server {
   }
 }
 let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+if CommandLine.arguments.contains("--updates-policy") {
+  try await runUpdatePolicyTests(root: root)
+  exit(0)
+}
 if CommandLine.arguments.contains("--audit-artwork") {
   try runArtworkAudit(root: root)
   exit(0)

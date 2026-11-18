@@ -37,6 +37,8 @@ enum PanelGlyph: String {
   /// destination ones and leave the strokes uneven, which is exactly what a
   /// bitmap is here to avoid.
   @MainActor func image(fitting box: CGSize, transparentRock: Bool = false) -> NSImage? {
+    if let image = resourceTileImage(fitting: box) { return image }
+    if let image = lixImage(fitting: box) { return image }
     let size = pixelSize
     guard size.width > 0, size.height > 0 else { return nil }
     let steps = min(Int(box.width) / size.width, Int(box.height) / size.height)
@@ -47,8 +49,10 @@ enum PanelGlyph: String {
 
   /// Keep control silhouettes white over the original 1-bit rock.
   @MainActor func monochromeImage(fitting box: CGSize) -> NSImage? {
+    if let image = resourceTileImage(fitting: box) { return image }
+    if let image = lixImage(fitting: box) { return image }
     let steps = max(1, art.scale(fitting: box))
-    let key = "mono-\(rawValue)-\(steps)"
+    let key = "\(GameArtworkResources.revision)-mono-\(rawValue)-\(steps)"
     if let hit = Self.cache[key] { return hit }
     let width = rows.first?.count ?? 0, height = rows.count
     guard width > 0 else { return nil }
@@ -75,11 +79,13 @@ enum PanelGlyph: String {
    * Recreates the panel art at Macintosh scale without changing its logical size.
    */
   @MainActor func macImage(fitting box: CGSize, transparentRock: Bool = false) -> NSImage? {
+    if let image = resourceTileImage(fitting: box) { return image }
+    if let image = lixImage(fitting: box) { return image }
     let size = pixelSize
     guard size.width > 0, size.height > 0 else { return nil }
     let steps = min(Int(box.width) / size.width, Int(box.height) / size.height)
     guard steps >= 1 else { return nil }
-    let key = "mac-\(rawValue)-\(steps)-\(transparentRock)-\(SequelMacArtwork.revision)"
+    let key = "\(GameArtworkResources.revision)-mac-\(rawValue)-\(steps)-\(transparentRock)-\(SequelMacArtwork.revision)"
     if let hit = Self.cache[key] { return hit }
     guard let first = rows.first else { return nil }
     let width = first.count, height = rows.count
@@ -151,8 +157,12 @@ enum PanelGlyph: String {
   /// Results are kept, because the bar redraws every frame and the scale only
   /// changes when the window does.
   @MainActor func image(scale: Int, transparentRock: Bool = false) -> NSImage? {
+    if let image = art.resourceTileImage(scale: scale) {
+      return NSImage(cgImage: image, size: CGSize(width: image.width / 2, height: image.height))
+    }
+    if let image = lixImage(fitting: CGSize(width: pixelSize.width * max(1, scale), height: pixelSize.height * max(1, scale))) { return image }
     let steps = max(1, scale)
-    let key = "\(rawValue)-\(steps)-\(transparentRock)"
+    let key = "\(GameArtworkResources.revision)-\(rawValue)-\(steps)-\(transparentRock)"
     if let hit = Self.cache[key] { return hit }
 
     let rows = self.rows
@@ -189,6 +199,39 @@ enum PanelGlyph: String {
     let image = NSImage(cgImage: cgImage, size: CGSize(width: width / (isOriginalTile ? 2 : 1), height: height))
     Self.cache[key] = image
     return image
+  }
+
+  @MainActor private func resourceTileImage(fitting box: CGSize) -> NSImage? {
+    let steps = art.scale(fitting: box)
+    guard steps > 0, let image = art.resourceTileImage(scale: steps) else { return nil }
+    return NSImage(cgImage: image, size: CGSize(width: image.width / 2, height: image.height))
+  }
+
+  @MainActor private func lixImage(fitting box: CGSize) -> NSImage? {
+    guard GameArtworkSkin.usesLixInterface else { return nil }
+    let control: LixInterfaceArtwork.Control
+    switch self {
+    case .pause: control = .pause
+    case .play: control = .play
+    case .nuke: control = .nuke
+    case .undo: control = .undo
+    case .fastForward: control = .fastForward
+    case .rewind: control = .rewind
+    case .stepBackward: control = .stepBackward
+    case .stepForward: control = .stepForward
+    case .hints: control = .help
+    default: return nil
+    }
+    guard let frame = GameArtworkResources.lixInterface?.control(control),
+          let provider = CGDataProvider(data: frame.rgba as CFData),
+          let image = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8,
+            bitsPerPixel: 32, bytesPerRow: frame.width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+            decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
+    let fit = min(box.width / CGFloat(frame.width), box.height / CGFloat(frame.height))
+    guard fit > 0 else { return nil }
+    let scale = fit >= 1 ? floor(fit) : fit >= 0.5 ? 0.5 : fit
+    return NSImage(cgImage: image, size: CGSize(width: CGFloat(frame.width) * scale, height: CGFloat(frame.height) * scale))
   }
 
   /// The glyph a button wears, or nil when the button carries wording instead.

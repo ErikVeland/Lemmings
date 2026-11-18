@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import ImageIO
 import NxlvKit
 
@@ -42,7 +43,7 @@ public enum GameMenuLogo {
                 bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
                 provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
         else { return nil }
-        let url = letteringURL ?? Bundle.main.resourceURL?.appendingPathComponent("MenuArtwork/ultimate.png")
+        let url = letteringURL ?? GameResources.file("MenuArtwork/ultimate.png")
         guard let url, let source = CGImageSourceCreateWithURL(url as CFURL, nil),
               let lettering = CGImageSourceCreateImageAtIndex(source, 0, nil)
         else {

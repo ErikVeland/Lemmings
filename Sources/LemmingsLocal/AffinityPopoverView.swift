@@ -1,14 +1,19 @@
 #if os(macOS)
 import AppKit
+import LemmingsGameArt
 import NxlvKit
 
 @MainActor final class AffinityPopoverView: NSView {
     private let affinity: TrolleyArchetype
-    private let font: MacInterfaceRenderer?
+    private let selectedFont: MacInterfaceRenderer?
+    private let fontRevision = GameArtworkResources.revision
+    private var font: MacInterfaceRenderer? {
+        fontRevision == GameArtworkResources.revision ? (selectedFont ?? GameMenuArtwork.renderer()) : GameMenuArtwork.renderer()
+    }
     private let forRun: Bool
     override var isFlipped: Bool { true }
     init(affinity: TrolleyArchetype, font: MacInterfaceRenderer?, forRun: Bool) {
-        self.affinity = affinity; self.font = font; self.forRun = forRun
+        self.affinity = affinity; self.selectedFont = font; self.forRun = forRun
         super.init(frame: CGRect(x: 0, y: 0, width: 480, height: 334))
         setAccessibilityElement(true)
         setAccessibilityLabel("\(affinity.name). \(affinity.philosophySummary) \(forRun ? L10n.text("This run") : L10n.text("Play style")): \(affinity.affinityDescription)")

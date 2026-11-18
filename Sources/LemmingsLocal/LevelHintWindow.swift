@@ -323,7 +323,7 @@ import NxlvKit
 
 /// Bitmap text keeps its complete readable value available to assistive tools.
 @MainActor final class HintBitmapText: NSView {
-    private let renderer = GameMenuArtwork.renderer()
+    private var renderer: MacInterfaceRenderer? { GameMenuArtwork.renderer() }
     private let face: ClassicMacUserInterface.Face
     var stringValue = "" {
         didSet {

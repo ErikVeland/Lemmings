@@ -1,5 +1,6 @@
 import SwiftUI
 import WidgetKit
+import LemmingsAppCore
 import LemmingsMobileCore
 import LemmingsGameArt
 import NxlvKit
@@ -49,7 +50,7 @@ struct ClockWidgetView: View {
             }
         }
         .privacySensitive()
-        .widgetURL(URL(string: "ultimatelemmings://desk-clock"))
+        .widgetURL(URL(string: "\(Bundle.main.object(forInfoDictionaryKey: "DeskClockURLScheme") as? String ?? "ultimatelemmings")://desk-clock"))
         .modifier(ClockBackground())
     }
 
@@ -61,8 +62,14 @@ struct ClockWidgetView: View {
 
     private func render(size: CGSize) -> CGImage? {
         let width = max(1, Int(size.width * 2)), height = max(1, Int(size.height * 2))
-        guard let root = Bundle.main.resourceURL,
-              let art = GameDeskClockArt(directory: root.appendingPathComponent("MacArtwork/lemmings")),
+        #if ULTIMATE_LEMMIX_STORE
+        let sharedContainer = GameDeskClockResources.sharedContainerURL
+        #else
+        let sharedContainer: URL? = nil
+        #endif
+        guard let directory = GameDeskClockResources.artworkDirectory(
+                containerURL: sharedContainer, bundledResourceURL: Bundle.main.resourceURL),
+              let art = GameDeskClockArt(directory: directory),
               let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
                 bytesPerRow: width * 4, space: CGColorSpaceCreateDeviceRGB(),
                 bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
@@ -71,7 +78,7 @@ struct ClockWidgetView: View {
         let bounds = CGRect(origin: .zero, size: size)
         #if os(iOS)
         if family == .accessoryRectangular,
-           let type = GameMenuTypography(directory: root.appendingPathComponent("MacArtwork/lemmings")) {
+           let type = GameMenuTypography(directory: directory) {
             GameTextLayout.draw(entry.date.formatted(date: .omitted, time: .shortened),
                 in: CGRect(x: 0, y: 0, width: size.width, height: size.height / 2), typography: type, palette: .green, context: context)
             if let event = entry.event {

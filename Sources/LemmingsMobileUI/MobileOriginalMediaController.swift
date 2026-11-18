@@ -1,6 +1,7 @@
 #if os(iOS) || os(tvOS)
 import AVFoundation
 import LemmingsAudio
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -117,7 +118,7 @@ import UIKit
                 effects.setMuted(muted || settings.classic.sound == .silent); effects.setVolume(settings.classic.soundVolume)
                 if !muted, settings.classic.sound != .silent { try? effects.start() }
                 if !muted, settings.musicEnabled, settings.classic.music != .silent,
-                   items[index] == .chronicles(.introduction), let root = Bundle.main.resourceURL {
+                   items[index] == .chronicles(.introduction), let root = GameResources.resourceURL {
                     soundtrack = try? AVAudioPlayer(contentsOf: root.appendingPathComponent("Music/All_New_World_of_Lemmings_(IBM_PC_AT)/01 Intro.m4a"))
                     soundtrack?.volume = Float(settings.classic.musicVolume); soundtrack?.play()
                 }

@@ -225,10 +225,20 @@ enum FanLevelLibrary {
     }
   }
 
-  static var bundledFolder: URL? { Bundle.main.resourceURL?.appendingPathComponent("LevelPacks") }
+  static var bundledFolder: URL? {
+    #if !CLASSIC_SOLVER_STANDALONE && canImport(LemmingsAppCore)
+    return GameResources.directory("LevelPacks")
+    #else
+    return Bundle.main.resourceURL?.appendingPathComponent("LevelPacks")
+    #endif
+  }
   static var downloadFolder: URL {
+    #if !CLASSIC_SOLVER_STANDALONE && canImport(LemmingsAppCore)
+    return AppStorage.current().applicationSupport.appendingPathComponent("Fan Levels", isDirectory: true)
+    #else
     FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
       .appendingPathComponent("Ultimate Lemmings/Fan Levels", isDirectory: true)
+    #endif
   }
 
   static func packID(_ url: URL) -> Int? {
@@ -458,7 +468,12 @@ enum FanLevelLibrary {
   static func directoryFingerprint(_ root: URL) -> String? {
     let key = GameAssetCache<String>.bundledKey(root).map { "directory:" + $0 }
     if let key, let cached = bundledFingerprints.value(for: key) { return cached }
-    guard let result = ClassicSourceRevision.directory(root) else { return nil }
+    guard let raw = ClassicSourceRevision.directory(root) else { return nil }
+    #if !CLASSIC_SOLVER_STANDALONE && canImport(LemmingsAppCore)
+    let result = OwnedContentIdentity.canonicalDirectoryRevision(raw: raw)
+    #else
+    let result = raw
+    #endif
     if let key { bundledFingerprints.insert(result, for: key) }
     return result
   }
@@ -736,19 +751,29 @@ enum FanLevelLibrary {
   /// Custom-level slots span the original five styles, Oh No's four, then Xmas.
   /// Resolve them independently of whichever campaign the player last opened.
   static func groundSet(for level: ClassicLevel, styleName: String?, portsRoot: URL,
-                        pack: URL? = nil, entry: Entry? = nil, useLocalStyles: Bool = true, useHolidayStyles: Bool = true) throws -> ClassicGroundSet {
+                        pack: URL? = nil, entry: Entry? = nil, useLocalStyles: Bool = true, useHolidayStyles: Bool = true,
+                        ownedClassicRoots: [URL] = []) throws -> ClassicGroundSet {
     let names = ["dirt", "fire", "marble", "pillar", "crystal", "brick", "rock", "snow", "bubble", "xmas"]
     let named = styleName?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     let name = named ?? (names.indices.contains(level.groundStyle) ? names[level.groundStyle] : L10n.text("slot \(level.groundStyle)"))
     let directory: URL, index: Int
     if named == nil, useLocalStyles, let pack, let local = localStyleDirectory(in: pack, includeHoliday: useHolidayStyles),
        local != "holiday_native_1994" || level.groundStyle == 2 {
-      directory = portsRoot.appendingPathComponent(local); index = level.groundStyle
+      index = level.groundStyle
+      directory = styleDirectory(preferred: portsRoot.appendingPathComponent(local), index: index,
+        titles: titles(forArtworkFolder: local), ownedClassicRoots: ownedClassicRoots)
     } else if name == "xmas" || name == "christmas" {
-      directory = portsRoot.appendingPathComponent("holiday_native_1994"); index = 2
+      index = 2
+      directory = styleDirectory(preferred: portsRoot.appendingPathComponent("holiday_native_1994"), index: index,
+        titles: titles(forArtworkFolder: "holiday_native_1994"), ownedClassicRoots: ownedClassicRoots)
     } else {
       switch ClassicStyleResolver(portsRoot: portsRoot).resolve(styleNamed: name == "special" ? "dirt" : name) {
       case let .found(root, slot), let .packSupplied(root, slot): directory = root; index = slot
+      case let .notInstalled(location):
+        index = location.index
+        let folder = location.release.folders[0]
+        directory = styleDirectory(preferred: portsRoot.appendingPathComponent(folder), index: index,
+          titles: titles(forArtworkFolder: folder), ownedClassicRoots: ownedClassicRoots)
       default: throw NSError(domain: "FanLevelLibrary", code: 1, userInfo: [NSLocalizedDescriptionKey: L10n.text("Unsupported or missing fan graphics style: \(name)")])
       }
     }
@@ -757,6 +782,9 @@ enum FanLevelLibrary {
       let ground = try graphicData("ground\(slot)o.dat", entry: entry, pack: pack)
       let graphics = try graphicData("vgagr\(slot).dat", entry: entry, pack: pack)
       if ground != nil || graphics != nil {
+        if let ground, let graphics {
+          return try ClassicGroundSet(style: index, groundData: ground, graphicsArchiveData: graphics)
+        }
         let files = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
         func fallback(_ name: String) throws -> Data {
           guard let file = files.first(where: { $0.lastPathComponent.lowercased() == name }) else { throw ClassicGraphicsError.missingFile(name) }
@@ -767,6 +795,47 @@ enum FanLevelLibrary {
       }
     }
     return try ClassicGroundSet.load(style: index, from: directory)
+  }
+
+  private static let ownedTitleCache = GameAssetCache<ClassicTitle>(capacity: 64)
+
+  /**
+   * Checks mutable imports by content before reusing their detected release.
+   */
+  private static func ownedDirectories(_ roots: [URL], titles: [ClassicTitle]) -> [URL] {
+    let detected: [(URL, ClassicTitle)] = roots.compactMap { root in
+      let directory = root.resolvingSymlinksInPath().standardizedFileURL
+      guard let revision = directoryFingerprint(directory) else { return nil }
+      if let title = ownedTitleCache.value(for: revision) { return (directory, title) }
+      guard let title = try? ClassicDataSet.detect(directory: directory).title else { return nil }
+      ownedTitleCache.insert(title, for: revision)
+      return (directory, title)
+    }
+    return titles.flatMap { title in detected.filter { $0.1 == title }.map(\.0) }
+  }
+
+  private static func titles(forArtworkFolder folder: String) -> [ClassicTitle] {
+    switch folder {
+    case "lemmings_dos_1991-07-30": return [.lemmings]
+    case "oh_no_more_lemmings_dos-1991-11-14_2232": return [.ohNoMoreLemmings]
+    case "xmas_dos_XmasLemmingsV1.9": return [.xmasLemmings1991]
+    case "xmas_dos_XmasLemmingsV1.9a1": return [.xmasLemmings1992]
+    case "holiday_native_1994":
+      return [.holidayLemmings1994, .holidayLemmings1993, .xmasLemmings1992, .xmasLemmings1991]
+    default: return []
+    }
+  }
+
+  private static func hasFile(_ name: String, in directory: URL) -> Bool {
+    (try? FileManager.default.contentsOfDirectory(atPath: directory.path))?
+      .contains { $0.lowercased() == name } == true
+  }
+
+  private static func styleDirectory(preferred: URL, index: Int, titles: [ClassicTitle],
+                                     ownedClassicRoots: [URL]) -> URL {
+    let name = "ground\(index)o.dat"
+    if hasFile(name, in: preferred) { return preferred }
+    return ownedDirectories(ownedClassicRoots, titles: titles).first { hasFile(name, in: $0) } ?? preferred
   }
 
   private static let presentationGrounds = GameAssetCache<ClassicGroundSet>(capacity: 32)
@@ -865,18 +934,35 @@ enum FanLevelLibrary {
     return selected
   }
 
-  static func specialGraphic(for level: ClassicLevel, entry: Entry, pack: URL, portsRoot: URL) throws -> ClassicSpecialGraphic? {
+  static func specialGraphic(for level: ClassicLevel, entry: Entry? = nil, pack: URL? = nil, portsRoot: URL,
+                             ownedClassicRoots: [URL] = []) throws -> ClassicSpecialGraphic? {
     guard level.specialStyle != 0 else { return nil }
     let index = level.specialStyle - 1
-    if let data = try graphicData("vgaspec\(index).dat", entry: entry, pack: pack) {
+    if let entry, let pack, let data = try graphicData("vgaspec\(index).dat", entry: entry, pack: pack) {
       return try ClassicSpecialGraphic(archiveData: data)
     }
     // Some older packs encode a single filename character relative to ASCII zero.
-    if (17...42).contains(index), let letter = UnicodeScalar(48 + index),
+    if let entry, let pack, (17...42).contains(index), let letter = UnicodeScalar(48 + index),
       let data = try graphicData("vgaspec\(Character(letter)).dat", entry: entry, pack: pack) {
       return try ClassicSpecialGraphic(archiveData: data)
     }
-    return try ClassicSpecialGraphic.load(index: index, from: portsRoot.appendingPathComponent("lemmings_dos_1991-07-30"))
+    let preferred = portsRoot.appendingPathComponent("lemmings_dos_1991-07-30")
+    let name = "vgaspec\(index).dat"
+    let directory = hasFile(name, in: preferred) ? preferred
+      : ownedDirectories(ownedClassicRoots, titles: [.lemmings]).first { hasFile(name, in: $0) } ?? preferred
+    return try ClassicSpecialGraphic.load(index: index, from: directory)
+  }
+
+  /**
+   * Uses bundled masks first, then the player's detected Classic releases.
+   */
+  static func mainDATAssets(portsRoot: URL, ownedClassicRoots: [URL] = []) throws -> ClassicMainDATAssets {
+    let preferred = portsRoot.appendingPathComponent("lemmings_dos_1991-07-30")
+    let titles: [ClassicTitle] = [.lemmings, .ohNoMoreLemmings, .holidayLemmings1994,
+      .holidayLemmings1993, .xmasLemmings1992, .xmasLemmings1991]
+    let directory = hasFile("main.dat", in: preferred) ? preferred
+      : ownedDirectories(ownedClassicRoots, titles: titles).first { hasFile("main.dat", in: $0) } ?? preferred
+    return try ClassicMainDATAssets.load(from: directory)
   }
 
   private final class GraphicArchiveIndex: @unchecked Sendable {

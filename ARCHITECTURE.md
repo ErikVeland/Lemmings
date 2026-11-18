@@ -64,14 +64,33 @@ iOS and tvOS shells adapt platform services.
 | `LemmingsAppCore` | Shared storage, records, recovery, privacy and online-service models | `NxlvKit` |
 | `LemmingsMobileCore` | Typed sessions, input and layout contracts, checkpoints | `LemmingsAppCore`, `NxlvKit` |
 | `LemmingsTVCore` | TV controller, activation, transport and migration policies | `LemmingsMobileCore`, `NxlvKit` |
-| `LemmingsGameArt` | Shared pixel menus, controls, typography and presentation effects | `NxlvKit`, `LemmingsMobileCore`, `LemmingsTVCore` |
-| `LemmingsAudio` | Sound and music playback, decks and playback transitions | `NxlvKit` |
+| `LemmingsGameArt` | Shared pixel menus, controls, typography and presentation effects | `LemmingsAppCore`, `NxlvKit`, `LemmingsMobileCore`, `LemmingsTVCore` |
+| `LemmingsAudio` | Sound and music playback, decks and playback transitions | `LemmingsAppCore`, `NxlvKit` |
 | `LemmingsTVUI` | TV platform adapters around the mobile flow | `LemmingsTVCore`, `LemmingsMobileUI`, `LemmingsMobileCore`, `LemmingsGameArt`, `LemmingsAudio`, `NxlvKit` |
 
 Keep simulation rules in `NxlvKit`. Shared services do not belong in a shell
 merely because the Mac implemented them first. Platform event recognition and
 view lifecycle remain in the corresponding shell or UI module. Consult
 `Package.swift` before introducing a dependency back toward a shell.
+
+### Selectable presentation resources
+
+Ultimate Lemmix uses the same full application and engines with licensed default
+assets. `LemmingsAppCore.GameResources` selects an immutable data bundle. Artwork,
+fonts, music, sounds and content discovery read that selected resource tree.
+`OwnedResourceLibrary` validates local imports and merges them with the current
+application's trusted resources. Application identity, service configuration and
+engine proof metadata remain application-owned.
+
+The platform shells reload resource-dependent caches after activation. Importing
+does not replace game code, remove features or change simulation rules. A complete
+resource pack and a single game's DOS folder supply different asset coverage.
+See [Ultimate Lemmix](Documentation/UltimateLemmix.md) for build and import limits.
+
+The Store Desk Clock widget reads selected owned artwork from its App Group.
+`GameDeskClockResources` validates an immutable artwork snapshot before publishing
+its selection atomically. Platform adapters request a WidgetKit refresh after
+publication. The shared model accepts an explicit container for isolated checks.
 
 ### `Sources/NxlvKit`
 
@@ -325,10 +344,42 @@ and [implementation guidance](https://developer.apple.com/videos/play/wwdc2025/2
 
 ### Packaging
 
+Ultimate Lemmings and Ultimate Lemmix are publication profiles of this source
+tree. They share application, engine, mobile launch, widget and Top Shelf code.
+`Resources/Publishing/editions.json` owns one marketing version and independent
+destination build counters. `Scripts/build-publication.sh` selects the profile
+and checks source membership before compilation. Both Mac profiles use the same
+recursive compiler helper and validated caches. See
+[shared publishing](Documentation/SharedPublishing.md) for commands and limits.
+
 `Package.swift` defines `NxlvKit`, the mobile core and UI libraries, the native
 macOS executables and package test targets. `Scripts/build-local-app.sh` builds
 universal arm64/x86_64 Mac bundles and embeds the supplied local game data. It
 targets macOS 12.3 or later.
+
+`Scripts/build-ultimate-lemmix-app-store.sh` builds the separate Ultimate Lemmix
+Mac candidate from the same engines and front end. A compilation flag excludes
+Sparkle and original embedded cursors. An exact resource allowlist supplies
+licensed Lix media, original starter content, authored feature metadata and an
+asset-free BYO helper. The shared menus and feature routes remain intact.
+The requested project icon has a separate character-rights review gate.
+Player-owned files enter through the staged `BYOIntegration` boundary.
+`OwnedGameLibrary` retains multiple installations. Verified campaigns reconnect
+to authored journey metadata without changing their current load-time hashes.
+Security-scoped bookmarks retain access to player-selected external libraries. See
+[Ultimate Lemmix](Documentation/UltimateLemmix.md) for scope and release limits.
+
+`Apps/UltimateLemmixIOS` and `Apps/UltimateLemmixTVOS` use the shared mobile
+core and UIKit/Metal front end with an explicit clean-distribution
+configuration. Each has its own app identity and allowlisted resources.
+`ClassicMobileLibrary` creates the independent starter without original data
+and renders Lix through the shared character and scene decoders. The scene
+adapter uses 2× artwork while retaining Classic terrain masks, trigger regions
+and simulation coordinates. iOS imports through the
+folder picker. tvOS receives bounded local browser transfers and stores
+disposable content in Caches. The native `BYOIntegration` boundary validates
+both imports. A process-wide TV installation lease prevents overlapping
+promotions. See [mobile and TV builds](Documentation/UltimateLemmixMobile.md).
 
 The macOS app keeps aggregate play counts locally. With consent and a configured
 HTTPS address, it sends fixed-schema count events to the optional collector in

@@ -52,6 +52,7 @@ public final class Lemmings2MobileSession: MobileGameSession {
     public var availableGraphics: [ClassicGraphicsSource] { artworkRenderer == nil ? [] : [.dosVGA, .macintosh] }
     private func artworkSprite(_ value: MobileSpriteHighlight?) -> MobileSpriteHighlight? {
         guard macArtwork else { return value }
+        if let value, value.frame.width == Int(value.rect.width * 2), value.frame.height == Int(value.rect.height * 2) { return value }
         return macSpriteCache.sprite(value, category: value?.cacheKey.contains("walker-") == true ? .lemmings2Walker : .sprite)
     }
     public func makeReplayClone() -> (any MobileGameSession)? {
@@ -655,6 +656,7 @@ public final class Lemmings3MobileSession: MobileGameSession {
     public var availableGraphics: [ClassicGraphicsSource] { artworkRenderer == nil ? [] : [.dosVGA, .macintosh] }
     private func artworkSprite(_ value: MobileSpriteHighlight?) -> MobileSpriteHighlight? {
         guard macArtwork else { return value }
+        if let value, value.frame.width == Int(value.rect.width * 2), value.frame.height == Int(value.rect.height * 2) { return value }
         return macSpriteCache.sprite(value, category: value?.cacheKey.contains("walker-") == true ? .lemmings2Walker : .sprite)
     }
     public func makeReplayClone() -> (any MobileGameSession)? {

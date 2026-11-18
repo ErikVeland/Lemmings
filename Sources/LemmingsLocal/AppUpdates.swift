@@ -1,6 +1,40 @@
 #if os(macOS)
 import AppKit
+#if ULTIMATE_LEMMIX_STORE
+/**
+ * Leaves application updates to the store while retaining the frontend contract.
+ */
+@MainActor final class AppUpdates: NSObject {
+    var onChange: (() -> Void)?
+    let availableVersion: String? = nil
+    let isDownloaded = false
+    let isDownloading = false
+    let isUpdateRequested = false
+    var isBusy: Bool { false }
+    func start() {}
+    func showUpdate() {}
+}
+#else
 import Sparkle
+#endif
+
+#if ULTIMATE_LEMMIX_STORE
+/**
+ * The Mac App Store owns updates for this distribution.
+ */
+@MainActor final class AppUpdates: NSObject {
+    var onChange: (() -> Void)?
+    let availableVersion: String? = nil
+    let isDownloaded = false
+
+    func start() { onChange?() }
+
+    func showUpdate() {
+        guard let url = URL(string: "macappstore://showUpdatesPage") else { return }
+        NSWorkspace.shared.open(url)
+    }
+}
+#else
 
 @MainActor protocol AppUpdateChecking: AnyObject {
     var canCheckForUpdates: Bool { get }
@@ -138,4 +172,5 @@ extension SPUUpdater: AppUpdateChecking {
         onChange?()
     }
 }
+#endif
 #endif

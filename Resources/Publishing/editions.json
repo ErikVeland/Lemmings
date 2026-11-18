@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "version": "2.4.2",
+  "shared": {
+    "package": "Package.swift",
+    "mobileAppSources": [
+      "Apps/SharedAppleMobile/AppDelegate.swift",
+      "Apps/SharedAppleMobile/LaunchURL.swift"
+    ],
+    "iosTestSources": [
+      "Apps/SharedAppleMobile/UITests/LaunchTests.swift",
+      "Apps/SharedAppleMobile/UITests/MobileCoreIOSSmokeTests.swift"
+    ],
+    "widgetSource": "Apps/DeskClockWidget/DeskClockWidget.swift",
+    "topShelfSource": "Apps/SharedAppleMobile/TopShelf/ContentProvider.swift",
+    "storeBuildGuard": "Apps/SharedAppleMobile/StoreBuildGuard.swift"
+  },
+  "editions": {
+    "ultimate-lemmings": {
+      "name": "Ultimate Lemmings",
+      "assetProfile": "preservation",
+      "storeArtwork": false,
+      "platforms": {
+        "macos": {
+          "build": 106,
+          "bundleIdentifier": "academy.glasscode.lemmings",
+          "infoPlist": "Resources/Info.plist",
+          "buildScript": "Scripts/build-local-app.sh"
+        },
+        "ios": {
+          "build": 45,
+          "bundleIdentifier": "academy.glasscode.lemmings.ios",
+          "project": "Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj",
+          "scheme": "UltimateLemmingsIOS",
+          "appTarget": "UltimateLemmingsIOS"
+        },
+        "tvos": {
+          "build": 20,
+          "bundleIdentifier": "academy.glasscode.lemmings",
+          "project": "Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj",
+          "scheme": "UltimateLemmingsTV",
+          "appTarget": "UltimateLemmingsTV"
+        }
+      }
+    },
+    "ultimate-lemmix": {
+      "name": "Ultimate Lemmix",
+      "assetProfile": "licensed-lix",
+      "storeArtwork": true,
+      "platforms": {
+        "macos": {
+          "build": 108,
+          "bundleIdentifier": "academy.glasscode.ultimatelemmix",
+          "infoPlist": "Resources/UltimateLemmix/Info.plist",
+          "buildScript": "Scripts/build-ultimate-lemmix-local.sh"
+        },
+        "ios": {
+          "build": 108,
+          "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios",
+          "project": "Apps/UltimateLemmixIOS/UltimateLemmixIOS.xcodeproj",
+          "scheme": "UltimateLemmixIOS",
+          "appTarget": "UltimateLemmixIOS"
+        },
+        "tvos": {
+          "build": 108,
+          "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos",
+          "project": "Apps/UltimateLemmixTVOS/UltimateLemmixTVOS.xcodeproj",
+          "scheme": "UltimateLemmixTVOS",
+          "appTarget": "UltimateLemmixTVOS"
+        }
+      }
+    }
+  }
+}

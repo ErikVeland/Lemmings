@@ -1,707 +1,277 @@
 #if os(iOS) || os(tvOS)
-import NxlvKit
-import LemmingsGameArt
 import LemmingsMobileCore
+import NxlvKit
 import UIKit
 
-/// The level overview with its current camera window.
-@MainActor final class MobileMinimapView: UIView {
-    var image: CGImage? { didSet { if oldValue !== image { setNeedsDisplay() } } }
-    var visible = CGRect.zero { didSet { if oldValue != visible { setNeedsDisplay() } } }
-    var levelSize = CGSize.zero { didSet { if oldValue != levelSize { setNeedsDisplay() } } }
-    var actors: [MobilePoint] = [] { didSet { if oldValue != actors { setNeedsDisplay() } } }
-    var overlay = false
-    var displayBounds: CGRect? { didSet { if oldValue != displayBounds { setNeedsDisplay() } } }
-    var onSeek: ((CGPoint) -> Void)?
-    private let thumbnail = GameMinimapThumbnail()
-
-    /// The level, fitted whole inside the touch area.
-    var content: CGRect {
-        let art = GameMinimapArt.drawingFrame(in: bounds, displayBounds: displayBounds)
-        return GameMinimapArt.content(in: overlay ? art.insetBy(dx: 4, dy: 4) : art, levelSize: levelSize)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .clear
-        isAccessibilityElement = true
-        accessibilityLabel = L10n.text("Level map")
-        accessibilityTraits = .adjustable
-    }
-
-    required init?(coder: NSCoder) { nil }
-
-    override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        GameMinimapArt.draw(in: context, bounds: bounds, image: image, visible: visible, levelSize: levelSize, overlay: overlay,
-                            thumbnail: thumbnail, displayBounds: displayBounds)
-        guard levelSize.width > 0, levelSize.height > 0 else { return }
-        context.setShouldAntialias(false)
-        context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.1, alpha: 1))
-        let map = content
-        for actor in actors {
-            let x = map.minX + CGFloat(actor.x) / levelSize.width * map.width
-            let y = map.minY + CGFloat(actor.y) / levelSize.height * map.height
-            context.fill(CGRect(x: floor(x), y: floor(y), width: 1, height: 1))
-        }
-    }
-    override func accessibilityIncrement() { seek(1) }
-    override func accessibilityDecrement() { seek(-1) }
-    private func seek(_ direction: CGFloat) {
-        onSeek?(CGPoint(x: min(levelSize.width, max(0, visible.midX + direction * visible.width / 2)), y: visible.midY))
-    }
+@MainActor enum MobileHUDAction: Equatable {
+    case releaseRate(Int)
+    case skill(Int)
+    case pause
+    case endRun
+    case speed
 }
 
-@MainActor private final class MobileHUDContourOutline: UIView {
-    var onGeometryChange: (() -> Void)?
-    private var lastRadii: GameControlCornerRadii?
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if #available(iOS 26.0, tvOS 26.0, *) {
-            let radii = GameControlCornerRadii(topLeft: effectiveRadius(corner: .topLeft),
-                topRight: effectiveRadius(corner: .topRight), bottomLeft: effectiveRadius(corner: .bottomLeft),
-                bottomRight: effectiveRadius(corner: .bottomRight))
-            if radii != lastRadii {
-                lastRadii = radii
-                onGeometryChange?()
-            }
-        }
+@MainActor final class MobileHUDView: UIView {
+    private struct Item {
+        let action: MobileHUDAction
+        let frame: CGRect
+        let sourceCell: Int?
+        let accessibilityLabel: String
     }
-}
 
-@MainActor final class MobileHUDView: UIView, UIGestureRecognizerDelegate {
-    var onRateDoubleTap: ((Bool) -> Void)?
-    var onSpeedHold: ((Bool, Bool) -> Void)?
-    var onHold: ((MobileHUDAction) -> Void)?
-    private typealias Item = MobileHUDRenderer.Item
-    var onRewindHold: ((Bool) -> Void)?
-    var onStepBatch: ((MobileHUDAction, Int) -> Void)?
-    private var readOnly = false
-    var playerName: String? { didSet { if oldValue != playerName { setNeedsDisplay() } } }
-    var playerPortrait: CGImage? { didSet { if oldValue !== playerPortrait { setNeedsDisplay() } } }
-    private let playerIdentity = UIView()
-    private let statusIdentity = UIView()
-    var replayLevel: MobileLevelSummary? { didSet { if oldValue != replayLevel { setNeedsDisplay() } } }
-    var replayMapFrame: CGRect?
-    private var mapFrame: CGRect? { replayMapFrame ?? layout?.minimapFrame }
-    var statusDetails: MobileHUDRenderer.StatusDetails?
-    private var drawnStatusDetails: MobileHUDRenderer.StatusDetails?
-    private let toolDirectionPicker = MobileToolDirectionPickerView()
-    private let rateValueTap = UITapGestureRecognizer()
     var onAction: ((MobileHUDAction) -> Void)?
-    var onToolDirection: ((Lemmings3Runtime.Direction?) -> Void)?
-    /// A touch on the map, as a point in level pixels.
-    var onMinimap: ((CGPoint) -> Void)?
-    private let minimapView = MobileMinimapView()
-    private let skillScroll = MobileSkillScrollView()
-    private let skillCanvas = MobileSkillCanvas()
 
     private var items: [Item] = []
     private var buttons: [UIButton] = []
-    private var layout: MobileHUDLayout?
+    private var buttonActions: [MobileHUDAction] = []
+    private var statusFrame = CGRect.zero
     private var snapshot: MobileGameSnapshot?
     private var selectedSkill = 0
     private var paused = true
     private var speed = 1.0
     private var endRunArmed = false
-    var skillIcons: [CGImage?] = [] { didSet { setNeedsDisplay(); skillCanvas.setNeedsDisplay() } }
-    var counterStyle: ClassicCounterStyle = .game { didSet { if oldValue != counterStyle { setNeedsDisplay() } } }
-    private var panelImage: CGImage?
-    private var cachedPanel: MobilePixelFrame?
-    private var pressedPanelImage: CGImage?
-    private var cachedPressedPanel: MobilePixelFrame?
-    private var displayCorners: GameControlCornerRadii?
-    private let contourOutline = MobileHUDContourOutline()
-    private let contourMask = UIView()
-    private struct ContourGeometry: Equatable {
-        let frame: CGRect
-        let header: CGRect
-        let deck: CGRect
-        let radii: GameControlCornerRadii
-    }
-    private var contourGeometry: ContourGeometry?
-    private var nativeContours = false
+    private var panelImage: UIImage?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
         isOpaque = false
         isAccessibilityElement = false
-        rateValueTap.numberOfTapsRequired = 2
-        rateValueTap.delegate = self
-        rateValueTap.addTarget(self, action: #selector(toggleRateValue(_:)))
-        addGestureRecognizer(rateValueTap)
-        playerIdentity.isAccessibilityElement = true
-        playerIdentity.accessibilityTraits = .staticText
-        playerIdentity.isUserInteractionEnabled = false
-        playerIdentity.isHidden = true
-        addSubview(playerIdentity)
-        statusIdentity.isAccessibilityElement = true
-        statusIdentity.accessibilityTraits = .staticText
-        statusIdentity.isUserInteractionEnabled = false
-        statusIdentity.isHidden = true
-        addSubview(statusIdentity)
-        addSubview(toolDirectionPicker)
-        toolDirectionPicker.onChoice = { [weak self] direction in self?.onToolDirection?(direction) }
-        let touch = UILongPressGestureRecognizer(target: self, action: #selector(minimapTouched(_:)))
-        touch.minimumPressDuration = 0
-        minimapView.addGestureRecognizer(touch)
-        addSubview(minimapView)
-        minimapView.onSeek = { [weak self] point in self?.onMinimap?(point) }
-        skillScroll.showsHorizontalScrollIndicator = true
-        skillScroll.delaysContentTouches = false
-        skillScroll.addSubview(skillCanvas)
-        addSubview(skillScroll)
-        skillCanvas.drawContent = { [weak self] context in
-            guard let self, let skills = self.layout?.portrait?.skills else { return }
-            context.translateBy(x: -skills.minX, y: -skills.minY)
-            self.renderer()?.drawSkills(in: context, clipped: false)
-        }
     }
 
     required init?(coder: NSCoder) { nil }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateScreenContours()
-    }
-
-    /// The opened inner display is one surface. UIKit retains its continuous
-    /// corner shape; a circular bitmap approximation does not.
-    private func updateScreenContours() {
-        #if os(iOS)
-        guard #available(iOS 26.0, *), MobileSystemRegions.isFoldable(in: self), let layout else {
-            mask = nil
-            contourOutline.removeFromSuperview()
-            contourGeometry = nil
-            nativeContours = false
-            return
-        }
-        if contourOutline.superview == nil {
-            contourOutline.isUserInteractionEnabled = false
-            contourOutline.isAccessibilityElement = false
-            contourOutline.backgroundColor = .clear
-            contourOutline.cornerConfiguration = .corners(radius: .containerConcentric())
-            contourOutline.layer.cornerCurve = .continuous
-            contourOutline.layer.borderWidth = 1
-            contourOutline.layer.borderColor = CGColor(srgbRed: 0.56, green: 0.59, blue: 0.49, alpha: 1)
-            contourOutline.onGeometryChange = { [weak self] in self?.setNeedsLayout() }
-            addSubview(contourOutline)
-        }
-        contourOutline.frame = bounds.insetBy(dx: 2, dy: 2)
-        if subviews.last !== contourOutline { bringSubviewToFront(contourOutline) }
-        let header = CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width,
-            height: layout.interface.statusFrame.maxY - bounds.minY)
-        let deck = CGRect(x: bounds.minX, y: layout.interface.controlsFrame.minY, width: bounds.width,
-            height: bounds.maxY - layout.interface.controlsFrame.minY)
-        let radii = GameControlCornerRadii(topLeft: contourOutline.effectiveRadius(corner: .topLeft),
-            topRight: contourOutline.effectiveRadius(corner: .topRight), bottomLeft: contourOutline.effectiveRadius(corner: .bottomLeft),
-            bottomRight: contourOutline.effectiveRadius(corner: .bottomRight))
-        let geometry = ContourGeometry(frame: contourOutline.frame, header: header, deck: deck, radii: radii)
-        guard geometry != contourGeometry || !nativeContours else { return }
-        contourGeometry = geometry
-        let rows = CGMutablePath()
-        for row in [header, deck] {
-            let visible = row.intersection(contourOutline.frame)
-            if !visible.isNull { rows.addRect(visible.offsetBy(dx: -contourOutline.frame.minX, dy: -contourOutline.frame.minY)) }
-        }
-        let rowMask = CAShapeLayer()
-        rowMask.frame = contourOutline.bounds
-        rowMask.path = rows
-        rowMask.fillColor = UIColor.white.cgColor
-        contourOutline.layer.mask = rowMask
-        contourMask.frame = contourOutline.frame
-        contourMask.backgroundColor = .white
-        contourMask.cornerConfiguration = .corners(topLeftRadius: .fixed(Double(radii.topLeft)),
-            topRightRadius: .fixed(Double(radii.topRight)), bottomLeftRadius: .fixed(Double(radii.bottomLeft)),
-            bottomRightRadius: .fixed(Double(radii.bottomRight)))
-        contourMask.layer.cornerCurve = .continuous
-        contourMask.clipsToBounds = true
-        mask = contourMask
-        nativeContours = true
-        displayCorners = GameControlCornerRadii(topLeft: 0, topRight: 0, bottomLeft: 0, bottomRight: 0)
-        setNeedsDisplay()
-        skillCanvas.setNeedsDisplay()
-        #endif
-    }
-
-    func updateMinimap(frame: MobilePixelFrame, visible: MobileRect, levelSize: MobileSize, image: CGImage? = nil, actors: [MobilePoint]? = nil) {
-        minimapView.isHidden = mapFrame == nil
-        guard !minimapView.isHidden else { return }
-        if let actors { minimapView.actors = actors }
-        minimapView.image = image ?? Self.image(frame)
-        minimapView.visible = Self.cgRect(visible)
-        minimapView.levelSize = CGSize(width: levelSize.width, height: levelSize.height)
-    }
-
-    @objc private func minimapTouched(_ recognizer: UILongPressGestureRecognizer) {
-        guard recognizer.state == .began || recognizer.state == .changed else { return }
-        let map = minimapView.content
-        guard !map.isEmpty else { return }
-        let point = recognizer.location(in: minimapView)
-        let fraction = CGPoint(x: min(1, max(0, (point.x - map.minX) / map.width)),
-                               y: min(1, max(0, (point.y - map.minY) / map.height)))
-        onMinimap?(CGPoint(x: fraction.x * minimapView.levelSize.width, y: fraction.y * minimapView.levelSize.height))
-    }
-
     func update(
-        layout: MobileHUDLayout,
+        layout: MobileInterfaceLayout,
         snapshot: MobileGameSnapshot,
         selectedSkill: Int,
         paused: Bool,
         speed: Double,
         endRunArmed: Bool,
-        panel: MobilePixelFrame?,
-        pressedPanel: MobilePixelFrame? = nil,
-        readOnly: Bool = false
+        panel: MobilePixelFrame?
     ) {
-        let previousSnapshot = self.snapshot
-        let skillsChanged = self.layout != layout || previousSnapshot?.skills != snapshot.skills
-            || self.selectedSkill != selectedSkill || cachedPanel != panel || cachedPressedPanel != pressedPanel || self.readOnly != readOnly
-        let presentationChanged = skillsChanged || self.paused != paused || self.speed != speed
-            || self.endRunArmed != endRunArmed || drawnStatusDetails != statusDetails
-            || previousSnapshot?.released != snapshot.released || previousSnapshot?.saved != snapshot.saved
-            || previousSnapshot?.total != snapshot.total || previousSnapshot?.required != snapshot.required
-            || previousSnapshot?.remainingSeconds != snapshot.remainingSeconds
-            || previousSnapshot?.releaseRate != snapshot.releaseRate
-            || previousSnapshot?.isComplete != snapshot.isComplete || previousSnapshot?.didWin != snapshot.didWin
-            || previousSnapshot?.isEndingRun != snapshot.isEndingRun
-            || (previousSnapshot?.tick == 0) != (snapshot.tick == 0)
-        drawnStatusDetails = statusDetails
-        self.readOnly = readOnly
-        if !presentationChanged { self.snapshot = snapshot; return }
-        let layoutChanged = self.layout != layout
-        self.layout = layout
-        let identityFrame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil && replayLevel == nil,
-            displayBounds: MobileSystemRegions.isFoldable(in: self) ? bounds : nil).player
-        playerIdentity.frame = identityFrame ?? .zero
-        playerIdentity.isHidden = identityFrame == nil
-        playerIdentity.accessibilityLabel = playerName.map { L10n.text("Current turn: \($0)") }
-        statusIdentity.isHidden = false
-        statusIdentity.frame = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: playerName != nil && replayLevel == nil,
-            displayBounds: MobileSystemRegions.isFoldable(in: self) ? bounds : nil).counters
-        let lines = MobileHUDRenderer.televisionStatusLines(snapshot: snapshot, details: statusDetails,
-            engineIdentifier: statusDetails?.engineIdentifier ?? (layout.panel?.style == .lemmings3 ? "lemmings3" : "classic"),
-            paused: paused, speed: speed)
-        statusIdentity.accessibilityLabel = lines.joined(separator: ". ")
-            .replacingOccurrences(of: statusDetails?.deathCounter ?? "💀", with: statusDetails?.accessibility ?? "")
-        if let replayLevel {
-            statusIdentity.accessibilityLabel = [L10n.text("Replay, \(replayLevel.locationLabel), \(replayLevel.title)"),
-                statusIdentity.accessibilityLabel ?? ""].joined(separator: ". ")
-        }
         self.snapshot = snapshot
-        let previousSkill = self.selectedSkill
         self.selectedSkill = selectedSkill
         self.paused = paused
         self.speed = speed
         self.endRunArmed = endRunArmed
-        if cachedPanel != panel {
-            cachedPanel = panel
-            panelImage = panel.flatMap(Self.image)
-        }
-        if cachedPressedPanel != pressedPanel {
-            cachedPressedPanel = pressedPanel
-            pressedPanelImage = pressedPanel.flatMap(Self.image)
-        }
-        minimapView.frame = mapFrame ?? .zero
-        minimapView.overlay = layout.portrait != nil || replayMapFrame != nil
-        minimapView.isHidden = mapFrame == nil
-        skillScroll.isHidden = layout.portrait == nil
-        let screenEdges = MobileSystemRegions.isFoldable(in: self)
-        minimapView.displayBounds = screenEdges
-            ? bounds.offsetBy(dx: -minimapView.frame.minX, dy: -minimapView.frame.minY) : nil
-        if let portrait = layout.portrait {
-            var skills = portrait.skills
-            if screenEdges, abs(skills.maxY - layout.interface.safeFrame.maxY) < 0.01 {
-                skills.size.height = bounds.maxY - skills.minY
-            }
-            skillScroll.frame = skills
-            skillScroll.contentSize = CGSize(width: portrait.skillContentWidth, height: skills.height)
-            skillCanvas.frame = CGRect(origin: .zero, size: skillScroll.contentSize)
-            let maximumOffset = max(0, skillScroll.contentSize.width - skillScroll.bounds.width)
-            let offset = CGPoint(x: min(maximumOffset, max(0, skillScroll.contentOffset.x)), y: 0)
-            if (layoutChanged || maximumOffset == 0), offset != skillScroll.contentOffset {
-                skillScroll.setContentOffset(offset, animated: false)
-            }
-        }
+        statusFrame = Self.cgRect(layout.statusFrame)
+        panelImage = panel.flatMap(Self.image)
 
-        let previousActions = items.map(\.action)
-        items = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
-                                          paused: paused, speed: speed, endRunArmed: endRunArmed)
-        if previousActions != items.map(\.action) { rebuildButtons() }
-        for (button, item) in zip(buttons, items) {
-            let inputFrame = MobileHUDRenderer.edgeInputFrame(for: item, layout: layout, displayBounds: bounds, screenEdges: screenEdges)
-            (button as? MobileHUDButton)?.activatesOnPress = item.action == .pause && !paused
-            if case .skill = item.action, let portrait = layout.portrait {
-                if button.superview !== skillCanvas { skillCanvas.addSubview(button) }
-                button.frame = inputFrame.offsetBy(dx: -portrait.skills.minX, dy: -portrait.skills.minY)
-            } else {
-                if button.superview !== self { addSubview(button) }
-                button.frame = inputFrame
-            }
-            button.accessibilityLabel = item.accessibilityLabel
-            button.accessibilityTraits = item.action == .skill(selectedSkill)
-                ? [.button, .selected] : .button
-            button.isEnabled = isEnabled(item.action)
-            button.accessibilityElementsHidden = readOnly && !button.isEnabled
+        var descriptors: [(MobileHUDAction, Int?, String)] = []
+        if let rate = snapshot.releaseRate {
+            descriptors.append((.releaseRate(-1), 0, "Decrease release rate, currently \(rate)"))
+            descriptors.append((.releaseRate(1), 1, "Increase release rate, currently \(rate)"))
         }
-        if layoutChanged || previousSkill != selectedSkill, let button = buttons.first(where: { $0.accessibilityTraits.contains(.selected) }),
-           button.superview === skillCanvas { skillScroll.scrollRectToVisible(button.frame, animated: false) }
-        if presentationChanged { setNeedsDisplay() }
-        if layoutChanged { setNeedsLayout() }
-        if skillsChanged { skillCanvas.setNeedsDisplay() }
-    }
+        for (index, skill) in snapshot.skills.enumerated() {
+            let amount = skill.isUnlimited ? "unlimited" : "\(skill.count) remaining"
+            let selected = index == selectedSkill ? ", selected" : ""
+            descriptors.append((.skill(index), index + 2, "\(skill.name), \(amount)\(selected)"))
+        }
+        descriptors.append((.pause, 10, paused ? "Resume" : "Pause"))
+        let endRunLabel = snapshot.isEndingRun
+            ? "Undo end run"
+            : (endRunArmed ? "Confirm end run" : "End run")
+        descriptors.append((.endRun, 11, endRunLabel))
+        descriptors.append((.speed, nil, "Game speed \(Self.speedLabel(speed))"))
 
-    @objc private func toggleRateValue(_ gesture: UITapGestureRecognizer) {
-        guard gesture.state == .ended, !readOnly else { return }
-        onRateDoubleTap?(snapshot?.releaseRate == 99)
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        guard gestureRecognizer === rateValueTap, !readOnly,
-              let frame = layout?.portrait?.rateValue else { return false }
-        return frame.contains(touch.location(in: self))
+        items = zip(descriptors, layout.controlFrames).map { descriptor, frame in
+            Item(
+                action: descriptor.0,
+                frame: Self.cgRect(frame),
+                sourceCell: descriptor.1,
+                accessibilityLabel: descriptor.2
+            )
+        }
+        rebuildButtons()
+        setNeedsDisplay()
     }
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        guard isUserInteractionEnabled, !isHidden, alpha > 0.01 else { return nil }
-        if !toolDirectionPicker.isHidden, toolDirectionPicker.frame.contains(point) {
-            return toolDirectionPicker.hitTest(convert(point, to: toolDirectionPicker), with: event)
-        }
-        if !readOnly, layout?.portrait?.rateValue?.contains(point) == true { return self }
-        // Each speed action has a separate target inside the shared speed socket.
-        if !minimapView.isHidden, minimapView.frame.contains(point) {
-            return isTransportForwardDeadZone(point) ? self : minimapView
-        }
-        if !skillScroll.isHidden, skillScroll.frame.contains(point) {
-            return skillScroll.hitTest(convert(point, to: skillScroll), with: event)
-        }
-        for button in buttons.reversed() where button.superview === self && button.frame.contains(point) {
+        for button in buttons where button.frame.contains(point) {
             return button.hitTest(convert(point, to: button), with: event)
-        }
-        if let layout, layout.interface.statusFrame.minY == layout.interface.safeFrame.minY,
-           point.y <= layout.interface.statusFrame.maxY { return self }
-        if let status = layout?.interface.statusFrame, Self.cgRect(status).contains(point) { return self }
-        return nil
-    }
-
-    /// Keep the minimap from stealing taps aimed at the forward transport control.
-    private func isTransportForwardDeadZone(_ point: CGPoint) -> Bool {
-        guard let forward = items.first(where: { $0.action == .step })?.inputFrame else { return false }
-        let exclusion = forward.insetBy(dx: -32, dy: -32)
-        return minimapView.frame.intersects(exclusion) && exclusion.contains(point)
-    }
-
-    /// Controller activation uses the visible button bounds, including scrolled skills.
-    func pointerAction(at point: CGPoint) -> MobileHUDAction? {
-        guard bounds.contains(point), isUserInteractionEnabled else { return nil }
-        for (button, item) in zip(buttons, items) where button.isEnabled && !button.isHidden {
-            let local = button.convert(point, from: self)
-            if button.bounds.contains(local) {
-                if button.superview === skillCanvas && !skillScroll.frame.contains(point) { continue }
-                return item.action
-            }
         }
         return nil
     }
 
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        renderer()?.draw(in: context, bounds: bounds, includeSkills: layout?.portrait == nil, includeTicks: true)
-    }
-
-    private func renderer() -> MobileHUDRenderer? {
-        guard let layout, let snapshot else { return nil }
-        let cornerInsets = MobileSystemRegions.contentInsets(in: self)
-        return MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
-                          paused: paused, speed: speed, endRunArmed: endRunArmed,
-                          panelImage: panelImage, pressedPanelImage: pressedPanelImage, typography: MobileGameArt.typography, counterStyle: counterStyle, skillIcons: skillIcons, readOnly: readOnly, playerName: playerName, playerPortrait: playerPortrait, statusDetails: statusDetails, replayLevel: replayLevel, shape: MobileSystemRegions.controlShape(in: self),
-                          duoCorners: MobileSystemRegions.isFoldable(in: self), displayBounds: bounds,
-                          displayCornerRadius: max(cornerInsets.top, cornerInsets.bottom), displayCornerRadii: displayCorners)
+        context.setShouldAntialias(false)
+        context.setFillColor(UIColor.black.cgColor)
+        context.fill(statusFrame)
+        drawStatus()
+        for item in items { draw(item, context: context) }
     }
 
     private func rebuildButtons() {
-        buttons.forEach { ($0 as? MobileHUDButton)?.cancelPress(); $0.removeFromSuperview() }
-        buttons = items.map { item in
-            let kind: MobileHUDPress.Kind
-            switch item.action {
-            case .releaseRate: kind = .releaseRate
-            case .speedStep: kind = .rate
-            case .speed: kind = .speed
-            case .rewind: kind = .rewind
-            case .step, .stepBackward: kind = .step
-            case .pause: kind = .pause
-            case .endRun: kind = .nuke
-            default: kind = .tap
+        let actions = items.map(\.action)
+        if actions != buttonActions {
+            buttons.forEach { $0.removeFromSuperview() }
+            buttons = items.map { item in
+                let button = UIButton(type: .custom)
+                button.backgroundColor = .clear
+                #if os(iOS)
+                button.addAction(UIAction { [weak self] _ in self?.onAction?(item.action) }, for: .touchUpInside)
+                #else
+                button.addAction(UIAction { [weak self] _ in self?.onAction?(item.action) }, for: .primaryActionTriggered)
+                #endif
+                addSubview(button)
+                return button
             }
-            let button = MobileHUDButton(kind: kind)
-            button.frame = item.inputFrame
-            button.backgroundColor = .clear
+            buttonActions = actions
+        }
+        for (button, item) in zip(buttons, items) {
+            button.frame = item.frame
             button.accessibilityLabel = item.accessibilityLabel
             button.accessibilityTraits = item.action == .skill(selectedSkill)
                 ? [.button, .selected]
                 : .button
-            button.isEnabled = isEnabled(item.action)
-            var rateStartedAtMaximum = false
-            button.onEffect = { [weak self] effect in
-                switch effect {
-                case .activate:
-                    if case .releaseRate = item.action { rateStartedAtMaximum = self?.snapshot?.releaseRate == 99 }
-                    self?.onAction?(item.action)
-                case let .step(count): self?.onStepBatch?(item.action, count)
-                case .doubleTap: self?.onRateDoubleTap?(rateStartedAtMaximum)
-                case .hold: self?.onHold?(item.action)
-                case let .pedal(held, allowTap):
-                    if item.action == .speed { self?.onSpeedHold?(held, allowTap) }
-                    else { self?.onRewindHold?(held) }
-                }
+        }
+    }
+
+    override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+        super.didUpdateFocus(in: context, with: coordinator)
+        setNeedsDisplay()
+    }
+
+    private func drawStatus() {
+        guard let snapshot else { return }
+        let time: String
+        if let remaining = snapshot.remainingSeconds {
+            time = String(format: "%d:%02d", remaining / 60, remaining % 60)
+        } else {
+            time = "--:--"
+        }
+        let status = "OUT \(snapshot.released)  HOME \(snapshot.saved)/\(snapshot.required)  \(time)"
+        MobilePixelText.draw(status, in: statusFrame.insetBy(dx: 6, dy: 4),
+                             palette: snapshot.didWin ? .green : .blue, maximumScale: 2)
+    }
+
+    private func draw(_ item: Item, context: CGContext) {
+        let frame = item.frame.insetBy(dx: 1, dy: 1)
+        let selected: Bool
+        if case let .skill(index) = item.action { selected = index == selectedSkill }
+        else if item.action == .pause { selected = paused }
+        else if item.action == .endRun { selected = endRunArmed || snapshot?.isEndingRun == true }
+        else if item.action == .speed { selected = speed > 1 }
+        else { selected = false }
+        let usesLix = MobileLixInterface.enabled && MobileLixInterface.button(in: frame, selected: selected)
+        if !usesLix, let cell = item.sourceCell,
+           let image = panelImage?.cgImage,
+           let crop = image.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
+            context.saveGState()
+            context.interpolationQuality = .none
+            UIImage(cgImage: crop).draw(in: frame)
+            context.restoreGState()
+        } else if !usesLix {
+            drawStone(frame, context: context)
+        }
+        if selected {
+            context.setStrokeColor((item.action == .endRun && endRunArmed
+                ? MobilePixelText.Palette.warning.colour
+                : MobilePixelText.Palette.green.colour).cgColor)
+            context.setLineWidth(2)
+            context.stroke(frame.insetBy(dx: 3, dy: 3))
+        }
+
+        switch item.action {
+        case let .releaseRate(delta):
+            if usesLix, MobileLixInterface.control(delta < 0 ? .rateDecrease : .rateIncrease,
+                in: frame.insetBy(dx: 5, dy: 7), selected: selected) { break }
+            MobilePixelText.draw(delta < 0 ? "-" : "+", in: frame.insetBy(dx: 5, dy: 7),
+                                 palette: .green, maximumScale: 3)
+        case let .skill(index):
+            guard let skill = snapshot?.skills[safe: index] else { return }
+            let amount = skill.isUnlimited ? "*" : "\(skill.count)"
+            MobilePixelText.draw(amount, in: CGRect(x: frame.minX + 2, y: frame.minY + 2,
+                                                     width: frame.width - 4, height: 13),
+                                 palette: selected ? .green : .blue, maximumScale: 1)
+            if usesLix {
+                _ = MobileLixInterface.skill(named: skill.name,
+                    in: CGRect(x: frame.minX + 3, y: frame.minY + 15,
+                        width: frame.width - 6, height: max(0, frame.height - 30)),
+                    enabled: skill.isUnlimited || skill.count > 0)
             }
-            button.onAccessiblePress = { [weak self] in self?.onAction?(item.action) }
-            if case .releaseRate = item.action {
-                button.accessibilityHint = L10n.text("Actions include minimum or maximum release rate.")
-                button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: L10n.text("Toggle minimum or maximum release rate")) { [weak self] _ in
-                    self?.onRateDoubleTap?(self?.snapshot?.releaseRate == 99); return true
-                }]
+            let label = String(skill.name.prefix(5)).uppercased()
+            MobilePixelText.draw(label, in: CGRect(x: frame.minX + 2, y: frame.maxY - 12,
+                                                    width: frame.width - 4, height: 12),
+                                 palette: selected ? .green : .blue, maximumScale: 1)
+        case .pause:
+            if usesLix, MobileLixInterface.control(paused ? .play : .pause,
+                in: frame.insetBy(dx: 6, dy: 6), selected: selected) { break }
+            if paused {
+                MobilePixelText.draw(">", in: frame.insetBy(dx: 8, dy: 8), palette: .green)
+            } else {
+                context.setFillColor(MobilePixelText.Palette.green.colour.cgColor)
+                let width = max(3, floor(frame.width / 9))
+                let height = max(14, floor(frame.height / 2))
+                context.fill(CGRect(x: frame.midX - width * 1.5, y: frame.midY - height / 2,
+                                    width: width, height: height))
+                context.fill(CGRect(x: frame.midX + width * 0.5, y: frame.midY - height / 2,
+                                    width: width, height: height))
             }
-            addSubview(button)
-            return button
+        case .endRun:
+            if usesLix, MobileLixInterface.control(snapshot?.isEndingRun == true ? .undo : .nuke,
+                in: frame.insetBy(dx: 5, dy: 7), selected: selected) { break }
+            MobilePixelText.draw(snapshot?.isEndingRun == true ? "UNDO" : "X",
+                                 in: frame.insetBy(dx: 5, dy: 7),
+                                 palette: endRunArmed ? .warning : .green, maximumScale: 2)
+        case .speed:
+            if usesLix {
+                _ = MobileLixInterface.control(speed > 2 ? .turbo : .fastForward,
+                    in: CGRect(x: frame.minX + 3, y: frame.minY + 3,
+                        width: frame.width - 6, height: max(0, frame.height - 18)), selected: selected)
+                MobilePixelText.draw(Self.speedLabel(speed),
+                    in: CGRect(x: frame.minX + 2, y: frame.maxY - 15, width: frame.width - 4, height: 13),
+                    palette: selected ? .green : .blue, maximumScale: 1)
+                break
+            }
+            MobilePixelText.draw(">> \(Self.speedLabel(speed))", in: frame.insetBy(dx: 4, dy: 7),
+                                 palette: speed > 1 ? .green : .blue, maximumScale: 2)
+        }
+        if buttons.contains(where: { $0.isFocused && $0.frame == item.frame }) {
+            context.saveGState()
+            context.setStrokeColor(UIColor.white.cgColor)
+            context.setLineWidth(2)
+            context.setLineDash(phase: 0, lengths: [4, 3])
+            context.stroke(frame.insetBy(dx: 1, dy: 1))
+            context.restoreGState()
         }
     }
 
-    func cancelHeldControls() {
-        buttons.forEach { ($0 as? MobileHUDButton)?.cancelPress() }
-        rateValueTap.isEnabled = false
-        rateValueTap.isEnabled = true
-        for recognizer in minimapView.gestureRecognizers ?? [] {
-            recognizer.isEnabled = false
-            recognizer.isEnabled = true
-        }
-        skillScroll.setContentOffset(skillScroll.contentOffset, animated: false)
-        skillScroll.panGestureRecognizer.isEnabled = false
-        skillScroll.panGestureRecognizer.isEnabled = true
+    private func drawStone(_ frame: CGRect, context: CGContext) {
+        context.setFillColor(UIColor(red: 0.16, green: 0.17, blue: 0.19, alpha: 1).cgColor)
+        context.fill(frame)
+        context.setStrokeColor(UIColor(white: 0.44, alpha: 1).cgColor)
+        context.setLineWidth(2)
+        context.stroke(frame.insetBy(dx: 1, dy: 1))
     }
 
-    @discardableResult
-    func showToolDirectionPicker(frames: [MobilePixelFrame], target: CGPoint, playfield: CGRect) -> Bool {
-        let bounds = MobileRect(x: playfield.minX, y: playfield.minY,
-                                width: playfield.width, height: playfield.height)
-        guard let frame = MobileDirectionPickerLayout.frame(
-            centredAt: MobilePoint(x: target.x, y: target.y), within: bounds
-        ) else { return false }
-        toolDirectionPicker.present(frames: frames,
-            frame: CGRect(x: frame.x, y: frame.y, width: frame.width, height: frame.height))
-        bringSubviewToFront(toolDirectionPicker)
-        return true
-    }
-
-    func hideToolDirectionPicker() { toolDirectionPicker.dismiss() }
-
-    private func isEnabled(_ action: MobileHUDAction) -> Bool {
-        switch action {
-        case .skill, .releaseRate, .endRun: return !readOnly
-        case .step: return paused
-        case .rewind, .stepBackward: return (snapshot?.tick ?? 0) > 0
-        default: return true
-        }
+    private static func speedLabel(_ speed: Double) -> String {
+        speed.rounded() == speed ? "\(Int(speed))X" : String(format: "%.1fX", speed)
     }
 
     private static func cgRect(_ rect: MobileRect) -> CGRect {
         CGRect(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
     }
 
-    private static func image(_ frame: MobilePixelFrame) -> CGImage? {
-        guard let provider = CGDataProvider(data: frame.rgba as CFData) else { return nil }
-        return CGImage(
-            width: frame.width,
-            height: frame.height,
-            bitsPerComponent: 8,
-            bitsPerPixel: 32,
-            bytesPerRow: frame.width * 4,
-            space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
-            provider: provider,
-            decode: nil,
-            shouldInterpolate: false,
-            intent: .defaultIntent
-        )
-    }
-}
-
-@MainActor private final class MobileToolDirectionPickerView: UIView {
-    private struct Cell {
-        let direction: Lemmings3Runtime.Direction?
-        let frameIndex: Int?
-        let label: String
-    }
-
-    private static var cells: [Cell] { MobileDirectionPickerLayout.gridDirections.map { direction in
-        guard let direction else {
-            return Cell(direction: nil, frameIndex: nil, label: L10n.text("Cancel tool direction"))
-        }
-        let label: String
-        switch direction {
-        case .upLeft: label = L10n.text("Up-left")
-        case .up: label = L10n.text("Up")
-        case .upRight: label = L10n.text("Up-right")
-        case .left: label = L10n.text("Left")
-        case .right: label = L10n.text("Right")
-        case .downLeft: label = L10n.text("Down-left")
-        case .down: label = L10n.text("Down")
-        case .downRight: label = L10n.text("Down-right")
-        }
-        return Cell(direction: direction, frameIndex: MobileDirectionPickerLayout.frameIndex(for: direction), label: label)
-    } }
-
-    var onChoice: ((Lemmings3Runtime.Direction?) -> Void)?
-    private var buttons: [UIButton] = []
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = UIColor.black.withAlphaComponent(0.92)
-        layer.borderWidth = 2
-        layer.borderColor = UIColor(red: 0.25, green: 0.9, blue: 0.35, alpha: 1).cgColor
-        isHidden = true
-        isAccessibilityElement = false
-        accessibilityViewIsModal = false
-    }
-
-    required init?(coder: NSCoder) { nil }
-
-    func present(frames: [MobilePixelFrame], frame: CGRect) {
-        guard frames.count == 8 else { return }
-        buttons.forEach { $0.removeFromSuperview() }
-        buttons.removeAll(keepingCapacity: true)
-        let extent = CGFloat(MobileDirectionPickerLayout.cellExtent)
-        self.frame = frame
-        for (index, cell) in Self.cells.enumerated() {
-            let button = MobileFocusButton(type: .custom)
-            button.frame = CGRect(x: CGFloat(index % 3) * extent,
-                                  y: CGFloat(index / 3) * extent,
-                                  width: extent, height: extent)
-            button.backgroundColor = .clear
-            button.accessibilityLabel = cell.label
-            button.accessibilityTraits = .button
-            button.accessibilityIdentifier = "game.l3.direction.\(cell.direction.map { $0.rawValue.lowercased() } ?? "cancel")"
-            var configuration = UIButton.Configuration.plain()
-            if let frameIndex = cell.frameIndex,
-               let image = MobileBitmapRenderer.image(frames[frameIndex]) {
-                configuration.image = UIImage(cgImage: image).withRenderingMode(.alwaysOriginal)
-                configuration.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
-            } else {
-                configuration.image = Self.cancelImage()?.withRenderingMode(.alwaysOriginal)
-                configuration.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 14, bottom: 14, trailing: 14)
-            }
-            button.configuration = configuration
-            button.imageView?.contentMode = .scaleAspectFit
-            button.imageView?.layer.magnificationFilter = .nearest
-            button.addAction(UIAction { [weak self] _ in self?.onChoice?(cell.direction) },
-                             for: .gameActivation)
-            addSubview(button)
-            buttons.append(button)
-        }
-        accessibilityLabel = L10n.text("Choose Lemmings 3 tool direction")
-        accessibilityViewIsModal = true
-        isHidden = false
-        setNeedsFocusUpdate()
-        updateFocusIfNeeded()
-        UIAccessibility.post(notification: .screenChanged, argument: buttons.first)
-    }
-
-    func dismiss() {
-        guard !isHidden else { return }
-        isHidden = true
-        buttons.forEach { $0.removeFromSuperview() }
-        buttons.removeAll(keepingCapacity: true)
-        accessibilityViewIsModal = false
-    }
-
-    private static func cancelImage() -> UIImage? {
-        let size = 8
-        var rgba = [UInt8](repeating: 0, count: size * size * 4)
-        for point in 1...6 {
-            for x in [point, size - point - 1] {
-                let index = (point * size + x) * 4
-                rgba[index] = 255
-                rgba[index + 1] = 74
-                rgba[index + 2] = 48
-                rgba[index + 3] = 255
-            }
-        }
-        guard let provider = CGDataProvider(data: Data(rgba) as CFData),
-              let image = CGImage(width: size, height: size, bitsPerComponent: 8,
-                  bitsPerPixel: 32, bytesPerRow: size * 4,
-                  space: CGColorSpaceCreateDeviceRGB(),
-                  bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
-                  provider: provider, decode: nil, shouldInterpolate: false,
-                  intent: .defaultIntent) else { return nil }
+    private static func image(_ frame: MobilePixelFrame) -> UIImage? {
+        guard let provider = CGDataProvider(data: frame.rgba as CFData),
+              let image = CGImage(
+                width: frame.width,
+                height: frame.height,
+                bitsPerComponent: 8,
+                bitsPerPixel: 32,
+                bytesPerRow: frame.width * 4,
+                space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue),
+                provider: provider,
+                decode: nil,
+                shouldInterpolate: false,
+                intent: .defaultIntent
+              ) else { return nil }
         return UIImage(cgImage: image)
     }
-}
-
-@MainActor private final class MobileSkillCanvas: UIView {
-    var drawContent: ((CGContext) -> Void)?
-    override init(frame: CGRect) { super.init(frame: frame); isOpaque = false; backgroundColor = .clear }
-    required init?(coder: NSCoder) { nil }
-    override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        context.setShouldAntialias(false); context.interpolationQuality = .none
-        drawContent?(context)
-    }
-}
-
-@MainActor private final class MobileSkillScrollView: UIScrollView {
-    override func touchesShouldCancel(in view: UIView) -> Bool {
-        view is MobileHUDButton || super.touchesShouldCancel(in: view)
-    }
-}
-
-@MainActor private final class MobileHUDButton: UIButton {
-    #if os(tvOS)
-    override var canBecomeFocused: Bool { false }
-    #endif
-    var onEffect: ((MobileHUDPress.Effect) -> Void)?
-    var onAccessiblePress: (() -> Void)?
-    var activatesOnPress = false
-    private var press: MobileHUDPress
-    private let needsRepeatTimer: Bool
-    private var timer: Timer?
-    init(kind: MobileHUDPress.Kind) {
-        press = MobileHUDPress(kind)
-        // Held rewind repeats from the gameplay frame loop, alongside controller holds.
-        needsRepeatTimer = kind != .pause && kind != .tap && kind != .rewind
-        super.init(frame: .zero)
-        addAction(UIAction { [weak self] _ in self?.beginPress() }, for: .touchDown)
-        addAction(UIAction { [weak self] _ in self?.finishPress(cancelled: false) }, for: .touchUpInside)
-        addAction(UIAction { [weak self] _ in self?.cancelPress() }, for: [.touchUpOutside, .touchCancel, .touchDragExit])
-    }
-    required init?(coder: NSCoder) { nil }
-    override var isEnabled: Bool { didSet { if !isEnabled { cancelPress() } } }
-    override func didMoveToWindow() { super.didMoveToWindow(); if window == nil { cancelPress() } }
-    override func accessibilityActivate() -> Bool {
-        guard isEnabled else { return false }
-        onAccessiblePress?(); return true
-    }
-    func cancelPress() { finishPress(cancelled: true) }
-    private func beginPress() {
-        let effects = press.begin(at: ProcessInfo.processInfo.systemUptime, activateOnBegin: activatesOnPress)
-        timer?.invalidate()
-        guard needsRepeatTimer else { deliver(effects); return }
-        let timer = Timer(timeInterval: 0.04, repeats: true) { [weak self] _ in
-            MainActor.assumeIsolated {
-                guard let self else { return }
-                self.deliver(self.press.update(at: ProcessInfo.processInfo.systemUptime))
-            }
-        }
-        self.timer = timer
-        RunLoop.main.add(timer, forMode: .common)
-        deliver(effects)
-    }
-    private func finishPress(cancelled: Bool) {
-        timer?.invalidate(); timer = nil
-        deliver(press.end(at: ProcessInfo.processInfo.systemUptime, cancelled: cancelled))
-    }
-    private func deliver(_ effects: [MobileHUDPress.Effect]) { effects.forEach { onEffect?($0) } }
 }
 
 private extension Collection {

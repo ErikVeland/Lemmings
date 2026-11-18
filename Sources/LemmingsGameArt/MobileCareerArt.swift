@@ -95,9 +95,9 @@ public enum MobileCareerArt {
         }
         if gameCenter { page.footer.append(.init("rankGameCenter", L10n.text("Game Center"))) }
         page.singleColumnRows = true
-        page.listTools = [.init("rankScope.world", L10n.text("World"), selected: world),
-                          .init("rankScope.local", L10n.text("This device"), selected: !world)]
-            + HostedCategory.worldwide.map { .init("rankCategory.\($0.rawValue)", $0.title, selected: $0 == category) }
+        page.listTools = [.init("rankScope.world", L10n.text("World"), selected: world, listToolRow: 0),
+                          .init("rankScope.local", L10n.text("This device"), selected: !world, listToolRow: 0)]
+            + HostedCategory.worldwide.map { .init("rankCategory.\($0.rawValue)", $0.title, selected: $0 == category, listToolRow: 1) }
         return page
     }
 

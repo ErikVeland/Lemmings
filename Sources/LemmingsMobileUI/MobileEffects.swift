@@ -32,6 +32,7 @@ import os
     private var prepared = false
     private var suspended = false
     private var source: ClassicSoundSource?
+    private var resourceRevision: String?
     private var resultPlayed = false
     private var loadedNeoLemmixSoundIdentity: String?
     private var idleTask: Task<Void, Never>?
@@ -57,11 +58,12 @@ import os
             prepared = false
             return
         }
-        let needsLibrary = source != sound
+        let needsLibrary = source != sound || resourceRevision != GameResources.revision
         source = sound
-        let amiga = needsLibrary ? BundledGameResources.amigaSoundDirectory() : nil
-        let image = needsLibrary ? BundledGameResources.macintoshSoundImage() : nil
-        let supplements = Bundle.main.resourceURL?.appendingPathComponent("Sounds")
+        resourceRevision = GameResources.revision
+        let amiga = needsLibrary ? BundledGameResources.amigaSoundDirectory(in: GameResources.bundle) : nil
+        let image = needsLibrary ? BundledGameResources.macintoshSoundImage(in: GameResources.bundle) : nil
+        let supplements = GameResources.resourceURL?.appendingPathComponent("Sounds")
         let logger = logger
         // Prepared means that configuration is queued before any following cue.
         prepared = true
@@ -113,9 +115,9 @@ import os
             let identity = [neoLemmix.levelFingerprint, soundDirectory.path,
                             neoLemmix.gadgetSounds.values.sorted().joined(separator: ",")].joined(separator: "|")
             if loadedNeoLemmixSoundIdentity != identity {
-                let resources = Bundle.main.resourceURL
+                let resources = GameResources.resourceURL
                 let names = Set(neoLemmix.gadgetSounds.values)
-                let amiga = BundledGameResources.amigaSoundDirectory()
+                let amiga = BundledGameResources.amigaSoundDirectory(in: GameResources.bundle)
                 enqueue(persistent: true) { player in
                     player.loadNeoLemmixSounds(names: names, soundDirectory: soundDirectory,
                         amigaDirectory: amiga, fallbackSoundDirectory: resources?.appendingPathComponent("NeoLemmix/sound"))

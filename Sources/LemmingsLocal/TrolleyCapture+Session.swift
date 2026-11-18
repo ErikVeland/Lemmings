@@ -70,7 +70,8 @@ extension TrolleyCapture {
             entries[FanLevelLibrary.relativeKey(url, level: enumerator.level)] = hash
         }
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
-        return ArcadeStore.fingerprint((try? encoder.encode(entries)) ?? Data(UUID().uuidString.utf8))
+        return OwnedContentIdentity.canonicalDirectoryRevision(
+            raw: ArcadeStore.fingerprint((try? encoder.encode(entries)) ?? Data(UUID().uuidString.utf8)))
     }
 }
 #endif

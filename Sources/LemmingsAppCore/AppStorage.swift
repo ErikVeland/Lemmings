@@ -52,10 +52,14 @@ public struct AppStorage: @unchecked Sendable {
         let integration = identifier.contains("integration-tests")
         let root = support.appendingPathComponent(folderName)
         // A separate preferences suite alone does not isolate playlists or checkpoints.
-        let applicationSupport = integration
+        let isolatedRoot = integration ? ProcessInfo.processInfo.environment["LEMMINGS_TEST_APPLICATION_SUPPORT"] : nil
+        let applicationSupport = isolatedRoot.flatMap { path -> URL? in
+            guard path.hasPrefix("/") else { return nil }
+            return URL(fileURLWithPath: path, isDirectory: true).standardizedFileURL
+        } ?? (integration
             ? FileManager.default.temporaryDirectory.appendingPathComponent("LemmingsIntegrationTests")
                 .appendingPathComponent(identifier).appendingPathComponent(String(ProcessInfo.processInfo.processIdentifier))
-            : root
+            : root)
         return AppStorage(applicationSupport: applicationSupport,
                           resources: bundle.resourceURL ?? bundle.bundleURL,
                           defaults: .standard, bundle: bundle,

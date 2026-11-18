@@ -1,5 +1,8 @@
 #if os(macOS)
 import AppKit
+import ImageIO
+import LemmingsAppCore
+import LemmingsGameArt
 #if canImport(NxlvKit)
 import NxlvKit
 #endif
@@ -59,11 +62,15 @@ import NxlvKit
   static func controlCursor(scale: CGFloat? = nil) -> NSCursor {
     guard !gameplaySuppressed else { return .arrow }
     if let scale { controlScale = min(4, max(1, floor(scale))) }
+    let revision = GameResources.revision
+    if controlRevision != revision { controlRevision = revision; controlCursors.removeAll() }
     if let cursor = controlCursors[controlScale] { return cursor }
-    let side = 14 * controlScale
+    let pointer = importedPointerImages?.first ?? clearedPointerImages?.first ?? embeddedCross
+    guard let pointer else { return .arrow }
+    let side = pointer.size.width * controlScale
     let image = NSImage(size: NSSize(width: side, height: side), flipped: true) { rect in
       NSGraphicsContext.current?.imageInterpolation = .none
-      originalCross.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1,
+      pointer.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1,
         respectFlipped: true, hints: nil)
       return true
     }
@@ -71,6 +78,7 @@ import NxlvKit
     controlCursors[controlScale] = cursor
     return cursor
   }
+  private static var controlRevision = ""
   private static var controlScale: CGFloat = 2
   private static var controlCursors: [CGFloat: NSCursor] = [:]
 
@@ -134,11 +142,69 @@ import NxlvKit
     defer { NSGraphicsContext.restoreGraphicsState() }
     NSGraphicsContext.current?.shouldAntialias = false
     NSGraphicsContext.current?.imageInterpolation = .none
-    let image = occupied ? originalReticule : originalCross
+    let images = importedPointerImages ?? clearedPointerImages ?? embeddedPointers
+    guard let images, images.count == 2 else { return }
+    let image = images[occupied ? 1 : 0]
     image.draw(in: frame, from: .zero, operation: .sourceOver, fraction: 1,
       respectFlipped: true, hints: nil)
   }
 
+  private static var importedRevision = ""
+  private static var loadedImportedPointers: [NSImage]?
+  private static var importedPointerImages: [NSImage]? {
+    let revision = GameResources.revision
+    if importedRevision != revision {
+      importedRevision = revision
+      let images = ["original-cross.png", "original-reticule.png"].compactMap { name -> NSImage? in
+        guard let url = GameResources.file("Cursors/" + name),
+              let data = try? Data(contentsOf: url), data.count <= 2_000_000,
+              let bitmap = NSBitmapImageRep(data: data)?.retagging(with: .sRGB),
+              bitmap.pixelsWide == 28, bitmap.pixelsHigh == 28, let image = bitmap.cgImage else { return nil }
+        return NSImage(cgImage: image, size: NSSize(width: 14, height: 14))
+      }
+      loadedImportedPointers = images.count == 2 ? images : nil
+    }
+    return loadedImportedPointers
+  }
+  private static let clearedPointerImages = makeClearedPointers()
+  private static func makeClearedPointers() -> [NSImage]? {
+    guard let url = Bundle.main.resourceURL?.appendingPathComponent("AlternativeAssets/Lix/assets/data/images/mouse.png"),
+          let data = try? Data(contentsOf: url),
+          let source = CGImageSourceCreateWithData(data as CFData, nil),
+          let image = CGImageSourceCreateImageAtIndex(source, 0, nil),
+          image.width == 133, image.height == 100 else { return nil }
+    var sheet = [UInt8](repeating: 0, count: 133 * 100 * 4)
+    guard let context = CGContext(data: &sheet, width: 133, height: 100, bitsPerComponent: 8,
+      bytesPerRow: 133 * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+      bitmapInfo: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+    context.draw(image, in: CGRect(x: 0, y: 0, width: 133, height: 100))
+    return (0..<2).compactMap { row in
+      var rgba = [UInt8](repeating: 0, count: 32 * 32 * 4)
+      for y in 0..<32 { for x in 0..<32 {
+        let source = ((y + 1 + row * 33) * 133 + x + 1) * 4
+        if sheet[source] == 255 && sheet[source + 1] == 0 && sheet[source + 2] == 255 { continue }
+        let offset = (y * 32 + x) * 4
+        rgba.replaceSubrange(offset..<(offset + 4), with: sheet[source..<(source + 4)])
+      } }
+      guard let provider = CGDataProvider(data: Data(rgba) as CFData),
+            let image = CGImage(width: 32, height: 32, bitsPerComponent: 8, bitsPerPixel: 32,
+              bytesPerRow: 128, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+              bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+              decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
+      return NSImage(cgImage: image, size: NSSize(width: 16, height: 16))
+    }
+  }
+
+  private static var embeddedCross: NSImage? { embeddedPointers?.first }
+  private static var embeddedPointers: [NSImage]? {
+    #if ULTIMATE_LEMMIX_STORE
+    nil
+    #else
+    [originalCross, originalReticule]
+    #endif
+  }
+
+  #if !ULTIMATE_LEMMIX_STORE
   private static func originalPointerImage(_ base64: String) -> NSImage {
     let data = Data(base64Encoded: base64, options: .ignoreUnknownCharacters)!
     let bitmap = NSBitmapImageRep(data: data)!.retagging(with: .sRGB)!
@@ -146,7 +212,7 @@ import NxlvKit
   }
 
   // Exact supplied Amiga PNGs, also kept in Tests/DialogCursorTests/Fixtures.
-  // The 28-pixel artwork represents 14 game pixels. Embed it for every build path.
+  // The 28-pixel artwork represents 14 game pixels. Clean builds import these resources.
   private static let originalCross = originalPointerImage("""
     iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAAXNSR0IArs4c6QAAAKRlWElmTU0AKgAAAAgABgESAAMAAAABAAEA
     AAEaAAUAAAABAAAAVgEbAAUAAAABAAAAXgEoAAMAAAABAAIAAAExAAIAAAATAAAAZodpAAQAAAABAAAAegAAAAAAABJbAAAAMgAA
@@ -176,6 +242,8 @@ import NxlvKit
     ADxJREFUeNpjYAYCRiBgAAImIADRID5InIGAJAMOQEgSaCB2AJShleRAACYm3DK0khwAMBDxSUHqIzvFAwCymwERWKw/XwAAAABJ
     RU5ErkJggg==
     """)
+
+  #endif
 
   static func targetTint(eligible: Bool, occupied: Bool) -> NSColor {
     if eligible { return NSColor(calibratedRed: 0.3, green: 0.85, blue: 0.2, alpha: 1) }

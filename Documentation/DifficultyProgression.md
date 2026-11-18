@@ -2,23 +2,17 @@
 
 ## Meaning and scope
 
-The golden path has 296 unique puzzles in 13 authored teaching chapters. The full order
+The golden path has 297 unique puzzles in 13 authored teaching chapters. The full order
 is pinned in `Artifacts/LearningJourney/course-plan.json` and `seasonal-plan.json`, with exact sources,
 winning replays, chapter goals, learning roles and placement reasons. Course
 positions are editorial ordinals. They are not measured human difficulty scores.
 Original measured replay scores remain unchanged.
 
-Learning-30 preserved the complete first 80 learning-29 lesson records after
+Learning-30 preserves the complete first 80 learning-29 lesson records after
 Erik and Uva reported a good curve through approximately 80 completed lessons.
-It added 70 seasonal sources to the later course. All 72 official 1991–1994
+It adds 70 seasonal sources to the later course. All 72 official 1991–1994
 Xmas/Holiday entries are represented. Two exact-state equivalents already form
 the closing pair. See the [later-curve review](JourneyCurveReview-2026-10-26.md).
-
-Learning-31 removed “That’s a good level” from step 78 after a player report
-of pixel-perfect timing. The puzzle remains Crazy 1 in Oh No! More Lemmings.
-Learning-32 moves “It’s a trade off” to the final slot for the same reason.
-“How on Earth?” is now step 78. Saved journeys at either timing puzzle resume
-at the next eligible lesson.
 
 The opening has 30 beginner lessons: the original skill tutorials, Cellbash,
 simple native practice and all 20 Tame levels. Fifteen lessons then combine
@@ -45,13 +39,13 @@ hatches increase coordination demand without multiplying spawn frequency.
 Same-tick assignments can use Pause. They do not establish physically simultaneous
 clicks or prove that the recorded execution is necessary.
 
-The native replay records for all 296 current lessons include the first tick that
-reaches the rescue quota and the tools remaining at that tick. Tool consumption
-must match the recorded commands before quota. Later commands do not inflate useful workload.
+All 297 native replay records include the first tick that reaches the rescue quota
+and the tools remaining at that tick. Successful tool consumption must match the
+recorded commands before quota. Later commands do not inflate useful workload.
 Deadline pressure uses the quota tick rather than replay shutdown. This corrects
 false deadline pressure in routes that had already won before running to timeout.
 
-`course-review.json` records all 296 transitions across eight pressure axes:
+`course-review.json` records all 297 transitions across eight pressure axes:
 rescue, available tool scarcity, minimum release rate, hatches, command density,
 worker skill chains, precision and deadline. After the foundations, a transition
 cannot raise more than two axes by over 30 points. A lesson cannot introduce more
@@ -63,10 +57,10 @@ compound jumps. They do not certify novice discovery or special pacing.
 Player-reported walls have explicit `tooHardForEarlyJourney` verdicts and later
 placement floors in `route-safety.json`. They remain in the Journey, with easier
 practice before them. `difficulty-walls.json` records their current positions,
-warning signs and preparation gaps. Watson follows small-budget practice at 95.
-PoP YoR ToP!!! follows group coordination at 163. Just A Quicky follows strict
+warning signs and preparation gaps. Watson follows small-budget practice at 97.
+PoP YoR ToP!!! follows group coordination at 165. Just A Quicky follows strict
 combinations after worker routing, containment and skill-chain practice.
-Time waits for no Lemming and This Corrosion precede the final challenge.
+Time waits for no Lemming and This Corrosion remain the closing pair.
 
 Redux provides comparison evidence. A retail rank alone must not hide useful
 easy practice. Fan bridges need an exact human solution review, comparable

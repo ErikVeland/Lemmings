@@ -1,0 +1,24 @@
+{
+  "checkedUTC": "2026-11-17T02:05:23.381091+00:00",
+  "kind": "isolated-personal-visual-review",
+  "sourceApp": ".build/ultimate-lemmix-personal-preview-build3/Ultimate Lemmix.app",
+  "appPath": ".build/ultimate-lemmix-hud-build3-manual-review/Ultimate Lemmix.app",
+  "sourceBundleIdentifier": "academy.glasscode.ultimatelemmix.personal-preview",
+  "bundleIdentifier": "academy.glasscode.ultimatelemmix.personal-review.build3",
+  "version": "0.1",
+  "build": "3",
+  "separateSandboxAndPreferences": true,
+  "allCanonicalFilesUnchanged": true,
+  "allResourceBytesMatchCanonical": true,
+  "changedFiles": [
+    "Contents/Info.plist",
+    "Contents/MacOS/UltimateLemmix"
+  ],
+  "signatureVerified": true,
+  "signing": "ad-hoc; hardened runtime disabled",
+  "launchPerformed": true,
+  "launchCommandExitCode": 0,
+  "confirmedPID": 13470,
+  "startupVerifiedUTC": "2026-11-17T02:08:05.123530+00:00",
+  "acceptanceScope": "Launch and running process only. Human gameplay and audible playback acceptance not recorded."
+}

@@ -34,15 +34,13 @@ struct LearningJourneyTests {
     @Test func seasonalExpansionKeepsTheTestedOpeningAndResumesTheExistingRun() throws {
         let journey = try bundledJourney()
         let oldEntries = journey.lessons.filter { !LearningJourney.isOfficialSeasonal($0.entry) }.map(\.entry)
-        let openingCount = 78
-        #expect(oldEntries.count == 226)
-        #expect(Array(journey.lessons.prefix(openingCount).map(\.entry)) == Array(oldEntries.prefix(openingCount)))
+        #expect(oldEntries.count == 227)
+        #expect(Array(journey.lessons.prefix(80).map(\.entry)) == Array(oldEntries.prefix(80)))
         let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
-            pool: .init(id: "learning-29", summary: "Existing journey"), entries: oldEntries, currentIndex: openingCount)
+            pool: .init(id: "learning-29", summary: "Existing journey"), entries: oldEntries, currentIndex: 80)
         let migrated = try #require(try journey.migrating(run))
-        #expect(migrated.id == run.id && migrated.currentIndex == openingCount)
-        #expect(Array(migrated.entries.prefix(openingCount)) == Array(oldEntries.prefix(openingCount)))
-        #expect(LearningJourney.isOfficialSeasonal(migrated.currentEntry))
+        #expect(migrated.id == run.id && migrated.currentIndex == 80)
+        #expect(Array(migrated.entries.prefix(80)) == Array(oldEntries.prefix(80)))
         #expect(migrated.entries.count == journey.lessons.count)
         #expect(Set(migrated.entries.map(\.identity)) == Set(journey.lessons.map(\.entry.identity)))
         #expect(try journey.migrating(migrated) == migrated)

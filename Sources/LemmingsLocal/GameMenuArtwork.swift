@@ -1,20 +1,23 @@
 #if os(macOS)
 import AppKit
 import NxlvKit
+import LemmingsAppCore
+import LemmingsGameArt
 
-/// Menu lettering that does not depend on which release is selected.
-///
-/// Kept in its own file so the playfield drawing tests can compile the view
-/// without pulling in the window and page machinery of the game screen.
+/// Menu lettering follows the current resource generation, independently of the selected release.
 @MainActor enum GameMenuArtwork {
-    private static let sharedRenderer: MacInterfaceRenderer? = {
-        guard let url = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings"),
-              let artwork = try? ClassicMacArtwork(directory: url),
-              let interface = ClassicMacUserInterface(artwork: artwork) else { return nil }
-        return MacInterfaceRenderer(interface: interface)
-    }()
+    private static var rendererRevision: String?
+    private static var sharedRenderer: MacInterfaceRenderer?
+    private static func currentRenderer() -> MacInterfaceRenderer? {
+        let revision = GameResources.revision
+        if rendererRevision != revision {
+            rendererRevision = revision
+            sharedRenderer = GameArtworkResources.menuInterface.map(MacInterfaceRenderer.init(interface:))
+        }
+        return sharedRenderer
+    }
     private static var renderFixture: MacInterfaceRenderer?
-    static func renderer() -> MacInterfaceRenderer? { renderFixture ?? sharedRenderer }
+    static func renderer() -> MacInterfaceRenderer? { renderFixture ?? currentRenderer() }
     /// Offscreen captures can supply the shipped artwork without an app bundle.
     static func withRenderer<Result>(_ renderer: MacInterfaceRenderer, _ body: () throws -> Result) rethrows -> Result {
         let previous = renderFixture

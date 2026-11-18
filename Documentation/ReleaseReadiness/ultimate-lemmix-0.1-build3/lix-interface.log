@@ -1,0 +1,2 @@
+UI test windows: offscreen; audio: muted
+PASS authored skill/control frames, selected and disabled states, source GUI palette, button backing, bounds and malformed-input rejection

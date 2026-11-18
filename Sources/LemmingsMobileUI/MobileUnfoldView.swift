@@ -1,12 +1,19 @@
 #if os(iOS) || os(tvOS)
 import LemmingsGameArt
+import LemmingsAppCore
 import LemmingsMobileCore
 import UIKit
 
 /// Decoration only. It neither delays navigation nor intercepts a player's input.
 @MainActor final class MobileUnfoldView: UIView {
-    private static let artwork: GameUnfoldArt? = Bundle.main.resourceURL.flatMap {
-        GameUnfoldArt(directory: $0.appendingPathComponent("MacArtwork/lemmings"))
+    private static var artworkRevision = ""
+    private static var cachedArtwork: GameUnfoldArt?
+    private static var artwork: GameUnfoldArt? {
+        if artworkRevision != MobileLixArtwork.revision {
+            artworkRevision = MobileLixArtwork.revision
+            cachedArtwork = GameResources.resourceURL.flatMap { GameUnfoldArt(directory: $0.appendingPathComponent("MacArtwork/lemmings")) }
+        }
+        return cachedArtwork
     }
     private let walker = CALayer()
     private var generation = UUID()

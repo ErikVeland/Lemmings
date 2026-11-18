@@ -1,0 +1,154 @@
+{
+  "buildExitCode": 0,
+  "buildLog": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/build.log",
+  "buildLogSHA256": "3e49135dff1d5792187dfc67494167685417ca15e177aa3be9a6313e93931305",
+  "buildSucceeded": true,
+  "checkout": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings",
+  "command": "DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer zsh Apps/UltimateLemmixSupport/build.sh ios -configuration Release -destination 'generic/platform=iOS' -derivedDataPath \"$PWD/.build/ultimate-lemmix-ios-107\" CURRENT_PROJECT_VERSION=108 CODE_SIGNING_ALLOWED=NO build",
+  "configuration": "Release",
+  "correctedCompileAttempt": {
+    "log": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/widget-refresh-missing-import.log",
+    "reason": "MobileWidgetResources lacked its LemmingsMobileCore import. Root corrected the import before the final successful build."
+  },
+  "derivedDataReused": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-107",
+  "destination": "generic/platform=iOS",
+  "developerDirectory": "/Applications/Xcode.app/Contents/Developer",
+  "engineDiff": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/engine-unchanged.diff",
+  "engineFingerprintMatches107": true,
+  "engineSourceFingerprint": "9a246f97fd42930d53c273a4bb9c45800f0379fd7326f7c65518d484ebfeeea5",
+  "engineSourcesUnchangedFromBaseline": true,
+  "engineSwiftCompileTasksObserved": false,
+  "failedRestrictedAttempt": {
+    "log": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/build-attempt1-cache-permission.log",
+    "reason": "Xcode package and module cache write permission denied. Same build then reran with approved cache access."
+  },
+  "kind": "ultimate-lemmix-full-game-device-sdk-build",
+  "preservedPreviousUnsignedApp": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/previous-unsigned-build107.app",
+  "products": [
+    {
+      "architecture": "arm64",
+      "binarySHA256": "39d41320e421438a39d66dd855d1aee0a377e066ae5603b5b2a5f1ecd7c77856",
+      "build": "108",
+      "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios",
+      "copiedResourceCount": 2300,
+      "copiedResourceHashMismatches": [],
+      "displayName": "Ultimate Lemmix",
+      "embeddedProvisioningProfile": false,
+      "infoSHA256": "4b3bc0f4e67f0d1bde8cbd4ab9f70b520098fa1b3e301c8dabb7c3145748a36f",
+      "minimumOSVersion": "16.0",
+      "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/UltimateLemmixIOS.app",
+      "platform": "iphoneos",
+      "resourceReceiptSHA256": "c93dc73fe7975c9f903424cfaa16f639650a2648e110250ee53ca4bb84ddc030",
+      "scope": "app",
+      "sdk": "iphoneos27.2",
+      "signatureInspection": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/UltimateLemmixIOS.app: code object is not signed at all",
+      "signed": false,
+      "version": "2.4.2"
+    },
+    {
+      "architecture": "arm64",
+      "binarySHA256": "e081c54a06f8e743eb5eba5aa23c0f26d4fecfd7fe088e57f8a117a40cb8b8e6",
+      "build": "108",
+      "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+      "copiedResourceCount": 1636,
+      "copiedResourceHashMismatches": [],
+      "displayName": "Desk Clock",
+      "embeddedProvisioningProfile": false,
+      "infoSHA256": "8e15e0cba8c7344720f023d72017562bcbc3161de30411ec000859aff4eb3281",
+      "minimumOSVersion": "16.0",
+      "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex",
+      "platform": "iphoneos",
+      "resourceReceiptSHA256": "c6269466e4320249ea6d5cec7efef3e92e4b31a2d0911325af8a82051c63ac24",
+      "scope": "widget",
+      "sdk": "iphoneos27.2",
+      "signatureInspection": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex: code object is not signed at all",
+      "signed": false,
+      "version": "2.4.2"
+    }
+  ],
+  "receiptFinal": true,
+  "recordedAtUTC": "2026-11-17T10:20:07.225281+00:00",
+  "refreshChangedInputs": [
+    "Apps/DeskClockWidget/DeskClockWidget.swift",
+    "Apps/DeskClockWidget/Mac/DeskClockMacWidget.entitlements",
+    "Apps/DeskClockWidget/Mac/Info.plist",
+    "Apps/UltimateLemmixIOS/DeskClockWidget/DeskClockWidget.entitlements",
+    "Apps/UltimateLemmixIOS/UltimateLemmixIOS.entitlements",
+    "Apps/UltimateLemmixIOS/UltimateLemmixIOS.xcodeproj/project.pbxproj",
+    "Sources/LemmingsAppCore/Resources/GameDeskClockResources.swift",
+    "Sources/LemmingsMobileUI/MobileLibraryViewController.swift",
+    "Sources/LemmingsMobileUI/MobileSettingsPages.swift",
+    "Sources/LemmingsMobileUI/MobileStartupViewController.swift",
+    "Sources/LemmingsMobileUI/MobileWidgetResources.swift"
+  ],
+  "refreshPurpose": "Frozen Desk Clock shared owned-artwork bridge and App Group configuration",
+  "resourceProfile": {
+    "copiedFilesVerifiedAgainstReceipts": true,
+    "fileCount": 2300,
+    "manifestSHA256": "87b13448571bb98269b4eee4b4efb34b2ae1311d56179af5548fe2d3d0601a29",
+    "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-mobile-clean-resources-107-r2",
+    "trustedDataInventorySHA256": "dc07708a1b98d362e6c031112c988820ff69af549ece5672255c89b0d3f2e495"
+  },
+  "schemaVersion": 1,
+  "sourceBaseline": "b294d3b7c298f549aad5faa36f92ba9bf23b7529",
+  "sourceBranch": "codex/ultimate-lemmix-2.4.2",
+  "sourceFilesChangedDuringBuild": [],
+  "sourceHashesAfter": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/source-hashes-after.json",
+  "sourceHashesBefore": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/source-hashes-before.json",
+  "storeCompilationCondition": {
+    "actualGameArtCompilerInvocationCount": 3,
+    "actualGameArtInvocationsCarryFlag": true,
+    "compilerEvidence": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/gameart-compiler-invocations.txt",
+    "compilerInvocationSource": "widget-refresh-compilation-before-MobileUI-import-correction",
+    "gameArtReusedWithoutCompilation": true,
+    "name": "ULTIMATE_LEMMIX_STORE"
+  },
+  "verificationLimits": {
+    "codeSigning": "Disabled with CODE_SIGNING_ALLOWED=NO. No signed-device install, export, upload or submission.",
+    "mac": "Running Mac build107 was not changed or relaunched.",
+    "network": "No package-fetch flags, downloads or network validation requested.",
+    "rights": "Build and hash checks do not establish asset redistribution rights. Existing project icon retains its rights-review gate.",
+    "runtime": "No physical-device or Simulator runtime. Loaded owned-resource parity remains unverified at runtime.",
+    "tests": "No tests, audits, windows or audio launched."
+  },
+  "widgetAppGroupConfiguration": {
+    "binarySymbols": {
+      "app": {
+        "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/app-widget-bridge-symbols.txt",
+        "sha256": "22398941bd211be746438ef329a7352e2d6caee747b57b6ca56dbc7fbec9fc83",
+        "symbolCount": 107
+      },
+      "widget": {
+        "path": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/widget-widget-bridge-symbols.txt",
+        "sha256": "bfa45ebe9746e646591618960ebc2f163c566b9b30d38304886ef5a086aef1a7",
+        "symbolCount": 107
+      }
+    },
+    "compileEvidenceLogs": [
+      "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/build.log",
+      "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/ultimate-lemmix-ios-108/widget-refresh-missing-import.log"
+    ],
+    "compiledSourcesObserved": {
+      "DeskClockWidget.swift": true,
+      "GameDeskClockResources.swift": true,
+      "MobileWidgetResources.swift": true
+    },
+    "entitlementSources": {
+      "Apps/UltimateLemmixIOS/DeskClockWidget/DeskClockWidget.entitlements": {
+        "applicationGroups": [
+          "group.academy.glasscode.lemmings"
+        ],
+        "sha256": "c514115e972fdd818ab5bb08a6efd1efd35b9e66bfa21ade20e6172dbed10bf4"
+      },
+      "Apps/UltimateLemmixIOS/UltimateLemmixIOS.entitlements": {
+        "applicationGroups": [
+          "group.academy.glasscode.lemmings"
+        ],
+        "sha256": "10a472bdb7f3436f89de5310d2530aa40f056c1d37210190f6a4edc5d3cac053"
+      }
+    },
+    "extensionEntitlementsSetting": "DeskClockWidget/DeskClockWidget.entitlements",
+    "projectSHA256": "f990e4b8563d0b1e4f468d47f56f3ecdfe315b0022063ab2899a9607206a4795",
+    "serviceAcceptance": "Unverified. Unsigned binaries do not establish App Group provisioning or cross-process service access."
+  }
+}

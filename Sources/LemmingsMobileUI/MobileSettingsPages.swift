@@ -75,6 +75,12 @@ extension MobileLibraryViewController {
                                language: interfaceLanguage, respectMuteAvailable: respectMuteAvailable,
                                foldable: foldable, calendarDenied: calendarDenied,
                                ghostsVisible: arcadeStore.hotSeatGhostsVisible)
+        if group == .graphics, GameArtworkResources.lixArtwork != nil {
+            let source = GameArtworkSkin.lixEnabled ? "Lix" : L10n.text("Original")
+            page.rows.insert(.init("setting.characterArtwork", L10n.text("Art set") + ": " + source,
+                                   enabled: MobileResourceAccess.hasOriginalGameData), at: 0)
+            page.rowHeadings["setting.characterArtwork"] = L10n.text("Art set")
+        }
         #if os(tvOS)
         page.televisionGrid = true
         page.settingsTabs = MobileSettingsTabsArt.actions(selected: group, inGame: inGame, television: true)
@@ -116,6 +122,17 @@ extension MobileLibraryViewController {
 
     /// Each row changes one choice. Individual gameplay edits retain the Custom preset.
     func handleSettings(_ id: String) -> Bool {
+        if id == "setting.characterArtwork" {
+            let useLix = !GameArtworkSkin.lixEnabled
+            if useLix || MobileResourceAccess.hasOriginalGameData {
+                _ = GameArtworkSkin.setLixEnabled(useLix)
+                MobileLixArtwork.activate()
+                MobileWidgetResources.publish()
+                selectedPreview = nil
+            }
+            rebuild()
+            return true
+        }
         if handleFamiliarNames(id) { return true }
         if id.hasPrefix("settingsTab."), let group = MobileSettingsGroup(rawValue: String(id.dropFirst(12))) {
             selectedSettingsGroup = group

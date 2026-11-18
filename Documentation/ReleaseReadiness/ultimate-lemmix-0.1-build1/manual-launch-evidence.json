@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-17",
+  "app": "Ultimate Lemmix",
+  "distribution": "ad-hoc manual test",
+  "appPath": ".build/ultimate-lemmix-manual-test/Ultimate Lemmix.app",
+  "launch": "Opened at user request; running process confirmed",
+  "hardenedRuntime": false,
+  "sandboxEntitlements": {
+    "com.apple.security.app-sandbox": true,
+    "com.apple.security.files.user-selected.read-write": true
+  },
+  "signature": "Executable=/Users/erikveland/Lemmings/.build/ultimate-lemmix-manual-test/Ultimate Lemmix.app/Contents/MacOS/UltimateLemmix\nIdentifier=academy.glasscode.ultimatelemmix\nFormat=app bundle with Mach-O universal (x86_64 arm64)\nCodeDirectory v=20400 size=14841 flags=0x2(adhoc) hashes=453+7 location=embedded\nVersionPlatform=1\nVersionMin=787200\nVersionSDK=787200\nHash type=sha256 size=32\nCandidateCDHash sha256=4f3bc29f37838ffdb85ebb0d163a7a0a48ee0ee4\nCandidateCDHashFull sha256=4f3bc29f37838ffdb85ebb0d163a7a0a48ee0ee4f2717ac2dd8c6a84df8c8d4e\nHash choices=sha256\nCMSDigest=4f3bc29f37838ffdb85ebb0d163a7a0a48ee0ee4f2717ac2dd8c6a84df8c8d4e\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=4358144\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=4f3bc29f37838ffdb85ebb0d163a7a0a48ee0ee4\nSignature=adhoc\nInfo.plist entries=14\nTeamIdentifier=not set\nSealed Resources version=2 rules=13 files=1434\nInternal requirements count=0 size=12\n",
+  "archive": {
+    "path": "Ultimate-Lemmix-0.1-build1-macOS-local-test.zip",
+    "bytes": 26885314,
+    "sha256": "9e129619d5721fd2635a1f89a135077d2ffa600631f1920cdbbac61fc043005c",
+    "crcAndBundleFileHashesVerified": true
+  },
+  "originalCandidate": "The 12 November hardened ad-hoc archive fails dynamic-library validation at launch. Its historical signature audit did not establish launchability."
+}

@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import NxlvKit
 
 /// Original Amiga control tiles, with separate glyphs for Resume and Undo.
 /// Source pixels use the Amiga panel aspect ratio and a reference-matched colour palette.
@@ -20,8 +21,16 @@ public enum PanelGlyphArt: String, Sendable {
   /// A dot leaves the button showing through. Every other mark is a colour
   /// the glyph names below.
   public var rows: [String] {
+    #if ULTIMATE_LEMMIX_STORE
+    if isOriginalTile, !GameArtworkSkin.usesLixInterface {
+      return OwnedClassicPanelArt.rows(for: rawValue) ?? []
+    }
+    #endif
     switch self {
     case .nuke:
+      #if ULTIMATE_LEMMIX_STORE
+      return []
+      #else
       return [
         "aa9aabbabaaa99aaabbbbbab9aba",
         "aaababba99a999aa999aabbb99aa",
@@ -46,6 +55,7 @@ public enum PanelGlyphArt: String, Sendable {
         "cdeeeedddeeeeedddeedeeddeccb",
         "eeddeeddeecdeeddeecddcdccbbb",
       ]
+      #endif
     case .undo:
       return [".....####...", "...########.", "..###....###", "..##......##", "#.##........", "####........", "###.........", "####........", "#####.......", "...........#", "...#########", ".....#####.."]
     case .menu:
@@ -148,6 +158,9 @@ public enum PanelGlyphArt: String, Sendable {
         "#############", "#############",
       ]
     case .pause:
+      #if ULTIMATE_LEMMIX_STORE
+      return []
+      #else
       return [
         "aaa99aa9aabbaa99999a90aaab90",
         "acbb99aa999abbaaaa9a9e99ba9c",
@@ -172,7 +185,11 @@ public enum PanelGlyphArt: String, Sendable {
         "aa9b0000000000dbba99abbbbbb9",
         "aab99bd00000dbbaaa999aaaab9a",
       ]
+      #endif
     case .rock:
+      #if ULTIMATE_LEMMIX_STORE
+      return []
+      #else
       return [
         "aac999bbccaabbaaa999bbccaeaa",
         "aab9aaaaaaa9abbaa9aaaaaaecba",
@@ -197,6 +214,7 @@ public enum PanelGlyphArt: String, Sendable {
         "aaaabacccbbbb9aaaab9abbbbbb9",
         "aabb9aaaacccbbbaaa999aaaab9a",
       ]
+      #endif
     case .play:
       return [
         "..#.........",
@@ -264,6 +282,7 @@ public enum PanelGlyphArt: String, Sendable {
 
   /// The glyph's own size, before any scaling.
   public var pixelSize: (width: Int, height: Int) {
+    if let tile = resourceTile { return (tile.width / 2, tile.height) }
     let rows = self.rows
     return ((rows.first?.count ?? 0) / (isOriginalTile ? 2 : 1), rows.count)
   }
@@ -275,6 +294,63 @@ public enum PanelGlyphArt: String, Sendable {
     return min(Int(box.width) / size.width, Int(box.height) / size.height)
   }
 
+  private struct ResourceTile: Sendable { let width: Int, height: Int; let rgba: Data }
+  private struct ResourceImage: @unchecked Sendable { let image: CGImage }
+  private static let resourceTiles = GameAssetCache<ResourceTile>(capacity: 12)
+  private static let resourceImages = GameAssetCache<ResourceImage>(capacity: 48)
+  private var resourceTile: ResourceTile? {
+    guard isOriginalTile else { return nil }
+    let key = GameArtworkResources.revision + ":" + String(GameArtworkSkin.usesLixInterface) + ":" + rawValue
+    if let cached = Self.resourceTiles.value(for: key) { return cached }
+    guard let tile = makeResourceTile() else { return nil }
+    Self.resourceTiles.insert(tile, for: key)
+    return tile
+  }
+  private func makeResourceTile() -> ResourceTile? {
+    if !GameArtworkSkin.usesLixInterface {
+      #if ULTIMATE_LEMMIX_STORE
+      guard OwnedClassicPanelArt.rows(for: rawValue) == nil else { return nil }
+      #else
+      return nil
+      #endif
+    }
+    let source = self == .rock
+      ? GameArtworkResources.lixInterface?.button(width: 28, height: 44, state: .normal)
+      : GameArtworkResources.lixInterface?.control(self == .pause ? .pause : .nuke)
+    guard let source else { return nil }
+    let bytes = [UInt8](source.rgba), height = max(1, source.height / 2)
+    var rgba = Data(capacity: source.width * height * 4)
+    for y in 0..<height { for x in 0..<source.width {
+      let offset = ((y * 2) * source.width + x) * 4
+      rgba.append(contentsOf: bytes[offset..<(offset + 4)])
+    } }
+    return ResourceTile(width: source.width, height: height, rgba: rgba)
+  }
+
+  /**
+   * Supplies cleared tiles when the selected skin or missing owned source needs them.
+   */
+  public func resourceTileImage(scale: Int) -> CGImage? {
+    guard let tile = resourceTile else { return nil }
+    let steps = max(1, scale), width = tile.width * steps, height = tile.height * steps
+    let key = "\(GameArtworkResources.revision):\(GameArtworkSkin.usesLixInterface):\(rawValue):\(steps)"
+    if let cached = Self.resourceImages.value(for: key) { return cached.image }
+    let bytes = [UInt8](tile.rgba)
+    var rgba = [UInt8](repeating: 0, count: width * height * 4)
+    for y in 0..<height { for x in 0..<width {
+      let source = ((y / steps) * tile.width + x / steps) * 4
+      let target = (y * width + x) * 4
+      rgba.replaceSubrange(target..<(target + 4), with: bytes[source..<(source + 4)])
+    } }
+    guard let provider = CGDataProvider(data: Data(rgba) as CFData) else { return nil }
+    guard let image = CGImage(width: width, height: height, bitsPerComponent: 8, bitsPerPixel: 32,
+      bytesPerRow: width * 4, space: CGColorSpace(name: CGColorSpace.sRGB)!,
+      bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+      decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
+    Self.resourceImages.insert(ResourceImage(image: image), for: key)
+    return image
+  }
+
   /// Renders the glyph at a whole-number scale. The image is `rows × scale` pixels, so an
   /// original tile (stored at half horizontal resolution) is twice as wide as its logical size.
   public func cgImage(scale: Int) -> CGImage? {
@@ -283,6 +359,7 @@ public enum PanelGlyphArt: String, Sendable {
 
   /// Custom sockets supply their own rock. Keep only the original control silhouette above it.
   func cgImage(scale: Int, transparentRock: Bool) -> CGImage? {
+    if let replacement = resourceTileImage(scale: scale) { return replacement }
     let steps = max(1, scale)
     let rows = self.rows
     guard let first = rows.first, !first.isEmpty else { return nil }

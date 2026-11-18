@@ -1,4 +1,5 @@
 #if os(iOS) || os(tvOS)
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -59,16 +60,31 @@ import UIKit
     private func startLoading() {
         hourglass.accessibilityLabel = L10n.text("Loading...")
         startupTask = Task { [weak self] in
+            let restored = await Task.detached(priority: .userInitiated) {
+                Result { try MobileResourceAccess.restoredBundleURL() }
+            }.value
+            guard let self, !Task.isCancelled else { return }
+            let resourceNotice: String?
+            do {
+                try GameResources.activate(bundleURL: try restored.get())
+                resourceNotice = nil
+            } catch {
+                resourceNotice = error.localizedDescription
+            }
+            MobileLixArtwork.activate()
+            MobileWidgetResources.publish()
             let support = try? FileManager.default.url(for: MobileStorage.localDirectory, in: .userDomainMask,
                                                        appropriateFor: nil, create: false)
-            let catalogue = await MobileCatalogueLoader().load(resources: Bundle.main.resourceURL, support: support)
-            guard let self, !Task.isCancelled else { return }
+            let catalogue = await MobileCatalogueLoader().load(resources: GameResources.resourceURL, support: support)
+            guard !Task.isCancelled else { return }
             #if os(tvOS)
             let controller = MobileTVBootstrap()
             controller.catalogue = catalogue
+            controller.resourceNotice = resourceNotice
             #else
             let controller = MobileLibraryViewController()
             controller.catalogue = catalogue
+            if let resourceNotice { controller.notice = resourceNotice }
             #endif
             addChild(controller)
             controller.view.frame = view.bounds

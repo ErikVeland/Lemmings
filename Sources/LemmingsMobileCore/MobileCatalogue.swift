@@ -1,4 +1,5 @@
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 /// A group of packs the player picks from on the home page.
@@ -25,6 +26,8 @@ public struct MobileContentPack: Equatable, Sendable {
     public enum Source: Equatable, Sendable {
         /// A stock release folder under the ports root.
         case release(folder: String, title: ClassicTitle)
+        /// Project-authored native levels with an independent save identity.
+        case authoredStarter(folder: String)
         case fan(file: URL)
     }
 
@@ -66,7 +69,7 @@ public final class MobileCatalogue {
     public init(portsRoot: URL, fanFolders: [URL] = [], bundledScope: BundledPlayableScope? = nil) {
         self.portsRoot = portsRoot
         self.fanFolders = fanFolders
-        self.bundledScope = bundledScope ?? Bundle.main.resourceURL.flatMap { try? BundledPlayableScope(resources: $0) }
+        self.bundledScope = bundledScope ?? GameResources.resourceURL.flatMap { try? BundledPlayableScope(resources: $0) }
         var counts: [String: Int] = [:]
         for folder in fanFolders {
             guard let data = try? Data(contentsOf: folder.appendingPathComponent("level-counts.json")),
@@ -94,7 +97,7 @@ public final class MobileCatalogue {
     public func packs(in family: MobileFamily) -> [MobileContentPack] {
         switch family {
         case .classic, .ohNo, .holiday, .ohYes:
-            return Self.releases.filter { $0.family == family }.compactMap { release in
+            let releases = Self.releases.filter { $0.family == family }.compactMap { release -> MobileContentPack? in
                 let folder = portsRoot.appendingPathComponent(release.folder)
                 var isDirectory: ObjCBool = false
                 guard FileManager.default.fileExists(atPath: folder.path, isDirectory: &isDirectory),
@@ -104,6 +107,13 @@ public final class MobileCatalogue {
                                          source: .release(folder: release.folder, title: release.title),
                                          levelCount: release.count)
             }
+            if family == .classic, releases.isEmpty,
+               GameStarterContent.isStarter(directory: portsRoot.appendingPathComponent("ultimate_lemmix_starter")) {
+                return [.init(id: "authored/" + GameStarterContent.identifier, family: .classic,
+                              title: GameStarterContent.displayName,
+                              source: .authoredStarter(folder: "ultimate_lemmix_starter"), levelCount: 3)]
+            }
+            return releases
         case .fan:
             return fanFiles().map { file in
                 MobileContentPack(id: ClassicFanPack.catalogueID(file), family: .fan,
@@ -116,6 +126,11 @@ public final class MobileCatalogue {
     }
 
     public func pack(id: String) -> MobileContentPack? {
+        if id == "authored/" + GameStarterContent.identifier,
+           GameStarterContent.isStarter(directory: portsRoot.appendingPathComponent("ultimate_lemmix_starter")) {
+            return .init(id: id, family: .classic, title: GameStarterContent.displayName,
+                         source: .authoredStarter(folder: "ultimate_lemmix_starter"), levelCount: 3)
+        }
         if id.hasPrefix("release/") {
             return MobileFamily.allCases.lazy.filter { $0 != .fan }.flatMap { self.packs(in: $0) }.first { $0.id == id }
         }
@@ -124,6 +139,9 @@ public final class MobileCatalogue {
 
     /// The pack a saved level identifier belongs to.
     public func pack(forLevelIdentifier identifier: String) -> MobileContentPack? {
+        if identifier.hasPrefix(GameStarterContent.identifier + "/") {
+            return pack(id: "authored/" + GameStarterContent.identifier)
+        }
         let parts = identifier.split(separator: "/", omittingEmptySubsequences: false).map(String.init)
         if parts.first == "fan", parts.count > 1 { return pack(id: parts[1]) }
         // Official identifiers start with the release name: "lemmings-LEVEL-120/Fun/1".
@@ -174,6 +192,8 @@ public final class MobileCatalogue {
         case let .release(_, title) where title == .ohYesMoreLemmings:
             library = try ClassicOhYesMobileLibrary(portsRoot: portsRoot)
         case let .release(folder, _):
+            library = try ClassicMobileLibrary(directory: portsRoot.appendingPathComponent(folder))
+        case let .authoredStarter(folder):
             library = try ClassicMobileLibrary(directory: portsRoot.appendingPathComponent(folder))
         case let .fan(file):
             library = try ClassicFanMobileLibrary(packURL: file, portsRoot: portsRoot, bundledScope: bundledScope)

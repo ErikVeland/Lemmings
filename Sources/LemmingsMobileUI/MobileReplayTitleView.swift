@@ -5,6 +5,7 @@ import LemmingsMobileCore
 import UIKit
 
 @MainActor final class MobileReplayTitleView: UIView {
+    private var playbackSeconds: TimeInterval = 0
     private var artworkScale: CGFloat {
         #if os(tvOS)
         2
@@ -14,6 +15,7 @@ import UIKit
     }
     var level: MobileLevelSummary? {
         didSet {
+            playbackSeconds = 0
             isHidden = level == nil
             accessibilityLabel = level.map { L10n.text("Replay, \($0.locationLabel), \($0.title)") }
             setNeedsDisplay()
@@ -34,6 +36,11 @@ import UIKit
         let scale = artworkScale
         let size = MobileReplayTitleArt.size(level: level, width: min(600, max(44, (area.width - 16) / scale)))
         frame = CGRect(x: area.minX + 8, y: area.minY + 8, width: size.width * scale, height: size.height * scale)
+    }
+    func advancePlayback(seconds: TimeInterval, visible: Bool) {
+        guard level != nil, visible, !isHidden else { return }
+        playbackSeconds += max(0, seconds)
+        if playbackSeconds >= 3 { isHidden = true }
     }
     override func draw(_ rect: CGRect) {
         guard let level, let context = UIGraphicsGetCurrentContext() else { return }

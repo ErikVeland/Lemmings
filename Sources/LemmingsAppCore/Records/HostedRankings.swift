@@ -26,11 +26,14 @@ public struct HostedBoard: Codable, Equatable {
     public let page: Int
     public let hasMore: Bool
     public let verification: String
-    public init(entries: [Entry], page: Int, hasMore: Bool, verification: String) {
+    public var sharedLeaders: [Entry]?
+    private enum CodingKeys: String, CodingKey { case entries, page, hasMore, verification, sharedLeaders = "leaders" }
+    public init(entries: [Entry], page: Int, hasMore: Bool, verification: String, sharedLeaders: [Entry]? = nil) {
         self.entries = entries; self.page = page; self.hasMore = hasMore; self.verification = verification
+        self.sharedLeaders = sharedLeaders
     }
     /// Rank 1 can be shared. Every tied first-place entry leads.
-    public var leaders: [Entry] { page == 0 ? entries.filter { $0.rank == 1 } : [] }
+    public var leaders: [Entry] { sharedLeaders ?? (page == 0 ? entries.filter { $0.rank == 1 } : []) }
 }
 
 public enum HostedCategory: String, CaseIterable, Sendable {

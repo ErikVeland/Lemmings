@@ -3,6 +3,16 @@ import NxlvKit
 
 /// Shared inspection layout for touch, keyboard and TV navigation.
 public enum LemmingInspectionArt {
+    /// Builds the compact story card used while a player points at an individual.
+    public static func hoverPage(_ individual: LemmingInspection.Individual) -> GameFrontEnd.Page {
+        let recent = Array(individual.actions.suffix(3).map(\.text))
+        let details = [individual.preference, individual.want, individual.status]
+            + (recent.isEmpty ? [] : [L10n.text("Recent actions")] + recent)
+        var page = GameFrontEnd.Page(title: individual.title, details: details)
+        if !recent.isEmpty { page.detailHeadings = [3] }
+        return page
+    }
+
     public static func page(_ snapshot: LemmingInspection, index requested: Int = 0, historyPage: Int = 0) -> GameFrontEnd.Page {
         let index = min(max(0, requested), max(0, snapshot.individuals.count - 1))
         guard snapshot.individuals.indices.contains(index) else {

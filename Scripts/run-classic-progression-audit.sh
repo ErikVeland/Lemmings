@@ -14,6 +14,7 @@ swiftc -O -swift-version 6 -parse-as-library -I "$build_dir/modules" -L "$build_
   -Xlinker -rpath -Xlinker "$build_dir" \
   "$project_dir/Tools/DifficultyDiagnostics/ClassicCorpus.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameResources.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
   "$project_dir/Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift" \
   "$project_dir/Sources/LemmingsAppCore/Records/GameProgressPreferences.swift" \
@@ -23,6 +24,7 @@ swiftc -O -swift-version 6 -parse-as-library -I "$build_dir/modules" -L "$build_
   -o "$build_dir/ClassicCorpus"
 shasum -a 256 "$project_dir/Tools/DifficultyDiagnostics/ClassicCorpus.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameResources.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
   "$project_dir/Sources/LemmingsAppCore/Collections/ClassicSourceRevision.swift" \
   "$project_dir/Sources/LemmingsAppCore/Records/GameProgressPreferences.swift" \

@@ -1,10 +1,18 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 
 /// Original sequel title artwork, decoded once from the bundled game data.
 public final class GameHomeLogoArt: @unchecked Sendable {
-    public static let bundled = GameHomeLogoArt(resources: Bundle.main.resourceURL)
+    private static let generations = GameAssetCache<GameHomeLogoArt>(capacity: 2)
+    public static var bundled: GameHomeLogoArt {
+        let key = GameResources.revision
+        if let cached = generations.value(for: key) { return cached }
+        let artwork = GameHomeLogoArt(resources: GameResources.resourceURL)
+        generations.insert(artwork, for: key)
+        return artwork
+    }
     private let images: [GameFrontEnd.GameLogo: CGImage]
     private let chronicles: CGImage?
     private let brand: Lemmings3Brand?

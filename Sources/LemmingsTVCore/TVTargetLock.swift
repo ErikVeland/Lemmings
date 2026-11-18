@@ -17,10 +17,12 @@ public struct TVTargetLock: Sendable {
         guard granular, point.x.isFinite, point.y.isFinite, distance.isFinite,
               distance <= 6, viewport.contentFrame.contains(point) else { clear(); return nil }
         let level = viewport.levelPoint(fromView: point)
-        let crowd = candidates.filter { candidate in
+        let underPointer = candidates.filter { candidate in
             let box = candidate.pointerBounds ?? .init(x: -6, y: -9, width: 12, height: 19)
             return box.contains(.init(x: level.x - candidate.point.x, y: level.y - candidate.point.y))
-        }.sorted { $0.id < $1.id }
+        }
+        let selectable = underPointer.filter { $0.assignment == .eligible }
+        let crowd = Self.alternateFacing(selectable.isEmpty ? underPointer : selectable)
         guard crowd.count > 1 else { clear(); return nil }
         let previous = id ?? displayed?.id
         let current = crowd.firstIndex { $0.id == previous }
@@ -42,6 +44,34 @@ public struct TVTargetLock: Sendable {
         let candidate = crowd[selected]
         id = candidate.id
         return .init(id: candidate.id, point: candidate.point, state: candidate.assignment)
+    }
+
+    public static func nextEligible(
+        _ candidates: [MobileTargetCandidate], after currentID: Int?, direction: Int
+    ) -> MobileTargetCandidate? {
+        let ordered = alternateFacing(candidates.filter { $0.assignment == .eligible })
+        guard !ordered.isEmpty, direction != 0 else { return nil }
+        guard let currentID, let index = ordered.firstIndex(where: { $0.id == currentID }) else {
+            return direction < 0 ? ordered.last : ordered.first
+        }
+        return ordered[(index + (direction < 0 ? -1 : 1) + ordered.count) % ordered.count]
+    }
+
+    private static func alternateFacing(_ candidates: [MobileTargetCandidate]) -> [MobileTargetCandidate] {
+        let sorted = candidates.sorted { $0.id < $1.id }
+        guard let first = sorted.first else { return [] }
+        var left = sorted.filter { $0.direction < 0 }
+        var right = sorted.filter { $0.direction > 0 }
+        var wantsLeft = first.direction < 0
+        var result: [MobileTargetCandidate] = []
+        result.reserveCapacity(sorted.count)
+        while !left.isEmpty || !right.isEmpty {
+            if wantsLeft, !left.isEmpty { result.append(left.removeFirst()); wantsLeft = false }
+            else if !wantsLeft, !right.isEmpty { result.append(right.removeFirst()); wantsLeft = true }
+            else if !left.isEmpty { result.append(left.removeFirst()); wantsLeft = false }
+            else { result.append(right.removeFirst()); wantsLeft = true }
+        }
+        return result
     }
     public func resolve(candidates: [MobileTargetCandidate], visible: MobileRect) -> MobileTargetSelection? {
         guard let id, let candidate = candidates.first(where: { $0.id == id }),

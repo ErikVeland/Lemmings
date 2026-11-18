@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-17",
+  "app": "Ultimate Lemmix",
+  "version": "0.1",
+  "build": "4",
+  "localPackagingVerified": true,
+  "submissionReady": false,
+  "uploaded": false,
+  "redistributionCleared": false,
+  "profiles": [
+    {
+      "platform": "macOS",
+      "profile": "clean-alternative-assets",
+      "architectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "evidence": "packaging-clean-mac.json",
+      "audit": "packaging-clean-mac-audit.json",
+      "appPath": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-app-store-build4-universal/Ultimate Lemmix.app",
+      "resourceFiles": 1960,
+      "archive": {
+        "path": ".build/ultimate-lemmix-app-store-build4-universal/Ultimate-Lemmix-0.1-build4-macOS.zip",
+        "bytes": 33398035,
+        "sha256": "f11d9d83a185abbce73ce93384510cf43e99cfa66be6437f13a19234cc7a76f4"
+      },
+      "frontendCompiled": true,
+      "coreRecompiled": false
+    },
+    {
+      "platform": "macOS",
+      "profile": "personal-local-preview-only",
+      "architectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "evidence": "packaging-personal-mac.json",
+      "audit": "packaging-personal-mac-audit.json",
+      "appPath": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-personal-preview-build4/Ultimate Lemmix.app",
+      "resourceFiles": 2679,
+      "archive": {
+        "path": ".build/ultimate-lemmix-personal-preview-build4/Ultimate-Lemmix-0.1-build4-personal-macOS.zip",
+        "bytes": 38807443,
+        "sha256": "f4b8edf3887b495c3d1b9980e7d9956b1cb1d7b8e3c003065e1034e2b75ed598"
+      },
+      "frontendCompiled": false,
+      "coreRecompiled": false,
+      "communityLevels": 5051,
+      "redistributionCleared": false
+    },
+    {
+      "platform": "ios",
+      "profile": "alternative-assets-unsigned-local-review",
+      "evidence": {
+        "path": ".build/ultimate-lemmix-ios-build4/build-evidence.json",
+        "bytes": 81421,
+        "sha256": "dc2aea0aed2d5a895f3a6c465ba6cb5464be10c75677f3cced915679bd41a9af"
+      },
+      "retainedEvidenceDirectory": "../ultimate-lemmix-mobile-0.1-build4",
+      "compiledInputsVerified": 190,
+      "swiftRecompiled": false,
+      "assetCataloguesCompiled": true,
+      "runtimeTested": false,
+      "deviceTested": false,
+      "products": [
+        {
+          "kind": "device",
+          "resources": {
+            "resourceFiles": 1959,
+            "resourceBytes": 33257396,
+            "resourceManifestSHA256": "0b9187d02b2bd2a2cba76c734e0ae68506565789021c993ba40dd30cabd2172c",
+            "displayName": "Ultimate Lemmix",
+            "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios"
+          },
+          "binary": {
+            "architectures": [
+              "arm64"
+            ],
+            "executableSHA256": "9ea8663e1ad5f8b3f9cbc9736d1256ab72eb3e798979ddb2339b35bdc4fff228",
+            "sparkleIncluded": false
+          },
+          "archive": {
+            "path": ".build/ultimate-lemmix-ios-build4/Ultimate-Lemmix-ios-0.1-build4-unsigned.ipa",
+            "bytes": 23922365,
+            "sha256": "c03d354af18e805748d3168cacfd934687dcdb73f2c999a6eb5f2aa7b44ac6e6"
+          }
+        },
+        {
+          "kind": "simulator",
+          "resources": {
+            "resourceFiles": 1959,
+            "resourceBytes": 33257396,
+            "resourceManifestSHA256": "0b9187d02b2bd2a2cba76c734e0ae68506565789021c993ba40dd30cabd2172c",
+            "displayName": "Ultimate Lemmix",
+            "bundleIdentifier": "academy.glasscode.ultimatelemmix.ios"
+          },
+          "binary": {
+            "architectures": [
+              "arm64"
+            ],
+            "executableSHA256": "8de616459fa6f8529909a10536207d3c78773260a318f55fd4f92ce5e25d8cb5",
+            "sparkleIncluded": false
+          },
+          "archive": {
+            "path": ".build/ultimate-lemmix-ios-build4/Ultimate-Lemmix-ios-0.1-build4-simulator.zip",
+            "bytes": 24899325,
+            "sha256": "dd3e9d10d4d926d6ccd99c757a7061fbf05621e9a9f59ef5cd8d7c1ec1533f1d"
+          }
+        }
+      ]
+    },
+    {
+      "platform": "tvos",
+      "profile": "alternative-assets-unsigned-local-review",
+      "evidence": {
+        "path": ".build/ultimate-lemmix-tvos-build4/build-evidence.json",
+        "bytes": 87896,
+        "sha256": "8b8b673a39ba62664ef2c3b7ee2b8f08625d842d3499444ecbfc5329ed44edfc"
+      },
+      "retainedEvidenceDirectory": "../ultimate-lemmix-mobile-0.1-build4",
+      "compiledInputsVerified": 190,
+      "swiftRecompiled": false,
+      "assetCataloguesCompiled": true,
+      "runtimeTested": false,
+      "deviceTested": false,
+      "products": [
+        {
+          "kind": "device",
+          "resources": {
+            "resourceFiles": 1959,
+            "resourceBytes": 33257396,
+            "resourceManifestSHA256": "0b9187d02b2bd2a2cba76c734e0ae68506565789021c993ba40dd30cabd2172c",
+            "displayName": "Ultimate Lemmix",
+            "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos"
+          },
+          "binary": {
+            "architectures": [
+              "arm64"
+            ],
+            "executableSHA256": "28f12c89314b5c15902ce8a067836496983db100d5a3819df0a2c51c731d90b7",
+            "sparkleIncluded": false
+          },
+          "archive": {
+            "path": ".build/ultimate-lemmix-tvos-build4/Ultimate-Lemmix-tvos-0.1-build4-unsigned.ipa",
+            "bytes": 29099689,
+            "sha256": "738341835a6f1d584fc865f8b883ec9a09dcbd4401003b15a8106af7151a1541"
+          }
+        },
+        {
+          "kind": "simulator",
+          "resources": {
+            "resourceFiles": 1959,
+            "resourceBytes": 33257396,
+            "resourceManifestSHA256": "0b9187d02b2bd2a2cba76c734e0ae68506565789021c993ba40dd30cabd2172c",
+            "displayName": "Ultimate Lemmix",
+            "bundleIdentifier": "academy.glasscode.ultimatelemmix.tvos"
+          },
+          "binary": {
+            "architectures": [
+              "arm64"
+            ],
+            "executableSHA256": "bfacf76cf3174fe48c2e4a4b18420629f28ea8ebff403ec8cea1448d113eed12",
+            "sparkleIncluded": false
+          },
+          "archive": {
+            "path": ".build/ultimate-lemmix-tvos-build4/Ultimate-Lemmix-tvos-0.1-build4-simulator.zip",
+            "bytes": 30097745,
+            "sha256": "bb1a7d7d370b23f622adf7e3d725be59254ad2efc9a3cb75bb6b908c7f59ab38"
+          }
+        }
+      ]
+    }
+  ],
+  "coreReuse": {
+    "sourceFiles": 162,
+    "librarySHA256": "4fdc649d6141027a423a4d3108cfab015580d32f48aae88e73940cec59bfe2b2",
+    "sourceArchiveSHA256": "637cf5a437bc7f6ee1aeca32a870f39d52117ebed03ecb7c6782f4f4a5110ca2",
+    "compiledAgain": false,
+    "exactSourceMembershipAndBytesVerified": true,
+    "archivedLibraryAndModulesVerified": true
+  },
+  "manualReview": {
+    "appPath": "/Users/erikveland/Lemmings/.build/ultimate-lemmix-build4-manual-review/Ultimate Lemmix.app",
+    "profile": "clean-alternative-assets",
+    "bundleIdentifier": "academy.glasscode.ultimatelemmix.personal-review.build3",
+    "existingReviewSaveIdentityPreserved": true,
+    "oldBuild3BundleUnchanged": true,
+    "resourcesExactCleanCandidate": true,
+    "evidence": "packaging-manual-review.json",
+    "launchedByPackagingAgent": false
+  },
+  "authoredFeatureData": {
+    "schemaVersion": 1,
+    "kind": "repository-authored-feature-data",
+    "gamePayloadsIncluded": false,
+    "runtimeEngineFingerprint": "30c06219498191facc1c026dfaac83467fb60b78af67dc62b041fbc79bd7f6b0",
+    "certificateEngineFingerprint": "a23fc195617af7cd2d6b162d5244b44a0f45ad12be10ac9f013d4ad9e794fe86",
+    "certificatesMatchCurrentEngine": false,
+    "certificateBytesRelabelled": false,
+    "witnessHashesVerified": true,
+    "staleProofBehaviour": "Retain original certificates. Loaders fail closed; generic practice hints remain available."
+  },
+  "rights": {
+    "lixGraphicsAndMusic": "CC0-1.0",
+    "lixFont": "Bitstream Vera/Arev full notices retained",
+    "projectIcon": "Requested existing character icon; separate provenance and rights review required",
+    "personalOriginalFontArtworkAndCommunityCorpus": "Private local preview only; redistribution not cleared"
+  },
+  "focusedChecks": {
+    "mobileResourceAndRefreshSuite": {
+      "tests": 21,
+      "result": "PASS",
+      "log": "logs/packaging-mobile-tests.log"
+    },
+    "cleanSafety": {
+      "tests": 3,
+      "result": "PASS",
+      "log": "logs/packaging-clean-safety-tests.log"
+    },
+    "privateSafety": {
+      "tests": 9,
+      "result": "PASS",
+      "log": "logs/packaging-personal-safety-tests.log"
+    },
+    "featureGuards": {
+      "tests": 4,
+      "result": "PASS",
+      "log": "logs/packaging-feature-tests.log"
+    },
+    "ownedGameLibrary": {
+      "result": "PASS",
+      "log": "logs/owned-game-library.log",
+      "realFixtures": [
+        "Classic",
+        "Oh No"
+      ],
+      "syntheticCases": [
+        "distinct installations",
+        "duplicate reuse",
+        "failed validation preservation",
+        "legacy roots",
+        "targeted repair",
+        "malformed and linked entries"
+      ]
+    }
+  },
+  "nativeChecks": "validation.json",
+  "nativeFeatureLimits": "feature-validation.json",
+  "historicalMobileFilesUnchanged": 20,
+  "limits": [
+    "Existing old-engine certificates and proof-specific hints fail closed; no certificate hashes were relabelled.",
+    "App Store signing, project-icon and private-content rights, privacy, accessibility and listening acceptance remain open.",
+    "Actual fullscreen menu reveal and live sandbox file-picker persistence require manual user validation.",
+    "iOS/tvOS binaries were source-verified and reprofiled; no runtime or physical-device acceptance is claimed."
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "status": "source-checks-pass",
+  "checkedUTC": "2026-11-17T01:49:54.100062+00:00",
+  "personalHUDCases": 4,
+  "cleanHUDCases": 1,
+  "regressionCases": 7,
+  "nativeHUDTargetsPerCase": 19,
+  "windows": "offscreen",
+  "audio": "muted",
+  "storage": "Per-process isolated defaults, records, checkpoints, playlists and owned-game roots.",
+  "visualReview": {
+    "status": "pass",
+    "inspectedCaptures": 19,
+    "notes": [
+      "All4 personal full-window/panel states and clean full-window/panel inspected.",
+      "Native original font has separated skill captions and fixed speed text size.",
+      "Narrow HUD uses one compact original face for every peer skill label.",
+      "Pause shows Play; end-run changes to actual Lix Undo artwork.",
+      "One initial clean full-window capture missed image layers; the retained rerun is complete."
+    ]
+  },
+  "imageSourceWitness": {
+    "upstreamRevision": "f1e805048fe439a4a0e9cc650c613713ababac8b",
+    "decoder": "Sources/NxlvKit/LixInterfaceArtwork.swift",
+    "sourcePNGHashes": {
+      "skillsinpanel.png": "2a6e5ef77ca1126e75716f767bd8691014e429bee20b2f15535f481389360ac7",
+      "gamebigbuttons/1.png": "61fe89b897559e5eb3afbef844c0903a5dd8c3c84770d2701ed9251564bccf7a",
+      "gamesmallbuttons/1.png": "f6dc81177f0e48b25b2b38c5fa663320039681b9d20ae26aebd5bc65445f0d53",
+      "gamepause/1.png": "53bcbdd4970599efbba8ad12470b01dd7ee17b2ca44664d419aec066801d5318",
+      "guinumpick/1.png": "4bc4c00453baaab7fcb7418216203520e6b7f272d8ad83ba9e5988685e978505",
+      "checkbox/1.png": "80266e79296ef61dce3634ae2b279f519243a20b9276fbe017025f64dc2fa1c2",
+      "rewindprevply/1.png": "1a278907ab770c1717aa72b85cdcb192728a6b350c6242af250231017b561b91",
+      "lixrecol.png": "a2f438ed2679bf3fad18d521d930eff31f45cb208ce5b38fa296d611213b4222"
+    },
+    "sockets": "Upstream Lix procedural button geometry and palette, not an invented socket PNG.",
+    "controlFrameProof": ".build/lix-interface-test-run.log"
+  },
+  "personalFontWitness": {
+    "glyphAggregateSHA256": "d6defafa920060a4b09423299b99f61c4370a099362c944d0d3a33ef9e74587c",
+    "glyphFiles": 188,
+    "metrics": [
+      {
+        "name": "Charset1",
+        "cellWidth": 12,
+        "cellHeight": 18
+      },
+      {
+        "name": "Charset2",
+        "cellWidth": 16,
+        "cellHeight": 20
+      }
+    ],
+    "distribution": "Original commercial lettering, personal preview only; not store-cleared."
+  },
+  "cleanFontWitness": {
+    "file": "Fonts/Lix/djvusans.ttf",
+    "sha256": "5cde0409cd6f6dff89fefb5349c90b92b62fd27de0fe3a577fb4036d5eeb4f71",
+    "postScriptName": "DejaVuSansCondensed-Bold",
+    "originalFontAbsent": true,
+    "noticeSHA256": "6b07a2a6b192d39baeca18f3491d7c25a1999ba11384588e0ed0f063a856bfb8"
+  },
+  "frontendSourceCount": 96,
+  "frontendSourceProof": ".build/personal-preview-hud-tests/frontend-source-proof.json",
+  "log": ".build/personal-preview-hud-tests/source-check-run.log",
+  "captures": [
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-community-browser.png",
+      "bytes": 116405,
+      "sha256": "070a87c16dd88bb86a28244b7638fff6f59fba69f63bc3bd4f1a4ee81cbfe60a",
+      "width": 2240,
+      "height": 1520
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-community-gameplay.png",
+      "bytes": 128582,
+      "sha256": "0bee9ed6b40dee66a5fc4a7faa29b6d80f643763859a43b7b881b7a3cb4029d9",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-community-lix-restored.png",
+      "bytes": 128582,
+      "sha256": "0bee9ed6b40dee66a5fc4a7faa29b6d80f643763859a43b7b881b7a3cb4029d9",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-community-original.png",
+      "bytes": 81762,
+      "sha256": "7147dc27330924917aef4e4ecd5a630dfd9e25405cd5ef2344e0572faf2e743b",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-home.png",
+      "bytes": 107459,
+      "sha256": "40d45816a303bbc57d9638fddbf8a04e232401fef3d1bd9f7e963f02a39a4aed",
+      "width": 2240,
+      "height": 1520
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-hud-panel.png",
+      "bytes": 42779,
+      "sha256": "6d67995cbdc41ddb813485803a2d4770a484c3d3ae1ec7fc0796ea5a44a74aed",
+      "width": 2240,
+      "height": 284
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-hud-paused-panel.png",
+      "bytes": 42305,
+      "sha256": "ae986ba89560422f8d9f66796a3927636da272a63af5eea96a2533b87cb13df3",
+      "width": 2240,
+      "height": 284
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-hud-paused-window.png",
+      "bytes": 131812,
+      "sha256": "253f3f355edea62940484121715bd14cbd6e0579c0d152649f1d214a26a39670",
+      "width": 2240,
+      "height": 1520
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-hud-small-panel.png",
+      "bytes": 31968,
+      "sha256": "34a67bf348915d12184c6d19701954a06633ed7f8b87866d688ce98af55abc0e",
+      "width": 1720,
+      "height": 204
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-hud-small-window.png",
+      "bytes": 101054,
+      "sha256": "d04176965a3373858a38cc8e1080b6ed5ca9a2e08ff7d5182731e71bc11ee9a9",
+      "width": 1720,
+      "height": 1280
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-hud-undo-panel.png",
+      "bytes": 44117,
+      "sha256": "1ccf3a64d490eb8f1e07ef4796957bc72e7bdeef17f9c97151481bc5cd222db5",
+      "width": 2240,
+      "height": 284
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-hud-undo-window.png",
+      "bytes": 133611,
+      "sha256": "3aa00cc0a081241839f26f342375dfdcd5510570ec6bd4bade08037b26d10873",
+      "width": 2240,
+      "height": 1520
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-hud-window.png",
+      "bytes": 132271,
+      "sha256": "41c37c0ea37f95016b80c1845c354ce8d0ac3553389807184d61b50faf470c74",
+      "width": 2240,
+      "height": 1520
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-settings.png",
+      "bytes": 119581,
+      "sha256": "7c17a8e4f4b6e2c88f29fcf8c83bae739f287cbb9d7d40808987111766353411",
+      "width": 2240,
+      "height": 1520
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-starter-lix-2.png",
+      "bytes": 81246,
+      "sha256": "f34b60b0f4175316b6945cd2ab5b64fe64079be2dab2985e7e8cc7428307edb9",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-starter-lix-3.png",
+      "bytes": 92677,
+      "sha256": "7bea27d75d984357d1cd08c8816d9d0de7dadf51306669ebb2f6e719d2a6e200",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/personal/personal-starter-lix.png",
+      "bytes": 74521,
+      "sha256": "2284dd7ce50909f73d810223108cdee9a140d5a81d8a6428906d8b6313228f90",
+      "width": 2240,
+      "height": 1236
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/clean/clean-hud-panel.png",
+      "bytes": 28224,
+      "sha256": "22feb629fb4e9b503b2a29b8c3aec35a6b8c9a935fde7058ed62dd3aa1654f32",
+      "width": 2240,
+      "height": 284
+    },
+    {
+      "path": ".build/personal-preview-hud-tests/source-check-captures/clean/clean-hud-window.png",
+      "bytes": 115908,
+      "sha256": "ec8747b35db8e4444ec4a270f1ad57adbe2c07ffbaae5c8f001f78a0faaec84f",
+      "width": 2240,
+      "height": 1520
+    }
+  ],
+  "packageSmoke": {
+    "status": "pending",
+    "note": "Await final packaged optimised core; current native runs use isolated test core."
+  },
+  "limits": [
+    "Full HUD and shared controls are covered; bespoke Home navigation rows retain their existing flat style.",
+    "This harness renders production frontend sources; it is not a direct launch of the signed app.",
+    "No audible or physical-device acceptance is claimed."
+  ]
+}

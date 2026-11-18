@@ -1474,6 +1474,16 @@
     },
     {
       "engine": "classic",
+      "levelID": "20:Crazy:1:0:1",
+      "packID": "ohNoMoreLemmings-DLVEL-100"
+    },
+    {
+      "engine": "classic",
+      "levelID": "32:Crazy:13:0:4",
+      "packID": "ohNoMoreLemmings-DLVEL-100"
+    },
+    {
+      "engine": "classic",
       "levelID": "68:Wicked:9:1:2",
       "packID": "ohNoMoreLemmings-DLVEL-100"
     }

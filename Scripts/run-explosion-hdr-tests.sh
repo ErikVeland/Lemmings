@@ -24,6 +24,7 @@ swiftc -swift-version 6 -D PERFORMANCE_TESTS -warnings-as-errors -target "$(unam
   "$project_dir/Sources/LemmingsLocal/CRTView.swift" \
   "$project_dir/Sources/LemmingsLocal/MacFXPerformance.swift" \
   "$project_dir/Sources/LemmingsLocal/CRTShaders.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameResources.swift" \
   "$project_dir/Sources/LemmingsLocal/GameCursor.swift" \
   "$project_dir/Tests/ExplosionHDRTests/main.swift"
 python3 "$project_dir/Tools/UITestRunner/run.py" "$build_dir/tests" "$@"

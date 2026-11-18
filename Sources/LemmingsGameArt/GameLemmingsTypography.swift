@@ -12,11 +12,7 @@ public enum GameLemmingsTypography {
         let x: Int, y: Int
     }
     private static let rasters = GameAssetCache<Raster>(capacity: 1024)
-    private static let bundledInterface: ClassicMacUserInterface? = {
-        guard let directory = Bundle.main.resourceURL?.appendingPathComponent("MacArtwork/lemmings"),
-              let artwork = try? ClassicMacArtwork(directory: directory) else { return nil }
-        return ClassicMacUserInterface(artwork: artwork)
-    }()
+    private static var bundledInterface: ClassicMacUserInterface? { GameArtworkResources.menuInterface }
 
     /// Returns false when the complete line needs the tiny HUD face or artwork is unavailable.
     /// Height is a role's chosen size, rather than permission to enlarge a short label.

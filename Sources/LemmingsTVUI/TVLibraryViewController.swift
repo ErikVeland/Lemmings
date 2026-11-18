@@ -260,7 +260,7 @@ import UIKit
             page.footer = [.init("library", L10n.text("Library"))]
         case .confirmRetry, .confirmEnd:
             page.title = destination == .confirmRetry ? L10n.text("Retry level?") : L10n.text("End attempt?")
-            page.footer = [.init("cancel", L10n.text("Cancel"), primary: true), .init(destination == .confirmRetry ? "retry" : "end", destination == .confirmRetry ? L10n.text("Retry") : L10n.text("End attempt"))]
+            page.footer = [.init("cancel", L10n.text("Cancel")), .init(destination == .confirmRetry ? "retry" : "end", destination == .confirmRetry ? L10n.text("Retry") : L10n.text("End attempt"), primary: true)]
         case .error:
             page.title = L10n.text("Unable to continue"); page.details = wrapped(errorMessage, columns: 44)
             page.footer = [back]

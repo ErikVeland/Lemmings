@@ -12,11 +12,12 @@ import NxlvKit
             let height = renderer.height(of: text, face: role.face, scale: 1)
             renderer.menuLine(text, in: CGRect(x: rect.minX, y: rect.midY - height / 2, width: rect.width, height: height),
                 face: role.face, alignment: alignment, alpha: enabled ? 1 : 0.45, palette: role.palette)
-        } else if let context = NSGraphicsContext.current?.cgContext {
-            GamePixelTypography.draw(MacInterfaceRenderer.menuText(text), in: rect, context: context, typography: nil,
-                palette: role.palette == .blue ? .blue : .green, maximumScale: role == .title ? 3 : 1,
-                alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
-                alpha: enabled ? 1 : 0.45, bitmapOnly: true)
+        } else {
+            NSGraphicsContext.saveGraphicsState()
+            defer { NSGraphicsContext.restoreGraphicsState() }
+            NSGraphicsContext.current?.cgContext.setAlpha(enabled ? 1 : 0.45)
+            GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect, maxScale: role == .title ? 3 : 1,
+                               palette: role.palette, alignment: alignment)
         }
     }
     static func focus(_ control: NSControl) {
@@ -46,9 +47,15 @@ import NxlvKit
     override func draw(_ dirtyRect: NSRect) {
         let selected = state == .on || state == .mixed || isHighlighted
         let socket = isCheck ? CGRect(x: 0, y: bounds.midY - 10, width: 20, height: 20) : bounds
-        GameStoneButton.draw(socket, selected: selected, pixel: 1)
-        if isCheck && selected {
-            GamePixelText.draw(state == .mixed ? "-" : "X", in: socket.insetBy(dx: 5, dy: 5))
+        let lixCheck = isCheck && GameArtworkSkin.usesLixInterface && NSGraphicsContext.current.map {
+            GameLixInterfaceArt.drawCheckbox(checked: state != .off, in: socket, context: $0.cgContext,
+                selected: isHighlighted, enabled: isEnabled)
+        } == true
+        if !lixCheck {
+            GameStoneButton.draw(socket, selected: selected, pixel: 1)
+            if isCheck && selected {
+                GamePixelText.draw(state == .mixed ? "-" : "X", in: socket.insetBy(dx: 5, dy: 5))
+            }
         }
         let caption = isCheck ? CGRect(x: 28, y: 0, width: bounds.width - 28, height: bounds.height) : bounds.insetBy(dx: 8, dy: 2)
         GameControlText.draw(title, in: caption, alignment: isCheck ? .left : .center, enabled: isEnabled, role: .body)

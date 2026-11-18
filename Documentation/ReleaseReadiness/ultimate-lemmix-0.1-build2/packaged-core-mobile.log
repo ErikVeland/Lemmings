@@ -1,0 +1,8 @@
+UI test windows: offscreen; audio: muted
+PASS Lix source decode, alpha, anchors, mirroring, timing bounds and malformed-input checks
+UI test windows: offscreen; audio: muted
+PASS clean starter availability, native Lix foot pixels and preservation defaults
+PASS all three starter puzzles through normal mobile commands
+PASS character selection, checkpoint compatibility and deterministic outcomes
+PASS three native 2× Lix scenes, actor anchors, reticle coordinates, reversible scene selection and real bomber transition
+PASS bounded clean import, invalid replacement rollback and hidden-link rejection

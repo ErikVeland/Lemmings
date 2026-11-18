@@ -1,0 +1,11 @@
+{
+  "states": 67,
+  "different": [],
+  "bundle": "/Users/erikveland/.codex/worktrees/ultimate-lemmix-full-game/Lemmings/.build/asset-parity-import/real/Library/Versions/145686716edb83924d1e56dbeaa2b37b3311ae69aecc10546a5f3eb1b1bbc8ac/PreservationResources.bundle",
+  "sourceSHA256": {
+    ".build/ultimate-lemmix-presentation-import-parity/PanelGlyphArt.swift": "5560e27093f7d8a7c181ec92a247773ea530d7cb5900daf18e45b470fca87d8d",
+    "Sources/LemmingsLocal/PanelGlyphs.swift": "44f3ee80d6e3e4588897613f8baef094ac1fce3772923cf1439983f2823ba42e",
+    "Tests/UltimateLemmixAssetParity/Presentation.swift": "1c46065ba227567212d33f3ffd5c4d728e2e99bcfaeb73907ffbe99648318113",
+    "Sources/LemmingsGameArt/OwnedClassicPanelArt.swift": "516eecd0609c2e7d906ddeba52ca4e8df8d4160a144d1402d788bb98c1a3fdcc"
+  }
+}

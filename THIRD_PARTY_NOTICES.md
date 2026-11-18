@@ -95,6 +95,29 @@ with those styles. The bundle carries CE `License.txt` next to the levels.
 list. CC BY-NC 4.0 does not permit commercial use. A paid release needs
 separate permission from the CE authors.
 
+## Lix alternative resources
+
+The optional preparation tools use Lix revision
+`f1e805048fe439a4a0e9cc650c613713ababac8b` from
+<https://github.com/SimonN/LixD>. Its
+[copying notice](https://github.com/SimonN/LixD/blob/f1e805048fe439a4a0e9cc650c613713ababac8b/doc/copying.txt)
+dedicates sprites, menu icons, tileset graphics and selected music to the public
+domain through CC0 1.0. The prepared pack retains that notice and creator
+credits. This graphics pack excludes fonts and `music/rubix` tracks.
+
+A separate font pack includes the unchanged `data/fonts/djvusans.ttf`, DejaVu
+Sans Condensed Bold 2.29. The Bitstream Vera and Arev font licences apply to it.
+The bundle retains their complete copyright, trademark and permission notices
+in `Licences/Lix-font-LICENSE.txt`. Font hashes and the pinned official notice
+source are recorded in
+[`lix-font-source.json`](Resources/AlternativeAssets/lix-font-source.json).
+The font is not CC0. Read the
+[official font licence](https://dejavu-fonts.github.io/License.html) for its terms.
+
+Read [Alternative assets](Documentation/AlternativeAssets.md) for the exact
+scope, source records, remix audit and integration limits. Preparation does not
+clear original Lemmings content or certify the current app for distribution.
+
 ## resource_dasm format reference
 
 The Macintosh SHPD and Presage LZSS decoder follows the format implementation in
@@ -191,9 +214,28 @@ Source URLs and file hashes are recorded in `Tools/TamilPixelFont/vendor/sources
 and `repertoire.json`. See the [font tool](Tools/TamilPixelFont/README.md) for
 the derivation and rebuild procedure.
 
+## Lix alternative resources
+
+Ultimate Lemmix uses selected resources from Lix revision
+`f1e805048fe439a4a0e9cc650c613713ababac8b` at
+<https://github.com/SimonN/LixD>. Its copying notice dedicates the selected
+sprites, menu icons, tileset graphics and music to CC0 1.0. The prepared media
+retains that notice and creator credits. Rubix tracks are excluded.
+
+The unchanged `data/fonts/djvusans.ttf` is DejaVu Sans Condensed Bold 2.29.
+Its Bitstream Vera and Arev licences apply separately. The font is not CC0.
+Complete notices accompany the font and the rasterised interface glyphs.
+The exact permitted media hashes are recorded in
+[the alternative-resource source record](Resources/UltimateLemmix/alternative-resource-source.json).
+
+Original game media, unreviewed remixes and the retained project icon do not
+gain redistribution permission from these licences. The icon's character
+rights remain a separate review gate.
+
 ## Sparkle
 
-The macOS app bundles Sparkle 2.7.3 for signed automatic updates. Sparkle is
+The preservation macOS app bundles Sparkle 2.7.3 for signed automatic updates.
+The Ultimate Lemmix Store profile excludes that updater. Sparkle is
 available from <https://github.com/sparkle-project/Sparkle>. Its MIT licence and
 the licences for its bundled third-party components are included in the Sparkle
 distribution used to build the app.

@@ -1,4 +1,5 @@
 #if os(iOS) || os(tvOS)
+import CoreImage
 import LemmingsAudio
 import LemmingsGameArt
 import NxlvKit
@@ -12,7 +13,6 @@ import UIKit
     var onHover: ((MobilePoint?) -> Void)?
     var blockedInputFrames: [CGRect] = []
     var onTouchEffects: (([MobileTouchEffect]) -> Void)?
-    var canHoldSelection: ((MobilePoint) -> Bool)?
     var onViewportChanged: ((MobileViewport) -> Void)?
     var deferFrameUpdates = false
 
@@ -43,54 +43,22 @@ import UIKit
     private var automaticallyFitsViewport: Bool
     private let initialCameraFocus: MobilePoint?
     private(set) var bitmap: CGImage?
-    private var bitmapRect: MobileRect?
     private var arrowGlints: ClassicMacScene.ArrowGlints?
     private var tubeViewport: MobileViewport?
     private let tubeSurface = MobileBitmapSurface()
-    private let tubeSceneSurface = MobileBitmapSurface()
-    private var tubeSceneImage: CGImage?
-    private var tubeSceneBitmap: CGImage?
-    private var tubeSceneViewport: MobileViewport?
-    private var tubeSignature: TubeSignature?
-    private var trailRevision: UInt64 = 0
-    private struct TubeSignature: Equatable {
-        let bitmap: ObjectIdentifier
-        let viewport: MobileViewport
-        let settings: ClassicSettings
-        let cursor: MobilePoint?
-        let cursorIcon: ObjectIdentifier?
-        let cursorCount: Int?
-        let cursorName: String
-        let cursorRemaining: Int?
-        let occupied: Bool, eligible: Bool, unlimited: Bool
-        let target: MobileTargetSelection?
-        let assignment: String?
-        let assignmentProgress: Double?
-        let trails: UInt64
-    }
     private let tube = MobileCRTView(tubeDevice: true)
     private var hdr: MobileHDRView?
     private var attemptedHDR = false
-    private let hdrPreparation = MobileDeferredPreparation<MobileHDRView.Pipelines>()
-    private struct PendingHDRBurst {
-        let rects: [CGRect]
-        let cinematic: Bool
-        let time: Double
-    }
-    private var pendingHDRBursts: [PendingHDRBurst] = []
-    private var spriteTrails = MobileSpriteTrails()
     private var speedMultiplier = 1.0
     private var speedEffectsActive = false
     private var sprites: [String: CGImage] = [:]
+    private var artworkRevision = ""
     private var directionPulse = SelectionDirectionPulse()
     private var obviousDirectionPulse = SelectionDirectionPulse()
     var selectionTargetID: Int? {
         didSet { if oldValue != selectionTargetID { directionPulse.reset(); obviousDirectionPulse.reset() } }
     }
     var selectionPoint: MobilePoint?
-    var selectionDirection = 0
-    var targetMarker: MobileTargetSelection?
-    var markerEngine = "classic-dos"
     var cursorPoint: MobilePoint?
     var cursorOccupied = false
     var cursorEligible = false
@@ -110,11 +78,15 @@ import UIKit
     private var explosionBirths: [Int: (tick: Int, expires: Double)] = [:]
     private let decoration = MobilePlayfieldDecoration()
     // Core Animation scales the engine bitmap on the GPU. CPU drawing covers only the overlays above it.
-    private let failureLayer = CALayer()
-    private let failureSurface = MobileBitmapSurface()
     private let bitmapClip = CALayer()
     private let bitmapLayer = CALayer()
     private var layerBitmap: CGImage?
+    #if os(tvOS)
+    private var filteredBitmapSource: CGImage?
+    private var filteredBitmapAmount: CGFloat = -1
+    private var filteredBitmap: CGImage?
+    private static let failureMoodContext = CIContext()
+    #endif
     private let overlay = MobilePlayfieldOverlay()
     private let failureMood = FailureMoodTransition()
     private var failureAmount: CGFloat = 0
@@ -148,11 +120,6 @@ import UIKit
         bitmapLayer.minificationFilter = .nearest
         bitmapClip.addSublayer(bitmapLayer)
         layer.addSublayer(bitmapClip)
-        failureLayer.actions = immediate
-        failureLayer.magnificationFilter = .nearest
-        failureLayer.minificationFilter = .nearest
-        failureLayer.isHidden = true
-        layer.addSublayer(failureLayer)
         overlay.drawContent = { [weak self] context in self?.drawOverlay(in: context) }
         addSubview(overlay)
         #if os(iOS)
@@ -185,6 +152,9 @@ import UIKit
             guard let self else { return }
             self.failureAmount = value
             self.tube?.failureAmount = value
+            #if os(tvOS)
+            self.layoutBitmap()
+            #endif
             self.setNeedsDisplay()
         }
         #if os(iOS)
@@ -211,9 +181,8 @@ import UIKit
         #endif
 
         isAccessibilityElement = true
-        accessibilityIdentifier = "game.playfield"
         accessibilityLabel = L10n.text("Game playfield")
-        accessibilityHint = L10n.text("Tap to assign. Hold, then slide left or right to browse lemmings. While holding, drag a second finger to pan. Lift the first finger to assign. Drag to pan. Pinch to zoom.")
+        accessibilityHint = L10n.text("Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom.")
         accessibilityTraits = .allowsDirectInteraction
     }
 
@@ -258,9 +227,6 @@ import UIKit
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         #if os(iOS)
-        if router.isHoldingSelection,
-           gestureRecognizer is UIPinchGestureRecognizer || gestureRecognizer is UISwipeGestureRecognizer
-            || gestureRecognizer is UITapGestureRecognizer { return false }
         if UIAccessibility.isVoiceOverRunning,
            gestureRecognizer is UITapGestureRecognizer || gestureRecognizer is UISwipeGestureRecognizer {
             return false
@@ -293,57 +259,13 @@ import UIKit
     }
 
     #endif
-    func captureSpriteTrails(session: any MobileGameSession) {
-        let enabled = displaySettings.hdEffectsEnabled && !motionReduced && !displaySettings.reduceFlashes
-            && !MobileDevicePerformance.constrained
-        guard enabled else { spriteTrails.reset(); return }
-        let visible = gameViewport.visibleLevelRect
-        var current: [Int: MobileSpriteHighlight] = [:]
-        let limit = MobileDevicePerformance.constrained ? 24 : 48
-        for actor in session.spriteActorIDs {
-            guard let sprite = session.spriteHighlight(for: actor),
-                  sprite.rect.x + sprite.rect.width >= visible.x, sprite.rect.x <= visible.x + visible.width,
-                  sprite.rect.y + sprite.rect.height >= visible.y, sprite.rect.y <= visible.y + visible.height else { continue }
-            current[actor] = sprite
-            if current.count >= limit { break }
-        }
-        spriteTrails.sample(current, tick: session.snapshot.tick, time: ProcessInfo.processInfo.systemUptime,
-            fast: speedEffectsActive && speedMultiplier > 1, enabled: enabled, budget: limit * 2)
-    }
-
-    private func drawSpriteTrails(viewport: MobileViewport, context: CGContext) {
-        guard !motionReduced, !displaySettings.reduceFlashes, displaySettings.hdEffectsEnabled else { return }
-        let content = viewport.contentFrame, now = ProcessInfo.processInfo.systemUptime
-        context.saveGState(); defer { context.restoreGState() }
-        context.clip(to: CGRect(x: content.x, y: content.y, width: content.width, height: content.height))
-        context.interpolationQuality = .none
-        for echo in spriteTrails.echoes {
-            guard let image = spriteImage(echo.sprite) else { continue }
-            let rect = spriteRect(echo.sprite, viewport: viewport)
-            context.saveGState()
-            context.setAlpha(echo.opacity(at: now))
-            context.translateBy(x: rect.minX, y: rect.maxY); context.scaleBy(x: 1, y: -1)
-            context.draw(image, in: CGRect(origin: .zero, size: rect.size))
-            context.restoreGState()
-        }
-    }
-
-    func advanceTouchInput(at now: Double) {
-        let touchEffects = router.advance(at: now, horizontalRange: 0...max(0, Double(bounds.width)))
-        if !touchEffects.isEmpty { onTouchEffects?(touchEffects) }
-    }
-
     func advanceVisualEffects() {
         let now = ProcessInfo.processInfo.systemUptime
-        if !spriteTrails.echoes.isEmpty {
-            spriteTrails.expire(at: now); trailRevision &+= 1; updateTube(); setNeedsDisplay()
-        }
         #if os(iOS)
         completionGlow.advance(at: now)
         #endif
         if explosionBirths.values.contains(where: { $0.expires > 0 && $0.expires <= now }) {
             for (id, value) in explosionBirths where value.expires > 0 && value.expires <= now { explosionBirths[id] = (value.tick, 0) }
-            tubeSignature = nil
             updateTube(); setNeedsDisplay()
         }
         guard enhancedEffects else { releaseHDR(); return }
@@ -372,67 +294,21 @@ import UIKit
     private func prepareHDR() {
         guard hdr == nil, !attemptedHDR, enhancedEffects else { return }
         attemptedHDR = true
-        hdrPreparation.request({ MobileHDRView.preparePipelines() }) { [weak self] pipelines in
-            guard let self else { return }
-            guard self.enhancedEffects, let pipelines else { self.pendingHDRBursts.removeAll(); return }
-            let view = MobileHDRView(pipelines: pipelines)
-            view.frame = self.bounds
-            self.insertSubview(view, belowSubview: self.bombCountdownView)
-            self.hdr = view
-            let now = ProcessInfo.processInfo.systemUptime
-            for burst in self.pendingHDRBursts {
-                view.trigger(rects: burst.rects, cinematic: burst.cinematic, at: max(now, burst.time))
-            }
-            self.pendingHDRBursts.removeAll(keepingCapacity: true)
-        }
+        guard let view = MobileHDRView(effects: true) else { return }
+        view.frame = bounds
+        // The decoration and input stay above the light surface.
+        insertSubview(view, belowSubview: bombCountdownView)
+        hdr = view
     }
-    func suspendVisualEffects() {
-        spriteTrails.reset(); trailRevision &+= 1
-        pendingHDRBursts.removeAll()
-        hdr?.clear(); speedEffectsActive = false; failureMood.finish()
-        tubeSignature = nil
-    }
-    func resetTransientEffects(preservingTrails: Bool = false) {
-        if !preservingTrails { spriteTrails.reset() }
-        directionPulse.reset(); obviousDirectionPulse.reset()
-        pendingHDRBursts.removeAll()
-        hdr?.clear(); explosionBirths.removeAll()
-        trailRevision &+= 1; tubeSignature = nil
-    }
+    func suspendVisualEffects() { hdr?.clear(); speedEffectsActive = false; failureMood.finish() }
+    func resetTransientEffects() { hdr?.clear(); explosionBirths.removeAll() }
     func releaseEffectResources() {
-        tubeSignature = nil; tubeSceneImage = nil; tubeSceneBitmap = nil; tubeSceneViewport = nil
-        tubeSceneSurface.release(); tubeSurface.release()
         releaseHDR()
         tube?.releaseEffectResources()
     }
     private func releaseHDR() {
-        hdrPreparation.cancel(); pendingHDRBursts.removeAll()
         hdr?.clear(); hdr?.removeFromSuperview(); hdr = nil; attemptedHDR = false
     }
-    func updatePresentation() {
-        updateTube()
-        setNeedsDisplay()
-    }
-
-    private func drawTargetMarker(viewport: MobileViewport, context: CGContext) {
-        guard let targetMarker else { return }
-        let marker = MobileTargetMarker.make(targetMarker, engine: markerEngine, scale: renderScale,
-            reducedColour: displaySettings.colorDepth == .amigaOCS)
-        context.saveGState()
-        defer { context.restoreGState() }
-        let clip = viewport.contentFrame
-        context.clip(to: CGRect(x: clip.x, y: clip.y, width: clip.width, height: clip.height))
-        context.setShouldAntialias(false)
-        context.setFillColor(CGColor(srgbRed: Double(marker.colour.0) / 255, green: Double(marker.colour.1) / 255,
-            blue: Double(marker.colour.2) / 255, alpha: 1))
-        for pixel in marker.pixels {
-            guard pixel.x >= 0, pixel.y >= 0, pixel.x < viewport.levelSize.width, pixel.y < viewport.levelSize.height else { continue }
-            let point = viewport.viewPoint(fromLevel: pixel)
-            context.fill(CGRect(x: point.x, y: point.y, width: viewport.zoom * viewport.pixelAspect * marker.pixelSize,
-                height: viewport.zoom * marker.pixelSize))
-        }
-    }
-
     func redrawSelection() {
         if let tube, !tube.isHidden, let tubeViewport {
             tube.selection = selectionEffect(viewport: tubeViewport)
@@ -441,10 +317,12 @@ import UIKit
     }
 
     func update(frame: MobilePixelFrame) throws {
+        if artworkRevision != MobileLixArtwork.revision {
+            artworkRevision = MobileLixArtwork.revision
+            sprites.removeAll(); tubeSignature = nil; tubeSceneImage = nil; tubeSceneBitmap = nil
+        }
         guard let image = MobileBitmapRenderer.image(frame) else { throw MobileSessionError.frameUnavailable }
         bitmap = image
-        tubeSignature = nil
-        bitmapRect = frame.renderedRect
         arrowGlints = frame.arrowGlints
         #if os(iOS)
         let now = ProcessInfo.processInfo.systemUptime
@@ -461,12 +339,7 @@ import UIKit
             }
             if !fresh.isEmpty, enhancedEffects {
                 prepareHDR()
-                let cinematic = displaySettings.cinematicExplosionsEnabled
-                if let hdr { hdr.trigger(rects: fresh, cinematic: cinematic, at: now) }
-                else if attemptedHDR {
-                    pendingHDRBursts.append(.init(rects: fresh, cinematic: cinematic, time: now))
-                    if pendingHDRBursts.count > NuclearExplosionTimeline.maximumBursts { pendingHDRBursts.removeFirst() }
-                }
+                hdr?.trigger(rects: fresh, cinematic: displaySettings.cinematicExplosionsEnabled, at: now)
             }
         }
         #endif
@@ -474,19 +347,8 @@ import UIKit
         setNeedsDisplay()
     }
 
-    /// Present a retained frame without replaying its sound or explosion events.
-    func presentRewindFrame(_ frame: MobilePixelFrame) throws {
-        guard let image = MobileBitmapRenderer.image(frame) else { throw MobileSessionError.frameUnavailable }
-        bitmap = image
-        bitmapRect = frame.renderedRect
-        arrowGlints = frame.arrowGlints
-        tubeSignature = nil
-        updateTube()
-        setNeedsDisplay()
-    }
-
     func purgeBitmap() {
-        spriteTrails.reset(); hdr?.clear(); explosionBirths.removeAll(); pendingHDRBursts.removeAll()
+        hdr?.clear(); explosionBirths.removeAll()
         bitmap = nil; arrowGlints = nil
         updateBombCountdowns()
         tube?.isHidden = true
@@ -499,7 +361,6 @@ import UIKit
 
     func cancelInteraction(clearHover: Bool = false) {
         activeTouchID = nil
-        if !trackedTouchIDs.isEmpty { ignoresTouchSequenceUntilLift = true }
         // Changed events from an old pose must wait for a fresh gesture begin.
         pinchGestureActive = false
         scrollGestureActive = false
@@ -512,19 +373,16 @@ import UIKit
         layoutBitmap()
     }
 
-    /// Blend the funeral mood with the actual scene, never a transparent sibling layer.
-    /// Normal play keeps GPU scaling. Oversized bitmaps also use the drawing path.
-    private var bitmapUsesLayer: Bool {
-        failureAmount == 0 && (bitmap.map { max($0.width, $0.height) <= 8192 } ?? false)
-    }
+    /// Larger bitmaps than every supported GPU's texture limit keep the CPU path.
+    private var bitmapUsesLayer: Bool { bitmap.map { max($0.width, $0.height) <= 8192 } ?? false }
 
     /// The view area of the arrow glint mask on the flat bitmap layer. The curved tube has no glints.
     private func arrowGlintRect(_ glints: ClassicMacScene.ArrowGlints) -> CGRect? {
         guard tube?.isHidden != false, let bitmap, bitmapUsesLayer, bitmap.width > 0, bitmap.height > 0 else { return nil }
         let content = gameViewport.contentFrame
         let scaleX = gameViewport.zoom * gameViewport.pixelAspect, scaleY = gameViewport.zoom
-        let pixelX = scaleX / max(1, renderScale)
-        let pixelY = scaleY / max(1, renderScale)
+        let pixelX = gameViewport.levelSize.width * scaleX / Double(bitmap.width)
+        let pixelY = gameViewport.levelSize.height * scaleY / Double(bitmap.height)
         return CGRect(x: content.x - gameViewport.origin.x * scaleX + Double(glints.x) * pixelX,
             y: content.y - gameViewport.origin.y * scaleY + Double(glints.y) * pixelY,
             width: Double(glints.width) * pixelX, height: Double(glints.height) * pixelY)
@@ -534,38 +392,17 @@ import UIKit
     private func layoutBitmap() {
         let content = gameViewport.contentFrame
         let flat = tube?.isHidden != false
-        // Compose the opaque failure scene at native pixel density, then let
-        // Core Animation scale it. Never tint a transparent overlay.
-        if flat, bitmap != nil, failureAmount > 0, bounds.width > 0, bounds.height > 0 {
-            let scale = min(1, renderScale / max(0.1, gameViewport.zoom),
-                sqrt(1_048_576 / Double(bounds.width * bounds.height)))
-            let width = max(1, Int(ceil(bounds.width * scale)))
-            let height = max(1, Int(ceil(bounds.height * scale)))
-            if let context = failureSurface.prepare(width: width, height: height) {
-                context.saveGState()
-                context.translateBy(x: 0, y: CGFloat(height))
-                context.scaleBy(x: CGFloat(width) / bounds.width, y: -CGFloat(height) / bounds.height)
-                drawOverlay(in: context)
-                context.restoreGState()
-                failureLayer.contents = context.makeImage()
-                failureLayer.frame = bounds
-                failureLayer.isHidden = false
-                bitmapClip.isHidden = true
-                bitmapLayer.contents = nil; layerBitmap = nil
-                overlay.isHidden = true
-                return
-            }
-        }
-        failureLayer.contents = nil
-        failureLayer.isHidden = true
-        failureSurface.release()
         if flat, let bitmap, bitmapUsesLayer, content.width > 0, content.height > 0 {
-            if layerBitmap !== bitmap { bitmapLayer.contents = bitmap; layerBitmap = bitmap }
+            #if os(tvOS)
+            let displayBitmap = failureMoodBitmap(bitmap, amount: failureAmount)
+            #else
+            let displayBitmap = bitmap
+            #endif
+            if layerBitmap !== displayBitmap { bitmapLayer.contents = displayBitmap; layerBitmap = displayBitmap }
             let scaleX = gameViewport.zoom * gameViewport.pixelAspect, scaleY = gameViewport.zoom
             bitmapClip.frame = CGRect(x: content.x, y: content.y, width: content.width, height: content.height)
-            let scene = bitmapRect ?? MobileRect(x: 0, y: 0, width: gameViewport.levelSize.width, height: gameViewport.levelSize.height)
-            bitmapLayer.frame = CGRect(x: (scene.x - gameViewport.origin.x) * scaleX, y: (scene.y - gameViewport.origin.y) * scaleY,
-                width: scene.width * scaleX, height: scene.height * scaleY)
+            bitmapLayer.frame = CGRect(x: -gameViewport.origin.x * scaleX, y: -gameViewport.origin.y * scaleY,
+                width: gameViewport.levelSize.width * scaleX, height: gameViewport.levelSize.height * scaleY)
             bitmapClip.isHidden = false
         } else {
             bitmapClip.isHidden = true
@@ -577,10 +414,41 @@ import UIKit
         if showsOverlay { overlay.setNeedsDisplay() }
     }
 
+    #if os(tvOS)
+    private func failureMoodBitmap(_ source: CGImage, amount: CGFloat) -> CGImage {
+        guard amount > 0 else {
+            filteredBitmapSource = nil
+            filteredBitmapAmount = -1
+            filteredBitmap = nil
+            return source
+        }
+        if filteredBitmapSource === source, filteredBitmapAmount == amount, let filteredBitmap {
+            return filteredBitmap
+        }
+        let input = CIImage(cgImage: source)
+        let filter = CIFilter.colorControls()
+        filter.inputImage = input
+        filter.saturation = FailureMoodArt.saturation(amount)
+        filter.brightness = 0
+        let output = filter.outputImage ?? input
+        let extent = input.extent
+        let result = Self.failureMoodContext.createCGImage(output, from: extent) ?? source
+        filteredBitmapSource = source
+        filteredBitmapAmount = amount
+        filteredBitmap = result
+        return result
+    }
+    #endif
+
     private var hasOverlayContent: Bool {
-        targetMarker != nil || (displaySettings.lemmingSelectionStyle == .obvious && selectionPoint != nil) || selectionSprite != nil
-            || (assignmentSprite != nil && assignmentProgress != nil) || !explosions.isEmpty
-            || cursorPoint != nil || failureAmount > 0 || !spriteTrails.echoes.isEmpty
+        let hasGameplayOverlay = (displaySettings.lemmingSelectionStyle == .obvious && selectionPoint != nil)
+            || selectionSprite != nil || (assignmentSprite != nil && assignmentProgress != nil)
+            || !explosions.isEmpty || cursorPoint != nil
+        #if os(tvOS)
+        return hasGameplayOverlay
+        #else
+        return hasGameplayOverlay || failureAmount > 0
+        #endif
     }
 
     private func drawOverlay(in context: CGContext) {
@@ -590,10 +458,13 @@ import UIKit
         if !bitmapUsesLayer {
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(bounds)
-            MobileBitmapRenderer.draw(bitmap, viewport: gameViewport, in: context, renderedRect: bitmapRect)
+            #if os(tvOS)
+            let displayBitmap = failureMoodBitmap(bitmap, amount: failureAmount)
+            #else
+            let displayBitmap = bitmap
+            #endif
+            MobileBitmapRenderer.draw(displayBitmap, viewport: gameViewport, in: context)
         }
-        drawSpriteTrails(viewport: gameViewport, context: context)
-        drawTargetMarker(viewport: gameViewport, context: context)
         drawObviousSelection(viewport: gameViewport, context: context)
         if let effect = selectionEffect(viewport: gameViewport) { LemmingSelectionRenderer.draw(effect, in: context) }
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
@@ -602,7 +473,9 @@ import UIKit
         }
         _ = drawExplosionCores(viewport: gameViewport, context: context)
         drawCursorBadge(viewport: gameViewport, context: context)
+        #if !os(tvOS)
         FailureMoodArt.draw(in: bounds, amount: failureAmount, context: context)
+        #endif
     }
 
     override func layoutSubviews() {
@@ -633,38 +506,16 @@ import UIKit
         // Draw at native vertical resolution. The tube supplies the final display scale.
         let width = max(1, Int(ceil(bounds.width / max(0.1, gameViewport.zoom) * renderScale)))
         let height = max(1, Int(ceil(bounds.height / max(0.1, gameViewport.zoom) * renderScale)))
+        guard let context = tubeSurface.prepare(width: width, height: height) else { return }
         var viewport = gameViewport
         viewport.viewSize = MobileSize(width: Double(width), height: Double(height))
         viewport.zoom = renderScale
         tubeViewport = viewport
-        let signature = TubeSignature(bitmap: ObjectIdentifier(bitmap), viewport: viewport, settings: displaySettings,
-            cursor: cursorPoint, cursorIcon: cursorIcon.map(ObjectIdentifier.init), cursorCount: cursorCount,
-            cursorName: cursorSkillName, cursorRemaining: cursorRemaining, occupied: cursorOccupied,
-            eligible: cursorEligible, unlimited: cursorUnlimited, target: targetMarker,
-            assignment: assignmentSprite?.cacheKey, assignmentProgress: assignmentProgress, trails: trailRevision)
-        if signature == tubeSignature {
-            tube.selection = selectionEffect(viewport: viewport)
-            tube.setNeedsDisplay()
-            return
-        }
-        if tubeSceneBitmap !== bitmap || tubeSceneViewport != viewport || tubeSceneImage == nil {
-            guard let scene = tubeSceneSurface.prepare(width: width, height: height) else { return }
-            scene.saveGState()
-            scene.translateBy(x: 0, y: CGFloat(height))
-            scene.scaleBy(x: 1, y: -1)
-            MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: scene, renderedRect: bitmapRect)
-            scene.restoreGState()
-            tubeSceneImage = scene.makeImage()
-            tubeSceneBitmap = bitmap; tubeSceneViewport = viewport
-        }
-        guard let context = tubeSurface.prepare(width: width, height: height), let tubeSceneImage else { return }
-        context.draw(tubeSceneImage, in: CGRect(x: 0, y: 0, width: width, height: height))
         context.saveGState()
         defer { context.restoreGState() }
         context.translateBy(x: 0, y: CGFloat(height))
         context.scaleBy(x: 1, y: -1)
-        drawSpriteTrails(viewport: viewport, context: context)
-        drawTargetMarker(viewport: viewport, context: context)
+        MobileBitmapRenderer.draw(bitmap, viewport: viewport, in: context)
         drawObviousSelection(viewport: viewport, context: context)
         if let sprite = assignmentSprite, let progress = assignmentProgress, let image = spriteImage(sprite) {
             SpriteAssignmentPulse.draw(sprite: image, in: spriteRect(sprite, viewport: viewport), context: context,
@@ -674,7 +525,6 @@ import UIKit
         drawCursorBadge(viewport: viewport, context: context)
         tube.selection = selectionEffect(viewport: viewport)
         tube.update(context: context, settings: displaySettings, flashes: flashes)
-        tubeSignature = signature
     }
 
     private func updateBombCountdowns() {
@@ -687,10 +537,8 @@ import UIKit
     private func drawObviousSelection(viewport: MobileViewport, context: CGContext) {
         guard displaySettings.lemmingSelectionStyle == .obvious, let selectionPoint else { return }
         let point = viewport.viewPoint(fromLevel: selectionPoint)
-        let pulseTime = obviousDirectionPulse.elapsed(target: selectionTargetID, direction: selectionDirection, at: ProcessInfo.processInfo.systemUptime)
         LemmingSelectionRenderer.drawObvious(at: CGPoint(x: point.x, y: point.y), scale: viewport.zoom,
-            animated: !motionReduced && !displaySettings.reduceFlashes, direction: selectionDirection,
-            pulseTime: pulseTime, context: context)
+            animated: !motionReduced && !displaySettings.reduceFlashes, context: context)
     }
 
     private func drawCursorBadge(viewport: MobileViewport, context: CGContext) {
@@ -785,11 +633,9 @@ import UIKit
     private func selectionEffect(viewport: MobileViewport) -> LemmingSelectionEffect? {
         guard let sprite = selectionSprite, let image = spriteImage(sprite) else { return nil }
         let content = viewport.contentFrame
-        let pulseTime = directionPulse.elapsed(target: selectionTargetID, direction: sprite.direction, at: ProcessInfo.processInfo.systemUptime)
         var effect = LemmingSelectionEffect(sprite: image, rect: spriteRect(sprite, viewport: viewport),
             clipRect: CGRect(x: content.x, y: content.y, width: content.width, height: content.height),
-            bloom: true, time: motionReduced || displaySettings.reduceFlashes ? nil : sprite.time, direction: sprite.direction,
-            directionTime: motionReduced || displaySettings.reduceFlashes ? nil : pulseTime)
+            bloom: true, time: motionReduced || displaySettings.reduceFlashes ? nil : sprite.time)
         effect.opacity = selectionOpacity
         return effect
     }
@@ -806,14 +652,6 @@ import UIKit
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         trackedTouchIDs.formUnion(touches.map(ObjectIdentifier.init))
         guard !ignoresTouchSequenceUntilLift else { return }
-        if trackedTouchIDs.count == 2, activeTouchID != nil, router.isHoldingSelection,
-           touches.count == 1, let touch = touches.first, touch.type == .direct,
-           acceptsInput(at: touch.location(in: self)) {
-            let point = inputPoint(touch.location(in: self))
-            onTouchEffects?(router.began(id: ObjectIdentifier(touch).hashValue,
-                at: .init(x: point.x, y: point.y), time: touch.timestamp))
-            return
-        }
         guard trackedTouchIDs.count == 1, activeTouchID == nil, let touch = touches.first else {
             ignoresTouchSequenceUntilLift = true
             activeTouchID = nil
@@ -832,23 +670,15 @@ import UIKit
             id: id,
             at: MobilePoint(x: point.x, y: point.y),
             time: touch.timestamp,
-            allowsPanning: touch.type != .pencil,
-            allowsHolding: touch.type == .direct && canHoldSelection?(.init(x: point.x, y: point.y)) == true
+            allowsPanning: touch.type != .pencil
         ))
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard activeTouchID != nil, !ignoresTouchSequenceUntilLift else { return }
-        // Process the selection finger first when both contacts move in one event.
-        let ordered = touches.sorted { ObjectIdentifier($0) == activeTouchID && ObjectIdentifier($1) != activeTouchID }
-        var effects: [MobileTouchEffect] = []
-        for touch in ordered {
-            guard acceptsInput(at: touch.location(in: self)) else { cancelInteraction(); return }
-            let point = inputPoint(touch.location(in: self))
-            effects += router.moved(id: ObjectIdentifier(touch).hashValue,
-                to: .init(x: point.x, y: point.y), time: touch.timestamp)
-        }
-        if !effects.isEmpty { onTouchEffects?(effects) }
+        guard let touchID = activeTouchID,
+              let touch = touches.first(where: { ObjectIdentifier($0) == touchID }) else { return }
+        let point = inputPoint(touch.location(in: self))
+        onTouchEffects?(router.moved(id: touchID.hashValue, to: MobilePoint(x: point.x, y: point.y)))
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -857,21 +687,19 @@ import UIKit
             resetTouchSequenceIfNeeded()
             return
         }
-        guard let touchID = activeTouchID else { resetTouchSequenceIfNeeded(); return }
-        guard touches.allSatisfy({ acceptsInput(at: $0.location(in: self)) }) else {
-            cancelInteraction()
-            resetTouchSequenceIfNeeded()
+        guard let touchID = activeTouchID,
+              let touch = touches.first(where: { ObjectIdentifier($0) == touchID }) else { return }
+        activeTouchID = nil
+        let point = inputPoint(touch.location(in: self))
+        guard acceptsInput(at: touch.location(in: self)) else {
+            onTouchEffects?(router.cancel())
             return
         }
-        let ordered = touches.sorted { ObjectIdentifier($0) != touchID && ObjectIdentifier($1) == touchID }
-        for touch in ordered {
-            let point = inputPoint(touch.location(in: self))
-            onTouchEffects?(router.ended(id: ObjectIdentifier(touch).hashValue,
-                at: .init(x: point.x, y: point.y), time: touch.timestamp))
-            if ObjectIdentifier(touch) == touchID { activeTouchID = nil }
-        }
-        if activeTouchID == nil, !trackedTouchIDs.isEmpty { ignoresTouchSequenceUntilLift = true }
-        resetTouchSequenceIfNeeded()
+        onTouchEffects?(router.ended(
+            id: touchID.hashValue,
+            at: MobilePoint(x: point.x, y: point.y),
+            time: touch.timestamp
+        ))
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -880,8 +708,10 @@ import UIKit
             resetTouchSequenceIfNeeded()
             return
         }
-        cancelInteraction()
-        resetTouchSequenceIfNeeded()
+        guard let activeTouchID,
+              touches.contains(where: { ObjectIdentifier($0) == activeTouchID }) else { return }
+        self.activeTouchID = nil
+        onTouchEffects?(router.cancel())
     }
 
     private func resetTouchSequenceIfNeeded() {

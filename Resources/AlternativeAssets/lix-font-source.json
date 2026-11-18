@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "lix-interface-font",
+  "family": "DejaVu Sans Condensed",
+  "style": "Bold",
+  "postScriptName": "DejaVuSansCondensed-Bold",
+  "fontVersion": "2.29",
+  "graphicsPinSHA256": "8e72df7ed9881a4b6ceeb26b43bb2a749b1780445a01ed64bfdcbc5f5d12cfb7",
+  "source": {
+    "repository": "https://github.com/SimonN/LixD",
+    "revision": "f1e805048fe439a4a0e9cc650c613713ababac8b",
+    "archive": {
+      "url": "https://codeload.github.com/SimonN/LixD/tar.gz/f1e805048fe439a4a0e9cc650c613713ababac8b",
+      "filename": "lix-f1e805048fe439a4a0e9cc650c613713ababac8b.tar.gz",
+      "root": "LixD-f1e805048fe439a4a0e9cc650c613713ababac8b",
+      "bytes": 6081876,
+      "sha256": "f6b91657c0b55483957875575813aff5d6e607c369c1a80d8573b9ff4b8655ec"
+    },
+    "path": "data/fonts/djvusans.ttf",
+    "bytes": 528156,
+    "sha256": "5cde0409cd6f6dff89fefb5349c90b92b62fd27de0fe3a577fb4036d5eeb4f71"
+  },
+  "licence": {
+    "id": "Bitstream-Vera AND LicenseRef-Arev-Fonts",
+    "names": [
+      "Bitstream Vera Fonts Copyright",
+      "Arev Fonts Copyright"
+    ],
+    "officialURL": "https://dejavu-fonts.github.io/License.html",
+    "noticeSourceURL": "https://raw.githubusercontent.com/dejavu-fonts/dejavu-fonts/869e21372bf8fc6ec7d61fbbc4cb8ff8a35b9cb7/LICENSE",
+    "noticeSourceRevision": "869e21372bf8fc6ec7d61fbbc4cb8ff8a35b9cb7",
+    "noticeFile": "Resources/AlternativeAssets/lix-font-LICENSE.txt",
+    "noticeBytes": 4772,
+    "noticeSHA256": "6b07a2a6b192d39baeca18f3491d7c25a1999ba11384588e0ed0f063a856bfb8",
+    "scope": "Only the unmodified djvusans.ttf. Lix graphics and approved music retain their separate CC0 records.",
+    "conditions": [
+      "Retain the full copyright, trademark and permission notices.",
+      "Do not sell the font by itself. Distribution within a larger software package is permitted.",
+      "The bundled font is unmodified. No font-renaming permission is relied on."
+    ],
+    "cc0": false
+  },
+  "modified": false,
+  "bundlePath": "Fonts/Lix/djvusans.ttf",
+  "noticeBundlePath": "Licences/Lix-font-LICENSE.txt"
+}

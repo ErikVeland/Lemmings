@@ -50,6 +50,8 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 
 ## Start here
 
+- [Ultimate Lemmix](Documentation/UltimateLemmix.md) — the full current game with licensed default assets and local owned-resource import.
+- [Shared publishing](Documentation/SharedPublishing.md) — one game codebase, two publication profiles and common build commands for Mac, iOS and tvOS.
 - [Roadmap through 3.0](Documentation/Roadmap.md) — historical milestones, the current baseline and proposed delivery gates through 3.0.
 - [2.2.2 release checks](Documentation/ReleaseReadiness/2.2.2-build99/README.md) — Duo improvements, shared controls and actual platform delivery.
 - [2.2 Duo launch plan](Documentation/2.2Roadmap.md) — launch priorities, delivery evidence and device acceptance.
@@ -76,6 +78,10 @@ or their result screens across Classic, fan packs, NeoLemmix, Lemmings 2 and 3.
 - [2.0 device beta](Documentation/ReleaseReadiness/2.0DeviceBeta.md) — bundled Classic content, signed archives, device installation and TestFlight preparation.
 - [Automatic updates](#automatic-updates) — Sparkle feed and release requirements.
 - [Music timing audit](Documentation/MusicTiming.md) — measured beats, bar estimates and DJ fallback rules.
+- [Alternative assets](Documentation/AlternativeAssets.md) — prepared Lix graphics, CC0 music and fan-remix permission audit.
+- [Ultimate Lemmix](Documentation/UltimateLemmix.md) — separate clean-content Mac App Store candidate, open starter and BYO importer.
+- [Ultimate Lemmix for iOS and tvOS](Documentation/UltimateLemmixMobile.md) — separate clean-content mobile and TV builds, starter play and Classic imports.
+- [Ultimate Lemmix personal preview](Documentation/UltimateLemmixPersonalPreview.md) — separate Mac test build with original lettering and classified community levels.
 - [Automatic update evidence](Documentation/AutomaticUpdates.md) — release checks and records.
 
 Historical iPhone/iPad 1.3 source and Simulator gates pass for their recorded
@@ -451,8 +457,7 @@ Apple does not accept that entitlement in a Developer ID notarisation.
 | `Sources/LemmingsMobileCore` | Platform-neutral mobile sessions, input, recovery and performance policy |
 | `Sources/LemmingsMobileUI` | UIKit, Metal, audio, import and mobile flow adapters |
 | `Apps/UltimateLemmingsIOS` | iPhone/iPad application and UI-test target |
-| `Sources/LemmingsTVCore` and `Sources/LemmingsTVUI` | TV preferences, controllers and presentation |
-| `Apps/UltimateLemmingsTV` | Apple TV application target and assets |
+| `Apps/UltimateLemmixIOS`, `Apps/UltimateLemmixTVOS` | Separate clean-content iPhone/iPad and Apple TV applications |
 | `Sources/LemmingsDataTool` | Development data inspection utility |
 | `Tests` | Focused engine, data, app and evidence suites |
 | `Scripts` | Repeatable build and validation gates |

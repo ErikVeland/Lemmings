@@ -29,6 +29,7 @@ swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" "${revision_objects[
   "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   "$project_dir/Tools/DifficultyDiagnostics/JourneyResources/main.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameResources.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
   -o "$build_dir/JourneyResources"
 "$build_dir/JourneyResources" "$build_dir/pool.json" "$resources" \
@@ -41,6 +42,7 @@ swiftc -O -swift-version 6 -I "$module_dir" "${objects[@]}" "${revision_objects[
   "$project_dir/Sources/NxlvKit/InterfaceLocalisation.swift" \
   "$project_dir/Tools/DifficultyDiagnostics/JourneyReplays/main.swift" \
   "$project_dir/Sources/LemmingsLocal/GameAssetCache.swift" \
+  "$project_dir/Sources/LemmingsLocal/GameResources.swift" \
   "$project_dir/Sources/LemmingsLocal/FanLevelLibrary.swift" \
   -o "$build_dir/JourneyReplays"
 "$build_dir/JourneyReplays" "$resources" \

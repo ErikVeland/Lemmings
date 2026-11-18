@@ -21,19 +21,17 @@ public enum GameListToolsArt {
         }
         let commands = actions.filter { $0.id != "search" && $0.id != "searchClear" }
         if !commands.isEmpty {
+            let commandX = inset + (compact ? searchWidth + gap : 0)
             let commandWidth = compact ? inner - searchWidth - gap : inner
-            let minimumCaptionWidth = commands.map { (GameTextLayout.width(of: $0.title) + 24) * scale }.max() ?? 44 * scale
-            let fittingColumns = max(1, Int((commandWidth + gap) / (minimumCaptionWidth + gap)))
-            let columns = commands.count > 5 ? min(commands.count, fittingColumns) : commands.count
-            let cell = (commandWidth - CGFloat(columns - 1) * gap) / CGFloat(columns)
-            let height = max(44 * scale, commands.map { GameTextLayout.height($0.title, width: (cell - 24) / scale) * scale + 12 }.max() ?? 0)
-            for (index, action) in commands.enumerated() {
-                let row = index / columns, column = index % columns
-                targets.append(.init(action: action, frame: CGRect(
-                    x: inset + (compact ? searchWidth + gap : 0) + CGFloat(column) * (cell + gap),
-                    y: y + CGFloat(row) * (height + gap), width: cell, height: height)))
+            let rows = Dictionary(grouping: commands, by: \.listToolRow).sorted { $0.key < $1.key }
+            for (_, rowActions) in rows {
+                let cell = (commandWidth - CGFloat(rowActions.count - 1) * gap) / CGFloat(rowActions.count)
+                let height = max(44 * scale, rowActions.map { GameTextLayout.height($0.title, width: (cell - 24) / scale) * scale + 12 }.max() ?? 0)
+                for (index, action) in rowActions.enumerated() {
+                    targets.append(.init(action: action, frame: CGRect(x: commandX + CGFloat(index) * (cell + gap), y: y, width: cell, height: height)))
+                }
+                y += height + gap
             }
-            y += CGFloat((commands.count + columns - 1) / columns) * (height + gap)
         }
         if compact, commands.isEmpty { y += 44 * scale + gap }
         return .init(size: CGSize(width: width, height: targets.isEmpty ? 0 : y), board: .zero, heading: .zero,

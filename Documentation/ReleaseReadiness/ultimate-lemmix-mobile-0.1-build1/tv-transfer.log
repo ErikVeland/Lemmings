@@ -1,0 +1,4 @@
+UI test windows: offscreen; audio: muted
+PASS transfer path/collision/limit guards, strict HTTP headers, ordered chunks, completion and cleanup
+PASS loopback browser page/helper, origin/token checks, incomplete upload rejection and native import callback
+PASS slow-import source retention, process-wide installation lease, restart and stale UI completion

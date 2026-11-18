@@ -1,0 +1,106 @@
+{
+  "files": [
+    {
+      "bytes": 41903,
+      "path": ".build/ultimate-lemmix-ios-build3/build-evidence.json",
+      "sha256": "46f30b8705a0b88674d91b41c31461140c2b90aa36a8376643574fa56d9ef1a5"
+    },
+    {
+      "bytes": 39514,
+      "path": ".build/ultimate-lemmix-ios-build3/source-inputs.json",
+      "sha256": "d0f4bf17cfbd2d774d404152372f40747ee15424bfb3cd4ba94c75f807bd07e8"
+    },
+    {
+      "bytes": 17608370,
+      "path": ".build/ultimate-lemmix-ios-build3/Ultimate-Lemmix-ios-0.1-build3-unsigned.ipa",
+      "sha256": "a25d6a8e03944477b43aa093ff5bbe69657b3b06151e0747ddedb8f12a40d00e"
+    },
+    {
+      "bytes": 1400,
+      "path": ".build/ultimate-lemmix-ios-build3/UltimateLemmixIOS.xcarchive/Products/Applications/UltimateLemmix.app/Info.plist",
+      "sha256": "21186a69d2b28fa2de4cfd6a1acb80acca0ea6d9661b875c242b372683492205"
+    },
+    {
+      "bytes": 62392,
+      "path": ".build/ultimate-lemmix-ios-build3/UltimateLemmixIOS.xcarchive/Products/Applications/UltimateLemmix.app/Assets.car",
+      "sha256": "89803ed5a05b36368f6b3d6116a8fb9bc68d7d27b1703449eadd1fdc6139c4e8"
+    },
+    {
+      "bytes": 5148672,
+      "path": ".build/ultimate-lemmix-ios-build3/UltimateLemmixIOS.xcarchive/Products/Applications/UltimateLemmix.app/UltimateLemmix",
+      "sha256": "9ea8663e1ad5f8b3f9cbc9736d1256ab72eb3e798979ddb2339b35bdc4fff228"
+    },
+    {
+      "bytes": 18610357,
+      "path": ".build/ultimate-lemmix-ios-build3/Ultimate-Lemmix-ios-0.1-build3-simulator.zip",
+      "sha256": "5cbf3305abc6ebb842f18d9697d2225775863861b0b70e694cad7ac17951db75"
+    },
+    {
+      "bytes": 1427,
+      "path": ".build/ultimate-lemmix-ios-build3/derived-data/Build/Products/Release-iphonesimulator/UltimateLemmix.app/Info.plist",
+      "sha256": "fa290e1bae2cbf3cfe405519875fd277c0003c998d232a70b5b8c55499890cd5"
+    },
+    {
+      "bytes": 62392,
+      "path": ".build/ultimate-lemmix-ios-build3/derived-data/Build/Products/Release-iphonesimulator/UltimateLemmix.app/Assets.car",
+      "sha256": "89803ed5a05b36368f6b3d6116a8fb9bc68d7d27b1703449eadd1fdc6139c4e8"
+    },
+    {
+      "bytes": 11298800,
+      "path": ".build/ultimate-lemmix-ios-build3/derived-data/Build/Products/Release-iphonesimulator/UltimateLemmix.app/UltimateLemmix",
+      "sha256": "8de616459fa6f8529909a10536207d3c78773260a318f55fd4f92ce5e25d8cb5"
+    },
+    {
+      "bytes": 49161,
+      "path": ".build/ultimate-lemmix-tvos-build3/build-evidence.json",
+      "sha256": "ccaf766ca9a9ca7e7969e94cfe08c1994d6a99dc660f6197ac20b6defb3329f7"
+    },
+    {
+      "bytes": 46763,
+      "path": ".build/ultimate-lemmix-tvos-build3/source-inputs.json",
+      "sha256": "c853dbde0ab537ce9e89b27f29d3b5c8726fc5f886d70059c474ffb8515df150"
+    },
+    {
+      "bytes": 17659653,
+      "path": ".build/ultimate-lemmix-tvos-build3/Ultimate-Lemmix-tvos-0.1-build3-unsigned.ipa",
+      "sha256": "1180a351e743787b82c4bb717c75299300c83d06ab8afcd30f5b946b624e6a98"
+    },
+    {
+      "bytes": 1274,
+      "path": ".build/ultimate-lemmix-tvos-build3/UltimateLemmixTVOS.xcarchive/Products/Applications/UltimateLemmix.app/Info.plist",
+      "sha256": "c7d951b25ad48c49592bf00445d97483922b980120e079e950422c1d00983faf"
+    },
+    {
+      "bytes": 130648,
+      "path": ".build/ultimate-lemmix-tvos-build3/UltimateLemmixTVOS.xcarchive/Products/Applications/UltimateLemmix.app/Assets.car",
+      "sha256": "8f151f2c3e7535127a5c1fdf32bceee135eaa7de217f28a197a55081de0d7479"
+    },
+    {
+      "bytes": 5218968,
+      "path": ".build/ultimate-lemmix-tvos-build3/UltimateLemmixTVOS.xcarchive/Products/Applications/UltimateLemmix.app/UltimateLemmix",
+      "sha256": "28f12c89314b5c15902ce8a067836496983db100d5a3819df0a2c51c731d90b7"
+    },
+    {
+      "bytes": 18666108,
+      "path": ".build/ultimate-lemmix-tvos-build3/Ultimate-Lemmix-tvos-0.1-build3-simulator.zip",
+      "sha256": "cb498feb974b5ce5ff777840069edaaf482a8fca7b91f217624c5a579fefd74f"
+    },
+    {
+      "bytes": 1301,
+      "path": ".build/ultimate-lemmix-tvos-build3/derived-data/Build/Products/Release-appletvsimulator/UltimateLemmix.app/Info.plist",
+      "sha256": "0d6038e4c47df32d3f629ebed6ec999d6cd613ed5750a0a4060ce14339bb0ad4"
+    },
+    {
+      "bytes": 130648,
+      "path": ".build/ultimate-lemmix-tvos-build3/derived-data/Build/Products/Release-appletvsimulator/UltimateLemmix.app/Assets.car",
+      "sha256": "8f151f2c3e7535127a5c1fdf32bceee135eaa7de217f28a197a55081de0d7479"
+    },
+    {
+      "bytes": 11401744,
+      "path": ".build/ultimate-lemmix-tvos-build3/derived-data/Build/Products/Release-appletvsimulator/UltimateLemmix.app/UltimateLemmix",
+      "sha256": "bfacf76cf3174fe48c2e4a4b18420629f28ea8ebff403ec8cea1448d113eed12"
+    }
+  ],
+  "purpose": "Preserve build3 review artefacts during isolated mobile build4 compilation",
+  "schemaVersion": 1
+}

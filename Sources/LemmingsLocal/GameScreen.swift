@@ -275,6 +275,9 @@ import LemmingsGameArt
     }
     func dismissAll() { if let first = pages.first { dismiss(first.view) } }
     func chooseFile(_ panel: NSOpenPanel) async -> URL? {
+        await chooseSave(panel)
+    }
+    func chooseSave(_ panel: NSSavePanel) async -> URL? {
         guard let gameWindow else { return nil }
         onNavigate?()
         onPresent?()
@@ -668,7 +671,7 @@ import LemmingsGameArt
     }
     var detail = ""
     var isMessage = false
-    private let font = GameMenuArtwork.renderer()
+    private var font: MacInterfaceRenderer? { GameMenuArtwork.renderer() }
     override var isFlipped: Bool { true }
     init(title: String, subtitle: String) {
         self.title = title; self.subtitle = subtitle
@@ -703,7 +706,7 @@ import LemmingsGameArt
     var wrapsTitle = false
     var onPress: (() -> Void)?
     private let primary: Bool
-    private let renderer = GameMenuArtwork.renderer()
+    private var renderer: MacInterfaceRenderer? { GameMenuArtwork.renderer() }
     init(title: String, primary: Bool = true, onPress: (() -> Void)? = nil) {
         self.onPress = onPress
         self.primary = primary

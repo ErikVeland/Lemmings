@@ -1,0 +1,10 @@
+UI test windows: offscreen; audio: muted
+PASS full-window hud, original bitmap HUD lettering, actual Lix sockets/icons and 19 native input targets
+UI test windows: offscreen; audio: muted
+PASS full-window hud-paused, original bitmap HUD lettering, actual Lix sockets/icons and 19 native input targets
+UI test windows: offscreen; audio: muted
+PASS full-window hud-undo, original bitmap HUD lettering, actual Lix sockets/icons and 19 native input targets
+UI test windows: offscreen; audio: muted
+PASS full-window hud-small, original bitmap HUD lettering, actual Lix sockets/icons and 19 native input targets
+UI test windows: offscreen; audio: muted
+PASS full-window hud, licensed Lix HUD lettering, actual Lix sockets/icons and 19 native input targets

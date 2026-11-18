@@ -1,0 +1,20 @@
+name: Shared publication contract
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  publication-contract:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check shared source and release metadata
+        run: zsh Scripts/build-publication.sh --check
+      - name: Check publication and compiler contracts
+        run: python3 -m unittest discover -s Tools/Publication -p 'test_*.py'
+      - name: Check shared mobile source contracts
+        run: python3 -m unittest discover -s Apps/SharedAppleMobile/Tests -p 'test_*.py'
+      - name: Check shared Mac compiler contracts
+        run: python3 -m unittest discover -s Tests/ReleaseReadinessTests -p 'test_mac_sources.py'

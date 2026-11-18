@@ -8,22 +8,52 @@ layout and file transfer may adapt to the device. An engine label, shared
 protocol or visible settings choice does not prove that its implementation is
 connected. Check the session, renderer, input route and persistence path.
 
-## Chronicles controls and Classic Short Games — 5 November 2026
+## Ultimate Lemmix loaded assets — 17 November 2026
 
-Chronicles uses each tribe's original pressed skill art in the Mac deck and
-the wide and compact mobile HUDs. The wide mobile panel also uses the pressed
-art for Pause, fast-forward and End run. The HUD keeps the existing input
-frames and action routing. The shared mobile renderer covers iPhone, iPad,
-Duo and Apple TV.
+Build 108 retains the full 2.4.2 application with unchanged NxlvKit. Complete
+owned import selects Original presentation and preserves all seven Classic
+campaign identities. Exact sanitised L2/L3 data retains native checkpoint
+identity without copying unused DOS drivers. Unknown or modified data remains
+distinct.
 
-Classic follow-up adds original DOS Fun 6–10 to Short Games. Mac and mobile
-use their existing playlist and Hot Seat flows with the exact level order.
-See the [Short games route checks](ShortGames.md) for replay results and
-saved-run coverage.
+Reference resources, live import and cold restoration pass the focused native
+comparison. Menu/control contracts and representative Classic/Neo pixels match.
+All 794 Neo catalogue entries match. Native recovery retains paused state,
+roster, next turn and archived Hot Seat queue position. L2/L3 host frames and
+checkpoints match. The control matrix passes 67 exact rendering comparisons.
 
-Muted offscreen renders check the pressed cells and nearby targets at phone,
-tablet and TV sizes. iOS and tvOS SDK compilation passes. Physical touch,
-controller and Siri Remote acceptance remain device checks.
+The Store widget now receives selected owned artwork through its declared App
+Group. Eighteen injected-container native clock renders match. iOS and tvOS
+device-SDK builds compile as 2.4.2 (108), with the widget and Top Shelf retained.
+Mac arm64 build 108 passes strict ad hoc signature verification and is in Downloads.
+
+These checks use the current full frontend against the two resource sources.
+They do not run the unmodified published executable. Physical input, audible
+audio, UIKit, signed App Group access and hosted services remain separate
+acceptance checks. No broad corpus or release audit ran. See the
+[build 108 record](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/README.md).
+
+## Ultimate Lemmix full-game baseline — 17 November 2026
+
+The separate Lemmix variant now starts from the full 2.4.2 application at
+`b294d3b7`, with unchanged NxlvKit fingerprint `9a246f97`. Earlier 0.1 Lemmix
+builds used the stale 1.8 checkout and do not establish feature parity.
+
+The Mac build retains the full current frontend. The new iOS and tvOS targets
+reuse the current mobile frontend, widgets and TV transfer routes. Licensed Lix
+presentation and local owned-resource selection adapt the resource boundary.
+They do not select a smaller engine or frontend. The authored starter uses the
+existing Classic session without an original sprite bank. Original imports
+still require their normal source data.
+
+Mac 2.4.2 build 107 compiles, passes its ad hoc signature check and is open for
+manual testing. The separate iOS and tvOS 2.4.2 build 107 targets compile against
+their device SDKs, including Desk Clock and Top Shelf. The actual GameArt
+package compiler receives the Store condition. These mobile outputs are unsigned.
+Physical-device gameplay, import, input, audio and service acceptance remain
+pending. No Simulator, automated suites or release audits ran for this candidate.
+The engine source is unchanged. See [Ultimate Lemmix](UltimateLemmix.md) for
+resource coverage, import behaviour and distribution limits.
 
 ## HUD target clearance — 5 November 2026
 
@@ -761,16 +791,15 @@ Least skills and Most saved, from direct runs only.
 | iPhone, iPad, Duo | Shared page | World, This device, Apple Game Center | Yes | `LevelLeaderboardResultTests`; iOS SDK compile |
 | Apple TV | Shared page | World, This device, Apple Game Center | Yes | tvOS SDK compile |
 
-Limits: the hosted service returns only rank, name and score for each entry.
-World therefore shows one score column. This device and This Mac also show
-cleared and three-star counts. More World columns need a server change. Mobile
-and TV staging now enables Game Center only when the exact iOS bundle and board
-catalogue have an Apple-verified activation record. The repository currently has
-a Mac activation record only, so iPhone, iPad, Duo and Apple TV candidate builds
-keep this service disabled. Developer ID and ad-hoc Mac builds also switch it
-off; App Store, TestFlight and development signing are the supported routes.
-Not yet checked: rendered captures, live service data, physical devices and
-controller focus on Apple TV.
+The current server source returns stars, cleared levels and three-star levels
+for each World career entry. Older server responses return only rank, name and
+the selected score. The clients show the other columns when the response has
+them. Live service deployment is not confirmed. Game Center is enabled in the
+bundled catalogue for every TestFlight and
+development-signed build. Developer ID and ad-hoc Mac builds still switch it
+off, because Apple allows Game Center only with App Store, TestFlight or
+development signing. Not yet checked: rendered captures, live service data,
+physical devices and controller focus on Apple TV.
 
 ## Validation and remaining acceptance
 

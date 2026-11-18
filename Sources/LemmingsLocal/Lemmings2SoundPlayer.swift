@@ -1,5 +1,6 @@
 #if os(macOS)
 import Foundation
+import LemmingsAppCore
 // Standalone test scripts compile the shared files into the same module.
 #if canImport(LemmingsAudio)
 import LemmingsAudio
@@ -17,7 +18,7 @@ final class Lemmings2SoundPlayer: @unchecked Sendable {
     }
     init(root: URL, bank: Lemmings2SoundBank? = nil) throws {
         self.bank = try bank ?? Lemmings2SoundBank(data: Data(contentsOf: root.appendingPathComponent("MUSIC/SBLAST.VOC")))
-        effects.loadSupplementSounds(directory: Bundle.main.resourceURL?.appendingPathComponent("Sounds"))
+        effects.loadSupplementSounds(directory: GameResources.resourceURL?.appendingPathComponent("Sounds"))
     }
     func start() throws { try effects.start() }
     func stop() { effects.stop() }

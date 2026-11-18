@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "lix-cc0-music",
+  "title": "Lix alternative soundtrack",
+  "licence": "CC0-1.0",
+  "licenceURL": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "source": {
+    "project": "Lix",
+    "repository": "https://github.com/SimonN/LixD",
+    "version": "0.10.36",
+    "commit": "f1e805048fe439a4a0e9cc650c613713ababac8b",
+    "downloadEvidence": "https://github.com/SimonN/LixD/blob/f1e805048fe439a4a0e9cc650c613713ababac8b/README.md",
+    "archiveURL": "https://www.lixgame.com/dow/lix-music.zip",
+    "archiveSHA256": "23ef8c20c5bf1674096e8b20ed9011669a9ad66f1135c64198e00e93aeb1f657",
+    "archiveBytes": 13238329,
+    "licenceURL": "https://raw.githubusercontent.com/SimonN/LixD/f1e805048fe439a4a0e9cc650c613713ababac8b/doc/copying.txt",
+    "licenceSHA256": "2d086a16ad111d8e1316a9967a9743186b1d728ff6485854a2664002db524a4f",
+    "licenceBytes": 9016
+  },
+  "scope": "Independent alternative music supplied with Lix. These tracks are not Lemmings fan remixes or replacements of the original compositions.",
+  "excluded": [
+    "music/rubix/earthen-energy.ogg",
+    "music/rubix/winter.ogg"
+  ],
+  "exclusionReason": "The rubix directory uses CC BY 4.0. This pack selects only the tracks explicitly covered by the upstream CC0 dedication.",
+  "tracks": [
+    {
+      "id": "lix.menulix",
+      "title": "Menu Lix",
+      "creator": "Mike Spanner (Rubix)",
+      "path": "music/menulix.ogg",
+      "bytes": 1777561,
+      "sha256": "638a47d64e55f6730e872220c8feabedaa1fc9b58102cb5037ebb11b17ab41b0",
+      "frames": 6434077
+    },
+    {
+      "id": "lix.assembly-line",
+      "title": "Assembly Line",
+      "creator": "Minim and mobius",
+      "path": "music/minim-mobius/assembly-line.ogg",
+      "bytes": 1757050,
+      "sha256": "639e2de0e5d7d8d098e07d3201ca97997940eca5e6bb959033e7bcfa6eb0b891",
+      "frames": 4642560
+    },
+    {
+      "id": "lix.beach-and-sailboats",
+      "title": "Beach and Sailboats",
+      "creator": "Minim and mobius",
+      "path": "music/minim-mobius/beach-and-sailboats.ogg",
+      "bytes": 1540999,
+      "sha256": "7ee091cbc8557302777afd155b29e695b6e1c2b9fa87e0bf8556a5ccc5320a5d",
+      "frames": 3744000
+    },
+    {
+      "id": "lix.driving",
+      "title": "Driving",
+      "creator": "Minim and mobius",
+      "path": "music/minim-mobius/driving.ogg",
+      "bytes": 1349808,
+      "sha256": "13fe1ce39f4234d17e7e39b62a1ee3d6aac04dcb52436005f55a58159dcf9d5e",
+      "frames": 3482496
+    },
+    {
+      "id": "lix.foggy-streets-at-night",
+      "title": "Foggy Streets at Night",
+      "creator": "Minim and mobius",
+      "path": "music/minim-mobius/foggy-streets-at-night.ogg",
+      "bytes": 1998079,
+      "sha256": "81778342b0218d67591162951d8bc55ea55a0a09368072fc11681a011ee979df",
+      "frames": 5533056
+    },
+    {
+      "id": "lix.meadow-sunrise",
+      "title": "Meadow Sunrise",
+      "creator": "Minim and mobius",
+      "path": "music/minim-mobius/meadow-sunrise.ogg",
+      "bytes": 1690073,
+      "sha256": "40c34a20d5067a568951cf98072443baf6a795109adcb5553cfad3ca99033f89",
+      "frames": 3924187
+    }
+  ]
+}

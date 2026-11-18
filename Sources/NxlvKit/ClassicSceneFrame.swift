@@ -3,11 +3,13 @@ import Foundation
 /// Combines the current terrain mask with the original animated objects.
 /// Collision triggers are independent from this visual composition.
 public enum ClassicSceneFrame {
-    public static func terrainRGBA(_ level: ClassicRenderedLevel, terrain: ClassicDOSTerrain) -> Data {
-        Data(terrainPixels(level, solid: terrain.renderingSolidMask))
-    }
-
-    private static func terrainPixels(_ level: ClassicRenderedLevel, solid: [UInt8]) -> [UInt8] {
+    public static func rgba(_ level: ClassicRenderedLevel, simulation: ClassicDOSSimulation,
+                            lixArtwork: LixSceneArtwork? = nil,
+                            lixTheme: LixSceneArtwork.Theme = .brick) -> Data {
+        if let lixArtwork {
+            return lixArtwork.frame(level, simulation: simulation, theme: lixTheme, pixelScale: 1).rgba
+        }
+        let solid = [UInt8](simulation.terrain.solidMask)
         let original = [UInt8](level.solidMask)
         var pixels = [UInt8](level.rgba)
         guard solid.count == original.count, pixels.count == solid.count * 4 else { return pixels }

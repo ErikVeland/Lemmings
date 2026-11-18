@@ -16,6 +16,8 @@ import Darwin
     private let staging = FileManager.default.temporaryDirectory.appendingPathComponent("TVTransfer-\(UUID().uuidString)")
     private let directory: Bool
     private let importName: String
+    private let maximumBytes: Int64
+    private let maximumEntries: Int
     private let exportURL: URL?
     private var completion: ((URL) -> Void)?
     private var listener: NWListener?
@@ -40,8 +42,13 @@ import Darwin
         }
     }
 
-    static func importFiles(from presenter: UIViewController, directory: Bool, name: String = L10n.text("recovery key"), completion: @escaping (URL) -> Void) {
-        presenter.present(MobileTVFileTransfer(directory: directory, exportURL: nil, importName: name, completion: completion), animated: true)
+    static func importFiles(from presenter: UIViewController, directory: Bool, name: String = L10n.text("recovery key"),
+                            maximumBytes: Int64 = MobileContentStore.maximumImportBytes,
+                            maximumEntries: Int = MobileContentStore.maximumImportEntries,
+                            completion: @escaping (URL) -> Void) {
+        presenter.present(MobileTVFileTransfer(directory: directory, exportURL: nil, importName: name,
+                                               maximumBytes: maximumBytes, maximumEntries: maximumEntries,
+                                               completion: completion), animated: true)
     }
 
     static func exportFile(_ url: URL, from presenter: UIViewController, completion: (() -> Void)? = nil) {
@@ -52,9 +59,13 @@ import Darwin
 
     private var onClose: (() -> Void)?
 
-    private init(directory: Bool, exportURL: URL?, importName: String = L10n.text("recovery key"), completion: ((URL) -> Void)?) {
+    private init(directory: Bool, exportURL: URL?, importName: String = L10n.text("recovery key"),
+                 maximumBytes: Int64 = MobileContentStore.maximumImportBytes,
+                 maximumEntries: Int = MobileContentStore.maximumImportEntries, completion: ((URL) -> Void)?) {
         self.directory = directory
         self.importName = importName
+        self.maximumBytes = maximumBytes
+        self.maximumEntries = maximumEntries
         self.exportURL = exportURL
         self.completion = completion
         super.init(nibName: nil, bundle: nil)
@@ -220,8 +231,8 @@ import Darwin
                 }
                 return
             }
-            guard request.path.hasPrefix("/upload/"), files.count < MobileContentStore.maximumImportEntries,
-                  length <= Int(MobileContentStore.maximumImportBytes) - totalBytes else { throw URLError(.dataLengthExceedsMaximum) }
+            guard request.path.hasPrefix("/upload/"), files.count < maximumEntries,
+                  Int64(length) <= maximumBytes - Int64(totalBytes) else { throw URLError(.dataLengthExceedsMaximum) }
             let relative = String(request.path.dropFirst("/upload/".count))
             let parts = relative.split(separator: "/", omittingEmptySubsequences: false)
             guard !relative.isEmpty, parts.count <= 32, parts.allSatisfy({
