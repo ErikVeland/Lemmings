@@ -16,9 +16,9 @@ Mobile extensions retain distinct identifiers:
 | Product | Bundle identifier |
 | --- | --- |
 | iOS | `academy.glasscode.ultimatelemmix` |
-| Desk Clock widget | `academy.glasscode.ultimatelemmix.ios.DeskClockWidget` |
+| Desk Clock widget | `academy.glasscode.ultimatelemmix.iOSDeskClockWidget` |
 | tvOS | `academy.glasscode.ultimatelemmix` |
-| Top Shelf | `academy.glasscode.ultimatelemmix.tvos.TopShelf` |
+| Top Shelf | `academy.glasscode.ultimatelemmix.TopShelf` |
 
 The targets retain the existing iCloud container, Game Center capability and TV
 App Group. Archive and export receipts must verify the service assignments for

@@ -103,6 +103,15 @@ class PublicationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "separate release branches"):
             publication.load_manifest(self.root)
 
+    def test_loader_rejects_a_nested_extension_bundle_identifier(self):
+        profile = self.manifest["editions"]["ultimate-lemmix"]["platforms"]["ios"]
+        profile["extensionBundleIdentifiers"] = {
+            "DeskClockWidget": profile["bundleIdentifier"] + ".mobile.DeskClockWidget"
+        }
+        self.write_manifests()
+        with self.assertRaisesRegex(ValueError, "one suffix"):
+            publication.load_manifest(self.root)
+
     def test_release_branch_rejects_the_other_product(self):
         for edition in self.manifest["editions"]:
             own = self.manifest["editions"][edition]["releaseBranch"]
