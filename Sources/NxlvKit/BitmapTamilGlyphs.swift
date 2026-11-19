@@ -33,13 +33,7 @@ public enum BitmapTamilGlyphs {
     }
     private static let frames = GameAssetCache<ClassicMacArtwork.Frame>(capacity: 4096)
     private static let catalogue: Catalogue = {
-        let bundleURL: URL?
-        #if SWIFT_PACKAGE
-        bundleURL = Bundle.module.url(forResource: "Localization", withExtension: "bundle")
-        #else
-        bundleURL = Bundle.main.url(forResource: "Localization", withExtension: "bundle")
-        #endif
-        let url = bundleURL?.appendingPathComponent("Fonts/TamilPixelFont.json")
+        let url = L10n.resourceBundle?.resourceURL?.appendingPathComponent("Fonts/TamilPixelFont.json")
         let resource = url.flatMap { try? Data(contentsOf: $0) }.flatMap { try? JSONDecoder().decode(Resource.self, from: $0) }
         let valid = resource.flatMap { value -> Resource? in
             guard value.version == 1, value.palette.count == 21, !value.faces.isEmpty else { return nil }
