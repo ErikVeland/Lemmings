@@ -33,6 +33,10 @@ def load_manifest(root):
         for profile in edition["platforms"].values():
             if not isinstance(profile["build"], int) or isinstance(profile["build"], bool) or profile["build"] < 1:
                 raise ValueError("Publication build numbers must be positive integers.")
+            parent_id = profile["bundleIdentifier"]
+            for extension_id in profile.get("extensionBundleIdentifiers", {}).values():
+                if not re.fullmatch(re.escape(parent_id) + r"\.[A-Za-z0-9-]+", extension_id):
+                    raise ValueError(f"Extension {extension_id} must append one suffix to {parent_id}.")
     branches = [edition["releaseBranch"] for edition in manifest["editions"].values()]
     if len(branches) != len(set(branches)):
         raise ValueError("Products must use separate release branches.")
@@ -95,8 +99,6 @@ def metadata_errors(root, manifest, platforms=None, selected_edition=None):
                     if str(settings.get(key)) != value:
                         errors.append(f"{profile['project']}: app {key} must be {value}.")
             for name, bundle_id in profile.get("extensionBundleIdentifiers", {}).items():
-                if not bundle_id.startswith(profile["bundleIdentifier"] + "."):
-                    errors.append(f"{profile['project']}: extension {name} must use the app ID prefix.")
                 extensions = [item for item in objects.values()
                               if item.get("isa") == "PBXNativeTarget" and item.get("name") == name]
                 if len(extensions) != 1:

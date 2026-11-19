@@ -473,7 +473,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.4.2;
-				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.tvos.TopShelf;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.TopShelf;
 				SDKROOT = appletvos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -500,7 +500,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.4.2;
-				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.tvos.TopShelf;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.TopShelf;
 				SDKROOT = appletvos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

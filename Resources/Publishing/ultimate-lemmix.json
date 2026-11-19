@@ -16,7 +16,7 @@
       "scheme": "UltimateLemmixIOS",
       "appTarget": "UltimateLemmixIOS",
       "extensionBundleIdentifiers": {
-        "DeskClockWidget": "academy.glasscode.ultimatelemmix.ios.DeskClockWidget"
+        "DeskClockWidget": "academy.glasscode.ultimatelemmix.iOSDeskClockWidget"
       }
     },
     "tvos": {
@@ -26,7 +26,7 @@
       "scheme": "UltimateLemmixTVOS",
       "appTarget": "UltimateLemmixTVOS",
       "extensionBundleIdentifiers": {
-        "TopShelf": "academy.glasscode.ultimatelemmix.tvos.TopShelf"
+        "TopShelf": "academy.glasscode.ultimatelemmix.TopShelf"
       }
     }
   },

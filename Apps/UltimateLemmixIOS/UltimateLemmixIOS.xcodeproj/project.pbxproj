@@ -547,7 +547,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.4.2;
-				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios.DeskClockWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.iOSDeskClockWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -575,7 +575,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.4.2;
-				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.ios.DeskClockWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = academy.glasscode.ultimatelemmix.iOSDeskClockWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
