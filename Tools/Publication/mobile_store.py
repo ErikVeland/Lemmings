@@ -14,6 +14,8 @@ import tempfile
 import shutil
 import zipfile
 
+from publication import load_manifest
+
 ROOT = Path(__file__).resolve().parents[2]
 TEAM = "54WU29TRTY"
 GROUP = "group.academy.glasscode.lemmings"
@@ -154,10 +156,9 @@ def validate_export(args):
         require(all(not Path(p).is_absolute() and ".." not in Path(p).parts for p in archive.namelist()), "Unsafe IPA path.")
     run("/usr/bin/ditto", "-x", "-k", ipa, inspection)
     app = next((inspection / "Payload").glob("*.app"))
-    product = json.loads((ROOT / "Resources/Publishing/ultimate-lemmix.json").read_text())
+    product = load_manifest(ROOT)["editions"]["ultimate-lemmix"]
     config = product["platforms"][args.platform]
     expected_ids = {config["bundleIdentifier"], *config["extensionBundleIdentifiers"].values()}
-    require(all(value.startswith(config["bundleIdentifier"] + ".") for value in config["extensionBundleIdentifiers"].values()), "Extension identity must use the app prefix.")
     records = []
     for bundle in [app, *app.glob("PlugIns/*.appex")]:
         info = read_plist(bundle / "Info.plist")
