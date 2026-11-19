@@ -21,9 +21,6 @@ from mac_sources import SHARED_MODULES, describe
 ROOT = Path(__file__).resolve().parents[2]
 MODULES = ("NxlvKit", *SHARED_MODULES)
 WIDGET = Path("Contents/PlugIns/DeskClockMacWidget.appex")
-RESOURCE_BUNDLE = Path("Localization.bundle")
-RESOURCE_SIGNATURES = {str(RESOURCE_BUNDLE / "_CodeSignature" / name)
-                       for name in ("CodeResources", "CodeDirectory", "CodeRequirements", "CodeSignature")}
 
 
 def run(*command):
@@ -177,6 +174,7 @@ def inputs():
                   "Tools/Publication/publication.py", "Scripts/check-release-history.sh",
                   "Tools/ReleaseReadiness/version_history.py", "Tools/AlternativeAssets/prepare_lemmix_base.py",
                   "Tools/AlternativeAssets/store_resources.py", "Tools/AlternativeAssets/feature_resources.py",
+                  "Tools/TrolleyVerification/catalogue.py", "Tools/TrolleyVerification/presentation-files.json",
                   "Apps/DeskClockWidget/DeskClockWidget.swift", "Apps/DeskClockWidget/Mac/Info.plist",
                   "Resources/UltimateLemmix/Info.plist", "Resources/UltimateLemmix/AppStore.entitlements",
                   "Resources/UltimateLemmix/DeskClockMacWidget.entitlements", "Resources/Publishing/ultimate-lemmix.json"))
@@ -206,7 +204,8 @@ def sign(args):
     flags = ["--force", "--sign", state["identity"], "--options", "0x0"]
     if not args.adhoc:
         flags.append("--timestamp")
-    run("codesign", *flags, args.app / "Contents/Resources" / RESOURCE_BUNDLE)
+    if (args.app / "Contents/Resources/Localization.bundle").exists():
+        raise ValueError("Place Mac Store localisation in the main app's resources before signing.")
     for path in binaries(args.app)[1:-1]:
         run("codesign", *flags, path)
     for name, bundle in (("widget", args.app / WIDGET), ("app", args.app)):
@@ -236,8 +235,7 @@ def audit(args):
     manifest = json.loads((resource_root / "store-resources-manifest.json").read_text())
     expected_resources = {row["path"]: row["sha256"] for row in manifest["files"]}
     actual_resources = {path.relative_to(resource_root).as_posix(): digest(path)
-                        for path in resource_root.rglob("*") if path.is_file() and path.name != "store-resources-manifest.json"
-                        and path.relative_to(resource_root).as_posix() not in RESOURCE_SIGNATURES}
+                        for path in resource_root.rglob("*") if path.is_file() and path.name != "store-resources-manifest.json"}
     if actual_resources != expected_resources:
         raise ValueError("The resource files differ from the verified clean inventory.")
     widget_resources = {name: value for name, value in expected_resources.items()
@@ -248,7 +246,6 @@ def audit(args):
                 "Contents/Resources/store-resources-manifest.json"}
     expected.update(str(path.relative_to(app)) for path in binaries(app))
     expected.update("Contents/Resources/" + name for name in expected_resources)
-    expected.update("Contents/Resources/" + name for name in RESOURCE_SIGNATURES)
     expected.update(str(WIDGET / "Contents/Resources" / name) for name in widget_resources)
     for name, bundle in (("app", Path(".")), ("widget", WIDGET)):
         if "profile" in state["bundles"][name]:
@@ -264,40 +261,16 @@ def audit(args):
     for name, value in widget_resources.items():
         if digest(app / WIDGET / "Contents/Resources" / name) != value:
             raise ValueError(f"The widget resource differs from the clean app resource: {name}")
-    resource_bundle = resource_root / RESOURCE_BUNDLE
-    run("codesign", "--verify", "--strict", resource_bundle)
-    details = subprocess.run(["codesign", "-d", "--verbose=4", str(resource_bundle)],
-                             capture_output=True, text=True, check=True).stderr
-    flags = int(re.search(r"flags=0x([0-9a-fA-F]+)", details).group(1), 16)
-    if bool(flags & 2) != args.adhoc:
-        raise ValueError("The resource bundle signature uses the wrong signing mode.")
-    if not args.adhoc:
-        team = re.search(r"^TeamIdentifier=(.*)$", details, re.M).group(1)
-        if team != state["bundles"]["app"]["team"]:
-            raise ValueError("The resource bundle must use the app's signing team.")
-        allowed_certificates = set(state["bundles"]["app"].get("certificates", []))
-        authorities = ["Authority=Apple Distribution:", "Authority=3rd Party Mac Developer Application:",
-                       "Authority=Mac App Distribution:"]
-        if getattr(args, "signing_override", None):
-            staging = json.loads((args.build_dir / "mac-store-signing.json").read_text())
-            original = staging["bundles"]["app"]
-            if staging.get("automaticExport") and original.get("profile"):
-                path = Path(original["profile"])
-                if digest(path) != original["profileSHA256"]:
-                    raise ValueError("The archive's resource signing profile changed.")
-                document, _ = profile(path, original["identifier"], original["entitlements"], development=True)
-                if document["TeamIdentifier"][0] != team:
-                    raise ValueError("The resource bundle's original signing team changed.")
-                allowed_certificates.update(hashlib.sha256(data).hexdigest() for data in document["DeveloperCertificates"])
-                authorities.append("Authority=Apple Development:")
-        if not state.get("automaticExport") and not any(label in details for label in authorities):
-            raise ValueError("The resource bundle must retain an approved Apple signing certificate.")
-        if allowed_certificates:
-            with tempfile.TemporaryDirectory(dir=args.build_dir) as temporary:
-                prefix = Path(temporary) / "certificate"
-                run("codesign", "-d", f"--extract-certificates={prefix}", resource_bundle)
-                if digest(Path(str(prefix) + "0")) not in allowed_certificates:
-                    raise ValueError("The resource bundle certificate is absent from the verified signing profiles.")
+    if (resource_root / "Localization.bundle").exists():
+        raise ValueError("The Mac Store app contains a separately packaged localisation bundle.")
+    localisation = {"Fonts/TamilPixelFont.json"}
+    localisation.update(f"{language}.lproj/{table}" for language in info["CFBundleLocalizations"]
+                        for table in ("Interface.strings", "Interface.stringsdict"))
+    sealed = plistlib.loads((app / "Contents/_CodeSignature/CodeResources").read_bytes())["files2"]
+    for name in sorted(localisation):
+        entry = sealed.get(f"Resources/{name}", {})
+        if name not in expected_resources or entry.get("hash2", b"").hex() != expected_resources[name]:
+            raise ValueError(f"The app signature does not seal the approved localisation resource: {name}")
     cursor = (ROOT / "Sources/LemmingsLocal/GameCursor.swift").read_text()
     payloads = re.findall(r'originalPointerImage\("""(.*?)"""', cursor, re.S)
     if len(payloads) != 2:
@@ -449,8 +422,9 @@ def automatic_export(args, archive_path, result):
                "-allowProvisioningUpdates"]
     environment = dict(os.environ, PATH="/usr/bin:/bin:/usr/sbin:/sbin",
                        TMPDIR=str(args.build_dir / "Temporary") + "/")
+    (args.build_dir / "Temporary").mkdir(exist_ok=True)
     with log_path.open("w") as log:
-        completed = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, env=environment)
+        completed = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, env=environment, umask=0o022)
     result.update(exportCommand=command, exportExitCode=completed.returncode, exportLog=str(log_path))
     if completed.returncode:
         result["blockers"].append("Authenticated Xcode export failed. See export.log for the provisioning response.")

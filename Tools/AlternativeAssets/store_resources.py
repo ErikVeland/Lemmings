@@ -199,6 +199,21 @@ def privacy_manifest():
     return data
 
 
+def place_mac_localisations(output):
+    """Place translations and the Tamil font in the main app's resource seal."""
+    legacy = output / 'Localization.bundle'
+    for path in sorted(legacy.rglob('*')):
+        relative = path.relative_to(legacy)
+        if relative.as_posix() == 'Info.plist' or not path.is_file():
+            continue
+        target = output / relative
+        if target.exists():
+            raise ValueError(f'A localisation resource already exists: {relative}')
+        target.parent.mkdir(parents=True, exist_ok=True)
+        path.rename(target)
+    shutil.rmtree(legacy)
+
+
 def collect(allow_missing_integration=False):
     """Prepare current shared features with the exact pinned alternative media inventory."""
     from prepare_lemmix_base import prepare as prepare_base, write_data_inventory
@@ -207,6 +222,7 @@ def collect(allow_missing_integration=False):
         output = Path(temporary) / 'Resources'
         prepare_base(output, ROOT / '.build/approved-alternative-resources', store=True)
         (output / 'PrivacyInfo.xcprivacy').write_bytes(privacy_manifest())
+        place_mac_localisations(output)
         write_data_inventory(output)
         return {path.relative_to(output).as_posix(): path.read_bytes()
                 for path in sorted(output.rglob('*')) if path.is_file()}
@@ -281,16 +297,7 @@ def verify_tree(output, files):
             raise ValueError('Links are not permitted in the store resources.')
         if path.is_file():
             actual.add(path.relative_to(output).as_posix())
-    signatures = set()
-    resource_signature = {'Localization.bundle/_CodeSignature/' + name for name in
-                          ('CodeResources', 'CodeDirectory', 'CodeRequirements', 'CodeSignature')}
-    if actual & resource_signature:
-        if not resource_signature <= actual or 'Localization.bundle/Info.plist' not in files:
-            raise ValueError('The localization resource signature is incomplete or unexpected.')
-        subprocess.run(['codesign', '--verify', '--strict', str(output / 'Localization.bundle')],
-                       check=True, capture_output=True)
-        signatures = resource_signature
-    if actual != set(files) | {MANIFEST} | signatures:
+    if actual != set(files) | {MANIFEST}:
         raise ValueError('The store resources contain extra or missing files.')
     expected = resource_manifest(files)
     if json.loads((output / MANIFEST).read_text()) != expected:
