@@ -26,6 +26,54 @@ def copy_tree(source, target, suffix=None):
             write(target / path.relative_to(source), path.read_bytes())
 
 
+def prepare_game_center(directory):
+    """Give Lemmix separate Apple identities without changing ranked conditions or scores."""
+    runtime_path = directory / 'leaderboards.json'
+    setup_path = directory / 'app-store-connect-boards.json'
+    runtime = json.loads(runtime_path.read_bytes())
+    setup = json.loads(setup_path.read_bytes())
+    original = json.loads(json.dumps([runtime, setup]))
+    career_keys = ('starsID', 'clearsID', 'perfectID')
+    level_keys = ('leaderboardID', 'fastestClearID', 'fastestAllSavedID')
+
+    def replace_id(value, before, after):
+        if not isinstance(value, str) or not value.startswith(before):
+            raise ValueError('The Game Center source identifier has an unexpected namespace.')
+        result = after + value[len(before):]
+        if len(result) > 100:
+            raise ValueError('The Lemmix Game Center identifier exceeds 100 characters.')
+        return result
+
+    def remap(config, manifest, before, after):
+        for key in career_keys:
+            config[key] = replace_id(config[key], before, after)
+        for row in config['levels']:
+            for key in level_keys:
+                if row.get(key) is not None:
+                    row[key] = replace_id(row[key], before, after)
+        for row in manifest['leaderboards']:
+            for key in ('id', 'set'):
+                row[key] = replace_id(row[key], before, after)
+
+    if setup.get('bundleID') != 'academy.glasscode.lemmings':
+        raise ValueError('The shared Game Center manifest names an unexpected product.')
+    remap(runtime, setup, 'ul.v1.', 'ulx.v1.')
+    setup['bundleID'] = 'academy.glasscode.ultimatelemmix'
+    identifiers = [runtime[key] for key in career_keys]
+    identifiers += [row[key] for row in runtime['levels'] for key in level_keys if row.get(key) is not None]
+    apple_ids = [row['id'] for row in setup['leaderboards']]
+    if (len(set(identifiers)) != len(identifiers) or len(set(apple_ids)) != len(apple_ids)
+            or set(identifiers) != set(apple_ids)):
+        raise ValueError('The Lemmix runtime and Apple manifests must contain the same unique identifiers.')
+    restored_runtime, restored_setup = json.loads(json.dumps([runtime, setup]))
+    remap(restored_runtime, restored_setup, 'ulx.v1.', 'ul.v1.')
+    restored_setup['bundleID'] = 'academy.glasscode.lemmings'
+    if [restored_runtime, restored_setup] != original:
+        raise ValueError('The Lemmix Game Center transform changed non-identity data.')
+    for path, value in ((runtime_path, runtime), (setup_path, setup)):
+        write(path, (json.dumps(value, indent=2, sort_keys=True) + '\n').encode())
+
+
 def write_data_inventory(output):
     """List prepared data files before an Apple target adds code and signing metadata."""
     name = 'ultimate-lemmix-data-inventory.json'
@@ -59,6 +107,7 @@ def prepare(output, alternatives, store=False):
     copy_tree(ROOT / 'Sources/NxlvKit/Resources/Localization.bundle', output / 'Localization.bundle')
     for name in ('Hints', 'Progression', 'GameCenter'):
         copy_tree(ROOT / 'Resources' / name, output / name, '.json')
+    prepare_game_center(output / 'GameCenter')
     subprocess.run(['python3', ROOT / 'Tools/TrolleyVerification/catalogue.py', 'bundle', output / 'Trolley'], check=True)
     subprocess.run(['python3', ROOT / 'Scripts/bundle-about.py', output / 'About'], check=True)
     publication = json.loads((ROOT / 'Resources/Publishing/ultimate-lemmix.json').read_bytes())
