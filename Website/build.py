@@ -33,9 +33,9 @@ def build():
     manifest = json.loads((ROOT / 'content/manifest.json').read_text())
     if isinstance(manifest, dict):
         manifest = manifest['pages']
-    pages = [{'route':'/', 'file':'home.html', 'title':'Everybody counts.', 'description':'Meet Ultimate Lemmix: a little crowd, a route home, and your plan. Three original puzzles, local Hot Seat and ways to try again. Preparing for the App Store.'}] + manifest
+    pages = [{'route':'/', 'file':'home.html', 'title':'Everybody counts.', 'description':'Play three original puzzles in Ultimate Lemmix. Own compatible original Lemmings assets? Import your own files for the Ultimate Lemmings experience.'}] + manifest
     pages += [{'route':'/404', 'file':'404.html', 'title':'This way is blocked.', 'description':'That page is not here. Return to Ultimate Lemmix.'}, {'route':'/503', 'file':'503.html', 'title':'A short pause.', 'description':'The site is temporarily unavailable. Try again shortly.'}]
-    nav = [('/', 'The game'), ('/manual', 'Field guide'), ('/support', 'Get help')]
+    nav = [('/', 'The game'), ('/upgrade', 'Upgrade'), ('/manual', 'Field guide'), ('/support', 'Get help')]
     footer = nav + [('/privacy','Privacy'),('/privacy/choices','Privacy choices'),('/accessibility','Accessibility'),('/terms','Terms'),('/release-notes','Release notes'),('/legal','Legal'),('/credits','Credits')]
     def links(items, route):
         return ''.join(f'<a href="{url}"' + (' aria-current="page"' if url == route else '') + f'>{label}</a>' for url, label in items)

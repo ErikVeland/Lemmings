@@ -22,3 +22,9 @@
 [hidden]{display:none!important}
 
 .footer-scene{color:#09281d}
+
+/* Restoration is an optional path, not part of the download. */
+.upgrade-quick { display: block; width: fit-content; margin-top: .8rem; font-weight: 700; text-underline-offset: .22em; }
+.upgrade-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 1rem; margin: 1.2rem 0; }
+.upgrade-options > div { border: 1px solid currentColor; padding: 1.15rem 1.3rem; }
+.upgrade-options h3 { margin-top: 0; }
