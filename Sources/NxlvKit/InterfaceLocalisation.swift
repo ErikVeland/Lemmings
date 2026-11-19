@@ -166,11 +166,17 @@ public struct InterfaceLocalisation: Sendable {
 }
 
 public enum L10n {
-    private static let resourceBundle: Bundle? = {
+    static let resourceBundle: Bundle? = {
         #if SWIFT_PACKAGE
         return Bundle.module.url(forResource: "Localization", withExtension: "bundle").flatMap { Bundle(url: $0) }
         #else
-        return Bundle.main.url(forResource: "Localization", withExtension: "bundle").flatMap { Bundle(url: $0) }
+        let legacy = Bundle.main.url(forResource: "Localization", withExtension: "bundle").flatMap { Bundle(url: $0) }
+        #if os(macOS)
+        if legacy == nil, Bundle.main.object(forInfoDictionaryKey: "UltimateLemmixStore") as? Bool == true {
+            return Bundle.main
+        }
+        #endif
+        return legacy
         #endif
     }()
     public static let availableLanguageIdentifiers = resourceBundle?.localizations.filter { $0 != "Base" } ?? ["en"]

@@ -26,11 +26,20 @@ NAMES = {
 # Fixed-input simulation replays do not call them.
 PRESENTATION_FILES = set(json.loads((Path(__file__).with_name("presentation-files.json")).read_text()))
 
+# Published replay identities included these presentation files. Retain their
+# original hashes so localisation packaging does not invalidate those identities.
+LEGACY_PRESENTATION_HASHES = {
+    "BitmapTamilGlyphs.swift": "bd9f455bf4fb7d83226424d5afe8450f1315c2388d4c99eb657ceb205e0441bd",
+    "InterfaceLocalisation.swift": "383cdb437ed45105efca4de2987fd2a6013151d4afc53aeda7044b88e01ab9c5",
+}
+
 
 def fingerprint():
     files = {p.name: sha256(p.read_bytes()).hexdigest()
              for p in (PROJECT / "Sources/NxlvKit").glob("*.swift")
-             if not p.name.startswith(("Trolley", "Arcade")) and p.name not in PRESENTATION_FILES}
+             if not p.name.startswith(("Trolley", "Arcade")) and p.name not in PRESENTATION_FILES
+             and p.name not in LEGACY_PRESENTATION_HASHES}
+    files.update(LEGACY_PRESENTATION_HASHES)
     return sha256(json.dumps(files, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
