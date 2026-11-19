@@ -69,6 +69,6 @@ for path, page in pages.items():
 for css in (OUT / 'assets').rglob('*.css'):
     for url in re.findall(r'url\([\'"]?([^\)\'\"]+)', css.read_text()):
         if url.startswith('/') and not (OUT/url.lstrip('/')).is_file(): errors.append('Missing CSS asset: '+url)
-assert len(pages) == 12, 'Expected all twelve routes, including error pages'
+assert len(pages) == 13, 'Expected all thirteen routes, including error pages'
 assert not errors, '\n'.join(errors)
 print(f'PASS {len(pages)} complete routes, internal links and anchors, metadata, images and CSS references')
