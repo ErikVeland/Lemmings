@@ -93,37 +93,29 @@ been uploaded to archive.org or another host.
 
 ## Remaining submission work
 
-App Store Connect sign-in is verified. The owner selected one listing for
-Mac, iOS and tvOS: Apple ID `6836347807`, main bundle ID
-`academy.glasscode.ultimatelemmix`. All three platform records exist. Mac version
-2.4.2 listing text, Games/Puzzle category and content rights are saved. Release
-is manual. The iOS and tvOS records still show version 1.0. The signed-in
-browser accepts text but button presses do not take effect. An owner handoff
-is pending for the filled iOS draft. Do not treat version 2.4.2 as saved there.
-The new record has no Game Center leaderboards configured yet.
+App Store Connect has one Ultimate Lemmix listing. Apple ID `6836347807`
+and bundle ID `academy.glasscode.ultimatelemmix` apply to all three platforms.
+Mac, iOS and tvOS each have a saved 2.4.2 draft with manual release.
+The review contact, review notes, marketing and support URLs are saved.
+The price is free. All 175 regions are selected, subject to Apple’s eligibility
+and compliance checks. App Store Connect shows a 13+ rating.
 
-The website is live at `https://lemmings.glasscode.academy` with valid HTTPS.
-All ten public routes, redirects, deployed hashes and the 404 response passed.
-Mac support and marketing URLs are saved. Other Store URL fields remain open.
-The contact address `erik@veland.au` is verified from the published GenErik DJ
-site. App Review contact fields still need completion, including a phone number.
+Apple confirmed publication of the four App Privacy responses. The privacy and
+privacy choices URLs and the Apple TV privacy text are saved. The live website
+passed checks on all ten public routes, redirects, deployed hashes and the 404
+response.
 
-The [Store account checklist](StoreAccountChecklist.md) records source-backed
-privacy, rating, encryption and Game Center requirements. These answers are
-prepared but are not saved account declarations.
+[Mac refresh evidence](MacGameCenterNamespace.md) and
+[mobile refresh evidence](MobileGameCenterRefresh.md) cover the re-signed
+packages. They use independent Lemmix Game Center identifiers. Apple accepted
+the first Lemmix leaderboard and set. The remaining boards, Apple review of
+the components and signed service acceptance are open.
 
-Complete these account and publication items before submitting:
-
-1. Verify and save version 2.4.2 for iOS and tvOS. Complete age rating,
-   price/availability and the review contact, including its telephone number.
-2. Configure the required Game Center leaderboards for the shared listing.
-3. Save the verified website URLs in the remaining App Store Connect fields.
-4. Confirm deployed retention and provider logging against the privacy notice
-   and App Store privacy responses. Complete the encryption determination.
-5. Review the [listing draft](StoreListing.en-AU.json), screenshots and
-   [App Review notes](AppReviewNotes.md).
-6. Upload the signed packages. Require successful Apple processing before
-   selecting each platform build for review.
+Upload the Mac package and screenshots first, then prepare iOS and tvOS in
+that order. Verify Apple's processing and select each build. Complete the
+export compliance determination if Apple prompts for it. The owner confirmed
+that mainland China filing records exist. Obtain the records, then complete
+the applicable App Compliance fields. Keep the restoration publication separate.
 
 [Hosted service evidence](HostedServices.md) confirms public endpoints respond.
 It does not establish signed cross-device save recovery, Game Center board

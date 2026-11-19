@@ -1,0 +1,808 @@
+{
+  "kind": "resource-only-mobile-game-center-refresh",
+  "compiledSourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+  "resourcePackagingCommit": "043a43dca9b701c76891d2f81d078ed2df4d6d1d",
+  "compilerRun": false,
+  "engineChanged": false,
+  "uploaded": false,
+  "helperSHA256": "65230dc2584a0476c7e98322621bb0a70263c9b50b775046c4efef72976e6dce",
+  "resources": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/mobile-resources",
+  "resourceFiles": 2298,
+  "resourceDelta": [
+    {
+      "path": "GameCenter/app-store-connect-boards.json",
+      "beforeSHA256": "03b92719cc725f1814194c78a2c2aac922915de2e8ee8aff1cda4a4102f7203e",
+      "afterSHA256": "eff045bf4cf559ea3ad7a168d54009a4e240838190f70a6e2ed9ed22d0facb72"
+    },
+    {
+      "path": "GameCenter/leaderboards.json",
+      "beforeSHA256": "44ff4a8204e0d3728655138bad43aa0481c40c60cb9c7e092bd68a17e0263106",
+      "afterSHA256": "5e3008b0e81a870ea0dc661c6bbe188a58305f47131ba0758ace267d185cef3d"
+    },
+    {
+      "path": "ultimate-lemmix-data-inventory.json",
+      "beforeSHA256": "92feddda722477499d7916319568d450862cd22c6e0d10abee1857ca8e06eb95",
+      "afterSHA256": "83840c6186b9e03cf60b621bde4e8b4be766c05902bc1be13b444530f9c7ec0b"
+    },
+    {
+      "path": "ultimate-lemmix-mobile-resources.json",
+      "beforeSHA256": "d7b99c6a2090899aec9b0d713fe33ed35df22b0edb2dbef73f5286d809e3b652",
+      "afterSHA256": "7d345e142019ad741ba0087e369023dde10387b9cd43cd27c383527d6f86348e"
+    }
+  ],
+  "boards": 359,
+  "sets": 4,
+  "conditions": 178,
+  "namespace": "ulx.v1.",
+  "platforms": {
+    "ios": {
+      "originalArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-iOS.xcarchive",
+      "originalCompilerReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-archive-receipt.json",
+      "originalCompilerReceiptSHA256": "6a34dac7fd7c957f73d4517f511150715fb97138200c65733556e56fb0502dc9",
+      "compiledSourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+      "resourcePackagingCommit": "043a43dca9b701c76891d2f81d078ed2df4d6d1d",
+      "stagedArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/UltimateLemmix-iOS-Resources.xcarchive",
+      "preparedArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/UltimateLemmix-iOS-Store.xcarchive",
+      "originalArchiveUnchanged": true,
+      "resourceDeltaBeforeSigning": [
+        "GameCenter/app-store-connect-boards.json",
+        "GameCenter/leaderboards.json",
+        "ultimate-lemmix-data-inventory.json",
+        "ultimate-lemmix-resource-receipt.json"
+      ],
+      "executableContentUnchanged": true,
+      "codeIdentityMethod": "SHA-256 over Mach-O bytes before embedded signature, with LC_CODE_SIGNATURE size and __LINKEDIT vmsize/filesize normalised. Signature offset and all other bytes retained.",
+      "codeIdentities": {
+        "UltimateLemmixIOS": {
+          "signatureOffset": 13586656,
+          "signedCodeSHA256": "13e6e3dac239a2bd7e6f7b03f21d3364f1c365362de09d83aa85dab7d4bf1260"
+        },
+        "PlugIns/DeskClockWidget.appex/DeskClockWidget": {
+          "signatureOffset": 11150480,
+          "signedCodeSHA256": "5aa4d25ff4dea2727fd3207c0c2f8e55d1e42e2fdfe37aadf3ef59fb8daf3240"
+        }
+      },
+      "entitlementsPreserved": true,
+      "profileSHA256": {
+        "embedded.mobileprovision": "302e29610e147d2fcce947aeb03843ac35922c6e279451ecf6bf01850c24eda2",
+        "PlugIns/DeskClockWidget.appex/embedded.mobileprovision": "caac3dbe7b4f5b71037e84811ca2f0a9a64e82cfce10cdc1ef8081828f6a3a9f"
+      },
+      "resources": [
+        {
+          "bundle": ".",
+          "resourceCount": 2298
+        },
+        {
+          "bundle": "PlugIns/DeskClockWidget.appex",
+          "resourceCount": 1633
+        }
+      ],
+      "exportStatus": "verified"
+    },
+    "tvos": {
+      "originalArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-tvOS.xcarchive",
+      "originalCompilerReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-archive-receipt.json",
+      "originalCompilerReceiptSHA256": "88d63df3611b36feac27fa62cd9c14239e312cd801b8ec3a4827814d260809bb",
+      "compiledSourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+      "resourcePackagingCommit": "043a43dca9b701c76891d2f81d078ed2df4d6d1d",
+      "stagedArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/UltimateLemmix-tvOS-Resources.xcarchive",
+      "preparedArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/UltimateLemmix-tvOS-Store.xcarchive",
+      "originalArchiveUnchanged": true,
+      "resourceDeltaBeforeSigning": [
+        "GameCenter/app-store-connect-boards.json",
+        "GameCenter/leaderboards.json",
+        "ultimate-lemmix-data-inventory.json",
+        "ultimate-lemmix-resource-receipt.json"
+      ],
+      "executableContentUnchanged": true,
+      "codeIdentityMethod": "SHA-256 over Mach-O bytes before embedded signature, with LC_CODE_SIGNATURE size and __LINKEDIT vmsize/filesize normalised. Signature offset and all other bytes retained.",
+      "codeIdentities": {
+        "UltimateLemmixTVOS": {
+          "signatureOffset": 13861872,
+          "signedCodeSHA256": "776f403a1716d97096d66c9704d6c677c925ed1f93a0049c3a6c999a52bfe2cc"
+        },
+        "PlugIns/TopShelf.appex/TopShelf": {
+          "signatureOffset": 71408,
+          "signedCodeSHA256": "8e7626ccec391eb0e99231b0512449e23bae16fc570563f2f07fdadbbae77145"
+        }
+      },
+      "entitlementsPreserved": true,
+      "profileSHA256": {
+        "embedded.mobileprovision": "71cfb9226c19439c7930142269b13a10a4e64e7c4081c7dcf0a556bdb0367c05",
+        "PlugIns/TopShelf.appex/embedded.mobileprovision": "a49982e09de5b34c161c74fe66087bd4676a572ae20f513172b3f6dc9b7a549b"
+      },
+      "resources": [
+        {
+          "bundle": ".",
+          "resourceCount": 2298
+        },
+        {
+          "bundle": "PlugIns/TopShelf.appex",
+          "resourceCount": 0
+        }
+      ],
+      "exportStatus": "verified"
+    }
+  },
+  "status": "resource-only-store-exports-verified-handoff-refreshed",
+  "exportVerification": {
+    "ios": {
+      "export": {
+        "platform": "ios",
+        "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/ios-store-export/UltimateLemmixIOS.ipa",
+        "sha256": "2d76792c428849945c5763c4222841936cc735909cbb2ba15c2588294256e8d7",
+        "bytes": 50180333,
+        "checkedUTC": "2026-11-19T08:24:36.264287+00:00",
+        "bundles": [
+          {
+            "bundleID": "academy.glasscode.ultimatelemmix",
+            "version": "2.4.2",
+            "build": "108",
+            "authorities": [
+              "Apple Distribution: Erik Veland (54WU29TRTY)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ],
+            "entitlements": {
+              "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix",
+              "beta-reports-active": true,
+              "com.apple.developer.game-center": true,
+              "com.apple.developer.icloud-container-environment": "Production",
+              "com.apple.developer.icloud-container-identifiers": [
+                "iCloud.academy.glasscode.lemmings"
+              ],
+              "com.apple.developer.icloud-services": [
+                "CloudDocuments",
+                "CloudKit"
+              ],
+              "com.apple.developer.team-identifier": "54WU29TRTY",
+              "com.apple.developer.ubiquity-container-identifiers": [
+                "iCloud.academy.glasscode.lemmings"
+              ],
+              "com.apple.security.application-groups": [
+                "group.academy.glasscode.lemmings"
+              ],
+              "get-task-allow": false
+            },
+            "profileUUID": "34405246-06a5-4ba2-8854-6e50f3cb7024",
+            "profileName": "iOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix",
+            "profileExpires": "2027-10-10T13:17:05",
+            "privacyManifest": {
+              "NSPrivacyAccessedAPITypes": [
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "CA92.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "35F9.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "C617.1",
+                    "3B52.1"
+                  ]
+                }
+              ],
+              "NSPrivacyCollectedDataTypes": [
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeDeviceID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeGameplayContent",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeProductInteraction",
+                  "NSPrivacyCollectedDataTypeLinked": false,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAnalytics"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                }
+              ],
+              "NSPrivacyTracking": false,
+              "NSPrivacyTrackingDomains": []
+            }
+          },
+          {
+            "bundleID": "academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+            "version": "2.4.2",
+            "build": "108",
+            "authorities": [
+              "Apple Distribution: Erik Veland (54WU29TRTY)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ],
+            "entitlements": {
+              "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+              "beta-reports-active": true,
+              "com.apple.developer.team-identifier": "54WU29TRTY",
+              "com.apple.security.application-groups": [
+                "group.academy.glasscode.lemmings"
+              ],
+              "get-task-allow": false
+            },
+            "profileUUID": "88486ca9-eaee-458b-8bfa-e2577f3914e6",
+            "profileName": "iOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+            "profileExpires": "2027-10-10T13:17:05",
+            "privacyManifest": {
+              "NSPrivacyAccessedAPITypes": [
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "CA92.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "35F9.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "C617.1",
+                    "3B52.1"
+                  ]
+                }
+              ],
+              "NSPrivacyCollectedDataTypes": [
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeDeviceID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeGameplayContent",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeProductInteraction",
+                  "NSPrivacyCollectedDataTypeLinked": false,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAnalytics"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                }
+              ],
+              "NSPrivacyTracking": false,
+              "NSPrivacyTrackingDomains": []
+            }
+          }
+        ],
+        "resources": [
+          {
+            "bundle": ".",
+            "resourceCount": 2298
+          },
+          {
+            "bundle": "PlugIns/DeskClockWidget.appex",
+            "resourceCount": 1633
+          }
+        ],
+        "resourceSignatures": [
+          {
+            "path": "LemmingsNativePort_NxlvKit.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "LemmingsNativePort_NxlvKit.bundle/Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "PlugIns/DeskClockWidget.appex/LemmingsNativePort_NxlvKit.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "PlugIns/DeskClockWidget.appex/LemmingsNativePort_NxlvKit.bundle/Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          }
+        ],
+        "appStoreInfoProductErrors": [],
+        "helperSHA256": "78e94af8a97a05be997e25e8f103c58457bd7049434c270ae0f06a8cdd539e65",
+        "allChecksPassed": true
+      },
+      "baselineIPA": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-store-export/UltimateLemmixIOS.ipa",
+      "baselineIPASHA256": "ed7d6d3afd733ed1c9d71301270b75101ed5722779e4054629e1e52e383d2b1f",
+      "exportedCodeUnchanged": true,
+      "codeIdentities": {
+        "Payload/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex/DeskClockWidget": {
+          "signatureOffset": 11150480,
+          "signedCodeSHA256": "5aa4d25ff4dea2727fd3207c0c2f8e55d1e42e2fdfe37aadf3ef59fb8daf3240"
+        },
+        "Payload/UltimateLemmixIOS.app/UltimateLemmixIOS": {
+          "signatureOffset": 13586656,
+          "signedCodeSHA256": "13e6e3dac239a2bd7e6f7b03f21d3364f1c365362de09d83aa85dab7d4bf1260"
+        }
+      },
+      "identicalSourceDebugSymbols": {
+        "DeskClockWidget.appex.dSYM/Contents/Info.plist": "e03c711c494744b1988a2ec29cf6409b287253c7eff02f60b2f8ba478e1aeb04",
+        "DeskClockWidget.appex.dSYM/Contents/Resources/DWARF/DeskClockWidget": "9607e989455a7ec9daadd11d3e9fdfe8a983acf6ef05baf197868f3645336795",
+        "DeskClockWidget.appex.dSYM/Contents/Resources/Relocations/aarch64/DeskClockWidget.yml": "ec0a8b12d53f5e584381f233189fd80db74d37b72a0704186f557654bdcc2c6c",
+        "UltimateLemmixIOS.app.dSYM/Contents/Info.plist": "aa1442519c96d676699b315afa94bca4f752b26454a0c83255a857a36aaf6363",
+        "UltimateLemmixIOS.app.dSYM/Contents/Resources/DWARF/UltimateLemmixIOS": "ca9671320eaac1d51d6fcf8d744da9b59b65df813f3d6788bcce1a026a8152f1",
+        "UltimateLemmixIOS.app.dSYM/Contents/Resources/Relocations/aarch64/UltimateLemmixIOS.yml": "630bd9f51ab787137ce2dde2cb9f8c396deeed6997ccbf29f0bd95a950ac7dd2"
+      },
+      "regeneratedSymbolExports": {
+        "Symbols/3B0977ED-D0F3-332B-90D0-FF068EFFD993.symbols": {
+          "sourceDWARF": "UltimateLemmixIOS.app.dSYM/Contents/Resources/DWARF/UltimateLemmixIOS",
+          "sourceSHA256": "ca9671320eaac1d51d6fcf8d744da9b59b65df813f3d6788bcce1a026a8152f1"
+        },
+        "Symbols/676F6E91-F35D-3542-95AE-CE326D8F752B.symbols": {
+          "sourceDWARF": "DeskClockWidget.appex.dSYM/Contents/Resources/DWARF/DeskClockWidget",
+          "sourceSHA256": "9607e989455a7ec9daadd11d3e9fdfe8a983acf6ef05baf197868f3645336795"
+        }
+      },
+      "packagedFileSetUnchanged": true,
+      "exactPackagedDelta": [
+        {
+          "path": "Payload/UltimateLemmixIOS.app/GameCenter/app-store-connect-boards.json",
+          "beforeSHA256": "03b92719cc725f1814194c78a2c2aac922915de2e8ee8aff1cda4a4102f7203e",
+          "afterSHA256": "eff045bf4cf559ea3ad7a168d54009a4e240838190f70a6e2ed9ed22d0facb72"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/GameCenter/leaderboards.json",
+          "beforeSHA256": "44ff4a8204e0d3728655138bad43aa0481c40c60cb9c7e092bd68a17e0263106",
+          "afterSHA256": "5e3008b0e81a870ea0dc661c6bbe188a58305f47131ba0758ace267d185cef3d"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/LemmingsNativePort_NxlvKit.bundle/Localization.bundle/_CodeSignature/CodeSignature",
+          "beforeSHA256": "dd6e2a6fb320daf844f3b48e72d206bc025a9a0091774fa51e881bef6ec67e00",
+          "afterSHA256": "9d0e29000d145a605f45bfa0eb5f483fe853c447c9f0b38bad9696f8d4f3b160"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/LemmingsNativePort_NxlvKit.bundle/_CodeSignature/CodeDirectory",
+          "beforeSHA256": "3e2707145fa0e3c7ad3cc68ae50b1defa881c4ebbaaa7a0d6ed7c10de84a7efe",
+          "afterSHA256": "7add28b877814f8f6110d5a8f716edf303a53854b686513ca1ca2c37f931a8eb"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/LemmingsNativePort_NxlvKit.bundle/_CodeSignature/CodeResources",
+          "beforeSHA256": "880959c85559a3ae5e7ddaa8bc993b30d14464505fc596677e51e4f1c59cb0e0",
+          "afterSHA256": "1ef6f9cf1377b59c252f3b478a629b26f65617048b2353e79e5b5f5dc2fbf682"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/LemmingsNativePort_NxlvKit.bundle/_CodeSignature/CodeSignature",
+          "beforeSHA256": "97722eb628ebcbfd0ed8a9f1178db047f06a578abd4f71a03a0714f4a81caf63",
+          "afterSHA256": "1dddf47f4f0347bd4b6e06f01b65820dedb01ad11dde1fcc9801aa395394ee30"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/Localization.bundle/_CodeSignature/CodeSignature",
+          "beforeSHA256": "dd6e2a6fb320daf844f3b48e72d206bc025a9a0091774fa51e881bef6ec67e00",
+          "afterSHA256": "9d0e29000d145a605f45bfa0eb5f483fe853c447c9f0b38bad9696f8d4f3b160"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex/DeskClockWidget",
+          "beforeSHA256": "21d6453908af7ef7e48ed1dad1446fa01b9d76130ff0c0d49c46e502dece4812",
+          "afterSHA256": "994707795a7f11cdf2a57c4112ceba2437db3b636de2cd52b748837e7293274f"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex/LemmingsNativePort_NxlvKit.bundle/Localization.bundle/_CodeSignature/CodeSignature",
+          "beforeSHA256": "dd6e2a6fb320daf844f3b48e72d206bc025a9a0091774fa51e881bef6ec67e00",
+          "afterSHA256": "9d0e29000d145a605f45bfa0eb5f483fe853c447c9f0b38bad9696f8d4f3b160"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex/LemmingsNativePort_NxlvKit.bundle/_CodeSignature/CodeDirectory",
+          "beforeSHA256": "3e2707145fa0e3c7ad3cc68ae50b1defa881c4ebbaaa7a0d6ed7c10de84a7efe",
+          "afterSHA256": "7add28b877814f8f6110d5a8f716edf303a53854b686513ca1ca2c37f931a8eb"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex/LemmingsNativePort_NxlvKit.bundle/_CodeSignature/CodeResources",
+          "beforeSHA256": "880959c85559a3ae5e7ddaa8bc993b30d14464505fc596677e51e4f1c59cb0e0",
+          "afterSHA256": "1ef6f9cf1377b59c252f3b478a629b26f65617048b2353e79e5b5f5dc2fbf682"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex/LemmingsNativePort_NxlvKit.bundle/_CodeSignature/CodeSignature",
+          "beforeSHA256": "97722eb628ebcbfd0ed8a9f1178db047f06a578abd4f71a03a0714f4a81caf63",
+          "afterSHA256": "6d9956c8c76765af95d23688e10e6d7b01f5727442b0f82ae65f70205d73e5e3"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/PlugIns/DeskClockWidget.appex/_CodeSignature/CodeResources",
+          "beforeSHA256": "e5551fd48007c6d635d3bf1f92a8cc464dace4d8e947ea5526122f19a2983702",
+          "afterSHA256": "d47fed194d3a4bdd50ddde365f49b99e78a01119d98bb2fabe8a8b2a3f47ea4e"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/UltimateLemmixIOS",
+          "beforeSHA256": "52b076f60953d48563f757282df43a134187b3b1b4014c45b4c241b5f30f9657",
+          "afterSHA256": "689fb9ed188acebcfc273abeedf17d4eb1966076928c7d754f4345f6fa9e531d"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/_CodeSignature/CodeResources",
+          "beforeSHA256": "9a2e2c5030e3d012b25040278a85edbbf27c2d395aaddd02832bb1363d7d9105",
+          "afterSHA256": "466fe61b06dd51b5e6bf69ab5a74ea97be46c5235f127f4984f7583843212640"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/ultimate-lemmix-data-inventory.json",
+          "beforeSHA256": "92feddda722477499d7916319568d450862cd22c6e0d10abee1857ca8e06eb95",
+          "afterSHA256": "83840c6186b9e03cf60b621bde4e8b4be766c05902bc1be13b444530f9c7ec0b"
+        },
+        {
+          "path": "Payload/UltimateLemmixIOS.app/ultimate-lemmix-resource-receipt.json",
+          "beforeSHA256": "3f1af0a465142078fbdbf7e76f8edbc2e2c2f744d9938d9277b6eec99c0ba2e6",
+          "afterSHA256": "55799c5644b915aa0221636163bdb914b5a572b88e7a70cd2f741158e3fb2d12"
+        },
+        {
+          "path": "Symbols/3B0977ED-D0F3-332B-90D0-FF068EFFD993.symbols",
+          "beforeSHA256": "aa4203e2ee0a12b8099b967fe7b96c1f209f09702ef01f1df93ececa861b5795",
+          "afterSHA256": "0f780169ab5c2b926a939780e50a7d3e47873874b63dc38df429f29a241d9009"
+        },
+        {
+          "path": "Symbols/676F6E91-F35D-3542-95AE-CE326D8F752B.symbols",
+          "beforeSHA256": "78eee7efc8855cb6279a736f13278adaac600af0bedf9b399487e683c1458bc5",
+          "afterSHA256": "3bedd5f860d458bdd11db78eb3355525d3b1c23f6f26e498e8492fd59b7cc909"
+        }
+      ],
+      "namespace": "ulx.v1.",
+      "boards": 359,
+      "sets": 4,
+      "conditions": 178
+    },
+    "tvos": {
+      "export": {
+        "platform": "tvos",
+        "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/tvos-store-export/UltimateLemmixTVOS.ipa",
+        "sha256": "ea74251f9d2ca1f5df2afcf29f3cc8c3c1ac2c5ea94513f323e328c06212c96f",
+        "bytes": 34356582,
+        "checkedUTC": "2026-11-19T08:25:38.818506+00:00",
+        "bundles": [
+          {
+            "bundleID": "academy.glasscode.ultimatelemmix",
+            "version": "2.4.2",
+            "build": "108",
+            "authorities": [
+              "Apple Distribution: Erik Veland (54WU29TRTY)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ],
+            "entitlements": {
+              "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix",
+              "aps-environment": "production",
+              "beta-reports-active": true,
+              "com.apple.developer.game-center": true,
+              "com.apple.developer.icloud-container-environment": "Production",
+              "com.apple.developer.icloud-container-identifiers": [
+                "iCloud.academy.glasscode.lemmings"
+              ],
+              "com.apple.developer.icloud-services": [
+                "CloudKit"
+              ],
+              "com.apple.developer.team-identifier": "54WU29TRTY",
+              "com.apple.security.application-groups": [
+                "group.academy.glasscode.lemmings"
+              ],
+              "get-task-allow": false
+            },
+            "profileUUID": "5e0e618d-44a2-4abb-a01a-1145038dec7f",
+            "profileName": "tvOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix",
+            "profileExpires": "2027-10-10T13:17:05",
+            "privacyManifest": {
+              "NSPrivacyAccessedAPITypes": [
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "CA92.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "35F9.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "C617.1",
+                    "3B52.1"
+                  ]
+                }
+              ],
+              "NSPrivacyCollectedDataTypes": [
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeDeviceID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeGameplayContent",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeProductInteraction",
+                  "NSPrivacyCollectedDataTypeLinked": false,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAnalytics"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                }
+              ],
+              "NSPrivacyTracking": false,
+              "NSPrivacyTrackingDomains": []
+            }
+          },
+          {
+            "bundleID": "academy.glasscode.ultimatelemmix.tvos.TopShelf",
+            "version": "2.4.2",
+            "build": "108",
+            "authorities": [
+              "Apple Distribution: Erik Veland (54WU29TRTY)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ],
+            "entitlements": {
+              "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix.tvos.TopShelf",
+              "beta-reports-active": true,
+              "com.apple.developer.team-identifier": "54WU29TRTY",
+              "com.apple.security.application-groups": [
+                "group.academy.glasscode.lemmings"
+              ],
+              "get-task-allow": false
+            },
+            "profileUUID": "06732da4-990a-411d-b2d8-dfb5822afe19",
+            "profileName": "tvOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix.tvos.TopShelf",
+            "profileExpires": "2027-10-10T13:17:05",
+            "privacyManifest": null
+          }
+        ],
+        "resources": [
+          {
+            "bundle": ".",
+            "resourceCount": 2298
+          },
+          {
+            "bundle": "PlugIns/TopShelf.appex",
+            "resourceCount": 0
+          }
+        ],
+        "resourceSignatures": [
+          {
+            "path": "LemmingsNativePort_NxlvKit.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "LemmingsNativePort_NxlvKit.bundle/Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          }
+        ],
+        "appStoreInfoProductErrors": [],
+        "helperSHA256": "78e94af8a97a05be997e25e8f103c58457bd7049434c270ae0f06a8cdd539e65",
+        "allChecksPassed": true
+      },
+      "baselineIPA": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-store-export/UltimateLemmixTVOS.ipa",
+      "baselineIPASHA256": "bfa391e196aa71b4bef0290cc73f6d0995aaaa79479d74c217ba01c5564799d2",
+      "exportedCodeUnchanged": true,
+      "codeIdentities": {
+        "Payload/UltimateLemmixTVOS.app/PlugIns/TopShelf.appex/TopShelf": {
+          "signatureOffset": 71408,
+          "signedCodeSHA256": "8e7626ccec391eb0e99231b0512449e23bae16fc570563f2f07fdadbbae77145"
+        },
+        "Payload/UltimateLemmixTVOS.app/UltimateLemmixTVOS": {
+          "signatureOffset": 13861872,
+          "signedCodeSHA256": "776f403a1716d97096d66c9704d6c677c925ed1f93a0049c3a6c999a52bfe2cc"
+        }
+      },
+      "identicalSourceDebugSymbols": {
+        "UltimateLemmixTVOS.app.dSYM/Contents/Info.plist": "aa1442519c96d676699b315afa94bca4f752b26454a0c83255a857a36aaf6363",
+        "UltimateLemmixTVOS.app.dSYM/Contents/Resources/DWARF/UltimateLemmixTVOS": "18f8346e38087ae4887816056c84c3f692adf1038e83bb8e1ef9578843bdfae6",
+        "UltimateLemmixTVOS.app.dSYM/Contents/Resources/Relocations/aarch64/UltimateLemmixTVOS.yml": "07918f9d1e16730b88559472b87081bb0ee83a10d77461d033d7380bf995da03",
+        "TopShelf.appex.dSYM/Contents/Info.plist": "5b8d6e3ee1f8bf2da75c5791b69d047e2146266830a3e53e321491e53739497f",
+        "TopShelf.appex.dSYM/Contents/Resources/DWARF/TopShelf": "ffc00f18d61f1794802c644550d83b5a91fb1116339728f2a197d5cbe2538691",
+        "TopShelf.appex.dSYM/Contents/Resources/Relocations/aarch64/TopShelf.yml": "fa3304936178062314ff1bc20720d60df28f602009827ec9957530cc550dbdb2"
+      },
+      "regeneratedSymbolExports": {
+        "Symbols/4D64DA85-2D93-3247-B802-B258B0FF8950.symbols": {
+          "sourceDWARF": "UltimateLemmixTVOS.app.dSYM/Contents/Resources/DWARF/UltimateLemmixTVOS",
+          "sourceSHA256": "18f8346e38087ae4887816056c84c3f692adf1038e83bb8e1ef9578843bdfae6"
+        },
+        "Symbols/7B7D648F-6EFC-3B7A-8441-0FBD736BEFB6.symbols": {
+          "sourceDWARF": "TopShelf.appex.dSYM/Contents/Resources/DWARF/TopShelf",
+          "sourceSHA256": "ffc00f18d61f1794802c644550d83b5a91fb1116339728f2a197d5cbe2538691"
+        }
+      },
+      "packagedFileSetUnchanged": true,
+      "exactPackagedDelta": [
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/GameCenter/app-store-connect-boards.json",
+          "beforeSHA256": "03b92719cc725f1814194c78a2c2aac922915de2e8ee8aff1cda4a4102f7203e",
+          "afterSHA256": "eff045bf4cf559ea3ad7a168d54009a4e240838190f70a6e2ed9ed22d0facb72"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/GameCenter/leaderboards.json",
+          "beforeSHA256": "44ff4a8204e0d3728655138bad43aa0481c40c60cb9c7e092bd68a17e0263106",
+          "afterSHA256": "5e3008b0e81a870ea0dc661c6bbe188a58305f47131ba0758ace267d185cef3d"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/LemmingsNativePort_NxlvKit.bundle/Localization.bundle/_CodeSignature/CodeSignature",
+          "beforeSHA256": "9961e55d8f6d4b445d985c5881d4999af0ce11ce24eaef4731c4c5f7e7243920",
+          "afterSHA256": "740de7be6262ba888d77785e9faebcdbde5c1926dd10f99c81a49dc7e45fa290"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/LemmingsNativePort_NxlvKit.bundle/_CodeSignature/CodeDirectory",
+          "beforeSHA256": "0b74cb56e34dc02c1b24a130932ebc62db71ea5671cffab0cb1b45848ef145e5",
+          "afterSHA256": "05bc775807949b6738468c6e1917773c6e631378fd43b85c900415fc5968fe45"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/LemmingsNativePort_NxlvKit.bundle/_CodeSignature/CodeResources",
+          "beforeSHA256": "826fe2679b46a0a02fa7da94157ba2da3b84f49d64614784ed2c076ee21b8ee3",
+          "afterSHA256": "1a07d6a7df0de050cecdce2d3e3e11e4f7fcfe7bc0b33b844ce2b4935ce2a2b7"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/LemmingsNativePort_NxlvKit.bundle/_CodeSignature/CodeSignature",
+          "beforeSHA256": "994cd72013b3d63a67814153eab948a39189d931e3f93acafab069583be57be1",
+          "afterSHA256": "423eb126ea38ce814686f92b0754312175c95e9f82538699423342641bb59303"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/Localization.bundle/_CodeSignature/CodeSignature",
+          "beforeSHA256": "9961e55d8f6d4b445d985c5881d4999af0ce11ce24eaef4731c4c5f7e7243920",
+          "afterSHA256": "740de7be6262ba888d77785e9faebcdbde5c1926dd10f99c81a49dc7e45fa290"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/PlugIns/TopShelf.appex/TopShelf",
+          "beforeSHA256": "9daab244358c110c5c135ad6ec2908ca1c9cbacd197b8383e41cd52b2ffeb88c",
+          "afterSHA256": "8636d776f2ccc1677c2fa2ff9d8289d679c24b0aaa560eaf62bf6b04b562d284"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/UltimateLemmixTVOS",
+          "beforeSHA256": "bfb8b6adcdb8c17098e6b9f5a28a58cd9d77c1179ade35bb0560ee453a9a2ef4",
+          "afterSHA256": "f1bc32f55abaf11c6cdbbfddafc046e05108e12e503c430d7b82c04a168ec9bd"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/_CodeSignature/CodeResources",
+          "beforeSHA256": "de0fc073197f1e29419fdd549ec230b323efefdc44e8872acee0f423bae90746",
+          "afterSHA256": "e8824c78c34d5eb4de3336ee86e3adcce3957c401cc898dd294b832c00b42267"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/ultimate-lemmix-data-inventory.json",
+          "beforeSHA256": "92feddda722477499d7916319568d450862cd22c6e0d10abee1857ca8e06eb95",
+          "afterSHA256": "83840c6186b9e03cf60b621bde4e8b4be766c05902bc1be13b444530f9c7ec0b"
+        },
+        {
+          "path": "Payload/UltimateLemmixTVOS.app/ultimate-lemmix-resource-receipt.json",
+          "beforeSHA256": "3f1af0a465142078fbdbf7e76f8edbc2e2c2f744d9938d9277b6eec99c0ba2e6",
+          "afterSHA256": "55799c5644b915aa0221636163bdb914b5a572b88e7a70cd2f741158e3fb2d12"
+        },
+        {
+          "path": "Symbols/4D64DA85-2D93-3247-B802-B258B0FF8950.symbols",
+          "beforeSHA256": "d84ea20d6cafb501e015d165264edb315ce45ffb883e20e6831947e9156bf4ed",
+          "afterSHA256": "9c03314060784daa258107cd6e84afc189c8d157ac7230e4aacc08b9e77cd8c8"
+        },
+        {
+          "path": "Symbols/7B7D648F-6EFC-3B7A-8441-0FBD736BEFB6.symbols",
+          "beforeSHA256": "a3085c6b1eb5267e68d378bdd00c8be4dcee3e21037c78f35b8e255f97efa9d0",
+          "afterSHA256": "1f78da1941ef58ae96e1b7e2be2eb2595a57e62736aeb92fbf5e8b5961c4fd75"
+        }
+      ],
+      "namespace": "ulx.v1.",
+      "boards": 359,
+      "sets": 4,
+      "conditions": 178
+    }
+  },
+  "handoffHistory": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/Superseded/mobile-before-gamecenter-ulx-20261119-183758",
+  "handoff": [
+    {
+      "platform": "ios",
+      "label": "iOS",
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/ios-store-export/UltimateLemmixIOS.ipa",
+      "destination": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff/iOS/Ultimate Lemmix 2.4.2 (108).ipa",
+      "sha256": "2d76792c428849945c5763c4222841936cc735909cbb2ba15c2588294256e8d7",
+      "bytes": 50180333
+    },
+    {
+      "platform": "tvos",
+      "label": "Apple TV",
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/tvos-store-export/UltimateLemmixTVOS.ipa",
+      "destination": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff/Apple TV/Ultimate Lemmix 2.4.2 (108).ipa",
+      "sha256": "ea74251f9d2ca1f5df2afcf29f3cc8c3c1ac2c5ea94513f323e328c06212c96f",
+      "bytes": 34356582
+    }
+  ],
+  "previousHandoff": [
+    {
+      "path": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/Superseded/mobile-before-gamecenter-ulx-20261119-183758/iOS/Ultimate Lemmix 2.4.2 (108).ipa",
+      "sha256": "ed7d6d3afd733ed1c9d71301270b75101ed5722779e4054629e1e52e383d2b1f",
+      "bytes": 50180093
+    },
+    {
+      "path": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/Superseded/mobile-before-gamecenter-ulx-20261119-183758/Apple TV/Ultimate Lemmix 2.4.2 (108).ipa",
+      "sha256": "bfa391e196aa71b4bef0290cc73f6d0995aaaa79479d74c217ba01c5564799d2",
+      "bytes": 34356381
+    }
+  ],
+  "restorationZIPChanged": false,
+  "sharedManifestsChanged": false,
+  "READMEChanged": false
+}

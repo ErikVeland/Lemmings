@@ -3,15 +3,13 @@
 Source audit: 19 November 2026. Candidate: 2.4.2, build 108.
 App Store listing: `6836347807`, bundle ID `academy.glasscode.ultimatelemmix`, shared by Mac, iOS and tvOS.
 
-These are proposed answers and configuration requirements. This audit did not
-save or verify answers in App Store Connect. Treat the entries below as unsaved
-until the account operator confirms them. Package export and website publication
-are complete according to the current release handoff. Earlier dossier claims
-that the website is unpublished are historical.
+Use the [current submission record](README.md#remaining-submission-work)
+for saved account fields and remaining work. The tables below document the
+source audit behind the App Privacy and age rating responses.
 
-## Proposed App Privacy answers
+## Published App Privacy responses
 
-Select **Yes, we collect data from this app**. The three main-app privacy
+The listing declares that the app collects data. The three main-app privacy
 manifests contain the following declarations:
 
 | App Store data type | Linked to the user | Purpose | Tracking |
@@ -19,7 +17,7 @@ manifests contain the following declarations:
 | User ID | Yes | App Functionality | No |
 | Device ID | Yes | App Functionality | No |
 | Gameplay Content | Yes | App Functionality | No |
-| Product Interaction | No, subject to the processing check below | Analytics | No |
+| Product Interaction | No | Analytics | No |
 
 Sources: [Mac privacy manifest](../../../../Resources/UltimateLemmix/PrivacyInfo.xcprivacy),
 [iOS privacy manifest](../../../../Apps/UltimateLemmixIOS/PrivacyInfo.xcprivacy) and
@@ -116,17 +114,16 @@ Game Center and contains 178 ranked Classic configurations. The prepared
 contains 359 boards: 178 rescue boards, 178 fastest-clear boards and three career
 boards. Its four sets contain 100, 100, 100 and 59 boards.
 
-The career IDs are `ul.v1.career.stars`, `ul.v1.career.cleared` and
-`ul.v1.career.three_star`. Rescue and career scores descend. Fastest-clear scores
+The Lemmix packages use `ulx.v1.career.stars`, `ulx.v1.career.cleared` and
+`ulx.v1.career.three_star`. Rescue and career scores descend. Fastest-clear scores
 ascend and use positive milliseconds. Keep the exact IDs and score rules.
 The catalogue contains no starter-level entries. A starter-only review cannot
 demonstrate those imported-content level boards.
 
-**Account verification remains open.** The setup manifest still names
-`academy.glasscode.lemmings`. Use its board definitions for comparison, but do
-not apply its product identity to Lemmix. Historical Lemmings activation receipts
-do not prove configuration for app `6836347807`. Do not group or merge the two
-products without a separate owner decision.
+The refreshed package manifest carries the Lemmix app identity and uses
+`ulx.v1.` throughout. The shared source manifest retains the Lemmings
+identifiers. Compare the Lemmix account with the exported setup JSON in the
+handoff. Full board configuration and live acceptance remain open.
 
 Apple permits 500 boards with sets, with at most 100 boards in each set.
 The prepared configuration fits those limits. Components require review before

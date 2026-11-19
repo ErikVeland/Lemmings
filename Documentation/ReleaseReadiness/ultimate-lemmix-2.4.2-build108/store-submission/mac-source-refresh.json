@@ -1,11 +1,11 @@
 {
   "checkedDate": "2026-11-19",
-  "status": "store-export-verified-handoff-refreshed",
+  "status": "store-export-verified-game-center-namespace-refreshed",
   "sourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
   "sharedSourceFingerprint": "591aabf1c1ae27aff8960c9092c63e98eb4199529d6fe7b3830238cbf80d3f7e",
   "sourceSnapshotVerified": true,
   "sourceFilesChecked": 570,
-  "archive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac/Ultimate Lemmix.xcarchive",
+  "archive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mac-game-center/Ultimate Lemmix.xcarchive",
   "architectures": [
     "arm64",
     "x86_64"
@@ -19,7 +19,7 @@
   "previousSignedPackagePreserved": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac-before-ci-compatibility-20261119/Export/Ultimate Lemmix.pkg",
   "handoffPackage": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff/Mac/Ultimate Lemmix 2.4.2 (108).pkg",
   "handoffPackageChanged": true,
-  "handoffPackageSHA256": "124bacf89b97ef6bc39da05e19fdbe7fc10948b421413d5c7c3671de8fff2791",
+  "handoffPackageSHA256": "6bb2f828a6bbb677baccb6d68c95eb8684ef8305c325ade265521298636d70e2",
   "presentationBytesEqual": true,
   "presentationByteCount": 9600,
   "presentationSHA256": "9483b3013bdaaaaafdebf56fced501c71cb8b4e99973f47c057241116ee28a78",
@@ -29,16 +29,16 @@
   "accountOrKeychainChangedByThisTask": false,
   "exportRetryRequiresCompilation": false,
   "buildLog": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac/build-ci-compatibility.log",
-  "exportLog": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac/export.log",
-  "buildEvidence": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac/build-evidence.json",
+  "exportLog": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mac-game-center/export.log",
+  "buildEvidence": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mac-game-center/build-evidence.json",
   "computerLockedWhenAccessFailed": true,
-  "exportVerificationCommit": "6c1d19d9b2b6048de044fc04d2a6fd2243daebba",
+  "exportVerificationCommit": "043a43dca9b701c76891d2f81d078ed2df4d6d1d",
   "sourceInputsMatchExportCommit": true,
-  "package": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/mac/Export/Ultimate Lemmix.pkg",
-  "packageBytes": 42622656,
-  "packageSHA256": "124bacf89b97ef6bc39da05e19fdbe7fc10948b421413d5c7c3671de8fff2791",
-  "previousHandoffPackage": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/Superseded/Mac before source refresh/Ultimate Lemmix 2.4.2 (108).pkg",
-  "previousHandoffPackageSHA256": "9010fcb80bd8c905dbdb402e8b9c24c4c937aeb0f165936f00baf61cfd448920",
+  "package": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mac-game-center/Export/Ultimate Lemmix.pkg",
+  "packageBytes": 42623057,
+  "packageSHA256": "6bb2f828a6bbb677baccb6d68c95eb8684ef8305c325ade265521298636d70e2",
+  "previousHandoffPackage": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/Superseded/Mac before Game Center namespace/Ultimate Lemmix 2.4.2 (108).pkg",
+  "previousHandoffPackageSHA256": "124bacf89b97ef6bc39da05e19fdbe7fc10948b421413d5c7c3671de8fff2791",
   "appStoreAnalysisErrors": [],
   "distributionSignaturesAndEntitlementsVerified": true,
   "resourceInventoryVerified": true,
@@ -52,5 +52,7 @@
     "MacWasLocked": true,
     "accountDeletionEstablished": false,
     "resolution": "User unlocked the Mac and signed into Xcode. Export-only retry passed."
-  }
+  },
+  "currentPackageEvidence": "mac-game-center-namespace.json",
+  "resourceSourceCommit": "043a43dca9b701c76891d2f81d078ed2df4d6d1d"
 }

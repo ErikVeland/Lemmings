@@ -1,9 +1,9 @@
 {
   "platform": "ios",
-  "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-store-export/UltimateLemmixIOS.ipa",
-  "sha256": "ed7d6d3afd733ed1c9d71301270b75101ed5722779e4054629e1e52e383d2b1f",
-  "bytes": 50180093,
-  "checkedUTC": "2026-11-18T22:31:59.693805+00:00",
+  "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/ios-store-export/UltimateLemmixIOS.ipa",
+  "sha256": "2d76792c428849945c5763c4222841936cc735909cbb2ba15c2588294256e8d7",
+  "bytes": 50180333,
+  "checkedUTC": "2026-11-19T08:24:36.264287+00:00",
   "bundles": [
     {
       "bundleID": "academy.glasscode.ultimatelemmix",

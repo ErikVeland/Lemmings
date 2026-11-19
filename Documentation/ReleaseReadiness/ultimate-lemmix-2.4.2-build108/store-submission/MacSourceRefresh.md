@@ -7,10 +7,10 @@ No upload or submission occurred.
 | --- | --- |
 | Version and build | 2.4.2 (108) |
 | Architectures | Apple silicon and Intel |
-| Package size | 42,622,656 bytes |
-| Package SHA-256 | `124bacf89b97ef6bc39da05e19fdbe7fc10948b421413d5c7c3671de8fff2791` |
+| Package size | 42,623,057 bytes |
+| Package SHA-256 | `6bb2f828a6bbb677baccb6d68c95eb8684ef8305c325ade265521298636d70e2` |
 | Build source commit | `1ac19c638e3f62dd48f7d4dedf17b285b961b079` |
-| Export verification commit | `6c1d19d9b2b6048de044fc04d2a6fd2243daebba` |
+| Export verification commit | `043a43dca9b701c76891d2f81d078ed2df4d6d1d` |
 | Installer signer | 3rd Party Mac Developer Installer: Erik Veland (54WU29TRTY) |
 | Apple export analysis | No product errors |
 
@@ -33,3 +33,9 @@ The complete prior build also remains in `mac-before-ci-compatibility-20261119` 
 The [package receipt](mac-store-package.json) records signing and package checks.
 The [refresh receipt](mac-source-refresh.json) records source equivalence, resolved credential access and retained artifact paths.
 Apple upload, processing and review remain separate gates.
+
+## Game Center resource update
+
+The current package uses the separate Lemmix `ulx.v1` namespace. All 359 boards and four sets remain enabled.
+Only the Game Center identities and generated resource inventory changed. No Swift compilation was needed.
+See [the namespace receipt](MacGameCenterNamespace.md) for the current package and preserved previous package.

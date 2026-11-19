@@ -1,9 +1,9 @@
 {
   "platform": "tvos",
-  "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-store-export/UltimateLemmixTVOS.ipa",
-  "sha256": "bfa391e196aa71b4bef0290cc73f6d0995aaaa79479d74c217ba01c5564799d2",
-  "bytes": 34356381,
-  "checkedUTC": "2026-11-18T22:32:33.375121+00:00",
+  "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/tvos-store-export/UltimateLemmixTVOS.ipa",
+  "sha256": "ea74251f9d2ca1f5df2afcf29f3cc8c3c1ac2c5ea94513f323e328c06212c96f",
+  "bytes": 34356582,
+  "checkedUTC": "2026-11-19T08:25:38.818506+00:00",
   "bundles": [
     {
       "bundleID": "academy.glasscode.ultimatelemmix",

@@ -41,22 +41,29 @@
       "manual release",
       "marketing URL"
     ],
-    "gameCenter": "No leaderboards configured in the new record",
+    "gameCenter": "The first Lemmix leaderboard and its set exist. Remaining configuration is in progress.",
     "buildsUploaded": false,
     "platformRecordsCreated": [
       "macOS",
       "iOS",
       "tvOS"
     ],
-    "savedFieldsPlatform": "macOS",
+    "savedFieldsPlatform": "macOS, iOS and tvOS",
     "mobileDraftVersion": {
       "requested": "2.4.2",
-      "iOSSavedVerified": false,
-      "tvOSSavedVerified": false,
-      "reason": "The signed-in Store session shows iOS and tvOS version 1.0. New iOS fields are filled but Save has not taken effect; owner handoff pending."
+      "iOSSavedVerified": true,
+      "tvOSSavedVerified": true
     },
     "unifiedMobilePackagesVerified": true,
-    "unifiedMobileEvidence": "unified-mobile-package-results.json"
+    "unifiedMobileEvidence": "unified-mobile-package-results.json",
+    "price": "Free",
+    "requestedAvailability": "All countries and regions",
+    "availabilitySelected": 175,
+    "mainlandChinaFilingRecordsReceived": false,
+    "ageRating": "13+",
+    "privacyPublicationApproved": true,
+    "privacyResponsesPublished": true,
+    "releaseMethod": "Manual on all three platform drafts"
   },
   "uploadedOrSubmitted": false,
   "website": {
@@ -71,6 +78,6 @@
   "contact": {
     "email": "erik@veland.au",
     "verifiedSource": "Published GenErik DJ site, verified in the owner task",
-    "savedToAppStoreReviewContactVerified": false
+    "savedToAppStoreReviewContactVerified": true
   }
 }
