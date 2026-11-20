@@ -288,9 +288,11 @@ import LemmingsGameArt
             }
         }
     }
-    func confirm(_ title: String, detail: String, actionTitle: String, owner: NSWindow? = nil, action: @escaping () -> Void) {
+    func confirm(_ title: String, detail: String, actionTitle: String, cancelTitle: String = L10n.text("Back"),
+                 owner: NSWindow? = nil, action: @escaping () -> Void) {
         let page = GameMenuPage(title: title, subtitle: "")
         page.setDetail(detail)
+        page.backTitle = cancelTitle
         page.onBack = { [weak page] in if let page { self.dismiss(page) } }
         page.addPrimaryAction(actionTitle) { [weak page] in
             if let page { self.dismiss(page) }

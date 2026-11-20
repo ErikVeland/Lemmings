@@ -3552,3 +3552,6 @@
 "Game assets are already downloading." = "De spelgegevens worden al gedownload.";
 "Game assets are unavailable. Try again later." = "De spelgegevens zijn niet beschikbaar. Probeer het later opnieuw.";
 "Game assets failed verification. Download them again." = "De controle van de spelgegevens is mislukt. Download ze opnieuw.";
+"Confirm your game licence" = "Bevestig je spellicentie";
+"Agree and download" = "Akkoord en downloaden";
+"To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "Om deze bestanden te downloaden moet je een geldige licentie hebben voor het oorspronkelijke spel “Lemmings” op ten minste één platform. Door “{0}” te kiezen bevestig je dat je die licentie hebt.";

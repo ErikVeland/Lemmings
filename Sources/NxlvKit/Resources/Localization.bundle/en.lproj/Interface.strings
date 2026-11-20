@@ -10645,3 +10645,6 @@
 "Game assets are already downloading." = "Game assets are already downloading.";
 "Game assets are unavailable. Try again later." = "Game assets are unavailable. Try again later.";
 "Game assets failed verification. Download them again." = "Game assets failed verification. Download them again.";
+"Confirm your game licence" = "Confirm your game licence";
+"Agree and download" = "Agree and download";
+"To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence.";

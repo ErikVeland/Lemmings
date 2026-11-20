@@ -133,6 +133,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var selectedImportKind: MobileGameDataKind = .classic
     private var importingResources = false
     private var restoringResources = false
+    private var confirmingGameAssetLicence = false {
+        didSet {
+            canvas.accessibilityViewIsModal = confirmingGameAssetLicence
+            globalNavigation.isHidden = confirmingGameAssetLicence
+        }
+    }
     private var resourceTask: Task<Void, Never>?
     private var gameAssetProgress: GameAssetPack.Progress?
     var checkpointStore: MobileCheckpointStore?
@@ -699,7 +705,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         } : []
         #endif
         canvas.usesMenuBackdrop = usesMenuOverlay
-        globalNavigation.isHidden = game != nil || route == .home || deskClockShown
+        globalNavigation.isHidden = game != nil || route == .home || deskClockShown || confirmingGameAssetLicence
         browser.showsBack = globalNavigation.isHidden
         switch route {
         case .settings, .settingsGroup, .language, .controllerMappings, .soundtrack:
@@ -1106,6 +1112,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case .soundtrack:
             canvas.page = soundtrackPage()
             canvas.preview = nil
+        case .data where confirmingGameAssetLicence:
+            var agreement = GameFrontEnd.Page(title: GameAssetPack.Licence.title, details: [GameAssetPack.Licence.detail],
+                footer: [.init("gameAssets.cancel", L10n.text("Cancel"), backNavigation: true),
+                         .init("gameAssets.agree", GameAssetPack.Licence.accept, primary: true)])
+            agreement.reading = true
+            canvas.page = agreement
+            canvas.preview = nil
         case .data:
             let download: [GameFrontEnd.Action] = MobileResourceAccess.isStore
                 ? [.init("download.gameAssets", GameAssetPack.actionTitle, enabled: !loading, primary: true)] : []
@@ -1181,7 +1194,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     func navigate(_ next: Route) {
-        guard !restoringResources else { return }
+        guard !restoringResources, !confirmingGameAssetLicence else { return }
         let position = NavigationPosition(route: route, offset: scrollView.contentOffset, focus: canvas.focusedID)
         let returning = navigationHistory.lastIndex { $0.route == next }
         let restore: NavigationPosition?
@@ -1251,6 +1264,21 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
     func handle(_ id: String) {
+        if confirmingGameAssetLicence {
+            guard id == "gameAssets.cancel" || id == "gameAssets.agree" else { return }
+            confirmingGameAssetLicence = false
+            rebuild()
+            if id == "gameAssets.agree" {
+                restoreResources { [self] library in
+                    try await GameAssetPack.shared.downloadAndInstall(progress: { [weak self] phase in
+                        guard let self, self.restoringResources else { return }
+                        self.gameAssetProgress = phase
+                        self.rebuild()
+                    }) { try library.install(directory: $0) }
+                }
+            }
+            return
+        }
         if id == "dataBack", case .downloading = gameAssetProgress { resourceTask?.cancel(); return }
         guard !restoringResources else { return }
         if handleL2Practice(id) { return }
@@ -1315,14 +1343,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             #endif
         case "data": navigate(.data)
         case "download.gameAssets":
-            guard MobileResourceAccess.isStore, !loading else { return }
-            restoreResources { [self] library in
-                try await GameAssetPack.shared.downloadAndInstall(progress: { [weak self] phase in
-                    guard let self, self.restoringResources else { return }
-                    self.gameAssetProgress = phase
-                    self.rebuild()
-                }) { try library.install(directory: $0) }
-            }
+            guard route == .data, MobileResourceAccess.isStore, !loading else { return }
+            confirmingGameAssetLicence = true
+            scrollView.setContentOffset(.zero, animated: false)
+            rebuild()
+            canvas.focusAction("gameAssets.cancel")
         case "import.resources": chooseResourceData()
         case "import": chooseGameData(for: .classic)
         case "import.classic": chooseGameData(for: .classic)

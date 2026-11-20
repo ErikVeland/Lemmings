@@ -3,8 +3,10 @@
 ## Lemmix Game Assets download — 21 November 2026
 
 The Lemmix importer on Mac and the Game Data screen on iPhone, iPad, Duo and Apple TV
-offer **Download game assets**. The button downloads the 253 MB GitHub pack, checks its
-size and SHA-256, then installs its resources through the folder importer.
+offer **Download game assets**. Each download asks the player to confirm they hold
+a valid licence for the original Lemmings game on at least one platform. **Cancel**
+has initial focus. **Agree and download** starts the 253 MB GitHub transfer.
+The app checks the size and SHA-256, then installs the resources through the folder importer.
 A player can cancel the transfer or retry a failed download. Audio settings
 list the 18 optional soundtrack libraries once the pack is active.
 

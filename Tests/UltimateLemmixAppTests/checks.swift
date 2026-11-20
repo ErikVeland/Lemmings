@@ -240,6 +240,19 @@ extension AppDelegate {
                            "An importer button has no action")
         }
         try storeImportCapture(window, name: "import-owned-games")
+        download.performClick(nil)
+        guard let agreement = GameScreen.shared.controllerPage(in: window) as? GameMenuPage,
+              agreement !== importPage, agreement.controllerInitialControl === agreement.controllerBackButton,
+              agreement.controllerBackButton.title == "Cancel",
+              storeDescendants(agreement).contains(where: { $0.accessibilityLabel()?.contains(GameAssetPack.Licence.detail) == true }),
+              GameAssetPack.Licence.detail.contains("“Lemmings”"),
+              storeDescendants(agreement).contains(where: { ($0 as? NSButton)?.title == "Agree and download" }) else {
+            throw StoreAppTestFailure(message: "The download did not ask for the original game licence with Cancel selected")
+        }
+        try storeImportCapture(window, name: "game-assets-licence")
+        agreement.controllerBackButton.performClick(nil)
+        try storeCheck(GameScreen.shared.controllerPage(in: window) === importPage && download.isEnabled,
+                       "Cancelling the licence agreement did not return to the importer")
         try storeCheck(gameChoice.accessibilityPerformPress(), "The importer game choices cannot open")
         guard let choicesPage = GameScreen.shared.controllerPage(in: window), choicesPage !== importPage,
               let sequelChoice = storeDescendants(choicesPage).compactMap({ $0 as? NSButton })

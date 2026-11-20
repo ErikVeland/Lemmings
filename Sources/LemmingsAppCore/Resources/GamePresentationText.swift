@@ -25,9 +25,9 @@ public enum GamePresentationText {
     ]
     private static let words: NSRegularExpression = {
         let names = titles.map { NSRegularExpression.escapedPattern(for: $0.0) }
-        // Paths, links and filenames keep their functional spelling.
+        // Preserve links, file paths and the quoted title of the licensed game.
         return try! NSRegularExpression(pattern:
-            #"(?:https?://|www\.)[^\s]+|(?<![\w/.])(?:"#
+            #"(?:https?://|www\.)[^\s]+|["“„«]Lemmings["”“»]|(?<![\w/.])("#
                 + (names + ["Lemmings?"]).joined(separator: "|")
                 + #")(?![\w/]|\.[A-Za-z])"#, options: [.caseInsensitive])
     }()
@@ -37,8 +37,9 @@ public enum GamePresentationText {
         let original = source as NSString
         var result = source
         for match in words.matches(in: source, range: NSRange(location: 0, length: original.length)).reversed() {
-            let word = original.substring(with: match.range)
-            guard !word.contains("://"), !word.lowercased().hasPrefix("www.") else { continue }
+            let range = match.range(at: 1)
+            guard range.location != NSNotFound else { continue }
+            let word = original.substring(with: range)
             let replacement = titles.first { $0.0.caseInsensitiveCompare(word) == .orderedSame }?.1 ?? "Lemmix"
             let value = word == word.uppercased() ? replacement.uppercased() : replacement
             if let range = Range(match.range, in: result) { result.replaceSubrange(range, with: value) }
