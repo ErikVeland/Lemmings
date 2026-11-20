@@ -64,9 +64,28 @@ def build():
 <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="96x96"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180"><link rel="preload" href="/assets/archivo-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="{assets['site.css']}">
 <script type="application/ld+json">{json.dumps(schema,ensure_ascii=False).replace('<', chr(92)+'u003c')}</script><script src="{assets['site.js']}" defer></script>
 </head><body><a class="skip" href="#main">Skip to content</a>
-<header class="site-header"><a class="brand" href="/" aria-label="Ultimate Lemmix home"><img src="/assets/favicon.png" alt="" width="34" height="34"><span>Ultimate Lemmix</span></a><nav aria-label="Primary">{links(nav,route)}</nav><a class="release-link" href="/release-notes">App Store preparations <span aria-hidden="true">↗</span></a></header>
+<header class="site-header forest-trailhead">
+  <div class="trailhead-inner">
+    <a class="trailhead-brand" href="/" aria-label="Ultimate Lemmix home"><img src="/assets/apple-touch-icon.png" alt="" width="48" height="48"><span>Ultimate Lemmix</span></a>
+    <nav class="trail-signs" aria-label="Primary">{links(nav,route)}</nav>
+    <a class="trailhead-release" href="/release-notes"{' aria-current="page"' if route == '/release-notes' else ''}>App Store preparations <span aria-hidden="true">↗</span></a>
+  </div>
+</header>
 <main id="main" tabindex="-1" class="{'home' if home else 'document'}">{body}</main>
-<footer class="site-footer"><div class="footer-scene" aria-hidden="true"><img src="/assets/walker.png" alt="" width="68" height="68"><span>Home, eventually.</span></div><div class="footer-body"><a href="/" class="footer-brand"><picture><source type="image/webp" srcset="/assets/logo-480.webp 480w, /assets/logo-960.webp 960w" sizes="290px"><img src="/assets/logo.png" alt="Ultimate Lemmix" width="2172" height="724" loading="lazy"></picture></a><nav aria-label="Footer">{links(footer,route)}</nav><div class="footer-note"><p>Made by Erik Veland.<br>A little care goes a long way.</p><p><a href="mailto:{CONFIG['contact']}">{CONFIG['contact']}</a><br>© 2026 Erik Veland</p><p>Preparing for the App Store.<br>No public release yet.</p></div></div></footer></body></html>'''
+<footer class="site-footer forest-trail-end">
+  <div class="trail-end-inner">
+    <div class="trail-end-sign">
+      <a class="trail-end-brand" href="/" aria-label="Ultimate Lemmix home"><picture><source type="image/webp" srcset="/assets/logo-480.webp 480w, /assets/logo-960.webp 960w" sizes="(max-width: 600px) 200px, 270px"><img src="/assets/logo.png" alt="Ultimate Lemmix" width="2172" height="724" loading="lazy"></picture></a>
+      <p class="trail-end-caption">Home, eventually.</p>
+    </div>
+    <nav class="trail-end-links" aria-label="Footer">
+      <div>{links(footer[:4],route)}</div>
+      <div>{links(footer[4:8],route)}</div>
+      <div>{links(footer[8:],route)}</div>
+    </nav>
+    <div class="trail-end-colophon"><p>© 2026 Erik Veland</p><a href="mailto:{CONFIG['contact']}">{CONFIG['contact']}</a><p>Preparing for the App Store.</p></div>
+  </div>
+</footer></body></html>'''
         target = OUT / ('index.html' if home else route.lstrip('/') + '/index.html')
         document = re.sub(r'/assets/(?!' + asset_stamp + '/)', asset_prefix, document)
         target.parent.mkdir(parents=True, exist_ok=True); target.write_text(document)
