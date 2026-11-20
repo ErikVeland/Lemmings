@@ -92,6 +92,10 @@ def verify_resources(app, resources, platform, signatures_required=False):
         require(source.is_file() and not source.is_symlink(), f"Missing source resource: {relative}")
         require(source.stat().st_size == row["bytes"] and digest(source) == row["sha256"],
                 f"Source resource changed: {relative}")
+    sys.path.insert(0, str(ROOT / "Tools/AlternativeAssets"))
+    from prepare_project_pixel import FONT_PREFIX, verify_packaged_font
+    verify_packaged_font({row["path"]: (resources / row["path"]).read_bytes()
+                          for row in rows if row["path"].startswith(FONT_PREFIX)})
     generated, signatures = resource_signatures(app, signatures_required)
     result = []
     for bundle in [app, *app.glob("PlugIns/*.appex")]:

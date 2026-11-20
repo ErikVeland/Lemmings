@@ -34,12 +34,11 @@ import UIKit
                      maximumScale: CGFloat = 4, alignment: NSTextAlignment = .center,
                      face: GameMenuTypography.Face = .small, alpha: CGFloat = 1, bitmapOnly: Bool = false) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        if MobileLixInterface.enabled && MobileLixInterface.text(text, in: rect,
-            colour: palette.colour, alignment: alignment, maximumScale: maximumScale) { return }
-        GamePixelTypography.draw(text, in: rect, context: context, typography: MobileGameArt.typography,
+        let displayedText = GamePresentationText.display(text)
+        GamePixelTypography.draw(displayedText, in: rect, context: context, typography: MobileGameArt.typography,
                                  palette: palette == .blue ? .blue : palette == .green ? .green : .warning, maximumScale: maximumScale,
                                  alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
-                                 face: face, alpha: alpha, bitmapOnly: bitmapOnly)
+                                 face: face, alpha: alpha, bitmapOnly: bitmapOnly || palette == .warning)
     }
 }
 
@@ -65,45 +64,76 @@ import UIKit
     required init?(coder: NSCoder) { nil }
 
     override func draw(_ rect: CGRect) {
+        let displayedText = GamePresentationText.display(text)
+        accessibilityLabel = displayedText
+        let typography = MobileGameArt.typography
         if let displayHeight, let context = UIGraphicsGetCurrentContext(),
-           GameLemmingsTypography.draw(text, in: bounds, height: displayHeight,
-            interface: MobileGameArt.typography?.interface, face: face,
+           GameLemmingsTypography.draw(displayedText, in: bounds, height: displayHeight,
+            interface: typography?.interface, face: face,
             palette: palette == .blue ? .blue : palette == .warning ? .warning : .green,
             alignment: alignment == .left ? .left : alignment == .right ? .right : .center, context: context) {
             return
-        } else if wraps, let context = UIGraphicsGetCurrentContext(), let typography = MobileGameArt.typography {
-            GameTextLayout.draw(text, in: bounds, typography: typography, face: face,
+        } else if wraps, let context = UIGraphicsGetCurrentContext(), let typography {
+            GameTextLayout.draw(displayedText, in: bounds, typography: typography, face: face,
                 palette: palette == .blue ? .blue : .green,
                 alignment: alignment == .left ? .left : alignment == .right ? .right : .center,
                 preservesCase: preservesCase, context: context)
         } else if numberOfLines <= 1 {
-            MobilePixelText.draw(text, in: bounds, palette: palette,
+            MobilePixelText.draw(displayedText, in: bounds, palette: palette,
                                  maximumScale: maximumScale, alignment: alignment, face: face)
         } else {
-            if MobileLixInterface.enabled && MobileLixInterface.paragraph(text, in: bounds,
-                colour: palette.colour, alignment: alignment,
-                maximumScale: maximumScale, maximumLines: numberOfLines) {
-                accessibilityLabel = GamePresentationText.display(text)
-                return
-            }
-            let capacity = max(1, Int(bounds.width / (6 * max(1, maximumScale))))
-            var lines = [String](), line = ""
-            for word in text.split(separator: " ") {
-                if !line.isEmpty && line.count + word.count + 1 > capacity {
-                    lines.append(line)
-                    line = ""
-                }
-                line += (line.isEmpty ? "" : " ") + String(word)
-            }
-            if !line.isEmpty { lines.append(line) }
-            let height = bounds.height / CGFloat(max(1, min(numberOfLines, lines.count)))
-            for (index, item) in lines.prefix(numberOfLines).enumerated() {
-                MobilePixelText.draw(item, in: CGRect(x: 0, y: CGFloat(index) * height,
-                    width: bounds.width, height: height), palette: palette,
-                    maximumScale: maximumScale, alignment: alignment)
+            if let context = UIGraphicsGetCurrentContext(), let typography,
+               drawCompactParagraph(displayedText, typography: typography, context: context) { return }
+            let lines = GamePixelTypography.lines(displayedText, width: bounds.width / max(1, maximumScale))
+            let shown = lines.prefix(numberOfLines)
+            let rowHeight = bounds.height / CGFloat(max(1, shown.count))
+            for (index, line) in shown.enumerated() {
+                MobilePixelText.draw(line, in: CGRect(x: bounds.minX, y: bounds.minY + CGFloat(index) * rowHeight,
+                    width: bounds.width, height: rowHeight), palette: palette,
+                    maximumScale: maximumScale, alignment: alignment, face: face)
             }
         }
-        accessibilityLabel = GamePresentationText.display(text)
+    }
+
+    /// Fits the complete caption to one bitmap size before drawing its lines.
+    private func drawCompactParagraph(_ text: String, typography: GameMenuTypography, context: CGContext) -> Bool {
+        let minimumHeight = 6
+        guard let font = typography.font(face), font.cellHeight >= minimumHeight,
+              bounds.width.isFinite, bounds.width > 0, bounds.height.isFinite, bounds.height >= CGFloat(minimumHeight) else { return false }
+        let heightCap = max(CGFloat(minimumHeight), 12 * maximumScale)
+        let maximumHeight = Int(min(CGFloat(font.cellHeight), bounds.height, heightCap))
+        let nativePitch = GameTextLayout.linePitch(text, face: face, font: font)
+        for height in stride(from: maximumHeight, through: minimumHeight, by: -1) {
+            let scale = CGFloat(height) / CGFloat(font.cellHeight)
+            let width = bounds.width / scale
+            let pitch = nativePitch * scale
+            let rowLimit = min(numberOfLines, Int(bounds.height / pitch))
+            guard rowLimit > 0 else { continue }
+            let wrapped = GameTextLayout.lines(text, width: width, face: face, font: font,
+                                               preservesCase: preservesCase)
+            if wrapped.count > rowLimit, height > minimumHeight { continue }
+
+            var lines = Array(wrapped.prefix(rowLimit))
+            if let last = lines.indices.last, wrapped.count > rowLimit {
+                let remainder = wrapped.dropFirst(last).joined(separator: " ")
+                lines[last] = GameTextLayout.truncated(remainder, width: width, face: face, font: font,
+                                                       preservesCase: preservesCase)
+            }
+            let top = bounds.midY - CGFloat(lines.count) * pitch / 2
+            let ink: GameLemmingsTypography.Ink = palette == .warning ? .warning : palette == .green ? .green : .blue
+            let align: GameMenuTypography.Alignment = alignment == .left ? .left : alignment == .right ? .right : .center
+            for (index, line) in lines.enumerated() {
+                let row = CGRect(x: bounds.minX, y: top + CGFloat(index) * pitch, width: bounds.width, height: pitch)
+                if !GameLemmingsTypography.draw(line, in: row, height: CGFloat(height), interface: typography.interface,
+                                                face: face, palette: ink, alignment: align, preservesCase: preservesCase,
+                                                context: context) {
+                    MobilePixelText.draw(line, in: row, palette: palette, maximumScale: max(1, CGFloat(height) / 7),
+                                         alignment: alignment, face: face)
+                }
+            }
+            return true
+        }
+        return false
     }
 }
 

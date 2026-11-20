@@ -100,8 +100,9 @@ remain release gates. This local build is not an approved Store release.
 
 The Store profile uses the current complete frontend and shared modules. It
 includes the authored starters, pinned Lix media, a CC0 Lix-derived icon, the
-project Lemmix logo and the project's pixel lettering. Original font and game
-media remain in the separate restoration bundle. Imported original artwork
+project Lemmix logo and the shared Ultimate Lemmings pixel font. The font
+package includes the two faces and counter glyphs. Other original game media
+stay in the separate restoration bundle. Imported original artwork
 can replace the fallback after validation. Starter scenes retain their Lix
 artwork even when the player selects Original for restored campaigns.
 
@@ -113,3 +114,13 @@ products have separate release histories and version-history build gates.
 Use the [Store submission dossier](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/store-submission/README.md)
 for current signed outputs and remaining acceptance. Earlier local receipts
 above describe personal test builds; they do not establish Store clearance.
+
+### Shared pixel font input
+
+Store resource preparation reads the verified Ultimate Lemmings font banks from
+`.build/mac-artwork/export/lemmings`. For a separate checkout, set
+`ULTIMATE_LEMMIX_PIXEL_FONT_DIR` to the installed Ultimate Lemmings app’s
+`Contents/Resources/MacArtwork/lemmings` directory. Use the same setting when
+preparing and auditing the resources. The packager checks the glyphs and metrics
+and copies only the font banks. The shared licence covers both apps and their
+App Store media.

@@ -1,67 +1,81 @@
 #!/usr/bin/env python3
-"""Export the project's compact pixel lettering into fixed interface cells."""
+"""Package the same pixel font glyphs that Ultimate Lemmings uses."""
 import hashlib
 import json
+import os
 from pathlib import Path
-import re
+
+from prepare_original_font import read_regular, validate_frame
 
 ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_SOURCE = ROOT / '.build/mac-artwork/export/lemmings'
+FONT_SHA256 = '0a11289b889d131a4ddbca48c427320f18ce842a5d9d1ba959fc38a0256b0dfa'
+FONT_PREFIX = 'Fonts/LixInterface/'
+NOTICE = FONT_PREFIX + 'NOTICE.md'
+
+
+def verify_packaged_font(files):
+    """Reject a prepared package that contains an old or changed font bank."""
+    glyphs = {
+        name.removeprefix(FONT_PREFIX): data for name, data in files.items()
+        if name == FONT_PREFIX + 'manifest.json'
+        or (name.startswith(FONT_PREFIX) and name.endswith('.rgba'))
+    }
+    digest = hashlib.sha256()
+    for name, data in sorted(glyphs.items()):
+        digest.update(name.encode() + b'\0' + data)
+    if digest.hexdigest() != FONT_SHA256:
+        raise ValueError('The Ultimate Lemmings pixel font differs from the verified glyphs and metrics.')
 
 
 def resources():
-    source = ROOT / 'Sources/LemmingsGameArt/GamePixelTypography.swift'
-    text = source.read_text().split('private static let glyphs', 1)[0]
-    columns = {key: [int(value) for value in values.split(',')]
-               for key, values in re.findall(r'"([^"\\]+)":\[([\d,]+)\]', text)}
-    columns.update({
-        '"': [0, 3, 0, 3, 0], '#': [20, 127, 20, 127, 20],
-        '$': [36, 42, 127, 42, 18], '&': [54, 73, 85, 34, 80],
-        ';': [0, 64, 54, 0, 0], '@': [62, 65, 93, 85, 30],
-        '[': [0, 127, 65, 65, 0], '\\': [2, 4, 8, 16, 32],
-        ']': [0, 65, 65, 127, 0], '^': [4, 2, 1, 2, 4],
-        '_': [64, 64, 64, 64, 64], '`': [0, 1, 2, 0, 0],
-        '{': [0, 8, 54, 65, 0], '|': [0, 0, 127, 0, 0],
-        '}': [0, 65, 54, 8, 0], '~': [8, 4, 8, 16, 8],
-    })
-    files, banks, names = {}, {}, {}
-    prefix = 'Fonts/LixInterface/'
+    """Copy only the two font faces and their counters from the verified source bank."""
+    source = Path(os.environ.get('ULTIMATE_LEMMIX_PIXEL_FONT_DIR', DEFAULT_SOURCE))
+    manifest = source / 'manifest.json'
+    if not manifest.is_file():
+        raise ValueError('The Ultimate Lemmings pixel font source is missing. Set '
+                         'ULTIMATE_LEMMIX_PIXEL_FONT_DIR to its MacArtwork/lemmings directory.')
+    original = json.loads(read_regular(manifest, 100_000))
+    if not isinstance(original, dict) or not all(isinstance(original.get(key), dict) for key in ('banks', 'names')):
+        raise ValueError('The Ultimate Lemmings pixel font manifest has an unexpected layout.')
+    glyphs, banks, names = {}, {}, {}
+    for bank, face, width, height in (('1301', 'Charset1', 12, 18), ('1302', 'Charset2', 16, 20)):
+        source_rows = original['banks'].get(bank)
+        if (original['names'].get(bank) != face or not isinstance(source_rows, list)
+                or len(source_rows) < 107 or source_rows[0] is not None):
+            raise ValueError('The Ultimate Lemmings pixel font bank has an unexpected layout.')
+        # The source atlas and panel artwork are outside the font itself.
+        rows = source_rows[:107]
+        rows[95] = None
+        for index, row in enumerate(rows):
+            if index in (0, 95):
+                continue
+            cell_width, cell_height = (width, height) if index < 95 else (6, 9)
+            validate_frame(row, bank, index, cell_width, cell_height)
+            data = read_regular(source / row['file'], cell_width * cell_height * 4)
+            if len(data) != row['width'] * row['height'] * 4:
+                raise ValueError('An Ultimate Lemmings pixel font glyph is truncated.')
+            glyphs[row['file']] = data
+        banks[bank], names[bank] = rows, face
 
-    def frame(character, width, height, scale, filename, black=False):
-        bits = columns.get(character.upper())
-        if bits is None:
-            raise ValueError('The project pixel font is missing a required character: ' + character)
-        pixels = bytearray(width * height * 4)
-        dx, dy = (width - 5 * scale) // 2, (height - 7 * scale) // 2
-        for x, column in enumerate(bits):
-            for y in range(7):
-                if not column & (1 << y):
-                    continue
-                color = bytes((0, 0, 0, 255) if black else (48, 128 + y * 8, 208, 255))
-                for sy in range(scale):
-                    for sx in range(scale):
-                        index = ((dy + y * scale + sy) * width + dx + x * scale + sx) * 4
-                        pixels[index:index + 4] = color
-        files[prefix + filename] = bytes(pixels)
-        return {'x': 0, 'y': 0, 'width': width, 'height': height, 'file': filename}
-
-    for bank, face, width, height in [('1', 'Charset1', 12, 18), ('2', 'Charset2', 16, 20)]:
-        frames = [None]
-        for scalar in range(33, 127):
-            frames.append(frame(chr(scalar), width, height, 2, f'{face}-{scalar}.rgba'))
-        frames.append(None)
-        for digit in range(10):
-            frames.append(frame(str(digit), 6, 9, 1, f'{face}-digit-{digit}.rgba', black=True))
-        blank = f'{face}-digit-blank.rgba'
-        files[prefix + blank] = bytes(6 * 9 * 4)
-        frames.append({'x': 0, 'y': 0, 'width': 6, 'height': 9, 'file': blank})
-        banks[bank], names[bank] = frames, face
-    manifest = {'version': 1, 'monochrome': False, 'names': names, 'banks': banks, 'objects': {}}
-    files[prefix + 'manifest.json'] = (json.dumps(manifest, indent=2, sort_keys=True) + '\n').encode()
-    provenance = {'schemaVersion': 1, 'sourceTypeface': 'Ultimate Lemmix project pixel lettering',
-                  'source': source.relative_to(ROOT).as_posix(),
-                  'sourceSHA256': hashlib.sha256(source.read_bytes()).hexdigest(),
-                  'originalGameAssets': False, 'lowercase': 'uppercase pixel forms',
-                  'method': 'Integer-scaled project glyph columns with fixed cells and authored punctuation.',
-                  'files': {name: hashlib.sha256(data).hexdigest() for name, data in sorted(files.items())}}
-    files[prefix + 'provenance.json'] = (json.dumps(provenance, indent=2, sort_keys=True) + '\n').encode()
+    glyphs['manifest.json'] = json.dumps(
+        {'version': 1, 'banks': banks, 'names': names, 'objects': {}},
+        sort_keys=True, separators=(',', ':'),
+    ).encode()
+    files = {FONT_PREFIX + name: data for name, data in glyphs.items()}
+    verify_packaged_font(files)
+    files[NOTICE] = (
+        '# Ultimate Lemmings shared pixel font\n\n'
+        'The project owner confirmed permission to use the customised pixel font in Ultimate Lemmings, '
+        'Ultimate Lemmix and their App Store marketing. The font is covered by the project’s own licence.\n\n'
+        'This bundle contains the two font faces and counter glyphs. The source atlas and game panel are excluded.\n'
+    ).encode()
+    provenance = {
+        'schemaVersion': 1,
+        'sourceTypeface': 'Ultimate Lemmings shared pixel font',
+        'glyphsAndMetricsSHA256': FONT_SHA256,
+        'glyphFiles': len(glyphs) - 1,
+        'notice': NOTICE,
+    }
+    files[FONT_PREFIX + 'provenance.json'] = (json.dumps(provenance, indent=2, sort_keys=True) + '\n').encode()
     return files

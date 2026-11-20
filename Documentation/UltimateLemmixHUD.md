@@ -1,8 +1,7 @@
 # Ultimate Lemmix HUD artwork
 
-The Classic gameplay HUD uses the original lettering in the personal preview
-and Lix's own UI font in clean builds. Both use actual Lix skill and transport
-icons. The shared buttons use synthesised stone, including Home and timeline
+The Classic gameplay HUD uses the shared Ultimate Lemmings pixel font and Lix
+skill and transport icons. The shared buttons use synthesised stone, including Home and timeline
 controls. Transparent icon padding is removed before fitting. Half-step scaling
 uses the 2× artwork to fill each existing input target.
 
@@ -17,12 +16,10 @@ skill captions have 66×18 logical cells with a gap between adjacent names.
 At 2×, every peer caption uses the same half-size source face. Speed uses the
 normal counter size instead of expanding to fill its socket.
 
-Clean builds use Lix's unchanged DejaVu Sans Condensed Bold 2.29 font.
-The exact TTF and full Bitstream Vera/Arev notice are separate from the CC0
-graphics pack. `LixInterfaceText` rasterises that font at whole pixel sizes
-and rejects unavailable glyphs instead of choosing a system font.
-Its paragraph fitter uses measured glyph widths and returns complete text
-or a failed fit. Mobile multiline labels use that fitter.
+Store packages verify the shared font’s glyph pixels and metrics before they
+copy the font. Mac, iPhone, iPad and Apple TV use the same bitmap renderer.
+The Mac and iOS Desk Clock widgets receive the same font banks. The owner
+confirmed that the font licence covers both games and their App Store media.
 
 ## Buttons and input
 

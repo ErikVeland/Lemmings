@@ -173,6 +173,7 @@ def inputs():
                   "Tools/Publication/mac_sources.py", "Tools/Publication/mac_store.py",
                   "Tools/Publication/publication.py", "Scripts/check-release-history.sh",
                   "Tools/ReleaseReadiness/version_history.py", "Tools/AlternativeAssets/prepare_lemmix_base.py",
+                  "Tools/AlternativeAssets/prepare_project_pixel.py", "Tools/AlternativeAssets/prepare_original_font.py",
                   "Tools/AlternativeAssets/store_resources.py", "Tools/AlternativeAssets/feature_resources.py",
                   "Tools/TrolleyVerification/catalogue.py", "Tools/TrolleyVerification/presentation-files.json",
                   "Apps/DeskClockWidget/DeskClockWidget.swift", "Apps/DeskClockWidget/Mac/Info.plist",

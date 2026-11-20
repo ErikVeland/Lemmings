@@ -10,9 +10,6 @@ import UIKit
     private static let artwork = Bundle.main.resourceURL.flatMap {
         try? LixInterfaceArtwork(directory: $0.appendingPathComponent("AlternativeAssets/Lix"))
     }
-    private static let font = Bundle.main.resourceURL.flatMap {
-        try? LixInterfaceText(directory: $0.appendingPathComponent("Fonts/Lix"))
-    }
     private static let images = NSCache<NSString, UIImage>()
 
     @discardableResult static func button(in rect: CGRect, selected: Bool = false,
@@ -67,56 +64,6 @@ import UIKit
               let image = image(key: "check-\(checked)-\(enabled)", width: frame.width,
                 height: frame.height, rgba: frame.rgba) else { return false }
         draw(image, in: rect)
-        return true
-    }
-
-    @discardableResult static func text(_ text: String, in rect: CGRect,
-        colour: UIColor, alignment: NSTextAlignment, maximumScale: CGFloat) -> Bool {
-        guard let font, rect.width > 0, rect.height > 0 else { return false }
-        var red: CGFloat = 1, green: CGFloat = 1, blue: CGFloat = 1, alpha: CGFloat = 1
-        colour.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        let rgb = [red, green, blue].map { UInt8(min(255, max(0, ($0 * 255).rounded()))) }
-        let value = text.uppercased().replacingOccurrences(of: "×", with: "X")
-            .replacingOccurrences(of: "∞", with: "*")
-        let maximum = min(28, max(8, Int(min(rect.height - 2, 12 * maximumScale))))
-        for size in stride(from: maximum, through: 8, by: -1) {
-            let key = "text-\(value)-\(size)-\(rgb)"
-            let bitmap: UIImage
-            if let cached = images.object(forKey: key as NSString) { bitmap = cached }
-            else {
-                guard let frame = font.frame(value, pixelSize: size, red: rgb[0], green: rgb[1], blue: rgb[2]),
-                      let image = image(key: key, width: frame.width, height: frame.height, rgba: frame.rgba) else { return false }
-                bitmap = image
-            }
-            guard bitmap.size.width <= rect.width && bitmap.size.height <= rect.height || size == 8 else { continue }
-            let x = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - bitmap.size.width : rect.midX - bitmap.size.width / 2
-            UIGraphicsGetCurrentContext()?.saveGState()
-            UIRectClip(rect)
-            bitmap.draw(at: CGPoint(x: x.rounded(), y: (rect.midY - bitmap.size.height / 2).rounded()))
-            UIGraphicsGetCurrentContext()?.restoreGState()
-            return true
-        }
-        return false
-    }
-
-    @discardableResult static func paragraph(_ value: String, in rect: CGRect,
-        colour: UIColor, alignment: NSTextAlignment, maximumScale: CGFloat, maximumLines: Int) -> Bool {
-        guard let font, rect.width > 0, rect.height > 0 else { return false }
-        var red: CGFloat = 1, green: CGFloat = 1, blue: CGFloat = 1, alpha: CGFloat = 1
-        colour.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        let rgb = [red, green, blue].map { UInt8(min(255, max(0, ($0 * 255).rounded()))) }
-        let text = value.uppercased().replacingOccurrences(of: "×", with: "X")
-        guard let frames = font.paragraph(text, width: Int(rect.width), height: Int(rect.height),
-            maximumLines: maximumLines, maximumPixelSize: min(28, max(8, Int(12 * maximumScale))),
-            red: rgb[0], green: rgb[1], blue: rgb[2]) else { return false }
-        let rowHeight = rect.height / CGFloat(maximumLines)
-        for (index, frame) in frames.enumerated() {
-            guard let image = image(key: "paragraph-\(text)-\(rect.width)-\(rect.height)-\(maximumLines)-\(maximumScale)-\(rgb)-\(index)",
-                width: frame.width, height: frame.height, rgba: frame.rgba) else { return false }
-            let x = alignment == .left ? rect.minX : alignment == .right ? rect.maxX - image.size.width : rect.midX - image.size.width / 2
-            image.draw(at: CGPoint(x: x.rounded(),
-                y: (rect.minY + CGFloat(index) * rowHeight + (rowHeight - image.size.height) / 2).rounded()))
-        }
         return true
     }
 
