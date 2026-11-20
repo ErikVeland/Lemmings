@@ -99,7 +99,7 @@ font_path.unlink()
 social.save(ASSETS / 'social.jpg', quality=91, optimize=True)
 (ROOT / 'image-provenance.json').write_text(json.dumps({
     'captures': records,
-    'illustration': 'Project artwork generated for this site from the approved Lix icon and woodland illustration. The creek, lantern-lit burrow, ocarina, trail sign, satchel and four material textures are illustrations. Gameplay images use the captures listed above.',
+    'illustration': 'Project artwork generated for this site from the approved Lix icon and woodland illustration. The creek, burrow, woodland objects, four material textures and two moss-covered button sprites are illustrations. Gameplay images use the captures listed above.',
     'social': 'The woodland illustration with the approved app icon and wordmark.',
     'font': 'Archivo, SIL Open Font License; reused from the existing GenErik DJ website.'
 }, indent=2) + '\n')

@@ -1,0 +1,96 @@
+/* The two silhouettes share a front-facing stone surface for live labels. */
+:is(.forest-trailhead, .home, .document) .moss-button {
+  --stone-art: url('/assets/moss-button-long.webp');
+  appearance: none;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  min-height: 72px;
+  max-width: 100%;
+  padding: 24px 32px 13px;
+  gap: .3em;
+  margin: 0;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  box-shadow: none;
+  color: #e8dfc1;
+  font: 700 clamp(1rem, 1.28vw, 1.12rem)/1.18 Georgia, "Iowan Old Style", serif;
+  letter-spacing: .005em;
+  text-decoration: none;
+  text-shadow: 0 -1px 0 #101810, 0 -2px 1px #151b13c9, 0 1px 0 #fff3cd9c;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: transform 100ms ease-out;
+}
+.moss-button::after {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: auto 6% -3px;
+  height: 12px;
+  background: radial-gradient(ellipse at center, #111b12a8 12%, transparent 72%);
+  pointer-events: none;
+}
+.moss-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--stone-art) 50% 50% / 100% 100% no-repeat;
+  filter: drop-shadow(0 3px 1px #17211677);
+  transition: filter 100ms ease-out;
+}
+:is(.forest-trailhead, .home, .document) .moss-button--compact {
+  --stone-art: url('/assets/moss-button-small.webp');
+  min-height: 58px;
+  min-width: 82px;
+  padding: 18px 19px 10px;
+  font-size: .98rem;
+}
+:is(.forest-trailhead, .home, .document) .moss-button:is([aria-current="page"], [aria-pressed="true"]) {
+  color: #fff3bd;
+  text-decoration: underline;
+  text-decoration-color: #fff2a0;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.moss-button:is([aria-current="page"], [aria-pressed="true"])::before {
+  filter: saturate(1.24) brightness(1.1) drop-shadow(0 2px 1px #13200ec2);
+}
+@media (hover: hover) {
+  :is(.forest-trailhead, .home, .document) .moss-button:hover {
+    color: #fff8da; transform: translateY(-1px);
+  }
+  .moss-button:hover::before {
+    filter: brightness(1.09) drop-shadow(0 4px 2px #15221299);
+  }
+}
+:is(.forest-trailhead, .home, .document) .moss-button:active {
+  transform: translateY(2px);
+}
+.moss-button:active::before { filter: brightness(.91) drop-shadow(0 1px 1px #17211677); }
+:is(.forest-trailhead, .home, .document) .moss-button:focus-visible {
+  outline: 3px solid #fff1a2; outline-offset: 1px; box-shadow: 0 0 0 5px #233d2c;
+}
+.woodland-copy .moss-button, .bring-along .moss-button, .last-word .moss-button { margin-top: 20px; }
+.capture-tabs { flex-wrap: wrap; }
+@media (max-width: 600px) {
+  :is(.forest-trailhead, .home, .document) .moss-button { padding-inline: 25px; }
+  :is(.forest-trailhead, .home, .document) .moss-button--compact { min-width: 74px; padding-inline: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.forest-trailhead, .home, .document) .moss-button, .moss-button::before { transition: none; }
+}
+@media (forced-colors: active), print {
+  :is(.forest-trailhead, .home, .document) .moss-button {
+    background: ButtonFace; border: 2px solid ButtonText; color: ButtonText;
+    text-shadow: none; padding: .7em 1em;
+  }
+  .moss-button::before, .moss-button::after { display: none; }
+}
