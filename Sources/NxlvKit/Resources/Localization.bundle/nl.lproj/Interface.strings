@@ -3548,3 +3548,7 @@
 "Favour active skilled lemmings" = "Geef werkende lemmings voorrang";
 "Target active workers" = "Selecteer actieve werkers";
 "Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply." = "Geef lemmings die een vaardigheid gebruiken voorrang totdat ze vallen. De regels van elke vaardigheid blijven gelden.";
+"Download game assets" = "Spelgegevens downloaden";
+"Game assets are already downloading." = "De spelgegevens worden al gedownload.";
+"Game assets are unavailable. Try again later." = "De spelgegevens zijn niet beschikbaar. Probeer het later opnieuw.";
+"Game assets failed verification. Download them again." = "De controle van de spelgegevens is mislukt. Download ze opnieuw.";

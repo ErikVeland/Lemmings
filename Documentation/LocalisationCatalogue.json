@@ -22813,5 +22813,29 @@
     "references": [
       "Sources/NxlvKit/TrolleyCelebration.swift:168"
     ]
+  },
+  "Download game assets": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:12"
+    ]
+  },
+  "Game assets are already downloading.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:30"
+    ]
+  },
+  "Game assets are unavailable. Try again later.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:31"
+    ]
+  },
+  "Game assets failed verification. Download them again.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:32"
+    ]
   }
 }
