@@ -9,7 +9,6 @@ from pathlib import Path, PurePosixPath
 import plistlib
 import shutil
 import stat
-import struct
 import subprocess
 import tempfile
 import unittest
@@ -90,16 +89,20 @@ def lemmix_icon():
     source = ROOT / 'Resources/UltimateLemmix/AppIcon/UltimateLemmix.png'
     png = source.read_bytes()
     notice = source.with_name('README.md').read_bytes()
-    chunks = []
-    for size, kinds in ((16, (b'icp4',)), (32, (b'icp5', b'ic11')), (64, (b'icp6', b'ic12')),
-                        (128, (b'ic07',)), (256, (b'ic08', b'ic13')), (512, (b'ic09', b'ic14')),
-                        (1024, (b'ic10',))):
-        image = convert([source, '-filter', 'Lanczos', '-resize', f'{size}x{size}',
-                         '-strip', '-define', 'png:exclude-chunks=date,time', 'png24:-'])
-        for kind in kinds:
-            chunks.append(kind + struct.pack('>I', len(image) + 8) + image)
-    body = b''.join(chunks)
-    return {'AppIcon.png': png, 'AppIcon.icns': b'icns' + struct.pack('>I', len(body) + 8) + body,
+    with tempfile.TemporaryDirectory(prefix='ultimate-lemmix-icon-') as temporary:
+        iconset = Path(temporary) / 'AppIcon.iconset'
+        iconset.mkdir()
+        for points in (16, 32, 128, 256, 512):
+            for scale in (1, 2):
+                size = points * scale
+                suffix = '@2x' if scale == 2 else ''
+                image = convert([source, '-filter', 'Lanczos', '-resize', f'{size}x{size}',
+                                 '-strip', '-define', 'png:exclude-chunks=date,time', 'png24:-'])
+                (iconset / f'icon_{points}x{points}{suffix}.png').write_bytes(image)
+        icns = Path(temporary) / 'AppIcon.icns'
+        subprocess.run(['iconutil', '-c', 'icns', iconset, '-o', icns], check=True)
+        mac_icon = icns.read_bytes()
+    return {'AppIcon.png': png, 'AppIcon.icns': mac_icon,
             'Provenance/ultimate-lemmix-icon.json': encoded({'source': source.relative_to(ROOT).as_posix(),
                 'sha256': sha(png), 'notice': 'Licences/Ultimate-Lemmix-icon.md'}),
             'Licences/Ultimate-Lemmix-icon.md': notice}
