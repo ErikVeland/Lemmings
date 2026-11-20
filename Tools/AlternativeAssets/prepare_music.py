@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare and verify the pinned CC0 Lix alternative soundtrack without playback."""
+"""Prepare and verify the pinned Lix soundtrack without playback."""
 import argparse
 from array import array
 import hashlib
@@ -15,7 +15,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 LOCK = ROOT / 'Resources/AlternativeAssets/music-sources.json'
-OUTPUT = ROOT / '.build/alternative-assets/music'
+OUTPUT = ROOT / '.build/alternative-assets/licensed-music'
 CACHE = ROOT / '.build/dependencies/alternative-music'
 
 
@@ -127,16 +127,19 @@ def playback_path(track):
 def credits(lock):
     """Keep upstream authors, source links, licence scope and conversion changes together."""
     lines = [lock['title'], '', lock['scope'], '',
-        'Licence: CC0 1.0 Universal', lock['licenceURL'],
+        'Default licence: CC0 1.0 Universal', lock['licenceURL'],
         'Upstream licence: ' + lock['source']['licenceURL'],
         'Official music download: ' + lock['source']['archiveURL'],
         'Pinned source archive SHA-256: ' + lock['source']['archiveSHA256'], '',
         'Tracks and creators:']
-    lines += [f"- {track['title']} — {track['creator']} ({track['path']})" for track in lock['tracks']]
+    lines.extend(
+        f"- {track['title']} — {track['creator']} ({track['path']})"
+        f" — {track.get('licence', lock['defaultLicence'])}: {track.get('licenceURL', lock['licenceURL'])}"
+        for track in lock['tracks']
+    )
     lines += ['', 'Changes: Ogg Vorbis originals are retained unchanged. Playback copies are',
         'peak-normalised MP3 files made with libsndfile. This is a lossy conversion.',
         'The minim-mobius credits follow the joint credit in the upstream licence.',
-        'Rubix-directory tracks, fonts, code and other music are excluded.',
         'Lix and its creators do not endorse this project.', '']
     return '\n'.join(lines).encode('utf-8')
 
@@ -193,7 +196,7 @@ def verify(target, lock, converter):
             run([converter, '-normalize', target / source_path(track), reference])
             if digest(reference) != row['playback']['sha256']:
                 raise ValueError(f"Playback differs from the pinned source conversion: {track['title']}")
-    print(f"Verified {len(lock['tracks'])} CC0 tracks, {sum(row['bytes'] for row in records):,} bytes. No audio played.")
+    print(f"Verified {len(lock['tracks'])} licensed tracks, {sum(row['bytes'] for row in records):,} bytes. No audio played.")
     return manifest
 
 
@@ -219,6 +222,8 @@ def prepare(args, lock, converter):
             names = zipped.namelist()
             if len(names) != len(set(names)):
                 raise ValueError('The source archive contains duplicate entries.')
+            if {name for name in names if name.endswith('.ogg')} != {track['path'] for track in lock['tracks']}:
+                raise ValueError('The source lock does not cover the complete Lix soundtrack.')
             for track in lock['tracks']:
                 data = zipped.read(track['path'])
                 if len(data) != track['bytes'] or hashlib.sha256(data).hexdigest() != track['sha256']:
@@ -258,6 +263,42 @@ def prepare(args, lock, converter):
         else:
             staging.rename(OUTPUT)
             print(f'Prepared {OUTPUT}')
+        return manifest
+
+
+def bundle_resources():
+    """Return the verified playback files, catalogue, and licence evidence."""
+    lock = json.loads(LOCK.read_bytes())
+    converter = decoder_path(None)
+    if OUTPUT.exists() or OUTPUT.is_symlink():
+        manifest = verify(OUTPUT, lock, converter)
+    else:
+        options = argparse.Namespace(source_archive=None, licence_file=None, offline=False)
+        manifest = prepare(options, lock, converter)
+    records = {row['path']: row for row in manifest['files']}
+    files = {}
+    tracks = []
+    for track in lock['tracks']:
+        name = playback_path(track)
+        row = records[name]
+        files[name] = checked(OUTPUT / name, row['bytes'], row['sha256']).read_bytes()
+        tracks.append({
+            'id': track['id'], 'game': 'lix', 'title': track['title'],
+            'role': 'menu' if track['id'] == 'lix.menulix' else 'level',
+            'variants': [{
+                'id': track['id'] + '.mp3', 'path': name.removeprefix('Music/'),
+                'port': 'lix', 'quality': 'lossy-source', 'remix': 'original',
+                'confidence': 'documented', 'sourcePath': track['path'],
+                'credits': track['creator'], 'licence': track.get('licence', lock['defaultLicence']),
+                'evidence': lock['source']['licenceURL'],
+            }],
+        })
+    files['Music/catalogue.json'] = (json.dumps({'schemaVersion': 1, 'tracks': tracks}, indent=2) + '\n').encode()
+    credit = records['Credits.txt']
+    files['Licences/Lix-music-credits.txt'] = checked(OUTPUT / 'Credits.txt', credit['bytes'], credit['sha256']).read_bytes()
+    files['Provenance/music-sources.json'] = LOCK.read_bytes()
+    files['Provenance/music-preparation-manifest.json'] = (OUTPUT / 'manifest.json').read_bytes()
+    return files
 
 
 def main():

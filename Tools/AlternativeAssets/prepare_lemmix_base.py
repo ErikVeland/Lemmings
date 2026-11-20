@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import zipfile
+from prepare_music import bundle_resources as soundtrack_resources
 from prepare_open_starter import resources as starter_resources
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -104,6 +105,8 @@ def prepare(output, alternatives, store=False):
             raise ValueError('An approved alternative asset changed: ' + row['path'])
         write(output / row['path'], data)
     write(output / 'Provenance/alternative-resource-source.json', PIN.read_bytes())
+    for name, data in soundtrack_resources().items():
+        write(output / name, data)
     copy_tree(ROOT / 'Sources/NxlvKit/Resources/Localization.bundle', output / 'Localization.bundle')
     for name in ('Hints', 'Progression', 'GameCenter'):
         copy_tree(ROOT / 'Resources' / name, output / name, '.json')
@@ -153,7 +156,7 @@ def prepare(output, alternatives, store=False):
             archive.writestr(entry, data)
     write(integration / 'README.txt', guide)
     write(output / 'Licences/Distribution-scope.txt', (
-        'Lix graphics and music retain their CC0 notices. The Lix font has its own full licence.\n' +
+        'Lix graphics use CC0. Lix music uses CC0 and CC BY 4.0. The Lix font has its own licence.\n' +
         ('The Store icon uses the approved CC0 Lix sprite. Interface lettering uses the shared Ultimate Lemmings pixel font.\n'
          if store else 'The requested existing project icon is separate and requires rights review.\n') +
         'Players supply any original game assets used for restoration.\n'

@@ -1,7 +1,8 @@
 # Ultimate Lemmix for iOS and tvOS
 
 Ultimate Lemmix has separate iPhone/iPad and Apple TV application targets.
-Both use the authored starter campaign, CC0 Lix artwork and six CC0 music tracks.
+Both use the authored starter campaign, CC0 Lix artwork and the full licensed
+Lix soundtrack. Six tracks use CC0 and two use CC BY 4.0.
 Starter play needs no game folder, account or download.
 
 | Platform | Project | Bundle identifier | Minimum OS |

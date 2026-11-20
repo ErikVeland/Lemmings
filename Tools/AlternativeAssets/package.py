@@ -9,12 +9,13 @@ import stat
 import subprocess
 import tempfile
 import zipfile
+from prepare_music import OUTPUT as MUSIC_OUTPUT
 
 
 ROOT = Path(__file__).resolve().parents[2]
 README = b"""Alternative resource preparation
 
-This archive contains prepared Lix graphics and selected CC0 music.
+This archive contains prepared Lix graphics and the licensed Lix soundtrack.
 Read the included source records, licence texts and remix audit.
 It is not an application, installed skin or App Store release approval.
 Classic, Lemmings 2 and Lemmings 3 renderer integration remains unverified.
@@ -33,11 +34,10 @@ def digest(path):
 def collect(root):
     """Accept only the prepared resource trees and their provenance records."""
     files = {}
-    for name, folder, suffixes in (
-        ('graphics', 'lix', {'.png', '.json', '.txt', '.md'}),
-        ('music', 'music', {'.ogg', '.wav', '.m4a', '.mp3', '.json', '.txt', '.md'}),
+    for name, directory, suffixes in (
+        ('graphics', root / '.build/alternative-assets/lix', {'.png', '.json', '.txt', '.md'}),
+        ('music', root / MUSIC_OUTPUT.relative_to(ROOT), {'.ogg', '.wav', '.m4a', '.mp3', '.json', '.txt', '.md'}),
     ):
-        directory = root / '.build/alternative-assets' / folder
         if directory.is_symlink() or not (directory / 'manifest.json').is_file():
             raise ValueError(f'Missing prepared {name}. Run its preparation script.')
         for path in sorted(directory.rglob('*')):
@@ -74,8 +74,8 @@ def verify_inputs(root):
 def validate_output(root, output, files):
     """Keep generated archives outside the prepared inputs and source records."""
     output = output.resolve()
-    for name in ('lix', 'music'):
-        directory = (root / '.build/alternative-assets' / name).resolve()
+    for source in (root / '.build/alternative-assets/lix', root / MUSIC_OUTPUT.relative_to(ROOT)):
+        directory = source.resolve()
         if output == directory or directory in output.parents:
             raise ValueError('The archive output must be outside prepared resource folders.')
     if output in {path.resolve() for path in files.values()}:

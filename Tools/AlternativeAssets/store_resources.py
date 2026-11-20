@@ -176,9 +176,8 @@ def integration_files(allow_missing):
 
 
 def verify_sources():
-    """Verify prepared media against pinned originals before either bundle path uses it."""
-    for script in ('prepare-lix-alternative.sh', 'prepare-alternative-music.sh'):
-        subprocess.run(['zsh', str(ROOT / 'Scripts' / script), '--verify'], check=True)
+    """Verify the prepared graphics. The shared base preparer verifies music."""
+    subprocess.run(['zsh', str(ROOT / 'Scripts/prepare-lix-alternative.sh'), '--verify'], check=True)
 
 
 def privacy_manifest():
@@ -230,7 +229,12 @@ def collect(allow_missing_integration=False):
 
 def media_rights(files):
     """Identify font rights separately from the CC0 graphics and music."""
-    licences = [{'scope': 'AlternativeAssets/Lix and Music/Lix', 'licence': 'CC0-1.0'}]
+    licences = [{'scope': 'AlternativeAssets/Lix and Music/Lix outside Music/Lix/rubix',
+                 'licence': 'CC0-1.0'}]
+    credited_music = any(name.startswith('Music/Lix/rubix/') for name in files)
+    if credited_music:
+        licences.append({'scope': 'Music/Lix/rubix', 'licence': 'CC-BY-4.0',
+                         'notice': 'Licences/Lix-music-credits.txt'})
     has_font = 'Fonts/Lix/djvusans.ttf' in files
     if has_font:
         licences.append({'scope': 'Fonts/Lix/djvusans.ttf', 'licence': prepare_lix_font.LICENCE,

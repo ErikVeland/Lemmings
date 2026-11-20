@@ -17,9 +17,55 @@ full-game baseline and do not establish current feature parity.
 
 The full menus, engines, Journey, collections, profiles, Hot Seat, recovery,
 records, hints, localisation, cloud interfaces and Desk Clock remain in the
-application. Lix supplies the default artwork and six licensed music tracks.
+application. Lix supplies the default artwork and music. The shared resource
+preparer includes all eight tracks from the pinned Lix soundtrack. Six use CC0.
+Mike Spanner’s “Earthen Energy” and “Winter” use CC BY 4.0, with credits in the app.
 The three independent starter puzzles use ordinary native game-data files and
 the existing engine. They provide first-launch play without original game data.
+
+## Bundled content policy
+
+Include every available non-official level, recording, graphic and font with
+redistribution permission and support in Ultimate Lemmix. Check each pack’s
+dependencies too. A fan level can require official scenery, and a public-domain
+composition can have a separately licensed recording. Original game assets
+remain available through player import.
+
+The local Classic catalogue has 487 candidate packs with 5,051 selectable
+levels. Creator permissions are unverified and some packs need original
+graphics. Do not use the personal preview archives as public packages. Some
+still contain excluded official level data that the personal preview hides
+at runtime. The [personal preview record](UltimateLemmixPersonalPreview.md)
+describes the classification and the NeoLemmix style dependencies.
+The [NeoLemmix style inventory](ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json)
+records who owns the artwork where known and which grants are missing.
+
+### Lemmings Forums sources
+
+Use the forum’s maintainer and creator posts to establish the terms for each
+asset. Use the NeoLemmix pack index to find the original posts and downloads.
+The index mixes original packs with conversions and gives no common licence.
+[NeoLemmix pack index](https://www.lemmingsforums.net/index.php?topic=7011.0)
+
+| Source | Published terms and release scope |
+| --- | --- |
+| [Lix upstream licence](https://github.com/SimonN/LixD#licensecopyingpublic-domain) and [Simon’s forum clarification](https://www.lemmingsforums.net/index.php?topic=7618.0) | The upstream CC0 dedication covers levels, graphics and sound effects. Music and the font have separate terms in the pinned notice. The current resource preparer already includes the eight licensed tracks, Lix graphics and the licensed font. |
+| [MandelSoft’s FL Studio arrangements](https://www.lemmingsforums.net/index.php?topic=3921.0) | The creator permits credited use in level packs and as replacement music. The post describes sources from the Windows game and another creator’s MIDI work. Resolve third-party rights and verify App Store scope track by track. |
+| [WillLem’s NeoLemmix Lemminas pack](https://www.lemmingsforums.net/index.php?topic=4679.0) and [Lemminas Origins](https://www.lemmingsforums.net/index.php?topic=6695.0) | The creator permits credited reuse of specified media in community packs or levels. The composition credits distinguish original tracks from tracks with samples or other writers. Origins also contains official levels and variants of them. The media reuse statement does not clear the full archive. |
+| [Raymanni’s NeoLemmix tilesets](https://www.lemmingsforums.net/index.php?topic=3279.0) | The creator shares these styles for NeoLemmix. The post gives no wider distribution terms. Use the verified Lix versions where the Lix licence covers them. |
+
+The pinned Lix 0.10.36 source has 859 single-player files, 15 tutorial files and
+990 network level files with native level headers. Ultimate Lemmix cannot
+read the Lix format or run its simulation.
+
+On 20 November 2026, the local Classic review matched all 487 candidate ZIPs
+to their pinned hashes and searched 27 readable documentation members for
+licence and redistribution terms. It found no grant in those files. This
+check does not establish what an author may have granted elsewhere.
+[Classic catalogue policy](../Resources/AlternativeAssets/community-levels-policy.json)
+
+Track findings against the [remix rights inventory](../Resources/AlternativeAssets/fan-remix-rights.json)
+and [Apple’s intellectual property requirements](https://developer.apple.com/app-store/review/guidelines/#intellectual-property).
 
 Importing assets changes the resource source. It does not install missing
 features or another game executable. The shared resource provider, original

@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Prepare the explicitly licensed CC0 Lix soundtrack without playing audio.
+# Prepare the licensed Lix soundtrack without playing audio.
 set -euo pipefail
 
 project_dir="${0:A:h:h}"

@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "lix-cc0-music",
+  "id": "lix-alternative-music",
   "title": "Lix alternative soundtrack",
-  "licence": "CC0-1.0",
+  "licence": "mixed",
+  "defaultLicence": "CC0-1.0",
   "licenceURL": "https://creativecommons.org/publicdomain/zero/1.0/",
   "source": {
     "project": "Lix",
@@ -18,11 +19,6 @@
     "licenceBytes": 9016
   },
   "scope": "Independent alternative music supplied with Lix. These tracks are not Lemmings fan remixes or replacements of the original compositions.",
-  "excluded": [
-    "music/rubix/earthen-energy.ogg",
-    "music/rubix/winter.ogg"
-  ],
-  "exclusionReason": "The rubix directory uses CC BY 4.0. This pack selects only the tracks explicitly covered by the upstream CC0 dedication.",
   "tracks": [
     {
       "id": "lix.menulix",
@@ -77,6 +73,28 @@
       "bytes": 1690073,
       "sha256": "40c34a20d5067a568951cf98072443baf6a795109adcb5553cfad3ca99033f89",
       "frames": 3924187
+    },
+    {
+      "id": "lix.earthen-energy",
+      "title": "Earthen Energy",
+      "creator": "Mike Spanner (Rubix)",
+      "path": "music/rubix/earthen-energy.ogg",
+      "licence": "CC-BY-4.0",
+      "licenceURL": "https://creativecommons.org/licenses/by/4.0/",
+      "bytes": 1604211,
+      "sha256": "479b85e5488197aaeb4bb0e71442817520e17bf41e0280531ce4adc6c4aa7c64",
+      "frames": 5555970
+    },
+    {
+      "id": "lix.winter",
+      "title": "Winter",
+      "creator": "Mike Spanner (Rubix)",
+      "path": "music/rubix/winter.ogg",
+      "licence": "CC-BY-4.0",
+      "licenceURL": "https://creativecommons.org/licenses/by/4.0/",
+      "bytes": 1751591,
+      "sha256": "131693c30e01c449fa8755a41b73ffe94cb22235bc76a4ec74b9f7ab10eb5954",
+      "frames": 5678211
     }
   ]
 }
