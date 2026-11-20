@@ -39,8 +39,9 @@ This prepares current metadata, the native three-level starter, Lix media and th
 licensed Lix font. It writes the trusted data inventory after font generation.
 The build copies only the verified inventory. It excludes original media phases
 and Mac icon formats. The widget receives its Lix artwork, font and notices.
-The requested project icon remains a separate item that requires rights review;
-its source and generated catalogue hashes are in `icon-source.json`.
+The Lemmix app icon uses the pointing character from the project logo.
+Run `python3 Apps/UltimateLemmixSupport/prepare_store_icons.py` after an artwork change.
+The script updates the iOS and tvOS catalogues and records their hashes in `icon-source.json`.
 
 The `Restore original assets` action installs a player-selected resource folder
 outside the app. It retains the current app's trusted metadata and licensed

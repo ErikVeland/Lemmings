@@ -1,16 +1,18 @@
 {
   "schemaVersion": 1,
   "kind": "ultimate-lemmix-store-catalogues",
-  "iconSource": "Resources/AlternativeAssets/lix-source.json",
-  "iconLicence": "CC0-1.0",
+  "iconSource": "Resources/UltimateLemmix/AppIcon/UltimateLemmix.png",
+  "iconSHA256": "34fd8da3c4b1d2707134d88301b556a50046dd9136de35959ad234865d78e8ea",
+  "tvCharacterMask": "Apps/UltimateLemmixSupport/Artwork/TV-character-mask.png",
+  "tvCharacterMaskSHA256": "3a9703b8eea6a66bdf4343daa89475d84786125ed727bd12ca68f03d085581e5",
   "startupLogoSource": "Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
   "startupLogoSHA256": "ccc23dc09af112019fd0f9b914c4678a967fc127914c8c5cf25ce38e551f8754",
-  "method": "Integer-pixel scaling of the approved Lix icon and the project Lemmix menu logo.",
+  "method": "Lanczos resizing for app icons, a character mask for TV depth, and point sampling for the menu logo.",
   "files": [
     {
       "path": "Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
-      "bytes": 3159,
-      "sha256": "f852c3d872d85822107f89b2db3b10770132c6fa0800261b909f9946f77af1df"
+      "bytes": 1487986,
+      "sha256": "749ab43677fcefa34d2254100e04a141c026ebf9acfd63b6cf78cda8ed12ef7b"
     },
     {
       "path": "Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/Contents.json",
@@ -44,8 +46,8 @@
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon - App Store.imagestack/Back.imagestacklayer/Content.imageset/back@1x.png",
-      "bytes": 215,
-      "sha256": "002079829851ac756c85c4815fb6fccc774f9876292b1f77171ddb9101c34ce0"
+      "bytes": 515838,
+      "sha256": "a6f38aa8a9fe49476f9258b9305d527e879fcf66e7f9eda95eb157a9fd320cd4"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon - App Store.imagestack/Back.imagestacklayer/Contents.json",
@@ -64,8 +66,8 @@
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon - App Store.imagestack/Front.imagestacklayer/Content.imageset/front@1x.png",
-      "bytes": 3718,
-      "sha256": "0f40b931e6ab71033afa5787e6d9bfd636036eaec2323dfe1a2cf3144dd04c9c"
+      "bytes": 503436,
+      "sha256": "d352d84c1bde5687d209a6af5bc8a3339c198ae2f4c9641957a90725efa2e90c"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon - App Store.imagestack/Front.imagestacklayer/Contents.json",
@@ -79,8 +81,8 @@
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon - App Store.imagestack/Middle.imagestacklayer/Content.imageset/middle@1x.png",
-      "bytes": 214,
-      "sha256": "731b9f571cf92ddb725176f7cfc6a8b993561b34ad91b04a74d8ddf8db481cf4"
+      "bytes": 459635,
+      "sha256": "65174d537513ae8973f632641b62aab4a1c68ced2ff54b9154bd57b15e72f1f7"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon - App Store.imagestack/Middle.imagestacklayer/Contents.json",
@@ -94,13 +96,13 @@
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon.imagestack/Back.imagestacklayer/Content.imageset/back@1x.png",
-      "bytes": 107,
-      "sha256": "1f1e0eac52f63dbcad1b0df66b2d9ebed55485d0bd6892edac902c5ca435c1be"
+      "bytes": 55763,
+      "sha256": "c57170b21f308a132b3574019fdc64326d2a75169e45a1b278d215df30608538"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon.imagestack/Back.imagestacklayer/Content.imageset/back@2x.png",
-      "bytes": 141,
-      "sha256": "61840245613caec4521d956bf225b45c99e77ed0bd154996928a1aa1b15eec47"
+      "bytes": 207699,
+      "sha256": "8b1d9231a8867e9e6b1ad7518787b989279be4e59ca490b1943a3063453f37fc"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon.imagestack/Back.imagestacklayer/Contents.json",
@@ -119,13 +121,13 @@
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon.imagestack/Front.imagestacklayer/Content.imageset/front@1x.png",
-      "bytes": 481,
-      "sha256": "18d303b776233919e5e15ccfc40254db9ac2ba8b46e47039a7a7b3e5a1b18cef"
+      "bytes": 63332,
+      "sha256": "2752a0ebf023576481aa6231c7bc3a419461c2313e39db0cf0ac1f86757838b9"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon.imagestack/Front.imagestacklayer/Content.imageset/front@2x.png",
-      "bytes": 1377,
-      "sha256": "1b759ef41566c222402e55db2e6a6905ba675a008717931b9215fade7f84f33a"
+      "bytes": 210362,
+      "sha256": "b9202c6a0970138d771df6f6d623375c407233369a5ac9e604624bf6cf5df1c0"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon.imagestack/Front.imagestacklayer/Contents.json",
@@ -139,13 +141,13 @@
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon.imagestack/Middle.imagestacklayer/Content.imageset/middle@1x.png",
-      "bytes": 106,
-      "sha256": "274348ba9adc4396466b4d1ebc07d9b76436b2dc17f57af74cac1649f27554df"
+      "bytes": 51470,
+      "sha256": "2ad0915d96a8304d258751f57397d8af97a5ec1e69fc44f5910b19aa17209eca"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon.imagestack/Middle.imagestacklayer/Content.imageset/middle@2x.png",
-      "bytes": 140,
-      "sha256": "29554b957062b9e68ca2164ce895352b4c74c10e94dceb94b319270fe39ff018"
+      "bytes": 188193,
+      "sha256": "2d47980b80038f2b3fb95f0c96f49ae478ae14ba7dcf1d8134eaaad8836a6f71"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/App Icon.imagestack/Middle.imagestacklayer/Contents.json",
@@ -164,13 +166,13 @@
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/Top Shelf Image Wide.imageset/top@1x.png",
-      "bytes": 3988,
-      "sha256": "a72c55c5b25ad6579bff597ff5c1809235dfc7e8573bdd5c8fac619e6be5988d"
+      "bytes": 1421750,
+      "sha256": "68fc8bc09af1e52185099b0daac14c4f068a7b46e176d770f4c6af1f26141719"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/Top Shelf Image Wide.imageset/top@2x.png",
-      "bytes": 11078,
-      "sha256": "2008aa4650cd673e673eb510437b4dcf7d5420fd8391df3bf1c5465c2d8ca552"
+      "bytes": 5055048,
+      "sha256": "66a93e86bbab65d4c7ad5bf228050cca26636f1f5c48f6a8f2b9aea218d4ccd7"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/Top Shelf Image.imageset/Contents.json",
@@ -179,13 +181,13 @@
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/Top Shelf Image.imageset/top@1x.png",
-      "bytes": 3569,
-      "sha256": "92d6de3bab48d21823a8bcf9d389505e90fb9221a45e6b2679a19d77c7c5aa9d"
+      "bytes": 1391540,
+      "sha256": "334f18b1f050ccbe5c104f51f0dd762d7f28d2627f63eb4fc4d235ee97ae7e24"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/AppIcon.brandassets/Top Shelf Image.imageset/top@2x.png",
-      "bytes": 9850,
-      "sha256": "54177747727f434d3190df3354e63350cc204773a1b7e6f14079d827b757e02d"
+      "bytes": 4958075,
+      "sha256": "64b2f7346d230029ce2383af0d585a30397b64bd3479d53556a314548631d464"
     },
     {
       "path": "Apps/UltimateLemmixTVOS/Assets.xcassets/Contents.json",

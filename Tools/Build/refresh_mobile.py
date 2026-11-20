@@ -250,7 +250,7 @@ def main():
         if info['DTSDKName'] != row['sdk'] + sdk_version:
             raise ValueError('The current SDK differs from the original compiled binary SDK.')
     files = mobile_resources.resources()
-    mobile_resources.icons(files, write=False)
+    mobile_resources.icons(write=False)
     if args.audit:
         evidence = json.loads((build / 'build-evidence.json').read_bytes())
         if evidence['binaryOrigin']['evidenceSHA256'] != sha(origin_bytes):

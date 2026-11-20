@@ -15,8 +15,8 @@ build 108. The 0.1 records below are historical. The existing
 Ultimate Lemmings iOS target remains separate. The
 [macOS edition](UltimateLemmix.md) shares the Lemmix App Store app identity.
 Each platform retains its own target and signed package.
-The requested project icon is shared across these editions. Its character
-rights review remains open.
+The Mac, iPhone, iPad and Apple TV editions use the pointing Lix icon.
+Apple TV uses a layered version for the Home screen and the App Store.
 
 ## Content and controls
 

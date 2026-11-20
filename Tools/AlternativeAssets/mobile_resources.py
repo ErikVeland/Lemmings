@@ -9,7 +9,7 @@ import tempfile
 import zipfile
 
 from byo_bundle import manifest_for, verify_archive, write_member
-from store_resources import ROOT, collect, convert, encoded, media_rights, read_checked, safe_name, sha
+from store_resources import ROOT, collect, convert, encoded, media_rights, safe_name, sha
 
 
 OUTPUT = ROOT / '.build/ultimate-lemmix-mobile-resources'
@@ -151,39 +151,84 @@ def prepare(files):
     return verify(OUTPUT, files)
 
 
-def artwork_assets(files, platform):
-    """Size the requested project icon without claiming CC0 or character-rights clearance."""
+ICON_SOURCE = ROOT / 'Resources/UltimateLemmix/AppIcon/UltimateLemmix.png'
+TV_CHARACTER_MASK = ROOT / 'Apps/UltimateLemmixSupport/Artwork/TV-character-mask.png'
+PNG_OPTIONS = ['-depth', '8', '-strip', '-define', 'png:exclude-chunks=date,time']
+
+
+def tv_layers(directory):
+    """Separate the Lix and moss from the sky so the TV can move each layer on focus."""
+    front = directory / 'front.png'
+    convert([ICON_SOURCE, TV_CHARACTER_MASK, '-alpha', 'off', '-compose', 'CopyOpacity',
+             '-composite', front])
+    # Recover the colours behind the figure from nearby uncovered pixels in each row.
+    columns, rows = 64, 128
+    grid = [ICON_SOURCE, TV_CHARACTER_MASK, '-alpha', 'off', '-compose', 'CopyOpacity',
+            '-composite', '-channel', 'A', '-negate', '+channel', '-resize', f'{columns}x{rows}!',
+            '-depth', '8', 'rgba:-']
+    samples = convert(grid)
+    colours = bytearray()
+    for y in range(rows):
+        row = samples[y * columns * 4:(y + 1) * columns * 4]
+        stops = [x for x in range(columns) if row[x * 4 + 3] >= 250]
+        for x in range(columns):
+            left = max((stop for stop in stops if stop <= x), default=stops[0])
+            right = min((stop for stop in stops if stop >= x), default=stops[-1])
+            weight = (x - left) / (right - left) if right > left else 0
+            for channel in range(3):
+                colours.append(round(row[left * 4 + channel] * (1 - weight)
+                                     + row[right * 4 + channel] * weight))
+    fill = directory / 'fill.rgb'
+    fill.write_bytes(colours)
+    plate = directory / 'plate.png'
+    size = int(convert([ICON_SOURCE, '-format', '%w', 'info:']))
+    convert([ICON_SOURCE, '(', '-size', f'{columns}x{rows}', '-depth', '8', fill,
+             '-resize', f'{size}x{size}!', ')', '(', TV_CHARACTER_MASK, '-morphology',
+             'Dilate', 'Disk:7', '-blur', '0x3', ')', '-compose', 'over', '-composite', plate])
+    # The soft transition lies in the empty sky above the moss.
+    middle = directory / 'middle.png'
+    convert([plate, '(', '-size', f'1x{size}', 'xc:black', '-fx',
+             'min(1,max(0,(j/h-.70)/.08))', '-resize', f'{size}x{size}!', ')',
+             '-alpha', 'off', '-compose', 'CopyOpacity', '-composite', middle])
+    back = directory / 'back.png'
+    sky_height = size * 79 // 100
+    convert([plate, '-crop', f'{size}x{sky_height}+0+0', '+repage', '-virtual-pixel', 'edge',
+             '-set', 'option:distort:viewport', f'{size}x{size}+0+0', '-distort', 'SRT', '0',
+             '+repage', back])
+    return {'Back': back, 'Middle': middle, 'Front': front}
+
+
+def artwork_assets(platform):
+    """Render the product icon at each catalogue size."""
     info = {'author': 'academy.glasscode.ultimatelemmix', 'version': 1}
     output = {'Contents.json': encoded({'info': info})}
-    pin = json.loads((ROOT / 'Resources/AlternativeAssets/project-icon-source.json').read_text())
-    sheet = read_checked(ROOT / pin['source'], pin)
     with tempfile.TemporaryDirectory(prefix='lemmix-mobile-icons-') as temporary:
         directory = Path(temporary)
-        source, frame = directory / 'sheet.png', directory / 'walker.png'
-        source.write_bytes(sheet)
-        frame.write_bytes(sheet)
+        layers = tv_layers(directory) if platform == 'tvos' else {}
 
         def layer(width, height, kind):
-            if kind == 'Back':
-                args = ['-size', f'{width}x{height}', 'xc:#152333']
-            elif kind == 'Middle':
-                args = ['-size', f'{width}x{height}', 'xc:none']
-            else:
-                icon = directory / f'walker-{width}-{height}.png'
-                icon.write_bytes(convert([frame, '-filter', 'Lanczos', '-resize', f'{width}x{height}', 'png:-']))
-                args = ['-size', f'{width}x{height}', 'xc:none', icon, '-gravity', 'center',
-                        '-compose', 'over', '-composite']
-            return convert([*args, '-strip', '-define', 'png:exclude-chunks=date,time', 'png:-'])
+            geometry = f'{width}x{height}'
+            extra_width = (width - height) // 2
+            if kind == 'Front':
+                return convert([layers[kind], '-filter', 'Lanczos', '-resize', f'{height}x{height}!',
+                                '-background', 'none', '-gravity', 'center', '-extent', geometry,
+                                *PNG_OPTIONS, 'png:-'])
+            # Extend only the clear scenery at the edges into the landscape margins.
+            band = round(height * .14)
+            wings = []
+            for gravity in ('west', 'east'):
+                wings.append(['(', '+clone', '-gravity', gravity, '-crop', f'{band}x{height}+0+0',
+                              '+repage', '-flop', '-resize', f'{min(extra_width, band * 3)}x{height}!',
+                              '-gravity', 'northwest', '-virtual-pixel', 'mirror', '-filter', 'point',
+                              '-set', 'option:distort:viewport',
+                              f'{extra_width}x{height}{min(0, band * 3 - extra_width) if gravity == "west" else 0:+d}+0',
+                              '-distort', 'SRT', '0', '+repage', ')'])
+            return convert([layers[kind], '-filter', 'Lanczos', '-resize', f'{height}x{height}!',
+                            *wings[0], '+swap', *wings[1], '+append', *PNG_OPTIONS, 'png:-'])
 
         if platform == 'ios':
-            pieces = []
-            for kind in ('Back', 'Middle', 'Front'):
-                path = directory / f'{kind}.png'
-                path.write_bytes(layer(1024, 1024, kind))
-                pieces.append(path)
-            image = convert([pieces[0], pieces[1], '-compose', 'over', '-composite', pieces[2],
-                             '-compose', 'over', '-composite', '-alpha', 'off', '-strip',
-                             '-define', 'png:exclude-chunks=date,time', 'png:-'])
+            image = convert([ICON_SOURCE, '-filter', 'Lanczos', '-resize', '1024x1024!',
+                             '-alpha', 'off', *PNG_OPTIONS, 'PNG24:-'])
             output['AppIcon.appiconset/AppIcon-1024.png'] = image
             output['AppIcon.appiconset/Contents.json'] = encoded({'info': info, 'images': [{
                 'filename': 'AppIcon-1024.png', 'idiom': 'universal', 'platform': 'ios', 'size': '1024x1024'}]})
@@ -228,11 +273,11 @@ def artwork_assets(files, platform):
     return output
 
 
-def icons(files, write):
+def icons(write):
     """Verify source asset catalogues against their approved deterministic generation."""
     for platform, app in (('ios', 'UltimateLemmixIOS'), ('tvos', 'UltimateLemmixTVOS')):
         directory = ROOT / 'Apps' / app / 'Assets.xcassets'
-        selected = artwork_assets(files, platform)
+        selected = artwork_assets(platform)
         if directory.is_symlink():
             raise ValueError('An application asset catalogue is a link.')
         actual = set()
@@ -241,7 +286,9 @@ def icons(files, write):
                 raise ValueError('A clean icon source folder contains a link.')
             if path.is_file():
                 actual.add(path.relative_to(directory).as_posix())
-        if actual - set(selected):
+        other_assets = {'StartupLogo.imageset/Contents.json', 'StartupLogo.imageset/startup-logo.png',
+                        'LaunchBackground.colorset/Contents.json'}
+        if actual - set(selected) - other_assets:
             raise ValueError('The clean asset catalogue contains an unapproved member.')
         for name, value in selected.items():
             target = directory / name
@@ -302,7 +349,7 @@ def main():
         prepare(files)
     else:
         verify(OUTPUT, files)
-    icons(files, args.icons)
+    icons(args.icons)
     if args.audit_app:
         if not args.platform:
             parser.error('--audit-app requires --platform')
