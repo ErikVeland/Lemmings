@@ -102,7 +102,7 @@ No original game data or unreviewed remix is offered as a hosted download.
 Ultimate Lemmix is a [separate project and release](SharedPublishing.md) on
 `release/ultimate-lemmix`. Its own manifest controls its version and build counters.
 Shared engines and features stay in sync with Ultimate Lemmings through `main`.
-Current build 109 uses the [Ultimate Lemmix app icon](../Resources/UltimateLemmix/AppIcon/README.md)
+New builds use the [Ultimate Lemmix app icon](../Resources/UltimateLemmix/AppIcon/README.md)
 on Mac, iPhone, iPad and Apple TV. The following records describe build 108.
 
 The local Mac candidate is 2.4.2 build 108. It uses the current Mac architecture
