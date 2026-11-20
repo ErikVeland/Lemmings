@@ -120,11 +120,11 @@ font_path.unlink()
 social.save(ASSETS / 'social.jpg', quality=91, optimize=True)
 (ROOT / 'image-provenance.json').write_text(json.dumps({
     'captures': records,
-    'duoScenes': {'renderer': 'Website/render_duo.py', 'artwork': 'Illustrated graphite foldable in three poses. The interiors use the two actual game layout frames listed above. The tent film projects the game clock demonstration onto the outer display.', 'outputs': ['duo-book-scene.webp', 'duo-tabletop-scene.webp', 'duo-tent-scene.webp', 'duo-tent-scene.mp4']},
+    'duoScenes': {'renderer': 'Website/render_duo.py', 'artwork': 'Illustrated graphite foldable in three poses. The interior screens use native build 110 Duo simulator captures at a 100° hinge, with the app’s reserved division and active display verified. The tent poster uses the native Duo cover screenshot at 52° and the film projects the game clock demonstration onto that outer display.', 'outputs': ['duo-book-scene.webp', 'duo-tabletop-scene.webp', 'duo-tent-scene.webp', 'duo-tent-scene.mp4']},
     'ravine': {'output': 'forest-ravine.webp', 'direction': 'A broken bridge above a dark pool. Four walkers approach the cliff while one Lix bobs in the current. Illustrated woodland scenery.'},
     'detonator': {'output': 'forest-detonator.webp', 'tool': 'Built-in image generation', 'direction': 'One cheerful blond Lix considers an oversized red plunger. Two others follow a sign towards a missing bridge. Cold spruce-blue shadows, a dusky plum sky, and a copper rim light in the mossy forest.'},
     'illustration': 'Project artwork generated for this site from the approved Lix icon and woodland illustration. The creek, burrow, woodland objects, four material textures and two moss-covered button sprites are illustrations. Gameplay images use the captures listed above.',
-    'clock': {'outputs': ['duo-desk-clock.mp4', 'duo-desk-clock.webp'], 'source': 'Build 110 GameDeskClockArt.drawFullScreen and DeskClockSimulation, signed Mac app resources. Simulated 14:59 to 15:00 with a fictional Tea break event. 980 by 520, 27 seconds, 15 frames per second.'},
+    'clock': {'outputs': ['duo-desk-clock.mp4', 'duo-desk-clock.webp'], 'source': 'Build 110 GameDeskClockArt.drawFullScreen and DeskClockSimulation, signed Mac app resources. Simulated 14:59 to 15:00 with a fictional Tea break event. 1008 by 692, 27 seconds, 15 frames per second.'},
     'social': 'The woodland illustration with the approved app icon and wordmark.',
     'font': 'Archivo, SIL Open Font License; reused from the existing GenErik DJ website.'
 }, indent=2) + '\n')

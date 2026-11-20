@@ -7,7 +7,7 @@ import tempfile
 
 ASSETS = Path(__file__).resolve().parent / 'assets'
 # Corners in the 1536 × 1024 illustrations, ordered TL, TR, BL, BR.
-TENT = [(313, 255), (1278, 244), (230, 679), (1208, 712)]
+TENT = [(376, 170), (1170, 167), (311, 729), (1106, 749)]
 BOOK = [[(306, 148), (765, 187), (306, 779), (765, 741)],
         [(767, 187), (1219, 148), (767, 741), (1219, 779)]]
 TABLETOP = [[(241, 108), (1290, 108), (241, 518), (1290, 518)],
@@ -36,11 +36,12 @@ def photo(artwork, screen, pose, corners, directory):
     if pose == 'tent':
         crops = [(0, 0, width, height)]
     elif pose == 'book':
-        half = width // 2
-        crops = [(0, 0, half, height), (half, 0, width-half, height)]
+        # The native 3× display reserves 40 points at the hinge.
+        panel = (width - 120) // 2
+        crops = [(0, 0, panel, height), (width-panel, 0, panel, height)]
     else:
-        half = height // 2
-        crops = [(0, 0, width, half), (0, half, width, height-half)]
+        panel = (height - 120) // 2
+        crops = [(0, 0, width, panel), (0, height-panel, width, panel)]
     layers = []
     for i, (crop, quad) in enumerate(zip(crops, corners)):
         layer = directory / f'{pose}-{i}.png'
@@ -53,8 +54,9 @@ def film(artwork, directory):
     # Only the glass changes between frames. Render the frame and its mask once.
     mask = directory/'glass.png'
     white = directory/'white.png'
-    run('magick', '-size', '980x520', 'xc:white', white)
-    project(white, (0, 0, 980, 520), TENT, mask)
+    width, height = dimensions(ASSETS/'duo-desk-clock.webp')
+    run('magick', '-size', f'{width}x{height}', 'xc:white', white)
+    project(white, (0, 0, width, height), TENT, mask)
     run('magick', mask, '-alpha', 'extract', '-resize', '1152x768!', directory/'alpha.png')
     xy = ':'.join(f'x{i}={x*.75}:y{i}={y*.75}' for i,(x,y) in enumerate(TENT))
     filters = ('[0:v]scale=1152:768,setsar=1,format=gbrp[wood];'
@@ -69,7 +71,7 @@ def film(artwork, directory):
 if __name__ == '__main__':
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('artwork', type=Path, help='Folder containing book.png, tabletop.png and tent.png')
-    parser.add_argument('--tent', type=Path, default=ASSETS/'duo-desk-clock.webp')
+    parser.add_argument('--tent', type=Path, default=ASSETS/'duo-cover-full.webp')
     parser.add_argument('--book', type=Path, default=ASSETS/'book-full.webp')
     parser.add_argument('--tabletop', type=Path, default=ASSETS/'tabletop-full.webp')
     parser.add_argument('--film', action='store_true')

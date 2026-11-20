@@ -76,29 +76,29 @@
     {
       "key": "tabletop",
       "file": "tabletop.png",
-      "sha256": "7ef0842230a5bacb8cab0d1f8ed07d30985256def587afe9e5b3c8c73d3231e2",
-      "width": 834,
-      "height": 1194,
+      "sha256": "2133727375ceccaa85b7bfee9ef1e256a0d489bdc98bbcf7e9e245438b2312f3",
+      "width": 2007,
+      "height": 2853,
       "widths": [
         480,
         834
       ],
-      "alt": "Three Lix cross Over the Rise on the upper pane. The lower pane holds the overview, time controls and eight skill buttons.",
-      "caption": "Tabletop · Over the Rise. Watch the crowd upstairs and work the controls downstairs. Duo layout render.",
+      "alt": "Four Lix cross the brick floor of First Steps above the fold. The overview, transport and eight skills sit on the lower screen.",
+      "caption": "Tabletop · First Steps. Four walkers are still on the bricks. The lower pane holds the controls.",
       "name": "Tabletop on Duo"
     },
     {
       "key": "book",
       "file": "book.png",
-      "sha256": "c682560862c63b6903f38791583b718c2b99bf74e1c116a969cad4c71392bb44",
-      "width": 1194,
-      "height": 834,
+      "sha256": "09154bbfc6f72f2f3f4b6f8f3b9bf6a24475c6271d5d3043dc266ec93c4d3369",
+      "width": 2853,
+      "height": 2007,
       "widths": [
         640,
         1194
       ],
-      "alt": "First Steps spans the vertical fold. The skills are divided between the panes, leaving the hinge clear.",
-      "caption": "Book · First Steps. The path crosses the fold and the skill buttons sit on either side. Duo layout render.",
+      "alt": "First Steps ends with six out of six saved. The result and level preview are on the left pane, with three earned stars on the right.",
+      "caption": "Book · All six made it home. Read the First Steps result on one side of the fold and the achievements on the other.",
       "name": "Book on Duo"
     },
     {
@@ -128,6 +128,17 @@
       "alt": "The first walker has fallen into blue water below the path. The others keep walking towards the same bank.",
       "caption": "Follow Me · geooPk1. The lead walker is drowning. The others are still following. Mac, with Lix artwork.",
       "name": "The water in Follow Me"
+    },
+    {
+      "key": "duo-cover",
+      "file": "duo-cover.png",
+      "sha256": "375b5c79c845c6eb2b0a217767568ea199c22c95b3c1c830b95ba81cc95f8817",
+      "width": 2034,
+      "height": 1398,
+      "widths": [],
+      "alt": "Desk Clock on the landscape cover display. Earth blocks read 19:52 while two Lix move towards the exit.",
+      "caption": "Build 110 in Tent Pose on the Duo simulator, cover display, 52-degree hinge.",
+      "name": "Desk Clock on the Duo cover display"
     },
     {
       "key": "phone",

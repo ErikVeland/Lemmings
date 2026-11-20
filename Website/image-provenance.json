@@ -70,7 +70,7 @@
     },
     {
       "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/tabletop.png",
-      "sha256": "7ef0842230a5bacb8cab0d1f8ed07d30985256def587afe9e5b3c8c73d3231e2",
+      "sha256": "2133727375ceccaa85b7bfee9ef1e256a0d489bdc98bbcf7e9e245438b2312f3",
       "outputs": [
         "tabletop-full.webp",
         "tabletop-480.webp",
@@ -79,11 +79,11 @@
         "tabletop-834.jpg"
       ],
       "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Tabletop \u00b7 Over the Rise. Watch the crowd upstairs and work the controls downstairs. Duo layout render."
+      "caption": "Tabletop \u00b7 First Steps. Four walkers are still on the bricks. The lower pane holds the controls."
     },
     {
       "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/book.png",
-      "sha256": "c682560862c63b6903f38791583b718c2b99bf74e1c116a969cad4c71392bb44",
+      "sha256": "09154bbfc6f72f2f3f4b6f8f3b9bf6a24475c6271d5d3043dc266ec93c4d3369",
       "outputs": [
         "book-full.webp",
         "book-640.webp",
@@ -92,7 +92,7 @@
         "book-1194.jpg"
       ],
       "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Book \u00b7 First Steps. The path crosses the fold and the skill buttons sit on either side. Duo layout render."
+      "caption": "Book \u00b7 All six made it home. Read the First Steps result on one side of the fold and the achievements on the other."
     },
     {
       "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/cliff.png",
@@ -119,6 +119,15 @@
       ],
       "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
       "caption": "Follow Me \u00b7 geooPk1. The lead walker is drowning. The others are still following. Mac, with Lix artwork."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/duo-cover.png",
+      "sha256": "375b5c79c845c6eb2b0a217767568ea199c22c95b3c1c830b95ba81cc95f8817",
+      "outputs": [
+        "duo-cover-full.webp"
+      ],
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "Build 110 in Tent Pose on the Duo simulator, cover display, 52-degree hinge."
     },
     {
       "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/phone.png",
@@ -185,7 +194,7 @@
   ],
   "duoScenes": {
     "renderer": "Website/render_duo.py",
-    "artwork": "Illustrated graphite foldable in three poses. The interiors use the two actual game layout frames listed above. The tent film projects the game clock demonstration onto the outer display.",
+    "artwork": "Illustrated graphite foldable in three poses. The interior screens use native build 110 Duo simulator captures at a 100\u00b0 hinge, with the app\u2019s reserved division and active display verified. The tent poster uses the native Duo cover screenshot at 52\u00b0 and the film projects the game clock demonstration onto that outer display.",
     "outputs": [
       "duo-book-scene.webp",
       "duo-tabletop-scene.webp",
@@ -208,7 +217,7 @@
       "duo-desk-clock.mp4",
       "duo-desk-clock.webp"
     ],
-    "source": "Build 110 GameDeskClockArt.drawFullScreen and DeskClockSimulation, signed Mac app resources. Simulated 14:59 to 15:00 with a fictional Tea break event. 980 by 520, 27 seconds, 15 frames per second."
+    "source": "Build 110 GameDeskClockArt.drawFullScreen and DeskClockSimulation, signed Mac app resources. Simulated 14:59 to 15:00 with a fictional Tea break event. 1008 by 692, 27 seconds, 15 frames per second."
   },
   "social": "The woodland illustration with the approved app icon and wordmark.",
   "font": "Archivo, SIL Open Font License; reused from the existing GenErik DJ website."
