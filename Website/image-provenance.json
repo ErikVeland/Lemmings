@@ -64,12 +64,14 @@
       "treatment": "Proportional responsive conversion of the current logo. No redrawing."
     },
     {
-      "source": "/Users/veland/UltimateLemmix/Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
-      "sha256": "f852c3d872d85822107f89b2db3b10770132c6fa0800261b909f9946f77af1df",
+      "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/AppIcon/UltimateLemmix.png",
+      "sha256": "34fd8da3c4b1d2707134d88301b556a50046dd9136de35959ad234865d78e8ea",
       "outputs": [
-        "favicon.png"
+        "favicon.png",
+        "apple-touch-icon.png",
+        "app-icon.png"
       ],
-      "treatment": "Nearest-neighbour resize of clean Store icon."
+      "treatment": "Resized from the approved Ultimate Lemmix app icon."
     },
     {
       "source": "/Users/veland/UltimateLemmix/.build/approved-alternative-resources/AlternativeAssets/Lix/assets/data/images/lixsprites.png",
@@ -81,6 +83,7 @@
       "treatment": "Extracted published walker frames using pinned metadata and the existing black/grid transparency keys. No redrawing."
     }
   ],
-  "social": "Authored composition using the unchanged product logo and full Mac starter capture.",
+  "illustration": "Project artwork generated from the approved Ultimate Lemmix icon. The mobile image is a crop of the woodland scene.",
+  "social": "The woodland illustration with the approved app icon and wordmark.",
   "font": "Archivo, SIL Open Font License; reused from the existing GenErik DJ website."
 }

@@ -4,7 +4,7 @@ from pathlib import Path
 import hashlib
 import json
 import shutil
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 from fontTools.ttLib import TTFont
 
 ROOT = Path(__file__).resolve().parent
@@ -46,9 +46,12 @@ for width in (480, 960):
                          Image.Resampling.LANCZOS).save(target, quality=90, method=6)
     logo_outputs.append(target.name)
 record(logo, logo_outputs, 'Proportional responsive conversion of the current logo. No redrawing.')
-icon = REPO / 'Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png'
-Image.open(icon).resize((96, 96), Image.Resampling.NEAREST).save(ASSETS / 'favicon.png')
-record(icon, ['favicon.png'], 'Nearest-neighbour resize of clean Store icon.')
+icon = REPO / 'Resources/UltimateLemmix/AppIcon/UltimateLemmix.png'
+app_icon = Image.open(icon).convert('RGB')
+icon_sizes = {'favicon.png': 96, 'apple-touch-icon.png': 180, 'app-icon.png': 512}
+for name, size in icon_sizes.items():
+    app_icon.resize((size, size), Image.Resampling.LANCZOS).save(ASSETS / name, optimize=True)
+record(icon, list(icon_sizes), 'Resized from the approved Ultimate Lemmix app icon.')
 for name in ['archivo-latin.woff2', 'archivo-OFL.txt']:
     shutil.copy2(DJ / name, ASSETS / name)
 
@@ -72,22 +75,26 @@ record(sheet_path, ['walker.png', 'walk-strip.png'], 'Extracted published walker
 shutil.copy2(lix / 'licences/copying.txt', ASSETS / 'Lix-copying.txt')
 shutil.copy2(REPO / 'THIRD_PARTY_NOTICES.md', ASSETS / 'application-notices.txt')
 
-# The social preview combines the genuine logo and capture without altering either.
-social = Image.new('RGB', (1200, 630), '#c6e9ed')
+# Use the woodland illustration for link previews and keep the square app icon visible.
+woodland = ASSETS / 'moss-bridge.webp'
+social = ImageOps.fit(Image.open(woodland).convert('RGB'), (1200, 630), centering=(0.53, 0.5))
 draw = ImageDraw.Draw(social)
-font = TTFont(ASSETS / 'archivo-latin.woff2'); font.flavor = None
-font_path = ROOT / '.social-font.ttf'; font.save(font_path)
-large = ImageFont.truetype(str(font_path), 67)
-small = ImageFont.truetype(str(font_path), 24)
-brand = Image.open(logo).convert('RGBA'); brand.thumbnail((540, 170), Image.Resampling.LANCZOS)
-social.paste(brand, (60, 48), brand)
-draw.text((60, 245), 'Everybody counts.', font=large, fill='#143e35')
-draw.text((65, 340), 'A little crowd. A route home. Your call.', font=small, fill='#143e35')
-draw.text((65, 545), 'Ultimate Lemmix · Mac, iPhone, iPad & Apple TV', font=small, fill='#143e35')
-capture = Image.open(CAPTURES / 'presentation/submission/Starter.png').convert('RGB')
-capture.thumbnail((490, 307), Image.Resampling.LANCZOS)
-social.paste(capture, (670, 165))
-social.save(ASSETS / 'social.jpg', quality=93, optimize=True)
+brand = original_logo.copy()
+brand.thumbnail((435, 160), Image.Resampling.LANCZOS)
+social.paste(brand, (52, 162), brand)
+social.paste(app_icon.resize((100, 100), Image.Resampling.LANCZOS), (57, 48))
+font = TTFont(ASSETS / 'archivo-latin.woff2')
+font.flavor = None
+font_path = ROOT / '.social-font.ttf'
+font.save(font_path)
+title_font = ImageFont.truetype(str(font_path), 49)
+draw.text((56, 324), 'Everybody counts.', font=title_font, fill='#fff5da', stroke_width=1, stroke_fill='#162b30')
 font_path.unlink()
-(ROOT / 'image-provenance.json').write_text(json.dumps({'captures': records, 'social': 'Authored composition using the unchanged product logo and full Mac starter capture.', 'font': 'Archivo, SIL Open Font License; reused from the existing GenErik DJ website.'}, indent=2) + '\n')
+social.save(ASSETS / 'social.jpg', quality=91, optimize=True)
+(ROOT / 'image-provenance.json').write_text(json.dumps({
+    'captures': records,
+    'illustration': 'Project artwork generated from the approved Ultimate Lemmix icon. The mobile image is a crop of the woodland scene.',
+    'social': 'The woodland illustration with the approved app icon and wordmark.',
+    'font': 'Archivo, SIL Open Font License; reused from the existing GenErik DJ website.'
+}, indent=2) + '\n')
 print('Prepared genuine product imagery and local fonts.')
