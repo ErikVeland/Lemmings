@@ -219,18 +219,21 @@ the derivation and rebuild procedure.
 Ultimate Lemmix uses selected resources from Lix revision
 `f1e805048fe439a4a0e9cc650c613713ababac8b` at
 <https://github.com/SimonN/LixD>. Its copying notice dedicates the selected
-sprites, menu icons, tileset graphics and music to CC0 1.0. The prepared media
-retains that notice and creator credits. Rubix tracks are excluded.
+sprites, menu icons, tileset graphics and six tracks to CC0 1.0. Mike Spanner
+(Rubix) licenses “Earthen Energy” and “Winter” under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The app includes
+normalised MP3 conversions of all eight tracks and retains the creator credits
+and upstream notice in `Licences/Lix-music-credits.txt`.
 
 The unchanged `data/fonts/djvusans.ttf` is DejaVu Sans Condensed Bold 2.29.
 Its Bitstream Vera and Arev licences apply separately. The font is not CC0.
 Complete notices accompany the font and the rasterised interface glyphs.
-The exact permitted media hashes are recorded in
-[the alternative-resource source record](Resources/UltimateLemmix/alternative-resource-source.json).
+The [art and font source record](Resources/UltimateLemmix/alternative-resource-source.json)
+and [soundtrack source record](Resources/AlternativeAssets/music-sources.json)
+record the exact source hashes.
 
-Original game media, unreviewed remixes and the retained project icon do not
-gain redistribution permission from these licences. The icon's character
-rights remain a separate review gate.
+Original game media and unreviewed remixes require separate redistribution permission.
+The project created its own [Ultimate Lemmix app icon](Resources/UltimateLemmix/AppIcon/README.md).
 
 ## Sparkle
 
