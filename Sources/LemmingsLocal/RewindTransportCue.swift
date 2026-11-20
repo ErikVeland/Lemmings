@@ -3,13 +3,13 @@ import AppKit
 
 /// Draws the small, shared rewind transport cue used by each playfield.
 @MainActor enum RewindTransportCue {
-  static func draw(
+  @discardableResult static func draw(
     origin: CGPoint,
     currentTick: Int,
     originTick: Int,
     scale: CGFloat = 1
-  ) {
-    guard originTick > currentTick else { return }
+  ) -> CGFloat {
+    guard originTick > currentTick else { return 0 }
 
     let delta = originTick - currentTick
     GameTypography.annotation("<< REWIND  -\(delta) TICKS", at: origin, palette: .blue)
@@ -30,6 +30,7 @@ import AppKit
       width: markerWidth,
       height: railHeight + 2 * scale
     ).fill()
+    return max(18, 12 * scale + railHeight)
   }
 }
 #endif

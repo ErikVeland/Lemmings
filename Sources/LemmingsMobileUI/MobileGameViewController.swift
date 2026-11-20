@@ -309,6 +309,8 @@ typealias MobileGameControllerBase = UIViewController
     private var readyCuePending = false
     let effects = MobileEffects()
     private let nowPlaying = MobileNowPlayingView()
+    private let assignmentNotice = MobilePixelLabel()
+    private var assignmentNoticeTask: Task<Void, Never>?
     private let replaySkillInfo = MobileReplaySkillView()
     private let replayMoves = MobileReplayMoveView()
     let solutionSelector = MobileSolutionSwitchView()
@@ -405,6 +407,12 @@ typealias MobileGameControllerBase = UIViewController
         view.addSubview(touchLoupe)
         view.addSubview(inspectionHover)
         view.addSubview(nowPlaying)
+        assignmentNotice.palette = .warning
+        assignmentNotice.numberOfLines = 3
+        assignmentNotice.backgroundColor = UIColor.black.withAlphaComponent(0.85)
+        assignmentNotice.isUserInteractionEnabled = false
+        assignmentNotice.isHidden = true
+        view.addSubview(assignmentNotice)
         view.addSubview(replaySkillInfo)
         countdownLabel.palette = .green
         countdownLabel.maximumScale = 6
@@ -647,12 +655,14 @@ typealias MobileGameControllerBase = UIViewController
         nowPlaying.position(in: musicArea)
         hud.frame = view.bounds
         updateHUD(layout: layout)
+        layoutAssignmentNotice()
         layoutOverlay()
         if previewPoint != nil { renderCurrentFrame(force: true) }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        clearAssignmentNotice()
         viewIsVisible = false
         #if os(tvOS)
         inputAdapter.reset()
@@ -924,6 +934,10 @@ typealias MobileGameControllerBase = UIViewController
         let point = playfieldView.gameViewport.viewPoint(fromLevel: selection.point)
         let targetPoint = playfieldView.convert(CGPoint(x: point.x, y: point.y), to: hud)
         let playfield = playfieldView.convert(playfieldView.bounds, to: hud)
+        if let reason = chronicles.assignmentRejection(control: control, to: target) {
+            showAssignmentRejection(reason)
+            return true
+        }
         pendingL3Use = (target, control, selection)
         pauseForPlanning()
         guard hud.showToolDirectionPicker(frames: chronicles.directionPickerFrames,
@@ -933,6 +947,7 @@ typealias MobileGameControllerBase = UIViewController
             return true
         }
         view.bringSubviewToFront(hud)
+        layoutAssignmentNotice()
         return true
     }
 
@@ -947,7 +962,11 @@ typealias MobileGameControllerBase = UIViewController
             return
         }
         let accepted = chronicles.useTool(direction: direction, to: pendingL3Use.target)
-        guard accepted else { effects.rejectedAssignment(); return }
+        guard accepted else {
+            showAssignmentRejection(chronicles.toolUseRejection(to: pendingL3Use.target, direction: direction))
+            return
+        }
+        clearAssignmentNotice()
         self.pendingL3Use = nil
         hud.hideToolDirectionPicker()
         restoreGameplayOverlayOrder()
@@ -971,6 +990,7 @@ typealias MobileGameControllerBase = UIViewController
         view.bringSubviewToFront(touchLoupe)
         view.bringSubviewToFront(inspectionHover)
         view.bringSubviewToFront(nowPlaying)
+        view.bringSubviewToFront(assignmentNotice)
         view.bringSubviewToFront(replaySkillInfo)
         view.bringSubviewToFront(countdownLabel)
         view.bringSubviewToFront(replayMoves)
@@ -1072,19 +1092,71 @@ typealias MobileGameControllerBase = UIViewController
         }
         let selection = held
             ? touchSelection?.selection(in: session.targetCandidates(for: selectedControl)) : target(at: point)
-        if let selection, selection.state == .eligible {
-            if !beginL3ToolDirectionSelection(control: selectedControl,
+        if let selection {
+            if selection.state != .eligible {
+                if let reason = session.assignmentRejection(control: selectedControl, to: selection.id) {
+                    showAssignmentRejection(reason)
+                }
+            } else if !beginL3ToolDirectionSelection(control: selectedControl,
                 target: selection.id, selection: selection) {
-                let accepted = session.assign(control: selectedControl, to: selection.id)
-                if accepted {
+                if session.assign(control: selectedControl, to: selection.id) {
+                    clearAssignmentNotice()
                     lastInputAssignment = selection; lastAssignmentControl = selectedControl
                     effects.update(session: session, viewport: playfieldView.gameViewport)
-                } else { effects.rejectedAssignment() }
-                saveCheckpoint(reason: .periodic)
+                    saveCheckpoint(reason: .periodic)
+                } else {
+                    showAssignmentRejection(session.assignmentRejection(control: selectedControl, to: selection.id))
+                }
             }
         }
         highlightedTarget = selection
         restoreHoverAim()
+    }
+
+    func showAssignmentRejection(_ reason: String?) {
+        effects.rejectedAssignment()
+        assignmentNoticeTask?.cancel()
+        assignmentNotice.text = reason ?? L10n.text("That lemming cannot use this action now.")
+        assignmentNotice.isHidden = false
+        layoutAssignmentNotice()
+        view.bringSubviewToFront(assignmentNotice)
+        UIAccessibility.post(notification: .announcement, argument: assignmentNotice.accessibilityLabel)
+        assignmentNoticeTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(3))
+            guard !Task.isCancelled else { return }
+            self?.clearAssignmentNotice()
+        }
+    }
+
+    private func layoutAssignmentNotice() {
+        guard !assignmentNotice.isHidden, let layout = lastHUDLayout else { return }
+        let available = playfieldView.frame.insetBy(dx: 8, dy: 8)
+        let overlays: [UIView] = [countdownLabel, solutionSelector]
+        let frames = hud.noticeObstructions.map { hud.convert($0, to: view) }
+            + overlays.filter { !$0.isHidden }.map(\.frame)
+        let obstructions = frames.filter { available.intersects($0) }.map { frame in
+            MobileReservedRegion(kind: .occlusion,
+                frame: .init(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height))
+        }
+        let regions = MobileDisplayRegions.freeFrames(
+            in: .init(x: available.minX, y: available.minY, width: available.width, height: available.height),
+            avoiding: layout.reservedRegions + obstructions)
+        guard let region = regions.filter({ $0.width >= 160 && $0.height >= 32 }).min(by: { lhs, rhs in
+            lhs.minY == rhs.minY ? lhs.width > rhs.width : lhs.minY < rhs.minY
+        }) else {
+            assignmentNotice.frame = .zero
+            return
+        }
+        let width = min(480, region.width)
+        assignmentNotice.maximumScale = width >= 480 ? 2 : 1
+        assignmentNotice.frame = CGRect(x: region.minX + (region.width - width) / 2,
+            y: region.minY, width: width, height: min(42, region.height))
+    }
+
+    func clearAssignmentNotice() {
+        assignmentNoticeTask?.cancel()
+        assignmentNoticeTask = nil
+        assignmentNotice.isHidden = true
     }
 
     func target(at point: MobilePoint) -> MobileTargetSelection? {
@@ -1656,6 +1728,7 @@ typealias MobileGameControllerBase = UIViewController
             completionDetails.insert(L10n.text("Bonus skill used"), at: 0)
         }
         nowPlaying.hide()
+        clearAssignmentNotice()
         effects.result(won: snapshot.didWin)
         onCompleted?(snapshot)
         let result = snapshot.didWin
@@ -2735,6 +2808,7 @@ typealias MobileGameControllerBase = UIViewController
         playfieldView.selectionSprite = nil
         hud.cancelHeldControls()
         nowPlaying.hide()
+        clearAssignmentNotice()
         achievementTask?.cancel(); achievementTask = nil
         overlayCanvas.actionHelp = [:]
         if !results { celebrationTask?.cancel(); celebrationTask = nil }

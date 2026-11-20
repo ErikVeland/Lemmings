@@ -1080,6 +1080,9 @@
 /* Sources/NxlvKit/SkillVocabulary.swift:15 */
 "Bricks" = "Bricks";
 
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:86 */
+"Bricks cannot build straight down." = "Bricks cannot build straight down.";
+
 /* Sources/NxlvKit/TrolleyLeaderboards.swift:140 */
 "Bring {0} more home to match your best." = "Bring {0} more home to match your best.";
 
@@ -1229,9 +1232,6 @@
 
 /* Sources/LemmingsLocal/main.swift:6923 */
 "Cannot add NeoLemmix packs" = "Cannot add NeoLemmix packs";
-
-/* Sources/LemmingsLocal/main.swift:8237 */
-"Cannot assign: {0}" = "Cannot assign: {0}";
 
 /* Sources/LemmingsLocal/SequelArtworkRenderer.swift:73 */
 "Cannot create sequel artwork." = "Cannot create sequel artwork.";
@@ -5235,6 +5235,9 @@
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:188 */
 "No hands-off clear this run. This goal may not be possible here." = "No hands-off clear this run. This goal may not be possible here.";
 
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:24; Sources/LemmingsAppCore/SkillRejectionFeedback.swift:39; Sources/LemmingsAppCore/SkillRejectionFeedback.swift:54 */
+"No lemming is selected." = "No lemming is selected.";
+
 /* Sources/LemmingsAppCore/Records/LemmingInspection.swift:72; Sources/LemmingsLocal/LemmingInspectionPage.swift:55 */
 "No lemmings released yet" = "No lemmings released yet";
 
@@ -5300,6 +5303,9 @@
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:356; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:357; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:388; Sources/LemmingsLocal/main.swift:9182 */
 "No unassigned lemmings" = "No unassigned lemmings";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:106 */
+"No uses of {0} remain." = "No uses of {0} remain.";
 
 /* Sources/LemmingsLocal/main.swift:4396 */
 "No validated local solution demonstrates this technique." = "No validated local solution demonstrates this technique.";
@@ -7845,6 +7851,12 @@
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:105; Sources/LemmingsLocal/SettingsWindow.swift:621; Sources/LemmingsLocal/SettingsWindow.swift:622 */
 "Static home screen" = "Static home screen";
 
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:29 */
+"Steel blocks this skill." = "Steel blocks this skill.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:46 */
+"Steel or a one-way wall blocks this skill." = "Steel or a one-way wall blocks this skill.";
+
 /* Sources/LemmingsLocal/LeaderboardReplayWindow.swift:48; Sources/LemmingsLocal/SolutionReplay.swift:144 */
 "Step +1" = "Step +1";
 
@@ -8211,7 +8223,7 @@
 /* Sources/Ports/Lemm2/FRONTEND/GFXIFFS/MEDALS.IFF:1 */
 "That just wasn't good enough. They're relying on you." = "That just wasn't good enough. They're relying on you.";
 
-/* Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1356 */
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:90; Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1356 */
 "That lemming cannot use this action now." = "That lemming cannot use this action now.";
 
 /* Sources/LemmingsMobileUI/MobileLibraryHotSeat.swift:177 */
@@ -8601,6 +8613,9 @@
 /* Sources/NxlvKit/NeoLemmixSimulation.swift:18 */
 "The one-way mask has invalid value {0} at index {1}." = "The one-way mask has invalid value {0} at index {1}.";
 
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:30 */
+"The one-way wall blocks this direction." = "The one-way wall blocks this direction.";
+
 /* Sources/LemmingsLocal/OriginalMoviePlayer.swift:134 */
 "The original movie ended before its declared final frame." = "The original movie ended before its declared final frame.";
 
@@ -8852,6 +8867,9 @@
 
 /* Sources/LemmingsMobileUI/MobileApplication.swift:89 */
 "The synthetic Lemmings 3 level must include an eligible tool holder." = "The synthetic Lemmings 3 level must include an eligible tool holder.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:32 */
+"The terrain data for this skill is unavailable." = "The terrain data for this skill is unavailable.";
 
 /* Sources/NxlvKit/NeoLemmixSimulation.swift:706 */
 "The time limit cannot be negative." = "The time limit cannot be negative.";
@@ -9111,6 +9129,9 @@
 /* Sources/NxlvKit/BundledGameResources.swift:57 */
 "This app has no embedded game resources. Rebuild the app with its game data." = "This app has no embedded game resources. Rebuild the app with its game data.";
 
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:31; Sources/LemmingsAppCore/SkillRejectionFeedback.swift:48 */
+"This blocker would overlap another blocker." = "This blocker would overlap another blocker.";
+
 /* Sources/LemmingsLocal/SettingsWindow.swift:268 */
 "This build has no shared counts service. Play insights show this Mac only." = "This build has no shared counts service. Play insights show this Mac only.";
 
@@ -9138,8 +9159,32 @@
 /* Sources/LemmingsMobileCore/MobileGameSession.swift:177 */
 "This journey level is unavailable on this device. The saved session has been kept." = "This journey level is unavailable on this device. The saved session has been kept.";
 
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:111 */
+"This lemming already has {0}." = "This lemming already has {0}.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:93 */
+"This lemming cannot take this skill now." = "This lemming cannot take this skill now.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:82 */
+"This lemming has no tool." = "This lemming has no tool.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:79 */
+"This lemming is already blocking." = "This lemming is already blocking.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:98 */
+"This lemming is already mining." = "This lemming is already mining.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:25; Sources/LemmingsAppCore/SkillRejectionFeedback.swift:40; Sources/LemmingsAppCore/SkillRejectionFeedback.swift:56; Sources/LemmingsAppCore/SkillRejectionFeedback.swift:73 */
+"This lemming is no longer active." = "This lemming is no longer active.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:77 */
+"This lemming needs solid ground." = "This lemming needs solid ground.";
+
 /* Sources/LemmingsLocal/ArcadeWindow.swift:953; Sources/LemmingsLocal/GameCenterScores.swift:117; Sources/LemmingsLocal/LemmingInspectionPage.swift:22; Sources/LemmingsLocal/ResultCelebrationView.swift:260; Sources/LemmingsLocal/TrolleyResultView.swift:226; Sources/LemmingsMobileUI/MobileRankings.swift:158 */
 "This level" = "This level";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:38 */
+"This level does not support this skill." = "This level does not support this skill.";
 
 /* Sources/NxlvKit/Lemmings2Runtime.swift:322 */
 "This level has an exit outside the decoded terrain. Its lower map boundary is not resolved yet." = "This level has an exit outside the decoded terrain. Its lower map boundary is not resolved yet.";
@@ -9195,8 +9240,17 @@
 /* Sources/LemmingsLocal/ArcadeWindow.swift:89 */
 "This session is no longer available." = "This session is no longer available.";
 
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:45 */
+"This skill conflicts with one the lemming already has." = "This skill conflicts with one the lemming already has.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:47 */
+"This skill needs a ceiling within reach." = "This skill needs a ceiling within reach.";
+
 /* Sources/NxlvKit/MusicLibraryInstaller.swift:64 */
 "This soundtrack library is already downloading." = "This soundtrack library is already downloading.";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:84 */
+"This tool has no uses left." = "This tool has no uses left.";
 
 /* Sources/LemmingsLocal/GameCenterScores.swift:53 */
 "This worldwide board is not available yet." = "This worldwide board is not available yet.";
@@ -9374,6 +9428,9 @@
 
 /* Sources/LemmingsGameArt/MobileTurnArt.swift:9 */
 "Turn: {0}" = "Turn: {0}";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:75 */
+"Turning while swimming needs two uses of Swimmer." = "Turning while swimming needs two uses of Swimmer.";
 
 /* Sources/LemmingsGameArt/MobileCareerArt.swift:59 */
 "Turns: {0}" = "Turns: {0}";
@@ -9761,6 +9818,9 @@
 
 /* Sources/LemmingsLocal/TelemetryDashboard.swift:203 */
 "WINS / FAILS" = "WINS / FAILS";
+
+/* Sources/LemmingsAppCore/SkillRejectionFeedback.swift:99 */
+"Wait for this lemming to land." = "Wait for this lemming to land.";
 
 /* Sources/LemmingsAppCore/Records/LemmingInspection.swift:117; Sources/LemmingsLocal/Lemmings3Panel.swift:9; Sources/NxlvKit/SkillVocabulary.swift:76 */
 "Walker" = "Walker";
