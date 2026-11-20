@@ -116,8 +116,8 @@
 .document .prose h2 { letter-spacing: -.03em; line-height: 1.13; }
 .document .prose h2:target { text-decoration: underline #a09351 .1em; text-underline-offset: .18em; }
 .document .prose li::marker { color: #4b6835; }
-.document .prose a:not(.stone-link) { color: #2d5537; text-underline-offset: .2em; }
-.document .prose a:not(.stone-link):hover { color: #723d16; }
+.document .prose a:not(.moss-button) { color: #2d5537; text-underline-offset: .2em; }
+.document .prose a:not(.moss-button):hover { color: #723d16; }
 .document .prose :is(a, button, summary, input, textarea, select):focus-visible {
   outline: 3px solid #87430d;
   outline-offset: 3px;
