@@ -74,7 +74,7 @@ import UniformTypeIdentifiers
       folder.frame = CGRect(x: 580, y: 290, width: 380, height: 40)
       next.body.addSubview(folder)
       action = folder
-      let download = next.addPrimaryAction(GameAssetPack.actionTitle) { [weak self, weak next] in
+      let startDownload = { [weak self, weak next] in
         guard let self, let next, self.task == nil else { return }
         self.task = Task { @MainActor in
           let controls = DialogKeyboardNavigation().controls(in: next).compactMap { $0 as? NSControl }
@@ -103,6 +103,12 @@ import UniformTypeIdentifiers
             status.stringValue = Task.isCancelled ? "" : error.localizedDescription
           }
         }
+      }
+      let download = next.addPrimaryAction(GameAssetPack.actionTitle) { [weak self, weak next, weak owner] in
+        guard let self, self.task == nil, let next, let owner,
+          GameScreen.shared.controllerPage(in: owner) === next else { return }
+        GameScreen.shared.confirm(GameAssetPack.Licence.title, detail: GameAssetPack.Licence.detail,
+          actionTitle: GameAssetPack.Licence.accept, cancelTitle: L10n.text("Cancel"), owner: owner, action: startDownload)
       }
       download.setAccessibilityIdentifier("download.gameAssets")
       next.addSecondaryAction(L10n.text("Restore original assets…")) { [weak self, weak next] in

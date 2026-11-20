@@ -3552,3 +3552,6 @@
 "Game assets are already downloading." = "Nedlasting av spilldata pågår allerede.";
 "Game assets are unavailable. Try again later." = "Spilldata er utilgjengelige. Prøv igjen senere.";
 "Game assets failed verification. Download them again." = "Kontrollen av spilldata mislyktes. Last dem ned på nytt.";
+"Confirm your game licence" = "Bekreft spillisensen din";
+"Agree and download" = "Godta og last ned";
+"To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "For å laste ned disse filene må du ha en gyldig lisens for originalspillet «Lemmings» på minst én plattform. Når du velger «{0}», bekrefter du at du har en slik lisens.";

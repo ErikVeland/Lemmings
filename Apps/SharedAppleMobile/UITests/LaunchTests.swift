@@ -6,6 +6,35 @@ final class LaunchTests: XCTestCase {
         continueAfterFailure = false
     }
 
+    @MainActor func testGameAssetDownloadRequiresALicence() throws {
+        try XCTSkipUnless(Bundle(for: Self.self).bundleIdentifier?.contains("ultimatelemmix") == true)
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
+        app.launchArguments = ["-mobile.whatsNew.seenBuild", "9999", "-AnonymousTelemetryDecisionV1", "YES"]
+        app.launch()
+        tap(app.buttons["menu.settings"])
+        let data = app.buttons.matching(NSPredicate(format: "identifier IN %@", ["menu.data", "data"])).firstMatch
+        tap(data)
+        let download = app.buttons["menu.download.gameAssets"]
+        let cancel = app.buttons["menu.gameAssets.cancel"]
+        let agree = app.buttons["menu.gameAssets.agree"]
+        let notice = app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@",
+            "valid licence for the original game “Lemmings” on at least one platform")).firstMatch
+        for _ in 0..<2 {
+            tap(download)
+            XCTAssertTrue(notice.waitForExistence(timeout: 5))
+            XCTAssertTrue(notice.label.contains("By selecting “Agree and download”, you confirm that you hold that licence."))
+            assertTarget(agree)
+            assertTarget(cancel)
+            XCTAssertFalse(download.exists)
+            capture(app, name: "Game Assets Licence")
+            tap(cancel)
+            XCTAssertTrue(download.waitForExistence(timeout: 5))
+            XCTAssertTrue(download.isEnabled)
+        }
+    }
+
     @MainActor func testMenuNavigationAndRotationKeepControlsAvailable() throws {
         let device = XCUIDevice.shared
         let originalOrientation = device.orientation

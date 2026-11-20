@@ -3565,5 +3565,8 @@
   "Download game assets": "விளையாட்டுத் தரவைப் பதிவிறக்கு",
   "Game assets are already downloading.": "விளையாட்டுத் தரவு ஏற்கெனவே பதிவிறங்குகிறது.",
   "Game assets are unavailable. Try again later.": "விளையாட்டுத் தரவு கிடைக்கவில்லை. பிறகு மீண்டும் முயலவும்.",
-  "Game assets failed verification. Download them again.": "விளையாட்டுத் தரவைச் சரிபார்க்க முடியவில்லை. மீண்டும் பதிவிறக்கவும்."
+  "Game assets failed verification. Download them again.": "விளையாட்டுத் தரவைச் சரிபார்க்க முடியவில்லை. மீண்டும் பதிவிறக்கவும்.",
+  "Confirm your game licence": "உங்கள் விளையாட்டு உரிமத்தை உறுதிப்படுத்தவும்",
+  "Agree and download": "ஒப்புக்கொண்டு பதிவிறக்கு",
+  "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence.": "இந்தக் கோப்புகளைப் பதிவிறக்க, அசல் “Lemmings” விளையாட்டுக்கு ஏதேனும் ஒரு தளத்திலாவது செல்லுபடியாகும் உரிமம் உங்களிடம் இருக்க வேண்டும். “{0}” என்பதைத் தேர்ந்தெடுப்பதன் மூலம் அந்த உரிமம் உங்களிடம் இருப்பதை உறுதிப்படுத்துகிறீர்கள்."
 }

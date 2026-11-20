@@ -22823,19 +22823,37 @@
   "Game assets are already downloading.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:30"
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:38"
     ]
   },
   "Game assets are unavailable. Try again later.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:31"
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:39"
     ]
   },
   "Game assets failed verification. Download them again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:32"
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:40"
+    ]
+  },
+  "Confirm your game licence": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:15"
+    ]
+  },
+  "Agree and download": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:19"
+    ]
+  },
+  "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Import/GameAssetPack.swift:17"
     ]
   }
 }
