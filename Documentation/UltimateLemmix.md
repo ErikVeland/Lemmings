@@ -49,7 +49,10 @@ folder. Those require their actual source assets or a complete prepared pack.
 The importer preserves previous installations and re-merges owned assets with
 the current application resources after an update. App identity, privacy,
 service configuration, current engine stamp and proof metadata stay app-owned.
-No original game data or unreviewed remix is offered as a hosted download.
+The [Game Assets release](https://github.com/ErikVeland/Lemmings/releases/tag/ultimate-lemmix-game-assets-1)
+contains the original campaigns and standard music. In builds with **Download game assets**,
+one action downloads, verifies and installs the 253 MB pack. Build 110 uses the extracted
+folder through **Restore original assets**. Settings offers 18 optional soundtrack libraries after restoration.
 
 ## Build and acceptance
 

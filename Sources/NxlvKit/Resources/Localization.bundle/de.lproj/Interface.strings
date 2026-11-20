@@ -3548,3 +3548,7 @@
 "Favour active skilled lemmings" = "Aktive Lemminge mit Fertigkeit bevorzugen";
 "Target active workers" = "Aktive Arbeiter auswählen";
 "Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply." = "Bevorzugt Lemminge, die eine Fertigkeit ausführen, bis sie fallen. Die Regeln der jeweiligen Fertigkeit gelten weiterhin.";
+"Download game assets" = "Spieldaten herunterladen";
+"Game assets are already downloading." = "Die Spieldaten werden bereits heruntergeladen.";
+"Game assets are unavailable. Try again later." = "Die Spieldaten sind nicht verfügbar. Versuche es später erneut.";
+"Game assets failed verification. Download them again." = "Die Prüfung der Spieldaten ist fehlgeschlagen. Lade sie erneut herunter.";

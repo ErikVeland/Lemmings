@@ -1,5 +1,19 @@
 # Cross-platform feature parity
 
+## Lemmix Game Assets download — 21 November 2026
+
+The Lemmix importer on Mac and the Game Data screen on iPhone, iPad, Duo and Apple TV
+offer **Download game assets**. The button downloads the 253 MB GitHub pack, checks its
+size and SHA-256, then installs its resources through the folder importer.
+A player can cancel the transfer or retry a failed download. Audio settings
+list the 18 optional soundtrack libraries once the pack is active.
+
+The Mac offscreen check exercised the primary button, its input target and live
+activation. A separate native check downloaded, installed and reopened all
+23,001 assets. The hosted ZIP matched the release checksum. Physical-device input
+and network interruptions on iPhone, iPad, Duo and Apple TV need device acceptance.
+Build 110 requires manual folder import. [Game Assets release](https://github.com/ErikVeland/Lemmings/releases/tag/ultimate-lemmix-game-assets-1)
+
 ## Lemmix button backgrounds — 20 November 2026
 
 Ultimate Lemmix forbids pale blue button backgrounds. The shared Lix background

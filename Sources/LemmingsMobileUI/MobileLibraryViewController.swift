@@ -133,6 +133,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var selectedImportKind: MobileGameDataKind = .classic
     private var importingResources = false
     private var restoringResources = false
+    private var resourceTask: Task<Void, Never>?
+    private var gameAssetProgress: GameAssetPack.Progress?
     var checkpointStore: MobileCheckpointStore?
     var library: (any MobileGameLibrary)?
     var catalogue: MobileCatalogue?
@@ -1105,8 +1107,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = soundtrackPage()
             canvas.preview = nil
         case .data:
-            canvas.page = .init(title: L10n.text("Game Data"), subtitle: subtitle,
-                                rows: [.init("import.resources", L10n.text("Restore original assets"), enabled: !loading)]
+            let download: [GameFrontEnd.Action] = MobileResourceAccess.isStore
+                ? [.init("download.gameAssets", GameAssetPack.actionTitle, enabled: !loading, primary: true)] : []
+            let back: GameFrontEnd.Action
+            if case .downloading = gameAssetProgress {
+                back = .init("dataBack", L10n.text("Cancel"), backNavigation: true)
+            } else {
+                back = .init("dataBack", L10n.text("Back"), enabled: !restoringResources)
+            }
+            canvas.page = .init(title: L10n.text("Game Data"), subtitle: gameAssetProgress?.title ?? subtitle,
+                                rows: download + [.init("import.resources", L10n.text("Restore original assets"), enabled: !loading)]
                                 + MobileGameDataKind.allCases.map { kind in
                                     let installed = store.map { FileManager.default.fileExists(atPath: $0.dataDirectory(for: kind).path) } ?? false
                                     let action = installed ? L10n.text("Replace") : L10n.text("Import")
@@ -1114,7 +1124,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                                  "\(action) \(kind.displayTitle)", enabled: !loading)
                                 },
                                 details: library.map { ["\($0.displayName)", L10n.plural("count.levels", count: $0.levels.count, one: "%ld level", other: "%ld levels")] } ?? [],
-                                footer: [.init("dataBack", L10n.text("Back"))])
+                                footer: [back])
             canvas.preview = nil
         }
         if !{ switch route { case .levels, .recordLevel, .recordHint: true; default: false } }() { canvas.previewSource = nil }
@@ -1241,6 +1251,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
     func handle(_ id: String) {
+        if id == "dataBack", case .downloading = gameAssetProgress { resourceTask?.cancel(); return }
         guard !restoringResources else { return }
         if handleL2Practice(id) { return }
         if handleCloudSync(id) { return }
@@ -1303,6 +1314,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             #endif
         case "data": navigate(.data)
+        case "download.gameAssets":
+            guard MobileResourceAccess.isStore, !loading else { return }
+            restoreResources { [self] library in
+                try await GameAssetPack.shared.downloadAndInstall(progress: { [weak self] phase in
+                    guard let self, self.restoringResources else { return }
+                    self.gameAssetProgress = phase
+                    self.rebuild()
+                }) { try library.install(directory: $0) }
+            }
         case "import.resources": chooseResourceData()
         case "import": chooseGameData(for: .classic)
         case "import.classic": chooseGameData(for: .classic)
@@ -1725,6 +1745,23 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     private func receiveResources(_ source: URL) {
+        restoreResources { library in
+            let accessed = source.startAccessingSecurityScopedResource()
+            defer {
+                if accessed { source.stopAccessingSecurityScopedResource() }
+                #if os(tvOS)
+                MobileTVFileTransfer.removeImportedFiles(source)
+                #endif
+            }
+            return try await Task.detached(priority: .userInitiated) {
+                try library.install(directory: source)
+            }.value
+        }
+    }
+
+    private func restoreResources(
+        _ install: @escaping @MainActor (OwnedResourceLibrary) async throws -> OwnedResourceLibrary.Installation
+    ) {
         guard !restoringResources, game == nil, let resources = MobileResourceAccess.library else { return }
         restoringResources = true
         libraryTask?.cancel(); libraryTask = nil; libraryGeneration = UUID()
@@ -1738,19 +1775,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         learningTask?.cancel(); learningTask = nil
         loading = true
         rebuild()
-        let accessed = source.startAccessingSecurityScopedResource()
-        Task {
-            defer {
-                restoringResources = false
-                if accessed { source.stopAccessingSecurityScopedResource() }
-                #if os(tvOS)
-                MobileTVFileTransfer.removeImportedFiles(source)
-                #endif
-            }
+        resourceTask = Task {
+            defer { resourceTask = nil }
             do {
-                let installed = try await Task.detached(priority: .userInitiated) {
-                    try resources.install(directory: source)
-                }.value
+                let installed = try await install(resources)
                 try GameResources.activate(bundleURL: installed.bundleURL, forceReload: true)
                 if GameArtworkResources.originalInterfaceAvailable {
                     if mobileSettings.soundtrack == "Lix" {
@@ -1765,12 +1793,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 library = nil; currentPack = nil; activeRun = nil
                 previewLoader = nil; selectedPreview = nil; selectedIndex = 0
                 preparingLevel = false; loading = false; restoringResources = false
+                gameAssetProgress = nil
                 notice = ""
                 navigate(.home)
                 reloadLibrary()
             } catch {
-                loading = false
-                notice = error.localizedDescription
+                restoringResources = false; loading = false
+                gameAssetProgress = nil
+                notice = Task.isCancelled ? "" : error.localizedDescription
                 rebuild()
             }
         }

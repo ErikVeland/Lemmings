@@ -3561,5 +3561,9 @@
   "{0}: replay analysis failed: {1}": "{0}: repriseanalysering mislyktes: {1}",
   "{0}: {1} ticks ago": "{0}: {1} ticks ago",
   "{0}H {1}M": "{0}H {1}M",
-  "{0}{1} more to rescue for three stars.": "{0}{1} flere å redde for tre stjerner."
+  "{0}{1} more to rescue for three stars.": "{0}{1} flere å redde for tre stjerner.",
+  "Download game assets": "Last ned spilldata",
+  "Game assets are already downloading.": "Nedlasting av spilldata pågår allerede.",
+  "Game assets are unavailable. Try again later.": "Spilldata er utilgjengelige. Prøv igjen senere.",
+  "Game assets failed verification. Download them again.": "Kontrollen av spilldata mislyktes. Last dem ned på nytt."
 }

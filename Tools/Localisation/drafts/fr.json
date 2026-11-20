@@ -3561,5 +3561,9 @@
   "{0}: replay analysis failed: {1}": "{0} : échec de l’analyse du rejeu : {1}",
   "{0}: {1} ticks ago": "{0}: {1} ticks ago",
   "{0}H {1}M": "{0}H {1}M",
-  "{0}{1} more to rescue for three stars.": "Encore {0}{1} à sauver pour obtenir trois étoiles."
+  "{0}{1} more to rescue for three stars.": "Encore {0}{1} à sauver pour obtenir trois étoiles.",
+  "Download game assets": "Télécharger les données du jeu",
+  "Game assets are already downloading.": "Le téléchargement des données du jeu est déjà en cours.",
+  "Game assets are unavailable. Try again later.": "Les données du jeu sont indisponibles. Réessayez plus tard.",
+  "Game assets failed verification. Download them again.": "La vérification des données du jeu a échoué. Téléchargez-les à nouveau."
 }

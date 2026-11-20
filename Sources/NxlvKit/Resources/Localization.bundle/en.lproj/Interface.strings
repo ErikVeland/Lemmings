@@ -10641,3 +10641,7 @@
 "Target active workers" = "Target active workers";
 "Your next level is ready." = "Your next level is ready.";
 "macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete; Chronicles and NeoLemmix remain Beta." = "macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete; Chronicles and NeoLemmix remain Beta.";
+"Download game assets" = "Download game assets";
+"Game assets are already downloading." = "Game assets are already downloading.";
+"Game assets are unavailable. Try again later." = "Game assets are unavailable. Try again later.";
+"Game assets failed verification. Download them again." = "Game assets failed verification. Download them again.";

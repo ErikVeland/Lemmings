@@ -207,6 +207,8 @@ extension AppDelegate {
                 .first(where: { $0.accessibilityLabel() == "Game to import" }),
               let chooseFolder = storeDescendants(importPage).compactMap({ $0 as? NSButton })
                 .first(where: { $0.title == "Choose game folder" }),
+              let download = storeDescendants(importPage).compactMap({ $0 as? NSButton })
+                .first(where: { $0.accessibilityIdentifier() == "download.gameAssets" }),
               let exportBundle = storeDescendants(importPage).compactMap({ $0 as? NSButton })
                 .first(where: { $0.title == "Get BYO bundle" }) else {
             throw StoreAppTestFailure(message: "The player-owned game importer lost its controls")
@@ -218,8 +220,10 @@ extension AppDelegate {
             throw StoreAppTestFailure(message: "The importer has no Back action")
         }
         try storeCheck(back.title == "Back", "The importer changed its Back caption")
+        try storeCheck((importPage as? GameMenuPage)?.controllerInitialControl === download,
+                       "The game assets download must receive initial focus")
         var importTargets: [CGRect] = []
-        for control in [gameChoice, chooseFolder, exportBundle, back] as [NSControl] {
+        for control in [gameChoice, chooseFolder, download, exportBundle, back] as [NSControl] {
             let target = importPage.convert(control.bounds, from: control)
             let point = control.convert(CGPoint(x: control.bounds.midX, y: control.bounds.midY), to: importPage.superview)
             try storeCheck(control.isEnabled && control.acceptsFirstResponder && target.width >= 100 && target.height >= 32
@@ -231,7 +235,7 @@ extension AppDelegate {
         for first in importTargets.indices { for second in importTargets.indices where second > first {
             try storeCheck(!importTargets[first].intersects(importTargets[second]), "The importer input targets overlap")
         } }
-        for button in [chooseFolder, exportBundle, back] {
+        for button in [chooseFolder, download, exportBundle, back] {
             try storeCheck(button.action != nil && button.target != nil && button.target!.responds(to: button.action!),
                            "An importer button has no action")
         }

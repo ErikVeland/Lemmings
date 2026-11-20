@@ -3561,5 +3561,9 @@
   "{0}: replay analysis failed: {1}": "{0}: மறு இயக்கப் பகுப்பாய்வு தோல்வி: {1}",
   "{0}: {1} ticks ago": "{0}: {1} ticks ago",
   "{0}H {1}M": "{0}H {1}M",
-  "{0}{1} more to rescue for three stars.": "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்."
+  "{0}{1} more to rescue for three stars.": "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்.",
+  "Download game assets": "விளையாட்டுத் தரவைப் பதிவிறக்கு",
+  "Game assets are already downloading.": "விளையாட்டுத் தரவு ஏற்கெனவே பதிவிறங்குகிறது.",
+  "Game assets are unavailable. Try again later.": "விளையாட்டுத் தரவு கிடைக்கவில்லை. பிறகு மீண்டும் முயலவும்.",
+  "Game assets failed verification. Download them again.": "விளையாட்டுத் தரவைச் சரிபார்க்க முடியவில்லை. மீண்டும் பதிவிறக்கவும்."
 }

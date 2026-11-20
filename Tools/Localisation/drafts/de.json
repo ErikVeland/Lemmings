@@ -3561,5 +3561,9 @@
   "{0}: replay analysis failed: {1}": "{0}: Wiedergabeanalyse fehlgeschlagen: {1}",
   "{0}: {1} ticks ago": "{0}: {1} ticks ago",
   "{0}H {1}M": "{0}H {1}M",
-  "{0}{1} more to rescue for three stars.": "Noch {0}{1} retten für drei Sterne."
+  "{0}{1} more to rescue for three stars.": "Noch {0}{1} retten für drei Sterne.",
+  "Download game assets": "Spieldaten herunterladen",
+  "Game assets are already downloading.": "Die Spieldaten werden bereits heruntergeladen.",
+  "Game assets are unavailable. Try again later.": "Die Spieldaten sind nicht verfügbar. Versuche es später erneut.",
+  "Game assets failed verification. Download them again.": "Die Prüfung der Spieldaten ist fehlgeschlagen. Lade sie erneut herunter."
 }
