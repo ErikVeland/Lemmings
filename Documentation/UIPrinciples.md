@@ -3,6 +3,8 @@
 The user's requirement: icons and states must make sense without explanatory
 sentences. Apply this to new UI and changes to existing UI.
 
+- Never use pale blue button backgrounds in Ultimate Lemmix. Use dark stone
+  faces, including selected, pressed, disabled and fallback controls.
 - Use the game's bitmap artwork and pixel controls throughout game pages and HUDs.
   Menu lettering must not depend on the selected level graphics.
   Do not mix system fonts, SF Symbols, rounded Aqua controls or modern gradients

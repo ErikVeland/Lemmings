@@ -277,9 +277,10 @@ extension MobileGameViewController {
             if let selection = highlightedTarget,
                !beginL3ToolDirectionSelection(control: control, target: selection.id, selection: selection) {
                 guard session.assign(control: control, to: selection.id) else {
-                    effects.rejectedAssignment()
+                    showAssignmentRejection(session.assignmentRejection(control: control, to: selection.id))
                     return
                 }
+                clearAssignmentNotice()
                 lastInputAssignment = selection; lastAssignmentControl = control
                 effects.update(session: session, viewport: playfieldView.gameViewport)
                 #if os(tvOS)

@@ -66,7 +66,21 @@ do {
     try check(colour(normal, 0, 0)[0] > colour(normal, 43, 33)[0], "Normal backing uses the upstream raised bevel")
     try check(colour(selected, 0, 0)[0] < colour(selected, 43, 33)[0], "Selected backing uses the upstream inset bevel")
     try check(colour(normal, 0, 33) == colour(normal, 22, 17), "Mixed bevel corner uses the middle source colour")
-    try check(selected.rgba != pressed.rgba, "Pressed and selected have distinct upstream brightness")
+    try check(selected.rgba != pressed.rgba, "Pressed and selected have distinct stone brightness")
+    for state in LixInterfaceArtwork.State.allCases {
+        for size in [(20, 20), (28, 44), (44, 34), (320, 48)] {
+            let backing = artwork.button(width: size.0, height: size.1, state: state)!
+            for offset in stride(from: 0, to: backing.rgba.count, by: 4) {
+                let green = backing.rgba[offset + 1], blue = backing.rgba[offset + 2]
+                try check(green >= blue, "Button backgrounds must not use the pale blue Lix palette")
+                try check(backing.rgba[offset + 3] == (state == .disabled ? 112 : 255),
+                          "Stone backing preserves disabled opacity")
+            }
+            let middle = colour(backing, size.0 / 2, size.1 / 2)
+            try check(middle[0] < 90 && middle[1] < 90 && middle[2] < 90,
+                      "Button faces stay dark behind bitmap labels")
+        }
+    }
     try check(artwork.button(width: Int.max, height: 1) == nil && artwork.button(width: 10, height: 10, border: Int.max) == nil,
               "Unbounded backing geometry is rejected before arithmetic")
     for state in LixInterfaceArtwork.State.allCases {

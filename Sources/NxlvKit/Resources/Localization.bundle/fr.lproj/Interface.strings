@@ -360,6 +360,7 @@
 "Breakfast resumed almost normally." = "Breakfast resumed almost normally.";
 "Brian blew up a hard disk - twice." = "Brian a fait exploser un disque dur, deux fois.";
 "Bricks" = "Briques";
+"Bricks cannot build straight down." = "Les briques ne permettent pas de construire à la verticale vers le bas.";
 "Bring {0} more home to match your best." = "Ramène {0} lemming(s) de plus à la sortie pour égaler ton record.";
 "Bronze" = "Bronze";
 "Browse levels" = "Parcourir les niveaux";
@@ -410,7 +411,6 @@
 "Cancel download" = "Annuler le téléchargement";
 "Cancel tool direction" = "Annuler la direction de l’outil";
 "Cannot add NeoLemmix packs" = "Impossible d’ajouter des packs NeoLemmix";
-"Cannot assign: {0}" = "Impossible d’attribuer : {0}";
 "Cannot create sequel artwork." = "Impossible de créer les graphismes de la suite.";
 "Cannot delete player" = "Impossible de supprimer le joueur";
 "Cannot discard saved run" = "Impossible d’abandonner la partie enregistrée";
@@ -1745,6 +1745,7 @@
 "No fan level packs are available." = "Aucun pack de niveaux communautaires n’est disponible.";
 "No favourites yet" = "Aucun favori pour le moment";
 "No hands-off clear this run. This goal may not be possible here." = "Vous n’avez pas terminé ce niveau sans intervenir. Cet objectif n’est peut-être pas possible ici.";
+"No lemming is selected." = "Aucun lemming sélectionné.";
 "No lemmings released yet" = "No lemmings released yet";
 "No level files were found for {0}." = "Aucun fichier de niveau trouvé pour {0}.";
 "No level packs are available." = "Aucun pack de niveaux n’est disponible.";
@@ -1767,6 +1768,7 @@
 "No target" = "Aucune cible";
 "No time limit" = "Aucune limite de temps";
 "No unassigned lemmings" = "Aucun lemming sans compétence";
+"No uses of {0} remain." = "Il ne reste aucune utilisation de {0}.";
 "No validated local solution demonstrates this technique." = "Aucune solution locale validée ne démontre cette technique.";
 "No worldwide score yet." = "Aucun score mondial pour le moment.";
 "No {0} level packs are available in this build." = "Aucun pack de niveaux {0} n’est disponible dans cette version.";
@@ -2615,6 +2617,8 @@
 "Started: {0}" = "Démarré : {0}";
 "Starting transfer" = "Démarrage du transfert";
 "Static home screen" = "Écran d’accueil statique";
+"Steel blocks this skill." = "L’acier bloque cette compétence.";
+"Steel or a one-way wall blocks this skill." = "L’acier ou un mur à sens unique bloque cette compétence.";
 "Step +1" = "Avancer d’un cycle";
 "Step back" = "Reculer d’un cycle";
 "Step backward one tick" = "Reculer d’un cycle";
@@ -2867,6 +2871,7 @@
 "The object metadata has more than one $PRIMARY_ANIMATION section." = "Les métadonnées de l’objet contiennent plusieurs sections $PRIMARY_ANIMATION.";
 "The object metadata has no $PRIMARY_ANIMATION section." = "Les métadonnées de l’objet ne contiennent aucune section $PRIMARY_ANIMATION.";
 "The one-way mask has invalid value {0} at index {1}." = "Le masque à sens unique a une valeur {0} invalide à l’index {1}.";
+"The one-way wall blocks this direction." = "Le mur à sens unique bloque cette direction.";
 "The original movie ended before its declared final frame." = "Le film original s’est terminé avant la dernière image indiquée.";
 "The original movie has invalid frame dimensions or missing frames." = "Le film original a des dimensions d’image incorrectes ou des images manquantes.";
 "The outside world makes regular appearances." = "The outside world makes regular appearances.";
@@ -2951,6 +2956,7 @@
 "The style reference contains an unsafe path component." = "La référence de style contient un élément de chemin non sûr.";
 "The style resolution contains duplicate assets for '{0}:{1}'." = "La résolution du style trouve des éléments en double pour '{0}:{1}'.";
 "The synthetic Lemmings 3 level must include an eligible tool holder." = "Le niveau Lemmings 3 de synthèse doit inclure un porteur d’outil apte.";
+"The terrain data for this skill is unavailable." = "Les données du terrain pour cette compétence sont indisponibles.";
 "The time limit cannot be negative." = "La limite de temps ne peut pas être négative.";
 "The toast seems unconcerned." = "The toast seems unconcerned.";
 "The total lemming count cannot be negative." = "Le nombre total de lemmings ne peut pas être négatif.";
@@ -3037,6 +3043,7 @@
 "This Mac only. No shared service is configured." = "Ce Mac uniquement. Aucun service partagé n’est configuré.";
 "This Mac only. Shared counts need the owner access token." = "Ce Mac uniquement. Les compteurs partagés nécessitent le jeton d’accès du propriétaire.";
 "This app has no embedded game resources. Rebuild the app with its game data." = "Cette app ne contient aucune ressource de jeu intégrée. Reconstruis-la avec ses données de jeu.";
+"This blocker would overlap another blocker." = "Ce bloqueur se superposerait à un autre bloqueur.";
 "This build has no shared counts service. Play insights show this Mac only." = "Cette version ne dispose pas de service de compteurs partagés. Les statistiques de jeu concernent uniquement ce Mac.";
 "This caller has restricted native play to the Classic tribe." = "Cet appelant a limité le jeu natif à la tribu classique.";
 "This checked route does not need a skill assignment. Watch where the lemmings walk before intervening." = "Ce parcours vérifié ne nécessite aucune compétence. Observez où vont les lemmings avant d’intervenir.";
@@ -3046,7 +3053,15 @@
 "This game has no mobile renderer." = "Ce jeu ne dispose pas de moteur de rendu mobile.";
 "This has helped considerably." = "This has helped considerably.";
 "This journey level is unavailable on this device. The saved session has been kept." = "This journey level is unavailable on this device. The saved session has been kept.";
+"This lemming already has {0}." = "Ce lemming possède déjà la compétence {0}.";
+"This lemming cannot take this skill now." = "Ce lemming ne peut pas recevoir cette compétence pour le moment.";
+"This lemming has no tool." = "Ce lemming n’a pas d’outil.";
+"This lemming is already blocking." = "Ce lemming bloque déjà le passage.";
+"This lemming is already mining." = "Ce lemming creuse déjà en diagonale.";
+"This lemming is no longer active." = "Ce lemming n’est plus actif.";
+"This lemming needs solid ground." = "Ce lemming a besoin d’un sol ferme.";
 "This level" = "Ce niveau";
+"This level does not support this skill." = "Cette compétence est indisponible dans ce niveau.";
 "This level has an exit outside the decoded terrain. Its lower map boundary is not resolved yet." = "Ce niveau a une sortie hors du terrain décodé. La limite inférieure de la carte n’est pas encore déterminée.";
 "This level needs NeoLemmix features that are not yet supported: {0}." = "Ce niveau nécessite des fonctions NeoLemmix qui ne sont pas encore prises en charge : {0}.";
 "This level uses community styles. Choose Add NeoLemmix Packs and select a NeoLemmix folder with its styles." = "Ce niveau utilise des styles communautaires. Choisis Ajouter des packs NeoLemmix et sélectionne un dossier NeoLemmix contenant ses styles.";
@@ -3065,7 +3080,10 @@
 "This saved run needs a different app version." = "Cette partie enregistrée nécessite une autre version de l’app.";
 "This saved run needs a different app version. Its files were preserved." = "Cette partie sauvegardée nécessite une autre version de l’app. Ses fichiers ont été conservés.";
 "This session is no longer available." = "Cette session n’est plus disponible.";
+"This skill conflicts with one the lemming already has." = "Cette compétence est incompatible avec une autre que le lemming possède déjà.";
+"This skill needs a ceiling within reach." = "Cette compétence nécessite un plafond à portée.";
 "This soundtrack library is already downloading." = "Cette bibliothèque de bandes-son est déjà en cours de téléchargement.";
+"This tool has no uses left." = "Cet outil ne peut plus être utilisé.";
 "This worldwide board is not available yet." = "Ce classement mondial n’est pas encore disponible.";
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "Thomas Hobbes considérait la paix et la sécurité comme essentielles. Des règles et une autorité communes protègent les personnes des conflits.";
 "Three-finger tap on the playfield: change graphics" = "Three-finger tap on the playfield: change graphics";
@@ -3125,6 +3143,7 @@
 "Tube strength" = "Intensité de l’effet tube";
 "Turn off" = "Désactiver";
 "Turn: {0}" = "Tour : {0}";
+"Turning while swimming needs two uses of Swimmer." = "Faire demi-tour en nageant nécessite deux utilisations de Nageur.";
 "Turns: {0}" = "Tours : {0}";
 "Twelve Tribes" = "Douze tribus";
 "Twister" = "Tornade";
@@ -3254,6 +3273,7 @@
 "WAVEfmt " = "WAVEfmt ";
 "WHEN THE TRIBES SETTLED IN THESE LANDS" = "QUAND LES TRIBUS S’INSTALLÈRENT SUR CES TERRES";
 "WINS / FAILS" = "VICTOIRES / ÉCHECS";
+"Wait for this lemming to land." = "Attendez que ce lemming se pose.";
 "Walker" = "Marcheur";
 "Walks home with accompaniment." = "Walks home with accompaniment.";
 "Want to see one way through? This reveals a full winning route. Your game stays paused." = "Want to see one way through? This reveals a full winning route. Your game stays paused.";

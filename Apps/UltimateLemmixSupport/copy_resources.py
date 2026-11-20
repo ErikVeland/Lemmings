@@ -4,7 +4,9 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path, PurePosixPath
+import sys
 
 MANIFEST = "ultimate-lemmix-mobile-resources.json"
 RECEIPT = "ultimate-lemmix-resource-receipt.json"
@@ -67,6 +69,10 @@ def main():
         raise ValueError("The mobile resource inventory has extra or missing files.")
     # Verify the whole input profile even when an extension needs only its artwork.
     verified = {row["path"]: read_checked(args.source, row) for row in rows}
+    if os.environ.get("ULTIMATE_LEMMIX_RELEASE_CHECKS") == "1":
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "Tools/AlternativeAssets"))
+        from prepare_project_pixel import verify_packaged_font
+        verify_packaged_font(verified)
     selected = [row for row in rows if args.scope == "app" or PurePosixPath(row["path"]).parts[0] in WIDGET_FOLDERS]
     chosen = {row["path"] for row in selected}
     receipt = args.destination / RECEIPT

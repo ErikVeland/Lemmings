@@ -35,6 +35,19 @@ struct MobileRewindTests {
         #expect(review.replaySkillUses == [.init(tick: 60, name: "Climber"), .init(tick: 60, name: "Floater")])
     }
 
+    @Test func classicAssignmentRejectionExplainsTheAttemptWithoutChangingTheRun() throws {
+        let game = session(try fixture())
+        for _ in 0..<60 { game.tick() }
+        let actor = try #require(game.targetCandidates(for: 0).first).id
+        #expect(game.assignmentRejection(control: 0, to: actor) == nil)
+        #expect(game.assign(control: 0, to: actor))
+        let before = ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation)
+        let duplicate = try #require(game.assignmentRejection(control: 0, to: actor))
+        let depleted = try #require(game.assignmentRejection(control: 2, to: actor))
+        #expect(duplicate != depleted)
+        #expect(ClassicDOSReplayRecorder.stateHash(of: game.finalSimulation) == before)
+    }
+
     @Test func pointerProbesMatchAssignmentsWithoutChangingTheRun() throws {
         var simulation = try fixture()
         for _ in 0..<70 { simulation.tick() }

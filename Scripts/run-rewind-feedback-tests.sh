@@ -21,6 +21,20 @@ swiftc -swift-version 6 -target "$target" -typecheck \
   Sources/LemmingsLocal/*.swift
 cat Sources/LemmingsLocal/Lemmings2PlayWindow.swift Sources/LemmingsLocal/Lemmings3PlayWindow.swift \
   Tests/RewindFeedbackTests/checks.swift > "$build_dir/main.swift"
+test_app="$build_dir/RewindFeedbackTests.app"
+views="$test_app/Contents/MacOS/views"
+mkdir -p "$test_app/Contents/MacOS"
+python3 - "$test_app/Contents/Info.plist" <<'PLIST'
+import plistlib
+import sys
+from pathlib import Path
+
+Path(sys.argv[1]).write_bytes(plistlib.dumps({
+    "CFBundleExecutable": "views",
+    "CFBundleIdentifier": "academy.glasscode.lemmings.integration-tests.rewind-feedback",
+    "CFBundlePackageType": "APPL",
+}))
+PLIST
 app_sources=(Sources/LemmingsLocal/*.swift)
 app_sources=("${(@)app_sources:#*/main.swift}")
 app_sources=("${(@)app_sources:#*/Lemmings2PlayWindow.swift}")
@@ -30,8 +44,8 @@ swiftc -swift-version 6 -target "$target" -module-cache-path "$build_dir/ModuleC
   -Xlinker -rpath -Xlinker "$build_dir" -F "${sparkle:h}" -framework Sparkle \
   -Xlinker -rpath -Xlinker "${sparkle:h}" \
   -framework AppKit -framework AVFoundation -framework Metal -framework QuartzCore \
-  "$build_dir/main.swift" "${app_sources[@]}" -o "$build_dir/views"
-python3 Tools/UITestRunner/run.py "$build_dir/views"
+  "$build_dir/main.swift" "${app_sources[@]}" -o "$views"
+python3 Tools/UITestRunner/run.py "$views"
 cat Sources/LemmingsAudio/BufferedAudioSource.swift Sources/LemmingsAudio/SoundEffectPlayer.swift Tests/SpatialAudioTests/checks.swift > "$build_dir/main.swift"
 swiftc -swift-version 6 -target "$target" -module-cache-path "$build_dir/ModuleCache" \
   -I "$module_dir" -L "$build_dir" -lNxlvKit -Xlinker -rpath -Xlinker "$build_dir" \

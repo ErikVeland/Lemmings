@@ -1,5 +1,31 @@
 # Cross-platform feature parity
 
+## Lemmix button backgrounds — 20 November 2026
+
+Ultimate Lemmix forbids pale blue button backgrounds. The shared Lix background
+generator now uses dark stone and moss colours for normal, selected, pressed and
+disabled states. Native Mac, shared bitmap and mobile adapters use this generator,
+as do fallback HUD rock tiles. This covers source paths for Mac, iPhone, iPad,
+Duo and Apple TV without changing engine behaviour or input rectangles.
+
+The focused artwork check passes offscreen with muted audio. It verifies sixteen
+size/state combinations, dark faces, absence of blue backing pixels, disabled
+opacity, bevels and bitmap bounds. The rendered control sheet was inspected.
+The old palette failed the new colour check before the fix. Full app builds,
+engine suites and physical touch/remote acceptance were not run for this change.
+
+## Rejected skill assignments — 20 November 2026
+
+Classic, NeoLemmix, Tribes and Chronicles use shared messages for rejected
+skills. Mac shows the reason in a bitmap notice. The shared iPhone, iPad, Duo
+and Apple TV interface shows the reason and announces it to VoiceOver. The
+existing rejection cue still plays where the input route supports a sound.
+
+In the Mac Tribes game, a rejected input keeps the original forward-scrub
+history. An accepted edit or explicit resume starts a new timeline and releases
+held pointer input. Mobile and Apple TV retain their existing rewind behaviour.
+Device layout and physical input acceptance remain open.
+
 ## Lemmix stone controls, icons and effects — 18 November 2026
 
 Shared stone sockets now remain active with Lix characters. Home rows, gameplay

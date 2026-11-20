@@ -1,9 +1,9 @@
 import Foundation
 
 /**
- * Decodes Lix's authored interface icons and reproduces its default button backing.
+ * Decodes Lix's authored interface icons and supplies dark stone button backgrounds.
  * Source: Lix f1e805048fe439a4a0e9cc650c613713ababac8b, CC0, doc/copying.txt.
- * Socket geometry and colours follow gui/draw3d.d, gui/button/button.d and graphic/color.d.
+ * Socket geometry follows gui/draw3d.d and gui/button/button.d. Icons retain graphic/color.d colours.
  */
 public struct LixInterfaceArtwork: Sendable {
     public enum State: String, CaseIterable, Sendable {
@@ -131,16 +131,17 @@ public struct LixInterfaceArtwork: Sendable {
     }
 
     /**
-     * Reproduces Lix's raised or inset backing. It contains no text or invented icons.
+     * Uses the shared stone palette within Lix's raised or inset button geometry.
      */
     public func button(width: Int, height: Int, state: State = .normal, border: Int = 2) -> Frame? {
         guard (1...2_048).contains(width), (1...2_048).contains(height),
               width * height <= 1_048_576, (0...64).contains(border) else { return nil }
         let thickness = min(border, width / 2, height / 2)
-        let brightness = state == .selected ? 11.0 / 16 : state == .pressed ? 8.75 / 16 : 7.75 / 16
-        let contrast = state == .normal || state == .disabled ? 1.2 : 1.1
-        let middle = Self.sepia(brightness)
-        let light = Self.sepia(brightness * contrast), dark = Self.sepia(brightness / contrast)
+        // Match GameStoneArt's stone and moss colours without changing the authored icon palette.
+        let middle: [UInt8] = state == .selected ? [56, 80, 34, 255]
+            : state == .pressed ? [16, 23, 13, 255] : [22, 30, 19, 255]
+        let light: [UInt8] = [181, 182, 167, 255]
+        let dark: [UInt8] = [37, 44, 34, 255]
         let inset = state == .selected || state == .pressed
         let top = inset ? dark : light, bottom = inset ? light : dark
         var pixels = [UInt8](repeating: 0, count: width * height * 4)

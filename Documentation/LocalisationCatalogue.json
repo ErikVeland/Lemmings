@@ -2363,6 +2363,12 @@
       "Sources/NxlvKit/SkillVocabulary.swift:15"
     ]
   },
+  "Bricks cannot build straight down.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:86"
+    ]
+  },
   "Bring {0} more home to match your best.": {
     "kind": "text",
     "references": [
@@ -2708,12 +2714,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:6923"
-    ]
-  },
-  "Cannot assign: {0}": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/main.swift:8237"
     ]
   },
   "Cannot create sequel artwork.": {
@@ -11278,6 +11278,14 @@
       "Sources/LemmingsLocal/ResultCelebrationView.swift:188"
     ]
   },
+  "No lemming is selected.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:24",
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:39",
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:54"
+    ]
+  },
   "No lemmings released yet": {
     "kind": "text",
     "references": [
@@ -11416,6 +11424,12 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:357",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:388",
       "Sources/LemmingsLocal/main.swift:9182"
+    ]
+  },
+  "No uses of {0} remain.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:106"
     ]
   },
   "No validated local solution demonstrates this technique.": {
@@ -16972,6 +16986,18 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:622"
     ]
   },
+  "Steel blocks this skill.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:29"
+    ]
+  },
+  "Steel or a one-way wall blocks this skill.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:46"
+    ]
+  },
   "Step +1": {
     "kind": "text",
     "references": [
@@ -17753,6 +17779,7 @@
   "That lemming cannot use this action now.": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:90",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1356"
     ]
   },
@@ -18548,6 +18575,12 @@
       "Sources/NxlvKit/NeoLemmixSimulation.swift:18"
     ]
   },
+  "The one-way wall blocks this direction.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:30"
+    ]
+  },
   "The original movie ended before its declared final frame.": {
     "kind": "text",
     "references": [
@@ -19057,6 +19090,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileApplication.swift:89"
+    ]
+  },
+  "The terrain data for this skill is unavailable.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:32"
     ]
   },
   "The time limit cannot be negative.": {
@@ -19580,6 +19619,13 @@
       "Sources/NxlvKit/BundledGameResources.swift:57"
     ]
   },
+  "This blocker would overlap another blocker.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:31",
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:48"
+    ]
+  },
   "This build has no shared counts service. Play insights show this Mac only.": {
     "kind": "text",
     "references": [
@@ -19635,6 +19681,51 @@
       "Sources/LemmingsMobileCore/MobileGameSession.swift:177"
     ]
   },
+  "This lemming already has {0}.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:111"
+    ]
+  },
+  "This lemming cannot take this skill now.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:93"
+    ]
+  },
+  "This lemming has no tool.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:82"
+    ]
+  },
+  "This lemming is already blocking.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:79"
+    ]
+  },
+  "This lemming is already mining.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:98"
+    ]
+  },
+  "This lemming is no longer active.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:25",
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:40",
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:56",
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:73"
+    ]
+  },
+  "This lemming needs solid ground.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:77"
+    ]
+  },
   "This level": {
     "kind": "text",
     "references": [
@@ -19644,6 +19735,12 @@
       "Sources/LemmingsLocal/ResultCelebrationView.swift:260",
       "Sources/LemmingsLocal/TrolleyResultView.swift:226",
       "Sources/LemmingsMobileUI/MobileRankings.swift:158"
+    ]
+  },
+  "This level does not support this skill.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:38"
     ]
   },
   "This level has an exit outside the decoded terrain. Its lower map boundary is not resolved yet.": {
@@ -19760,10 +19857,28 @@
       "Sources/LemmingsLocal/ArcadeWindow.swift:89"
     ]
   },
+  "This skill conflicts with one the lemming already has.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:45"
+    ]
+  },
+  "This skill needs a ceiling within reach.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:47"
+    ]
+  },
   "This soundtrack library is already downloading.": {
     "kind": "text",
     "references": [
       "Sources/NxlvKit/MusicLibraryInstaller.swift:64"
+    ]
+  },
+  "This tool has no uses left.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:84"
     ]
   },
   "This worldwide board is not available yet.": {
@@ -20136,6 +20251,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileTurnArt.swift:9"
+    ]
+  },
+  "Turning while swimming needs two uses of Swimmer.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:75"
     ]
   },
   "Turns: {0}": {
@@ -20942,6 +21063,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/TelemetryDashboard.swift:203"
+    ]
+  },
+  "Wait for this lemming to land.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/SkillRejectionFeedback.swift:99"
     ]
   },
   "Walker": {
