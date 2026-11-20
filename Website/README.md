@@ -19,8 +19,9 @@ Asset preparation requires Pillow, FontTools and Brotli. Its source records live
 in `image-provenance.json`. Do not replace genuine captures with mock interfaces.
 
 The page shell and navigation are in `build.py`. Page bodies are in `content`.
-The tiny optional script switches real platform screenshots. All text, navigation,
-the first capture and alternative image links remain available without it.
+The optional script switches platform screenshots and opens the Game Assets
+download agreement. Without JavaScript, the upgrade page shows the same licence
+notice and agreement link inline.
 
 ## Publication
 

@@ -28,3 +28,25 @@
 .upgrade-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 1rem; margin: 1.2rem 0; }
 .upgrade-options > div { border: 1px solid currentColor; padding: 1.15rem 1.3rem; }
 .upgrade-options h3 { margin-top: 0; }
+
+.asset-dialog {
+  width: min(34rem, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 2px solid var(--leaf);
+  color: var(--ink);
+  background: var(--paper);
+}
+.asset-dialog::backdrop { background: rgb(9 27 23 / 70%); }
+.asset-dialog h3 { margin: 0; font-size: 1.45rem; }
+.asset-dialog p { margin: 1rem 0 1.5rem; }
+.asset-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+.asset-actions button {
+  min-height: 50px;
+  padding: .5rem 1rem;
+  border: 1px solid var(--leaf);
+  color: var(--ink);
+  background: var(--paper);
+  cursor: pointer;
+}
+#get-game-assets[hidden], #cancel-game-assets[hidden] { display: none; }

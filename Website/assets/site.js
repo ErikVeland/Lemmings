@@ -24,3 +24,22 @@ if (gallery) {
     });
   }
 }
+
+const licence = document.getElementById('game-assets-licence');
+if (licence && typeof HTMLDialogElement !== 'undefined' && HTMLDialogElement.prototype.showModal) {
+  const dialog = document.createElement('dialog');
+  dialog.className = 'asset-dialog';
+  dialog.setAttribute('aria-labelledby', 'game-assets-title');
+  dialog.setAttribute('aria-describedby', 'game-assets-terms');
+  licence.before(dialog);
+  dialog.append(licence);
+
+  const openButton = document.getElementById('get-game-assets');
+  const cancelButton = document.getElementById('cancel-game-assets');
+  openButton.hidden = false;
+  cancelButton.hidden = false;
+  cancelButton.autofocus = true;
+  openButton.addEventListener('click', () => dialog.showModal());
+  cancelButton.addEventListener('click', () => dialog.close());
+  licence.querySelector('a').addEventListener('click', () => dialog.close());
+}

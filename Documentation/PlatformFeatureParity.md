@@ -10,10 +10,12 @@ The app checks the size and SHA-256, then installs the resources through the fol
 A player can cancel the transfer or retry a failed download. Audio settings
 list the 18 optional soundtrack libraries once the pack is active.
 
-The Mac offscreen check exercised the primary button, its input target and live
-activation. A separate native check downloaded, installed and reopened all
-23,001 assets. The hosted ZIP matched the release checksum. Physical-device input
-and network interruptions on iPhone, iPad, Duo and Apple TV need device acceptance.
+On Mac, an offscreen check opened the agreement, cancelled, reopened it and accepted.
+The app installed the pack and displayed all 18 soundtrack libraries. An iPhone
+simulator confirmed the notice, both touch targets and cancellation on two attempts.
+A separate native check downloaded, installed and reopened all 23,001 assets.
+The hosted ZIP matched the release checksum. The iOS and tvOS device builds passed.
+Physical-device input and interrupted transfers still need device acceptance.
 Build 110 requires manual folder import. [Game Assets release](https://github.com/ErikVeland/Lemmings/releases/tag/ultimate-lemmix-game-assets-1)
 
 ## Lemmix button backgrounds — 20 November 2026

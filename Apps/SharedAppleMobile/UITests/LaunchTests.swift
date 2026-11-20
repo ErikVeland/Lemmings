@@ -25,6 +25,7 @@ final class LaunchTests: XCTestCase {
             tap(download)
             XCTAssertTrue(notice.waitForExistence(timeout: 5))
             XCTAssertTrue(notice.label.contains("By selecting “Agree and download”, you confirm that you hold that licence."))
+            XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Next:")).firstMatch.exists)
             assertTarget(agree)
             assertTarget(cancel)
             XCTAssertFalse(download.exists)
