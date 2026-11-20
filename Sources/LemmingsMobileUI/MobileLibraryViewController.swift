@@ -937,7 +937,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         canvas.fitsSupportPage = route == .support
         canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
-        canvas.playerName = route == .players && renamingPlayer ? nil : playerName(hotSeat?.turn ?? profiles.activeID)
+        let hidePlayerName = confirmingGameAssetLicence || (route == .players && renamingPlayer)
+        canvas.playerName = hidePlayerName ? nil : playerName(hotSeat?.turn ?? profiles.activeID)
         unfold.stop()
         let count = library?.levels.count ?? 0
         let subtitle = loading ? L10n.text("Loading...") : notice

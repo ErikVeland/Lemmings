@@ -23,8 +23,9 @@ To update the Duo device renderings after replacing the original captures, run
 three device illustrations in `Website/artwork/duo`.
 
 The page shell and navigation are in `build.py`. Page bodies are in `content`.
-The tiny optional script switches real platform screenshots. All text, navigation,
-the first capture and alternative image links remain available without it.
+The optional script switches platform screenshots and opens the Game Assets
+download agreement. Without JavaScript, the upgrade page shows the same licence
+notice and agreement link inline.
 
 ## Publication
 
