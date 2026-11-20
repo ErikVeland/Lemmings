@@ -23,6 +23,15 @@ existing behaviour. The original
 one-bit Macintosh presentation retains its own rock and monochrome states.
 Passive information panels retain their flat backgrounds.
 
+## Lix fallback backgrounds
+
+Ultimate Lemmix must not use pale blue button backgrounds. The shared Lix
+background generator uses the stone socket's dark green face and olive bevel.
+Selected buttons use moss green. Pressed buttons use a darker face.
+Disabled buttons retain their reduced opacity. This covers mobile buttons and
+fallback HUD rock tiles, plus both native and shared Lix drawing adapters.
+Lix symbol colours, bitmap lettering and input rectangles stay intact.
+
 ## Gameplay controls
 
 `GamePlayButtonArt` gives skills, rate, pause, nuke, speed and transport controls

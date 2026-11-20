@@ -1,5 +1,19 @@
 # Cross-platform feature parity
 
+## Lemmix button backgrounds — 20 November 2026
+
+Ultimate Lemmix forbids pale blue button backgrounds. The shared Lix background
+generator now uses dark stone and moss colours for normal, selected, pressed and
+disabled states. Native Mac, shared bitmap and mobile adapters use this generator,
+as do fallback HUD rock tiles. This covers source paths for Mac, iPhone, iPad,
+Duo and Apple TV without changing engine behaviour or input rectangles.
+
+The focused artwork check passes offscreen with muted audio. It verifies sixteen
+size/state combinations, dark faces, absence of blue backing pixels, disabled
+opacity, bevels and bitmap bounds. The rendered control sheet was inspected.
+The old palette failed the new colour check before the fix. Full app builds,
+engine suites and physical touch/remote acceptance were not run for this change.
+
 ## Rejected skill assignments — 20 November 2026
 
 Classic, NeoLemmix, Tribes and Chronicles use shared messages for rejected
