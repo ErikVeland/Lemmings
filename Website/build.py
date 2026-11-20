@@ -16,10 +16,12 @@ ORIGIN = CONFIG['origin']
 
 def screenshot(capture, figure_class, sizes, platform=None):
     name = capture['key']
+    label = html.escape(capture['name'], quote=True)
     alt = html.escape(capture['alt'], quote=True)
     caption = html.escape(capture['caption'])
     widths = capture['widths']
     sources = ', '.join(f'/assets/{name}-{width}.webp {width}w' for width in widths)
+    jpeg_sources = ', '.join(f'/assets/{name}-{width}.jpg {width}w' for width in widths)
     full = f'/assets/{name}-full.webp'
     hdr = ''
     hdr_link = ''
@@ -27,15 +29,15 @@ def screenshot(capture, figure_class, sizes, platform=None):
         hdr_path = '/assets/' + html.escape(capture['hdr']['output'], quote=True)
         mime = html.escape(capture['hdr']['type'], quote=True)
         hdr = f'<source type="{mime}" media="(dynamic-range: high)" srcset="{hdr_path}">'
-        hdr_link = f' <a href="{hdr_path}" aria-label="{caption}, full-size HDR">Full-size HDR</a>'
+        hdr_link = f' <a href="{hdr_path}" aria-label="Full-size HDR for {label}">Full-size HDR</a>'
     platform_attr = f' id="screen-{platform}" data-platform="{platform}"' if platform else ''
     if platform and capture['height'] > capture['width']:
         figure_class += ' portrait'
     return f'''<figure class="{figure_class}"{platform_attr}>
       <picture>{hdr}<source type="image/webp" srcset="{sources}" sizes="{sizes}">
-        <img src="/assets/{name}-{widths[-1]}.jpg" alt="{alt}" width="{capture['width']}" height="{capture['height']}" loading="lazy">
+        <img src="/assets/{name}-{widths[-1]}.jpg" srcset="{jpeg_sources}" sizes="{sizes}" alt="{alt}" width="{capture['width']}" height="{capture['height']}" loading="lazy">
       </picture>
-      <figcaption>{caption} <a href="{full}" aria-label="{caption}, full size">Full size</a>{hdr_link}</figcaption>
+      <figcaption>{caption} <a href="{full}" aria-label="Full size for {label}">Full size</a>{hdr_link}</figcaption>
     </figure>'''
 
 
@@ -94,11 +96,12 @@ def build():
         body = body.replace('{{contact}}', html.escape(CONFIG['contact'])).replace('{{policy_date}}', CONFIG['policy_date'])
         if home:
             captures = json.loads((ROOT / 'content/screenshots.json').read_text())['captures']
+            feature_classes = {'journey': 'puzzle-capture', 'community': 'community-capture',
+                               'nuke': 'blast-frame', 'tabletop': 'pose-frame', 'book': 'pose-frame'}
             for capture in captures:
-                name = capture['key']
-                if name in ('journey', 'community', 'nuke'):
-                    css = {'journey': 'puzzle-capture', 'community': 'community-capture', 'nuke': 'blast-frame'}[name]
-                    body = body.replace('{{' + name + '}}', screenshot(capture, css, '(max-width: 800px) 90vw, 560px'))
+                key = capture['key']
+                if key in feature_classes:
+                    body = body.replace('{{' + key + '}}', screenshot(capture, feature_classes[key], '(max-width: 800px) 90vw, 560px'))
             body = body.replace('{{platform-gallery}}', screenshot_gallery(captures))
         toc = ''
         if not home:

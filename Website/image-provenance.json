@@ -69,6 +69,32 @@
       "treatment": "Build 110 Metal gameplay effect rendered at 4\u00d7 headroom over its matching native HUD capture. Rec.2020/PQ AVIF. Corresponding SDR render at 1\u00d7. Decoded peak 698 nits at 203-nit reference white."
     },
     {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/tabletop.png",
+      "sha256": "7ef0842230a5bacb8cab0d1f8ed07d30985256def587afe9e5b3c8c73d3231e2",
+      "outputs": [
+        "tabletop-full.webp",
+        "tabletop-480.webp",
+        "tabletop-480.jpg",
+        "tabletop-834.webp",
+        "tabletop-834.jpg"
+      ],
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "Tabletop \u00b7 Over the Rise. Watch the crowd upstairs and work the controls downstairs. Duo layout render."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/book.png",
+      "sha256": "c682560862c63b6903f38791583b718c2b99bf74e1c116a969cad4c71392bb44",
+      "outputs": [
+        "book-full.webp",
+        "book-640.webp",
+        "book-640.jpg",
+        "book-1194.webp",
+        "book-1194.jpg"
+      ],
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "Book \u00b7 First Steps. The path crosses the fold and the skill buttons sit on either side. Duo layout render."
+    },
+    {
       "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/phone.png",
       "sha256": "a098d2f7fb2e63c9ec6bdfda32856a951a661852210c96724759a7f90f336d08",
       "outputs": [

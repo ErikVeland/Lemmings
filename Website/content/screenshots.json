@@ -12,7 +12,8 @@
         1600
       ],
       "alt": "The Mac Home screen shows Resume Journey above the campaign library, with Collections and Playlists below.",
-      "caption": "Resume Journey on Mac. Your route is waiting on Home."
+      "caption": "Resume Journey on Mac. Your route is waiting on Home.",
+      "name": "Resume Journey on Mac"
     },
     {
       "key": "community",
@@ -25,7 +26,8 @@
         1600
       ],
       "alt": "Walkers emerge below a cave of suspended rock and winding stone pillars. The skill bar and minimap sit below the playfield.",
-      "caption": "Tower Of Training by IchoTolot. Basic Training 1 in the NeoLemmix Introduction Pack, on Mac."
+      "caption": "Tower Of Training by IchoTolot. Basic Training 1 in the NeoLemmix Introduction Pack, on Mac.",
+      "name": "Tower Of Training on Mac"
     },
     {
       "key": "mac",
@@ -47,7 +49,8 @@
         "output": "mac-hdr.avif",
         "type": "image/avif",
         "method": "Build 110 Metal gameplay effect rendered at 4× headroom over its matching native HUD capture. Rec.2020/PQ AVIF. Corresponding SDR render at 1×. Decoded peak 405 nits at 203-nit reference white."
-      }
+      },
+      "name": "Down the cliff on Mac"
     },
     {
       "key": "nuke",
@@ -67,7 +70,36 @@
         "output": "nuke-hdr.avif",
         "type": "image/avif",
         "method": "Build 110 Metal gameplay effect rendered at 4× headroom over its matching native HUD capture. Rec.2020/PQ AVIF. Corresponding SDR render at 1×. Decoded peak 698 nits at 203-nit reference white."
-      }
+      },
+      "name": "Nuke in First Steps"
+    },
+    {
+      "key": "tabletop",
+      "file": "tabletop.png",
+      "sha256": "7ef0842230a5bacb8cab0d1f8ed07d30985256def587afe9e5b3c8c73d3231e2",
+      "width": 834,
+      "height": 1194,
+      "widths": [
+        480,
+        834
+      ],
+      "alt": "Three Lix cross Over the Rise on the upper pane. The lower pane holds the overview, time controls and eight skill buttons.",
+      "caption": "Tabletop · Over the Rise. Watch the crowd upstairs and work the controls downstairs. Duo layout render.",
+      "name": "Tabletop on Duo"
+    },
+    {
+      "key": "book",
+      "file": "book.png",
+      "sha256": "c682560862c63b6903f38791583b718c2b99bf74e1c116a969cad4c71392bb44",
+      "width": 1194,
+      "height": 834,
+      "widths": [
+        640,
+        1194
+      ],
+      "alt": "First Steps spans the vertical fold. The skills are divided between the panes, leaving the hinge clear.",
+      "caption": "Book · First Steps. The path crosses the fold and the skill buttons sit on either side. Duo layout render.",
+      "name": "Book on Duo"
     },
     {
       "key": "phone",
@@ -82,7 +114,8 @@
       "alt": "A green three starts the countdown at the entrance above a brick floor. Eight character skill buttons sit below the overview.",
       "caption": "First Steps on iPhone. The entrance countdown, overview and touch controls in the iPhone 17 Pro simulator.",
       "platform": "phone",
-      "platformLabel": "iPhone"
+      "platformLabel": "iPhone",
+      "name": "iPhone game screen"
     }
   ]
 }

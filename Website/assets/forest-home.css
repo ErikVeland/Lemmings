@@ -236,6 +236,9 @@
     mask-image: linear-gradient(black 75%, transparent);
     margin-bottom: -26px;
   }
+  .home > .second-thoughts .woodland-still {
+    mask-image: linear-gradient(transparent, black var(--fade), black 75%, transparent);
+  }
   .duo-notes .lead { max-width: 44ch; }
 }
 @media (forced-colors: active), print {
@@ -251,3 +254,17 @@
 .nuke-demo img { display: block; width: 100%; height: auto; }
 .nuke-demo figcaption { margin-top: 10px; font-size: .87rem; color: #efe1c9; }
 .nuke-demo summary:focus-visible { outline: 3px solid #ffe1a5; outline-offset: 3px; }
+
+.duo-layouts {
+  grid-column: 1 / -1;
+  display: grid; grid-template-columns: minmax(0, 245px) minmax(0, 500px);
+  align-items: start; justify-content: center;
+  gap: clamp(25px, 5vw, 80px);
+}
+.pose-frame { min-width: 0; }
+.pose-frame img { display: block; width: 100%; height: auto; }
+.pose-frame figcaption { margin-top: 12px; font-size: .94rem; color: #f5e8c9; }
+@media (max-width: 540px) {
+  .duo-layouts { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .pose-frame img { width: auto; max-width: 100%; max-height: 340px; }
+}
