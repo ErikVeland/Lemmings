@@ -47,11 +47,13 @@ func assetHash(_ root: URL) throws -> String {
     return try hash(compact(hashes))
 }
 let sourceFiles = try FileManager.default.contentsOfDirectory(at: project.appendingPathComponent("Sources/NxlvKit"), includingPropertiesForKeys: nil)
-var sourceHashes: [String: String] = [:]
 // The packager and verifier use one source-selection policy.
 let presentationFiles = Set(try JSONDecoder().decode([String].self, from:
     Data(contentsOf: project.appendingPathComponent("Tools/TrolleyVerification/presentation-files.json"))))
-for file in sourceFiles where file.pathExtension == "swift" && !file.lastPathComponent.hasPrefix("Trolley") && !file.lastPathComponent.hasPrefix("Arcade") && !presentationFiles.contains(file.lastPathComponent) {
+let legacyPresentationHashes = try JSONDecoder().decode([String: String].self, from:
+    Data(contentsOf: project.appendingPathComponent("Tools/TrolleyVerification/legacy-presentation-hashes.json")))
+var sourceHashes = legacyPresentationHashes
+for file in sourceFiles where file.pathExtension == "swift" && !file.lastPathComponent.hasPrefix("Trolley") && !file.lastPathComponent.hasPrefix("Arcade") && !presentationFiles.contains(file.lastPathComponent) && legacyPresentationHashes[file.lastPathComponent] == nil {
     sourceHashes[file.lastPathComponent] = try fileHash(file)
 }
 let engineHash = try hash(compact(sourceHashes))
