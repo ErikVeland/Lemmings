@@ -3548,3 +3548,7 @@
 "Favour active skilled lemmings" = "Foretrekk lemminger som bruker ferdigheter";
 "Target active workers" = "Sikt på aktive arbeidere";
 "Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply." = "Foretrekk lemminger som bruker en ferdighet, og behold prioriteten til de faller. Reglene for hver ferdighet gjelder fortsatt.";
+"Download game assets" = "Last ned spilldata";
+"Game assets are already downloading." = "Nedlasting av spilldata pågår allerede.";
+"Game assets are unavailable. Try again later." = "Spilldata er utilgjengelige. Prøv igjen senere.";
+"Game assets failed verification. Download them again." = "Kontrollen av spilldata mislyktes. Last dem ned på nytt.";

@@ -35,8 +35,9 @@ import UniformTypeIdentifiers
     let status = GameLabel(wrappingLabelWithString: "")
     status.frame = CGRect(x: 0, y: 170, width: 900, height: 100)
     next.body.addSubview(status)
-    var action: NSButton?
-    action = next.addPrimaryAction(L10n.text("Choose game folder")) { [weak self, weak next] in
+    weak var action: NSButton?
+    var canCancelDownload = false
+    let chooseGameFolder: () -> Void = { [weak self, weak next] in
       guard let self, self.task == nil,
         BYOGame.allCases.indices.contains(choice.indexOfSelectedItem) else { return }
       let game = BYOGame.allCases[choice.indexOfSelectedItem]
@@ -68,8 +69,42 @@ import UniformTypeIdentifiers
         }
       }
     }
-    action?.setAccessibilityLabel(L10n.text("Choose a player-owned game folder"))
     if let resourceLibrary {
+      let folder = GameActionButton(title: L10n.text("Choose game folder"), primary: false, onPress: chooseGameFolder)
+      folder.frame = CGRect(x: 580, y: 290, width: 380, height: 40)
+      next.body.addSubview(folder)
+      action = folder
+      let download = next.addPrimaryAction(GameAssetPack.actionTitle) { [weak self, weak next] in
+        guard let self, let next, self.task == nil else { return }
+        self.task = Task { @MainActor in
+          let controls = DialogKeyboardNavigation().controls(in: next).compactMap { $0 as? NSControl }
+          defer {
+            self.task = nil
+            canCancelDownload = false
+            next.backTitle = L10n.text("Back")
+            for control in controls { control.isEnabled = true }
+          }
+          for control in controls where control !== next.controllerBackButton { control.isEnabled = false }
+          do {
+            let installed = try await GameAssetPack.shared.downloadAndInstall(progress: { phase in
+              status.stringValue = phase.title
+              if case .downloading = phase {
+                canCancelDownload = true
+                next.backTitle = L10n.text("Cancel")
+              } else {
+                canCancelDownload = false
+                next.controllerBackButton.isEnabled = false
+              }
+            }) { try resourceLibrary.install(directory: $0) }
+            GameScreen.shared.dismiss(next)
+            self.page = nil
+            self.onResourcesInstalled?(installed)
+          } catch {
+            status.stringValue = Task.isCancelled ? "" : error.localizedDescription
+          }
+        }
+      }
+      download.setAccessibilityIdentifier("download.gameAssets")
       next.addSecondaryAction(L10n.text("Restore original assets…")) { [weak self, weak next] in
         guard let self, self.task == nil else { return }
         let picker = NSOpenPanel()
@@ -98,9 +133,13 @@ import UniformTypeIdentifiers
           }
         }
       }
+    } else {
+      action = next.addPrimaryAction(L10n.text("Choose game folder"), action: chooseGameFolder)
     }
+    action?.setAccessibilityLabel(L10n.text("Choose a player-owned game folder"))
     next.addSecondaryAction(L10n.text("Get BYO bundle")) { [weak self] in self?.exportBundle() }
     next.onBack = { [weak self, weak next] in
+      if canCancelDownload { self?.task?.cancel(); return }
       guard self?.task == nil, let next else { return }
       GameScreen.shared.dismiss(next)
       self?.page = nil
