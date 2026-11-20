@@ -26,12 +26,10 @@ NAMES = {
 # Fixed-input simulation replays do not call them.
 PRESENTATION_FILES = set(json.loads((Path(__file__).with_name("presentation-files.json")).read_text()))
 
-# Published replay identities included these presentation files. Retain their
-# original hashes so localisation packaging does not invalidate those identities.
-LEGACY_PRESENTATION_HASHES = {
-    "BitmapTamilGlyphs.swift": "bd9f455bf4fb7d83226424d5afe8450f1315c2388d4c99eb657ceb205e0441bd",
-    "InterfaceLocalisation.swift": "383cdb437ed45105efca4de2987fd2a6013151d4afc53aeda7044b88e01ab9c5",
-}
+# Keep the original hashes of presentation files included in published replay identities.
+LEGACY_PRESENTATION_HASHES = json.loads(
+    Path(__file__).with_name("legacy-presentation-hashes.json").read_text()
+)
 
 
 def fingerprint():
