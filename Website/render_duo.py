@@ -47,7 +47,7 @@ def photo(artwork, screen, pose, corners, directory):
         layer = directory / f'{pose}-{i}.png'
         project(screen, crop, quad, layer)
         layers += [layer, '-compose', 'over', '-composite']
-    run('magick', artwork / f'{pose}.png', *layers, '-resize', '1200x800',
+    run('magick', artwork / f'{pose}.webp', *layers, '-resize', '1200x800',
         '-quality', '88', ASSETS / f'duo-{pose}-scene.webp')
 
 def film(artwork, directory):
@@ -63,14 +63,15 @@ def film(artwork, directory):
                '[1:v]scale=1152:768,setsar=1,format=gbrp,perspective=' + xy + ':sense=destination[display];'
                '[2:v]format=gbrp[mask];[wood][display][mask]maskedmerge,format=yuv420p[out]')
     run('ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-filter_complex_threads', '1',
-        '-loop', '1', '-framerate', '15', '-i', artwork/'tent.png',
+        '-loop', '1', '-framerate', '15', '-i', artwork/'tent.webp',
         '-i', ASSETS/'duo-desk-clock.mp4', '-loop', '1', '-framerate', '15', '-i', directory/'alpha.png',
         '-filter_complex', filters, '-map', '[out]', '-an', '-t', '27', '-c:v', 'libx264',
         '-threads', '2', '-preset', 'fast', '-crf', '17', '-movflags', '+faststart', ASSETS/'duo-tent-scene.mp4')
 
 if __name__ == '__main__':
     parser = ArgumentParser(description=__doc__)
-    parser.add_argument('artwork', type=Path, help='Folder containing book.png, tabletop.png and tent.png')
+    parser.add_argument('--artwork', type=Path, default=ASSETS.parent/'artwork/duo',
+                        help='Folder containing the three 1536 × 1024 device illustrations.')
     parser.add_argument('--tent', type=Path, default=ASSETS/'duo-cover-full.webp')
     parser.add_argument('--book', type=Path, default=ASSETS/'book-full.webp')
     parser.add_argument('--tabletop', type=Path, default=ASSETS/'tabletop-full.webp')

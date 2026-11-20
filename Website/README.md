@@ -18,6 +18,10 @@ Normal builds use the Python standard library and committed assets.
 Asset preparation requires Pillow, FontTools and Brotli. Its source records live
 in `image-provenance.json`. Do not replace genuine captures with mock interfaces.
 
+To update the Duo device renderings after replacing the original captures, run
+`python3 Website/render_duo.py --film`. It uses ImageMagick, FFmpeg and the
+three device illustrations in `Website/artwork/duo`.
+
 The page shell and navigation are in `build.py`. Page bodies are in `content`.
 The tiny optional script switches real platform screenshots. All text, navigation,
 the first capture and alternative image links remain available without it.

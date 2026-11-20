@@ -157,6 +157,22 @@
       "name": "iPhone game screen"
     },
     {
+      "key": "tablet",
+      "file": "tablet.png",
+      "sha256": "a6eea6957308f11820e209ca9d6e791e4c7eaf7992ae90909e85cced3edc2e8a",
+      "width": 2388,
+      "height": 1668,
+      "widths": [
+        800,
+        1600
+      ],
+      "alt": "Five walkers descend a grassy cavern ledge. A sixth has fallen into the pool below. The touch skill controls and overview run along the bottom.",
+      "caption": "In the cavern... · Mikepak00. The build 110 game renderer draws the 11-inch iPad layout with imported DOS artwork.",
+      "platform": "tablet",
+      "platformLabel": "iPad",
+      "name": "iPad game screen"
+    },
+    {
       "key": "tv",
       "file": "tv.png",
       "sha256": "9642b4745ac8c2350655f2f41300a1fd0394c9334f664ad92bdc07436f289765",
