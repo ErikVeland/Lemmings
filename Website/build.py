@@ -23,6 +23,12 @@ def build():
     asset_prefix = '/assets/' + asset_stamp + '/'
     asset_directory = OUT / 'assets' / asset_stamp
     shutil.copytree(ROOT / 'assets', asset_directory)
+    # Serve the shared and page-specific styles in one cacheable stylesheet.
+    stylesheets = ('site.css', 'forest-home.css', 'forest-guide.css', 'forest-shell.css')
+    style_parts = [(asset_directory / name).read_text() for name in stylesheets]
+    (asset_directory / 'site.css').write_text('\n'.join(style_parts))
+    for name in stylesheets[1:]:
+        (asset_directory / name).unlink()
     assets = {}
     for name in ['site.css', 'site.js']:
         path = asset_directory / name

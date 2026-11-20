@@ -99,7 +99,7 @@ font_path.unlink()
 social.save(ASSETS / 'social.jpg', quality=91, optimize=True)
 (ROOT / 'image-provenance.json').write_text(json.dumps({
     'captures': records,
-    'illustration': 'Project artwork generated from the approved Ultimate Lemmix icon. The mobile image is a crop of the woodland scene.',
+    'illustration': 'Project artwork generated for this site from the approved Lix icon and woodland illustration. The creek, lantern-lit burrow, ocarina, trail sign, satchel and four material textures are illustrations. Gameplay images use the captures listed above.',
     'social': 'The woodland illustration with the approved app icon and wordmark.',
     'font': 'Archivo, SIL Open Font License; reused from the existing GenErik DJ website.'
 }, indent=2) + '\n')

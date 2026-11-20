@@ -1,0 +1,168 @@
+/* The trail moves from the stream to a noticeboard and back to the burrow. */
+.home {
+  --board: url('/assets/forest-bark.webp');
+  --moss: url('/assets/forest-moss.webp');
+  --paper-grain: url('/assets/forest-paper.webp');
+  --slate: url('/assets/forest-stone.webp');
+  --cream: #fff4d2;
+  --forest-edge: max(var(--gutter), calc((100vw - 1240px) / 2));
+  background: #263c29;
+}
+.home .stone-link, .home .stone-link.pale, .capture-tabs button, .paired-links a {
+  color: #fff6d2;
+  background: linear-gradient(#72431e75, #352412dc), var(--board) center / 235px;
+  border: 2px solid #b88447;
+  border-radius: 11px 19px 13px 8px / 7px 9px 10px 12px;
+  box-shadow: inset 0 1px #eac48191, inset 0 -3px #321e12, 0 3px 0 #201c12, 0 6px 12px #0d1c1b48;
+  text-shadow: 0 1px 2px #1d110f;
+}
+.home .stone-link:hover, .home .stone-link.pale:hover, .capture-tabs button:hover, .paired-links a:hover {
+  color: white;
+  background: linear-gradient(#94602166,#50301caa), var(--board) center / 235px;
+}
+.home a:focus-visible, .home button:focus-visible { outline: 3px solid #ffe081; outline-offset: 4px; box-shadow: 0 0 0 6px #274d3d; }
+.home > .first-steps {
+  display: block; max-width: none;
+  padding: clamp(44px, 7vw, 112px) var(--forest-edge);
+  border-block: 5px solid #404428;
+  background: linear-gradient(#192d1530,#202c1766), url('/assets/forest-creek.webp') center / cover;
+}
+.trail-book {
+  position: relative;
+  display: grid; grid-template-columns: 1fr 1fr;
+  isolation: isolate; max-width: 1150px; margin: auto;
+  color: #342f1f; border: 7px solid #59402c;
+  border-radius: 14px 23px 16px 12px / 12px 10px 20px 9px;
+  box-shadow: 0 4px #d8bd89, 0 7px #a1845b, 0 12px #513e29, 0 16px 32px #07170abd;
+  background: linear-gradient(90deg,#fff9ddae 0%,#fff6d898 42%,#c19c655c 48%,#71542c88 49.9%,#efd3a680 50.5%,#fff6dcad 55%,#fff9dbab 96%,#cba46e44), var(--paper-grain) center / auto, #e4d3ac;
+}
+.trail-book > div { padding: clamp(24px,3.9vw,62px); }
+.trail-book .chapter-intro { align-self: center; }
+.trail-book .field-notes { align-self: center; max-width: none; }
+.trail-book h2 { color: #38412a; }
+.puzzle-capture img { border: 6px solid #efe3c6; outline: 1px solid #a99b78; border-radius: 1px; transform: rotate(-1deg); }
+.puzzle-capture figcaption { color: #57503b; margin-top: 14px; }
+.level-list li { border-color: #9b9971; }
+.level-list li:last-child { border-color: #9b9971; }
+.level-list li::before {
+  display: inline-grid; place-items: center;
+  width: 22px; height: 22px;
+  background: #475f3b; color: #fff8d9;
+  border-radius: 65% 8% 63% 18%;
+}
+.trail-book .text-link, .trail-book .restore-note a { color: #284d31; }
+.home > .community-levels {
+  display: block; max-width: none;
+  padding: clamp(50px,7vw,110px) var(--forest-edge);
+  background: linear-gradient(#182f22a8,#192e21cd), var(--moss) center / 410px;
+}
+.community-board {
+  position: relative;
+  display: grid; grid-template-columns: 1fr 1.18fr;
+  gap: 24px clamp(30px,4vw,67px);
+  align-items: center;
+  padding: clamp(27px,5vw,82px);
+  color: #fff1cf;
+  border: 2px solid #776044;
+  border-radius: 32px 13px 24px 14px / 11px 21px 19px 18px;
+  background: linear-gradient(95deg,#281f16e8,#392618cd 70%,#312017ba), var(--board) center / 560px;
+  box-shadow: inset 0 3px #d9b48944, inset 0 -7px #221b12a6, 0 9px 20px #10201999;
+}
+.community-board::before, .capture-picker::before {
+  content: ''; position: absolute; z-index: 1; inset: -9px 1% auto; height: 21px;
+  background: linear-gradient(#77924040,#2f4d1944), var(--moss) center / 205px;
+  clip-path: polygon(0 45%,2% 10%,12% 28%,19% 8%,36% 31%,48% 9%,60% 35%,70% 4%,85% 32%,96% 21%,100% 51%,100% 80%,93% 70%,83% 98%,73% 72%,61% 85%,52% 65%,44% 99%,30% 67%,19% 90%,6% 74%,0 100%);
+  pointer-events: none;
+}
+.community-board .lead { font-size: clamp(1.2rem,1.7vw,1.55rem); }
+.community-library { font-size: 16px; }
+.community-links li { border-color: #aa8d6666; }
+.community-links a { color: #ffe1a0; }
+.community-capture img, .platform-capture picture {
+  background: linear-gradient(#52382065,#2b2119ad), var(--board) center / 300px;
+  border: 1px solid #92764c; border-radius: 6px;
+  box-shadow: 0 4px 12px #1217107a, inset 0 1px #dec39970;
+  padding: clamp(6px,1vw,14px);
+}
+.community-capture figcaption, .platform-capture figcaption, .capture-note { color: #ebddb8; }
+.community-music, .second-thoughts, .bring-along {
+  max-width: none; margin: 0;
+  display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  align-items: stretch; gap: 0; padding: 0;
+}
+.woodland-still { display: block; width: 100%; height: 100%; min-height: 355px; object-fit: cover; }
+.glade-copy {
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  min-width: 0;
+  padding: clamp(38px,5.6vw,100px) clamp(25px,5.1vw,88px);
+}
+.glade-copy p { max-width: 38ch; }
+.glade-copy h2 { margin-bottom: 20px; }
+.glade-copy .lead { margin-bottom: 16px; }
+.community-music {
+  color: #f9f0d1;
+  background: linear-gradient(115deg,#283920e8,#102e25df), var(--moss) center / 300px;
+}
+.community-music .text-link { color: #ffdf99; padding-block: 8px; }
+.second-thoughts {
+  color: #fff2d4;
+  background: linear-gradient(105deg,#243936ed,#2c3b37dd), var(--slate) center / 480px;
+}
+.paired-links { gap: 14px; }
+.paired-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 18px; text-decoration: none; }
+.looking-glass {
+  position: relative; max-width: none;
+  padding: clamp(50px,7vw,110px) var(--forest-edge);
+  color: var(--cream);
+  background: linear-gradient(#192c1cbd,#172d2394 65%,#142b21c9), url('/assets/forest-creek.webp') center / cover;
+}
+.looking-glass > header { padding-inline: 6px; text-shadow: 0 2px 8px #092218; }
+.capture-picker {
+  position: relative;
+  padding: clamp(17px,3vw,44px);
+  border-block: 3px solid #61492c; border-radius: 19px 27px 12px 14px;
+  background: linear-gradient(#382d1ddc,#291f17d6), var(--board) center / 400px;
+  box-shadow: 0 10px 20px #081b1380;
+}
+.capture-tabs { gap: 8px; }
+.capture-tabs button { margin: 0; text-decoration: none; }
+.capture-tabs button[aria-pressed=true] {
+  color: #182d18; background: linear-gradient(#f8e7acdd,#d5c684e8), var(--paper-grain) center / 180px;
+  border-color: #e5d49a; box-shadow: inset 0 -3px #a68c50, 0 0 0 2px #3f3b24;
+  text-shadow: none; text-decoration: underline; text-underline-offset: 5px;
+}
+.platform-capture picture { background: linear-gradient(#17241ee6,#17211be6), var(--slate) center / 400px; }
+.looking-glass .capture-note { background: #213927e6; padding: 10px 16px; border-radius: 0 0 16px 16px; margin: 0 auto; width: fit-content; }
+.bring-along { color: #3d3225; background: linear-gradient(#fff3d0ac,#f6dfb294), var(--paper-grain) center / 460px; }
+.bring-along .stone-link { margin-bottom: 0; }
+.home .last-word {
+  text-align: center; color: var(--cream);
+  background: linear-gradient(#182e23db,#162e24e8), var(--moss) center / 320px;
+  padding-block: clamp(44px,5.5vw,86px);
+  box-shadow: inset 0 5px 12px #142a1e5c;
+}
+@media (max-width: 800px) {
+  .home > .first-steps, .home > .community-levels, .looking-glass { padding-inline: clamp(12px,4vw,30px); }
+  .trail-book, .community-board { grid-template-columns: minmax(0,1fr); }
+  .trail-book { background: linear-gradient(90deg,#b0895366,#fff4dca8 6%,#fff4dca8 95%,#bf9a6255), var(--paper-grain) center / 420px; }
+  .trail-book > div { padding: 25px clamp(18px,5vw,40px); }
+  .trail-book .field-notes { border-top: 1px solid #ae916a66; }
+  .community-board { padding: 32px clamp(18px,4vw,33px); }
+  .community-capture { grid-column: 1; grid-row: auto; }
+  .level-list { margin-block: 19px; }
+  .level-list li { grid-template-columns: 25px 1fr auto; }
+  .level-list small { grid-column: auto; }
+  .community-music, .second-thoughts, .bring-along { grid-template-columns: minmax(0,1fr); }
+  .woodland-still { height: clamp(215px,53vw,355px); min-height: 0; }
+  .second-thoughts .woodland-still { grid-row: 1; }
+  .glade-copy { padding: 33px var(--gutter) 42px; }
+  .capture-tabs button { padding-inline: clamp(10px,4vw,20px); }
+}
+@media (max-width: 400px) {
+  .level-list li { grid-template-columns: 24px 1fr; }
+  .level-list small { grid-column: 2; }
+}
+@media (forced-colors: active) {
+  .community-board, .trail-book, .capture-picker, .capture-tabs button, .home .stone-link { border: 2px solid CanvasText; }
+  .capture-tabs button[aria-pressed=true] { border: 3px solid Highlight; }
+}
