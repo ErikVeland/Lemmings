@@ -235,11 +235,15 @@ def media_rights(files):
     if has_font:
         licences.append({'scope': 'Fonts/Lix/djvusans.ttf', 'licence': prepare_lix_font.LICENCE,
                          'notice': 'Licences/Lix-font-LICENSE.txt', 'modified': False})
+    shared_font_notice = 'Fonts/LixInterface/NOTICE.md'
+    if shared_font_notice in files:
+        licences.append({'scope': 'Fonts/LixInterface', 'licence': 'Ultimate Lemmings shared pixel font',
+                         'notice': shared_font_notice})
     if 'Provenance/project-icon-source.json' in files:
         licences.append({'scope': 'Project app icon and derived platform icon catalogues',
                          'licence': 'Rights review required; not CC0',
                          'notice': 'Licences/Project-icon-source.md', 'redistributionCleared': False})
-    return {'mediaLicence': 'mixed' if has_font else 'CC0-1.0', 'mediaLicences': licences}
+    return {'mediaLicence': 'mixed' if len(licences) > 1 else 'CC0-1.0', 'mediaLicences': licences}
 
 
 def resource_manifest(files):

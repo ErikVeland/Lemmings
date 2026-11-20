@@ -154,9 +154,9 @@ def prepare(output, alternatives, store=False):
     write(integration / 'README.txt', guide)
     write(output / 'Licences/Distribution-scope.txt', (
         'Lix graphics and music retain their CC0 notices. The Lix font has its own full licence.\n' +
-        ('The Store icon uses the approved CC0 Lix sprite. Interface lettering uses project pixel glyphs.\n'
+        ('The Store icon uses the approved CC0 Lix sprite. Interface lettering uses the shared Ultimate Lemmings pixel font.\n'
          if store else 'The requested existing project icon is separate and requires rights review.\n') +
-        'Original game assets are supplied by the player and stay outside the installed app.\n'
+        'Players supply any original game assets used for restoration.\n'
         'Imports and this helper do not grant redistribution rights.\n').encode())
     fingerprint = (output / 'Trolley/engine-fingerprint.txt').read_text().strip()
     print('Prepared current full-game metadata with alternative media. Engine fingerprint: ' + fingerprint)
