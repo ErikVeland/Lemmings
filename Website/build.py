@@ -14,6 +14,46 @@ OUT = ROOT / 'dist'
 ORIGIN = CONFIG['origin']
 
 
+def screenshot(capture, figure_class, sizes, platform=None):
+    name = capture['key']
+    alt = html.escape(capture['alt'], quote=True)
+    caption = html.escape(capture['caption'])
+    widths = capture['widths']
+    sources = ', '.join(f'/assets/{name}-{width}.webp {width}w' for width in widths)
+    full = f'/assets/{name}-full.webp'
+    hdr = ''
+    hdr_link = ''
+    if 'hdr' in capture:
+        hdr_path = '/assets/' + html.escape(capture['hdr']['output'], quote=True)
+        mime = html.escape(capture['hdr']['type'], quote=True)
+        hdr = f'<source type="{mime}" media="(dynamic-range: high)" srcset="{hdr_path}">'
+        hdr_link = f' <a href="{hdr_path}" aria-label="{caption}, full-size HDR">Full-size HDR</a>'
+    platform_attr = f' id="screen-{platform}" data-platform="{platform}"' if platform else ''
+    if platform and capture['height'] > capture['width']:
+        figure_class += ' portrait'
+    return f'''<figure class="{figure_class}"{platform_attr}>
+      <picture>{hdr}<source type="image/webp" srcset="{sources}" sizes="{sizes}">
+        <img src="/assets/{name}-{widths[-1]}.jpg" alt="{alt}" width="{capture['width']}" height="{capture['height']}" loading="lazy">
+      </picture>
+      <figcaption>{caption} <a href="{full}" aria-label="{caption}, full size">Full size</a>{hdr_link}</figcaption>
+    </figure>'''
+
+
+def screenshot_gallery(captures):
+    platforms = [c for c in captures if 'platformLabel' in c]
+    buttons = []
+    figures = []
+    for index, capture in enumerate(platforms):
+        key = capture['platform']
+        pressed = 'true' if index == 0 else 'false'
+        label = html.escape(capture['platformLabel'])
+        buttons.append(f'<button class="moss-button moss-button--compact" type="button" data-capture="{key}" aria-controls="screen-{key}" aria-pressed="{pressed}">{label}</button>')
+        figures.append(screenshot(capture, 'platform-capture', '(max-width: 800px) 92vw, 960px', key))
+    return ('<div class="capture-picker" data-gallery><div class="capture-tabs" hidden '
+            'role="group" aria-label="Choose a platform screenshot">' + ''.join(buttons) +
+            '</div>' + ''.join(figures) + '</div>')
+
+
 def build():
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -39,7 +79,7 @@ def build():
     manifest = json.loads((ROOT / 'content/manifest.json').read_text())
     if isinstance(manifest, dict):
         manifest = manifest['pages']
-    pages = [{'route':'/', 'file':'home.html', 'title':'Everybody counts.', 'description':'Play three starter puzzles with music from Lix. Discover Classic and NeoLemmix community packs and learn how to add them to Ultimate Lemmix.'}] + manifest
+    pages = [{'route':'/', 'file':'home.html', 'title':'296 Journey lessons and thousands of fan puzzles', 'description':'Discover 5,051 Classic fan puzzles in 487 packs, import NeoLemmix adventures, follow the 296-lesson Journey or watch the Duo Desk Clock at work.'}] + manifest
     pages += [{'route':'/404', 'file':'404.html', 'title':'This way is blocked.', 'description':'That page is not here. Return to Ultimate Lemmix.'}, {'route':'/503', 'file':'503.html', 'title':'A short pause.', 'description':'The site is temporarily unavailable. Try again shortly.'}]
     nav = [('/', 'The game'), ('/upgrade', 'Upgrade'), ('/manual', 'Field guide'), ('/support', 'Get help')]
     footer = nav + [('/privacy','Privacy'),('/privacy/choices','Privacy choices'),('/accessibility','Accessibility'),('/terms','Terms'),('/release-notes','Release notes'),('/legal','Legal'),('/credits','Credits')]
@@ -52,6 +92,14 @@ def build():
         title = page['title'] + ' · Ultimate Lemmix'
         body = (ROOT / 'content' / page['file']).read_text()
         body = body.replace('{{contact}}', html.escape(CONFIG['contact'])).replace('{{policy_date}}', CONFIG['policy_date'])
+        if home:
+            captures = json.loads((ROOT / 'content/screenshots.json').read_text())['captures']
+            for capture in captures:
+                name = capture['key']
+                if name in ('journey', 'community', 'nuke'):
+                    css = {'journey': 'puzzle-capture', 'community': 'community-capture', 'nuke': 'blast-frame'}[name]
+                    body = body.replace('{{' + name + '}}', screenshot(capture, css, '(max-width: 800px) 90vw, 560px'))
+            body = body.replace('{{platform-gallery}}', screenshot_gallery(captures))
         toc = ''
         if not home:
             headings = re.findall(r'<h2\s+id="([^"]+)"[^>]*>(.*?)</h2>', body)

@@ -1,69 +1,88 @@
 {
   "captures": [
     {
-      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/UltimateLemmix/Website109/Run/Starter.png",
-      "sha256": "ef9e78e7d045a88ff4101f7a03c0e54ee5b78c08b54d5a8f4da1209b0859c821",
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/journey.png",
+      "sha256": "240c396c197c882877176e973ac45af0e971d31ebe62cc6d81fe5b0f4f17bd51",
       "outputs": [
-        "starter-800.webp",
-        "starter-800.jpg",
-        "starter-1600.webp",
-        "starter-1600.jpg",
-        "starter-2560.webp",
-        "starter-2560.jpg"
+        "journey-full.webp",
+        "journey-800.webp",
+        "journey-800.jpg",
+        "journey-1600.webp",
+        "journey-1600.jpg"
       ],
-      "treatment": "Full actual capture with proportional resizing and format conversion.",
-      "build": "Mac 109"
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "Resume Journey on Mac. Your route is waiting on Home."
     },
     {
-      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/UltimateLemmix/Website109/Raw/Home.png",
-      "sha256": "b5579da99740e87626eb7e809494376c4bc71fea4d4fd104e9ac7cefed886f5c",
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/community.png",
+      "sha256": "590081abc27359c332deb324bf153870750d3da7150c55c8828fffb185963d33",
       "outputs": [
-        "home-800.webp",
-        "home-800.jpg",
-        "home-1600.webp",
-        "home-1600.jpg"
-      ],
-      "treatment": "Full actual capture with proportional resizing and format conversion.",
-      "build": "Mac 109"
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/UltimateLemmix/Website109/Community/Community.png",
-      "sha256": "9271d7344ca2df7ff811e08e698bf5d86797f09a7f68e4dd6eaa0dd22061b069",
-      "outputs": [
+        "community-full.webp",
         "community-800.webp",
         "community-800.jpg",
         "community-1600.webp",
         "community-1600.jpg"
       ],
-      "treatment": "Full actual capture with proportional resizing and format conversion.",
-      "build": "Mac 109 with local packs"
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "Tower Of Training by IchoTolot. Basic Training 1 in the NeoLemmix Introduction Pack, on Mac."
     },
     {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/iPhone-Home.png",
-      "sha256": "2cd99d62ae8f11bb5411b67ac859be45ff99452eca2c24c8ff9a1eb8115e78e7",
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/mac.webp",
+      "sha256": "790e0c41705dd67808fa42c232b33eeeb1405cc35fae4dcb1cc750d88f181f80",
       "outputs": [
+        "mac-full.webp",
+        "mac-800.webp",
+        "mac-800.jpg",
+        "mac-1600.webp",
+        "mac-1600.jpg"
+      ],
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "Down the cliff, level four of geooPk0. A detonation in the Mac game, rendered in HDR and standard range."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/mac-hdr.avif",
+      "sha256": "2829226dd4c97875ca1b91c7b3bd0ae10f5b354daa8d5039b87dfb85a3dc056e",
+      "outputs": [
+        "mac-hdr.avif"
+      ],
+      "treatment": "Build 110 Metal gameplay effect rendered at 4\u00d7 headroom over its matching native HUD capture. Rec.2020/PQ AVIF. Corresponding SDR render at 1\u00d7. Decoded peak 405 nits at 203-nit reference white."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/nuke.webp",
+      "sha256": "83b9d113989962c272d3fc2acdf92a909911ad6b0a262148c7b0186cfb174dd0",
+      "outputs": [
+        "nuke-full.webp",
+        "nuke-800.webp",
+        "nuke-800.jpg",
+        "nuke-1600.webp",
+        "nuke-1600.jpg"
+      ],
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "First Steps on Mac. Five walkers, five detonations, one press of Nuke."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/nuke-hdr.avif",
+      "sha256": "0b024dd7aa7dd41c68b8a1d614347bf8545b0edab391ac66a20b2d38c33290d6",
+      "outputs": [
+        "nuke-hdr.avif"
+      ],
+      "treatment": "Build 110 Metal gameplay effect rendered at 4\u00d7 headroom over its matching native HUD capture. Rec.2020/PQ AVIF. Corresponding SDR render at 1\u00d7. Decoded peak 698 nits at 203-nit reference white."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/phone.png",
+      "sha256": "a098d2f7fb2e63c9ec6bdfda32856a951a661852210c96724759a7f90f336d08",
+      "outputs": [
+        "phone-full.webp",
         "phone-402.webp",
         "phone-402.jpg",
         "phone-804.webp",
         "phone-804.jpg"
       ],
-      "treatment": "Full actual capture with proportional resizing and format conversion.",
-      "build": "Earlier iPhone Simulator"
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "First Steps on iPhone. The entrance countdown, overview and touch controls in the iPhone 17 Pro simulator."
     },
     {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/AppleTV-Home.png",
-      "sha256": "8354cd368edbb72f556be058721cc79c12c99096167c40e0d770bd4764bdf29d",
-      "outputs": [
-        "tv-960.webp",
-        "tv-960.jpg",
-        "tv-1920.webp",
-        "tv-1920.jpg"
-      ],
-      "treatment": "Full actual capture with proportional resizing and format conversion.",
-      "build": "Earlier Apple TV Simulator"
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/Lemmix109Source/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
+      "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
       "sha256": "ccc23dc09af112019fd0f9b914c4678a967fc127914c8c5cf25ce38e551f8754",
       "outputs": [
         "logo.png"
@@ -71,7 +90,7 @@
       "treatment": "Unmodified current product logo."
     },
     {
-      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/Lemmix109Source/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
+      "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
       "sha256": "ccc23dc09af112019fd0f9b914c4678a967fc127914c8c5cf25ce38e551f8754",
       "outputs": [
         "logo-480.webp",
@@ -99,7 +118,19 @@
       "treatment": "Extracted published walker frames using pinned metadata and the existing black/grid transparency keys. No redrawing."
     }
   ],
+  "detonator": {
+    "output": "forest-detonator.webp",
+    "tool": "Built-in image generation",
+    "direction": "One cheerful blond Lix considers an oversized red plunger. Two others follow a sign towards a missing bridge. Cold spruce-blue shadows, a dusky plum sky, and a copper rim light in the mossy forest."
+  },
+  "illustration": "Project artwork generated for this site from the approved Lix icon and woodland illustration. The creek, burrow, woodland objects, four material textures and two moss-covered button sprites are illustrations. Gameplay images use the captures listed above.",
+  "clock": {
+    "outputs": [
+      "duo-desk-clock.mp4",
+      "duo-desk-clock.webp"
+    ],
+    "source": "Build 110 GameDeskClockArt.drawFullScreen and DeskClockSimulation, signed Mac app resources. Simulated 14:59 to 15:00 with a fictional Tea break event. 980 by 520, 27 seconds, 15 frames per second."
+  },
   "social": "The woodland illustration with the approved app icon and wordmark.",
-  "font": "Archivo, SIL Open Font License; reused from the existing GenErik DJ website.",
-  "illustration": "Project artwork generated for this site from the approved Lix icon and woodland illustration. The creek, burrow, woodland objects, four material textures and two moss-covered button sprites are illustrations. Gameplay images use the captures listed above."
+  "font": "Archivo, SIL Open Font License; reused from the existing GenErik DJ website."
 }

@@ -1,0 +1,88 @@
+{
+  "build": 110,
+  "captures": [
+    {
+      "key": "journey",
+      "file": "journey.png",
+      "sha256": "240c396c197c882877176e973ac45af0e971d31ebe62cc6d81fe5b0f4f17bd51",
+      "width": 2560,
+      "height": 1600,
+      "widths": [
+        800,
+        1600
+      ],
+      "alt": "The Mac Home screen shows Resume Journey above the campaign library, with Collections and Playlists below.",
+      "caption": "Resume Journey on Mac. Your route is waiting on Home."
+    },
+    {
+      "key": "community",
+      "file": "community.png",
+      "sha256": "590081abc27359c332deb324bf153870750d3da7150c55c8828fffb185963d33",
+      "width": 2560,
+      "height": 1600,
+      "widths": [
+        800,
+        1600
+      ],
+      "alt": "Walkers emerge below a cave of suspended rock and winding stone pillars. The skill bar and minimap sit below the playfield.",
+      "caption": "Tower Of Training by IchoTolot. Basic Training 1 in the NeoLemmix Introduction Pack, on Mac."
+    },
+    {
+      "key": "mac",
+      "file": "mac.webp",
+      "sha256": "790e0c41705dd67808fa42c232b33eeeb1405cc35fae4dcb1cc750d88f181f80",
+      "width": 2560,
+      "height": 1600,
+      "widths": [
+        800,
+        1600
+      ],
+      "alt": "A fireball and shockwave spread through the brick maze above the skill bar and rescue count.",
+      "caption": "Down the cliff, level four of geooPk0. A detonation in the Mac game, rendered in HDR and standard range.",
+      "platform": "mac",
+      "platformLabel": "Mac",
+      "hdr": {
+        "file": "mac-hdr.avif",
+        "sha256": "2829226dd4c97875ca1b91c7b3bd0ae10f5b354daa8d5039b87dfb85a3dc056e",
+        "output": "mac-hdr.avif",
+        "type": "image/avif",
+        "method": "Build 110 Metal gameplay effect rendered at 4× headroom over its matching native HUD capture. Rec.2020/PQ AVIF. Corresponding SDR render at 1×. Decoded peak 405 nits at 203-nit reference white."
+      }
+    },
+    {
+      "key": "nuke",
+      "file": "nuke.webp",
+      "sha256": "83b9d113989962c272d3fc2acdf92a909911ad6b0a262148c7b0186cfb174dd0",
+      "width": 2560,
+      "height": 1600,
+      "widths": [
+        800,
+        1600
+      ],
+      "alt": "Five orange fireballs light the red-brick path. The Mac skill bar shows NUKING.",
+      "caption": "First Steps on Mac. Five walkers, five detonations, one press of Nuke.",
+      "hdr": {
+        "file": "nuke-hdr.avif",
+        "sha256": "0b024dd7aa7dd41c68b8a1d614347bf8545b0edab391ac66a20b2d38c33290d6",
+        "output": "nuke-hdr.avif",
+        "type": "image/avif",
+        "method": "Build 110 Metal gameplay effect rendered at 4× headroom over its matching native HUD capture. Rec.2020/PQ AVIF. Corresponding SDR render at 1×. Decoded peak 698 nits at 203-nit reference white."
+      }
+    },
+    {
+      "key": "phone",
+      "file": "phone.png",
+      "sha256": "a098d2f7fb2e63c9ec6bdfda32856a951a661852210c96724759a7f90f336d08",
+      "width": 1206,
+      "height": 2622,
+      "widths": [
+        402,
+        804
+      ],
+      "alt": "A green three starts the countdown at the entrance above a brick floor. Eight character skill buttons sit below the overview.",
+      "caption": "First Steps on iPhone. The entrance countdown, overview and touch controls in the iPhone 17 Pro simulator.",
+      "platform": "phone",
+      "platformLabel": "iPhone"
+    }
+  ]
+}

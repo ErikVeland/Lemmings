@@ -5,23 +5,25 @@
   </picture>
   <div class="woodland-copy">
     <picture><source type="image/webp" srcset="/assets/logo-480.webp 480w, /assets/logo-960.webp 960w" sizes="210px"><img class="woodland-wordmark" src="/assets/logo.png" alt="Ultimate Lemmix" width="2172" height="724"></picture>
-    <h1 id="hello">Everybody <br>counts.</h1>
-    <p>Guide a little crowd home in three original puzzles. Give them skills, build a path, and mind the drop.</p>
+    <h1 id="hello">Thousands<br> of ways home.</h1>
+    <p>Discover 5,051 puzzles in the Classic fan catalogue. Import a favourite pack, give the crowd their skills, and mind the drop.</p>
     <a class="platform-note" href="/release-notes">Coming to Mac, iPhone, iPad &amp; Apple TV</a>
-    <a class="moss-button" href="#first-steps">Explore the puzzles</a>
+    <a class="moss-button" href="#journey">Explore the Journey</a>
   </div>
 </section>
 
-<section id="first-steps" class="first-steps">
-  <div class="trail-book">
-  <div class="chapter-intro"><h2>Small steps.<br>Questionable plans.</h2>
-  <figure class="puzzle-capture">
-    <picture><source type="image/webp" srcset="/assets/starter-800.webp 800w, /assets/starter-1600.webp 1600w, /assets/starter-2560.webp 2560w" sizes="(max-width: 800px) 94vw, 57vw"><img src="/assets/starter-1600.jpg" alt="Lix characters cross the red-brick First Steps playfield. The stone control bar shows skills, pause, rewind and hints." width="2560" height="1600" loading="lazy"></picture>
-    <figcaption>First Steps on Mac · Build 109</figcaption>
-  </figure>
+<section id="journey" class="first-steps" aria-labelledby="journey-heading">
+  <div class="trail-book" id="first-steps">
+  <div class="chapter-intro"><h2 id="journey-heading">Follow the<br> Journey.</h2>
+  {{journey}}
   </div>
-  <div class="field-notes"><p class="lead">Start with three original puzzles. No old game files required.</p><ol class="level-list"><li><span>First Steps</span><small>Find your feet.</small></li><li><span>Float to Safety</span><small>Mind the drop.</small></li><li><span>Over the Rise</span><small>Make a way.</small></li></ol><a class="moss-button" href="/manual#get-started">Open the field guide</a>
-    <p class="restore-note">Already own the classic games? <a href="/upgrade">Bring your own levels.</a></p>
+  <div class="field-notes"><p class="lead">Pick a pack and follow its maker’s route. Keep the puzzles that made you grin. You can inflict them on a friend later.</p>
+    <dl class="route-notes">
+      <dt>The Journey</dt><dd>Follow 296 lessons in sequence, from a first dig to puzzles that need a whole crew. Import the matching level files to play.</dd>
+      <dt>Your own playlist</dt><dd>Put favourite puzzles from different fan packs in the order you want to play them.</dd>
+    </dl>
+    <a class="moss-button" href="/manual#journeys">Open the Journey guide</a>
+    <p class="restore-note"><a href="#community">Browse the level makers’ packs</a></p>
   </div>
   </div>
 </section>
@@ -29,18 +31,12 @@
 <section id="community" class="community-levels" aria-labelledby="community-heading">
   <div class="community-board">
   <div class="community-intro">
-    <h2 id="community-heading">Creatures of<br>many routes.</h2>
-    <p class="lead">Explore puzzles made by the community. Start with a lesson, try a contest level, or see what happens when someone gives you one builder.</p>
+    <h2 id="community-heading">Meet the<br> level makers.</h2>
+    <p class="lead">Our community collection spans <strong>5,051 Classic puzzles in 487 packs</strong>. Try a contest entry, tackle a whole campaign, or see what happens when the author gives you a single builder.</p>
   </div>
-  <figure class="community-capture">
-    <picture>
-      <source type="image/webp" srcset="/assets/community-800.webp 800w, /assets/community-1600.webp 1600w" sizes="(max-width: 800px) 90vw, 52vw">
-      <img src="/assets/community-1600.jpg" alt="Mac Fan library after import with Learning, Magazines and Books, Fan Levels, Contests and Community, and Ports and Remakes categories." width="2560" height="1600" loading="lazy">
-    </picture>
-    <figcaption>Local Mac collection after adding fan packs · Build 109</figcaption>
-  </figure>
+  {{community}}
   <div class="community-library">
-    <p>Our local preview contains <strong>5,051 Classic levels across 487 packs</strong> and the <strong>120-level NeoLemmix Introduction Pack</strong> by IchoTolot.</p>
+    <p>For a guided route into NeoLemmix, IchoTolot’s Introduction Pack has <strong>120 levels</strong> of its own.</p>
     <p>Get packs from their authors and add them to your library. Some packs need their own styles or music. NeoLemmix support is in beta.</p>
     <ul class="community-links">
       <li><a href="https://www.lemmingsforums.net/index.php?topic=3233.0">Find Classic levels</a></li>
@@ -61,24 +57,36 @@
   </div>
 </section>
 
-<section class="second-thoughts" aria-labelledby="try-again">
-  <div class="glade-copy"><h2 id="try-again">A better idea?<br>Go back.</h2><p class="lead">Pause to think. Rewind to reconsider. Try a different route.</p><p>Save a journey, keep a replay, or pass the next turn to a friend. Hot Seat waits until the next player is ready.</p><div class="paired-links"><a class="moss-button moss-button--compact" href="/manual#controls">The controls</a><a class="moss-button moss-button--compact" href="/manual#hot-seat">Taking turns</a></div></div>
-  <img class="woodland-still" src="/assets/forest-rewind.webp" alt="" width="960" height="720" loading="lazy">
+<section id="duo" class="duo-glade" aria-labelledby="duo-heading">
+  <div class="duo-notes"><h2 id="duo-heading">Fold out<br> the Duo.</h2>
+    <p class="lead">In Tabletop, the puzzle sits above the fold. Your skills, controls and overview sit below, where your fingers can reach them.</p>
+    <p>Open it like a book and the playfield spans the fold. Stand it in Tent Pose and the front screen becomes a Desk Clock. Each minute the crew rebuilds the digits underfoot.</p>
+    <a class="moss-button" href="/manual#duo">Duo field guide</a>
+  </div>
+  <figure class="clock-scene">
+    <video controls muted playsinline preload="none" poster="/assets/duo-desk-clock.webp" width="980" height="520" aria-label="Desk Clock demonstration with a sample calendar event" aria-describedby="clock-caption"><source src="/assets/duo-desk-clock.mp4" type="video/mp4"></video>
+    <figcaption id="clock-caption">Tea break at three. A blocker holds the exit until the event begins. Watch the workers change 14:59 to 15:00 in this 27-second rendering from the game.</figcaption>
+  </figure>
 </section>
 
 <section class="looking-glass" aria-labelledby="at-home">
-  <header><h2 id="at-home">Room for everyone.</h2><p>The same little crowd, with room to stretch.</p></header>
-  <div class="capture-picker" data-gallery>
-    <div class="capture-tabs" hidden role="group" aria-label="Choose a platform screenshot"><button class="moss-button moss-button--compact" type="button" data-capture="mac" aria-pressed="true">Mac</button><button class="moss-button moss-button--compact" type="button" data-capture="phone" aria-pressed="false">iPhone</button><button class="moss-button moss-button--compact" type="button" data-capture="tv" aria-pressed="false">Apple TV</button></div>
-    <figure class="platform-capture"><picture id="platform-picture"><source id="platform-webp" type="image/webp" srcset="/assets/home-800.webp 800w, /assets/home-1600.webp 1600w" sizes="(max-width: 800px) 94vw, 80vw"><img id="platform-image" src="/assets/home-1600.jpg" alt="Ultimate Lemmix Mac Home with Start Journey, campaign choices and empty community libraries before import." width="2560" height="1600" loading="lazy"></picture><figcaption id="platform-caption" aria-live="polite">Mac Home · Build 109</figcaption></figure>
-  </div>
-  <noscript><p><a href="/assets/phone-804.jpg">See the iPhone Home capture</a>. <a href="/assets/tv-1920.jpg">See the Apple TV Home capture</a>.</p></noscript>
-  <p class="capture-note">The iPhone and Apple TV images show earlier simulator builds.</p>
+  <header><h2 id="at-home">Room for everyone.</h2><p>Explore the puzzles and controls in build 110. Open a frame at full size to read the game’s pixel lettering.</p></header>
+  {{platform-gallery}}
 </section>
 
 <section class="bring-along" aria-labelledby="more-roads">
   <img class="woodland-still" src="/assets/forest-satchel.webp" alt="" width="960" height="720" loading="lazy">
-  <div class="glade-copy"><h2 id="more-roads">From Lemmix to<br>Ultimate Lemmings.</h2><p class="lead">Own a legal copy of compatible original game assets? Bring your own files.</p><p>Ultimate Lemmix comes with three starter puzzles. The original games, artwork and soundtracks are not bundled. Import compatible assets from your own collection to restore the classic content those files contain.</p><a class="moss-button" href="/upgrade">Read the upgrade guide</a></div>
+  <div class="glade-copy"><h2 id="more-roads">From Lemmix to<br>Ultimate Lemmings.</h2><p class="lead">Own a legal copy of compatible original game assets? Bring your own files.</p><p>Your own classic files can add the original campaigns, artwork, fonts and soundtracks to your library. Keep exploring fan packs alongside them.</p><a class="moss-button" href="/upgrade">Read the upgrade guide</a></div>
 </section>
 
-<section class="last-word"><h2>They have places to be.</h2><p>We are getting the App Store release ready.<br>In the meantime, the field guide is open.</p><a class="moss-button" href="/manual">Open the field guide</a></section>
+<section id="nuke" class="second-thoughts" aria-labelledby="try-again">
+  <div class="glade-copy"><h2 id="try-again">Who gave them<br> the plunger?</h2>
+    <p class="lead">Fifty walkers. A rescue quota of forty-eight. Two of them would like a word.</p>
+    <p>Pause to place a skill. Rewind to catch someone you missed. Or press Nuke and explain the crater to the next Hot Seat player.</p>
+    <div class="paired-links"><a class="moss-button moss-button--compact" href="/manual#controls">The controls</a><a class="moss-button moss-button--compact" href="/manual#hot-seat">Taking turns</a></div>
+    <details class="nuke-demo"><summary>See Nuke in the game</summary>{{nuke}}</details>
+  </div>
+  <img class="woodland-still" src="/assets/forest-detonator.webp" alt="A small blond Lix considers an enormous red plunger. Behind him, a wooden arrow points straight off a cliff." width="1120" height="840" loading="lazy">
+</section>
+
+<section class="last-word"><h2>Where to next?</h2><p>The level maker has drawn you a map. That last bridge is in pencil.</p><a class="moss-button" href="#community">Find a level pack</a></section>

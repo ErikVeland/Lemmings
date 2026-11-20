@@ -107,9 +107,22 @@
 
 .document-layout:not(:has(.contents)) > .prose { margin: auto; }
 .document .prose section + section {
-  margin-top: clamp(26px, 3vw, 42px);
-  padding-top: clamp(25px, 3vw, 42px);
-  border-top: 1px solid #c7b78f;
+  position: relative;
+  margin-top: clamp(24px, 4vw, 60px);
+  padding-top: clamp(28px, 5vw, 74px);
+  border: 0;
+}
+.document .prose section + section::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: clamp(20px, 3vw, 36px);
+  background: radial-gradient(ellipse at 39% 50%, #a2a9796e, transparent 70%),
+    url('/assets/forest-paper.webp') center / 330px;
+  background-blend-mode: color-burn;
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(to bottom, transparent, #000a 43%, transparent);
+  pointer-events: none;
 }
 .document .prose section > h2:first-child { margin-top: 0; }
 .document .prose h2, .document .prose h3 { color: var(--guide-green); }

@@ -15,7 +15,7 @@
   gap: .3em;
   margin: 0;
   border: 0;
-  border-radius: 16px;
+  border-radius: 0;
   background: transparent;
   box-shadow: none;
   color: #e8dfc1;
@@ -27,24 +27,24 @@
   vertical-align: middle;
   transition: transform 100ms ease-out;
 }
-.moss-button::after {
-  content: "";
-  position: absolute;
-  z-index: -2;
-  inset: auto 6% -3px;
-  height: 12px;
-  background: radial-gradient(ellipse at center, #111b12a8 12%, transparent 72%);
-  pointer-events: none;
-}
-.moss-button::before {
+.moss-button::before, .moss-button::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: var(--stone-art) 50% 50% / 100% 100% no-repeat;
-  filter: drop-shadow(0 3px 1px #17211677);
-  transition: filter 100ms ease-out;
+  background: var(--stone-art) center / 100% 100% no-repeat;
+}
+.moss-button::before {
+  filter: var(--rim, drop-shadow(0 3px 1px #15201899));
+  transition: filter 120ms ease-out;
+}
+.moss-button::after {
+  /* Relight the original pixels, preserving cracks, moss tips and transparent edges. */
+  filter: sepia(.65) saturate(1.65) brightness(1.65);
+  mask-image: radial-gradient(ellipse at 34% 8%, #000 7%, #000a 46%, transparent 85%);
+  opacity: var(--light, 0);
+  transition: opacity 120ms ease-out;
 }
 :is(.forest-trailhead, .home, .document) .moss-button--compact {
   --stone-art: url('/assets/moss-button-small.webp');
@@ -53,31 +53,28 @@
   padding: 18px 19px 10px;
   font-size: .98rem;
 }
-:is(.forest-trailhead, .home, .document) .moss-button:is([aria-current="page"], [aria-pressed="true"]) {
-  color: #fff3bd;
-  text-decoration: underline;
-  text-decoration-color: #fff2a0;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 3px;
-}
-.moss-button:is([aria-current="page"], [aria-pressed="true"])::before {
-  filter: saturate(1.24) brightness(1.1) drop-shadow(0 2px 1px #13200ec2);
+.moss-button:is([aria-current="page"], [aria-pressed="true"]) {
+  --light: .95;
+  --rim: drop-shadow(-.5px -1px 1px #ffe7a1) drop-shadow(-1px -2px 4px #e5b740a1) drop-shadow(0 3px 2px #172018);
 }
 @media (hover: hover) {
-  :is(.forest-trailhead, .home, .document) .moss-button:hover {
-    color: #fff8da; transform: translateY(-1px);
+  .moss-button:hover {
+    --light: .52;
+    transform: translateY(-1px);
   }
-  .moss-button:hover::before {
-    filter: brightness(1.09) drop-shadow(0 4px 2px #15221299);
-  }
+  .moss-button:hover:is([aria-current="page"], [aria-pressed="true"]) { --light: 1; }
+}
+:is(.forest-trailhead, .home, .document) .moss-button:focus-visible {
+  outline: none;
+  box-shadow: none;
+  --light: .92;
+  --rim: drop-shadow(0 0 1px #fffee0) drop-shadow(0 0 2px #fff7b9) drop-shadow(0 0 4px #fff4a5) drop-shadow(0 1px 3px #1d3218);
 }
 :is(.forest-trailhead, .home, .document) .moss-button:active {
+  --light: .18;
   transform: translateY(2px);
 }
-.moss-button:active::before { filter: brightness(.91) drop-shadow(0 1px 1px #17211677); }
-:is(.forest-trailhead, .home, .document) .moss-button:focus-visible {
-  outline: 3px solid #fff1a2; outline-offset: 1px; box-shadow: 0 0 0 5px #233d2c;
-}
+.moss-button:active::before { filter: brightness(.89) drop-shadow(0 1px 1px #17211699); }
 .woodland-copy .moss-button, .bring-along .moss-button, .last-word .moss-button { margin-top: 20px; }
 .capture-tabs { flex-wrap: wrap; }
 @media (max-width: 600px) {
@@ -85,7 +82,7 @@
   :is(.forest-trailhead, .home, .document) .moss-button--compact { min-width: 74px; padding-inline: 13px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  :is(.forest-trailhead, .home, .document) .moss-button, .moss-button::before { transition: none; }
+  :is(.forest-trailhead, .home, .document) .moss-button, .moss-button::before, .moss-button::after { transition: none; }
 }
 @media (forced-colors: active), print {
   :is(.forest-trailhead, .home, .document) .moss-button {
@@ -93,4 +90,9 @@
     text-shadow: none; padding: .7em 1em;
   }
   .moss-button::before, .moss-button::after { display: none; }
+}
+
+@media (forced-colors: active) {
+  :is(.forest-trailhead, .home, .document) .moss-button:focus-visible { outline: 3px solid Highlight; outline-offset: 3px; }
+  .moss-button:is([aria-current="page"], [aria-pressed="true"]) { text-decoration: underline; }
 }

@@ -2,16 +2,18 @@
 """Export genuine product captures and licensed artwork for the website."""
 from pathlib import Path
 import hashlib
+import io
+import os
 import json
 import shutil
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageCms, ImageDraw, ImageFont, ImageOps
 from fontTools.ttLib import TTFont
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 ASSETS = ROOT / 'assets'
-SIMULATOR_CAPTURES = Path('/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118')
-MAC_CAPTURES = Path('/Volumes/Games/CodexBuilds/Release-Sync-20261120/UltimateLemmix/Website109')
+CAPTURES = Path(os.environ.get('LEMMIX_WEBSITE_CAPTURES',
+                               '/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected'))
 DJ = Path('/Users/veland/GenErik DJ/website/assets')
 ASSETS.mkdir(parents=True, exist_ok=True)
 records = []
@@ -20,24 +22,43 @@ def record(source, outputs, treatment):
     records.append({'source': str(source), 'sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
                     'outputs': outputs, 'treatment': treatment})
 
-def responsive(source, name, widths, build):
-    original = Image.open(source).convert('RGB')
-    outputs = []
-    for width in widths:
-        size = (width, round(original.height * width / original.width))
-        im = original.resize(size, Image.Resampling.LANCZOS)
-        for suffix in ('webp', 'jpg'):
-            target = ASSETS / f'{name}-{width}.{suffix}'
-            im.save(target, quality=90, **({'method': 6} if suffix == 'webp' else {'optimize': True}))
-            outputs.append(target.name)
-    record(source, outputs, 'Full actual capture with proportional resizing and format conversion.')
-    records[-1]['build'] = build
+def checked_capture(spec):
+    source = CAPTURES / spec['file']
+    if hashlib.sha256(source.read_bytes()).hexdigest() != spec['sha256']:
+        raise ValueError(f'Capture differs from its source record: {source.name}')
+    return source
 
-responsive(MAC_CAPTURES / 'Run/Starter.png', 'starter', [800, 1600, 2560], 'Mac 109')
-responsive(MAC_CAPTURES / 'Raw/Home.png', 'home', [800, 1600], 'Mac 109')
-responsive(MAC_CAPTURES / 'Community/Community.png', 'community', [800, 1600], 'Mac 109 with local packs')
-responsive(SIMULATOR_CAPTURES / 'simulator-captures/submission/iPhone-Home.png', 'phone', [402, 804], 'Earlier iPhone Simulator')
-responsive(SIMULATOR_CAPTURES / 'simulator-captures/submission/AppleTV-Home.png', 'tv', [960, 1920], 'Earlier Apple TV Simulator')
+
+for capture in json.loads((ROOT / 'content/screenshots.json').read_text())['captures']:
+    name = capture['key']
+    source = checked_capture(capture)
+    with Image.open(source) as raster:
+        original = raster.convert('RGB')
+        profile = raster.info.get('icc_profile')
+        if profile:
+            original = ImageCms.profileToProfile(original, io.BytesIO(profile), ImageCms.createProfile('sRGB'))
+    if original.size != (capture['width'], capture['height']):
+        raise ValueError(f'Capture dimensions differ for {name}.')
+
+    full = ASSETS / f'{name}-full.webp'
+    original.save(full, lossless=True, method=5)
+    outputs = [full.name]
+    for width in capture['widths']:
+        size = (width, round(original.height * width / original.width))
+        preview = original.resize(size, Image.Resampling.LANCZOS)
+        for extension in ('webp', 'jpg'):
+            target = ASSETS / f'{name}-{width}.{extension}'
+            options = {'method': 5} if extension == 'webp' else {'optimize': True, 'subsampling': 0}
+            preview.save(target, quality=94, **options)
+            outputs.append(target.name)
+    record(source, outputs, 'Full sRGB capture in lossless WebP, plus proportional SDR previews.')
+    records[-1]['caption'] = capture['caption']
+    if 'hdr' in capture:
+        hdr = capture['hdr']
+        source = checked_capture(hdr)
+        shutil.copyfile(source, ASSETS / hdr['output'])
+        record(source, [hdr['output']], hdr['method'])
+
 logo = REPO / 'Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png'
 shutil.copy2(logo, ASSETS / 'logo.png')
 record(logo, ['logo.png'], 'Unmodified current product logo.')
@@ -77,7 +98,7 @@ strip.save(ASSETS / 'walk-strip.png')
 record(sheet_path, ['walker.png', 'walk-strip.png'], 'Extracted published walker frames using pinned metadata and the existing black/grid transparency keys. No redrawing.')
 shutil.copy2(lix / 'licences/copying.txt', ASSETS / 'Lix-copying.txt')
 shutil.copy2(REPO / 'THIRD_PARTY_NOTICES.md', ASSETS / 'application-notices.txt')
-notices = MAC_CAPTURES / 'Proof.app/Contents/Resources/Licences'
+notices = Path('/Volumes/Games/CodexBuilds/UltimateLemmix-Icon110-20261120/MacSigned/Ultimate Lemmix.app/Contents/Resources/Licences')
 for notice in ('Lix-font-LICENSE.txt', 'Lix-music-credits.txt'):
     shutil.copy2(notices / notice, ASSETS / notice)
 
@@ -93,13 +114,15 @@ font = TTFont(ASSETS / 'archivo-latin.woff2')
 font.flavor = None
 font_path = ROOT / '.social-font.ttf'
 font.save(font_path)
-title_font = ImageFont.truetype(str(font_path), 49)
-draw.text((56, 324), 'Everybody counts.', font=title_font, fill='#fff5da', stroke_width=1, stroke_fill='#162b30')
+title_font = ImageFont.truetype(str(font_path), 42)
+draw.text((56, 324), 'Thousands of ways home.', font=title_font, fill='#fff5da', stroke_width=1, stroke_fill='#162b30')
 font_path.unlink()
 social.save(ASSETS / 'social.jpg', quality=91, optimize=True)
 (ROOT / 'image-provenance.json').write_text(json.dumps({
     'captures': records,
+    'detonator': {'output': 'forest-detonator.webp', 'tool': 'Built-in image generation', 'direction': 'One cheerful blond Lix considers an oversized red plunger. Two others follow a sign towards a missing bridge. Cold spruce-blue shadows, a dusky plum sky, and a copper rim light in the mossy forest.'},
     'illustration': 'Project artwork generated for this site from the approved Lix icon and woodland illustration. The creek, burrow, woodland objects, four material textures and two moss-covered button sprites are illustrations. Gameplay images use the captures listed above.',
+    'clock': {'outputs': ['duo-desk-clock.mp4', 'duo-desk-clock.webp'], 'source': 'Build 110 GameDeskClockArt.drawFullScreen and DeskClockSimulation, signed Mac app resources. Simulated 14:59 to 15:00 with a fictional Tea break event. 980 by 520, 27 seconds, 15 frames per second.'},
     'social': 'The woodland illustration with the approved app icon and wordmark.',
     'font': 'Archivo, SIL Open Font License; reused from the existing GenErik DJ website.'
 }, indent=2) + '\n')

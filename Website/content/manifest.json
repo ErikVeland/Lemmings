@@ -19,7 +19,7 @@
     {
       "route": "/manual",
       "title": "Manual",
-      "description": "A practical guide to starter levels, controls, imports, journeys, Hot Seat and saved progress.",
+      "description": "Import community packs, follow the curated Journey, take turns in Hot Seat and use the Desk Clock on Duo.",
       "file": "manual.html"
     },
     {
