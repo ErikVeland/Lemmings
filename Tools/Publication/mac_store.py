@@ -424,6 +424,12 @@ def automatic_export(args, archive_path, result):
     command = ["xcodebuild", "-exportArchive", "-archivePath", str(archive_path),
                "-exportOptionsPlist", str(options_path), "-exportPath", str(export_path),
                "-allowProvisioningUpdates"]
+    key_path, key_id, issuer_id = (os.environ.get(name) for name in ("ASC_KEY_PATH", "ASC_KEY_ID", "ASC_ISSUER_ID"))
+    if any((key_path, key_id, issuer_id)):
+        if not all((key_path, key_id, issuer_id)):
+            raise ValueError("Set ASC_KEY_PATH, ASC_KEY_ID and ASC_ISSUER_ID together.")
+        command.extend(["-authenticationKeyPath", key_path, "-authenticationKeyID", key_id,
+                        "-authenticationKeyIssuerID", issuer_id])
     environment = dict(os.environ, PATH="/usr/bin:/bin:/usr/sbin:/sbin",
                        TMPDIR=str(args.build_dir / "Temporary") + "/")
     (args.build_dir / "Temporary").mkdir(exist_ok=True)
