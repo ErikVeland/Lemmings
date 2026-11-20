@@ -1,0 +1,24 @@
+Lix alternative soundtrack
+
+Independent alternative music supplied with Lix. These tracks are not Lemmings fan remixes or replacements of the original compositions.
+
+Default licence: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+Upstream licence: https://raw.githubusercontent.com/SimonN/LixD/f1e805048fe439a4a0e9cc650c613713ababac8b/doc/copying.txt
+Official music download: https://www.lixgame.com/dow/lix-music.zip
+Pinned source archive SHA-256: 23ef8c20c5bf1674096e8b20ed9011669a9ad66f1135c64198e00e93aeb1f657
+
+Tracks and creators:
+- Menu Lix — Mike Spanner (Rubix) (music/menulix.ogg) — CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
+- Assembly Line — Minim and mobius (music/minim-mobius/assembly-line.ogg) — CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
+- Beach and Sailboats — Minim and mobius (music/minim-mobius/beach-and-sailboats.ogg) — CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
+- Driving — Minim and mobius (music/minim-mobius/driving.ogg) — CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
+- Foggy Streets at Night — Minim and mobius (music/minim-mobius/foggy-streets-at-night.ogg) — CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
+- Meadow Sunrise — Minim and mobius (music/minim-mobius/meadow-sunrise.ogg) — CC0-1.0: https://creativecommons.org/publicdomain/zero/1.0/
+- Earthen Energy — Mike Spanner (Rubix) (music/rubix/earthen-energy.ogg) — CC-BY-4.0: https://creativecommons.org/licenses/by/4.0/
+- Winter — Mike Spanner (Rubix) (music/rubix/winter.ogg) — CC-BY-4.0: https://creativecommons.org/licenses/by/4.0/
+
+Changes: Ogg Vorbis originals are retained unchanged. Playback copies are
+peak-normalised MP3 files made with libsndfile. This is a lossy conversion.
+The minim-mobius credits follow the joint credit in the upstream licence.
+Lix and its creators do not endorse this project.

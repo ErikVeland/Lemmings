@@ -33,7 +33,7 @@ def build():
     manifest = json.loads((ROOT / 'content/manifest.json').read_text())
     if isinstance(manifest, dict):
         manifest = manifest['pages']
-    pages = [{'route':'/', 'file':'home.html', 'title':'Everybody counts.', 'description':'Play three original puzzles in Ultimate Lemmix. Own compatible original Lemmings assets? Import your own files for the Ultimate Lemmings experience.'}] + manifest
+    pages = [{'route':'/', 'file':'home.html', 'title':'Everybody counts.', 'description':'Play three starter puzzles with music from Lix. Discover Classic and NeoLemmix community packs and learn how to add them to Ultimate Lemmix.'}] + manifest
     pages += [{'route':'/404', 'file':'404.html', 'title':'This way is blocked.', 'description':'That page is not here. Return to Ultimate Lemmix.'}, {'route':'/503', 'file':'503.html', 'title':'A short pause.', 'description':'The site is temporarily unavailable. Try again shortly.'}]
     nav = [('/', 'The game'), ('/upgrade', 'Upgrade'), ('/manual', 'Field guide'), ('/support', 'Get help')]
     footer = nav + [('/privacy','Privacy'),('/privacy/choices','Privacy choices'),('/accessibility','Accessibility'),('/terms','Terms'),('/release-notes','Release notes'),('/legal','Legal'),('/credits','Credits')]

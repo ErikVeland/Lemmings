@@ -10,7 +10,8 @@ from fontTools.ttLib import TTFont
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 ASSETS = ROOT / 'assets'
-CAPTURES = Path('/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118')
+SIMULATOR_CAPTURES = Path('/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118')
+MAC_CAPTURES = Path('/Volumes/Games/CodexBuilds/Release-Sync-20261120/UltimateLemmix/Website109')
 DJ = Path('/Users/veland/GenErik DJ/website/assets')
 ASSETS.mkdir(parents=True, exist_ok=True)
 records = []
@@ -19,7 +20,7 @@ def record(source, outputs, treatment):
     records.append({'source': str(source), 'sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
                     'outputs': outputs, 'treatment': treatment})
 
-def responsive(source, name, widths):
+def responsive(source, name, widths, build):
     original = Image.open(source).convert('RGB')
     outputs = []
     for width in widths:
@@ -29,12 +30,14 @@ def responsive(source, name, widths):
             target = ASSETS / f'{name}-{width}.{suffix}'
             im.save(target, quality=90, **({'method': 6} if suffix == 'webp' else {'optimize': True}))
             outputs.append(target.name)
-    record(source, outputs, 'Full actual capture; proportional resize and format conversion only.')
+    record(source, outputs, 'Full actual capture with proportional resizing and format conversion.')
+    records[-1]['build'] = build
 
-responsive(CAPTURES / 'presentation/submission/Starter.png', 'starter', [800, 1600, 2560])
-responsive(CAPTURES / 'presentation/submission/Home.png', 'home', [800, 1600])
-responsive(CAPTURES / 'simulator-captures/submission/iPhone-Home.png', 'phone', [402, 804])
-responsive(CAPTURES / 'simulator-captures/submission/AppleTV-Home.png', 'tv', [960, 1920])
+responsive(MAC_CAPTURES / 'Run/Starter.png', 'starter', [800, 1600, 2560], 'Mac 109')
+responsive(MAC_CAPTURES / 'Raw/Home.png', 'home', [800, 1600], 'Mac 109')
+responsive(MAC_CAPTURES / 'Community/Community.png', 'community', [800, 1600], 'Mac 109 with local packs')
+responsive(SIMULATOR_CAPTURES / 'simulator-captures/submission/iPhone-Home.png', 'phone', [402, 804], 'Earlier iPhone Simulator')
+responsive(SIMULATOR_CAPTURES / 'simulator-captures/submission/AppleTV-Home.png', 'tv', [960, 1920], 'Earlier Apple TV Simulator')
 logo = REPO / 'Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png'
 shutil.copy2(logo, ASSETS / 'logo.png')
 record(logo, ['logo.png'], 'Unmodified current product logo.')
@@ -55,7 +58,7 @@ record(icon, list(icon_sizes), 'Resized from the approved Ultimate Lemmix app ic
 for name in ['archivo-latin.woff2', 'archivo-OFL.txt']:
     shutil.copy2(DJ / name, ASSETS / name)
 
-lix = REPO / '.build/approved-alternative-resources/AlternativeAssets/Lix'
+lix = Path('/Users/veland/UltimateLemmix/.build/approved-alternative-resources/AlternativeAssets/Lix')
 metadata = json.loads((lix / 'sprite-metadata.json').read_text())
 sheet_path = lix / 'assets' / metadata['sourcePath']
 sheet = Image.open(sheet_path).convert('RGBA')
@@ -74,6 +77,9 @@ strip.save(ASSETS / 'walk-strip.png')
 record(sheet_path, ['walker.png', 'walk-strip.png'], 'Extracted published walker frames using pinned metadata and the existing black/grid transparency keys. No redrawing.')
 shutil.copy2(lix / 'licences/copying.txt', ASSETS / 'Lix-copying.txt')
 shutil.copy2(REPO / 'THIRD_PARTY_NOTICES.md', ASSETS / 'application-notices.txt')
+notices = MAC_CAPTURES / 'Proof.app/Contents/Resources/Licences'
+for notice in ('Lix-font-LICENSE.txt', 'Lix-music-credits.txt'):
+    shutil.copy2(notices / notice, ASSETS / notice)
 
 # Use the woodland illustration for link previews and keep the square app icon visible.
 woodland = ASSETS / 'moss-bridge.webp'
