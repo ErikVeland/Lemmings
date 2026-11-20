@@ -475,6 +475,21 @@ public final class ClassicMobileSession: MobileGameSession {
         }
     }
 
+    public func assignmentRejection(control: Int, to target: Int) -> String? {
+        guard ClassicSkill.allCases.indices.contains(control) else { return nil }
+        let skill = ClassicSkill.allCases[control]
+        let result = simulation.assignmentResult(skill, to: target)
+        guard result != .assigned else { return nil }
+        let action = simulation.lemmings.first { $0.id == target }?.action
+        let miningState: SkillRejectionFeedback.MiningState? = switch action {
+        case .mining: .mining
+        case .falling: .falling
+        default: nil
+        }
+        return SkillRejectionFeedback.classic(result, skill: skill.rawValue,
+            miningState: miningState)
+    }
+
     @discardableResult
     public func assign(control: Int, to target: Int) -> Bool {
         cachedRender = nil

@@ -344,7 +344,10 @@ struct ReticleFeedback {
   var overlayFrame = 0
   var phase: GamePhase = .playing {
     didSet {
-      if phase != oldValue { reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; cursorViewPoint = nil; overlayReplayLine = nil; overlayRetryLine = nil }
+      if phase != oldValue {
+        reticleFeedback = ReticleFeedback(); assignedTarget = nil; displayedTarget = nil; cursorViewPoint = nil
+        overlayReplayLine = nil; overlayRetryLine = nil; assignmentHighlight.clearNotice()
+      }
       if phase != oldValue { needsDisplay = true; window?.invalidateCursorRects(for: self) }
     }
   }
@@ -1038,15 +1041,17 @@ struct ReticleFeedback {
         RescueCelebration.draw(in: bounds, amount: completionGlowAmount, context: context)
       }
       FailureMoodOverlay.draw(in: bounds, amount: failureMoodAmount)
-      drawRewindCue()
+      let rewindBottom = drawRewindCue()
       if phase == .playing {
         drawTurnBadge(); drawCursor()
         let zoomBadgeSize = precisionStatus.draw(at: CGPoint(x: 12, y: 12),
           scale: bounds.width >= 960 ? 2 : 1, opacity: precisionStatusOpacity)
+        var noticeY = max(12 + zoomBadgeSize.height + 4, rewindBottom)
         if showsDeathCountdownOverlay && !deathCountdownText.isEmpty {
-          GameTypography.annotation(deathCountdownText,
-            at: CGPoint(x: 12, y: 12 + zoomBadgeSize.height + 4), palette: .blue)
+          GameTypography.annotation(deathCountdownText, at: CGPoint(x: 12, y: noticeY), palette: .blue)
+          noticeY += 20
         }
+        assignmentHighlight.drawNotice(at: CGPoint(x: 12, y: noticeY))
       }
     }
     if phase != .playing { drawOverlay() }
@@ -2077,16 +2082,18 @@ struct ReticleFeedback {
     return image
   }
 
-  private func drawRewindCue() {
+  private func drawRewindCue() -> CGFloat {
     let now = ProcessInfo.processInfo.systemUptime
-    guard rewindCueStartedAt != nil || now < rewindCueUntil else { return }
+    guard rewindCueStartedAt != nil || now < rewindCueUntil else { return 0 }
     let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
     let badgeOffset = precisionStatus.isEmpty ? 0 : precisionStatus.size(scale: badgeScale).height + 4
-    RewindTransportCue.draw(
-      origin: CGPoint(x: 12, y: 12 + badgeOffset),
+    let y = 12 + badgeOffset
+    let height = RewindTransportCue.draw(
+      origin: CGPoint(x: 12, y: y),
       currentTick: rewindCurrentTick,
       originTick: rewindOriginTick
     )
+    return y + height + 4
   }
 
   /// Walks a row of real lemmings across the foot of a menu.

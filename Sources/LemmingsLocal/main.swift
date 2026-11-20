@@ -8426,11 +8426,21 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.needsDisplay = true
     panel.needsDisplay = true
     if let rejection {
-      setStatus(L10n.text("Cannot assign: \(rejection)"))
-      if let lemming = session.lemmings.first(where: { $0.id == id }) {
+      let skill = session.skills[safe: panel.selectedSkillIndex]?.name ?? ""
+      let lemming = session.lemmings.first(where: { $0.id == id })
+      let miningState: SkillRejectionFeedback.MiningState?
+      switch lemming?.pose {
+      case .mining: miningState = .mining
+      case .falling: miningState = .falling
+      default: miningState = nil
+      }
+      let reason = SkillRejectionFeedback.classicOrNeoLemmix(rejection, skill: skill, miningState: miningState)
+      playfield.assignmentHighlight.showNotice(reason, in: playfield)
+      if let lemming {
         effects.play(.actionRejected, at: GameplaySoundPoint(x: Double(lemming.x), y: Double(lemming.y)))
       }
     } else {
+      playfield.assignmentHighlight.clearNotice()
       playfield.didAssign(to: id)
       assignmentFocus.record(id: id, skill: panel.selectedSkillIndex, tick: session.currentTick)
       // The click is acknowledged straight away rather than on the next tick,

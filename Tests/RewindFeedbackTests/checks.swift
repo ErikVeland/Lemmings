@@ -111,7 +111,10 @@ private final class RewindPreviewSession: GameSession {
     print("PASS Classic rendered one-tick reverse echoes, sharp solid sprites and HD opt-out")
 }
 
-extension Lemmings2Canvas { fileprivate var rewindIsActive: Bool { speedTrails.isRewinding } }
+extension Lemmings2Canvas {
+    fileprivate var rewindIsActive: Bool { speedTrails.isRewinding }
+    fileprivate var assignmentRejectionNotice: String? { focusNotice }
+}
 extension Lemmings3Canvas { fileprivate var rewindIsActive: Bool { speedTrails.isRewinding } }
 
 @MainActor func checkSequelRewinds() throws {
@@ -136,6 +139,12 @@ extension Lemmings3Canvas { fileprivate var rewindIsActive: Bool { speedTrails.i
     view.hdEffectsEnabled = true; view.reduceMotion = true
     view.prepareRewindEffects(); view.finishRewindEffects(old)
     try checkRewind(!view.rewindIsActive, "L2 reduced motion started a rewind impulse")
+
+    view.rewindOriginTick = game.tick; view.rewindCurrentTick = old.tick
+    let railOnly = try rewindShot(view, "l2-rewind-rail")
+    view.showFocusNotice("No uses of Miner remain.")
+    let withRejection = try rewindShot(view, "l2-rewind-rejection")
+    try checkRewind(railOnly != withRejection, "L2 hid the rejection notice during rewind")
 
     let l3root = root.appendingPathComponent("Sources/Ports/LEM3CD")
     func l3data(_ path: String) throws -> Data { try Data(contentsOf: l3root.appendingPathComponent(path)) }
@@ -163,6 +172,74 @@ extension Lemmings3Canvas { fileprivate var rewindIsActive: Bool { speedTrails.i
     try checkRewind(!l3view.rewindIsActive, "L3 reduced flashes started a rewind impulse")
     print("PASS L2 and L3 rendered one-tick rewind, timeline targets and gaps, HD opt-out, reduced motion and reduced flashes")
 }
+extension Lemmings2PlayWindow {
+    fileprivate func checkRejectedAssignmentKeepsForwardScrub() throws {
+        defer { stop() }
+        timer?.invalidate()
+        restoringRun = true
+        let width = 128, height = 96
+        let configuration = Lemmings2Runtime.Configuration(width: width, height: height,
+            pixels: Array(repeating: 0, count: width * height),
+            solid: (0..<(width * height)).map { $0 / width >= 65 },
+            palette: Array(repeating: 0, count: 1024),
+            entrance: .init(x: 32, y: 32, width: 1, height: 1),
+            exits: [.init(x: 120, y: 65, width: 2, height: 2)],
+            skills: [.miner, .builder, .unused, .unused, .unused, .unused, .unused, .unused],
+            supplies: [0, 1, 0, 0, 0, 0, 0, 0], total: 1, timeLimit: 60,
+            releaseInterval: 1, terrainMasks: masks, firstReleaseTick: 1)
+        let start = try Lemmings2Runtime(configuration: configuration)
+        var advanced = start
+        for _ in 0..<47 { advanced.step() }
+        initial = start; game = advanced; screen = .playing; paused = true; selected = 0
+        let step = 1 / Lemmings2Runtime.ticksPerSecond
+        try checkRewind(rewind(seconds: step) && canStepForward, "L2 failed to open its rewind history")
+        guard let target = game?.lemmings.first, target.state == .walking else {
+            throw RewindFailure(message: "L2 rewind fixture did not supply a walking lemming")
+        }
+
+        try checkRewind(canvas.target(slot: 0, x: target.x, y: target.y - 5)?.id == target.id,
+            "L2 pointer fixture did not target the lemming")
+        canvas.onPointer?(target.x, target.y - 5, false)
+        canvas.onClick?(target.x, target.y - 5)
+        canvas.onPointer?(target.x, target.y - 5, true)
+        canvas.onPointer?(target.x, target.y - 5, false)
+        canvas.onRelease?()
+        try checkRewind(canStepForward && recoveryInputs.isEmpty,
+            "A rejected L2 pointer assignment discarded forward history or recorded an input")
+        let rejection = "No uses of Miner remain."
+        try checkRewind(canvas.assignmentRejectionNotice == rejection,
+            "A rejected L2 pointer assignment did not explain the empty skill stock")
+
+        canvas.focusLemming(target.id)
+        gameplayKeyboard?.assignSelected()
+        try checkRewind(canStepForward && recoveryInputs.isEmpty,
+            "A rejected L2 keyboard assignment discarded forward history or recorded an input")
+        selected = 1
+        assignmentFocus.record(id: target.id, skill: 0, tick: game?.tick ?? 0)
+        canvas.focusLemming(target.id)
+        canvas.showFocusNotice("")
+        gameplayKeyboard?.repeatAssignment()
+        try checkRewind(canStepForward && recoveryInputs.isEmpty && canvas.assignmentRejectionNotice == rejection,
+            "Repeat Assignment ignored the attempted skill or discarded forward history")
+        try checkRewind(stepForward(seconds: step) && game?.tick == advanced.tick,
+            "L2 could not replay the preserved forward tick")
+        singleStep()
+        try checkRewind(game?.tick == advanced.tick + 1 && rewindOriginState == nil
+            && recoveryInputs.last?.action == .releasePointer,
+            "The first live step after forward scrub did not release the restored pointer state")
+
+        try checkRewind(rewind(seconds: step), "L2 failed to rewind before a valid assignment")
+        selected = 1
+        canvas.focusLemming(target.id)
+        gameplayKeyboard?.assignSelected()
+        try checkRewind(!canStepForward && game?.supplies[1] == 0,
+            "An accepted L2 keyboard assignment did not replace the future")
+        try checkRewind(recoveryInputs.last?.action == .releasePointer && canvas.assignmentRejectionNotice == nil,
+            "The new L2 timeline kept old pointer state or rejection feedback")
+        print("PASS rejected L2 pointer and keyboard assignments preserve forward scrub until an input succeeds")
+    }
+}
+
 @MainActor func checkControllerResetPriority() throws {
     let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 640, height: 480), styleMask: [.borderless], backing: .buffered, defer: false)
     let keyboard = GameplayKeyboard(window: window)
@@ -191,3 +268,6 @@ try checkControllerResetPriority()
 try checkSharedRewind()
 try checkClassicRewind()
 try checkSequelRewinds()
+
+try Lemmings2PlayWindow(root: root.appendingPathComponent("Sources/Ports/Lemm2"),
+    recordsCampaignProgress: false).checkRejectedAssignmentKeepsForwardScrub()

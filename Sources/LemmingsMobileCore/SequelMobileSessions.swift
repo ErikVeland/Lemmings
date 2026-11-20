@@ -351,6 +351,11 @@ public final class Lemmings2MobileSession: MobileGameSession {
         }
     }
 
+    public func assignmentRejection(control: Int, to target: Int) -> String? {
+        guard !runtime.canAssign(slot: control, to: target) else { return nil }
+        return SkillRejectionFeedback.lemmings2(slot: control, target: target, in: runtime)
+    }
+
     @discardableResult
     public func assign(control: Int, to target: Int) -> Bool {
         guard runtime.assign(slot: control, to: target) else { return false }
@@ -918,6 +923,29 @@ public final class Lemmings3MobileSession: MobileGameSession {
         }
     }
 
+    public func assignmentRejection(control: Int, to target: Int) -> String? {
+        guard Lemmings3Runtime.Action.allCases.indices.contains(control),
+              let lemming = runtime.lemmings.first(where: { $0.id == target && $0.active }) else { return nil }
+        let action = Lemmings3Runtime.Action.allCases[control]
+        if action == .use {
+            guard !Lemmings3Runtime.Direction.allCases.contains(where: {
+                runtime.canUseTool(lemming, direction: $0)
+            }) else { return nil }
+        } else {
+            guard !runtime.canAssign(action, to: lemming) else { return nil }
+        }
+        return SkillRejectionFeedback.lemmings3(action, lemming: lemming,
+            onSolidGround: runtime.isSolid(lemming.x, lemming.y),
+            direction: lemming.direction > 0 ? .right : .left)
+    }
+
+    public func toolUseRejection(to target: Int, direction: Lemmings3Runtime.Direction) -> String? {
+        guard let lemming = runtime.lemmings.first(where: { $0.id == target && $0.active }),
+              !runtime.canUseTool(lemming, direction: direction) else { return nil }
+        return SkillRejectionFeedback.lemmings3(.use, lemming: lemming,
+            onSolidGround: runtime.isSolid(lemming.x, lemming.y), direction: direction)
+    }
+
     @discardableResult
     public func assign(control: Int, to target: Int) -> Bool {
         guard Lemmings3Runtime.Action.allCases.indices.contains(control) else { return false }
@@ -1428,6 +1456,21 @@ public final class NeoLemmixMobileSession: MobileGameSession {
                 pointerBounds: MobileRect(x: -8, y: -10, width: 16, height: 20)
             )
         }
+    }
+
+    public func assignmentRejection(control: Int, to target: Int) -> String? {
+        guard controls.indices.contains(control) else { return nil }
+        let skill = controls[control]
+        var probe = simulation
+        guard case let .rejected(_, _, reason) = probe.assign(skill: skill, to: target) else { return nil }
+        let action = simulation.lemmings.first { $0.id == target }?.action
+        let miningState: SkillRejectionFeedback.MiningState? = switch action {
+        case .mining: .mining
+        case .falling: .falling
+        default: nil
+        }
+        return SkillRejectionFeedback.neoLemmix(reason, skill: skill.rawValue,
+            miningState: miningState)
     }
 
     @discardableResult

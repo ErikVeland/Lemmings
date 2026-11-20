@@ -47,13 +47,23 @@ import LemmingsGameArt
 }
 
 @MainActor final class LemmingFocusHighlight {
+    private static let noticeDuration: TimeInterval = 2
     private var notice: String?
     private var noticeUntil: TimeInterval = 0
-    func showNotice(_ text: String) { notice = text; noticeUntil = ProcessInfo.processInfo.systemUptime + 2 }
-    func drawNotice() {
-        guard let notice, ProcessInfo.processInfo.systemUptime < noticeUntil else { return }
-        GameTypography.annotation(notice, at: CGPoint(x: 12, y: 12))
+    func showNotice(_ text: String, in view: NSView? = nil) {
+        notice = text
+        noticeUntil = ProcessInfo.processInfo.systemUptime + Self.noticeDuration
+        guard let view else { return }
+        view.needsDisplay = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.noticeDuration) { [weak view] in
+            view?.needsDisplay = true
+        }
     }
+    func drawNotice(at point: CGPoint = CGPoint(x: 12, y: 12)) {
+        guard let notice, ProcessInfo.processInfo.systemUptime < noticeUntil else { return }
+        GameTypography.annotation(notice, at: point)
+    }
+    func clearNotice() { notice = nil }
     private var id: Int?
     private var until: TimeInterval = 0
     var target: Int? { ProcessInfo.processInfo.systemUptime < until ? id : nil }

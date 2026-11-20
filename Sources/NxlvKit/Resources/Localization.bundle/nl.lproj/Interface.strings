@@ -360,6 +360,7 @@
 "Breakfast resumed almost normally." = "Breakfast resumed almost normally.";
 "Brian blew up a hard disk - twice." = "Brian heeft een harde schijf opgeblazen — twee keer.";
 "Bricks" = "Stenen";
+"Bricks cannot build straight down." = "Met stenen kun je niet recht naar beneden bouwen.";
 "Bring {0} more home to match your best." = "Red nog {0} lemmings om je beste resultaat te evenaren.";
 "Bronze" = "Brons";
 "Browse levels" = "Levels doorzoeken";
@@ -410,7 +411,6 @@
 "Cancel download" = "Download annuleren";
 "Cancel tool direction" = "Richting van gereedschap annuleren";
 "Cannot add NeoLemmix packs" = "NeoLemmix-pakketten kunnen niet worden toegevoegd";
-"Cannot assign: {0}" = "Toewijzen mislukt: {0}";
 "Cannot create sequel artwork." = "Artwork voor het vervolg kan niet worden gemaakt.";
 "Cannot delete player" = "Speler kan niet worden verwijderd";
 "Cannot discard saved run" = "Opgeslagen spel kan niet worden gewist";
@@ -1745,6 +1745,7 @@
 "No fan level packs are available." = "Er zijn geen fanlevelpakketten beschikbaar.";
 "No favourites yet" = "Nog geen favorieten";
 "No hands-off clear this run. This goal may not be possible here." = "Je hebt dit level deze keer niet zonder ingrijpen voltooid. Dit doel is hier misschien niet haalbaar.";
+"No lemming is selected." = "Er is geen lemming geselecteerd.";
 "No lemmings released yet" = "No lemmings released yet";
 "No level files were found for {0}." = "Geen levelbestanden gevonden voor {0}.";
 "No level packs are available." = "Er zijn geen levelpakketten beschikbaar.";
@@ -1767,6 +1768,7 @@
 "No target" = "Geen doelwit";
 "No time limit" = "Geen tijdslimiet";
 "No unassigned lemmings" = "Geen lemmings zonder opdracht";
+"No uses of {0} remain." = "Je kunt {0} niet meer gebruiken.";
 "No validated local solution demonstrates this technique." = "Geen gevalideerde lokale oplossing toont deze techniek aan.";
 "No worldwide score yet." = "Er is nog geen wereldwijde score.";
 "No {0} level packs are available in this build." = "In deze build zijn geen levelpakketten van {0} beschikbaar.";
@@ -2615,6 +2617,8 @@
 "Started: {0}" = "Gestart: {0}";
 "Starting transfer" = "Overdracht starten";
 "Static home screen" = "Statisch startscherm";
+"Steel blocks this skill." = "Staal blokkeert deze vaardigheid.";
+"Steel or a one-way wall blocks this skill." = "Staal of een eenrichtingsmuur blokkeert deze vaardigheid.";
 "Step +1" = "Stap +1";
 "Step back" = "Stap terug";
 "Step backward one tick" = "Eén tick terug";
@@ -2867,6 +2871,7 @@
 "The object metadata has more than one $PRIMARY_ANIMATION section." = "De objectmetagegevens bevatten meer dan één sectie $PRIMARY_ANIMATION.";
 "The object metadata has no $PRIMARY_ANIMATION section." = "De objectmetagegevens bevatten geen sectie $PRIMARY_ANIMATION.";
 "The one-way mask has invalid value {0} at index {1}." = "Het eenrichtingsmasker heeft de ongeldige waarde {0} op index {1}.";
+"The one-way wall blocks this direction." = "De eenrichtingsmuur blokkeert deze richting.";
 "The original movie ended before its declared final frame." = "De originele film eindigde vóór het opgegeven laatste beeld.";
 "The original movie has invalid frame dimensions or missing frames." = "De originele film heeft ongeldige beeldafmetingen of ontbrekende beelden.";
 "The outside world makes regular appearances." = "The outside world makes regular appearances.";
@@ -2951,6 +2956,7 @@
 "The style reference contains an unsafe path component." = "De stijlverwijzing bevat een onveilig padonderdeel.";
 "The style resolution contains duplicate assets for '{0}:{1}'." = "De stijlresolutie bevat dubbele bestanden voor '{0}:{1}'.";
 "The synthetic Lemmings 3 level must include an eligible tool holder." = "Het synthetische Lemmings 3-level moet een geschikte gereedschapsdrager bevatten.";
+"The terrain data for this skill is unavailable." = "De terreingegevens voor deze vaardigheid zijn niet beschikbaar.";
 "The time limit cannot be negative." = "De tijdslimiet mag niet negatief zijn.";
 "The toast seems unconcerned." = "The toast seems unconcerned.";
 "The total lemming count cannot be negative." = "Het totale aantal lemmings mag niet negatief zijn.";
@@ -3037,6 +3043,7 @@
 "This Mac only. No shared service is configured." = "Alleen deze Mac. Er is geen gedeelde dienst ingesteld.";
 "This Mac only. Shared counts need the owner access token." = "Alleen deze Mac. Voor gedeelde aantallen is het toegangstoken van de eigenaar nodig.";
 "This app has no embedded game resources. Rebuild the app with its game data." = "Deze app bevat geen ingebedde gamebestanden. Bouw de app opnieuw met de gamegegevens.";
+"This blocker would overlap another blocker." = "Deze blokkeerder zou een andere blokkeerder overlappen.";
 "This build has no shared counts service. Play insights show this Mac only." = "Deze build heeft geen dienst voor gedeelde aantallen. Spelinzichten tonen alleen deze Mac.";
 "This caller has restricted native play to the Classic tribe." = "Deze aanroeper heeft native spelen beperkt tot de Classic-stam.";
 "This checked route does not need a skill assignment. Watch where the lemmings walk before intervening." = "Deze gecontroleerde route vereist geen vaardigheid. Kijk waar de lemmings lopen voordat je ingrijpt.";
@@ -3046,7 +3053,15 @@
 "This game has no mobile renderer." = "Dit spel heeft geen mobiele renderer.";
 "This has helped considerably." = "This has helped considerably.";
 "This journey level is unavailable on this device. The saved session has been kept." = "This journey level is unavailable on this device. The saved session has been kept.";
+"This lemming already has {0}." = "Deze lemming heeft de vaardigheid {0} al.";
+"This lemming cannot take this skill now." = "Deze lemming kan deze vaardigheid nu niet krijgen.";
+"This lemming has no tool." = "Deze lemming heeft geen gereedschap.";
+"This lemming is already blocking." = "Deze lemming blokkeert de doorgang al.";
+"This lemming is already mining." = "Deze lemming graaft al schuin naar beneden.";
+"This lemming is no longer active." = "Deze lemming is niet meer actief.";
+"This lemming needs solid ground." = "Deze lemming heeft vaste grond nodig.";
 "This level" = "Dit niveau";
+"This level does not support this skill." = "Dit level ondersteunt deze vaardigheid niet.";
 "This level has an exit outside the decoded terrain. Its lower map boundary is not resolved yet." = "Dit level heeft een uitgang buiten het gedecodeerde terrein. De ondergrens van de kaart is nog niet bepaald.";
 "This level needs NeoLemmix features that are not yet supported: {0}." = "Dit level vereist NeoLemmix-functies die nog niet worden ondersteund: {0}.";
 "This level uses community styles. Choose Add NeoLemmix Packs and select a NeoLemmix folder with its styles." = "Dit level gebruikt communitystijlen. Kies NeoLemmix-pakketten toevoegen en selecteer een NeoLemmix-map met de bijbehorende stijlen.";
@@ -3065,7 +3080,10 @@
 "This saved run needs a different app version." = "Voor deze opgeslagen poging is een andere appversie nodig.";
 "This saved run needs a different app version. Its files were preserved." = "Deze opgeslagen poging vereist een andere appversie. De bestanden zijn behouden.";
 "This session is no longer available." = "Deze sessie is niet meer beschikbaar.";
+"This skill conflicts with one the lemming already has." = "Deze vaardigheid is onverenigbaar met een vaardigheid die de lemming al heeft.";
+"This skill needs a ceiling within reach." = "Voor deze vaardigheid is een plafond binnen bereik nodig.";
 "This soundtrack library is already downloading." = "Deze soundtrackbibliotheek wordt al gedownload.";
+"This tool has no uses left." = "Dit gereedschap kan niet meer worden gebruikt.";
 "This worldwide board is not available yet." = "Deze wereldwijde ranglijst is nog niet beschikbaar.";
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "Thomas Hobbes zag vrede en veiligheid als essentieel. Gedeelde regels en gezag beschermen mensen tegen conflicten.";
 "Three-finger tap on the playfield: change graphics" = "Three-finger tap on the playfield: change graphics";
@@ -3125,6 +3143,7 @@
 "Tube strength" = "Buiseffectsterkte";
 "Turn off" = "Uitschakelen";
 "Turn: {0}" = "Beurt: {0}";
+"Turning while swimming needs two uses of Swimmer." = "Om tijdens het zwemmen om te keren, heb je Zwemmer nog twee keer nodig.";
 "Turns: {0}" = "Beurten: {0}";
 "Twelve Tribes" = "Twaalf stammen";
 "Twister" = "Wervelaar";
@@ -3254,6 +3273,7 @@
 "WAVEfmt " = "WAVEfmt ";
 "WHEN THE TRIBES SETTLED IN THESE LANDS" = "TOEN DE STAMMEN ZICH IN DEZE LANDEN VESTIGDEN";
 "WINS / FAILS" = "OVERWINNINGEN / MISLUKKINGEN";
+"Wait for this lemming to land." = "Wacht tot deze lemming landt.";
 "Walker" = "Loper";
 "Walks home with accompaniment." = "Walks home with accompaniment.";
 "Want to see one way through? This reveals a full winning route. Your game stays paused." = "Want to see one way through? This reveals a full winning route. Your game stays paused.";

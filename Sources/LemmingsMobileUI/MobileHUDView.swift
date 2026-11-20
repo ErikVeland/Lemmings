@@ -498,6 +498,16 @@ import LemmingsAppCore
 
     func hideToolDirectionPicker() { toolDirectionPicker.dismiss() }
 
+    /// Keeps passive notices clear of the current controls and picker.
+    var noticeObstructions: [CGRect] {
+        var frames = items.map(\.inputFrame)
+        if let layout { frames.append(Self.cgRect(layout.interface.statusFrame)) }
+        if !minimapView.isHidden { frames.append(minimapView.frame) }
+        if !skillScroll.isHidden { frames.append(skillScroll.frame) }
+        if !toolDirectionPicker.isHidden { frames.append(toolDirectionPicker.frame) }
+        return frames
+    }
+
     private func isEnabled(_ action: MobileHUDAction) -> Bool {
         switch action {
         case .skill, .releaseRate, .endRun: return !readOnly

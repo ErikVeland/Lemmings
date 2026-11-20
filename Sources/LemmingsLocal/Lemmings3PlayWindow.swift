@@ -1368,10 +1368,14 @@ import NxlvKit
             warningSound.play(Lemmings3SoundCue.positionedCues(before: previousSoundState, after: .init(game)))
             skillAssignments[action.rawValue, default: 0] += 1
             if action == .use, let tool = lem.tool { toolUses[String(describing: tool), default: 0] += 1 }
+            canvas.assignmentHighlight.clearNotice()
+            message = L10n.text("\(SkillVocabulary.title(action.rawValue)) assigned to lemming \(id + 1).")
         } else {
             warningSound.play(.actionRejected, at: GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y)))
+            message = SkillRejectionFeedback.lemmings3(action, lemming: lem,
+                onSolidGround: game.isSolid(lem.x, lem.y), direction: direction)
+            canvas.assignmentHighlight.showNotice(message, in: canvas)
         }
-        message = accepted ? L10n.text("\(SkillVocabulary.title(action.rawValue)) assigned to lemming \(id + 1).") : L10n.text("That lemming cannot use this action now.")
         refresh()
     }
     func playReadySound() { warningSound.play(.ready) }
@@ -2445,7 +2449,6 @@ import NxlvKit
             let obviousID = lemmingSelectionStyle == .obvious && !GameCursor.gameplaySuppressed && menuRows == nil ? highlightedLemmingID : nil
             let obviousDirection = game?.lemmings.first(where: { $0.id == obviousID })?.direction ?? 0
             let obviousPulseTime = obviousDirectionPulse.elapsed(target: obviousID, direction: obviousDirection, at: ProcessInfo.processInfo.systemUptime)
-            assignmentHighlight.drawNotice()
             if !GameCursor.gameplaySuppressed, menuRows == nil,
                let id = manualCarrierID,
                let lem = game?.lemmings.first(where: { $0.id == id && $0.active && $0.tool != nil }) {
@@ -2461,13 +2464,6 @@ import NxlvKit
                     tint: assignmentHighlight.target != nil ? .systemYellow : .systemGreen,
                     animated: !reduceMotion && !reduceFlashes, direction: lem.direction, pulseTime: obviousPulseTime)
             }
-            if let origin = rewindOriginTick, origin > rewindCurrentTick {
-                let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
-                let badgeOffset = precisionStatus.isEmpty ? 0 : precisionStatus.size(scale: badgeScale).height + 4
-                RewindTransportCue.draw(origin: CGPoint(x: playfieldRect.minX + 12,
-                    y: playfieldRect.minY + 12 + badgeOffset),
-                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom)
-            }
         }
         updateSpeedTrails()
         NSColor.black.setFill(); bounds.fill()
@@ -2480,8 +2476,16 @@ import NxlvKit
         }
         FailureMoodOverlay.draw(in: playfieldRect, amount: failureMoodAmount)
         if menuRows == nil {
-            _ = precisionStatus.draw(at: CGPoint(x: playfieldRect.minX + 12,
-                y: playfieldRect.minY + 12), scale: bounds.width >= 960 ? 2 : 1, opacity: precisionStatusOpacity)
+            let noticeX = playfieldRect.minX + 12
+            let top = playfieldRect.minY + 12
+            let badgeSize = precisionStatus.draw(at: CGPoint(x: noticeX, y: top),
+                scale: bounds.width >= 960 ? 2 : 1, opacity: precisionStatusOpacity)
+            var noticeY = top + (badgeSize.height > 0 ? badgeSize.height + 4 : 0)
+            if let origin = rewindOriginTick, origin > rewindCurrentTick {
+                noticeY += RewindTransportCue.draw(origin: CGPoint(x: noticeX, y: noticeY),
+                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom) + 4
+            }
+            assignmentHighlight.drawNotice(at: CGPoint(x: noticeX, y: noticeY))
         }
     }
     private func drawLemmings(_ game: Lemmings3Runtime, ghostsOnly: Bool, hotSeatColour: ReplayGhostColour? = nil) {

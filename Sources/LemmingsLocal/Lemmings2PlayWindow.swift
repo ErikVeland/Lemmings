@@ -305,7 +305,7 @@ import NxlvKit
         canvas.onClick = { [weak self] x, y in self?.assign(x, y) }
         canvas.onRelease = { [weak self] in self?.releasePointerInput() }
         canvas.onPointer = { [weak self] x, y, held in
-            guard let self else { return }
+            guard let self, !self.isBrowsingRewindHistory else { return }
             self.performRecoveryInput(.fan(x:x,y:y,active:held && self.fanSelected && !self.paused))
             self.performRecoveryInput(.aim(x:x,y:y,held:held && !self.fanSelected && !self.paused))
         }
@@ -341,12 +341,7 @@ import NxlvKit
         }
         keyboard.assignSelected = { [weak self] in
             guard let self, let id = self.canvas.assignmentHighlight.target ?? self.canvas.pointerTarget(slot: self.selected) else { return }
-            if self.performRecoveryInput(.assign(slot: self.selected, lemming: id)) {
-                self.assignmentFocus.record(id: id, skill: self.selected, tick: self.game?.tick ?? 0)
-                self.canvas.didAssign(to: id)
-            } else {
-                self.playAssignmentRejection(id)
-            }
+            self.assignSkill(slot: self.selected, to: id)
             self.sounds.play(self.game?.drainSoundEvents() ?? []); self.refreshGame()
         }
         keyboard.togglePause = { [weak self] in self?.panelAction(8) }
@@ -373,12 +368,7 @@ import NxlvKit
         keyboard.repeatAssignment = { [weak self] in
             guard let self, let skill = self.assignmentFocus.lastSkill,
                   let id = self.canvas.assignmentHighlight.target ?? self.canvas.pointerTarget(slot: skill) else { return }
-            if self.performRecoveryInput(.assign(slot: skill, lemming: id)) {
-                self.assignmentFocus.record(id: id, skill: skill, tick: self.game?.tick ?? 0)
-                self.canvas.didAssign(to: id)
-            } else {
-                self.playAssignmentRejection(id)
-            }
+            self.assignSkill(slot: skill, to: id)
             self.sounds.play(self.game?.drainSoundEvents() ?? []); self.refreshGame()
         }
         canvas.onSpeedPress = { [weak self] time, count in self?.speedControl.pointerDown(at: time, clickCount: count) }
@@ -1322,6 +1312,7 @@ import NxlvKit
     private func playFromMenu() {
         if let game, !game.isComplete,
            (practiceLevel != nil && game.configuration.isPractice) || game.configuration.levelFingerprint == level.fingerprint {
+            branchFromRewind()
             paused = false; updateUserMusicPause(); show(.playing); playTribeMusic(); refreshGame()
         } else { prepareBriefing() }
     }
@@ -1364,7 +1355,7 @@ import NxlvKit
                 }
                 let wasPaused = paused; paused.toggle(); accumulator = 0
                 updateUserMusicPause()
-                if wasPaused { discardRewindOrigin() }
+                if wasPaused { branchFromRewind() }
             case .fan: fanSelected.toggle()
             case .nuke:
                 if nukeAction == .undo { undoNuke() } else if nukeAction == .activate { activateNuke() }
@@ -1378,7 +1369,6 @@ import NxlvKit
     }
     @discardableResult private func performRecoveryInput(_ action: L2RunRecovery.Input.Action) -> Bool {
         guard var current = game else { return false }
-        if rewindOriginState != nil { discardRewindOrigin() }
         switch action {
         case .fan: if action == lastFanInput { return true }
         case .aim: if action == lastAimInput { return true }
@@ -1395,9 +1385,15 @@ import NxlvKit
         default: break
         }
         recoveryInputs.append(input)
+        branchFromRewind()
         return true
     }
-    private func releasePointerInput() { performRecoveryInput(.releasePointer) }
+    private var isBrowsingRewindHistory: Bool { paused && rewindOriginState != nil }
+
+    private func releasePointerInput() {
+        guard !isBrowsingRewindHistory else { return }
+        performRecoveryInput(.releasePointer)
+    }
 
     private func makeCheckpoint(engine: String) throws -> RunRecovery? {
         guard !restoringRun, !engine.isEmpty, let game, game.tick >= 0, !game.isComplete,
@@ -1442,19 +1438,21 @@ import NxlvKit
         if !fanSelected, performRecoveryInput(.machine(x:x,y:y)) { sounds.play(game?.drainSoundEvents() ?? []); refreshGame(); return }
         if !fanSelected, performRecoveryInput(.chain(x:x,y:y)) { sounds.play(game?.drainSoundEvents() ?? []); refreshGame(); return }
         if !fanSelected, let lem = canvas.target(slot: selected, x: x, y: y) {
-            if performRecoveryInput(.assign(slot: selected, lemming: lem.id)) {
-                assignmentFocus.record(id: lem.id, skill: selected, tick: game?.tick ?? 0)
-                canvas.didAssign(to: lem.id)
-            } else {
-                playAssignmentRejection(lem.id)
-            }
+            assignSkill(slot: selected, to: lem.id)
         }
         sounds.play(game?.drainSoundEvents() ?? [])
         refreshGame()
     }
-    private func playAssignmentRejection(_ id: Int) {
-        guard let lem = game?.lemmings.first(where: { $0.id == id && $0.active }) else { return }
-        sounds.play([Lemmings2SoundRequest(supplemental: .actionRejected).positioned(x: lem.x, y: lem.y)])
+    private func assignSkill(slot: Int, to id: Int) {
+        if performRecoveryInput(.assign(slot: slot, lemming: id)) {
+            assignmentFocus.record(id: id, skill: slot, tick: game?.tick ?? 0)
+            canvas.didAssign(to: id)
+        } else if let game {
+            canvas.showFocusNotice(SkillRejectionFeedback.lemmings2(slot: slot, target: id, in: game))
+            if let lemming = game.lemmings.first(where: { $0.id == id && $0.active }) {
+                sounds.play([Lemmings2SoundRequest(supplemental: .actionRejected).positioned(x: lemming.x, y: lemming.y)])
+            }
+        }
     }
     func playReadySound() { sounds.playInterface(.ready) }
     private var ghostAttemptID: UUID?
@@ -1675,6 +1673,7 @@ import NxlvKit
     private func singleStep() {
         canvas.startCountdown.cancel()
         guard screen == .playing, var game, !game.isComplete, !GameScreen.shared.isPresented else { return }
+        branchFromRewind()
         paused = true; accumulator = 0; releasePointerInput(); updateUserMusicPause()
         // Release held fan/aim input before taking the single physics step.
         game = self.game!
@@ -1742,6 +1741,15 @@ import NxlvKit
             beginForward: { [weak self] in self?.beginContinuousStepForward(advanceImmediately: false) ?? false },
             endForward: { [weak self] in self?.endContinuousStepForward() })
     }
+    /**
+     * Starts a new timeline and releases any pointer input held in the restored tick.
+     */
+    private func branchFromRewind() {
+        guard rewindOriginState != nil else { return }
+        discardRewindOrigin()
+        releasePointerInput()
+    }
+
     private func discardRewindOrigin() {
         endContinuousStepForward()
         rewindOriginState = nil
@@ -1996,6 +2004,7 @@ import NxlvKit
         let page = GamePauseMenu.page(title: arcadeLevel?.title ?? "",
             resume: { [weak self] in
                 guard let self else { return }
+                self.branchFromRewind()
                 self.paused = false; self.accumulator = 0
                 self.updateUserMusicPause(); self.refreshGame()
             }, retry: { [weak self] in self?.retryLevel() },
@@ -3328,19 +3337,20 @@ import NxlvKit
             let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
             let badgeSize = precisionStatus.draw(at: CGPoint(x: gameplayRect.minX + 12,
                 y: gameplayRect.minY + 12), scale: badgeScale, opacity: precisionStatusOpacity)
-            if let focusNotice { GameTypography.annotation(focusNotice,
-                at: CGPoint(x: gameplayRect.minX + 12, y: gameplayRect.minY + 16 + badgeSize.height)) }
             if !deathCountdownText.isEmpty { GameTypography.annotation(deathCountdownText,
                 at: statusReadoutFrame.origin, palette: .blue) }
             if let game {
                 GameTypography.annotation(L10n.text("Saved \(game.saved * 100 / max(1, game.configuration.total))%"),
                     at: CGPoint(x: statusReadoutFrame.minX, y: statusReadoutFrame.minY + 18), palette: .blue)
             }
+            let noticeX = gameplayRect.minX + 12
+            var noticeY = gameplayRect.minY + 16 + badgeSize.height
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
-                RewindTransportCue.draw(origin: CGPoint(x: gameplayRect.minX + 12,
-                    y: gameplayRect.minY + 16 + badgeSize.height),
-                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom)
+                noticeY += RewindTransportCue.draw(origin: CGPoint(x: noticeX, y: noticeY),
+                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom) + 4
             }
+            if let focusNotice { GameTypography.annotation(focusNotice,
+                at: CGPoint(x: noticeX, y: noticeY)) }
         }
         if turnBadge.superview == nil { addSubview(turnBadge) }
         turnBadge.place(in: CGRect(x: origin.x, y: origin.y, width: visibleWidth * zoom, height: 192 * zoom))
@@ -3563,7 +3573,10 @@ import NxlvKit
     private var skillBadge: NSImage?
     private var pointerSelectionEnabled = true
     private var focusNotice: String?
+    private var focusNoticeExpiry: Task<Void, Never>?
     func didAssign(to id: Int) {
+        focusNoticeExpiry?.cancel()
+        focusNotice = nil
         assignmentPulse.show(id)
         needsDisplay = true
         scheduleAssignmentPulseRedraw()
@@ -3580,7 +3593,12 @@ import NxlvKit
     }
     func showFocusNotice(_ text: String) {
         focusNotice = text; needsDisplay = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in self?.focusNotice = nil; self?.needsDisplay = true }
+        focusNoticeExpiry?.cancel()
+        focusNoticeExpiry = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            guard !Task.isCancelled, let self else { return }
+            self.focusNotice = nil; self.needsDisplay = true
+        }
     }
     func target(slot: Int, x: Int, y: Int) -> Lemmings2Runtime.Lemming? {
         guard let game else { return nil }

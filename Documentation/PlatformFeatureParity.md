@@ -1,5 +1,17 @@
 # Cross-platform feature parity
 
+## Rejected skill assignments — 20 November 2026
+
+Classic, NeoLemmix, Tribes and Chronicles use shared messages for rejected
+skills. Mac shows the reason in a bitmap notice. The shared iPhone, iPad, Duo
+and Apple TV interface shows the reason and announces it to VoiceOver. The
+existing rejection cue still plays where the input route supports a sound.
+
+In the Mac Tribes game, a rejected input keeps the original forward-scrub
+history. An accepted edit or explicit resume starts a new timeline and releases
+held pointer input. Mobile and Apple TV retain their existing rewind behaviour.
+Device layout and physical input acceptance remain open.
+
 ## Lemmix stone controls, icons and effects — 18 November 2026
 
 Shared stone sockets now remain active with Lix characters. Home rows, gameplay
