@@ -1,5 +1,5 @@
-/* The links remain ordinary anchors on a carved trailhead sign. */
-.site-header.forest-trailhead {
+/* The shared stone sprite supplies the button face. */
+.forest-trailhead {
   display: block;
   position: relative;
   z-index: 2;
@@ -51,55 +51,26 @@
 .forest-trailhead .trail-signs {
   display: flex;
   justify-content: center;
-  gap: 1px;
+  gap: clamp(3px, .65vw, 10px);
   margin: 0;
-  padding: 2px 0 4px;
+  padding: 0;
 }
-.forest-trailhead .trail-signs a {
-  isolation: isolate;
-  display: inline-flex;
-  position: relative;
-  justify-content: center;
-  align-items: center;
-  min-height: 44px;
-  padding: 9px clamp(15px, 1.6vw, 26px);
-  color: #fff2d7;
-  text-decoration: none;
-  font: 700 clamp(.88rem, 1.22vw, 1.05rem)/1.2 var(--book, Georgia, serif);
+.forest-trailhead .trail-signs .moss-button {
+  min-width: clamp(84px, 8.4vw, 128px);
+  font: 700 clamp(.88rem, 1.18vw, 1.05rem)/1.2 var(--book, Georgia, serif);
   white-space: nowrap;
-  text-shadow: 0 2px 1px #21110b;
 }
-.trail-signs a::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 1px 0 0;
-  border-top: 1px solid #c9a77d;
-  border-bottom: 3px solid #302417;
-  background: linear-gradient(105deg, #52331e99, #754a2bb8 45%, #4c311db8),
-              #6c462c url('/assets/forest-bark.webp') center / 290px auto;
-  box-shadow: inset 0 -2px 0 #c5955655;
-  clip-path: polygon(0 3%,91% 0,100% 46%,92% 94%,1% 100%,5% 50%);
-}
-.trail-signs a:nth-child(even)::before { transform: rotate(-1.7deg); background-position: 40% 70%; }
-.trail-signs a:nth-child(odd)::before { transform: rotate(1deg); }
-.forest-trailhead .trail-signs a[aria-current],
-.forest-trailhead .trail-signs a:hover {
-  color: #fff0a5;
+.forest-trailhead .moss-button[aria-current="page"] {
+  color: #fff2a3;
   text-decoration: underline;
   text-decoration-thickness: 2px;
+  text-decoration-color: #efde79;
   text-underline-offset: 4px;
 }
-.trail-signs a[aria-current]::before { border-top-color: #e5c18b; filter: brightness(1.22); }
-.trailhead-release {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  color: #ffe2a6;
-  text-decoration-color: #c0995b;
-  font-size: .8rem;
-  font-weight: 650;
+.forest-trailhead .trailhead-release.moss-button {
+  gap: 4px;
+  text-align: center;
+  font-size: .85rem;
 }
 .forest-trail-end {
   position: relative;
@@ -176,15 +147,24 @@
   .trailhead-inner { gap: 5px 16px; padding-inline: 20px; }
   .trailhead-brand span { font-size: 1.13rem; }
   .trailhead-brand img { width: 40px; height: 40px; }
-  .forest-trailhead .trail-signs a { padding-inline: 14px; }
+  .forest-trailhead .trail-signs .moss-button { min-width: 78px; }
   .trail-end-inner { grid-template-columns: minmax(320px, 1fr) 1fr; column-gap: 20px; }
 }
-@media (max-width: 760px) {
+@media (min-width: 861px) and (max-width: 1100px) {
+  .trailhead-inner { gap: 10px; padding-inline: 18px; }
+  .trailhead-brand span { font-size: 1.13rem; }
+  .trailhead-brand img { width: 40px; height: 40px; }
+  .forest-trailhead .trail-signs .moss-button { min-width: 78px; padding-inline: 12px; font-size: .9rem; }
+  .forest-trailhead .trailhead-release.moss-button { width: 175px; min-height: 58px; padding: 18px 12px 10px; font-size: .86rem; }
+}
+@media (max-width: 860px) {
   .trailhead-inner { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; padding-block: 7px; }
-  .trailhead-release { grid-area: 1 / 2; font-size: .75rem; }
+  .forest-trailhead .trailhead-release.moss-button { grid-area: 1 / 2; min-height: 58px; padding: 18px 18px 10px; font-size: .85rem; }
   .forest-trailhead .trail-signs { grid-column: 1/-1; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 2px; }
   .trailhead-brand { gap: 8px; }
-  .forest-trailhead .trail-signs a { padding-inline: 4px; font-size: .88rem; }
+  .forest-trailhead .trail-signs .moss-button { min-width: 0; padding-inline: 5px; font-size: clamp(.79rem, 3.35vw, .94rem); }
+}
+@media (max-width: 760px) {
   .forest-trail-end { background-size: auto 265px; background-position: 82% 0; }
   .forest-trail-end::before { background: linear-gradient(180deg,transparent 40px,#101e1d00 130px,#101e1d 257px); }
   .trail-end-inner { grid-template-columns: 1fr; gap: 14px; padding-top: 190px; }
@@ -192,12 +172,12 @@
   .trail-end-colophon { gap: 0 12px; }
 }
 @media (max-width: 420px) {
-  .trailhead-inner { padding-inline: 10px; }
-  .trailhead-release { max-width: 104px; line-height: 1.25; }
+  .trailhead-inner { padding-inline: 8px; }
+  .forest-trailhead .trail-signs { grid-template-columns: 1fr 1fr 1.22fr .92fr; }
+  .forest-trailhead .trailhead-release.moss-button { width: 116px; padding-inline: 9px; font-size: .78rem; line-height: 1.15; }
   .trail-end-colophon p:last-child { flex-basis: 100%; }
 }
 @media (forced-colors: active) {
-  .trail-signs a::before { display: none; }
   .forest-trailhead .trail-signs a { border: 1px solid ButtonText; }
   .forest-trailhead .trail-signs a[aria-current] { border-bottom-width: 4px; }
 }

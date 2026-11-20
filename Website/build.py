@@ -43,8 +43,9 @@ def build():
     pages += [{'route':'/404', 'file':'404.html', 'title':'This way is blocked.', 'description':'That page is not here. Return to Ultimate Lemmix.'}, {'route':'/503', 'file':'503.html', 'title':'A short pause.', 'description':'The site is temporarily unavailable. Try again shortly.'}]
     nav = [('/', 'The game'), ('/upgrade', 'Upgrade'), ('/manual', 'Field guide'), ('/support', 'Get help')]
     footer = nav + [('/privacy','Privacy'),('/privacy/choices','Privacy choices'),('/accessibility','Accessibility'),('/terms','Terms'),('/release-notes','Release notes'),('/legal','Legal'),('/credits','Credits')]
-    def links(items, route):
-        return ''.join(f'<a href="{url}"' + (' aria-current="page"' if url == route else '') + f'>{label}</a>' for url, label in items)
+    def links(items, route, classes=''):
+        style = f' class="{classes}"' if classes else ''
+        return ''.join(f'<a{style} href="{url}"' + (' aria-current="page"' if url == route else '') + f'>{label}</a>' for url, label in items)
     for page in pages:
         route = page['route']; home = route == '/'; error = route in ('/404','/503')
         canonical = ORIGIN + route
@@ -70,11 +71,11 @@ def build():
 <link rel="icon" href="/assets/favicon.png" type="image/png" sizes="96x96"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" sizes="180x180"><link rel="preload" href="/assets/archivo-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="{assets['site.css']}">
 <script type="application/ld+json">{json.dumps(schema,ensure_ascii=False).replace('<', chr(92)+'u003c')}</script><script src="{assets['site.js']}" defer></script>
 </head><body><a class="skip" href="#main">Skip to content</a>
-<header class="site-header forest-trailhead">
+<header class="forest-trailhead">
   <div class="trailhead-inner">
     <a class="trailhead-brand" href="/" aria-label="Ultimate Lemmix home"><img src="/assets/apple-touch-icon.png" alt="" width="48" height="48"><span>Ultimate Lemmix</span></a>
-    <nav class="trail-signs" aria-label="Primary">{links(nav,route)}</nav>
-    <a class="trailhead-release" href="/release-notes"{' aria-current="page"' if route == '/release-notes' else ''}>App Store preparations <span aria-hidden="true">↗</span></a>
+    <nav class="trail-signs" aria-label="Primary">{links(nav,route,'moss-button moss-button--compact')}</nav>
+    <a class="trailhead-release moss-button" href="/release-notes"{' aria-current="page"' if route == '/release-notes' else ''}>App Store preparations <span aria-hidden="true">↗</span></a>
   </div>
 </header>
 <main id="main" tabindex="-1" class="{'home' if home else 'document'}">{body}</main>
