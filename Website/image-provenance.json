@@ -1,8 +1,8 @@
 {
   "captures": [
     {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/submission/Starter.png",
-      "sha256": "94a1ea6f5dd0b23df747010c4dc2685a8d9662a222c7f68e9e4afa36d5edc9de",
+      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/UltimateLemmix/Website109/Run/Starter.png",
+      "sha256": "ef9e78e7d045a88ff4101f7a03c0e54ee5b78c08b54d5a8f4da1209b0859c821",
       "outputs": [
         "starter-800.webp",
         "starter-800.jpg",
@@ -11,18 +11,32 @@
         "starter-2560.webp",
         "starter-2560.jpg"
       ],
-      "treatment": "Full actual capture; proportional resize and format conversion only."
+      "treatment": "Full actual capture with proportional resizing and format conversion.",
+      "build": "Mac 109"
     },
     {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/submission/Home.png",
-      "sha256": "4b7c36b924947838b2d1ab270486e0f676b7ed428088df8856fbad790f252ba3",
+      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/UltimateLemmix/Website109/Raw/Home.png",
+      "sha256": "b5579da99740e87626eb7e809494376c4bc71fea4d4fd104e9ac7cefed886f5c",
       "outputs": [
         "home-800.webp",
         "home-800.jpg",
         "home-1600.webp",
         "home-1600.jpg"
       ],
-      "treatment": "Full actual capture; proportional resize and format conversion only."
+      "treatment": "Full actual capture with proportional resizing and format conversion.",
+      "build": "Mac 109"
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/UltimateLemmix/Website109/Community/Community.png",
+      "sha256": "9271d7344ca2df7ff811e08e698bf5d86797f09a7f68e4dd6eaa0dd22061b069",
+      "outputs": [
+        "community-800.webp",
+        "community-800.jpg",
+        "community-1600.webp",
+        "community-1600.jpg"
+      ],
+      "treatment": "Full actual capture with proportional resizing and format conversion.",
+      "build": "Mac 109 with local packs"
     },
     {
       "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/iPhone-Home.png",
@@ -33,7 +47,8 @@
         "phone-804.webp",
         "phone-804.jpg"
       ],
-      "treatment": "Full actual capture; proportional resize and format conversion only."
+      "treatment": "Full actual capture with proportional resizing and format conversion.",
+      "build": "Earlier iPhone Simulator"
     },
     {
       "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/AppleTV-Home.png",
@@ -44,10 +59,11 @@
         "tv-1920.webp",
         "tv-1920.jpg"
       ],
-      "treatment": "Full actual capture; proportional resize and format conversion only."
+      "treatment": "Full actual capture with proportional resizing and format conversion.",
+      "build": "Earlier Apple TV Simulator"
     },
     {
-      "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
+      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/Lemmix109Source/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
       "sha256": "ccc23dc09af112019fd0f9b914c4678a967fc127914c8c5cf25ce38e551f8754",
       "outputs": [
         "logo.png"
@@ -55,7 +71,7 @@
       "treatment": "Unmodified current product logo."
     },
     {
-      "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
+      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/Lemmix109Source/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
       "sha256": "ccc23dc09af112019fd0f9b914c4678a967fc127914c8c5cf25ce38e551f8754",
       "outputs": [
         "logo-480.webp",
@@ -64,7 +80,7 @@
       "treatment": "Proportional responsive conversion of the current logo. No redrawing."
     },
     {
-      "source": "/Users/veland/UltimateLemmix/Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "source": "/Volumes/Games/CodexBuilds/Release-Sync-20261120/Lemmix109Source/Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
       "sha256": "f852c3d872d85822107f89b2db3b10770132c6fa0800261b909f9946f77af1df",
       "outputs": [
         "favicon.png"

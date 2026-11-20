@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "contentDate": "2026-11-19",
+  "contentDate": "2026-11-20",
   "language": "en-AU",
   "releaseStatus": "candidate",
   "pages": [
@@ -49,7 +49,7 @@
     {
       "route": "/release-notes",
       "title": "Release notes",
-      "description": "Changes and current release status for Ultimate Lemmix 2.4.2, build 108.",
+      "description": "Changes and current release status for Ultimate Lemmix 2.4.2, including build 109.",
       "file": "release-notes.html"
     },
     {
@@ -61,7 +61,7 @@
     {
       "route": "/credits",
       "title": "Credits",
-      "description": "The people and projects behind Ultimate Lemmix and its game-preservation foundations.",
+      "description": "Full Lix soundtrack credits, MandelSoft’s traditional arrangements and the community level packs behind Ultimate Lemmix.",
       "file": "credits.html"
     }
   ]
