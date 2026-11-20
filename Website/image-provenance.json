@@ -95,6 +95,32 @@
       "caption": "Book \u00b7 First Steps. The path crosses the fold and the skill buttons sit on either side. Duo layout render."
     },
     {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/cliff.png",
+      "sha256": "1aafea892b40989b8f17955bdf36762571d938cc287c7b2ef27b667fca37d609",
+      "outputs": [
+        "cliff-full.webp",
+        "cliff-640.webp",
+        "cliff-640.jpg",
+        "cliff-1280.webp",
+        "cliff-1280.jpg"
+      ],
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "Palace o/t once-hacked Lemmix \u00b7 geooPk1. A walker falls between the fortress towers. Mac, with imported Classic artwork."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/water.png",
+      "sha256": "b021bf7f27eb8ccc3455a79442f2cc1cc7443b9cec67c018ca209741dc6cc6fc",
+      "outputs": [
+        "water-full.webp",
+        "water-640.webp",
+        "water-640.jpg",
+        "water-1280.webp",
+        "water-1280.jpg"
+      ],
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "Follow Me \u00b7 geooPk1. The lead walker is drowning. The others are still following. Mac, with Lix artwork."
+    },
+    {
       "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/phone.png",
       "sha256": "a098d2f7fb2e63c9ec6bdfda32856a951a661852210c96724759a7f90f336d08",
       "outputs": [
@@ -106,6 +132,19 @@
       ],
       "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
       "caption": "First Steps on iPhone. The entrance countdown, overview and touch controls in the iPhone 17 Pro simulator."
+    },
+    {
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/tv.png",
+      "sha256": "9642b4745ac8c2350655f2f41300a1fd0394c9334f664ad92bdc07436f289765",
+      "outputs": [
+        "tv-full.webp",
+        "tv-960.webp",
+        "tv-960.jpg",
+        "tv-1920.webp",
+        "tv-1920.jpg"
+      ],
+      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
+      "caption": "Apple TV Home in build 110. The 4K simulator shows Start Journey, the campaign library and the import controls."
     },
     {
       "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
@@ -144,6 +183,20 @@
       "treatment": "Extracted published walker frames using pinned metadata and the existing black/grid transparency keys. No redrawing."
     }
   ],
+  "duoScenes": {
+    "renderer": "Website/render_duo.py",
+    "artwork": "Illustrated graphite foldable in three poses. The interiors use the two actual game layout frames listed above. The tent film projects the game clock demonstration onto the outer display.",
+    "outputs": [
+      "duo-book-scene.webp",
+      "duo-tabletop-scene.webp",
+      "duo-tent-scene.webp",
+      "duo-tent-scene.mp4"
+    ]
+  },
+  "ravine": {
+    "output": "forest-ravine.webp",
+    "direction": "A broken bridge above a dark pool. Four walkers approach the cliff while one Lix bobs in the current. Illustrated woodland scenery."
+  },
   "detonator": {
     "output": "forest-detonator.webp",
     "tool": "Built-in image generation",

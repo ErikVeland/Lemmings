@@ -268,3 +268,55 @@
   .duo-layouts { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .pose-frame img { width: auto; max-width: 100%; max-height: 340px; }
 }
+
+/* The two folding layouts share the clearing with the clock on the cover screen. */
+.home > .duo-glade { display: block; }
+.duo-notes, .ravine-bank {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: clamp(22px, 5vw, 76px);
+  align-items: center;
+}
+.duo-notes .lead, .ravine-notes .lead { margin: 0 0 12px; }
+.duo-glade .clock-scene { margin: clamp(25px, 4vw, 58px) 0; }
+.clock-scene video {
+  width: min(100%, 114svh); height: auto; margin-inline: auto; object-fit: contain;
+  border: 0; border-radius: 3px; box-shadow: none; background: transparent;
+}
+.clock-scene figcaption, .pose-frame figcaption { max-width: 76ch; }
+.duo-layouts { grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(18px,3.2vw,48px); }
+.duo-layouts .pose-frame img { display: block; width: 100%; height: auto; max-height: none; }
+.pose-frame > a { display: block; }
+.duo-glade > .moss-button { margin-top: 1.7rem; }
+.ravine { color: #f3e7d4; }
+.home > .ravine { mask-image: none; padding-bottom: var(--clearing-pad); }
+.ravine::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(146deg,#15242bdc,#151c28ed 62%,#201c29ea), var(--slate) center / 520px;
+  mask-image: var(--clearing-mask); pointer-events: none;
+}
+.ravine-art {
+  width: 100%; height: auto; display: block;
+  mask-image: linear-gradient(transparent, black min(14%, var(--fade)), black 79%, transparent);
+}
+.ravine-bank { margin: 0 var(--forest-edge); }
+.hazard-frames {
+  grid-column: 1/-1; display: grid; grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: clamp(18px,3.2vw,48px); align-items: start;
+}
+.hazard-frame picture {
+  display: block; padding: clamp(6px,.8vw,12px); background: var(--slate) center / 420px;
+  border-radius: 6px 3px 7px 2px;
+  box-shadow: 0 3px 9px #070e1aa3;
+}
+.hazard-frame img { display: block; width: 100%; height: auto; }
+.hazard-frame figcaption { font-size: .94rem; color: #eee0ce; margin-top: 10px; }
+@media (max-width: 720px) {
+  .duo-notes, .ravine-bank, .hazard-frames { grid-template-columns: minmax(0,1fr); }
+  .ravine-bank { margin-inline: var(--gutter); }
+}
+@media (max-width: 550px) {
+  .duo-layouts { grid-template-columns: minmax(0,1fr); }
+}
+
+.clock-scene figcaption { margin-inline: auto; text-align: center; }

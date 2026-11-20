@@ -102,6 +102,34 @@
       "name": "Book on Duo"
     },
     {
+      "key": "cliff",
+      "file": "cliff.png",
+      "sha256": "1aafea892b40989b8f17955bdf36762571d938cc287c7b2ef27b667fca37d609",
+      "width": 2560,
+      "height": 1600,
+      "widths": [
+        640,
+        1280
+      ],
+      "alt": "A lone Lix drops from a high walkway between the fire-lit towers. The skill bar and rescue count run along the bottom.",
+      "caption": "Palace o/t once-hacked Lemmix · geooPk1. A walker falls between the fortress towers. Mac, with imported Classic artwork.",
+      "name": "The cliff in Palace o/t once-hacked Lemmix"
+    },
+    {
+      "key": "water",
+      "file": "water.png",
+      "sha256": "b021bf7f27eb8ccc3455a79442f2cc1cc7443b9cec67c018ca209741dc6cc6fc",
+      "width": 2560,
+      "height": 1600,
+      "widths": [
+        640,
+        1280
+      ],
+      "alt": "The first walker has fallen into blue water below the path. The others keep walking towards the same bank.",
+      "caption": "Follow Me · geooPk1. The lead walker is drowning. The others are still following. Mac, with Lix artwork.",
+      "name": "The water in Follow Me"
+    },
+    {
       "key": "phone",
       "file": "phone.png",
       "sha256": "a098d2f7fb2e63c9ec6bdfda32856a951a661852210c96724759a7f90f336d08",
@@ -116,6 +144,22 @@
       "platform": "phone",
       "platformLabel": "iPhone",
       "name": "iPhone game screen"
+    },
+    {
+      "key": "tv",
+      "file": "tv.png",
+      "sha256": "9642b4745ac8c2350655f2f41300a1fd0394c9334f664ad92bdc07436f289765",
+      "width": 3840,
+      "height": 2160,
+      "widths": [
+        960,
+        1920
+      ],
+      "alt": "Start Journey sits above the campaign library on the Apple TV Home screen. A stone border surrounds the bitmap menu labels.",
+      "caption": "Apple TV Home in build 110. The 4K simulator shows Start Journey, the campaign library and the import controls.",
+      "platform": "tv",
+      "platformLabel": "Apple TV",
+      "name": "Apple TV game screen"
     }
   ]
 }

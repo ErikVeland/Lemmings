@@ -33,10 +33,15 @@ def screenshot(capture, figure_class, sizes, platform=None):
     platform_attr = f' id="screen-{platform}" data-platform="{platform}"' if platform else ''
     if platform and capture['height'] > capture['width']:
         figure_class += ' portrait'
-    return f'''<figure class="{figure_class}"{platform_attr}>
-      <picture>{hdr}<source type="image/webp" srcset="{sources}" sizes="{sizes}">
+    picture = f'''<picture>{hdr}<source type="image/webp" srcset="{sources}" sizes="{sizes}">
         <img src="/assets/{name}-{widths[-1]}.jpg" srcset="{jpeg_sources}" sizes="{sizes}" alt="{alt}" width="{capture['width']}" height="{capture['height']}" loading="lazy">
-      </picture>
+      </picture>'''
+    if platform:
+        picture = f'<div class="device-stage"><div class="device-shell">{picture}</div></div>'
+    elif name in ('journey', 'community'):
+        picture = f'<div class="print-mount">{picture}</div>'
+    return f'''<figure class="{figure_class}"{platform_attr}>
+      {picture}
       <figcaption>{caption} <a href="{full}" aria-label="Full size for {label}">Full size</a>{hdr_link}</figcaption>
     </figure>'''
 
@@ -50,10 +55,27 @@ def screenshot_gallery(captures):
         pressed = 'true' if index == 0 else 'false'
         label = html.escape(capture['platformLabel'])
         buttons.append(f'<button class="moss-button moss-button--compact" type="button" data-capture="{key}" aria-controls="screen-{key}" aria-pressed="{pressed}">{label}</button>')
-        figures.append(screenshot(capture, 'platform-capture', '(max-width: 800px) 92vw, 960px', key))
+        sizes = '(max-width: 800px) 92vw, 960px'
+        if capture['height'] > capture['width']:
+            ratio = capture['width'] / capture['height']
+            sizes = f'min(90vw, {75 * ratio:.2f}vh, {43 * ratio:.2f}rem)'
+        figures.append(screenshot(capture, 'platform-capture', sizes, key))
     return ('<div class="capture-picker" data-gallery><div class="capture-tabs" hidden '
             'role="group" aria-label="Choose a platform screenshot">' + ''.join(buttons) +
             '</div>' + ''.join(figures) + '</div>')
+
+
+def duo_pose(capture):
+    pose = capture['key']
+    label = html.escape(capture['name'], quote=True)
+    alt = html.escape(capture['alt'], quote=True)
+    caption = html.escape(capture['caption'])
+    return f'''<figure class="pose-frame">
+      <a href="/assets/duo-{pose}-scene.webp" aria-label="Full-size device rendering of {label}">
+        <img src="/assets/duo-{pose}-scene.webp" alt="{alt}" width="1200" height="800" loading="lazy">
+      </a>
+      <figcaption>{caption} <a href="/assets/{pose}-full.webp" aria-label="Original screen for {label}">Original screen</a></figcaption>
+    </figure>'''
 
 
 def build():
@@ -66,7 +88,7 @@ def build():
     asset_directory = OUT / 'assets' / asset_stamp
     shutil.copytree(ROOT / 'assets', asset_directory)
     # Serve the shared and page-specific styles in one cacheable stylesheet.
-    stylesheets = ('site.css', 'forest-home.css', 'forest-guide.css', 'forest-shell.css', 'moss-buttons.css')
+    stylesheets = ('site.css', 'forest-home.css', 'forest-guide.css', 'forest-shell.css', 'moss-buttons.css', 'forest-screens.css')
     style_parts = [(asset_directory / name).read_text() for name in stylesheets]
     (asset_directory / 'site.css').write_text('\n'.join(style_parts))
     for name in stylesheets[1:]:
@@ -97,10 +119,12 @@ def build():
         if home:
             captures = json.loads((ROOT / 'content/screenshots.json').read_text())['captures']
             feature_classes = {'journey': 'puzzle-capture', 'community': 'community-capture',
-                               'nuke': 'blast-frame', 'tabletop': 'pose-frame', 'book': 'pose-frame'}
+                               'nuke': 'blast-frame', 'water': 'hazard-frame', 'cliff': 'hazard-frame'}
             for capture in captures:
                 key = capture['key']
-                if key in feature_classes:
+                if key in ('tabletop', 'book'):
+                    body = body.replace('{{' + key + '}}', duo_pose(capture))
+                elif key in feature_classes:
                     body = body.replace('{{' + key + '}}', screenshot(capture, feature_classes[key], '(max-width: 800px) 90vw, 560px'))
             body = body.replace('{{platform-gallery}}', screenshot_gallery(captures))
         toc = ''
