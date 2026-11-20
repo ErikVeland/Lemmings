@@ -38,37 +38,46 @@
       "version",
       "copyright",
       "sign-in not required",
-      "manual release"
+      "manual release",
+      "marketing URL"
     ],
-    "gameCenter": "No leaderboards configured in the new record",
+    "gameCenter": "The first Lemmix leaderboard and its set exist. Remaining configuration is in progress.",
     "buildsUploaded": false,
     "platformRecordsCreated": [
       "macOS",
       "iOS",
       "tvOS"
     ],
-    "savedFieldsPlatform": "macOS",
+    "savedFieldsPlatform": "macOS, iOS and tvOS",
     "mobileDraftVersion": {
       "requested": "2.4.2",
-      "iOSSavedVerified": false,
-      "tvOSSavedVerified": false,
-      "reason": "Platform records exist. Draft-version saves are unverified because browser text input stopped working."
+      "iOSSavedVerified": true,
+      "tvOSSavedVerified": true
     },
     "unifiedMobilePackagesVerified": true,
-    "unifiedMobileEvidence": "unified-mobile-package-results.json"
+    "unifiedMobileEvidence": "unified-mobile-package-results.json",
+    "price": "Free",
+    "requestedAvailability": "All countries and regions",
+    "availabilitySelected": 175,
+    "mainlandChinaFilingRecordsReceived": false,
+    "ageRating": "13+",
+    "privacyPublicationApproved": true,
+    "privacyResponsesPublished": true,
+    "releaseMethod": "Manual on all three platform drafts"
   },
   "uploadedOrSubmitted": false,
   "website": {
     "canonicalOrigin": "https://lemmings.glasscode.academy",
     "localBuildReady": true,
-    "liveVerified": false,
-    "dnsReady": false,
-    "tlsReady": false,
-    "blocker": "Cloudflare sign-in is pending for DNS and TLS setup."
+    "liveVerified": true,
+    "dnsReady": true,
+    "tlsReady": true,
+    "deployedSourceRevision": "6c1d19d9b2b6048de044fc04d2a6fd2243daebba",
+    "liveEvidence": "WebsiteLiveVerification.json"
   },
   "contact": {
     "email": "erik@veland.au",
     "verifiedSource": "Published GenErik DJ site, verified in the owner task",
-    "savedToAppStoreReviewContactVerified": false
+    "savedToAppStoreReviewContactVerified": true
   }
 }

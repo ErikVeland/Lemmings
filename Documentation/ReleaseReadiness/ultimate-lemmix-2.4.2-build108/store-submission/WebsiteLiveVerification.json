@@ -1,0 +1,336 @@
+{
+  "checkedAt": "2026-11-18T22:32:40.191279+00:00",
+  "origin": "https://lemmings.glasscode.academy",
+  "sourceRevision": "6c1d19d9b2b6048de044fc04d2a6fd2243daebba",
+  "certificateHostnameVerified": true,
+  "routes": [
+    {
+      "route": "/",
+      "status": 200,
+      "bytes": 9663,
+      "sha256": "43816ebd2f0281c3bca4bc870fe08916fa8163749283d58e87951e585454fdbc"
+    },
+    {
+      "route": "/support",
+      "status": 200,
+      "bytes": 7127,
+      "sha256": "2efda9fffb457ad9ec7522704864c05e947f375a8eff45e64a25e386a5ff9b5c"
+    },
+    {
+      "route": "/manual",
+      "status": 200,
+      "bytes": 12066,
+      "sha256": "5fef9928e3b50d52b6a0cd27057dee96d6c39a1c9fed939b99ab07266039b78b"
+    },
+    {
+      "route": "/privacy",
+      "status": 200,
+      "bytes": 12988,
+      "sha256": "25be4e1fedd97772c8a242eb17ac3cda8200ede82a630619ed6a0ad065187577"
+    },
+    {
+      "route": "/privacy/choices",
+      "status": 200,
+      "bytes": 8811,
+      "sha256": "fa3b3e839e0ad0417ec12afc5ffb311c4adcea4021d2ca66c53bb62b902a2a41"
+    },
+    {
+      "route": "/accessibility",
+      "status": 200,
+      "bytes": 6096,
+      "sha256": "b4d07b6ee8b0883d3baf515927e38999ac3b614a67f851a5d262de9bf0f14a9f"
+    },
+    {
+      "route": "/terms",
+      "status": 200,
+      "bytes": 5105,
+      "sha256": "c5ca3e1da51874e5338b0e8d5aeb07f649386a2b41a505f32321be176eadf31a"
+    },
+    {
+      "route": "/release-notes",
+      "status": 200,
+      "bytes": 5604,
+      "sha256": "12bfc9d30bfb0184c531fe45d644ed15ec5344fbee2cc762e3c7ef3146f76c0f"
+    },
+    {
+      "route": "/legal",
+      "status": 200,
+      "bytes": 5397,
+      "sha256": "cb0d963486187779633b28a0b2d4d636706a13aa0842e769e8cde5a71cd22554"
+    },
+    {
+      "route": "/credits",
+      "status": 200,
+      "bytes": 6888,
+      "sha256": "31db9e3ab18cb227335406456fcbd36f4f4ee5246be0a0893077c63508df476c"
+    }
+  ],
+  "files": [
+    {
+      "path": "404/index.html",
+      "internalErrorDocument": true
+    },
+    {
+      "path": "503/index.html",
+      "internalErrorDocument": true
+    },
+    {
+      "path": "accessibility/index.html",
+      "status": 200,
+      "sha256": "b4d07b6ee8b0883d3baf515927e38999ac3b614a67f851a5d262de9bf0f14a9f"
+    },
+    {
+      "path": "assets/cd29237d62d5/Lix-copying.txt",
+      "status": 200,
+      "sha256": "2d086a16ad111d8e1316a9967a9743186b1d728ff6485854a2664002db524a4f"
+    },
+    {
+      "path": "assets/cd29237d62d5/application-notices.txt",
+      "status": 200,
+      "sha256": "eca389a7cbc95f3dcb65b3a2e39bc1615f1a769299a8d3876cc4bbe6667b0253"
+    },
+    {
+      "path": "assets/cd29237d62d5/archivo-OFL.txt",
+      "status": 200,
+      "sha256": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b"
+    },
+    {
+      "path": "assets/cd29237d62d5/archivo-latin.woff2",
+      "status": 200,
+      "sha256": "f24b97180ad5585ec319bec00dd6af82114a131cc76f12d3fb470b455148663e"
+    },
+    {
+      "path": "assets/cd29237d62d5/favicon.png",
+      "status": 200,
+      "sha256": "02b7e9bd5e4e9fff6d834a3964d4dc200e13003eb22558995e729b103f51323d"
+    },
+    {
+      "path": "assets/cd29237d62d5/home-1600.jpg",
+      "status": 200,
+      "sha256": "bf689bf13e3f6058a7dfbae71cca7bb7a3226cf49a1f65a39be5163df5e35a05"
+    },
+    {
+      "path": "assets/cd29237d62d5/home-1600.webp",
+      "status": 200,
+      "sha256": "29229e558a7007b6a4df6e1d0b2149c1c4f3a2e84aa09e489f361b7288ce751c"
+    },
+    {
+      "path": "assets/cd29237d62d5/home-800.jpg",
+      "status": 200,
+      "sha256": "45e11b82bb99a59f3eb86c0e053127d19e147c75b1f4e11b96161bf90131916a"
+    },
+    {
+      "path": "assets/cd29237d62d5/home-800.webp",
+      "status": 200,
+      "sha256": "948a848a2a661e28833c53b3df5ed08a097d96eb569f83f2730a5202c86b2f66"
+    },
+    {
+      "path": "assets/cd29237d62d5/logo-480.webp",
+      "status": 200,
+      "sha256": "08a0c866b1c8e51513a725682ba138d5c1075c18602a3fbff556e57d299bdfdd"
+    },
+    {
+      "path": "assets/cd29237d62d5/logo-960.webp",
+      "status": 200,
+      "sha256": "dc52539e5518cc1e5469f8bc98b68165026419e2d22f6c5ad4341ae334a4f833"
+    },
+    {
+      "path": "assets/cd29237d62d5/logo.png",
+      "status": 200,
+      "sha256": "ccc23dc09af112019fd0f9b914c4678a967fc127914c8c5cf25ce38e551f8754"
+    },
+    {
+      "path": "assets/cd29237d62d5/phone-402.jpg",
+      "status": 200,
+      "sha256": "42e71376197cbcc0169e064bff3f48c17a53e603573601ae4b24cfb471e83c0f"
+    },
+    {
+      "path": "assets/cd29237d62d5/phone-402.webp",
+      "status": 200,
+      "sha256": "892b5c21000209ac64805cf4f4afaff8557c353d7024ce07bb34a0fcfbb974f4"
+    },
+    {
+      "path": "assets/cd29237d62d5/phone-804.jpg",
+      "status": 200,
+      "sha256": "3af3ed8535db9c4bb1add9ad3b6c14b5583a78e83028f42f26bddf074198730a"
+    },
+    {
+      "path": "assets/cd29237d62d5/phone-804.webp",
+      "status": 200,
+      "sha256": "cb48a4c586112d54b4d52bfb4ea60e367d77152ec5a1a26244202990f4ba18e0"
+    },
+    {
+      "path": "assets/cd29237d62d5/site.058de633e529.js",
+      "status": 200,
+      "sha256": "058de633e529710ba89ff85fea59fab272f6eda3b1cd8c3ae91697bc51eb8237"
+    },
+    {
+      "path": "assets/cd29237d62d5/site.7db6b1da82fe.css",
+      "status": 200,
+      "sha256": "7db6b1da82fee6946c8f9227803c4032c1bca7db1ae4e91d4d8c8bed7205f90d"
+    },
+    {
+      "path": "assets/cd29237d62d5/social.jpg",
+      "status": 200,
+      "sha256": "2702c5f36e8bbd80d17051b0d97903a3a3ea5ce900da0507ca09f54e52d3aaa3"
+    },
+    {
+      "path": "assets/cd29237d62d5/starter-1600.jpg",
+      "status": 200,
+      "sha256": "6114fe161ead19dd55c134d144c60efb8f8306e1234d5ee60305e3aad5a5f926"
+    },
+    {
+      "path": "assets/cd29237d62d5/starter-1600.webp",
+      "status": 200,
+      "sha256": "f6a0ce6ba44c7c569d5eb24e3321bee1f90615726b5b2b0e26b32484ab8cdae5"
+    },
+    {
+      "path": "assets/cd29237d62d5/starter-2560.jpg",
+      "status": 200,
+      "sha256": "e0352157eb52c3d31c43519ab2b64b8004fc6ba8ff81c94895db17e788c63c69"
+    },
+    {
+      "path": "assets/cd29237d62d5/starter-2560.webp",
+      "status": 200,
+      "sha256": "e341d9d8bf3cdbd4ce8933cbdc809d540296e0c8872836aad34c57c337f5158f"
+    },
+    {
+      "path": "assets/cd29237d62d5/starter-800.jpg",
+      "status": 200,
+      "sha256": "16823b5fe6d7f83d310c5bda5f7f4618736351bcbc44962175fe5f0fc0c82f5f"
+    },
+    {
+      "path": "assets/cd29237d62d5/starter-800.webp",
+      "status": 200,
+      "sha256": "d2c565ad7c6b9ad5627c9cf5539841ea5568c6728d8ac818b44d58dc0975eb65"
+    },
+    {
+      "path": "assets/cd29237d62d5/tv-1920.jpg",
+      "status": 200,
+      "sha256": "88c3950371a8c60bebafc73a5c0a9fca5cb7db141097658f6ca3c351fa002aab"
+    },
+    {
+      "path": "assets/cd29237d62d5/tv-1920.webp",
+      "status": 200,
+      "sha256": "0df68e81a8ef9f580bce23587f2739f9999f97d8738230e396170926c0bbc156"
+    },
+    {
+      "path": "assets/cd29237d62d5/tv-960.jpg",
+      "status": 200,
+      "sha256": "2ae030342b24f4f67ca45132a7796bd9f0e306fa7bab944be42fb94ab7784ce5"
+    },
+    {
+      "path": "assets/cd29237d62d5/tv-960.webp",
+      "status": 200,
+      "sha256": "5690db098124fb091c4fc92c933a57680da491758cb3ea254bef148afface39b"
+    },
+    {
+      "path": "assets/cd29237d62d5/walk-strip.png",
+      "status": 200,
+      "sha256": "6de19756aca635c419233c2859f353f2209abb70b0ad4571f69cfaf899337258"
+    },
+    {
+      "path": "assets/cd29237d62d5/walker.png",
+      "status": 200,
+      "sha256": "22989ec64165f315bed471defb3c184bbd6c6fb3b34a7a06f9d2b0f1248f01c3"
+    },
+    {
+      "path": "build.json",
+      "status": 200,
+      "sha256": "d2ed891b65236b57f1ea37e637638ad980e6190f516556d7d940aa5d5577f04d"
+    },
+    {
+      "path": "credits/index.html",
+      "status": 200,
+      "sha256": "31db9e3ab18cb227335406456fcbd36f4f4ee5246be0a0893077c63508df476c"
+    },
+    {
+      "path": "index.html",
+      "status": 200,
+      "sha256": "43816ebd2f0281c3bca4bc870fe08916fa8163749283d58e87951e585454fdbc"
+    },
+    {
+      "path": "legal/index.html",
+      "status": 200,
+      "sha256": "cb0d963486187779633b28a0b2d4d636706a13aa0842e769e8cde5a71cd22554"
+    },
+    {
+      "path": "manual/index.html",
+      "status": 200,
+      "sha256": "5fef9928e3b50d52b6a0cd27057dee96d6c39a1c9fed939b99ab07266039b78b"
+    },
+    {
+      "path": "privacy/choices/index.html",
+      "status": 200,
+      "sha256": "fa3b3e839e0ad0417ec12afc5ffb311c4adcea4021d2ca66c53bb62b902a2a41"
+    },
+    {
+      "path": "privacy/index.html",
+      "status": 200,
+      "sha256": "25be4e1fedd97772c8a242eb17ac3cda8200ede82a630619ed6a0ad065187577"
+    },
+    {
+      "path": "release-notes/index.html",
+      "status": 200,
+      "sha256": "12bfc9d30bfb0184c531fe45d644ed15ec5344fbee2cc762e3c7ef3146f76c0f"
+    },
+    {
+      "path": "robots.txt",
+      "status": 200,
+      "sha256": "329a1dcb1436b7324b75db0e78532698fd3775775bd24ba86f2b9b922175377d"
+    },
+    {
+      "path": "sitemap.xml",
+      "status": 200,
+      "sha256": "bd68736788ce27937c4aa52f767534b2cf1f233fda84487ded44c429e739da98"
+    },
+    {
+      "path": "support/index.html",
+      "status": 200,
+      "sha256": "2efda9fffb457ad9ec7522704864c05e947f375a8eff45e64a25e386a5ff9b5c"
+    },
+    {
+      "path": "terms/index.html",
+      "status": 200,
+      "sha256": "c5ca3e1da51874e5338b0e8d5aeb07f649386a2b41a505f32321be176eadf31a"
+    }
+  ],
+  "unknownPath": {
+    "status": 404,
+    "designedPage": true,
+    "sha256": "ee98427527936bf61fc1c9542eac1d241ee77903117833b38087c99f0e4b9706",
+    "exactErrorDocument": true
+  },
+  "redirects": [
+    {
+      "url": "http://lemmings.glasscode.academy/",
+      "status": 308,
+      "location": "https://lemmings.glasscode.academy/"
+    },
+    {
+      "url": "https://lemmings.glasscode.academy/support/",
+      "status": 308,
+      "location": "https://lemmings.glasscode.academy/support"
+    },
+    {
+      "url": "https://lemmings.glasscode.academy/support/index.html",
+      "status": 308,
+      "location": "https://lemmings.glasscode.academy/support"
+    },
+    {
+      "url": "https://lemmings.glasscode.academy/index.html",
+      "status": 308,
+      "location": "https://lemmings.glasscode.academy/"
+    }
+  ],
+  "browserChecks": {
+    "galleryPointerSelection": true,
+    "galleryKeyboardActivation": true,
+    "tabNavigationBetweenButtons": true,
+    "skipLinkFocusesMain": true,
+    "consoleWarningsOrErrors": 0,
+    "horizontalOverflow": false,
+    "visibleViewportImagesLoaded": true,
+    "scope": "Current Chromium in-app browser. Offscreen lazy images are not counted as broken. Earlier local responsive and Lighthouse evidence remains separate."
+  }
+}

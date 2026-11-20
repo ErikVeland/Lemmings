@@ -1,0 +1,554 @@
+{
+  "candidate": "Ultimate Lemmix 2.4.2 (108)",
+  "frozenCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+  "mainBundleIdentifier": "academy.glasscode.ultimatelemmix",
+  "status": "store-exports-verified-and-mobile-handoff-refreshed",
+  "exportAttempted": true,
+  "authenticationState": "User unlocked the Mac and signed into Xcode. Both local Store exports then passed verification.",
+  "uploaded": false,
+  "renderEquivalence": {
+    "bytes": 9600,
+    "sha256": "9483b3013bdaaaaafdebf56fced501c71cb8b4e99973f47c057241116ee28a78"
+  },
+  "history": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/Superseded/mobile-before-render-refactor-20261119-011923",
+  "resumeScript": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/resume-mobile-store-exports.sh",
+  "platforms": {
+    "ios": {
+      "archiveReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-archive-receipt.json",
+      "archiveReceiptSHA256": "6a34dac7fd7c957f73d4517f511150715fb97138200c65733556e56fb0502dc9",
+      "sourceFingerprint": "591aabf1c1ae27aff8960c9092c63e98eb4199529d6fe7b3830238cbf80d3f7e",
+      "sourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+      "sharedSourcesUnchanged": true,
+      "publicationMetadataUnchanged": true,
+      "compilerExitCode": 0,
+      "preparedArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-iOS-Store.xcarchive",
+      "preparationReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-iOS-Store.preparation.json",
+      "preparationReceiptSHA256": "5383d2e751e3c000e72203efbb3750e10119599183be60dcfde145e9fa73e7cc",
+      "entitlementsPreserved": true,
+      "resources": [
+        {
+          "bundle": ".",
+          "resourceCount": 2298
+        },
+        {
+          "bundle": "PlugIns/DeskClockWidget.appex",
+          "resourceCount": 1633
+        }
+      ],
+      "bundles": [
+        {
+          "bundleID": "academy.glasscode.ultimatelemmix",
+          "build": "108",
+          "version": "2.4.2",
+          "executableSHA256": "1011ae386d38a1bcd429b5c5abcb7cd6bb9d84d4a9956a4f393cca6d462f9432"
+        },
+        {
+          "bundleID": "academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+          "build": "108",
+          "version": "2.4.2",
+          "executableSHA256": "4fbd37dca7d1a06513117f6c40fc27810c12c6fafb4eb6ba945c08ba99223049"
+        }
+      ],
+      "exportCommand": [
+        "python3",
+        "Tools/Publication/mobile_store.py",
+        "export",
+        "--platform",
+        "ios",
+        "--resources",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-resources-submission",
+        "--archive",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-iOS-Store.xcarchive",
+        "--output",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-store-export",
+        "--temporary",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/temporary"
+      ],
+      "cachedProfilesOnly": true,
+      "export": {
+        "platform": "ios",
+        "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/ios-store-export/UltimateLemmixIOS.ipa",
+        "sha256": "ed7d6d3afd733ed1c9d71301270b75101ed5722779e4054629e1e52e383d2b1f",
+        "bytes": 50180093,
+        "checkedUTC": "2026-11-18T22:31:59.693805+00:00",
+        "bundles": [
+          {
+            "bundleID": "academy.glasscode.ultimatelemmix",
+            "version": "2.4.2",
+            "build": "108",
+            "authorities": [
+              "Apple Distribution: Erik Veland (54WU29TRTY)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ],
+            "entitlements": {
+              "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix",
+              "beta-reports-active": true,
+              "com.apple.developer.game-center": true,
+              "com.apple.developer.icloud-container-environment": "Production",
+              "com.apple.developer.icloud-container-identifiers": [
+                "iCloud.academy.glasscode.lemmings"
+              ],
+              "com.apple.developer.icloud-services": [
+                "CloudDocuments",
+                "CloudKit"
+              ],
+              "com.apple.developer.team-identifier": "54WU29TRTY",
+              "com.apple.developer.ubiquity-container-identifiers": [
+                "iCloud.academy.glasscode.lemmings"
+              ],
+              "com.apple.security.application-groups": [
+                "group.academy.glasscode.lemmings"
+              ],
+              "get-task-allow": false
+            },
+            "profileUUID": "34405246-06a5-4ba2-8854-6e50f3cb7024",
+            "profileName": "iOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix",
+            "profileExpires": "2027-10-10T13:17:05",
+            "privacyManifest": {
+              "NSPrivacyAccessedAPITypes": [
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "CA92.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "35F9.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "C617.1",
+                    "3B52.1"
+                  ]
+                }
+              ],
+              "NSPrivacyCollectedDataTypes": [
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeDeviceID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeGameplayContent",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeProductInteraction",
+                  "NSPrivacyCollectedDataTypeLinked": false,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAnalytics"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                }
+              ],
+              "NSPrivacyTracking": false,
+              "NSPrivacyTrackingDomains": []
+            }
+          },
+          {
+            "bundleID": "academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+            "version": "2.4.2",
+            "build": "108",
+            "authorities": [
+              "Apple Distribution: Erik Veland (54WU29TRTY)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ],
+            "entitlements": {
+              "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+              "beta-reports-active": true,
+              "com.apple.developer.team-identifier": "54WU29TRTY",
+              "com.apple.security.application-groups": [
+                "group.academy.glasscode.lemmings"
+              ],
+              "get-task-allow": false
+            },
+            "profileUUID": "88486ca9-eaee-458b-8bfa-e2577f3914e6",
+            "profileName": "iOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix.ios.DeskClockWidget",
+            "profileExpires": "2027-10-10T13:17:05",
+            "privacyManifest": {
+              "NSPrivacyAccessedAPITypes": [
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "CA92.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "35F9.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "C617.1",
+                    "3B52.1"
+                  ]
+                }
+              ],
+              "NSPrivacyCollectedDataTypes": [
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeDeviceID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeGameplayContent",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeProductInteraction",
+                  "NSPrivacyCollectedDataTypeLinked": false,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAnalytics"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                }
+              ],
+              "NSPrivacyTracking": false,
+              "NSPrivacyTrackingDomains": []
+            }
+          }
+        ],
+        "resources": [
+          {
+            "bundle": ".",
+            "resourceCount": 2298
+          },
+          {
+            "bundle": "PlugIns/DeskClockWidget.appex",
+            "resourceCount": 1633
+          }
+        ],
+        "resourceSignatures": [
+          {
+            "path": "LemmingsNativePort_NxlvKit.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "LemmingsNativePort_NxlvKit.bundle/Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "PlugIns/DeskClockWidget.appex/LemmingsNativePort_NxlvKit.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "PlugIns/DeskClockWidget.appex/LemmingsNativePort_NxlvKit.bundle/Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          }
+        ],
+        "appStoreInfoProductErrors": [],
+        "helperSHA256": "78e94af8a97a05be997e25e8f103c58457bd7049434c270ae0f06a8cdd539e65",
+        "allChecksPassed": true
+      },
+      "handoff": {
+        "platform": "ios",
+        "path": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff/iOS/Ultimate Lemmix 2.4.2 (108).ipa",
+        "sha256": "ed7d6d3afd733ed1c9d71301270b75101ed5722779e4054629e1e52e383d2b1f",
+        "bytes": 50180093
+      }
+    },
+    "tvos": {
+      "archiveReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-archive-receipt.json",
+      "archiveReceiptSHA256": "88d63df3611b36feac27fa62cd9c14239e312cd801b8ec3a4827814d260809bb",
+      "sourceFingerprint": "591aabf1c1ae27aff8960c9092c63e98eb4199529d6fe7b3830238cbf80d3f7e",
+      "sourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+      "sharedSourcesUnchanged": true,
+      "publicationMetadataUnchanged": true,
+      "compilerExitCode": 0,
+      "preparedArchive": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-tvOS-Store.xcarchive",
+      "preparationReceipt": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-tvOS-Store.preparation.json",
+      "preparationReceiptSHA256": "55de19d18e5429d74acc666c2eeab8eaccbf44d0765d0f7f65d60483019ec080",
+      "entitlementsPreserved": true,
+      "resources": [
+        {
+          "bundle": ".",
+          "resourceCount": 2298
+        },
+        {
+          "bundle": "PlugIns/TopShelf.appex",
+          "resourceCount": 0
+        }
+      ],
+      "bundles": [
+        {
+          "bundleID": "academy.glasscode.ultimatelemmix",
+          "build": "108",
+          "version": "2.4.2",
+          "executableSHA256": "788b17127df2cea34d5424af05ed17ebe4f6012297bb5a91bd54dcc743a0b4ca"
+        },
+        {
+          "bundleID": "academy.glasscode.ultimatelemmix.tvos.TopShelf",
+          "build": "108",
+          "version": "2.4.2",
+          "executableSHA256": "dc4d2992d6809d500ae2c0432f06ed9fcfa28e87eb63b4811df4baad183390e3"
+        }
+      ],
+      "exportCommand": [
+        "python3",
+        "Tools/Publication/mobile_store.py",
+        "export",
+        "--platform",
+        "tvos",
+        "--resources",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-resources-submission",
+        "--archive",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/UltimateLemmix-tvOS-Store.xcarchive",
+        "--output",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-store-export",
+        "--temporary",
+        "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/temporary"
+      ],
+      "cachedProfilesOnly": true,
+      "export": {
+        "platform": "tvos",
+        "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/tvos-store-export/UltimateLemmixTVOS.ipa",
+        "sha256": "bfa391e196aa71b4bef0290cc73f6d0995aaaa79479d74c217ba01c5564799d2",
+        "bytes": 34356381,
+        "checkedUTC": "2026-11-18T22:32:33.375121+00:00",
+        "bundles": [
+          {
+            "bundleID": "academy.glasscode.ultimatelemmix",
+            "version": "2.4.2",
+            "build": "108",
+            "authorities": [
+              "Apple Distribution: Erik Veland (54WU29TRTY)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ],
+            "entitlements": {
+              "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix",
+              "aps-environment": "production",
+              "beta-reports-active": true,
+              "com.apple.developer.game-center": true,
+              "com.apple.developer.icloud-container-environment": "Production",
+              "com.apple.developer.icloud-container-identifiers": [
+                "iCloud.academy.glasscode.lemmings"
+              ],
+              "com.apple.developer.icloud-services": [
+                "CloudKit"
+              ],
+              "com.apple.developer.team-identifier": "54WU29TRTY",
+              "com.apple.security.application-groups": [
+                "group.academy.glasscode.lemmings"
+              ],
+              "get-task-allow": false
+            },
+            "profileUUID": "5e0e618d-44a2-4abb-a01a-1145038dec7f",
+            "profileName": "tvOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix",
+            "profileExpires": "2027-10-10T13:17:05",
+            "privacyManifest": {
+              "NSPrivacyAccessedAPITypes": [
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "CA92.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "35F9.1"
+                  ]
+                },
+                {
+                  "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
+                  "NSPrivacyAccessedAPITypeReasons": [
+                    "C617.1",
+                    "3B52.1"
+                  ]
+                }
+              ],
+              "NSPrivacyCollectedDataTypes": [
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeUserID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeDeviceID",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeGameplayContent",
+                  "NSPrivacyCollectedDataTypeLinked": true,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                },
+                {
+                  "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeProductInteraction",
+                  "NSPrivacyCollectedDataTypeLinked": false,
+                  "NSPrivacyCollectedDataTypePurposes": [
+                    "NSPrivacyCollectedDataTypePurposeAnalytics"
+                  ],
+                  "NSPrivacyCollectedDataTypeTracking": false
+                }
+              ],
+              "NSPrivacyTracking": false,
+              "NSPrivacyTrackingDomains": []
+            }
+          },
+          {
+            "bundleID": "academy.glasscode.ultimatelemmix.tvos.TopShelf",
+            "version": "2.4.2",
+            "build": "108",
+            "authorities": [
+              "Apple Distribution: Erik Veland (54WU29TRTY)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ],
+            "entitlements": {
+              "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix.tvos.TopShelf",
+              "beta-reports-active": true,
+              "com.apple.developer.team-identifier": "54WU29TRTY",
+              "com.apple.security.application-groups": [
+                "group.academy.glasscode.lemmings"
+              ],
+              "get-task-allow": false
+            },
+            "profileUUID": "06732da4-990a-411d-b2d8-dfb5822afe19",
+            "profileName": "tvOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix.tvos.TopShelf",
+            "profileExpires": "2027-10-10T13:17:05",
+            "privacyManifest": null
+          }
+        ],
+        "resources": [
+          {
+            "bundle": ".",
+            "resourceCount": 2298
+          },
+          {
+            "bundle": "PlugIns/TopShelf.appex",
+            "resourceCount": 0
+          }
+        ],
+        "resourceSignatures": [
+          {
+            "path": "LemmingsNativePort_NxlvKit.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "LemmingsNativePort_NxlvKit.bundle/Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          },
+          {
+            "path": "Localization.bundle",
+            "authorities": [
+              "Apple Development: Erik Veland (T93G24W53E)",
+              "Apple Worldwide Developer Relations Certification Authority",
+              "Apple Root CA"
+            ]
+          }
+        ],
+        "appStoreInfoProductErrors": [],
+        "helperSHA256": "78e94af8a97a05be997e25e8f103c58457bd7049434c270ae0f06a8cdd539e65",
+        "allChecksPassed": true
+      },
+      "handoff": {
+        "platform": "tvos",
+        "path": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff/Apple TV/Ultimate Lemmix 2.4.2 (108).ipa",
+        "sha256": "bfa391e196aa71b4bef0290cc73f6d0995aaaa79479d74c217ba01c5564799d2",
+        "bytes": 34356381
+      }
+    }
+  },
+  "tests": "Skipped: presentation-only refactor; no engine changes.",
+  "accountOrKeychainMutations": false,
+  "priorHandoffIPAsUnchanged": false,
+  "handoffRefreshedAt": "2026-11-19T08:33:56.128321+10:00",
+  "handoffHistory": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/Superseded/mobile-handoff-before-refresh-20261119-083355",
+  "priorHandoffIPAsPreserved": true,
+  "currentHandoffIPAs": [
+    {
+      "platform": "ios",
+      "path": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff/iOS/Ultimate Lemmix 2.4.2 (108).ipa",
+      "sha256": "ed7d6d3afd733ed1c9d71301270b75101ed5722779e4054629e1e52e383d2b1f",
+      "bytes": 50180093
+    },
+    {
+      "platform": "tvos",
+      "path": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff/Apple TV/Ultimate Lemmix 2.4.2 (108).ipa",
+      "sha256": "bfa391e196aa71b4bef0290cc73f6d0995aaaa79479d74c217ba01c5564799d2",
+      "bytes": 34356381
+    }
+  ]
+}

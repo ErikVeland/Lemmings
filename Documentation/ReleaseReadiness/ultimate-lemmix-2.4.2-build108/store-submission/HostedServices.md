@@ -5,8 +5,8 @@
 > It is not the current gate list. Use the [current handoff](README.md),
 > [unified mobile identity evidence](UnifiedListingMobile.md) and
 > [website release record](WebsiteRelease.md) for current status.
-> All main apps now use one listing. The website is built locally, with DNS
-> and TLS pending. Earlier missing-signing or separate-ID findings are retained
+> All main apps now use one listing. The website is live with valid HTTPS.
+> Earlier missing-signing or separate-ID findings are retained
 > as history, not current package blockers.
 
 Checked 18 November 2026 at approximately 12:42 UTC. Requests used HTTPS GET,

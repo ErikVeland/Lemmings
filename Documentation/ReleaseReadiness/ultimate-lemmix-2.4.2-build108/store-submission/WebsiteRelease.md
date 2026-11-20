@@ -1,11 +1,12 @@
 # Lemmix website release record
 
-Checked 19 November 2026. The website is complete locally. Public deployment
-remains blocked by DNS access. Do not treat this record as a live-site receipt.
+Checked 19 November 2026. The website is live at
+https://lemmings.glasscode.academy with valid HTTPS. The deployed source is
+`6c1d19d9b2b6048de044fc04d2a6fd2243daebba`.
 
 ## Public destinations
 
-| App Store field | Intended URL |
+| App Store field | Verified public URL |
 | --- | --- |
 | Marketing | https://lemmings.glasscode.academy/ |
 | Support | https://lemmings.glasscode.academy/support |
@@ -69,29 +70,30 @@ now uses a darker text colour. The final audits include both corrections.
 
 Browser evidence is in the local ignored `Website/verification` directory.
 The route and build checks can be reproduced with Python's standard library.
-The final interactive browser pass is incomplete: input stopped taking effect
-in both the local preview and App Store Connect. Do not count those attempts as
-passed keyboard, gallery or Store-save checks. Earlier gallery selection worked,
-but it does not replace the final interaction pass.
+The live browser pass verified pointer and keyboard gallery selection, Tab
+navigation and the skip link. The skip link focuses the main content. The live
+page has no horizontal overflow or captured console warnings or errors.
 
 Safari, Firefox, assistive-technology, high-zoom and physical-device acceptance
 remain unverified. No native game tests or audible checks ran for this website.
 
-## Publication gate
+## Published release
 
-The requested hostname returns no A record. Cloudflare manages the zone.
-The owner sign-in handoff remains pending. The prepared DNS record is:
+Cloudflare now serves the DNS-only A record `lemmings` → `194.195.248.217`.
+The certificate covers the public hostname and expires on 16 February 2027.
+The existing Certbot timer is active. A certificate-specific renewal dry run
+passed and ran the host's existing Nginx reload hook. No duplicate hook remains.
 
-| Type | Name | Value | Mode |
-| --- | --- | --- | --- |
-| A | lemmings | 194.195.248.217 | DNS only |
+The immutable release is `/var/www/lemmings/releases/6c1d19d9b2b6048de044fc04d2a6fd2243daebba`.
+The current link selects that release. The previous configuration and deployment
+receipt remain available for recovery. Other Glasscode sites are unchanged.
 
-No AAAA record is required for this deployment. The server has a dedicated
-ACME bootstrap configuration, with no active site release. Publication requires
-DNS resolution, a valid certificate and a committed source revision.
+[Live verification](WebsiteLiveVerification.json) records ten HTTPS routes,
+deployed file hashes, canonical metadata, redirects and the designed 404 page.
+HTTP redirects to HTTPS. Directory and index aliases redirect to clean routes.
+The server returns Content Security Policy and Strict Transport Security headers.
 
-After publication, verify all public routes, HTTPS, redirects, canonical
-metadata, social assets and the unknown-page response through the public host.
-Then save the verified URLs in App Store Connect. Keep the previous release
-available for rollback. Do not mark the app ready merely because its website
-is online.
+The Handoff website folder retains the publication log, renewal dry-run log,
+DNS screenshot and live home capture. Mac support and marketing URLs are saved
+in App Store Connect. Remaining Store URL fields still need verified saves.
+Website publication does not complete the app submission gates.

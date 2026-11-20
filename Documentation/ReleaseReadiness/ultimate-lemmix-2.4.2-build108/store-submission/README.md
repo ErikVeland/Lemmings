@@ -2,25 +2,35 @@
 
 Checked 19 November 2026. Version 2.4.2, build 108 on Mac, iOS and tvOS.
 
-All three local Store packages are signed and pass Apple's local package
-analysis. No build has been uploaded, processed by App Store Connect, submitted
-for review or published.
+All three refreshed Store packages are signed and passed Apple's local package
+analysis with zero product errors. The final exports completed after the owner
+restored Xcode credential access.
+No build has been uploaded, processed by App Store Connect, submitted for review
+or published. These are preparation artifacts, not a completed submission.
 
 ## Packages
 
-| Platform | Final package | Verification |
+| Platform | Current Handoff package | Verification |
 | --- | --- | --- |
-| Mac, Apple silicon and Intel | `20261118/mac/Export/Ultimate Lemmix.pkg` | [Mac receipt](mac-store-package.json) |
-| iPhone and iPad | `20261119/ios-store-export/UltimateLemmixIOS.ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
-| Apple TV | `20261119/tvos-store-export/UltimateLemmixTVOS.ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
+| Mac, Apple silicon and Intel | `Mac/Ultimate Lemmix 2.4.2 (108).pkg` | [Mac receipt](mac-store-package.json) |
+| iPhone and iPad | `iOS/Ultimate Lemmix 2.4.2 (108).ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
+| Apple TV | `Apple TV/Ultimate Lemmix 2.4.2 (108).ipa` | [Unified mobile receipt](unified-mobile-package-results.json) |
 
-The date prefixes select `/Volumes/Games/CodexBuilds/UltimateLemmix-Store-DATE`.
-The Mac package is unchanged. Both new mobile packages use the shared main ID
+Paths start at `/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff`.
+All three refreshed packages replaced the earlier exports after exact verification.
+Both mobile packages use the shared main ID
 `academy.glasscode.ultimatelemmix`, with their distinct extensions retained.
 The separate-ID mobile packages are superseded and remain outside the handoff
 in the dated build archive.
-The `Handoff` folder contains copies of the final packages, checksums and review
-material. A Downloads shortcut points to that folder.
+The `Handoff` folder contains the signed packages, checksums and review material.
+A Downloads shortcut points to that folder.
+
+Fresh archives use source `1ac19c638e3f62dd48f7d4dedf17b285b961b079`.
+Their development signatures, resources and entitlements passed local checks.
+See [Mac archive refresh](MacSourceRefresh.md) and
+[mobile archive refresh](MobileRenderRefresh.md).
+Exports and exact package verification passed for all three archives.
+Earlier exports remain in the dated build archive under `Superseded`.
 
 The Mac package contains both architectures, all six shared libraries and Desk
 Clock widget. iOS retains its Desk Clock widget; TV retains Top Shelf. Every
@@ -64,7 +74,7 @@ Sparkle feed or separate notarisation step for these App Store packages.
 ## Restoration bundle
 
 The separate transport file is
-`restoration/Ultimate-Lemmix-Restoration-20261118.zip`.
+`Restoration/Ultimate-Lemmix-Restoration-20261118.zip`.
 It contains 23,591 resources, including the local levels, artwork, original
 font and 495 music variants. Native import and a separate-process reopen passed.
 Every archive member's size, checksum and CRC passed. See the
@@ -83,33 +93,29 @@ been uploaded to archive.org or another host.
 
 ## Remaining submission work
 
-App Store Connect sign-in is verified. The owner selected one listing for
-Mac, iOS and tvOS: Apple ID `6836347807`, main bundle ID
-`academy.glasscode.ultimatelemmix`. All three platform records exist. Mac version
-2.4.2 listing text, Games/Puzzle category and content rights are saved. Release
-is manual. The iOS and tvOS draft-version saves are not verified because browser
-controls stopped responding. Do not treat their requested version 2.4.2 as saved.
-The new record has no Game Center leaderboards configured yet.
+App Store Connect has one Ultimate Lemmix listing. Apple ID `6836347807`
+and bundle ID `academy.glasscode.ultimatelemmix` apply to all three platforms.
+Mac, iOS and tvOS each have a saved 2.4.2 draft with manual release.
+The review contact, review notes, marketing and support URLs are saved.
+The price is free. All 175 regions are selected, subject to Apple’s eligibility
+and compliance checks. App Store Connect shows a 13+ rating.
 
-The website is built locally for `https://lemmings.glasscode.academy`.
-Cloudflare sign-in, DNS and TLS setup remain pending. The site and its privacy
-URL are not verified live. The contact address `erik@veland.au` is verified from
-the published GenErik DJ site. Saving that address to App Review fields remains
-separate from verifying the address itself.
+Apple confirmed publication of the four App Privacy responses. The privacy and
+privacy choices URLs and the Apple TV privacy text are saved. The live website
+passed checks on all ten public routes, redirects, deployed hashes and the 404
+response.
 
-Complete these account and publication items before submitting:
+[Mac refresh evidence](MacGameCenterNamespace.md) and
+[mobile refresh evidence](MobileGameCenterRefresh.md) cover the re-signed
+packages. They use independent Lemmix Game Center identifiers. Apple accepted
+the first Lemmix leaderboard and set. The remaining boards, Apple review of
+the components and signed service acceptance are open.
 
-1. Verify and save version 2.4.2 for iOS and tvOS. Complete age rating,
-   price/availability and the review contact, including its telephone number.
-2. Configure the required Game Center leaderboards for the shared listing.
-3. Complete DNS and TLS setup. Publish the approved website and privacy notice,
-   then verify their public URLs before saving them in App Store Connect.
-4. Confirm deployed retention and provider logging against the privacy notice
-   and App Store privacy responses. Complete the encryption determination.
-5. Review the [listing draft](StoreListing.en-AU.json), screenshots and
-   [App Review notes](AppReviewNotes.md).
-6. Upload the signed packages. Require successful Apple processing before
-   selecting each platform build for review.
+Upload the Mac package and screenshots first, then prepare iOS and tvOS in
+that order. Verify Apple's processing and select each build. Complete the
+export compliance determination if Apple prompts for it. The owner confirmed
+that mainland China filing records exist. Obtain the records, then complete
+the applicable App Compliance fields. Keep the restoration publication separate.
 
 [Hosted service evidence](HostedServices.md) confirms public endpoints respond.
 It does not establish signed cross-device save recovery, Game Center board

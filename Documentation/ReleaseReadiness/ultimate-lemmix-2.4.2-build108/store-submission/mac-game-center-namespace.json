@@ -1,0 +1,42 @@
+{
+  "resourceSourceCommit": "043a43dca9b701c76891d2f81d078ed2df4d6d1d",
+  "compiledSourceCommit": "1ac19c638e3f62dd48f7d4dedf17b285b961b079",
+  "resourceOnly": true,
+  "swiftCompilerInvoked": false,
+  "engineChanged": false,
+  "resourceDelta": [
+    "GameCenter/app-store-connect-boards.json",
+    "GameCenter/leaderboards.json",
+    "ultimate-lemmix-data-inventory.json"
+  ],
+  "allOtherResourceHashesUnchanged": true,
+  "unsignedExecutableHashesUnchanged": {
+    "Contents/MacOS/UltimateLemmix": "14b246329fee2e0ecfdd9f2b78b4bb0d5bc4714943d716656fd181cf4e78e162",
+    "Contents/Frameworks/libNxlvKit.dylib": "d8e7d14f168c27c2c84036096cc33763d92f517673f675ef4ac6f3d223b6ad91",
+    "Contents/Frameworks/libLemmingsMobileCore.dylib": "97ad750049d47502ad55c036828995b98e53af18d53ba0b5e02ea84e36f9affc",
+    "Contents/Frameworks/libLemmingsGameArt.dylib": "e07d0c51848e89925f0e41fcbe9c611568334d74e3c34093633bc19bc02c44f2",
+    "Contents/Frameworks/libLemmingsAudio.dylib": "574770d5a43b7664347fec85cba89b8ec66a8c542fe48b3137ba1880d6c0beeb",
+    "Contents/Frameworks/libLemmingsAppCore.dylib": "e45cefb992bb29de478e3b27ec1075680f4d65cb8de0caaf329ccd6cbf900553",
+    "Contents/Frameworks/libLemmingsTVCore.dylib": "a8f2808996b7008ca1d64af6afd437b0e1eb3ca98165fa6a64d7981c0208371f",
+    "Contents/PlugIns/DeskClockMacWidget.appex/Contents/MacOS/DeskClockMacWidget": "0f75dcbaa3ab6b33c48d031fc62fcea1c4e041433b8b4cd8208c6c11a5eeb091"
+  },
+  "runtimePrefix": "ulx.v1.",
+  "boardCount": 359,
+  "setCount": 4,
+  "rankedConditionCount": 178,
+  "exportedNamespaceVerified": true,
+  "exportedFileBackedSectionsUnchanged": true,
+  "exportedFileBackedSectionCount": 549,
+  "exportedCodeComparison": "All file-backed Mach-O code/data sections match. Whole unsigned files differ after Apple export outside those sections.",
+  "package": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mac-game-center/Export/Ultimate Lemmix.pkg",
+  "packageSHA256": "6bb2f828a6bbb677baccb6d68c95eb8684ef8305c325ade265521298636d70e2",
+  "packageBytes": 42623057,
+  "appStoreAnalysisErrors": [],
+  "exportVerificationCommit": "043a43dca9b701c76891d2f81d078ed2df4d6d1d",
+  "sourceSnapshotVerified": true,
+  "uploadPerformed": false,
+  "submissionPerformed": false,
+  "previousHandoffPackage": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/Superseded/Mac before Game Center namespace/Ultimate Lemmix 2.4.2 (108).pkg",
+  "previousHandoffPackageSHA256": "124bacf89b97ef6bc39da05e19fdbe7fc10948b421413d5c7c3671de8fff2791",
+  "handoffPackage": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/Handoff/Mac/Ultimate Lemmix 2.4.2 (108).pkg"
+}

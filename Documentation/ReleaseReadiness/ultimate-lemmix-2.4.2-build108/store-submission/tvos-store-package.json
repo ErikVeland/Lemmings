@@ -1,12 +1,12 @@
 {
   "platform": "tvos",
-  "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/tvos-store-export/UltimateLemmixTVOS.ipa",
-  "sha256": "eaeb5a434dd3323ea682f35718d1e676ddee26dfc302585188a8005eb5237412",
-  "bytes": 34356205,
-  "checkedUTC": "2026-11-18T13:05:04.434120+00:00",
+  "ipa": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261119/mobile-game-center-ulx/tvos-store-export/UltimateLemmixTVOS.ipa",
+  "sha256": "ea74251f9d2ca1f5df2afcf29f3cc8c3c1ac2c5ea94513f323e328c06212c96f",
+  "bytes": 34356582,
+  "checkedUTC": "2026-11-19T08:25:38.818506+00:00",
   "bundles": [
     {
-      "bundleID": "academy.glasscode.ultimatelemmix.tvos",
+      "bundleID": "academy.glasscode.ultimatelemmix",
       "version": "2.4.2",
       "build": "108",
       "authorities": [
@@ -15,7 +15,7 @@
         "Apple Root CA"
       ],
       "entitlements": {
-        "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix.tvos",
+        "application-identifier": "54WU29TRTY.academy.glasscode.ultimatelemmix",
         "aps-environment": "production",
         "beta-reports-active": true,
         "com.apple.developer.game-center": true,
@@ -32,8 +32,8 @@
         ],
         "get-task-allow": false
       },
-      "profileUUID": "0909d776-3c3a-4430-ac96-66dc9b1ecbb0",
-      "profileName": "tvOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix.tvos",
+      "profileUUID": "5e0e618d-44a2-4abb-a01a-1145038dec7f",
+      "profileName": "tvOS Team Store Provisioning Profile: academy.glasscode.ultimatelemmix",
       "profileExpires": "2027-10-10T13:17:05",
       "privacyManifest": {
         "NSPrivacyAccessedAPITypes": [
@@ -156,6 +156,6 @@
     }
   ],
   "appStoreInfoProductErrors": [],
-  "helperSHA256": "2d058d7c4cf89e0ff3eb682f6541b974b6d74bf9757ab7a8c44f1bd80e17c766",
+  "helperSHA256": "78e94af8a97a05be997e25e8f103c58457bd7049434c270ae0f06a8cdd539e65",
   "allChecksPassed": true
 }

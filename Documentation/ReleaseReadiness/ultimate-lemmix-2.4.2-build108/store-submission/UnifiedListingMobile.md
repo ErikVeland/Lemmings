@@ -1,5 +1,11 @@
 # Mobile packages for the shared App Store listing
 
+Current export refresh: 19 November 2026, after the user restored Xcode credential
+availability. Both packages now use frozen source `1ac19c638e3f62dd48f7d4dedf17b285b961b079`.
+The cached-profile archive commands omitted `-allowProvisioningUpdates`; Store
+export used the existing helper. See [Mobile render refresh](MobileRenderRefresh.md)
+for the new signatures, hashes and preserved history. No upload occurred.
+
 Candidate: Ultimate Lemmix 2.4.2, build 108. Identity revision: 19 November 2026.
 The owner selected one App Store listing for Mac, iPhone, iPad and Apple TV.
 The App Store Connect app is `6836347807`.
@@ -86,8 +92,8 @@ account authentication error.
 
 | Platform | IPA bytes | SHA-256 |
 | --- | ---: | --- |
-| iOS | 50,180,568 | `31f6b5e1ef5b61d33eae6ce7e2b1be7c7886fbe1c158e6b972ddc1bd65906ad0` |
-| tvOS | 34,356,162 | `f316ce9229168134f5d08478780b4815b8f56615325a999092277e5878a78810` |
+| iOS | 50,180,093 | `ed7d6d3afd733ed1c9d71301270b75101ed5722779e4054629e1e52e383d2b1f` |
+| tvOS | 34,356,381 | `bfa391e196aa71b4bef0290cc73f6d0995aaaa79479d74c217ba01c5564799d2` |
 
 The final files are `ios-store-export/UltimateLemmixIOS.ipa` and
 `tvos-store-export/UltimateLemmixTVOS.ipa` under the 19 November build root.
