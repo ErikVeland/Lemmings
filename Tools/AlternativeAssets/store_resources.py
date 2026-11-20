@@ -85,59 +85,24 @@ def convert(arguments):
     return result.stdout
 
 
-def clean_icon(sheet, metadata):
-    """Build a distinct pixel icon from one approved Lix frame and a plain backdrop."""
-    walker = next(row for row in metadata['rows'] if row['activity'] == 'walker')['frames'][0]
-    with tempfile.TemporaryDirectory(prefix='ultimate-lemmix-icon-') as temporary:
-        directory = Path(temporary)
-        source = directory / 'sprites.png'
-        source.write_bytes(sheet)
-        frame = directory / 'frame.png'
-        geometry = f"{walker['width']}x{walker['height']}+{walker['x']}+{walker['y']}"
-        colour = 'rgb(' + ','.join(map(str, metadata['gridRGBA'][:3])) + ')'
-        convert([source, '-crop', geometry, '+repage', '-transparent', colour, '-transparent', '#000000',
-                 '-trim', '+repage', '-filter', 'point', '-resize', '640x640', frame])
-        png = convert(['-size', '1024x1024', 'xc:#152333', '-fill', '#2d4655',
-            '-draw', 'rectangle 64,64 959,959', '-fill', '#152333',
-            '-draw', 'rectangle 96,96 927,927', frame, '-gravity', 'center',
-            '-compose', 'over', '-composite', '-strip', '-define', 'png:exclude-chunks=date,time', 'png:-'])
-        original = directory / 'icon.png'
-        original.write_bytes(png)
-        chunks = []
-        for size, kind in ((16, b'icp4'), (32, b'icp5'), (64, b'icp6'), (128, b'ic07'),
-                           (256, b'ic08'), (512, b'ic09'), (1024, b'ic10')):
-            image = convert([original, '-filter', 'point', '-resize', f'{size}x{size}',
-                             '-strip', '-define', 'png:exclude-chunks=date,time', 'png:-'])
-            chunks.append(kind + struct.pack('>I', len(image) + 8) + image)
-        body = b''.join(chunks)
-        return {'AppIcon.png': png, 'AppIcon.icns': b'icns' + struct.pack('>I', len(body) + 8) + body}
-
-
-def project_icon():
-    """Retain the requested project artwork with its explicit rights-review record."""
-    pin_path = ROOT / 'Resources/AlternativeAssets/project-icon-source.json'
-    pin = json.loads(pin_path.read_text())
-    if pin['cc0'] is not False or pin['redistributionCleared'] is not False or pin['rightsReviewRequired'] is not True:
-        raise ValueError('The project icon rights-review scope changed.')
-    png = read_checked(ROOT / pin['source'], pin)
-    readme = (ROOT / pin['readme']).read_bytes()
-    if sha(readme) != pin['readmeSHA256']:
-        raise ValueError('The project icon source notice changed.')
+def lemmix_icon():
+    """Encode the approved Lemmix artwork at each Mac icon resolution."""
+    source = ROOT / 'Resources/UltimateLemmix/AppIcon/UltimateLemmix.png'
+    png = source.read_bytes()
+    notice = source.with_name('README.md').read_bytes()
     chunks = []
-    with tempfile.TemporaryDirectory(prefix='lemmix-project-icon-') as temporary:
-        source = Path(temporary) / 'icon.png'
-        source.write_bytes(png)
-        for size, kind in ((16, b'icp4'), (32, b'icp5'), (64, b'ic07'),
-                           (128, b'ic07'), (256, b'ic08'), (512, b'ic09'), (1024, b'ic10')):
-            if size == 64:
-                kind = b'icp6'
-            data = convert([source, '-filter', 'Lanczos', '-resize', f'{size}x{size}!',
-                            '-strip', '-define', 'png:exclude-chunks=date,time', 'png:-'])
-            chunks.append(kind + struct.pack('>I', len(data) + 8) + data)
+    for size, kinds in ((16, (b'icp4',)), (32, (b'icp5', b'ic11')), (64, (b'icp6', b'ic12')),
+                        (128, (b'ic07',)), (256, (b'ic08', b'ic13')), (512, (b'ic09', b'ic14')),
+                        (1024, (b'ic10',))):
+        image = convert([source, '-filter', 'Lanczos', '-resize', f'{size}x{size}',
+                         '-strip', '-define', 'png:exclude-chunks=date,time', 'png24:-'])
+        for kind in kinds:
+            chunks.append(kind + struct.pack('>I', len(image) + 8) + image)
     body = b''.join(chunks)
     return {'AppIcon.png': png, 'AppIcon.icns': b'icns' + struct.pack('>I', len(body) + 8) + body,
-            'Provenance/project-icon-source.json': pin_path.read_bytes(),
-            'Licences/Project-icon-source.md': readme}
+            'Provenance/ultimate-lemmix-icon.json': encoded({'source': source.relative_to(ROOT).as_posix(),
+                'sha256': sha(png), 'notice': 'Licences/Ultimate-Lemmix-icon.md'}),
+            'Licences/Ultimate-Lemmix-icon.md': notice}
 
 
 def integration_files(allow_missing):
@@ -243,10 +208,9 @@ def media_rights(files):
     if shared_font_notice in files:
         licences.append({'scope': 'Fonts/LixInterface', 'licence': 'Ultimate Lemmings shared pixel font',
                          'notice': shared_font_notice})
-    if 'Provenance/project-icon-source.json' in files:
-        licences.append({'scope': 'Project app icon and derived platform icon catalogues',
-                         'licence': 'Rights review required; not CC0',
-                         'notice': 'Licences/Project-icon-source.md', 'redistributionCleared': False})
+    if 'Provenance/ultimate-lemmix-icon.json' in files:
+        licences.append({'scope': 'Ultimate Lemmix app icon and platform icon catalogues',
+                         'licence': 'Project artwork', 'notice': 'Licences/Ultimate-Lemmix-icon.md'})
     return {'mediaLicence': 'mixed' if len(licences) > 1 else 'CC0-1.0', 'mediaLicences': licences}
 
 

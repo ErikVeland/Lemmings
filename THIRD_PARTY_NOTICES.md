@@ -232,9 +232,8 @@ The [art and font source record](Resources/UltimateLemmix/alternative-resource-s
 and [soundtrack source record](Resources/AlternativeAssets/music-sources.json)
 record the exact source hashes.
 
-Original game media, unreviewed remixes and the retained project icon do not
-gain redistribution permission from these licences. The icon's character
-rights remain a separate review gate.
+Original game media and unreviewed remixes require separate redistribution permission.
+The project created its own [Ultimate Lemmix app icon](Resources/UltimateLemmix/AppIcon/README.md).
 
 ## Sparkle
 

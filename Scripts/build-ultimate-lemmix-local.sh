@@ -52,9 +52,11 @@ zsh "$project_dir/Scripts/prepare-lix-interface.sh" \
   --font "$app/Contents/Resources/Fonts/Lix/djvusans.ttf" \
   --licence "$app/Contents/Resources/Licences/Lix-font-LICENSE.txt" \
   --output "$app/Contents/Resources/Fonts/LixInterface"
-zsh "$project_dir/Scripts/build-app-icon.sh" "$app/Contents/Resources/AppIcon.icns"
 cp "$project_dir/Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy" "$app/Contents/Resources/PrivacyInfo.xcprivacy"
 touch "$build_dir/resources-ready"
+else
+  python3 -B "$project_dir/Tools/AlternativeAssets/prepare_lemmix_base.py" \
+    --output "$app/Contents/Resources" --refresh-local-branding
 fi
 font_source="${ULTIMATE_LEMMIX_ORIGINAL_FONT_SOURCE:-$project_dir}"
 if [[ ! -f "$font_source/.build/mac-artwork/export/lemmings/manifest.json" && -z "${ULTIMATE_LEMMIX_ORIGINAL_FONT_SOURCE:-}" ]]; then

@@ -177,6 +177,7 @@ def inputs():
                   "Tools/AlternativeAssets/store_resources.py", "Tools/AlternativeAssets/feature_resources.py",
                   "Tools/AlternativeAssets/prepare_music.py", "Resources/AlternativeAssets/music-sources.json",
                   "Resources/UltimateLemmix/alternative-resource-source.json",
+                  "Resources/UltimateLemmix/AppIcon/UltimateLemmix.png", "Resources/UltimateLemmix/AppIcon/README.md",
                   "Tools/TrolleyVerification/catalogue.py", "Tools/TrolleyVerification/presentation-files.json",
                   "Apps/DeskClockWidget/DeskClockWidget.swift", "Apps/DeskClockWidget/Mac/Info.plist",
                   "Resources/UltimateLemmix/Info.plist", "Resources/UltimateLemmix/AppStore.entitlements",

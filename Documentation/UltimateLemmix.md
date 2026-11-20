@@ -102,7 +102,8 @@ No original game data or unreviewed remix is offered as a hosted download.
 Ultimate Lemmix is a [separate project and release](SharedPublishing.md) on
 `release/ultimate-lemmix`. Its own manifest controls its version and build counters.
 Shared engines and features stay in sync with Ultimate Lemmings through `main`.
-Its current candidate metadata is 2.4.2 build 108 on all three platforms.
+Current build 109 uses the [Ultimate Lemmix app icon](../Resources/UltimateLemmix/AppIcon/README.md)
+on Mac, iPhone, iPad and Apple TV. The following records describe build 108.
 
 The local Mac candidate is 2.4.2 build 108. It uses the current Mac architecture
 and the complete frontend. Its ad hoc signature passes strict verification.
@@ -138,14 +139,14 @@ Signed group access and hosted WidgetKit reload still require device acceptance.
 The manual Mac build retains the existing local save location. Quit build 107
 before opening build 108. Automated checks used separate temporary storage.
 
-The requested existing project icon is retained. Its character rights require
-review. App Store signing, service provisioning, privacy and rights clearance
+The personal build 108 used the Ultimate Lemmings project icon. Its character rights required
+separate review. App Store signing, service provisioning, privacy and rights clearance
 remain release gates. This local build is not an approved Store release.
 
 ## Store preparation on 18 November 2026
 
-The Store profile uses the current complete frontend and shared modules. It
-includes the authored starters, pinned Lix media, a CC0 Lix-derived icon, the
+The build 108 Store profile used the complete frontend and shared modules. It
+included the authored starters, pinned Lix media, a CC0 Lix-derived icon, the
 project Lemmix logo and the shared Ultimate Lemmings pixel font. The font
 package includes the two faces and counter glyphs. Other original game media
 stay in the separate restoration bundle. Imported original artwork

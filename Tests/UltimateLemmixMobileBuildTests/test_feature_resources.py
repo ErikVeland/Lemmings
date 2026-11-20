@@ -1,6 +1,5 @@
 """Check current Store feature data and the boundary around original assets."""
 from pathlib import Path
-import hashlib
 import sys
 import unittest
 
@@ -21,10 +20,9 @@ class RestoredFeatureResourceTests(unittest.TestCase):
         self.assertTrue(all(not name.startswith('Ports/') or name.startswith('Ports/ultimate_lemmix_starter/')
                             for name in files))
 
-    def test_store_icon_excludes_the_uncleared_personal_icon(self):
+    def test_store_uses_the_ultimate_lemmix_icon(self):
         files = store_resources.collect()
-        self.assertNotEqual(hashlib.sha256(files['AppIcon.png']).hexdigest(),
-                         hashlib.sha256((ROOT / 'Resources/AppIcon/AppIcon.png').read_bytes()).hexdigest())
+        self.assertEqual(files['AppIcon.png'], (ROOT / 'Resources/UltimateLemmix/AppIcon/UltimateLemmix.png').read_bytes())
         self.assertNotIn('Provenance/project-icon-source.json', files)
         self.assertFalse(any(name.startswith('Fonts/OriginalLemmings/') for name in files))
 

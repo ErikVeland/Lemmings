@@ -91,6 +91,18 @@ def write_data_inventory(output):
                                      'files': rows}, indent=2) + '\n').encode())
 
 
+def prepare_branding(output, store):
+    from store_resources import lemmix_icon
+    for name, data in lemmix_icon().items():
+        write(output / name, data)
+    write(output / 'Licences/Distribution-scope.txt', (
+        'Lix graphics use CC0. Lix music uses CC0 and CC BY 4.0. The Lix font has its own licence.\n'
+        'Ultimate Lemmix uses its own app icon. See Licences/Ultimate-Lemmix-icon.md.\n' +
+        ('Interface lettering uses the shared Ultimate Lemmings pixel font.\n' if store else '') +
+        'Players supply any original game assets used for restoration.\n'
+        'Imports and this helper do not grant redistribution rights.\n').encode())
+
+
 def prepare(output, alternatives, store=False):
     output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()):
@@ -122,23 +134,12 @@ def prepare(output, alternatives, store=False):
     for name, data in starter_resources().items():
         write(output / 'Ports/ultimate_lemmix_starter' / name, data)
     copy_tree(ROOT / 'Resources/UltimateLemmix/MenuArtwork', output / 'MenuArtwork')
+    prepare_branding(output, store)
     if store:
-        from store_resources import clean_icon
         from prepare_project_pixel import resources as pixel_resources
-        metadata = json.loads((output / 'AlternativeAssets/Lix/sprite-metadata.json').read_bytes())
-        sheet = output / 'AlternativeAssets/Lix/assets' / metadata['sourcePath']
-        for name, data in clean_icon(sheet.read_bytes(), metadata).items():
-            write(output / name, data)
         for name, data in pixel_resources().items():
             write(output / name, data)
     else:
-        icon = ROOT / 'Resources/AppIcon/AppIcon.png'
-        write(output / 'AppIcon.png', icon.read_bytes())
-        write(output / 'Licences/Project-icon-source.md', (ROOT / 'Resources/AppIcon/README.md').read_bytes())
-        write(output / 'Provenance/project-icon-source.json', (json.dumps({
-            'kind': 'requested-existing-project-icon', 'cc0': False, 'redistributionCleared': False,
-            'rightsReviewRequired': True, 'sha256': hashlib.sha256(icon.read_bytes()).hexdigest(),
-            'notice': 'Licences/Project-icon-source.md'}, indent=2) + '\n').encode())
         boards = output / 'GameCenter/leaderboards.json'
         config = json.loads(boards.read_bytes())
         config['enabled'] = False
@@ -155,12 +156,6 @@ def prepare(output, alternatives, store=False):
             entry.external_attr = 0o100644 << 16
             archive.writestr(entry, data)
     write(integration / 'README.txt', guide)
-    write(output / 'Licences/Distribution-scope.txt', (
-        'Lix graphics use CC0. Lix music uses CC0 and CC BY 4.0. The Lix font has its own licence.\n' +
-        ('The Store icon uses the approved CC0 Lix sprite. Interface lettering uses the shared Ultimate Lemmings pixel font.\n'
-         if store else 'The requested existing project icon is separate and requires rights review.\n') +
-        'Players supply any original game assets used for restoration.\n'
-        'Imports and this helper do not grant redistribution rights.\n').encode())
     fingerprint = (output / 'Trolley/engine-fingerprint.txt').read_text().strip()
     print('Prepared current full-game metadata with alternative media. Engine fingerprint: ' + fingerprint)
 
@@ -169,10 +164,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--alternative-resources', type=Path)
-    parser.add_argument('--inventory-only', action='store_true')
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--inventory-only', action='store_true')
+    mode.add_argument('--refresh-local-branding', action='store_true')
     arguments = parser.parse_args()
     if arguments.inventory_only:
         write_data_inventory(arguments.output)
+    elif arguments.refresh_local_branding:
+        prepare_branding(arguments.output, store=False)
+        for legacy in ('Provenance/project-icon-source.json', 'Licences/Project-icon-source.md'):
+            (arguments.output / legacy).unlink(missing_ok=True)
     else:
         if arguments.alternative_resources is None:
             parser.error('--alternative-resources is required when preparing data.')
