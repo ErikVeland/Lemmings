@@ -11,6 +11,14 @@ public actor GameAssetPack {
 
     public static var actionTitle: String { L10n.text("Download game assets") + " (253 MB)" }
 
+    public enum Licence {
+        public static var title: String { L10n.text("Confirm your game licence") }
+        public static var detail: String {
+            L10n.text("To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “\(accept)”, you confirm that you hold that licence.")
+        }
+        public static var accept: String { L10n.text("Agree and download") }
+    }
+
     public enum Progress: Sendable {
         case downloading(Int)
         case installing

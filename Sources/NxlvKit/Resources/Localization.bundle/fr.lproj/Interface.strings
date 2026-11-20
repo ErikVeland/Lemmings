@@ -3552,3 +3552,6 @@
 "Game assets are already downloading." = "Le téléchargement des données du jeu est déjà en cours.";
 "Game assets are unavailable. Try again later." = "Les données du jeu sont indisponibles. Réessayez plus tard.";
 "Game assets failed verification. Download them again." = "La vérification des données du jeu a échoué. Téléchargez-les à nouveau.";
+"Confirm your game licence" = "Confirmez votre licence de jeu";
+"Agree and download" = "Accepter et télécharger";
+"To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "Pour télécharger ces ressources, vous devez détenir une licence valide pour le jeu original «Lemmings» sur au moins une plateforme. En sélectionnant « {0} », vous confirmez que vous détenez cette licence.";
