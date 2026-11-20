@@ -5,6 +5,12 @@
   "releaseStatus": "candidate",
   "pages": [
     {
+      "route": "/upgrade",
+      "title": "Upgrade to Ultimate Lemmings",
+      "description": "Use your own legally obtained compatible Lemmings assets to restore classic content in Ultimate Lemmix on Mac, iPhone, iPad or Apple TV.",
+      "file": "upgrade.html"
+    },
+    {
       "route": "/support",
       "title": "Support",
       "description": "Help with starting, importing game data, saved journeys and reporting a problem.",
