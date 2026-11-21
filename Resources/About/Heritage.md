@@ -26,6 +26,11 @@ and black-and-white artwork. Tony Williams arranged the original music for DOS.
 Other ports, composers and arrangers have their own identities in the soundtrack
 catalogue.
 
+## NeoLemmix Christmas music
+
+WillLem arranged and produced the eight Christmas tracks referenced by the
+Xmas Lemmings and Holiday Lemmings playlists.
+
 ## Preserved and recreated
 
 Classic's DOS, Amiga and Macintosh artwork comes from the original releases.
