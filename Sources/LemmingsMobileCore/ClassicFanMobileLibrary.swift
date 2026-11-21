@@ -23,13 +23,13 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
 
     public init(packURL: URL, portsRoot: URL, bundledScope: BundledPlayableScope? = nil) throws {
         pack = try ClassicFanPack(url: packURL)
-        self.portsRoot = portsRoot
+        self.portsRoot = ClassicFanPack.runtimeRoot(for: portsRoot)
         usesNativeArtwork = GameResources.resourceURL.map { root in
             ["MacArtwork", "AmigaArtwork"].contains { kind in
                 FileManager.default.fileExists(atPath: root.appendingPathComponent(kind + "/lemmings/manifest.json").path)
             }
         } ?? false
-        assets = try ClassicMainDATAssets.load(from: portsRoot.appendingPathComponent(Self.engineFolder))
+        assets = try ClassicMainDATAssets.load(from: self.portsRoot.appendingPathComponent(Self.engineFolder))
         let scope = bundledScope ?? GameResources.resourceURL.flatMap { try? BundledPlayableScope(resources: $0) }
         let found = scope?.entries(in: pack) ?? pack.entries()
         guard !found.isEmpty else { throw MobileSessionError.changedLevel }

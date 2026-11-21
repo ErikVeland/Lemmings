@@ -753,6 +753,7 @@ enum FanLevelLibrary {
   static func groundSet(for level: ClassicLevel, styleName: String?, portsRoot: URL,
                         pack: URL? = nil, entry: Entry? = nil, useLocalStyles: Bool = true, useHolidayStyles: Bool = true,
                         ownedClassicRoots: [URL] = []) throws -> ClassicGroundSet {
+    let portsRoot = ClassicFanPack.runtimeRoot(for: portsRoot)
     let names = ["dirt", "fire", "marble", "pillar", "crystal", "brick", "rock", "snow", "bubble", "xmas"]
     let named = styleName?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     let name = named ?? (names.indices.contains(level.groundStyle) ? names[level.groundStyle] : L10n.text("slot \(level.groundStyle)"))
@@ -936,6 +937,7 @@ enum FanLevelLibrary {
 
   static func specialGraphic(for level: ClassicLevel, entry: Entry? = nil, pack: URL? = nil, portsRoot: URL,
                              ownedClassicRoots: [URL] = []) throws -> ClassicSpecialGraphic? {
+    let portsRoot = ClassicFanPack.runtimeRoot(for: portsRoot)
     guard level.specialStyle != 0 else { return nil }
     let index = level.specialStyle - 1
     if let entry, let pack, let data = try graphicData("vgaspec\(index).dat", entry: entry, pack: pack) {
@@ -957,6 +959,7 @@ enum FanLevelLibrary {
    * Uses bundled masks first, then the player's detected Classic releases.
    */
   static func mainDATAssets(portsRoot: URL, ownedClassicRoots: [URL] = []) throws -> ClassicMainDATAssets {
+    let portsRoot = ClassicFanPack.runtimeRoot(for: portsRoot)
     let preferred = portsRoot.appendingPathComponent("lemmings_dos_1991-07-30")
     let titles: [ClassicTitle] = [.lemmings, .ohNoMoreLemmings, .holidayLemmings1994,
       .holidayLemmings1993, .xmasLemmings1992, .xmasLemmings1991]
