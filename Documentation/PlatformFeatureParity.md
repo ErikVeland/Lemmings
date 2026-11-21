@@ -10,7 +10,12 @@ count and the player can continue. Sharing stays off until the player enables it
 
 Offscreen checks cover phone, iPad, folded Duo and TV layouts, including portrait
 selection, empty initials, an unavailable count and loading. TV migration checks
-cover existing rosters and checkpoints. Physical-device input remains unverified.
+cover existing rosters and checkpoints. A muted Mac check started Fun 1 and First
+Steps from profile setup. On an isolated iPhone simulator, the live counter appeared
+before consent. Selecting a portrait and initials, playing, then relaunching opened
+Home with the same player and a Resume Level action. The simulator UI test runner
+stalled during startup. The iPhone check used native controls in the installed app.
+Physical-device input remains unverified.
 
 ## Mac fast-forward and skill input — 21 November 2026
 
