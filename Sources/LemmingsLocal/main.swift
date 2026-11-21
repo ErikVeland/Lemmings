@@ -27,7 +27,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
   private let launchStartedAt = ProcessInfo.processInfo.systemUptime
   private var preparingLaunch = false
-  private var wasExistingPlayer = false
+  private static let firstProfileKey = "FirstLaunchProfileCompleteV1"
+  private weak var firstProfilePage: ArcadeView?
 
   private func traceLaunch(_ stage: String) {
     guard ProcessInfo.processInfo.environment["LEMMINGS_LAUNCH_TRACE"] == "1" else { return }
@@ -184,7 +185,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
   private var homeGlobalSaved: Int?
   private var homeSavedRefreshTask: Task<Void, Never>?
-  private var homeSavedRefreshID = UUID()
   private var homeSavedLastRefreshAt = -Double.infinity
   private var activeTitle: ClassicTitle?
   private var sequelIsActive: Bool { nativeL2Window != nil || nativeL3Window != nil }
@@ -713,7 +713,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     window.beginSheet(sheet)
   }
   private var cloudCanImport: Bool {
-    guard !sequelIsActive, phase != .playing else { return false }
+    guard firstProfilePage == nil, !sequelIsActive, phase != .playing else { return false }
     switch flow?.screen {
     case .title, .rankSelect, nil: return true
     default: return false
@@ -811,8 +811,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     preparingLaunch = true
-    wasExistingPlayer = UserDefaults.standard.bool(forKey: EffectsWelcome.choiceKey)
-      || UserDefaults.standard.object(forKey: settingsKey) != nil
+    migrateStandaloneSaves()
+    let needsFirstProfile = Self.needsFirstProfile(in: .current())
     traceLaunch("begin")
     if AppDistribution.isStore { UserResourceAccess.shared.restore() }
     if let installed = try? AppDistribution.ownedResourceLibrary.refreshBaseIfNeeded() {
@@ -832,7 +832,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.playfield.needsDisplay = true
     }
     updates.start()
-    migrateStandaloneSaves()
     buildMenu()
     NotificationCenter.default.addObserver(self, selector: #selector(interfaceLanguageChanged),
                                           name: L10n.languageDidChange, object: nil)
@@ -904,7 +903,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     traceLaunch("content")
     startFanUpdates()
     startTimer()
-    presentLaunchPages()
+    if needsFirstProfile { presentFirstProfile() }
     // Present the completed opening screen before asking AppKit for full screen.
     // A full-screen transition does not replace ordering the window.
     window.contentView?.layoutSubtreeIfNeeded()
@@ -951,15 +950,55 @@ let achievementProgressKey = "ClassicAchievementProgress"
     apply(updated)
   }
 
-  private func presentLaunchPages() {
-    EffectsWelcome.acknowledgeDefaults()
-    releaseWelcome.showIfNeeded(in: window, existingPlayer: wasExistingPlayer) { [weak self] in
-      guard let self else { return }
-      TelemetryConsentWindow.shared.showIfNeeded(in: self.window) { [weak self] in
-        guard let self else { return }
-        MusicLibraryWindow.shared.showIfNeeded(in: self.window)
+  private static func needsFirstProfile(in storage: AppStorage) -> Bool {
+    let defaults = storage.defaults
+    if let complete = defaults.object(forKey: firstProfileKey) as? Bool { return !complete }
+    let records = ArcadeStore.recordsFile(storage: storage)
+    let returning = defaults.bool(forKey: EffectsWelcome.choiceKey)
+      || defaults.object(forKey: settingsKey) != nil
+      || defaults.dictionaryRepresentation().keys.contains(where: LegacySaveMigration.isProgress)
+      || [records, ArcadeRecordFile(url: records).backupURL].contains { FileManager.default.fileExists(atPath: $0.path) }
+    defaults.set(returning, forKey: firstProfileKey)
+    return !returning
+  }
+
+  private func presentFirstProfile() {
+    let page = ArcadeView()
+    page.mode = .profiles
+    page.selectProfile(ArcadeStore.shared.records.activeProfile)
+    page.worldwideSaved = homeGlobalSaved
+    page.onFirstPlay = { [weak self, weak page] in
+      guard let self, let page else { return }
+      UserDefaults.standard.set(true, forKey: Self.firstProfileKey)
+      GameScreen.shared.dismiss(page)
+      self.firstProfilePage = nil
+      self.playFirstLevel()
+    }
+    firstProfilePage = page
+    GameScreen.shared.present(page, owner: window, focus: page)
+    refreshHomeSavedCountsIfNeeded()
+  }
+
+  private func playFirstLevel() {
+    let preferred = AppDistribution.isStore
+      ? dataSets.firstIndex { GameStarterContent.isStarter(directory: $0.directory) }
+      : nonFanQuestDataSetIndex(for: .lemmings)
+    let candidates = [preferred].compactMap { $0 } + dataSets.indices.filter { $0 != preferred }
+    for index in candidates where !dataSets[index].set.campaign.levels.isEmpty {
+      gamePicker.selectItem(at: index)
+      do { try applyDataSetSelection(at: index) } catch { continue }
+      launchMode = .singleTitle
+      activeTitle = dataSets[index].set.title
+      picker.selectItem(at: 0)
+      session = nil
+      levelChanged()
+      if session != nil, case .briefing = flow?.screen {
+        advancePhase()
+        return
       }
     }
+    returnToLibrary()
+    GameScreen.shared.message(L10n.text("Level unavailable"), detail: L10n.text("Add a game folder to play."))
   }
 
   private func migrateStandaloneSaves() {
@@ -6676,17 +6715,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let telemetry = AnonymousTelemetry.shared
     playfield.overlaySavedCounts = SavedLemmingsCounter(
       local: telemetry.localSavedTotal,
-      global: telemetry.sharesCounts ? homeGlobalSaved : nil).text
+      global: homeGlobalSaved).text
     playfield.needsDisplay = true
   }
 
   private func homeSavedCountsChanged() {
-    if !AnonymousTelemetry.shared.sharesCounts {
-      homeSavedRefreshTask?.cancel()
-      homeSavedRefreshTask = nil
-      homeSavedRefreshID = UUID()
-      homeGlobalSaved = nil
-    }
     homeSavedLastRefreshAt = -Double.infinity
     showHomeSavedCounts()
     refreshHomeSavedCountsIfNeeded()
@@ -6694,16 +6727,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func refreshHomeSavedCountsIfNeeded(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     guard flow?.screen == .title, fanScreen == .off, !fanPlaying, !sequelIsActive,
-      AnonymousTelemetry.shared.sharesCounts, homeSavedRefreshTask == nil,
+      homeSavedRefreshTask == nil,
       now - homeSavedLastRefreshAt >= 60 else { return }
     homeSavedLastRefreshAt = now
-    let requestID = UUID()
-    homeSavedRefreshID = requestID
     homeSavedRefreshTask = Task { [weak self] in
       let total = try? await AnonymousTelemetry.shared.publicSavedTotal()
-      guard let self, self.homeSavedRefreshID == requestID else { return }
+      guard let self else { return }
       self.homeSavedRefreshTask = nil
-      self.homeGlobalSaved = AnonymousTelemetry.shared.sharesCounts ? total : nil
+      self.homeGlobalSaved = total
+      self.firstProfilePage?.worldwideSaved = total
       self.showHomeSavedCounts()
     }
   }

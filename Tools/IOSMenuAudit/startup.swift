@@ -1,6 +1,7 @@
 import CoreGraphics
 import Foundation
 import ImageIO
+import LemmingsAppCore
 import LemmingsGameArt
 
 extension MenuAudit {
@@ -30,6 +31,33 @@ extension MenuAudit {
             }
         }
         print("PASS loading pages expose cancellation only; loading text has no input target")
+    }
+
+    @MainActor static func checkFirstPlayer(typography: GameMenuTypography, portraits: GamePortraitArt?, output: URL) throws {
+        guard let portraits, portraits.image(2) != nil else { throw Failure.missingArtwork }
+        let devices = [("phone", CGSize(width: 320, height: 568)), ("ipad", CGSize(width: 768, height: 1024)),
+                       ("duo", CGSize(width: 495, height: 720)), ("tv", CGSize(width: 960, height: 540))]
+        for (device, size) in devices {
+            for (state, initials, total, busy) in [("empty", "", nil, false), ("ready", "ABC", 123456, false),
+                                                   ("offline", "AB", nil, false), ("loading", "X", 123456, true)] {
+                let page = MobileCareerArt.firstPlayer(initials: initials, portrait: 2, counter: SavedLemmingsCounter.worldwideText(total),
+                    status: busy ? "Loading..." : "", busy: busy)
+                let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
+                guard page.backAction == nil, layout.targets.map(\.action.id) == ["playerPortrait", "nameField", "firstPlay"],
+                      page.subtitle.contains(total == nil ? "—" : "123,456") else { throw invalidTargets(line: #line) }
+                for target in layout.targets {
+                    let enabled = !busy && (target.action.id != "firstPlay" || !initials.isEmpty)
+                    guard target.action.enabled == enabled, target.frame.height >= 44, target.frame.width >= 44,
+                          CGRect(origin: .zero, size: size).contains(target.frame),
+                          layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == (enabled ? target.action.id : nil)
+                    else { throw invalidTargets(line: #line) }
+                }
+                let context = try bitmapContext(size: layout.size)
+                GameFrontEnd.draw(page, layout: layout, typography: typography, portraits: portraits, in: context)
+                try save(context: context, to: output.appendingPathComponent("first-player-\(device)-\(state).png"))
+            }
+        }
+        print("PASS first player renders and input targets on phone, iPad, Duo and TV")
     }
 
     @MainActor static func checkStartup(output: URL) throws {

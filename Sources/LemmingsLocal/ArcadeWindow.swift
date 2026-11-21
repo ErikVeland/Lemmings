@@ -345,12 +345,12 @@ import NxlvKit
             return element
         }
         if mode == .profiles {
-            let field = accessibleElements.element(id: "initials", owner: self, label: L10n.text("Player initials"), frame: mapped(CGRect(x: 564, y: 204, width: 430, height: 60)))
+            let field = accessibleElements.element(id: "initials", owner: self, label: L10n.text("Player initials"), frame: mapped(initialsRect))
             field.setAccessibilityRole(.textField)
             field.readValue = { [weak self] in self?.initials ?? "" }
             field.writeValue = { [weak self] value in
                 self?.initials = String(value.uppercased().filter { $0.isASCII && ($0.isLetter || $0.isNumber) }.prefix(3))
-                self?.replaceInitials = false; self?.saveEdits(); self?.needsDisplay = true
+                self?.replaceInitials = false; self?.keyboardButton = nil; self?.saveEdits(); self?.needsDisplay = true
             }
             result.insert(field, at: 0)
         }
@@ -416,7 +416,8 @@ import NxlvKit
             if ArcadeStore.shared.profilesAreWritable {
                 button(L10n.text("Retry save"), rect) { [weak self] in
                     guard let self else { return }
-                    if self.mode == .profiles { self.saveEdits() }
+                    if self.onFirstPlay != nil { self.performProfilePrimaryAction() }
+                    else if self.mode == .profiles { self.saveEdits() }
                     else { ArcadeStore.shared.save() }
                     self.needsDisplay = true
                 }
@@ -635,13 +636,17 @@ import NxlvKit
                    from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
                    hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
+    var onFirstPlay: (() -> Void)?
+    var worldwideSaved: Int? { didSet { needsDisplay = true } }
+    private var editorOffset: CGFloat { onFirstPlay == nil ? 0 : -176 }
+    private var initialsRect: CGRect { CGRect(x: 564 + editorOffset, y: 204, width: 430, height: 60) }
     var profilesReturnToHotSeat = false
     var isNewProfile: Bool { selectedProfileID == nil }
     /// A run in progress keeps its player. Other players can still be added, edited or removed.
     private var runInProgress: Bool { !canSwitch }
     /// Edits to an existing player save at once. A new player is saved by Add player.
     func saveEdits() {
-        guard let id = selectedProfileID, !initials.isEmpty else { return }
+        guard onFirstPlay == nil, let id = selectedProfileID, !initials.isEmpty else { return }
         ArcadeStore.shared.updateProfile(id, initials: initials, portrait: portrait)
         needsDisplay = true
     }
@@ -686,6 +691,16 @@ import NxlvKit
         return L10n.text("Done")
     }
     func performProfilePrimaryAction() {
+        if let onFirstPlay {
+            let store = ArcadeStore.shared
+            guard !initials.isEmpty, selectedProfileID == store.records.activeProfileID,
+                  store.saveProfile(id: selectedProfileID, initials: initials, portrait: portrait, select: false) != nil else {
+                needsDisplay = true
+                return
+            }
+            onFirstPlay()
+            return
+        }
         if isNewProfile { addNewProfile() }
         else if profilePrimaryTitle == L10n.text("Done") {
             guard ArcadeStore.shared.storageError == nil else { needsDisplay = true; return }
@@ -693,6 +708,7 @@ import NxlvKit
         } else { playAsSelected() }
     }
     func closeProfiles() {
+        guard onFirstPlay == nil else { return }
         if profilesReturnToHotSeat { profilesReturnToHotSeat = false; returnToPage(.hotSeat) } else { onClose?() }
     }
     func startNewProfile(returnToHotSeat: Bool = false) {
@@ -845,6 +861,14 @@ import NxlvKit
     private func drawProfiles() {
         let store = ArcadeStore.shared
         let records = store.records
+        if onFirstPlay != nil {
+            header(L10n.text("New player"), subtitle: SavedLemmingsCounter.worldwideText(worldwideSaved))
+            drawProfileEditor()
+            button(L10n.text("Play"), CGRect(x: 400, y: 627, width: 320, height: 55), primary: true,
+                   enabled: store.profilesAreWritable && !initials.isEmpty) { [weak self] in self?.performProfilePrimaryAction() }
+            setAccessibilityLabel(L10n.text("New player"))
+            return
+        }
         header(L10n.text("Players"), subtitle: isNewProfile ? L10n.text("NEW PLAYER") : L10n.text("PLAYER SELECT"))
         for (index, profile) in records.profiles.enumerated() {
             let rect = CGRect(x: 64, y: 160 + index * 46, width: 264, height: 40)
@@ -868,19 +892,7 @@ import NxlvKit
             }
         }
         GameStyle.fill(CGRect(x: 364, y: 158, width: 1, height: 440), GameStyle.muted.withAlphaComponent(0.2))
-        drawPortrait(portrait, in: CGRect(x: 417, y: 153, width: 108, height: 136))
-        text(L10n.text("INITIALS"), 564, 167, 440)
-        title(initials.padding(toLength: 3, withPad: "_", startingAt: 0), x: 564, y: 204, width: 430, height: 60)
-        for index in 0..<8 {
-            let rect = CGRect(x: 418 + index % 4 * 160, y: 318 + index / 4 * 124, width: 144, height: 110)
-            GameStyle.fill(rect, index == portrait ? NSColor(calibratedWhite: 0.22, alpha: 1) : NSColor.clear)
-            if index == portrait { GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), GameStyle.accent) }
-            drawPortrait(index, in: CGRect(x: rect.midX - 30, y: rect.minY + 8, width: 60, height: 64))
-            text(ArcadeProfile.portraitNames[index], rect.minX, rect.minY + 80, rect.width, alignment: .center)
-            buttons.append(("portrait-\(index)", rect, { [weak self] in
-                self?.portrait = index; self?.saveEdits(); self?.needsDisplay = true
-            }))
-        }
+        drawProfileEditor()
         button(L10n.text("Back"), CGRect(x: 64, y: 627, width: 200, height: 55)) { [weak self] in self?.closeProfiles() }
         if let id = selectedProfileID {
             button(L10n.text("Delete"), CGRect(x: 280, y: 627, width: 200, height: 55),
@@ -897,6 +909,21 @@ import NxlvKit
         button(profilePrimaryTitle, CGRect(x: 736, y: 627, width: 320, height: 55), primary: true,
                enabled: store.profilesAreWritable) { [weak self] in self?.performProfilePrimaryAction() }
         setAccessibilityLabel(L10n.text("Players. \(records.profiles.map(\.initials).joined(separator: ", ")). Type initials. Arrow keys choose a portrait. Changes save automatically. Enter: \(profilePrimaryTitle). Escape goes back."))
+    }
+    private func drawProfileEditor() {
+        drawPortrait(portrait, in: CGRect(x: 417 + editorOffset, y: 153, width: 108, height: 136))
+        text(L10n.text("INITIALS"), 564 + editorOffset, 167, 440)
+        title(initials.padding(toLength: 3, withPad: "_", startingAt: 0), x: initialsRect.minX, y: initialsRect.minY, width: initialsRect.width, height: initialsRect.height)
+        for index in 0..<8 {
+            let rect = CGRect(x: CGFloat(418 + index % 4 * 160) + editorOffset, y: CGFloat(318 + index / 4 * 124), width: 144, height: 110)
+            GameStyle.fill(rect, index == portrait ? NSColor(calibratedWhite: 0.22, alpha: 1) : NSColor.clear)
+            if index == portrait { GameStyle.fill(CGRect(x: rect.minX, y: rect.maxY - 3, width: rect.width, height: 3), GameStyle.accent) }
+            drawPortrait(index, in: CGRect(x: rect.midX - 30, y: rect.minY + 8, width: 60, height: 64))
+            text(ArcadeProfile.portraitNames[index], rect.minX, rect.minY + 80, rect.width, alignment: .center)
+            buttons.append(("portrait-\(index)", rect, { [weak self] in
+                self?.portrait = index; self?.saveEdits(); self?.needsDisplay = true
+            }))
+        }
     }
     private func drawRecords() {
         if boardScope == .career { drawCareerBoard(); return }
@@ -1068,6 +1095,7 @@ import NxlvKit
                 if replaceInitials { initials = ""; replaceInitials = false }
                 initials = String((initials + key).prefix(3))
             } else { return }
+            if onFirstPlay != nil { keyboardButton = nil }
             saveEdits(); needsDisplay = true; return
         }
         if mode == .awards, level?.conditions != nil {

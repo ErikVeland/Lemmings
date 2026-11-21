@@ -11,6 +11,15 @@ public enum MobileCareerArt {
         return ClassicTitle(rawValue: conditions.gameID) == nil ? "" : L10n.text("Official")
     }
 
+    public static func firstPlayer(initials: String, portrait: Int, counter: String,
+                                   status: String, busy: Bool) -> GameFrontEnd.Page {
+        .init(title: L10n.text("New player"), subtitle: counter,
+              rows: [.init("playerPortrait", L10n.text("Portrait: \(ArcadeProfile.portraitNames[portrait])"), enabled: !busy, portrait: portrait),
+                     .init("nameField", L10n.text("Initials: \(initials)_"), enabled: !busy)],
+              details: status.isEmpty ? [] : [status],
+              footer: [.init("firstPlay", L10n.text("Play"), enabled: !busy && !initials.isEmpty, primary: true)])
+    }
+
     public static func players(_ profiles: MobileProfiles, subtitle: String, draft: String? = nil,
                                creating: Bool = false, portrait: Int = 0,
                                canDelete: Bool = false, confirmingDelete: Bool = false,

@@ -1,5 +1,22 @@
 # Cross-platform feature parity
 
+## First player profile — 21 November 2026
+
+On Mac, iPhone, iPad, Duo and Apple TV, a new player chooses a portrait and
+initials beside the worldwide rescue count. Play opens Classic Fun 1 in Ultimate
+Lemmings or the first bundled starter puzzle in Ultimate Lemmix. Returning players
+open Home. If the count service is unavailable, a dash takes the place of the
+count and the player can continue. Sharing stays off until the player enables it.
+
+Offscreen checks cover phone, iPad, folded Duo and TV layouts, including portrait
+selection, empty initials, an unavailable count and loading. TV migration checks
+cover existing rosters and checkpoints. A muted Mac check started Fun 1 and First
+Steps from profile setup. On an isolated iPhone simulator, the live counter appeared
+before consent. Selecting a portrait and initials, playing, then relaunching opened
+Home with the same player and a Resume Level action. The simulator UI test runner
+stalled during startup. The iPhone check used native controls in the installed app.
+Physical-device input remains unverified.
+
 ## Mac fast-forward and skill input — 21 November 2026
 
 Classic, supported NeoLemmix, Lemmings 2 and Lemmings 3 use the Mac effects budget.

@@ -9284,6 +9284,12 @@
       "Sources/LemmingsGameArt/MobileInformationArt.swift:43"
     ]
   },
+  "Lemmings saved worldwide": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Privacy/AnonymousTelemetry.swift:141"
+    ]
+  },
   "Less is more": {
     "kind": "text",
     "references": [

@@ -6,6 +6,7 @@ import LemmingsTVCore
 import UIKit
 
 @MainActor final class MobileTVBootstrap: UIViewController {
+    let configuration: LemmingsMobileConfiguration
     var catalogue: MobileCatalogue?
     var resourceNotice: String?
     private let canvas = MobileMenuCanvas()
@@ -13,6 +14,13 @@ import UIKit
     private var content: UIViewController?
     private var migrating = false
     override var preferredFocusEnvironments: [any UIFocusEnvironment] { content.map { [$0] } ?? [canvas] }
+
+    init(configuration: LemmingsMobileConfiguration) {
+        self.configuration = configuration
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) { nil }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,10 +52,8 @@ import UIKit
             guard let self else { return }
             do {
                 let store = try MobileContentStore()
-                let old = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-                    .appendingPathComponent("UltimateLemmings/TV/Checkpoints/current.json")
                 try await TVMobileMigration.migrate(defaults: .standard, players: .standard(profile: "_players"),
-                    legacyCheckpoint: MobileCheckpointStore(url: old),
+                    legacyCheckpoint: MobileCheckpointStore(url: TVMobileMigration.legacyCheckpointURL),
                     destination: MobileCheckpointStore(url: store.checkpointURL))
                 openLibrary()
             } catch {
@@ -64,7 +70,7 @@ import UIKit
 
     private func openLibrary() {
         guard content == nil else { return }
-        let library = MobileLibraryViewController()
+        let library = MobileLibraryViewController(configuration: configuration)
         library.catalogue = catalogue
         if let resourceNotice { library.notice = resourceNotice }
         addChild(library)

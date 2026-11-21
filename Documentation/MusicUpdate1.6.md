@@ -79,9 +79,7 @@ contains all composition identities and timing metadata. Downloads add recording
 ports, remixes and prototypes without changing the selection rules. Derived drum
 loops are hidden from track enumeration.
 
-The first-launch soundtrack checklist follows the play-style choice and any upgrade
-notes. Not now dismisses the offer once. Settings > Audio > Download soundtracks
-reopens it. Select individual libraries or all extra soundtracks and review the
+Open the soundtrack checklist in Settings > Audio > Download soundtracks. Select individual libraries or all extra soundtracks and review the
 combined size. Downloads run in sequence and continue after the page closes. The
 shared bitmap controls show progress, verification, installed and retry states.
 Cancel preserves an existing installation; Remove deletes only the selected

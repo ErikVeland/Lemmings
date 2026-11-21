@@ -67,7 +67,7 @@ final class MobileCoreIOSSmokeTests: XCTestCase {
     @MainActor func testGameDataOffersSeparateImportRoutes() {
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
-        app.launchArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US"]
+        app.launchArguments += ["-AppleLanguages", "(en)", "-AppleLocale", "en_US", "-FirstLaunchProfileCompleteV1", "YES"]
         app.launch()
 
         let settings = app.buttons["menu.settings"]

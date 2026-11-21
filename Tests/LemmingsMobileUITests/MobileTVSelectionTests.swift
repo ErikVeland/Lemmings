@@ -9,6 +9,27 @@ import LemmingsGameArt
 }
 
 @MainActor struct MobileTVSelectionTests {
+    @Test func firstPlayerKeepsFocusWhenTheWorldwideCountArrives() throws {
+        let canvas = MobileMenuCanvas(frame: CGRect(x: 0, y: 0, width: 1920, height: 1080))
+        canvas.requiresNeutralActivation = true
+        canvas.page = MobileCareerArt.firstPlayer(initials: "", portrait: 0, counter: "—", status: "", busy: false)
+        canvas.layoutIfNeeded()
+        let buttons = canvas.subviews.compactMap { $0 as? UIButton }
+        let name = try #require(buttons.first { $0.accessibilityIdentifier == "menu.nameField" })
+        let play = try #require(buttons.first { $0.accessibilityIdentifier == "menu.firstPlay" })
+        #expect(!play.isEnabled)
+        canvas.focusAction("nameField")
+        canvas.page = MobileCareerArt.firstPlayer(initials: "TV", portrait: 2, counter: "123", status: "", busy: false)
+        canvas.layoutIfNeeded()
+        #expect(canvas.preferredFocusEnvironments.first === name)
+        #expect(play.isEnabled)
+        var selected: String?
+        canvas.onAction = { selected = $0 }
+        play.pressesBegan([MenuSelectPress()], with: nil)
+        play.sendActions(for: .gameActivation)
+        #expect(selected == "firstPlay")
+    }
+
     @Test func menuStartsOnThePrimaryActionInsteadOfCancel() throws {
         let canvas = MobileMenuCanvas(frame: CGRect(x: 0, y: 0, width: 1920, height: 1080))
         canvas.page = GameFrontEnd.Page(title: "Confirm", footer: [

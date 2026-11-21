@@ -32,7 +32,7 @@ public struct MobileBuildInfo: Codable, Equatable, Sendable {
         return L10n.text("Built \(formatter.string(from: date))")
     }
 
-    private static let seenKey = "tv.whatsNew.seenIdentity"
+    public static let seenKey = "tv.whatsNew.seenIdentity"
     public func needsWelcome(in defaults: UserDefaults) -> Bool {
         defaults.string(forKey: Self.seenKey) != identity
     }

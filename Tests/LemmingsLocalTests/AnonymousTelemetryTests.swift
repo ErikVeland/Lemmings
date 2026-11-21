@@ -244,7 +244,7 @@ final class AnonymousTelemetryTests: XCTestCase {
                        "LEMMINGS SAVED   LOCAL 1,239   GLOBAL 34,567")
     }
 
-    @MainActor func testPublicSavedTotalRequiresConsentAndUsesNoOwnerToken() async throws {
+    @MainActor func testPublicSavedTotalIsReadOnlyBeforeAndAfterDecliningSharing() async throws {
         let suite = UUID().uuidString
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }
@@ -253,25 +253,23 @@ final class AnonymousTelemetryTests: XCTestCase {
         transport.responseData = Data("{\"saved\":12345}".utf8)
         let telemetry = AnonymousTelemetry(defaults: defaults,
             endpoint: URL(string: "https://counts.example.org")!, transport: transport)
-        do {
-            _ = try await telemetry.publicSavedTotal()
-            XCTFail("A declined player must not contact the count service")
-        } catch { XCTAssertTrue(transport.requests.isEmpty) }
-        telemetry.setSharing(true)
-        for _ in 0..<20 where transport.requests.count < 2 { await Task.yield() }
-        transport.requests.removeAll()
-        let total = try await telemetry.publicSavedTotal()
-        XCTAssertEqual(total, 12_345)
-        let request = try XCTUnwrap(transport.requests.first)
-        XCTAssertEqual(request.url?.path, "/v1/saved")
-        XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
-        XCTAssertNil(request.httpBody)
-        telemetry.setSharing(false)
-        transport.requests.removeAll()
-        do {
-            _ = try await telemetry.publicSavedTotal()
-            XCTFail("An opted-out player must not contact the count service")
-        } catch { XCTAssertTrue(transport.requests.isEmpty) }
+        for declined in [false, true] {
+            if declined { telemetry.setSharing(false) }
+            telemetry.recordActiveDay()
+            let total = try await telemetry.publicSavedTotal()
+            XCTAssertEqual(total, 12_345)
+            XCTAssertEqual(telemetry.consentDecided, declined)
+            XCTAssertFalse(telemetry.sharesCounts)
+            XCTAssertEqual(transport.requests.count, 1)
+            let request = try XCTUnwrap(transport.requests.first)
+            XCTAssertEqual(request.httpMethod, "GET")
+            XCTAssertEqual(request.url?.path, "/v1/saved")
+            XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
+            XCTAssertNil(request.httpBody)
+            transport.requests.removeAll()
+        }
+        XCTAssertTrue(SavedLemmingsCounter.worldwideText(nil).hasSuffix("—"))
+        XCTAssertTrue(SavedLemmingsCounter.worldwideText(12_345).hasSuffix("12,345"))
     }
 
     @MainActor func testSavedCountUploadsOneWeightedEvent() async throws {
