@@ -39,11 +39,12 @@ The Classic packs retain the three pack-specific special graphics needed for
 geooPk0, geooPk1 and Mon0lith. The earlier personal-preview inventory describes
 the unfiltered source archives.
 
-Offline acceptance requires the Classic terrain, object and sprite data and
-the NeoLemmix styles used by these levels. The staged catalogue loaded,
-rendered and advanced one tick for all 5,171 levels with local preservation
-resources and community styles. The clean Store profile still lacks those
-dependencies. A fresh-install gameplay check remains open.
+The build also requires the pinned `FanRuntime.zip` input. Place it in
+`.build`, or set `ULTIMATE_LEMMIX_FAN_RUNTIME` to its path. It supplies the
+Classic sprites, terrain and object data under `FanRuntime`, and the
+NeoLemmix styles under `NeoLemmix/styles`. Classic campaign discovery uses
+the separate `Ports` folder so fan artwork does not advertise official campaigns.
+The optional restoration download remains available for additional content.
 
 ### Lemmings Forums sources
 

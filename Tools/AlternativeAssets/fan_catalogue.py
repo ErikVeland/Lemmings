@@ -1,11 +1,12 @@
 """Read the approved Ultimate Lemmix level catalogue."""
 import hashlib
 import io
+import os
 from pathlib import Path
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
-FOLDERS = {"LevelPacks", "NeoLemmix"}
+FOLDERS = {"LevelPacks", "NeoLemmix", "FanRuntime"}
 
 
 def resources():
@@ -13,7 +14,13 @@ def resources():
     if hashlib.sha256(data).hexdigest() != "b454384f5483255fae4a69bbfee8d20fa3f980f52c90253130cb10dddb7cfd2a":
         raise ValueError("The fan catalogue differs from the approved archive.")
     with zipfile.ZipFile(io.BytesIO(data)) as archive:
-        return {name: archive.read(name) for name in archive.namelist()}
+        files = {name: archive.read(name) for name in archive.namelist()}
+    runtime = Path(os.environ.get("ULTIMATE_LEMMIX_FAN_RUNTIME", ROOT / ".build/FanRuntime.zip")).read_bytes()
+    if hashlib.sha256(runtime).hexdigest() != "5b573f15a6f3905670c6fa399f0bcd2012c40a7f6c2e5ce33db88b4bb0895a6b":
+        raise ValueError("The fan runtime differs from the verified offline assets.")
+    with zipfile.ZipFile(io.BytesIO(runtime)) as archive:
+        files.update({name: archive.read(name) for name in archive.namelist()})
+    return files
 
 
 def verify_manifest(rows):
