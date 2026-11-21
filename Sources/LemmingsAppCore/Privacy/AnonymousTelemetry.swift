@@ -137,6 +137,10 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
         "LEMMINGS SAVED   LOCAL \(Self.grouped(local))   GLOBAL \(global.map(Self.grouped) ?? "—")"
     }
 
+    public static func worldwideText(_ total: Int?) -> String {
+        L10n.text("Lemmings saved worldwide") + "   " + (total.map(grouped) ?? "—")
+    }
+
     private static func grouped(_ count: Int) -> String {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "en_AU")
@@ -319,11 +323,11 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
     public var localSavedTotal: Int { localSummary().total(.lemmingsSaved) }
 
     public func publicSavedTotal() async throws -> Int {
-        guard sharesCounts, let endpoint else { throw URLError(.userAuthenticationRequired) }
+        guard let endpoint else { throw URLError(.badURL) }
         let request = URLRequest(url: endpoint.appendingPathComponent("v1/saved"),
                                  cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 8)
         let (data, response) = try await transport.data(for: request)
-        guard sharesCounts, let http = response as? HTTPURLResponse,
+        guard let http = response as? HTTPURLResponse,
               http.statusCode == 200, data.count <= 64 else { throw URLError(.badServerResponse) }
         let total = try JSONDecoder().decode(PublicSavedTotal.self, from: data).saved
         guard total >= 0 else { throw URLError(.badServerResponse) }

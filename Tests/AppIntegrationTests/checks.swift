@@ -436,6 +436,79 @@ extension AppDelegate {
     print("PASS repeated Solo/Hot Seat mode, campaign, save namespace and library round trips")
     store.endHotSeat(); selectDataSet(); returnToLibrary()
   }
+  fileprivate func testFirstProfileLaunch() throws {
+    let storage = try AppStorage.temporary(named: "first-profile")
+    defer { storage.removeTemporaryFiles() }
+    try check(Self.needsFirstProfile(in: storage), "Fresh installation skipped profile setup")
+    storage.defaults.set(true, forKey: EffectsWelcome.choiceKey)
+    try check(Self.needsFirstProfile(in: storage), "Interrupted setup sent the player to Home")
+    storage.defaults.removeObject(forKey: Self.firstProfileKey)
+    try check(!Self.needsFirstProfile(in: storage), "An existing installation repeated setup")
+
+    settings.music = .silent
+    settings.sound = .silent
+    if window == nil { buildInterface() }
+    loadContent()
+    presentFirstProfile()
+    guard let page = firstProfilePage else { throw IntegrationFailure(message: "No first player page") }
+    let id = ArcadeStore.shared.records.activeProfileID
+    let sharesCounts = AnonymousTelemetry.shared.sharesCounts
+    window.contentView?.layoutSubtreeIfNeeded()
+    let render = { () throws -> [GameAccessibleElement] in
+      guard let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds) else {
+        throw IntegrationFailure(message: "Cannot render the first player page")
+      }
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      let directory = URL(fileURLWithPath: ".build/first-profile-renders")
+      try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+      let name = page.worldwideSaved == nil ? "offline.png" : "total.png"
+      try bitmap.representation(using: .png, properties: [:])?.write(to: directory.appendingPathComponent(name))
+      return page.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    }
+    page.worldwideSaved = nil
+    let elements = try render()
+    guard let field = elements.first(where: { $0.accessibilityRole() == .textField }),
+          let portrait = elements.first(where: { $0.accessibilityLabel() == "Portrait: Digger" }) else {
+      throw IntegrationFailure(message: "Missing initials or portrait target")
+    }
+    try check(elements.contains { $0.accessibilityLabel() == SavedLemmingsCounter.worldwideText(nil) },
+      "Unavailable count did not appear")
+    page.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: window.windowNumber, context: nil, characters: "a", charactersIgnoringModifiers: "a",
+      isARepeat: false, keyCode: 0)!)
+    try check(page.initials == "A", "Typing did not replace the default initials")
+    field.setAccessibilityValue("AX")
+    let whereToClick = page.convert(CGPoint(x: portrait.localFrame.midX, y: portrait.localFrame.midY), to: nil)
+    page.mouseDown(with: NSEvent.mouseEvent(with: .leftMouseDown, location: whereToClick, modifierFlags: [],
+      timestamp: 1, windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 1)!)
+    page.worldwideSaved = 12345
+    let edited = try render()
+    try check(page.initials == "AX" && page.portrait == 6 && edited.contains {
+      $0.accessibilityLabel() == SavedLemmingsCounter.worldwideText(12345)
+    }, "Count refresh lost the player's edits")
+    guard let play = edited.first(where: { $0.accessibilityLabel() == "Play" }) else {
+      throw IntegrationFailure(message: "Missing Play target")
+    }
+    try check(play.accessibilityPerformPress(), "Play did not respond")
+    try check(phase == .playing && activeTitle == .lemmings && flow?.currentLevelIndex == 0
+      && session != nil && !GameScreen.shared.isPresented, "Play did not start Classic Fun 1")
+    try check(AnonymousTelemetry.shared.sharesCounts == sharesCounts, "Saving a profile changed sharing consent")
+    try check(ArcadeStore.shared.records.activeProfile == ArcadeProfile(id: id, initials: "AX", portrait: 6)
+      && !Self.needsFirstProfile(in: .current()), "The next launch lost the profile or repeated setup")
+    returnToLibrary()
+    let starter = storage.applicationSupport.appendingPathComponent("starter")
+    let generator = Process()
+    generator.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+    generator.arguments = ["python3", "Tools/AlternativeAssets/prepare_open_starter.py", "--output", starter.path]
+    try generator.run(); generator.waitUntilExit()
+    try check(generator.terminationStatus == 0, "Could not prepare the Open Starter fixture")
+    let set = try GameStarterContent.dataSet(in: starter)
+    dataSets = [(set, starter)]
+    playFirstLevel()
+    try check(phase == .playing && arcadeLevel?.title == "First Steps", "Open Starter did not start its first level")
+    returnToLibrary()
+    print("PASS first-launch counter, offline editing, portrait input, saved identity, Fun 1 and First Steps")
+  }
   fileprivate func testProfileSessionActions() throws {
     if window == nil { buildInterface() }
     loadContent(); returnToLibrary(); installKeyboardShortcuts()
@@ -8291,7 +8364,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !PLAYFIELD_TESTS && !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
+    #if !PLAYFIELD_TESTS && !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !FIRST_PROFILE_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -8348,6 +8421,8 @@ Task { @MainActor in
     print("Gameplay quick controls integration tests passed.")
     #elseif HOME_BACKDROP_TESTS
     try await subject.testHomeBackdrop()
+    #elseif FIRST_PROFILE_TESTS
+    try subject.testFirstProfileLaunch()
     #elseif MAC_FIDELITY_TESTS
     try await subject.testMacintoshFidelity()
     print("Macintosh fidelity integration tests passed.")

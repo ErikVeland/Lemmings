@@ -6,12 +6,40 @@ final class LaunchTests: XCTestCase {
         continueAfterFailure = false
     }
 
+    @MainActor func testFirstPlayerStartsLevelAndReturnsHomeOnRelaunch() throws {
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "NO"]
+        app.launch()
+
+        let portrait = app.buttons["menu.playerPortrait"]
+        let initials = app.buttons["menu.nameField"]
+        let play = app.buttons["menu.firstPlay"]
+        let total = app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] %@", "saved worldwide")).firstMatch
+        XCTAssertTrue(total.waitForExistence(timeout: 20))
+        assertTarget(portrait)
+        let originalPortrait = portrait.label
+        tap(portrait)
+        XCTAssertNotEqual(portrait.label, originalPortrait)
+        tap(initials)
+        app.typeText("LEM\n")
+        capture(app, name: "First player")
+        tap(play)
+        XCTAssertTrue(app.buttons["Pause"].waitForExistence(timeout: 30))
+        app.terminate()
+        app.launchArguments = []
+        app.launch()
+        assertTarget(app.buttons["menu.settings"])
+        XCTAssertFalse(portrait.exists)
+    }
+
     @MainActor func testGameAssetDownloadRequiresALicence() throws {
         try XCTSkipUnless(Bundle(for: Self.self).bundleIdentifier?.contains("ultimatelemmix") == true)
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
         app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
-        app.launchArguments = ["-mobile.whatsNew.seenBuild", "9999", "-AnonymousTelemetryDecisionV1", "YES"]
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
         app.launch()
         tap(app.buttons["menu.settings"])
         let data = app.buttons.matching(NSPredicate(format: "identifier IN %@", ["menu.data", "data"])).firstMatch
@@ -43,6 +71,7 @@ final class LaunchTests: XCTestCase {
 
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
         app.launch()
 
         // A data-free install starts on Game Data; bundled builds start at Home.
@@ -81,6 +110,7 @@ final class LaunchTests: XCTestCase {
 
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
         app.launch()
         let family = app.buttons["menu.family.classic"]
         let classic = app.buttons["menu.classic"]

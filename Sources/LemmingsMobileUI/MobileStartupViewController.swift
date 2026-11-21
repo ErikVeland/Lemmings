@@ -84,7 +84,7 @@ import UIKit
             let catalogue = await MobileCatalogueLoader().load(resources: GameResources.resourceURL, support: support)
             guard !Task.isCancelled else { return }
             #if os(tvOS)
-            let controller = MobileTVBootstrap()
+            let controller = MobileTVBootstrap(configuration: configuration)
             controller.catalogue = catalogue
             controller.resourceNotice = resourceNotice
             #else

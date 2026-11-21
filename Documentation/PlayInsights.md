@@ -8,9 +8,9 @@ On Mac, a successful shared load saves the owner token in local app preferences
 for that service. **Load shared** and date-range changes reuse it after relaunch.
 An authentication rejection clears the saved token so the next load asks again.
 iOS and tvOS still require token entry for each shared load.
-The home screen shows lemmings saved on this Mac and, when the player shares
-counts and the service responds, a shared total. A dash means the shared total
-is unavailable; it does not mean zero.
+The first player profile shows how many lemmings players have saved worldwide.
+Mac Home also shows this total alongside the local rescue count. The app can read
+the worldwide total with sharing off. A dash means the total is unavailable.
 
 Click an official level row to start that level through Level Select's launch
 flow. The whole row supports mouse, keyboard and accessibility activation.
@@ -72,8 +72,8 @@ concurrent-player or completion-rate figures.
 
 ## Consent and privacy
 
-Sharing starts off. A first-run page asks for consent only when the build has a
-service address. The player can change the choice in **Settings > Privacy**.
+Sharing starts off. Reading the public total sends no play counts, initials or
+portrait. Players can enable sharing in **Settings > Privacy**.
 Sharing counts also enables worldwide records for local players without an
 explicit records opt-out. Worldwide records publish initials, scores and action
 replays through the separate rankings service. They use a player credential and

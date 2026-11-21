@@ -367,7 +367,7 @@ import LemmingsGameArt
     }
     override func layout() {
         super.layout()
-        let visible = GameScreen.shared.onMainMenu != nil
+        let visible = GameScreen.shared.onMainMenu != nil && (page as? ArcadeView)?.onFirstPlay == nil
         home.isHidden = !visible
         let showsBack = (page as? GameMenuPage)?.controllerBackButton.isHidden != true
         back.title = (page as? GameMenuPage)?.backTitle ?? (page as? SolutionReplayPage)?.navigationBackButton?.title ?? L10n.text("Back")
