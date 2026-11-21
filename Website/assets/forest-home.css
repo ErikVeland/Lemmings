@@ -192,8 +192,8 @@
   padding-block: var(--clearing-pad);
 }
 @media (min-width: 801px) {
-  .home > .bring-along { --fade: clamp(48px, 6vw, 110px); }
-  .home > .bring-along .glade-copy { padding: var(--fade) clamp(24px, 3vw, 88px); }
+  .home > :is(.community-music, .bring-along) { --fade: clamp(48px, 6vw, 110px); }
+  .home > :is(.community-music, .bring-along) .glade-copy { padding: var(--fade) clamp(24px, 3vw, 88px); }
 }
 .duo-glade {
   display: grid;
@@ -240,7 +240,8 @@
     mask-image: linear-gradient(black 75%, transparent);
     margin-bottom: -26px;
   }
-  .home > .bring-along .woodland-still { height: auto; }
+  .home > :is(.community-music, .bring-along) .woodland-still { height: auto; }
+  .home > .community-music { --fade: clamp(24px, 5vw, 40px); }
   .home > .second-thoughts .woodland-still {
     mask-image: linear-gradient(transparent, black var(--fade), black 75%, transparent);
   }
