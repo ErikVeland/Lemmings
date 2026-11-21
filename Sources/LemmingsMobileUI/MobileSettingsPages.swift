@@ -98,7 +98,8 @@ extension MobileLibraryViewController {
             let libraries = MobileMusicLibraries.shared
             let packs = libraries.catalogue?.packs ?? []
             let status = libraries.failure ?? (libraries.isDownloading ? L10n.text("Downloading...") : "\(packs.filter { libraries.isBundled($0) || libraries.isInstalled($0) }.count)/\(packs.count)")
-            var page = GameFrontEnd.Page(title: L10n.text("Soundtrack"), subtitle: status,
+            let credit = L10n.text("WillLem arranged and produced the eight Christmas tracks referenced by the NeoLemmix packs Xmas Lemmings and Holiday Lemmings.")
+            var page = GameFrontEnd.Page(title: L10n.text("Soundtrack"), subtitle: [status, credit].joined(separator: "\n"),
                                 rows: packs.map { pack in
                                     let included = libraries.isBundled(pack)
                                     let percent = libraries.progress[pack.id].map { "  \(Int($0 * 100))%" }
