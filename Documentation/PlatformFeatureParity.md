@@ -5,7 +5,8 @@
 The Lemmix importer on Mac and the Game Data screen on iPhone, iPad, Duo and Apple TV
 offer **Download game assets**. Each download asks the player to confirm they hold
 a valid licence for the original Lemmings game on at least one platform. **Cancel**
-has initial focus. **Agree and download** starts the 253 MB GitHub transfer.
+has initial focus. **Agree and download** downloads the 253 MB pack from Archive.org. If the transfer or file verification
+fails, the app tries GitHub. Build 111 uses GitHub directly.
 The app checks the size and SHA-256, then installs the resources through the folder importer.
 A player can cancel the transfer or retry a failed download. Audio settings
 list the 18 optional soundtrack libraries once the pack is active.
