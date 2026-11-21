@@ -1,10 +1,11 @@
 import Foundation
 import NxlvKit
 
-/// Downloads the fixed GitHub release and passes its verified resource folder to the normal importer.
+/// Downloads the game asset pack and passes its verified resource folder to the normal importer.
 public actor GameAssetPack {
     public static let shared = GameAssetPack()
-    private static let source = URL(string: "https://github.com/ErikVeland/Lemmings/releases/download/ultimate-lemmix-game-assets-1/Ultimate-Lemmix-Restoration-Game-Assets.zip")!
+    private static let primary = URL(string: "https://archive.org/download/ultimate-lemmix-restoration-extra-soundtracks/Ultimate-Lemmix-Restoration-Game-Assets.zip")!
+    private static let fallback = URL(string: "https://github.com/ErikVeland/Lemmings/releases/download/ultimate-lemmix-game-assets-1/Ultimate-Lemmix-Restoration-Game-Assets.zip")!
     fileprivate static let bytes: Int64 = 252_732_885
     private static let digest = "142b37b8b7ff42e818b46d7f72f676706e4c86c90e379fc819e36f91c7a55ca1"
     private var busy = false
@@ -49,23 +50,46 @@ public actor GameAssetPack {
         guard !busy else { throw Failure.busy }
         busy = true
         defer { busy = false }
-        await progress(.downloading(0))
         let session = URLSession(configuration: .ephemeral)
         defer { session.invalidateAndCancel() }
-        let monitor = TransferProgress(update: progress)
-        let (file, response) = try await session.download(from: Self.source, delegate: monitor)
-        defer { try? FileManager.default.removeItem(at: file) }
-        guard (response as? HTTPURLResponse)?.statusCode == 200, response.url?.scheme == "https" else {
-            throw Failure.unavailable
+        let file = try await Self.withDownloadFallback { source in
+            try Task.checkCancellation()
+            await progress(.downloading(0))
+            let monitor = TransferProgress(update: progress)
+            let (file, response) = try await session.download(from: source, delegate: monitor)
+            do {
+                guard (response as? HTTPURLResponse)?.statusCode == 200, response.url?.scheme == "https" else {
+                    throw Failure.unavailable
+                }
+                try Task.checkCancellation()
+                try Self.verifyArchive(file)
+                return file
+            } catch {
+                try? FileManager.default.removeItem(at: file)
+                throw error
+            }
         }
+        defer { try? FileManager.default.removeItem(at: file) }
         try Task.checkCancellation()
         await progress(.installing)
-        return try Self.installArchive(file, install: install)
+        return try Self.installVerifiedArchive(file, install: install)
     }
 
-    static func installArchive<Result>(_ file: URL, install: (URL) throws -> Result) throws -> Result {
+    static func withDownloadFallback(_ download: (URL) async throws -> URL) async throws -> URL {
+        do {
+            return try await download(primary)
+        } catch {
+            try Task.checkCancellation()
+            return try await download(fallback)
+        }
+    }
+
+    static func verifyArchive(_ file: URL) throws {
         guard try file.resourceValues(forKeys: [.fileSizeKey]).fileSize == Int(bytes),
               try MusicLibraryStore.hash(file) == digest else { throw Failure.invalid }
+    }
+
+    private static func installVerifiedArchive<Result>(_ file: URL, install: (URL) throws -> Result) throws -> Result {
         let archive = try ZipArchive(contentsOf: file)
         let prefix = "Ultimate-Lemmix-Restoration-Game-Assets/Resources/"
         let manager = FileManager.default
