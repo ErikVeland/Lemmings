@@ -9,12 +9,12 @@ for the previous TestFlight submissions.
 
 ## Latest published Mac release
 
-[Mac 2.4.2 build 106](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.2)
-has full and slim notarised downloads for Apple silicon and Intel. The signed
-feed includes direct deltas from the five preceding builds.
-See the [2.4.2 release record](ReleaseReadiness/2.4.2-build106/README.md).
+[Mac 2.4.3 build 109](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.3)
+has full and slim notarised downloads for Intel and Apple silicon. The signed
+feed provides direct updates from builds 106, 105, 104, 102 and 99.
+See the [2.4.3 release record](ReleaseReadiness/2.4.3-build109/README.md).
 
-The [Mac 2.4.1 record](ReleaseReadiness/2.4.1-build105/README.md) retains the
+The [2.4.2 record](ReleaseReadiness/2.4.2-build106/README.md) retains the
 previous release checks.
 
 ## Earlier notes
