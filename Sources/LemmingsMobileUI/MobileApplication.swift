@@ -30,6 +30,12 @@ public enum LemmingsMobileApplication {
     }
     #endif
     @MainActor public static func makeRootViewController(configuration: LemmingsMobileConfiguration = .current) -> UIViewController {
+#if targetEnvironment(simulator)
+        if ProcessInfo.processInfo.arguments.contains("--verify-offline-fan-catalogue") {
+            Task.detached { await OfflineFanCatalogueCheck.run() }
+            return UIViewController()
+        }
+#endif
 #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("--ui-test-l3-direction-picker")
             || ProcessInfo.processInfo.arguments.contains("--ui-test-accessible-targeting")
