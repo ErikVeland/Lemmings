@@ -22,7 +22,7 @@ public enum MobileBookHomeArt {
         let showsTurnAtTop = page.homeNextPlayerIndex != nil
         var turnInitials = CGRect(x: left.minX + padding, y: subtitle.maxY + 4,
             width: leftWidth, height: showsTurnAtTop ? 22 : 0)
-        var start = max(showsTurnAtTop ? turnInitials.maxY : subtitle.maxY, libraryHeading.maxY) + 12
+        var leftStart = (showsTurnAtTop ? turnInitials.maxY : subtitle.maxY) + 12
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
         let footerHeight = max(44, footer.map { GameTextLayout.height($0.title, width: leftWidth - 24) + 8 }.max() ?? 44)
@@ -34,7 +34,7 @@ public enum MobileBookHomeArt {
         }.max() ?? 52)
         func rows(_ actions: [GameFrontEnd.Action], in pane: CGRect) -> (targets: [GameFrontEnd.Target], bottom: CGFloat) {
             let inner = pane.width - padding * 2
-            var y = start
+            var y = pane == left ? leftStart : libraryHeading.maxY + gap
             var targets: [GameFrontEnd.Target] = []
             for (index, action) in actions.enumerated() {
                 if index > 0, isLibrary(action) != isLibrary(actions[index - 1])
@@ -66,7 +66,7 @@ public enum MobileBookHomeArt {
         heading.size.height += logoGrowth
         subtitle.origin.y += logoGrowth
         turnInitials.origin.y += logoGrowth
-        start += logoGrowth
+        leftStart += logoGrowth
         let leading = rows(Array(page.rows.prefix(split)), in: left)
         let trailing = rows(Array(page.rows.dropFirst(split)), in: right)
         let contentHeight = max(height, max(leading.bottom + footerSpace, trailing.bottom) + bottomPadding)

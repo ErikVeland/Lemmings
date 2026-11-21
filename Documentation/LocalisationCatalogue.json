@@ -4356,6 +4356,14 @@
       "Sources/LemmingsLocal/main.swift:5315"
     ]
   },
+  "Create profile": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileCareerArt.swift:16",
+      "Sources/LemmingsLocal/ArcadeWindow.swift:865",
+      "Sources/LemmingsLocal/ArcadeWindow.swift:869"
+    ]
+  },
   "Create / View": {
     "kind": "text",
     "references": [
@@ -9282,6 +9290,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:43"
+    ]
+  },
+  "Lemmings saved here": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsAppCore/Privacy/AnonymousTelemetry.swift:145"
     ]
   },
   "Lemmings saved worldwide": {

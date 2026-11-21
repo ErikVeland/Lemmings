@@ -2013,6 +2013,9 @@
 /* Sources/LemmingsLocal/main.swift:4186; Sources/LemmingsLocal/main.swift:5315 */
 "Create" = "Create";
 
+/* Sources/LemmingsGameArt/MobileCareerArt.swift:16; Sources/LemmingsLocal/ArcadeWindow.swift:865; Sources/LemmingsLocal/ArcadeWindow.swift:869 */
+"Create profile" = "Create profile";
+
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:175 */
 "Create / View" = "Create / View";
 
@@ -4325,6 +4328,9 @@
 
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:43 */
 "Lemmings saved" = "Lemmings saved";
+
+/* Sources/LemmingsAppCore/Privacy/AnonymousTelemetry.swift:145 */
+"Lemmings saved here" = "Lemmings saved here";
 
 /* Sources/LemmingsAppCore/Privacy/AnonymousTelemetry.swift:141 */
 "Lemmings saved worldwide" = "Lemmings saved worldwide";
