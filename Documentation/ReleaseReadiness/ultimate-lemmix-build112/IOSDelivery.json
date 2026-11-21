@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-11-21T02:20:30.428317+00:00",
+  "product": "Ultimate Lemmix",
+  "platform": "IOS",
+  "version": "2.4.3",
+  "build": "112",
+  "bundleID": "academy.glasscode.ultimatelemmix",
+  "appStoreID": "6836347807",
+  "sourceCommit": "f5f71fa1",
+  "freshSimulator": {
+    "model": "iPhone 18 Pro",
+    "OS": "iOS 27.0",
+    "method": "Fresh app container. Each bundled level opened through its mobile library and advanced one simulation tick. No asset download or import.",
+    "result": {
+      "neoLevels": 120,
+      "classicLevels": 5051,
+      "classicPacks": 487,
+      "failures": [],
+      "complete": true
+    }
+  },
+  "acceptedLimits": "Simulator gameplay opening and one tick per level. Three catalogue levels lack exits and one requires more survivors than its population. The four levels remain outside automatic fan selection.",
+  "exportVerified": true,
+  "ipaSHA256": "018389adde3baa630aaf4a808c964e5636b91f3e90d0549d318b3be0178453a8",
+  "ipaBytes": 66346870,
+  "verifiedPackagedFiles": 5757,
+  "runtimeInputSHA256": "5b573f15a6f3905670c6fa399f0bcd2012c40a7f6c2e5ce33db88b4bb0895a6b",
+  "buildID": "bd7dbc72-1801-48c2-9dfc-df124ab22b53",
+  "processing": "VALID",
+  "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88",
+  "versionState": "PREPARE_FOR_SUBMISSION",
+  "selectedBuild": "bd7dbc72-1801-48c2-9dfc-df124ab22b53",
+  "releaseType": "AFTER_APPROVAL",
+  "existingArtworkSubmission": {
+    "id": "e10860fd-a8ec-4a0c-9c1e-b4ac9a5a22da",
+    "state": "WAITING_FOR_REVIEW"
+  },
+  "submissionBlocker": "Apple refused to add the version for review because assigned store artwork is locked in a standalone submission."
+}
