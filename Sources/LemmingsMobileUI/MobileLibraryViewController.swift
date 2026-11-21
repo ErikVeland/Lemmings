@@ -691,7 +691,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         var menuRegion = book.isEmpty ? MobileSystemRegions.menuFrame(in: view) : safe
         if MobileSystemRegions.usesFullDisplay(in: view) { menuRegion = view.bounds }
         canvas.obstructionReferenceView = view
-        canvas.viewportObstructions = MobileSystemRegions.isFoldable(in: view) && !canvas.page.home && !browserShown
+        let compactHome = canvas.page.home && book.isEmpty && min(view.bounds.width, view.bounds.height) < 600
+        canvas.viewportObstructions = MobileSystemRegions.isFoldable(in: view) && (!canvas.page.home || compactHome) && !browserShown
             ? MobileSystemRegions.layoutObstructions(in: view).map { CGRect(x: $0.frame.x, y: $0.frame.y, width: $0.frame.width, height: $0.frame.height) } : []
         #if os(iOS)
         let openDuoHome = route == .home && canvas.page.home && book.isEmpty
