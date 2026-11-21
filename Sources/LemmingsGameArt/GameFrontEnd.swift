@@ -398,8 +398,8 @@ public struct GameFrontEnd {
         let statusSlot = GameTextLayout.width(of: L10n.text("Loading...")) + 8
         let statusWidth = GameTextLayout.width(of: page.subtitle)
         let headerStatus = !page.subtitle.contains("\n") && statusWidth <= statusSlot
-        let heading = CGRect(x: x + 62 + statusSlot / 2, y: 22,
-                            width: boardWidth - 124 - statusSlot, height: 44)
+        let headerInset = 62 + (headerStatus ? statusSlot / 2 : 0)
+        let heading = CGRect(x: x + headerInset, y: 22, width: boardWidth - 2 * headerInset, height: 44)
         let statusHeight = GameTextLayout.height(page.subtitle, width: inner)
         let subtitle = headerStatus
             ? CGRect(x: x + boardWidth - 62 - statusWidth, y: 22 + floor((44 - statusHeight) / 2),

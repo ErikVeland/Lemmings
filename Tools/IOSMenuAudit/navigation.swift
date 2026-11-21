@@ -1,6 +1,7 @@
 import Foundation
 import CoreGraphics
 import ImageIO
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -11,9 +12,11 @@ extension MenuAudit {
         let families: [Action] = [.init("classic", "Classic"), .init("l2", "Lemmings 2", gameLogo: .lemmings2),
             .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
         var pages: [(String, GameFrontEnd.Page)] = [
-            ("home", MobileHomeArt.page(journey: MobileHomeArt.journeyAction(run: nil), families: families, initials: "LEM")),
+            ("home", MobileHomeArt.page(journey: MobileHomeArt.journeyAction(run: nil), families: families, initials: "LEM",
+                subtitle: SavedLemmingsCounter(local: 42, global: 130662).homeCaption)),
             ("home-saves", MobileHomeArt.page(resume: [.init("resume", "Resume level - LEM")],
-                journey: MobileHomeArt.journeyAction(run: nil), families: families, initials: "LEM v PAL")),
+                journey: MobileHomeArt.journeyAction(run: nil), families: families, initials: "LEM v PAL", nextPlayerIndex: 1,
+                subtitle: SavedLemmingsCounter(local: 42, global: nil).homeCaption)),
             ("journey-progress", MobileHomeArt.journeyPage(title: "Journey", completed: 812,
                 solved: 12, total: 227, revisit: 2, resume: nil, canContinue: true)),
             ("journey-resume", MobileHomeArt.journeyPage(title: "Journey", completed: 812,
@@ -120,6 +123,10 @@ extension MenuAudit {
                     guard (page.home || footerNavigationIsValid(page, layout: layout)), layout.targets.count == actions.count else {
                         FileHandle.standardError.write(Data("Navigation: \(name), \(device), \(setting)\n".utf8))
                         throw invalidTargets(line: #line)
+                    }
+                    if page.home, !page.subtitle.isEmpty {
+                        guard !layout.subtitle.intersects(layout.heading),
+                              layout.targets.allSatisfy({ !$0.frame.intersects(layout.subtitle) }) else { throw invalidTargets(line: #line) }
                     }
                     for (index, target) in layout.targets.enumerated() {
                         guard canvas.contains(target.frame), target.frame.width * scale >= 44, target.frame.height * scale >= 44,

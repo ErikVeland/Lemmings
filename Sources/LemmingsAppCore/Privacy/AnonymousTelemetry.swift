@@ -141,6 +141,12 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
         L10n.text("Lemmings saved worldwide") + "   " + (total.map(grouped) ?? "—")
     }
 
+    public var homeCaption: String {
+        let device = L10n.text("Lemmings saved here") + " " + Self.grouped(local)
+        let worldwide = L10n.text("Worldwide") + " " + (global.map(Self.grouped) ?? "—")
+        return device + "\n" + worldwide
+    }
+
     private static func grouped(_ count: Int) -> String {
         let formatter = NumberFormatter()
         formatter.locale = Locale(identifier: "en_AU")

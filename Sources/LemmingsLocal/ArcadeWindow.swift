@@ -862,11 +862,11 @@ import NxlvKit
         let store = ArcadeStore.shared
         let records = store.records
         if onFirstPlay != nil {
-            header(L10n.text("New player"), subtitle: SavedLemmingsCounter.worldwideText(worldwideSaved))
+            header(L10n.text("Create profile"), subtitle: SavedLemmingsCounter.worldwideText(worldwideSaved))
             drawProfileEditor()
             button(L10n.text("Play"), CGRect(x: 400, y: 627, width: 320, height: 55), primary: true,
                    enabled: store.profilesAreWritable && !initials.isEmpty) { [weak self] in self?.performProfilePrimaryAction() }
-            setAccessibilityLabel(L10n.text("New player"))
+            setAccessibilityLabel(L10n.text("Create profile"))
             return
         }
         header(L10n.text("Players"), subtitle: isNewProfile ? L10n.text("NEW PLAYER") : L10n.text("PLAYER SELECT"))
