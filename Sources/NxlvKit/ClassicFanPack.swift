@@ -276,11 +276,6 @@ public struct ClassicFanPack: Sendable {
     return .original
   }
 
-  public static func runtimeRoot(for portsRoot: URL) -> URL {
-    let bundled = portsRoot.deletingLastPathComponent().appendingPathComponent("FanRuntime", isDirectory: true)
-    return FileManager.default.fileExists(atPath: bundled.path) ? bundled : portsRoot
-  }
-
   /// The stock release folder whose graphics this exact archive was made for.
   public func localStyleDirectory(includeHoliday: Bool = false) -> String? {
     let conventions = includeHoliday

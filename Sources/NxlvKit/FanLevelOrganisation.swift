@@ -145,3 +145,10 @@ public enum FanLevelOrganisation {
         return stem.isEmpty ? title : stem
     }
 }
+
+extension ClassicFanPack {
+  public static func runtimeRoot(for portsRoot: URL) -> URL {
+    let bundled = portsRoot.deletingLastPathComponent().appendingPathComponent("FanRuntime", isDirectory: true)
+    return FileManager.default.fileExists(atPath: bundled.path) ? bundled : portsRoot
+  }
+}

@@ -2,8 +2,8 @@
 
 ## Current source and delivery queue
 
-The current source version is **2.4.3** (Mac build 108, iOS build 47, tvOS build 22).
-Read the [complete 2.4.3 notes](ReleaseNotes-2.4.3-build108.md).
+The current source version is **2.4.3** (Mac build 109, iOS build 47, tvOS build 22).
+Read the [complete 2.4.3 notes](ReleaseNotes-2.4.3-build109.md).
 See the [2.4.1 mobile delivery record](ReleaseReadiness/2.4.1-build105/README.md#ios-and-tvos-delivery--4-november-2026)
 for the previous TestFlight submissions.
 

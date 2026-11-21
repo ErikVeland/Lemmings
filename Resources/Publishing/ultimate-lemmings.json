@@ -4,7 +4,7 @@
   "storeArtwork": false,
   "platforms": {
     "macos": {
-      "build": 108,
+      "build": 109,
       "bundleIdentifier": "academy.glasscode.lemmings",
       "infoPlist": "Resources/Info.plist",
       "buildScript": "Scripts/build-local-app.sh"
