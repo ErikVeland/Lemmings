@@ -172,7 +172,7 @@ enum ExplosionHDR {
   func setSuperSpeed(_ enabled: Bool, in field: CGRect, immediate: Bool = false, multiplier: Double = 3) {
     let now = ProcessInfo.processInfo.systemUptime
     let clipped = field.intersection(bounds)
-    let wanted = enabled && !clipped.isNull && !clipped.isEmpty
+    let wanted = enabled && MacFXPerformance.shared.allowsSpeedEffects && !clipped.isNull && !clipped.isEmpty
     let changed = wanted != speed.enabled || clipped != speedField || (wanted && multiplier != speed.multiplier)
       || (immediate && !wanted && speed.isAnimating(now: now))
     guard changed else { return }
