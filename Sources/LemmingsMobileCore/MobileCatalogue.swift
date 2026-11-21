@@ -77,7 +77,7 @@ public final class MobileCatalogue {
             for (name, count) in index where count >= 0 && counts[name] == nil { counts[name] = count }
         }
         measuredCounts = counts
-        if let scope = self.bundledScope {
+        if ClassicFanPack.runtimeRoot(for: portsRoot) == portsRoot, let scope = self.bundledScope {
             for file in fanFiles() where scope.applies(to: file) {
                 guard let pack = try? ClassicFanPack(url: file) else { continue }
                 excludedCounts[file.standardizedFileURL.path] = scope.members(in: file, archiveSHA256: pack.fingerprint).count

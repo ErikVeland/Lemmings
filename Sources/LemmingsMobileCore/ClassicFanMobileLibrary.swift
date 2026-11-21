@@ -31,7 +31,7 @@ public final class ClassicFanMobileLibrary: MobileGameLibrary {
         } ?? false
         assets = try ClassicMainDATAssets.load(from: self.portsRoot.appendingPathComponent(Self.engineFolder))
         let scope = bundledScope ?? GameResources.resourceURL.flatMap { try? BundledPlayableScope(resources: $0) }
-        let found = scope?.entries(in: pack) ?? pack.entries()
+        let found = self.portsRoot != portsRoot ? pack.entries() : (scope?.entries(in: pack) ?? pack.entries())
         guard !found.isEmpty else { throw MobileSessionError.changedLevel }
         entries = found
         let name = pack.displayName
