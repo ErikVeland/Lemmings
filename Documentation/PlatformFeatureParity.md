@@ -1,5 +1,18 @@
 # Cross-platform feature parity
 
+## Mac fast-forward and skill input — 21 November 2026
+
+Classic, supported NeoLemmix, Lemmings 2 and Lemmings 3 use the Mac effects budget.
+Intel Macs start with speed trails and the full-screen speed effect off. Both
+effects require full CPU and GPU quality. Late game updates count towards CPU
+pressure, including delays between timer callbacks. Minimum quality disables
+bloom and enhanced overlays. Classic and NeoLemmix also stop testing nearby
+actors once the targeting rules identify the preferred eligible lemming.
+
+The policy check simulates sustained 25 Hz delivery on an Intel-class profile.
+Actual fast-forward speed and click-to-action latency on a 2018 Mac still need
+hardware measurements.
+
 ## Lemmix Game Assets download — 21 November 2026
 
 The Lemmix importer on Mac and the Game Data screen on iPhone, iPad, Duo and Apple TV

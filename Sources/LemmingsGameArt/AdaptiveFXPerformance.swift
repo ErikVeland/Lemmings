@@ -119,10 +119,27 @@ public struct AdaptiveFXPerformance: Sendable {
         gpu = AdaptiveFXQuality(initial: profile.initialQuality)
     }
 
+    /// Older Macs enable speed trails and the full-screen overlay after both budgets reach full quality.
+    public var allowsSpeedEffects: Bool {
+        !profile.desktop || profile.prefersFullDesktopEffects || (cpu.quality == .full && gpu.quality == .full)
+    }
+
+    private var lastGameplayFrameStart: Double?
+
+    public mutating func recordGameplayFrame(seconds: Double, now: Double) {
+        guard seconds.isFinite, seconds >= 0, now.isFinite else { return }
+        let start = now - seconds
+        let interval = lastGameplayFrameStart.map { start - $0 } ?? 0
+        lastGameplayFrameStart = start
+        // AppKit can spend time drawing and handling input between timer callbacks.
+        let late = interval > 0 && interval <= 1 ? max(0, interval - 1 / framesPerSecond) : 0
+        recordCPU(max(seconds, late), now: now)
+    }
+
     public var presentation: FXPresentationBudget {
         FXPresentationBudget(cpuQuality: cpu.quality, gpuQuality: gpu.quality,
                              framesPerSecond: framesPerSecond, maximumOverlayPixels: maximumOverlayPixels,
-                             enhancedEffectsAllowed: enhancedEffectsAllowed, effectsFollowCPU: !profile.desktop)
+                             enhancedEffectsAllowed: enhancedEffectsAllowed, effectsFollowCPU: !profile.prefersFullDesktopEffects)
     }
 
     public mutating func setPressure(ceiling: FXQuality, framesPerSecond: Double, now: Double,
@@ -131,7 +148,7 @@ public struct AdaptiveFXPerformance: Sendable {
         self.ceiling = FXQuality(rawValue: min(profile.maximumQuality.rawValue, ceiling.rawValue, resources?.qualityCeiling ?? 2))!
         let resourcePixels = resources?.maximumOverlayPixels ?? profile.maximumOverlayPixels
         // Memory warnings use the small emergency surface on every platform.
-        maximumOverlayPixels = profile.desktop && resourcePixels > 262_144
+        maximumOverlayPixels = profile.prefersFullDesktopEffects && resourcePixels > 262_144
             ? profile.maximumOverlayPixels : min(profile.maximumOverlayPixels, resourcePixels)
         enhancedEffectsAllowed = profile.supportsEnhancedEffects && (resources?.enhancedEffectsAllowed ?? true)
         self.framesPerSecond = min(60, framesPerSecond)
