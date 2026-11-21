@@ -31,14 +31,19 @@ dependencies too. A fan level can require official scenery, and a public-domain
 composition can have a separately licensed recording. Original game assets
 remain available through player import.
 
-The local Classic catalogue has 487 candidate packs with 5,051 selectable
-levels. Creator permissions are unverified and some packs need original
-graphics. Do not use the personal preview archives as public packages. Some
-still contain excluded official level data that the personal preview hides
-at runtime. The [personal preview record](UltimateLemmixPersonalPreview.md)
-describes the classification and the NeoLemmix style dependencies.
-The [NeoLemmix style inventory](ReleaseReadiness/2.0-build83/neolemmix-style-rights-inventory.json)
-records who owns the artwork where known and which grants are missing.
+The owner approved the complete fan-level selection for the Store update:
+487 Classic packs (5,051 levels) and all 120 NeoLemmix Introduction levels.
+The Store packager includes the reviewed level files from
+`Resources/UltimateLemmix/FanCatalogue.zip`. Its checksum pins the selection.
+The Classic packs retain the three pack-specific special graphics needed for
+geooPk0, geooPk1 and Mon0lith. The earlier personal-preview inventory describes
+the unfiltered source archives.
+
+Offline acceptance requires the Classic terrain, object and sprite data and
+the NeoLemmix styles used by these levels. The staged catalogue loaded,
+rendered and advanced one tick for all 5,171 levels with local preservation
+resources and community styles. The clean Store profile still lacks those
+dependencies. A fresh-install gameplay check remains open.
 
 ### Lemmings Forums sources
 

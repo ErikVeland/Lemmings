@@ -136,6 +136,9 @@ def prepare(output, alternatives, store=False):
     copy_tree(ROOT / 'Resources/UltimateLemmix/MenuArtwork', output / 'MenuArtwork')
     prepare_branding(output, store)
     if store:
+        from fan_catalogue import resources as fan_resources
+        for name, data in fan_resources().items():
+            write(output / name, data)
         from prepare_project_pixel import resources as pixel_resources
         for name, data in pixel_resources().items():
             write(output / name, data)

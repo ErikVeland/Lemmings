@@ -8,10 +8,13 @@ import os
 from pathlib import Path, PurePosixPath
 import sys
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "Tools/AlternativeAssets"))
+import fan_catalogue
+
 MANIFEST = "ultimate-lemmix-mobile-resources.json"
 RECEIPT = "ultimate-lemmix-resource-receipt.json"
 FOLDERS = {"AlternativeAssets", "Fonts", "Music", "Licences", "Provenance", "Integration",
-           "Localization.bundle", "About", "GameCenter", "Hints", "Progression", "Trolley", "Ports", "MenuArtwork"}
+           "Localization.bundle", "About", "GameCenter", "Hints", "Progression", "Trolley", "Ports", "MenuArtwork"} | fan_catalogue.FOLDERS
 WIDGET_FOLDERS = {"AlternativeAssets", "Fonts", "Licences", "Provenance"}
 
 
@@ -58,6 +61,8 @@ def main():
     if manifest.get("kind") != "ultimate-lemmix-full-game-mobile-resources" or manifest.get("schemaVersion") != 1:
         raise ValueError("The full-game mobile resource manifest is invalid.")
     rows = manifest["files"]
+    if os.environ.get("ULTIMATE_LEMMIX_RELEASE_CHECKS") == "1" or any(row["path"].split("/", 1)[0] in fan_catalogue.FOLDERS for row in rows):
+        fan_catalogue.verify_manifest(rows)
     expected = {row["path"] for row in rows}
     actual = set()
     for path in args.source.rglob("*"):
@@ -84,7 +89,7 @@ def main():
     old = {row["path"]: row for row in previous}
     for row in previous:
         read_checked(args.destination, row)
-    for prohibited in ("MacArtwork", "AmigaArtwork", "NeoLemmix", "LevelPacks", "BetaGameData"):
+    for prohibited in ("MacArtwork", "AmigaArtwork", "BetaGameData"):
         if (args.destination / prohibited).exists():
             raise ValueError("The product contains resources outside the clean profile.")
     for family in FOLDERS:
