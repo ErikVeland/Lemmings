@@ -11,8 +11,10 @@ A player can cancel the transfer or retry a failed download. Audio settings
 list the 18 optional soundtrack libraries once the pack is active.
 
 On Mac, an offscreen check opened the agreement, cancelled, reopened it and accepted.
-The app installed the pack and displayed all 18 soundtrack libraries. An iPhone
-simulator confirmed the notice, both touch targets and cancellation on two attempts.
+The app installed the pack and displayed all 18 soundtrack libraries. On iPhone,
+iPad and folded Duo simulators, the check opened the agreement from Settings,
+verified both touch targets and cancelled on two attempts. The folded Duo Home
+screen places Settings clear of the camera and system status display.
 A separate native check downloaded, installed and reopened all 23,001 assets.
 The hosted ZIP matched the release checksum. The iOS and tvOS device builds passed.
 Physical-device input and interrupted transfers still need device acceptance.
