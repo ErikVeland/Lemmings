@@ -13,6 +13,10 @@ import NxlvKit
     #if PERFORMANCE_TESTS
     var overrideQuality: FXQuality?
     #endif
+    var allowsSpeedEffects: Bool {
+        poll()
+        return budget.allowsSpeedEffects
+    }
     var quality: FXQuality {
         presentation.quality
     }
@@ -60,7 +64,7 @@ import NxlvKit
     func recordCPU(_ seconds: Double) {
         poll()
         let now = ProcessInfo.processInfo.systemUptime
-        budget.recordCPU(seconds, now: now)
+        budget.recordGameplayFrame(seconds: seconds, now: now)
         DeviceEffectPressure.shared.setAudioQuality(budget.cpu.quality.rawValue)
     }
     func recordGPU(_ seconds: Double, source: String) {

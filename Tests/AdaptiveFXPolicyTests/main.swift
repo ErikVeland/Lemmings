@@ -74,6 +74,21 @@ private func require(_ value: @autoclosure () -> Bool, _ message: String) throws
         for tick in 0..<600 { olderDesktop.recordGPU(0.025, source: "effects", now: Double(tick) / 60) }
         try require(olderDesktop.presentation.gpuQuality == .minimal,
                     "An older Intel-class desktop lost measured GPU scaling")
+        try require(!olderDesktop.allowsSpeedEffects && !olderDesktop.presentation.enhancedEffectsAllowed,
+                    "GPU pressure kept expensive Intel Mac effects active")
+        var delayed = AdaptiveFXPerformance(profile: smallMac)
+        try require(!delayed.allowsSpeedEffects, "Intel Mac started with speed effects enabled")
+        for frame in 0..<1000 {
+            let now = Double(frame) / 60
+            delayed.recordGameplayFrame(seconds: 0.002, now: now)
+            delayed.recordGPU(0.002, source: "crt", now: now)
+        }
+        try require(delayed.allowsSpeedEffects, "Intel Mac could not earn speed effects")
+        for frame in 0..<240 {
+            delayed.recordGameplayFrame(seconds: 0.002, now: 17 + Double(frame) / 25)
+        }
+        try require(!delayed.allowsSpeedEffects && !delayed.presentation.bloomAllowed,
+                    "Late frames with cheap timer callbacks kept Intel Mac effects active")
         let saving = macResources.underPressure(thermalLevel: 0, lowPower: true, memoryPressure: false)
         mac.setPressure(ceiling: .balanced, framesPerSecond: 30, now: 54, resources: saving)
         try require(!mac.presentation.enhancedEffectsAllowed && mac.presentation.effectHz == 30,

@@ -661,7 +661,7 @@ struct ReticleFeedback {
 
   private var usesTrails: Bool {
     hdEffectsEnabled && !reduceMotion && phase == .playing
-      && (isFastForward || (!reduceFlashes && speedTrails.isRewinding))
+      && (isFastForward || (!reduceFlashes && speedTrails.isRewinding)) && MacFXPerformance.shared.allowsSpeedEffects
   }
 
   /// Updates the transport cue after a deterministic history seek.
@@ -878,16 +878,16 @@ struct ReticleFeedback {
        }) {
       return builder
     }
-    let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
-    if favorBombBlockers, name == "bomber", let blocker = eligible.first(where: { $0.pose == .blocking }) {
+    func eligible(_ actor: SessionLemming) -> Bool { session.canAssign(skillIndex: skill, to: actor.id) }
+    if favorBombBlockers, name == "bomber", let blocker = candidates.first(where: { $0.pose == .blocking && eligible($0) }) {
       return blocker
     }
-    if favorBuilders, let worker = eligible.first(where: {
-      $0.isPerformingSkill && !(name == "bomber" && !favorBombBlockers && $0.pose == .blocking)
+    if favorBuilders, let worker = candidates.first(where: {
+      $0.isPerformingSkill && !(name == "bomber" && !favorBombBlockers && $0.pose == .blocking) && eligible($0)
     }) {
       return worker
     }
-    guard let nearest = eligible.first else { return nil }
+    guard let nearest = candidates.first(where: eligible) else { return nil }
     if favorApproachingLemmings, nearest.pose == .building {
       // A follower behind the builder can sit outside the click's own pick
       // box, so look for one near the builder instead of near the click.
@@ -907,8 +907,8 @@ struct ReticleFeedback {
         LemmingApproachTargeting.isApproaching(x: lemming.x, direction: lemming.facingLeft ? -1 : 1,
           clickX: Double(point.x), wallDirection: wallDirection)
       }
-      if !approaching(nearest), let preferred = eligible.first(where: {
-        $0.facingLeft != nearest.facingLeft && approaching($0)
+      if !approaching(nearest), let preferred = candidates.first(where: {
+        $0.facingLeft != nearest.facingLeft && approaching($0) && eligible($0)
       }) { return preferred }
     }
     return nearest

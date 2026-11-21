@@ -2763,9 +2763,9 @@ import NxlvKit
             needsDisplay = true
         }
     }
-    private var usesSpeedEffects: Bool { hdEffectsEnabled && !reduceMotion && isFastForward }
+    private var usesSpeedEffects: Bool { hdEffectsEnabled && !reduceMotion && isFastForward && MacFXPerformance.shared.allowsSpeedEffects }
     private var usesTrails: Bool {
-        hdEffectsEnabled && !reduceMotion && (isFastForward || (!reduceFlashes && speedTrails.isRewinding))
+        hdEffectsEnabled && !reduceMotion && (isFastForward || (!reduceFlashes && speedTrails.isRewinding)) && MacFXPerformance.shared.allowsSpeedEffects
     }
     private func rewindActors(_ game: Lemmings2Runtime?) -> [SpeedTrails.Actor] {
         (game?.lemmings ?? []).filter { $0.active }.map {
