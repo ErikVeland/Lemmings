@@ -4326,6 +4326,9 @@
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:43 */
 "Lemmings saved" = "Lemmings saved";
 
+/* Sources/LemmingsAppCore/Privacy/AnonymousTelemetry.swift:141 */
+"Lemmings saved worldwide" = "Lemmings saved worldwide";
+
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:185; Sources/LemmingsLocal/ResultCelebrationView.swift:199 */
 "Less is more" = "Less is more";
 

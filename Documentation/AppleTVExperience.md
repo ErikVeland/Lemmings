@@ -19,11 +19,9 @@ target bundles `BuildInfo.json` in its final build phase, before signing. Each
 invocation gets its own identity, so a local rebuild can show its changes even
 when its version and build number are reused. The current target is 2.0 build 2.
 
-The Latest build page opens once for each installed identity, before first-run
-play-style selection. Continue acknowledges it in device defaults. Opening the
-page alone does not. What's New on Home reopens the same bundled notes. The
-notice retains the background library/checkpoint load and does not start a game
-or change saved-run ownership. All three game engines share this frontend.
+New players choose initials and a portrait on the shared profile screen. Returning
+players open Home, where **What's New** shows the bundled notes. Continue
+acknowledges the build in device defaults.
 
 Keep `Apps/UltimateLemmingsTV/BuildChanges.json` current with the changes since
 the previous distributed build. These are authored notes, not generated Git

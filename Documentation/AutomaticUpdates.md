@@ -69,12 +69,9 @@ busy checks, repeated clicks, automatic notes, session cleanup and home icon inp
 targets without downloading or installing an update. A public archive installation
 and relaunch remain separate release checks.
 
-Automatic downloads and installation remain supported. Bundled **What's New**
-notes appear once after each upgrade, even if installation did not show an alert.
-The build is acknowledged only when the player continues. Notes also remain in Help.
-On first launch, the play-style choice precedes the optional soundtrack chooser.
-For returning players, upgrade notes precede that chooser. Audio settings can reopen
-soundtrack downloads at any time.
+After an update, returning players open Home. They can read the bundled **What's New**
+notes in Help. New players choose a portrait and initials before their first level.
+Players can download extra soundtracks in Audio settings.
 
 ## Release procedure
 

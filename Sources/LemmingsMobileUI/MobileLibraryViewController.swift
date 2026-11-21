@@ -22,7 +22,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     enum Route: Equatable {
         case home, support, family(MobileFamily), fanGroup([String]), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
-        case whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
+        case firstPlayer, whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
         case journey, progression, techniques, rankings
         case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, progressPlayer(String), progressLevel(String, String?), records, achievements, recordLevel(String), recordHint(String)
     }
@@ -82,6 +82,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var previousSize = CGSize.zero
     let browser = MobileLevelBrowserView()
     var browserShown = false
+    var firstPlayerSavedTotal: Int?
     var route = Route.home
     struct NavigationPosition {
         let route: Route
@@ -360,7 +361,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.addGestureRecognizer(swipe)
         }
         #endif
-        _ = saveProfiles()
+        beginFirstLaunch()
+        if route != .firstPlayer { _ = saveProfiles() }
         reloadPlayerData()
         let target = MobileDisplayLinkTarget { [weak self] in self?.pollLibraryInput($0) }
         inputLink = CADisplayLink(target: target, selector: #selector(MobileDisplayLinkTarget.frame(_:)))
@@ -384,6 +386,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 self.syncDraft = String(AppleCloudLibraryTransport.cleanCode(self.searchField.text ?? "").prefix(12))
                 self.searchField.text = self.syncDraft
             }
+            else if self.route == .firstPlayer {
+                let text = (self.searchField.text ?? "").uppercased()
+                self.nameDraft = String(text.filter { $0.isASCII && ($0.isLetter || $0.isNumber) }.prefix(3))
+                self.searchField.text = self.nameDraft
+            }
             else if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
             else {
                 self.searchQuery = self.searchField.text ?? ""
@@ -398,15 +405,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let configured = try MobileContentStore()
             store = configured
             checkpointStore = MobileCheckpointStore(url: configured.checkpointURL)
-            reloadLibrary()
+            if route == .firstPlayer, firstPlayerPack != nil { rebuild() } else { reloadLibrary() }
         } catch { notice = error.localizedDescription; rebuild() }
-        beginWelcomeIfNeeded()
         measureMobileFanPacks()
         AnonymousTelemetry.shared.recordActiveDay()
         AnonymousTelemetry.shared.onSharingChanged = { [weak self] in self?.mobileRankings.community.countSharingChanged() }
         mobileRankings.community.countSharingChanged()
         #if os(iOS)
-        cloudProgress.canImport = { [weak self] in self?.game == nil && self?.preparingLevel == false }
+        cloudProgress.canImport = { [weak self] in self?.game == nil && self?.preparingLevel == false && self?.route != .firstPlayer }
         cloudProgress.captureExtra = { profileID in
             let saved = MobileStorage.standard(profile: profileID).load(MobileLearningState.self, name: "learning")
             return saved.map { .init(values: ["LearningJourneyProgress": .learning($0.progress)]) } ?? .init()
@@ -501,7 +507,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     private func presentCloudAuthentication() {
         #if os(iOS)
-        guard game == nil, presentedViewController == nil, view.window != nil, let controller = cloudAuthentication else { return }
+        guard route != .firstPlayer, game == nil, presentedViewController == nil, view.window != nil, let controller = cloudAuthentication else { return }
         cloudAuthentication = nil
         present(controller, animated: true)
         #endif
@@ -706,7 +712,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         } : []
         #endif
         canvas.usesMenuBackdrop = usesMenuOverlay
-        globalNavigation.isHidden = game != nil || route == .home || deskClockShown || confirmingGameAssetLicence
+        globalNavigation.isHidden = game != nil || route == .home || route == .firstPlayer || deskClockShown || confirmingGameAssetLicence
         browser.showsBack = globalNavigation.isHidden
         switch route {
         case .settings, .settingsGroup, .language, .controllerMappings, .soundtrack:
@@ -938,7 +944,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         canvas.fitsSupportPage = route == .support
         canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
-        let hidePlayerName = confirmingGameAssetLicence || (route == .players && renamingPlayer)
+        let hidePlayerName = route == .firstPlayer || confirmingGameAssetLicence || (route == .players && renamingPlayer)
         canvas.playerName = hidePlayerName ? nil : playerName(hotSeat?.turn ?? profiles.activeID)
         unfold.stop()
         let count = library?.levels.count ?? 0
@@ -1058,6 +1064,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = rankingsPage(subtitle: subtitle); canvas.preview = nil
         case .whatsNew:
             canvas.page = whatsNewPage(); canvas.preview = nil
+        case .firstPlayer:
+            canvas.page = MobileCareerArt.firstPlayer(initials: nameDraft ?? "", portrait: draftPortrait,
+                counter: SavedLemmingsCounter.worldwideText(firstPlayerSavedTotal), status: subtitle, busy: loading)
+            canvas.preview = nil
         case .effectsWelcome:
             canvas.page = effectsWelcomePage(); canvas.preview = nil
         case .telemetryConsent:
@@ -1283,6 +1293,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         if id == "dataBack", case .downloading = gameAssetProgress { resourceTask?.cancel(); return }
         guard !restoringResources else { return }
+        if route == .firstPlayer {
+            guard !loading else { return }
+            switch id {
+            case "playerPortrait": cyclePlayerPortrait()
+            case "nameField": searchField.becomeFirstResponder()
+            case "firstPlay": startFirstLevel()
+            default: break
+            }
+            return
+        }
         if handleL2Practice(id) { return }
         if handleCloudSync(id) { return }
         if handleWelcome(id) || handleInsights(id) { return }
@@ -1486,7 +1506,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             previewLoader = MobileMenuPreviewLoader { try MobileCatalogue(portsRoot: ports, fanFolders: fan).library(for: pack) }
             selectedIndex = 0; selectedPreview = nil; browserShown = false
             levelsBackRoute = back
-            navigate(.levels)
+            if route != .firstPlayer { navigate(.levels) }
             if let checkpoint {
                 do { startLevel(try loaded.checkpointLevelIndex(for: checkpoint), checkpoint: checkpoint) }
                 catch { notice = error.localizedDescription; rebuild() }
@@ -1603,7 +1623,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 previewLoader = MobileMenuPreviewLoader { try ClassicMobileLibrary(directory: directory) }
             }
             selectedIndex = 0; selectedPreview = nil
-            if library == nil, catalogue == nil { route = .data }
             rebuild(); loadCheckpoint()
         }
     }
@@ -2199,6 +2218,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             view.addSubview(next.view); next.didMove(toParent: self)
             #endif
             game = next
+            if route == .firstPlayer {
+                nameDraft = nil
+                searchField.text = searchQuery
+                route = .levels
+                if hotSeat == nil, checkpoint == nil { next.resumePlay() }
+            }
             rememberHomeBackdrop(content.session, at: index)
             syncPages()
             previous?.willMove(toParent: nil); previous?.view.removeFromSuperview(); previous?.removeFromParent()

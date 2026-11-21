@@ -57,6 +57,7 @@ if [[ "${TEST_SCOPE:-all}" == short-games ]]; then test_flags+=(-D FOUNDATION_TE
 if [[ "${TEST_SCOPE:-all}" == quick-controls ]]; then test_flags+=(-D QUICK_CONTROLS_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == typography ]]; then test_flags+=(-D TYPOGRAPHY_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == extra-skills ]]; then test_flags+=(-D EXTRA_SKILL_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == first-profile ]]; then test_flags+=(-D FIRST_PROFILE_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == home-backdrop ]]; then test_flags+=(-D HOME_BACKDROP_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == nuke ]]; then test_flags+=(-D NUKE_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == mac-fidelity ]]; then test_flags+=(-D MAC_FIDELITY_TESTS); fi

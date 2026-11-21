@@ -34,7 +34,9 @@ import LemmingsTVCore
         old.preferences.deadZone = 0.25
         old.preferences.textScale = 1.25
         defaults.set(try JSONEncoder().encode(old), forKey: "tv.localState")
-        let legacy = MobileCheckpointStore(url: root.appendingPathComponent("old/current.json"))
+        let legacyURL = root.appendingPathComponent("old/current.json")
+        #expect(TVMobileMigration.hasLegacyPlayer(in: defaults, checkpointURL: legacyURL))
+        let legacy = MobileCheckpointStore(url: legacyURL)
         let destination = MobileCheckpointStore(url: root.appendingPathComponent("new/current.json"))
         let saved = checkpoint(owner: guest, scope: seat.scope)
         try await legacy.save(saved)
@@ -57,6 +59,21 @@ import LemmingsTVCore
         defaults.set([9], forKey: "mobile.completed.release/lemmings.guest")
         try await TVMobileMigration.migrate(defaults: defaults, players: players, legacyCheckpoint: legacy, destination: destination)
         #expect(defaults.array(forKey: "mobile.completed.release/lemmings.guest") as? [Int] == [9])
+    }
+
+    @Test func emptyMigrationLeavesFirstLaunchAvailable() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let suite = UUID().uuidString
+        let defaults = try #require(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite); try? FileManager.default.removeItem(at: root) }
+        let legacyURL = root.appendingPathComponent("old.json")
+        let legacy = MobileCheckpointStore(url: legacyURL)
+        try await TVMobileMigration.migrate(defaults: defaults, players: MobileStorage(directory: root),
+            legacyCheckpoint: legacy, destination: MobileCheckpointStore(url: root.appendingPathComponent("new.json")))
+        #expect(defaults.bool(forKey: TVMobileMigration.completionKey))
+        #expect(!TVMobileMigration.hasLegacyPlayer(in: defaults, checkpointURL: legacyURL))
+        try await legacy.save(checkpoint(owner: "default"))
+        #expect(TVMobileMigration.hasLegacyPlayer(in: defaults, checkpointURL: legacyURL))
     }
 
     @Test func keepsNewerRunsAndExistingProgress() async throws {

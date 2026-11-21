@@ -15,6 +15,7 @@ import NxlvKit
         let cloudSync = CommandLine.arguments.last == "--cloud-sync"
         let duoRelease = CommandLine.arguments.last == "--duo-release"
         let startup = CommandLine.arguments.last == "--startup"
+        let firstPlayer = CommandLine.arguments.last == "--first-player"
         let levelLoading = CommandLine.arguments.last == "--level-loading"
         let sharing = CommandLine.arguments.last == "--sharing"
         let previewFill = CommandLine.arguments.last == "--preview-fill"
@@ -44,7 +45,7 @@ import NxlvKit
         let journeyHome = CommandLine.arguments.last == "--journey-home"
         let homeScenery = CommandLine.arguments.last == "--home-scenery"
         let regionalBrand = CommandLine.arguments.last == "--regional-brand"
-        guard CommandLine.arguments.count == (cloudSync || levelLoading || startup || replayControls || edgeToEdge || duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || gridHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || journeyHome || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
+        guard CommandLine.arguments.count == (cloudSync || levelLoading || startup || firstPlayer || replayControls || edgeToEdge || duoRelease || previewFill || sharing || muteSetting || extraSkill || tableResult || roundedHUD || gridHUD || bookHome || support || duo || staticHome || hierarchy || pause || ghostSolution || solutionSwitch || skillPause || latestFixes || hotSeat || hotSeatHUD || hotSeatFlow || bundledGames || buildChanges || navigation || journeyHome || homeScenery || regionalBrand ? 5 : 4) else { throw Failure.invalidArguments }
         let artwork = URL(fileURLWithPath: CommandLine.arguments[1])
         let content = URL(fileURLWithPath: CommandLine.arguments[2])
         let output = URL(fileURLWithPath: CommandLine.arguments[3])
@@ -57,6 +58,10 @@ import NxlvKit
         if levelLoading { try checkLevelLoading(typography: typography, output: output); return }
         if edgeToEdge { try checkEdgeToEdge(typography: typography, content: content, output: output); return }
         if duoRelease { try checkDuoRelease(typography: typography, artwork: artwork, output: output); return }
+        if firstPlayer {
+            try checkFirstPlayer(typography: typography, portraits: GamePortraitArt(directory: artwork), output: output)
+            return
+        }
         if sharing { try checkSharingPrivacy(typography: typography, output: output); return }
         if previewFill { try checkPreviewFill(typography: typography, content: content, output: output); return }
         if muteSetting { try checkMuteSetting(typography: typography, output: output); return }
