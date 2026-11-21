@@ -2,6 +2,36 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <item>
+            <title>2.4.3</title>
+            <pubDate>Sat, 21 Nov 2026 17:21:06 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>109</sparkle:version>
+            <sparkle:shortVersionString>2.4.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}</style></head><body><!-- Release commit: 40b6009004055fac86611e88540e82ebad3edb26 -->
+<h3>Mac playability</h3>
+<p>Intel Macs start with speed trails and the full-screen fast-forward effect off. The game enables them when both the CPU and GPU have spare capacity. When frames arrive late, the game reduces optional effects automatically. Classic and NeoLemmix also do less work when you click a lemming in a crowd.</p>
+<h3>First launch</h3>
+<p>New Mac players can choose a profile and start the first level from the same screen. Returning players keep their existing profile.</p>
+<h3>Skill feedback and rewind</h3>
+<p>A rejected skill shows the reason. In The Tribes on Mac, a rejected assignment keeps the forward history while you rewind.</p>
+<h3>Chronicles controls</h3>
+<p>Selecting a skill in Chronicles shows the original pressed artwork.</p>
+<h3>Short games</h3>
+<p>Classic follow-up adds five levels from the original DOS game, Fun 6–10. On Mac, open Playlists, then Short games. On iPhone, iPad, Duo and Apple TV, open Collections, then Short games.</p>
+<h3>Compatibility</h3>
+<p>macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta.</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.3/UltimateLemmings-2.4.3-build109.zip" length="2074993820" type="application/octet-stream" sparkle:edSignature="OGw0jD1i8umoLoxFPV+eMBBqLV9YNIQfTlPs+Xc6H9hhQYQeGseV+NzCVfkU9UvLP+Xqbthx7S556tz/W3r4CQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.3/UltimateLemmings-build109-from106.delta" sparkle:deltaFrom="106" length="19492694" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="w+vnWDzf1vdN/hniVLAmkIA+7pdshsd8n+D5vVKBUke+Di8BkXMVNfCMUx4pMP9aF5BuEzW90fG6rEZBVe/GBw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.3/UltimateLemmings-build109-from105.delta" sparkle:deltaFrom="105" length="19505534" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="B2e7Dn3YDGT2n/ttY9d15ppDVhTV+c6BdnL3REzqOXgwDImsjD08e5C8GhTXbCVtvB+dT/Y/Z6Bfyw/FRHHdDw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.3/UltimateLemmings-build109-from104.delta" sparkle:deltaFrom="104" length="63946538" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="UCen46wqi0Gm/dK9NnTPaf6ne3rVaWtP6DHJF5d+nrZOW+0MqFq8OT01HoFKSUAjhU63FhCFJb7vGV6X3u+fCw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.3/UltimateLemmings-build109-from102.delta" sparkle:deltaFrom="102" length="64565786" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="MheNYurfyunCZveqlQsQO+vkK99lW88IQLsGUD97AMqCi6OgFAzcko492AxbPY9y6wtZnKpxGX/yOe7Tao1BAQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.3/UltimateLemmings-build109-from99.delta" sparkle:deltaFrom="99" length="67912230" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="ZEek8IjDnFR72DTG6JYrDw6jStQi7yoHcnJoDVd6se4oTEvKYOqfkrh9Y7ZlteUTn6kr5B48VWttRVqyOJGqCQ=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.4.2</title>
             <pubDate>Thu, 05 Nov 2026 16:56:07 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
