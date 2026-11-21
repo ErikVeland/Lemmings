@@ -9,7 +9,8 @@ for that service. **Load shared** and date-range changes reuse it after relaunch
 An authentication rejection clears the saved token so the next load asks again.
 iOS and tvOS still require token entry for each shared load.
 The first player profile shows how many lemmings players have saved worldwide.
-Mac Home also shows this total alongside the local rescue count. The app can read
+Home on Mac, iPhone, iPad, Duo and Apple TV shows this total alongside the local
+rescue count. The app can read
 the worldwide total with sharing off. A dash means the total is unavailable.
 
 Click an official level row to start that level through Level Select's launch

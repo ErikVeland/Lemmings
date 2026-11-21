@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -43,7 +44,8 @@ extension MenuAudit {
                     var page = MobileHomeArt.page(resume: resume, journey: .init("journey", "Journey map 1/227 solved"),
                         families: families, initials: state == "hot-seat" ? "ALICE v BOB" : "PLA",
                         nextPlayerIndex: state == "hot-seat" ? 0 : nil,
-                        subtitle: state == "hot-seat" ? "" : "Next: PLA", collectionsAvailable: state != "unavailable",
+                        subtitle: SavedLemmingsCounter(local: 42, global: state == "unavailable" ? nil : 130662).homeCaption,
+                        collectionsAvailable: state != "unavailable",
                         deskClock: true)
                     if state == "unavailable" {
                         page.rows[page.rows.count - 3].selected = true

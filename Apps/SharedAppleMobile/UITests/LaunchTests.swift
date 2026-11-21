@@ -18,6 +18,7 @@ final class LaunchTests: XCTestCase {
         let play = app.buttons["menu.firstPlay"]
         let total = app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] %@", "saved worldwide")).firstMatch
         XCTAssertTrue(total.waitForExistence(timeout: 20))
+        XCTAssertTrue(app.staticTexts["Create profile"].exists)
         assertTarget(portrait)
         let originalPortrait = portrait.label
         tap(portrait)
@@ -32,6 +33,8 @@ final class LaunchTests: XCTestCase {
         app.launch()
         assertTarget(app.buttons["menu.settings"])
         XCTAssertFalse(portrait.exists)
+        let homeCount = app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] %@ AND label CONTAINS[c] %@", "saved here", "Worldwide")).firstMatch
+        XCTAssertTrue(homeCount.exists)
     }
 
     @MainActor func testGameAssetDownloadRequiresALicence() throws {

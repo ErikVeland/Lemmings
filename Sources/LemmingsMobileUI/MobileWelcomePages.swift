@@ -30,11 +30,30 @@ extension MobileLibraryViewController {
         nameDraft = profiles.active.name == "Player 1" ? "" : ArcadeProfile(initials: profiles.active.name).initials
         draftPortrait = profiles.active.portrait
         searchField.text = nameDraft
-        Task { [weak self] in
-            let total = try? await AnonymousTelemetry.shared.publicSavedTotal()
-            guard let self, route == .firstPlayer else { return }
-            firstPlayerSavedTotal = total
-            rebuild()
+    }
+
+    func syncSavedCountRefresh(visible: Bool) {
+        guard visible, AnonymousTelemetry.shared.sharingAvailable else {
+            savedCountTask?.cancel()
+            savedCountTask = nil
+            return
+        }
+        guard savedCountTask == nil else { return }
+        savedCountTask = Task { [weak self] in
+            while !Task.isCancelled, let nextRefresh = self?.nextSavedTotalRefresh {
+                let delay = nextRefresh - ProcessInfo.processInfo.systemUptime
+                if delay > 0 {
+                    do { try await Task.sleep(for: .seconds(delay)) } catch { return }
+                }
+                guard !Task.isCancelled else { return }
+                let total = try? await AnonymousTelemetry.shared.publicSavedTotal()
+                guard !Task.isCancelled, let self else { return }
+                nextSavedTotalRefresh = ProcessInfo.processInfo.systemUptime + 60
+                if total != worldwideSavedTotal {
+                    worldwideSavedTotal = total
+                    rebuild()
+                }
+            }
         }
     }
 

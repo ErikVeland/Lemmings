@@ -82,7 +82,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var previousSize = CGSize.zero
     let browser = MobileLevelBrowserView()
     var browserShown = false
-    var firstPlayerSavedTotal: Int?
+    var worldwideSavedTotal: Int?
+    var nextSavedTotalRefresh: CFTimeInterval = 0
+    var savedCountTask: Task<Void, Never>?
     var route = Route.home
     struct NavigationPosition {
         let route: Route
@@ -586,6 +588,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     deinit {
+        savedCountTask?.cancel()
         inputLink?.invalidate()
         #if os(iOS)
         deskClockTimer?.invalidate()
@@ -628,6 +631,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     private func updateLibraryDisplayLink() {
         let active = viewIsVisible && sceneIsActive && game == nil && !deskClockShown
+        syncSavedCountRefresh(visible: active && (route == .home || route == .firstPlayer))
         if !active { unfold.stop() }
         let animatedBackdrop = usesHomeBox && route == .home && homeBackdropView.canAnimate
             && !mobileSettings.classic.staticHomeScreen && !mobileSettings.classic.reduceMotion
@@ -944,7 +948,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         canvas.fitsSupportPage = route == .support
         canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
-        let hidePlayerName = route == .firstPlayer || confirmingGameAssetLicence || (route == .players && renamingPlayer)
+        let hidePlayerName = route == .firstPlayer || (route == .home && hotSeat == nil) || confirmingGameAssetLicence || (route == .players && renamingPlayer)
         canvas.playerName = hidePlayerName ? nil : playerName(hotSeat?.turn ?? profiles.activeID)
         unfold.stop()
         let count = library?.levels.count ?? 0
@@ -980,10 +984,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let journey = bundledJourney
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
             let nextPlayerIndex = hotSeat.flatMap { $0.players.firstIndex(of: $0.turn) }
+            let savedCounter = SavedLemmingsCounter(local: AnonymousTelemetry.shared.localSavedTotal, global: worldwideSavedTotal)
             #if os(tvOS)
-            let homeSubtitle = [tvBuildInfo.label, tvBuildInfo.dateLabel, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
+            let homeSubtitle = [savedCounter.homeCaption, tvBuildInfo.label, tvBuildInfo.dateLabel, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
             #else
-            let homeSubtitle = subtitle
+            let homeSubtitle = [savedCounter.homeCaption, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
             #endif
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: MobileHomeArt.journeyAction(run: resumableLearningJourney?.state.run,
@@ -1066,7 +1071,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = whatsNewPage(); canvas.preview = nil
         case .firstPlayer:
             canvas.page = MobileCareerArt.firstPlayer(initials: nameDraft ?? "", portrait: draftPortrait,
-                counter: SavedLemmingsCounter.worldwideText(firstPlayerSavedTotal), status: subtitle, busy: loading)
+                counter: SavedLemmingsCounter.worldwideText(worldwideSavedTotal), status: subtitle, busy: loading)
             canvas.preview = nil
         case .effectsWelcome:
             canvas.page = effectsWelcomePage(); canvas.preview = nil

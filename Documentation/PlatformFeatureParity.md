@@ -2,11 +2,17 @@
 
 ## First player profile — 21 November 2026
 
-On Mac, iPhone, iPad, Duo and Apple TV, a new player chooses a portrait and
-initials beside the worldwide rescue count. Play opens Classic Fun 1 in Ultimate
+On Mac, iPhone, iPad, Duo and Apple TV, **Create profile** asks new players to
+choose a portrait and initials beside the worldwide rescue count. Play opens Classic Fun 1 in Ultimate
 Lemmings or the first bundled starter puzzle in Ultimate Lemmix. Returning players
 open Home. If the count service is unavailable, a dash takes the place of the
 count and the player can continue. Sharing stays off until the player enables it.
+Home shows local and worldwide rescues beneath the logo on iPhone, iPad and Duo.
+Apple TV shows the counts in its Home status area. The public total refreshes
+once a minute while Home or Create profile is visible in the foreground. An iPhone
+simulator showed both Home counts after profile creation and relaunch with sharing
+off. Offscreen checks covered the counter with and without a worldwide total,
+including touch targets and hinge clearance on Duo.
 
 Offscreen checks cover phone, iPad, folded Duo and TV layouts, including portrait
 selection, empty initials, an unavailable count and loading. TV migration checks
