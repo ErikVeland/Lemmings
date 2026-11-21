@@ -1,0 +1,78 @@
+{
+  "checkedAt": "2026-11-21T00:54:53.402575+00:00",
+  "product": "Ultimate Lemmix",
+  "appStoreID": "6836347807",
+  "scope": "Game data download, licence agreement, and folded Duo settings. Gameplay engine unchanged.",
+  "skippedChecks": [
+    "Automated test suites and test-running release audits, under the release schedule."
+  ],
+  "platforms": [
+    {
+      "platform": "IOS",
+      "version": "2.4.2",
+      "build": "110",
+      "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "releaseType": "MANUAL",
+      "selectedBuildID": "e5bef432-3d31-4da1-8f3d-f69964d83ed5",
+      "buildID": "e5bef432-3d31-4da1-8f3d-f69964d83ed5",
+      "buildProcessing": "VALID"
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.3",
+      "build": "111",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88",
+      "versionState": "PREPARE_FOR_SUBMISSION",
+      "releaseType": "AFTER_APPROVAL",
+      "selectedBuildID": "b8fac41d-e04a-4fe2-a6bb-d2f5f82d543e",
+      "buildID": "b8fac41d-e04a-4fe2-a6bb-d2f5f82d543e",
+      "buildProcessing": "VALID",
+      "source": "4db63e3f40ffdbcac01db569aa9514cde02fbecd",
+      "sha256": "9da5f2176ad18a546c03bbabd915f0982bba98d690f1a2a76a4c54f4d01a73e4",
+      "exportVerified": true
+    },
+    {
+      "platform": "MAC_OS",
+      "version": "2.4.2",
+      "build": "111",
+      "versionID": "ce8b39f1-caa5-4d02-9776-dc7bb34c83d0",
+      "versionState": "WAITING_FOR_REVIEW",
+      "releaseType": "AFTER_APPROVAL",
+      "selectedBuildID": "70567d03-be47-42c3-a7e1-489b0e2d1b14",
+      "buildID": "70567d03-be47-42c3-a7e1-489b0e2d1b14",
+      "buildProcessing": "VALID",
+      "source": "f32884dfd91f18e80dce5fbb3461c2f06a43a299",
+      "architectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "sha256": "c4f11598371cd01d0ed1b6af5115ec771bc2ec01ea05d0dc915597be181b0886",
+      "reviewSubmissionID": "dca39769-8bf0-4b1a-be5c-ea87800ad9f9"
+    },
+    {
+      "platform": "TV_OS",
+      "version": "2.4.2",
+      "build": "111",
+      "versionID": "3809e541-17ca-4321-8e85-59fd5a0b3b40",
+      "versionState": "PREPARE_FOR_SUBMISSION",
+      "releaseType": "AFTER_APPROVAL",
+      "selectedBuildID": "e911cf25-db97-45c3-8444-fa3e761e35c0",
+      "buildID": "e911cf25-db97-45c3-8444-fa3e761e35c0",
+      "buildProcessing": "VALID",
+      "source": "f32884dfd91f18e80dce5fbb3461c2f06a43a299",
+      "sha256": "0160a63b572289e3a7971eb95d0b3393157cb7326e6c52ce4d8172b4593357fa",
+      "exportVerified": true
+    }
+  ],
+  "mediaReview": {
+    "submissionID": "e10860fd-a8ec-4a0c-9c1e-b4ac9a5a22da",
+    "state": "WAITING_FOR_REVIEW",
+    "items": 17,
+    "blockedVersions": [
+      "iOS 2.4.3",
+      "tvOS 2.4.2"
+    ],
+    "reason": "Apple rejected the requests to add these versions to review because assigned store artwork is in a standalone submission."
+  }
+}
