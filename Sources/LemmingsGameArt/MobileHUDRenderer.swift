@@ -10,6 +10,8 @@ public enum MobileHUDAction: Equatable, Sendable {
     case endRun
     case speed
     case speedStep(Int)
+    case speedTier(Double)
+    case speedPicker
     case rewind
     case stepBackward
     case step
@@ -197,6 +199,17 @@ public enum MobileHUDAction: Equatable, Sendable {
             items.append(Item(action: .speedStep(1), frame: layout.speedArrows[1], sourceCell: nil,
                               accessibilityLabel: L10n.text("Faster"), speedInputFrame: nil))
         }
+        if layout.speedTiers.isEmpty, !layout.speedTierFrame.isEmpty {
+            items.append(Item(action: .speedPicker, frame: layout.speedTierFrame, sourceCell: nil,
+                              accessibilityLabel: L10n.text("Choose speed"), speedInputFrame: nil))
+        }
+        for (index, tier) in layout.speedTiers.enumerated() {
+            let strip = layout.speedTierFrame
+            let width = strip.width / CGFloat(layout.speedTiers.count)
+            let frame = CGRect(x: strip.minX + CGFloat(index) * width, y: strip.minY, width: width, height: strip.height)
+            items.append(Item(action: .speedTier(tier), frame: frame, sourceCell: nil,
+                              accessibilityLabel: L10n.text("Speed \(Self.speedValue(tier))X"), speedInputFrame: nil))
+        }
         return items
     }
 
@@ -302,7 +315,7 @@ public enum MobileHUDAction: Equatable, Sendable {
                 drawIconButton(item, context: context)
             case .menu:
                 drawTextButton(item, context: context)
-            case .speedStep:
+            case .speedStep, .speedTier, .speedPicker:
                 break
             case let .skill(index):
                 if let icon = skillIcons[safe: index] ?? nil { drawNativeSkill(item, icon: icon, context: context, pixel: panel.bevel) }
@@ -522,6 +535,23 @@ public enum MobileHUDAction: Equatable, Sendable {
             else { drawTextButton(item, context: context) }
         case .rewind, .stepBackward, .step:
             drawIconButton(item, context: context)
+        case .speedPicker:
+            GameControlGroupArt.draw(in: context, frame: frame, group: frame, selected: false, face: .speed)
+            drawGameLabel(L10n.text("Speed"), in: frame.insetBy(dx: 4, dy: 6).offsetBy(dx: 0, dy: -3), context: context)
+            context.setFillColor(CGColor(gray: 1, alpha: 1))
+            for row in 0..<3 {
+                let half = CGFloat(2 - row)
+                context.fill(CGRect(x: floor(frame.midX) - half, y: frame.maxY - 9 + CGFloat(row), width: 2 * half + 1, height: 1))
+            }
+        case let .speedTier(tier):
+            let chosen = speed == tier
+            GameControlGroupArt.draw(in: context, frame: frame, group: layout.speedTierFrame,
+                                     selected: chosen, face: .speed)
+            drawGameLabel(Self.speedLabel(tier), in: frame.insetBy(dx: 3, dy: 6), context: context)
+            if chosen {
+                context.setFillColor(CGColor(gray: 1, alpha: 1))
+                context.fill(CGRect(x: frame.midX - 8, y: frame.maxY - 5, width: 16, height: 2))
+            }
         case .speedStep:
             break
         }

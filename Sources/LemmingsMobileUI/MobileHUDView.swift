@@ -100,6 +100,9 @@ import LemmingsAppCore
 
     private var items: [Item] = []
     private var buttons: [UIButton] = []
+    var speedPickerButton: UIButton? {
+        items.firstIndex(where: { $0.action == .speedPicker }).map { buttons[$0] }
+    }
     private var layout: MobileHUDLayout?
     private var snapshot: MobileGameSnapshot?
     private var selectedSkill = 0
@@ -342,8 +345,9 @@ import LemmingsAppCore
                 button.frame = inputFrame
             }
             button.accessibilityLabel = GamePresentationText.display(item.accessibilityLabel)
+            if item.action == .speedPicker { button.accessibilityValue = "\(Int(speed))×" }
             if item.action == .speed { button.accessibilityHint = speed > 1 ? L10n.text("Return to normal speed") : L10n.text("Fast-forward") }
-            button.accessibilityTraits = item.action == .skill(selectedSkill)
+            button.accessibilityTraits = item.action == .skill(selectedSkill) || item.action == .speedTier(speed)
                 ? [.button, .selected] : .button
             button.isEnabled = isEnabled(item.action)
             button.accessibilityElementsHidden = readOnly && !button.isEnabled
@@ -441,7 +445,7 @@ import LemmingsAppCore
             button.frame = item.inputFrame
             button.backgroundColor = .clear
             button.accessibilityLabel = GamePresentationText.display(item.accessibilityLabel)
-            button.accessibilityTraits = item.action == .skill(selectedSkill)
+            button.accessibilityTraits = item.action == .skill(selectedSkill) || item.action == .speedTier(speed)
                 ? [.button, .selected]
                 : .button
             button.isEnabled = isEnabled(item.action)

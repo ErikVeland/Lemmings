@@ -13,7 +13,11 @@ The shipping Apple TV entry point uses the shared mobile frontend. TV controller
 
 ## Speed selection and skill supply
 
-iPhone, iPad and Duo offer exact speed selection from the pause menu. Apple TV
+iPhone, iPad, Duo and Apple TV show exact tiers beside the minimap when the
+overview can accommodate them. Compact layouts offer a Speed chooser beside
+the map when at least 120 points remain for seeking. The existing input
+positions for skills, transport and the pedal stay fixed. iPhone, iPad and Duo
+also offer exact speed selection from the pause menu. Apple TV
 offers the same bitmap page under Game controls and restores focus to Speed on
 return. Fixed mode offers the session’s normal and fast multipliers. Variable
 mode offers 1×, 2×, 3×, 5× and 10×, with 25× when enabled. The shared mobile HUD

@@ -1,5 +1,6 @@
 import Foundation
 import LemmingsGameArt
+import NxlvKit
 import Testing
 import LemmingsMobileCore
 @testable import LemmingsMobileUI
@@ -50,6 +51,11 @@ struct NeoLemmixMobileDataTests {
             for size in [MobileSize(width: 320, height: 568), .init(width: 1024, height: 768), .init(width: 1920, height: 1080)] {
                 let layout = MobileHUDLayout.make(container: size, safeArea: .init(), hasRate: initial.releaseRate != nil,
                     skillCount: initial.skills.count, supportsRewind: true, hasPlayer: true, engineIdentifier: session.engineIdentifier)
+                    .addingSpeedTiers(GameplaySpeed.steps)
+                if size.width >= 700 {
+                    #expect(layout.speedTiers == GameplaySpeed.steps)
+                    #expect(layout.minimapFrame?.intersects(layout.speedTierFrame) == false)
+                }
                 let first = MobileHUDRenderer.targets(layout: layout, snapshot: initial, selectedSkill: 0, paused: false, speed: 1, endRunArmed: false)
                 let later = MobileHUDRenderer.targets(layout: layout, snapshot: session.snapshot, selectedSkill: 0, paused: true, speed: 10, endRunArmed: false)
                 #expect(first.map(\.inputFrame) == later.map(\.inputFrame))
