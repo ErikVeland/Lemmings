@@ -58,7 +58,7 @@ extension MobileLibraryViewController {
     }
 
     var firstPlayerPack: MobileContentPack? {
-        let id = configuration == .ultimateLemmix ? "authored/" + GameStarterContent.identifier : "release/lemmings"
+        let id = configuration == .ultimateLemmix && !GameMenuLogo.usesRestoredArtwork ? "authored/" + GameStarterContent.identifier : "release/lemmings"
         return catalogue?.pack(id: id) ?? catalogue?.packs(in: .classic).first
     }
 

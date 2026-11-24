@@ -14,7 +14,7 @@ import NxlvKit
     static let lemmixNotesVersion = "2.4.3"
     static var subtitle: String { GameReleaseCopy.invitation }
     static var sections: [(String, String)] {
-        if Bundle.main.object(forInfoDictionaryKey: "UltimateLemmixStore") as? Bool == true {
+        if AppDistribution.isStore && !GameMenuLogo.usesRestoredArtwork {
             return [
                 (L10n.text("Ultimate Lemmix"), L10n.text("Three starter puzzles, pixel lettering and Lix characters.")),
                 (L10n.text("Your game"), L10n.text("Keep your journeys, Hot Seat games, hints, replays and HD effects.")),
