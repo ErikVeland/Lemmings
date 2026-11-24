@@ -265,11 +265,13 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
 
     @Test func hotSeatGhostSettingUsesStoredVisibility() {
         for visible in [false, true] {
-            let page = MobileSettingsArt.page(.gameplay, settings: .init(), ghostsVisible: visible)
+            let page = MobileSettingsArt.page(.gameplay, settings: .init(), inGame: true, ghostsVisible: visible)
             let toggle = page.rows.first { $0.id == "setting.hotSeatGhosts" }
             #expect(toggle?.selected == visible)
             #expect(toggle?.toggleValue == visible)
         }
+        // Outside a Hot Seat level the Hot Seat page owns the choice.
+        #expect(!MobileSettingsArt.page(.gameplay, settings: .init()).rows.contains { $0.id == "setting.hotSeatGhosts" })
     }
 
     @Test func accessibilityLabelReadsTimeAndEvent() {

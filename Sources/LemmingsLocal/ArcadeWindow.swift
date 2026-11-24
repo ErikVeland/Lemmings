@@ -103,6 +103,11 @@ import NxlvKit
             self.arcadeView.needsDisplay = true
         }
         resume.isEnabled = !sessions.isEmpty
+        // Choosing a session comes first, and a new session is one press away.
+        page.addSecondaryAction(L10n.text("New Hot Seat")) { [weak self, weak page] in
+            if let page { GameScreen.shared.dismiss(page) }
+            self?.showSession(owner: owner)
+        }
         carousel.configure(items: sessions.map { saved in
             LevelCoverFlowItem(id: saved.id, title: saved.players.compactMap { store.records.profile($0)?.initials }.joined(separator: " + "),
                 subtitle: L10n.text("Next turn: \((store.records.profile(saved.turn ?? saved.host)?.initials ?? L10n.text("LEM")))"),

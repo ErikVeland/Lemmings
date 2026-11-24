@@ -1895,7 +1895,7 @@ extension AppDelegate {
     let reopenedBackpacks = descendants(root).compactMap { $0 as? NSButton }.first { $0.title == "Show skill backpacks" }
     try check(reopenedBackpacks?.state == .off && !reopened.current.showClassicSkillBackpacks,
       "Backpack opt-out did not survive save and reopen")
-    let videoTab = descendants(root).compactMap { $0 as? GameTabButton }.first { $0.title == "Video" }!
+    let videoTab = descendants(root).compactMap { $0 as? GameTabButton }.first { $0.title == "Display" }!
     videoTab.performClick(nil)
     root.layoutSubtreeIfNeeded()
     guard let screen = descendants(root).compactMap({ $0 as? GamePopUpButton }).first(where: { $0.accessibilityLabel() == "Screen" }) else {

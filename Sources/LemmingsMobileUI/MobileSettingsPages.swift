@@ -74,7 +74,7 @@ extension MobileLibraryViewController {
                                sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true, inGame: inGame,
                                language: interfaceLanguage, respectMuteAvailable: respectMuteAvailable,
                                foldable: foldable, calendarDenied: calendarDenied,
-                               ghostsVisible: arcadeStore.hotSeatGhostsVisible)
+                               ghostsVisible: inGame && hotSeat != nil ? arcadeStore.hotSeatGhostsVisible : nil)
         if group == .graphics, GameArtworkResources.lixArtwork != nil {
             let source = GameArtworkSkin.lixEnabled ? "Lix" : L10n.text("Original")
             page.rows.insert(.init("setting.characterArtwork", L10n.text("Art set") + ": " + source,
