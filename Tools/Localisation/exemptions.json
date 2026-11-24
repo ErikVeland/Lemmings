@@ -83,5 +83,35 @@
     "file": "Sources/LemmingsMobileUI/MobileListToolsView.swift",
     "source": "searchClear",
     "reason": "Stable action identifier in accessibility label selection; displayed labels use L10n.text"
+  },
+  {
+    "file": "Sources/LemmingsMobileUI/MobileAudioEventLog.swift",
+    "source": "Lemmings.audio-event-log",
+    "reason": "Dispatch queue identifier"
+  },
+  {
+    "file": "Sources/LemmingsMobileUI/MobileEffects.swift",
+    "source": "Lemmings.mobile-effects-control",
+    "reason": "Dispatch queue identifier"
+  },
+  {
+    "file": "Sources/LemmingsMobileUI/TVGameImportServer.swift",
+    "source": "academy.glasscode.ultimatelemmix.transfer",
+    "reason": "Dispatch queue identifier"
+  },
+  {
+    "file": "Sources/NxlvKit/OpenStarterContent.swift",
+    "source": "First Steps",
+    "reason": "Authored level title"
+  },
+  {
+    "file": "Sources/NxlvKit/OpenStarterContent.swift",
+    "source": "Float to Safety",
+    "reason": "Authored level title"
+  },
+  {
+    "file": "Sources/NxlvKit/OpenStarterContent.swift",
+    "source": "Over the Rise",
+    "reason": "Authored level title"
   }
 ]

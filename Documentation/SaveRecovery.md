@@ -1,6 +1,6 @@
 # Save recovery and upgrade migration
 
-Updated 21 October 2026.
+Updated 25 November 2026.
 
 ## Arcade records
 
@@ -92,6 +92,20 @@ Journey has no sequel lessons. Menu renders and input targets are checked at
 each engine's minimum window size, 900 × 620 and 1600 × 1000. Saved standalone
 attempts resume paused. Composited CRT and physical controller checks remain
 outside this scope.
+
+### Restoring a Journey on another device
+
+Automatic library sync carries the Journey queue, completion records, roster,
+house rule and next turn. Mid-level checkpoints stay on the device that saved
+them. After syncing to another device, select the saved Hot Seat to resume its
+queue with the correct player.
+
+Apple TV also offers **Back up TV saves** and **Restore TV saves** in Cloud
+saves. Its manual `.lemmingstv` archive carries the scoped checkpoint. Restore
+the archive and open the original Hot Seat with compatible game content installed.
+The queue ID, position and level identify the attempt even when a newer solo
+checkpoint occupies the global slot. Restoring a file-only roster also refreshes
+the TV preferences used to reopen it.
 
 ## Upgrade migration
 

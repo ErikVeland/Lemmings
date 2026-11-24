@@ -49,7 +49,8 @@ import LemmingsMobileCore
             ])
             game.overlayCanvas.focusedID = "1"
             let source = game.overlayCanvas.page
-            for open in [game.showControlsHelp, game.showRestartLevel] {
+            let overlays: [() -> Void] = [{ game.showControlsHelp() }, game.showRestartLevel]
+            for open in overlays {
                 open()
                 game.overlayCanvas.goBack()
                 #expect(game.overlayCanvas.page == source)
@@ -154,6 +155,63 @@ import LemmingsMobileCore
             #expect(game.globalNavigation.isUserInteractionEnabled)
         }
     }
+
+    #if os(tvOS)
+    @Test func speedChoicesReturnRemoteFocusToSpeedAfterSelectionOrBack() async throws {
+        try await withGame { game in
+            game.resumePlay()
+            game.inputSpeed.variableEnabled = true
+            game.showTVControls()
+            let speed = try #require(game.overlayCanvas.page.rows.first { $0.title == GameLocalisation.text("Speed 1X") })
+            for id in ["5", "back"] {
+                game.overlayCanvas.focusAction(speed.id)
+                game.overlayCanvas.activateFocused()
+                let selected = game.overlayCanvas.page.rows.first(where: \.selected)
+                let current = try #require(selected)
+                #expect(current.id == game.overlayCanvas.focusedID)
+                game.overlayCanvas.onAction?(id)
+                #expect(game.inputSpeed.target == 5)
+                #expect(game.overlayCanvas.focusedID == speed.id)
+                let button = try #require(game.overlayCanvas.preferredFocusEnvironments.first as? UIButton)
+                #expect(button.accessibilityIdentifier == "menu." + speed.id)
+                #expect(game.paused)
+            }
+        }
+    }
+    #endif
+
+    #if os(iOS)
+    @Test func unfoldingWhileChoosingSpeedKeepsThePageAndRestoresThePriorPlayState() async throws {
+        try await withGame { game in
+            game.gameSettings.classic.variableSpeedEnabled = true
+            game.inputSpeed.variableEnabled = true
+            game.gameSettings.pauseToAssign = false
+            game.resumePlay()
+            game.handle(.skill(2))
+            for wasRunning in [true, false] {
+                if !wasRunning { game.pauseForPlanning() }
+                game.view.frame.size = CGSize(width: 495, height: 720)
+                game.view.layoutIfNeeded()
+                game.handle(.speedPicker)
+                game.overlayCanvas.focusAction("5")
+                let page = game.overlayCanvas.page
+                let snapshot = game.session.snapshot
+                for size in [CGSize(width: 100, height: 100), CGSize(width: 834, height: 1194)] {
+                    game.view.frame.size = size
+                    game.view.layoutIfNeeded()
+                    #expect(game.overlayCanvas.page == page)
+                    #expect(game.overlayCanvas.focusedID == "5")
+                    #expect(game.paused && game.session.snapshot == snapshot)
+                }
+                game.overlayCanvas.activateFocused()
+                #expect(game.overlay.isHidden && game.paused != wasRunning)
+                #expect(game.inputSpeed.target == 5 && game.selectedControl == 2)
+                let speed = try #require(game.hud.speedFocusButton)
+                #expect(speed.accessibilityTraits.contains(.selected))
+            }
+        }
+    }
+    #endif
 
     #if os(iOS)
     @Test func edgeBackUsesTheVisibleMenusReturnActionAndIsDisabledDuringPlay() async throws {

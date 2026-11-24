@@ -6,7 +6,7 @@ import UIKit
 
 /// The wide level page: a CoverFlow carousel with the Mac level browser's actions beneath it.
 @MainActor final class MobileLevelBrowserView: UIView {
-    var artworkLoader: ((Int) async -> CGImage?)? { didSet { flow.artworkLoader = artworkLoader } }
+    var artworkLoader: ((Int) async -> CGImage?)?
     var artworkLoadingEnabled: Bool {
         get { flow.artworkLoadingEnabled }
         set { flow.artworkLoadingEnabled = newValue }
@@ -15,13 +15,19 @@ import UIKit
     var onBack: (() -> Void)?
     var onPlay: ((Int) -> Void)?
     var onSelect: ((Int) -> Void)?
+    var onDetails: (() -> Void)?
     var onFavourite: ((Int) -> Void)?
     var onPlaylist: ((Int) -> Void)?
     var showsBack = true { didSet { if showsBack != oldValue { setNeedsLayout() } } }
 
     var playerName: String? { didSet { if oldValue != playerName { updateSubtitle() } } }
     var statusText = "" { didSet { if oldValue != statusText { updateSubtitle(); setNeedsLayout() } } }
-    var isLoading = false { didSet { play.isEnabled = !isLoading } }
+    var isLoading = false {
+        didSet {
+            play.isEnabled = !isLoading
+            flow.actionTitle = isLoading ? nil : play.title
+        }
+    }
     private let backdrop = MobileMenuBackdrop()
     private let titleLabel = MobilePixelLabel()
     var headingText: String { titleLabel.text }
@@ -36,6 +42,7 @@ import UIKit
     private let back = MobilePixelButton()
     private let rankPrevious = MobilePixelButton()
     private let rankNext = MobilePixelButton()
+    private let details = MobilePixelButton()
     private let favourite = MobilePixelButton()
     private let playlist = MobilePixelButton()
     private let play = MobilePixelButton()
@@ -57,6 +64,8 @@ import UIKit
         rankNext.title = L10n.text("RANK >")
         favourite.title = L10n.text("FAVOURITE")
         favourite.icon = .favourite
+        details.title = L10n.text("Details")
+        details.onPress = { [weak self] in self?.onDetails?() }
         playlist.title = L10n.text("PLAYLIST")
         play.title = L10n.text("PLAY")
         play.isPrimary = true
@@ -75,12 +84,16 @@ import UIKit
             guard let self, !self.isLoading, self.levels.indices.contains(self.flow.selectedIndex) else { return }
             self.onPlay?(self.levels[self.flow.selectedIndex].index)
         }
+        flow.artworkLoader = { [weak self] position in
+            guard let self, levels.indices.contains(position) else { return nil }
+            return await artworkLoader?(levels[position].index)
+        }
         flow.onSelectionChanged = { [weak self] index in self?.selectionChanged(index) }
         flow.onActivate = { [weak self] index in
             guard let self, !self.isLoading, self.levels.indices.contains(index) else { return }
             self.onPlay?(self.levels[index].index)
         }
-        [backdrop, titleLabel, subtitleLabel, flow, back, rankPrevious, rankNext, favourite, playlist, play].forEach(addSubview)
+        [backdrop, titleLabel, subtitleLabel, flow, back, rankPrevious, rankNext, details, favourite, playlist, play].forEach(addSubview)
     }
 
     required init?(coder: NSCoder) { nil }
@@ -95,6 +108,13 @@ import UIKit
         let position = levels.firstIndex { $0.index == selected } ?? 0
         flow.select(position, animated: false)
         selectionChanged(position)
+    }
+
+    func setPlayTitle(_ title: String) {
+        flow.actionTitle = isLoading ? nil : title
+        guard play.title != title else { return }
+        play.title = title
+        setNeedsLayout()
     }
 
     /// Marks the current level as starred or not.
@@ -137,11 +157,11 @@ import UIKit
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        // A short screen has room for four actions in a row, so the rank pair steps aside.
+        // On short screens the carousel also handles rank navigation.
         // The carousel itself still reaches every level.
         let wideRoom = bounds.height >= 430
         let buttons = (showsBack ? [back] : []) + (hasRanks && wideRoom ? [rankPrevious, rankNext] : [])
-            + [favourite, playlist, play]
+            + [details, favourite, playlist, play]
         back.isHidden = !showsBack
         for button in [rankPrevious, rankNext] { button.isHidden = !(hasRanks && wideRoom) }
         let fullDisplay = MobileSystemRegions.usesFullDisplay(in: self)

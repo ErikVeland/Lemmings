@@ -3,12 +3,13 @@ import AVFoundation
 import GameController
 import LemmingsGameArt
 import LemmingsMobileCore
+import LemmingsMobileUI
 import LemmingsTVCore
 import NxlvKit
 import UIKit
 
 @MainActor final class TVLibraryViewController: UIViewController {
-    private enum Route { case home, games, ranks, levels, briefing, deck, skills, camera, targets, transport, settings, audio, players, player, roster, help, results, confirmRetry, confirmEnd, error }
+    private enum Route { case home, games, ranks, levels, briefing, deck, skills, camera, targets, transport, settings, audio, players, player, roster, help, results, levelDetails, confirmRetry, confirmEnd, error }
     private let sources: [TVLibrarySource]
     private let menu = TVMenuView()
     private let playfield = TVPlayfieldView()
@@ -31,6 +32,9 @@ import UIKit
     private var rosterOffset = 0
     private var editingPlayerID = MobileProfiles.defaultID
     private var checkpoint: MobileCheckpointEnvelope?
+    private var browsingPreview: TVGameExperience?
+    private var browsingCheckpoint: MobileCheckpointEnvelope?
+    private var resultReplay: Data?
     private var preview: CGImage?
     private var preparation: Task<Void, Never>?
     private var generation = UUID()
@@ -123,6 +127,7 @@ import UIKit
     }
 
     @objc private func frame(_ link: CADisplayLink) {
+        guard presentedViewController == nil else { return }
         input.poll(at: link.timestamp, context: context, menu: !menu.isHidden)
         guard let game else { return }
         game.advancePointer(at: link.timestamp, enabled: menu.isHidden && !busy)
@@ -156,12 +161,15 @@ import UIKit
             }
         case .games:
             page.title = L10n.text("Choose a game")
-            page.rows = ["classic", "lemmings2", "lemmings3"].map { id in
-                .init("source." + id, id == "classic" ? L10n.text("Lemmings") : id == "lemmings2" ? L10n.text("Lemmings 2") : Lemmings3Brand.current.displayName,
+            let stock = ["classic", "lemmings2", "lemmings3"]
+            let games = stock + sources.map(\.id).filter { !stock.contains($0) }
+            page.rows = games.dropFirst(pageOffset).prefix(4).map { id in
+                .init("source." + id, id == "classic" ? L10n.text("Lemmings") : id == "lemmings2" ? L10n.text("Lemmings 2") : id == "lemmings3" ? Lemmings3Brand.current.displayName : sources.first(where: { $0.id == id })?.title ?? id,
                     enabled: sources.contains(where: { $0.id == id }), primary: id == "classic")
             }
             page.subtitle = sources.isEmpty ? L10n.text("Game data unavailable") : ""
-            page.footer = [back]
+            page.footer = games.count <= 4 ? [back] : [back, .init("previous", "<", enabled: pageOffset > 0),
+                .init("more", ">", enabled: pageOffset + 4 < games.count)]
         case .ranks:
             page.title = source?.title ?? L10n.text("Levels")
             page.rows = ranks.enumerated().dropFirst(pageOffset).prefix(4).map { .init("rank.\($0.offset)", $0.element) }
@@ -176,13 +184,14 @@ import UIKit
             page.subtitle = "\(pageOffset + 1)-\(min(pageOffset + 4, browse.count)) / \(browse.count)"
             page.footer = [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < browse.count)]
         case .briefing:
-            guard let game else { return }
-            page.title = game.content.summary.title; page.subtitle = seat == nil ? game.content.summary.rank : name
+            guard let game = browsingPreview ?? game else { return }
+            page.title = game.content.summary.title
+            page.subtitle = seat == nil ? game.content.summary.rank : player(game.owner).name
             page.preview = true
             let snapshot = game.session.snapshot
             page.details = ["\(snapshot.total) LEMMINGS  /  SAVE \(snapshot.required)", snapshot.remainingSeconds.map { "\($0 / 60) MINUTES" } ?? ""]
-            page.rows = [.init("ready", game.awaitsFirstStart ? (seat == nil ? L10n.text("Start") : L10n.text("Ready")) : L10n.text("Resume"), primary: true, portrait: player(game.owner).portrait)]
-            page.footer = [back]
+            page.rows = [.init("ready", game.awaitsFirstStart ? (seat == nil ? L10n.text("Play") : L10n.text("Ready")) : L10n.text("Resume"), primary: true, portrait: player(game.owner).portrait)]
+            page.footer = [back, .init("levelDetails", L10n.text("Details"))]
         case .deck:
             page.title = L10n.text("Paused"); page.subtitle = name
             page.rows = [.init("skills", L10n.text("Skills")), .init("targets", L10n.text("Lemmings")), .init("camera", L10n.text("Camera")), .init("transport", L10n.text("Time and actions")), .init("help", L10n.text("Controls"))]
@@ -257,7 +266,17 @@ import UIKit
                 for index in page.rows.indices { page.rows[index].primary = index == first }
             }
             page.rows = page.rows.filter { !$0.primary } + page.rows.filter(\.primary)
-            page.footer = [.init("library", L10n.text("Library"))]
+            page.footer = [.init("library", L10n.text("Library")), .init("levelDetails", L10n.text("Records"))]
+            if resultReplay != nil { page.footer.append(.init("review", L10n.text("Replay"))) }
+        case .levelDetails:
+            guard let game = browsingPreview ?? game, let source else { return }
+            let summary = game.content.summary
+            let key = local.progressKey(source: source.id, owner: game.owner, scope: game.scope)
+            page.title = summary.title
+            page.subtitle = summary.sourceLabel.isEmpty ? source.title : summary.sourceLabel
+            page.details = [summary.locationLabel, local.completed[key]?.contains(selectedLevel) == true
+                ? L10n.text("Level complete") : L10n.text("No records")]
+            page.footer = [back]
         case .confirmRetry, .confirmEnd:
             page.title = destination == .confirmRetry ? L10n.text("Retry level?") : L10n.text("End attempt?")
             page.footer = [.init("cancel", L10n.text("Cancel")), .init(destination == .confirmRetry ? "retry" : "end", destination == .confirmRetry ? L10n.text("Retry") : L10n.text("End attempt"), primary: true)]
@@ -278,7 +297,7 @@ import UIKit
         }
         if id.hasPrefix("source."), let chosen = sources.first(where: { $0.id == String(id.dropFirst(7)) }) { open(chosen); return }
         if id.hasPrefix("rank."), let index = Int(id.dropFirst(5)), ranks.indices.contains(index) { selectedRank = ranks[index]; pageOffset = 0; show(.levels); return }
-        if id.hasPrefix("level."), let index = Int(id.dropFirst(6)) { prepare(index); return }
+        if id.hasPrefix("level."), let index = Int(id.dropFirst(6)) { prepare(index, resumeMatchingPreview: true); return }
         if id.hasPrefix("skill."), let index = Int(id.dropFirst(6)) { game?.selectSkill(index); showPlay(); return }
         if id.hasPrefix("zoom."), let index = Int(id.dropFirst(5)), let mode = TVCameraMode(rawValue: index) { game?.setCamera(mode); show(.camera); return }
         if id.hasPrefix("player.") { editingPlayerID = String(id.dropFirst(7)); show(.player); return }
@@ -289,13 +308,13 @@ import UIKit
         }
         switch id {
         case "back", "cancel": back()
-        case "games": seat = nil; show(.games)
+        case "games": seat = nil; pageOffset = 0; show(.games)
         case "hotseat":
             if local.profiles.players.count == 1 { addPlayer() }
             roster = .init(host: local.profiles.activeID); rosterOffset = 0; show(.roster)
         case "startSeat":
             guard let roster, let newSeat = MobileHotSeat(host: roster.host, players: roster.players) else { return }
-            seat = newSeat; local.seats[newSeat.scope] = newSeat; persist(); show(.games)
+            seat = newSeat; local.seats[newSeat.scope] = newSeat; pageOffset = 0; persist(); show(.games)
         case "players": rosterOffset = 0; show(.players)
         case "addPlayer": addPlayer(); show(.player)
         case "usePlayer": local.profiles.select(editingPlayerID); persist(); show(.players)
@@ -313,7 +332,10 @@ import UIKit
         case "previous": pageOffset = max(0, pageOffset - 4); show(route)
         case "more": pageOffset += 4; show(route)
         case "restore": restore()
-        case "ready", "resume": input.claimMenuDevice(); if game?.resume() == true { if let game { audio.start(game) }; showPlay() }
+        case "ready", "resume":
+            input.claimMenuDevice()
+            if browsingPreview != nil { prepare(selectedLevel, restoring: browsingCheckpoint, playImmediately: true) }
+            else { beginPlay() }
         case "skills": pageOffset = (game?.selectedControl ?? 0) / 4 * 4; show(.skills)
         case "previousSkills": pageOffset = max(0, pageOffset - 4); show(.skills)
         case "moreSkills": pageOffset += 4; show(.skills)
@@ -333,6 +355,11 @@ import UIKit
         case "speed": if game?.speed == 10 { game?.clearSpeed() } else { game?.changeSpeed(1) }; show(.transport)
         case "rateDown": game?.rate(-1); show(.transport)
         case "rateUp": game?.rate(1); show(.transport)
+        case "levelDetails": show(.levelDetails)
+        case "review":
+            guard route == .results, let game, let resultReplay else { return }
+            do { present(try LemmingsMobileApplication.makeReplayViewController(content: game.content, document: resultReplay), animated: false) }
+            catch { fail(error, back: .results) }
         case "retryConfirm": show(.confirmRetry)
         case "retry": prepare(selectedLevel)
         case "next": prepare(selectedLevel + 1)
@@ -379,6 +406,12 @@ import UIKit
         if game.play.phase == .completed { completed() }
     }
 
+    private func beginPlay() {
+        guard let game, game.resume() else { return }
+        audio.start(game)
+        showPlay()
+    }
+
     private func showPlay() {
         guard let game else { return }
         cameraAdjustment = false; playfield.cameraAdjustment = false
@@ -395,7 +428,9 @@ import UIKit
     }
 
     private func open(_ chosen: TVLibrarySource) {
-        cancelPreparation(); source = chosen; loader = .init(makeLibrary: chosen.makeLibrary)
+        cancelPreparation()
+        browsingPreview = nil; browsingCheckpoint = nil
+        source = chosen; loader = .init(makeLibrary: chosen.makeLibrary)
         busy = true; show(.games)
         let token = generation
         preparation = Task { [weak self] in
@@ -406,7 +441,8 @@ import UIKit
             } catch { guard let self, token == self.generation, !Task.isCancelled else { return }; self.preparation = nil; self.busy = false; self.fail(error, back: .games) }
         }
     }
-    private func prepare(_ index: Int, restoring saved: MobileCheckpointEnvelope? = nil, nextOwner: String? = nil) {
+    private func prepare(_ index: Int, restoring saved: MobileCheckpointEnvelope? = nil, nextOwner: String? = nil,
+                         resumeMatchingPreview: Bool = false, playImmediately: Bool = false) {
         guard let loader, levels.indices.contains(index) else { return }
         cancelPreparation(); busy = true; show(route)
         let token = generation
@@ -415,10 +451,27 @@ import UIKit
         let preferences = local.preferences
         preparation = Task { [weak self] in
             do {
-                let prepared = try await loader.prepare(index)
+                let prepared = try await loader.prepare(index, forPreview: resumeMatchingPreview)
                 guard let self, token == self.generation, !Task.isCancelled else { return }
-                let nextGame = try TVGameExperience(content: prepared.content, owner: owner, scope: scope, preferences: preferences, checkpoint: saved)
+                var restore = saved
+                if resumeMatchingPreview, let checkpoint = self.checkpoint,
+                   self.local.checkpointSources[checkpoint.runID.uuidString] == self.source?.id,
+                   (checkpoint.owner ?? MobileProfiles.defaultID) == owner, checkpoint.scope == scope,
+                   checkpoint.matchesPreview(levelIdentifier: prepared.content.session.levelIdentifier, journey: .init()) {
+                    restore = checkpoint
+                }
+                let nextGame = try TVGameExperience(content: prepared.content, owner: owner, scope: scope, preferences: preferences, checkpoint: restore)
                 let preview = try self.levelPreview(nextGame)
+                if resumeMatchingPreview {
+                    self.browsingPreview = nextGame
+                    self.browsingCheckpoint = restore
+                    self.selectedLevel = index
+                    self.preview = preview
+                    self.busy = false
+                    self.preparation = nil
+                    self.show(.briefing)
+                    return
+                }
                 let draft = try nextGame.prepareCheckpoint()
                 let value = try await Task.detached(priority: .utility) { try draft.encode() }.value
                 guard token == self.generation, !Task.isCancelled else { return }
@@ -439,9 +492,11 @@ import UIKit
                 self.game?.pause(); self.audio.stop(); self.input.releaseOwner()
                 self.preparation = nil; self.game = nextGame; self.selectedLevel = index; self.busy = false
                 self.selectedRank = nextGame.content.summary.rank
-                self.checkpoint = value; self.preview = preview
+                self.checkpoint = value; self.preview = preview; self.resultReplay = nil
+                self.browsingPreview = nil; self.browsingCheckpoint = nil
                 if UIApplication.shared.applicationState != .active { nextGame.suspend(inactive: true) }
                 self.show(.briefing)
+                if playImmediately, UIApplication.shared.applicationState == .active { self.beginPlay() }
             } catch { guard let self, token == self.generation, !Task.isCancelled else { return }; self.preparation = nil; self.busy = false; self.fail(error, back: .levels) }
         }
     }
@@ -470,6 +525,7 @@ import UIKit
         resultHandledRunID = game.runID
         audio.pause(); input.reset()
         preview = try? levelPreview(game)
+        resultReplay = try? game.session.replayDocument()
         if game.session.snapshot.didWin {
             let key = local.progressKey(source: source.id, owner: game.owner, scope: game.scope)
             local.completed[key, default: []].insert(selectedLevel); persist()
@@ -525,7 +581,10 @@ import UIKit
     private func back() {
         if busy {
             guard preparation != nil else { return }
-            cancelPreparation(); show(game == nil ? .home : .deck); return
+            cancelPreparation()
+            if browsingPreview != nil { show(.briefing) }
+            else { show(game == nil ? .home : .deck) }
+            return
         }
         switch route {
         case .home: return
@@ -533,11 +592,16 @@ import UIKit
         case .player: show(.players)
         case .settings: show(game == nil ? .home : .deck)
         case .audio: show(.settings)
-        case .ranks: show(.games)
+        case .ranks: pageOffset = 0; show(.games)
         case .levels: pageOffset = 0; show(.ranks)
-        case .briefing: saveAndLeave()
+        case .briefing:
+            if browsingPreview != nil {
+                browsingPreview = nil; browsingCheckpoint = nil; preview = nil
+                show(.levels)
+            } else { saveAndLeave() }
         case .deck: if game?.play.phase == .suspended { return }; if game?.resume() == true { if let game { audio.start(game) }; showPlay() }
         case .results: saveAndLeave()
+        case .levelDetails: show(browsingPreview == nil && game?.play.phase == .completed ? .results : .briefing)
         case .error: show(previousRoute)
         default: show(.deck)
         }

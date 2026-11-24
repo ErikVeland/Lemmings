@@ -81,6 +81,12 @@ public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
         return journeyContext.runID == runID && journeyContext.position == position
     }
 
+    public func matchesPreview(levelIdentifier: String?, journey: JourneyContext) -> Bool {
+        guard let levelIdentifier, self.levelIdentifier == levelIdentifier else { return false }
+        if let journeyContext { return journeyContext == journey }
+        return true
+    }
+
     @discardableResult
     public func validated() throws -> MobileCheckpointEnvelope {
         let strings = [engine, engineFingerprint, levelIdentifier, levelFingerprint]

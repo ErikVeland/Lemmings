@@ -4,10 +4,15 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileResumePreparationTests {
-    private static let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
-        .deletingLastPathComponent().deletingLastPathComponent()
-    private static let hasSequelLevels = ["Sources/Ports/Lemm2/LEVELS/LEVEL000.DAT", "Sources/Ports/LEM3CD/LEVELS/LEVEL001.DAT"]
-        .allSatisfy { FileManager.default.fileExists(atPath: root.appendingPathComponent($0).path) }
+    private static let ports: URL = {
+        if let resources = ProcessInfo.processInfo.environment["LEMMINGS_MOBILE_BUNDLED_RESOURCES"] {
+            return URL(fileURLWithPath: resources).appendingPathComponent("Ports")
+        }
+        return URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Sources/Ports")
+    }()
+    private static let hasSequelLevels = ["Lemm2/LEVELS/LEVEL000.DAT", "LEM3CD/LEVELS/LEVEL001.DAT"]
+        .allSatisfy { FileManager.default.fileExists(atPath: ports.appendingPathComponent($0).path) }
 
     @MainActor @Test(.enabled(if: Self.hasSequelLevels), arguments: [false, true])
     func beachResumeRestoresTheExactAttempt(withCachedPreview: Bool) async throws {
@@ -15,7 +20,7 @@ struct MobileResumePreparationTests {
         defer { try? FileManager.default.removeItem(at: directory) }
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         let storage = MobileStorage(directory: directory.appendingPathComponent("campaign"))
-        let source = Self.root.appendingPathComponent("Sources/Ports/Lemm2")
+        let source = Self.ports.appendingPathComponent("Lemm2")
         let loader = MobileMenuPreviewLoader { try Lemmings2MobileLibrary(directory: source, storage: storage) }
         let opened = try await loader.prepare(10)
         let session = opened.content.session
@@ -52,8 +57,8 @@ struct MobileResumePreparationTests {
         defer { try? FileManager.default.removeItem(at: directory) }
         let storage = MobileStorage(directory: directory)
         let libraries: [any MobileGameLibrary] = [
-            try Lemmings2MobileLibrary(directory: Self.root.appendingPathComponent("Sources/Ports/Lemm2"), storage: storage),
-            try Lemmings3MobileLibrary(directory: Self.root.appendingPathComponent("Sources/Ports/LEM3CD"), storage: storage)
+            try Lemmings2MobileLibrary(directory: Self.ports.appendingPathComponent("Lemm2"), storage: storage),
+            try Lemmings3MobileLibrary(directory: Self.ports.appendingPathComponent("LEM3CD"), storage: storage)
         ]
         for library in libraries {
             let session = try library.loadLevel(at: library is Lemmings2MobileLibrary ? 10 : 0).session

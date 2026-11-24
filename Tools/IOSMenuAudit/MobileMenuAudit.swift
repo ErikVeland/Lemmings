@@ -315,7 +315,7 @@ import NxlvKit
             solution: true, playable: true, preview: true)
         let savedSeats = MobileCareerArt.players(profiles, subtitle: "", canDelete: true, hasSavedHotSeats: true)
         // Profile owns personal records, players and saves. Community owns public rankings.
-        guard progress.rows.map(\.id) == ["recordList", "achievements", "players", "cloudSaves", "playInsights"],
+        guard progress.rows.map(\.id) == ["recordList", "achievements", "profileStatistics", "players", "cloudSaves", "playInsights"],
               progress.footer.map(\.id) == ["home"],
               MobileCareerArt.recordsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "").footer.map(\.id) == ["records"],
               MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "").footer.map(\.id) == ["records"],

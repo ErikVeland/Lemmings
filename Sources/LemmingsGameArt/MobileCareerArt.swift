@@ -7,7 +7,7 @@ import NxlvKit
 public enum MobileCareerArt {
     private static func sourceLabel(_ level: ArcadeLevel) -> String {
         guard let conditions = level.conditions else { return "" }
-        if conditions.gameID == L10n.text("fan") || conditions.gameID == L10n.text("neolemmix") { return L10n.text("Fan-made") }
+        if conditions.gameID == "fan" || conditions.gameID == "neolemmix" { return L10n.text("Fan-made") }
         return ClassicTitle(rawValue: conditions.gameID) == nil ? "" : L10n.text("Official")
     }
 
@@ -54,7 +54,7 @@ public enum MobileCareerArt {
         rows.append(.init("hotSeat", hotSeatTurn.map { L10n.text("Hot Seat: \($0)") } ?? L10n.text("Hot Seat")))
         if hasSavedHotSeats { rows.append(.init("seatSaved", L10n.text("Saved Hot Seats"))) }
         return .init(title: L10n.text("Players"), subtitle: subtitle, rows: rows,
-            footer: [.init("profile", L10n.text("Back"))])
+            footer: [.init("profile", L10n.text("Back"), backNavigation: true)])
     }
 
     public static func savedHotSeats(_ profiles: MobileProfiles, sessions: [MobileHotSeat],
@@ -69,14 +69,14 @@ public enum MobileCareerArt {
         // The newest session is the likely choice. A new one is always available beside Back.
         if !rows.isEmpty { rows[0].primary = true }
         return .init(title: L10n.text("Saved Hot Seats"), subtitle: subtitle, rows: rows,
-            footer: [.init(backID, L10n.text("Back")), .init("seatFresh", L10n.text("New Hot Seat"))])
+            footer: [.init(backID, L10n.text("Back"), backNavigation: true), .init("seatFresh", L10n.text("New Hot Seat"))])
     }
 
     public static func hotSeat(_ profiles: MobileProfiles, subtitle: String, roster: MobileHotSeatRoster,
                                policy: MobileHotSeat.TurnPolicy, active: Bool, hasSaved: Bool,
                                confirmingRestart: Bool = false, ghostsVisible: Bool = true) -> GameFrontEnd.Page {
         var rows = profiles.players.map { player in
-            GameFrontEnd.Action("seat." + player.id, player.name + (player.id == roster.host ? "  Host" : ""),
+            GameFrontEnd.Action("seat." + player.id, player.name + (player.id == roster.host ? "  " + L10n.text("Host") : ""),
                                 enabled: player.id != roster.host, selected: roster.contains(player.id), portrait: player.portrait)
         }
         rows.append(.init("seatNew", L10n.text("New player"), enabled: profiles.players.count < MobileProfiles.maximum,
@@ -89,7 +89,7 @@ public enum MobileCareerArt {
             rows.append(.init("seatSolo", L10n.text("Return to solo")))
         }
         return .init(title: L10n.text("Hot Seat"), subtitle: subtitle.isEmpty ? L10n.text("Players: \(roster.players.count) / 2 minimum") : subtitle, rows: rows,
-                     footer: [.init("seatBack", L10n.text("Back")),
+                     footer: [.init("seatBack", L10n.text("Back"), backNavigation: true),
                               .init("seatStart", L10n.text("Choose a game"), enabled: roster.canStart, primary: roster.canStart)])
     }
 
@@ -101,7 +101,10 @@ public enum MobileCareerArt {
         var page = GameFrontEnd.Page(title: L10n.text("Community"),
             subtitle: [worldwide, category.title].filter { !$0.isEmpty }.joined(separator: "\n"),
             rows: rows, details: busy ? [L10n.text("Loading...")] : rows.isEmpty ? [status.isEmpty ? L10n.text("No scores") : status] : [],
-            footer: [.init("home", L10n.text("Back"))])
+            footer: [.init("home", L10n.text("Back"), backNavigation: true)])
+        if !worldwide.isEmpty {
+            page.subtitleSizingText = SavedLemmingsCounter(local: .max, global: .max).homeCaption + "\n" + category.title
+        }
         if world, let sharing {
             var share = GameFrontEnd.Action("rankShare", L10n.text("Share my records"), selected: sharing)
             share.toggleValue = sharing
@@ -158,27 +161,47 @@ public enum MobileCareerArt {
     }
 
     /// Progress is the active local player's own career: totals first, then their records, awards and insights.
-    public static func progressPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String,
-                                    campaign: ClassicAchievementProgress = .init(),
-                                    insightsAvailable: Bool = true,
-                                    selectablePlayers: [MobileProfile] = []) -> GameFrontEnd.Page {
+    public static func profileStatistics(records: ArcadeRecords, profileID: String) -> [String] {
         let history = records.trolley
         let attempts = history.attempts.compactMap { attempt in
             attempt.run.level.conditions.map { attempt.assessed(using: history.maximum(conditions: $0, assisted: attempt.run.assisted)) }
         }
         let career = TrolleyCareerScore(profileID: profileID, attempts: attempts, assisted: false)
+        let winningRuns = records.runs.filter { $0.profileID == profileID && $0.qualifies }
+        var clearedLevels = Set(winningRuns.map { TrolleyCareerScore.levelKey($0) })
+        for attempt in history.attempts where attempt.run.profileID == profileID && attempt.run.qualifies {
+            clearedLevels.insert(TrolleyCareerScore.levelKey(attempt.run))
+        }
+        let recordedAttempts = records.statistics.reduce(0) { total, item in
+            let own = item.key.hasSuffix("|" + profileID + "|false") || item.key.hasSuffix("|" + profileID + "|true")
+            return total + (own ? item.value.attempts : 0)
+        }
+        return [L10n.text("Career stars: \(career.stars)"), L10n.text("Levels cleared: \(clearedLevels.count)"),
+                L10n.text("Three-star levels: \(career.threeStarLevels)"), L10n.text("Recorded attempts: \(recordedAttempts)")]
+    }
+
+    public static func profileStatisticsPage(records: ArcadeRecords, profileID: String, name: String,
+                                             storageError: String? = nil) -> GameFrontEnd.Page {
+        .init(title: L10n.text("Statistics"), subtitle: name,
+              details: storageError.map { [$0] } ?? profileStatistics(records: records, profileID: profileID),
+              footer: [.init("records", L10n.text("Back"), backNavigation: true)])
+    }
+
+    public static func progressPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String,
+                                    campaign: ClassicAchievementProgress = .init(),
+                                    insightsAvailable: Bool = true,
+                                    selectablePlayers: [MobileProfile] = []) -> GameFrontEnd.Page {
         let awards = achievementsPage(records: records, profileID: profileID, profileName: profileName,
                                       subtitle: "", campaign: campaign).rows
         // Profile owns everything personal: identity, records, awards, statistics and saves.
         var page = GameFrontEnd.Page(title: L10n.text("Profile"), subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: [.init("recordList", L10n.text("Records")),
                    .init("achievements", L10n.text("Achievements") + "  \(awards.filter(\.selected).count)/\(awards.count)"),
+                   .init("profileStatistics", L10n.text("Statistics")),
                    .init("players", L10n.text("Players")),
                    .init("cloudSaves", L10n.text("Cloud saves")),
                    .init("playInsights", L10n.text("Play Insights"), enabled: insightsAvailable)],
-            details: [L10n.text("Career stars: \(career.stars)"), L10n.text("Levels cleared: \(career.clearedLevels)"),
-                      L10n.text("Three-star levels: \(career.threeStarLevels)")],
-            footer: [.init("home", L10n.text("Back"))])
+            footer: [.init("home", L10n.text("Back"), backNavigation: true)])
         page.singleColumnRows = true
         page.listTools = selectablePlayers.map { player in
             .init("progress.profile.\(player.id)", player.name, selected: player.id == profileID, portrait: player.portrait)
@@ -203,7 +226,7 @@ public enum MobileCareerArt {
         }
         return .init(title: profile, subtitle: L10n.text("Best result per level"), rows: rows,
             details: [L10n.text("Direct runs only. Lost counts use population minus saved from one retained result per level.")],
-            footer: [.init("progressBack", L10n.text("Back"))])
+            footer: [.init("progressBack", L10n.text("Back"), backNavigation: true)])
     }
 
     /// Level boards use the shared level metrics, Fastest 100% first, whatever the all-levels metric is.
@@ -215,7 +238,7 @@ public enum MobileCareerArt {
         let runs = records.runs.filter { $0.level.boardID == boardID && $0.assisted == assisted }
         guard let level = runs.first?.level else {
             let backID = parentProfileID.map { "progress.playerBack.\($0)" } ?? "progressBack"
-            return .init(title: L10n.text("Level records"), details: [L10n.text("No records yet.")], footer: [.init(backID, L10n.text("Back"))])
+            return .init(title: L10n.text("Level records"), details: [L10n.text("No records yet.")], footer: [.init(backID, L10n.text("Back"), backNavigation: true)])
         }
         let metric = levelMetrics.contains { $0.id == metric } ? metric : "full"
         let eligible = runs.filter { run in

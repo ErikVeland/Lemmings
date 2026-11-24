@@ -54,12 +54,12 @@
   },
   "draft": {
     "path": "Tools/Localisation/drafts/ta.json",
-    "sha256": "61c7d810a67b753883b7b44238cf004164da5835e30ba0195c5357bf932e9d43",
-    "entry_count": 3519,
+    "sha256": "c14e46433af3e75b479eedbd1923af0259767da2d016b0ff9019e9bc7d30b2a9",
+    "entry_count": 3623,
     "modified_by_this_worker": true,
     "missing_current_text_count": 0,
     "obsolete_key_count": 0,
-    "text_count": 3519,
+    "text_count": 3623,
     "unknown_current_text_count": 0
   },
   "catalogue": {
@@ -343,9 +343,9 @@
     "native_language_approved": false
   },
   "catalogue_snapshot": {
-    "text_count": 3519,
+    "text_count": 3623,
     "plural_count": 8,
-    "sha256": "eb050b7d0e132f45e1946c53e124df9044a6a3cf60b4dcacaad79da4a93aed64"
+    "sha256": "1fd9759bdf86c78ec4ff2ca745d666a3bf9f4c0479175bf4c8d828b158ab7007"
   },
   "maintenance_2_0_3": {
     "date": "2026-10-16",
@@ -425,5 +425,11 @@
     ],
     "removedObsoleteKeys": [],
     "humanReview": "pending"
+  },
+  "ux_redesign_checkpoint": {
+    "added": 145,
+    "removed": 92,
+    "revised": 42,
+    "human_review": "pending"
   }
 }

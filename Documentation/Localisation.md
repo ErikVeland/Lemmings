@@ -50,7 +50,8 @@ Inspect the current checkout before resetting, staging or committing files.
 ### Current checkpoint
 
 Eight translation locales share the current text catalogue and eight plural
-keys. Each locale has a complete AI draft and runtime tables for testing.
+keys. Each locale has a structurally complete runtime table for testing.
+The tables include explicitly retained English text.
 Read the catalogue and review checkpoints for current counts and hashes.
 Check the review files before treating a translation as approved.
 
@@ -87,6 +88,35 @@ The expanded source state needs a fresh full localisation regression run.
 Earlier focused tests passed, but they predate some bank-text, plural and font
 changes. The catalogue check and six Python validator tests passed during the
 handover. This does not establish translated gameplay or device acceptance.
+
+### Redesign destinations, 24 November 2026
+
+Each installed pack contains 3,623 text keys and eight plural keys. Source extraction,
+runtime and draft validation pass. Proper names, player initials, authored level
+titles and control bindings retain their source identity.
+
+| Destination | Route and input behaviour |
+| --- | --- |
+| Home and Play | Continue keeps initial priority. Returning from Play restores the Play selection. On touch, keyboard and controller activation use the same action ID. |
+| Profile | Players, Records, Statistics and Cloud saves use translated captions. Back from Players returns to Profile. Player names retain the spelling the player entered. |
+| Community | The Mac opens its ranking view. iOS and tvOS use the Community page with local and worldwide scopes. Both use translated service status messages. |
+| Hot Seat | With saved sessions and no active session, Home opens the saved list. On mobile and TV, Back from New Hot Seat restores the list and its selection. Mac changes to an active roster use the existing save-and-return flow. |
+| Settings | Controls, Artwork and Display retain their existing preference IDs. Gameplay → Language previews a locale. Apply persists it and Back restores the entry language. Desk Clock is available on supported mobile devices. Mac places Donate in Help. |
+
+The muted Mac run exercised the language picker, accessibility activation, input
+targets, global navigation, and catalogues in all eight locales. The six shared
+destination pages produced 48 phone-width bitmap renders. At 390 points the
+Play title fits in each language, and showing Loading preserves Home and Play
+targets. iOS and tvOS destination tests typecheck against the Simulator SDKs.
+Native touch, Siri Remote, spoken VoiceOver and fluent-reader acceptance remain open.
+
+Previously recorded English fallbacks elsewhere in the catalogue remain listed by
+key and locale in `Tools/Localisation/unchanged.json`. Entries explicitly marked as
+fallbacks number 390 in German, 391 in Latin American Spanish, 387 in French, 391 in
+Italian, 387 in Norwegian Bokmål, 387 in Dutch, 391 in Brazilian Portuguese and
+390 in Tamil. These include lemming assessments, inspection and hint text, gameplay
+help, and older About and Desk Clock copy. The separate TV browser transfer helper
+and original lettering embedded in game art also retain English.
 
 ### Files and formats
 

@@ -30,6 +30,7 @@ public enum MobileTurnArt {
             identified.subtitleRuns = [.init(identified.subtitle, .blue)]
         } else {
             identified.subtitle = subtitle(page.subtitle, playerName: playerName, role: role)
+            identified.subtitleSizingText = page.subtitleSizingText.map { subtitle($0, playerName: playerName, role: role) }
             identified.subtitleRuns = []
             identified.subtitleRuns += GameSemanticText.named(subtitle(page.subtitle, playerName: playerName, role: role), name: playerName)
         }
