@@ -29,6 +29,12 @@ With variable speed enabled, Shift+1 through Shift+5 select 1×, 2×, 3×, 5×
 and 10× in order. Shift+6 selects 25× when enabled. These shortcuts also work
 in narrow windows and Classic CRT mode. Releasing Shift keeps the chosen tier.
 
+On iPhone, iPad, Duo and Apple TV, wide overview rows offer one button per
+tier. Tap the underlined tier's neighbour or any other multiplier to change
+speed. Compact overview rows offer a Speed button when there is room beside
+the map. Choosing a tier or going Back returns to the playfield and restores
+the previous running or planning state.
+
 On iPhone, iPad and Duo, Pause menu → Speed opens the available multipliers.
 On Apple TV the same picker is under Game controls → Speed. It initially focuses
 the active tier. Choosing a multiplier returns to the paused controls. Back

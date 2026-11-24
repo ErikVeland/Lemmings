@@ -47,6 +47,7 @@ extension MenuAudit {
             session.applySettings(settings)
             for _ in 0..<100 { session.tick() }
             let image = MobileBitmapRenderer.image(try session.render(highlight: nil))
+            let minimapImage = MobileBitmapRenderer.image(try session.renderMinimap())
             let panel = session.panelFrame.flatMap(MobileBitmapRenderer.image)
             let icons = session.snapshot.skills.indices.map { session.skillCursorFrame(control: $0).flatMap(MobileBitmapRenderer.image) }
             for (pose, size, safe, clearance, radius, regions) in poses {
@@ -67,7 +68,7 @@ extension MenuAudit {
                 let extraStates = pose == "ipad-wide" ? ["values-9", "values-10", "values-99", "values-100", "supply-empty", "supply-one", "supply-unlimited"] : []
                 for state in ["running", "paused", "selected-last", "armed", "undo", "fixed-speed"] + extraStates {
                     let counter = state.hasPrefix("values-") ? Int(state.dropFirst(7)) : nil
-                    let speed: Double = (counter ?? 0) < 10 ? 1 : 10
+                    let speed: Double = state == "paused" ? 25 : (counter ?? 0) < 10 ? 1 : 10
                     let original = session.snapshot
                     var supplies = original.skills
                     if state.hasPrefix("supply-"), let first = supplies.first {
@@ -81,6 +82,7 @@ extension MenuAudit {
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
                         engineIdentifier: session.engineIdentifier, topBarInsets: duo ? .init() : clearance, navigationRail: rail,
                         fillsDisplayWidth: menuLeading, menuLeading: menuLeading, variableSpeed: state != "fixed-speed")
+                        .addingSpeedTiers(state == "fixed-speed" ? [] : state == "paused" ? GameplaySpeed.ridiculousSteps : GameplaySpeed.steps)
                     if state == "fixed-speed" {
                         let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: 0,
                             paused: false, speed: speed, endRunArmed: false)
@@ -91,6 +93,15 @@ extension MenuAudit {
                     let baseline = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
                         engineIdentifier: session.engineIdentifier, navigationRail: rail, fillsDisplayWidth: menuLeading)
+                    if pose == "ipad-wide", state != "fixed-speed" {
+                        let steps = state == "paused" ? GameplaySpeed.ridiculousSteps : GameplaySpeed.steps
+                        guard layout.speedTiers == steps, layout.minimapFrame?.intersects(layout.speedTierFrame) == false,
+                              layout.interface.controlFrames == baseline.interface.controlFrames else { throw invalidTargets(line: #line) }
+                    }
+                    if pose == "portrait", state == "running" {
+                        guard layout.speedTiers.isEmpty, layout.speedTierFrame.size == CGSize(width: 64, height: 44),
+                              layout.minimapFrame?.intersects(layout.speedTierFrame) == false else { throw invalidTargets(line: #line) }
+                    }
                     let selected = state == "selected-last" ? snapshot.skills.count - 1 : 0
                     let paused = state == "paused"
                     let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot,
@@ -194,6 +205,15 @@ extension MenuAudit {
                         endRunArmed: state == "armed", panelImage: panel, typography: typography, skillIcons: icons, playerName: "PLA", shape: .rounded,
                         duoCorners: !pose.hasPrefix("ipad-"), displayBounds: bounds)
                         .draw(in: context, bounds: bounds)
+                    if let map = layout.minimapFrame {
+                        context.saveGState()
+                        context.translateBy(x: map.minX, y: map.minY)
+                        GameMinimapArt.draw(in: context, bounds: CGRect(origin: .zero, size: map.size),
+                            image: minimapImage, visible: cg(viewport.visibleLevelRect),
+                            levelSize: CGSize(width: session.levelSize.width, height: session.levelSize.height),
+                            overlay: layout.portrait != nil)
+                        context.restoreGState()
+                    }
                     context.restoreGState()
                     for region in regions { context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame)) }
                     try save(context: context, to: output.appendingPathComponent("\(session.engineIdentifier)-\(pose)-\(state).png"))

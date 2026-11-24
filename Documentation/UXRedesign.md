@@ -1,9 +1,10 @@
 # UX redesign proposal
 
-Status: Phase 1 is merged (ErikVeland/Lemmings#40). Phase 2 is partly merged
-(ErikVeland/Lemmings#41): see [Phase 2 status](#phase-2-status). Phase 3 is in progress:
-see [Phase 3 status](#phase-3-status). Phase 4 remains a proposal. See [Phase 1 status](#phase-1-status) for what
-landed, what changed from the proposal and what is not yet verified.
+Home, Play, Profile, Community and profile-first onboarding are on shared main.
+The gameplay changes include fixed HUD counters, speed selection, rewind feedback
+and the result music fade. Settings group names and saved Hot Seat navigation
+are also merged. The phase sections below keep the original proposals and their
+dated checks.
 
 This proposal reorganises the existing depth of Ultimate Lemmings. It does not
 remove features. It builds on [UI clarity](UIPrinciples.md),
@@ -61,10 +62,10 @@ The Apple TV HUD already draws its visible counters through
 
 | Area | Implemented in the working source | Further implementation or acceptance |
 | --- | --- | --- |
-| Speed | The iOS and TV socket displays the chosen tier immediately. Fixed-speed mode gives the whole socket to its toggle. The touch pause menu and TV Game controls offer an exact tier, including 1×. | The proposed always-visible wide speed strip and compact in-play picker are still open. Existing hold, controller and keyboard bindings retain their functions. |
+| Speed | The iOS and TV socket displays the chosen tier immediately. Fixed-speed mode gives the whole socket to its toggle. The touch pause menu and TV Game controls offer an exact tier, including 1×. | The later Mac and mobile sections below record the in-play controls. Existing hold, controller and keyboard bindings retain their functions. |
 | Rewind | The shared cue expresses distance in game seconds. Touch and TV indicate changes in rewind speed. | Check visibility on real playfields and repeated Siri Remote presses. |
 | Skills | Stocked and unlimited skills retain their artwork brightness. Exhausted skills dim on the shared mobile HUD. Native L3 panel artwork uses its own original control states. | Check physical-device contrast, selected outlines and remote focus. |
-| Navigation | Home, Play, Profile, Community, first launch and the saved-route resolver are implemented. | The Settings and saved Hot Seat changes have their own concurrent work. Preview details, remaining terminology and fan catalogue filters need review against their actual routes. |
+| Navigation | Home, Play, Profile, Community, first launch and the saved-route resolver are implemented. | Settings and saved Hot Seat navigation landed in #45. Preview details, remaining terminology and fan catalogue filters need review against their actual routes. |
 | Polish | Results fade the outgoing level track. | First-use teaching for transport and assignments, minimap/tracking grouping, Duo fold transitions, audible playback and older-device input timing remain open. |
 
 The muted follow-up ran 25 targeted tests and 209 offscreen HUD and speed-page
@@ -90,6 +91,23 @@ The offscreen check rendered the Mac panel and pressed nine points on each
 tier with the optional tier both enabled and disabled. It checked the minimap
 and timeline boundaries, accessibility activation, and Shift release after a
 temporary boost. Live play with a physical keyboard and VoiceOver remains open.
+
+### Touch and TV speed controls — 25 November 2026
+
+The existing speed pedal stays in place. The adaptive HUD uses the trailing end
+of the minimap row for speed selection. At 700 safe points and wider, it shows
+one 44-point button per tier when the map keeps at least half its width and
+220 points. Compact rows show a Speed button that opens the bitmap chooser
+when at least 120 points remain for the map. Users can still reach the chooser
+from the pause controls on smaller layouts. Fixed speed and replay use the
+original overview. The selected tier has an underline and an accessibility
+selection state. Returning from the compact chooser restores play or planning.
+
+Windowless audits cover the three original engines, TV and Duo layouts, nine
+sample points per visible target, the map boundary, fixed mode and the optional
+25× button. The NeoLemmix test advances a supported fan level to tick 100 and
+checks that the targets stay fixed as the counters and speed change. Real touch,
+screen-reader focus and Siri Remote navigation through the chooser need a device.
 
 ## Evidence and limits
 
