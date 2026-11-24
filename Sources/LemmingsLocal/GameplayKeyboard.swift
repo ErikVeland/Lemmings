@@ -150,6 +150,38 @@ import NxlvKit
     private let navigationAppearance = GameplayMenuAppearance()
     private let navigationHitArea = GameplayMenuHitArea(frame: .zero)
     private let controlHelp = GameplayControlHelp()
+    private let tipHelp = GameplayControlHelp()
+    private var tipExpiry: Task<Void, Never>?
+    var allowsControlTips: () -> Bool = { true }
+    var controlTips: () -> GameplayControlTips = {
+        let store = ArcadeStore.shared
+        let profile = store.playingProfileID
+        return GameplayControlTips(profileID: profile, defaults: .standard,
+            previouslyPlayed: store.records.runs.contains { $0.profileID == profile })
+    }
+
+    func showControlTip(_ tip: GameplayControlTip) {
+        guard active(), allowsControlTips(), ownsController(), !GameScreen.shared.isPresented,
+              let window, window.isKeyWindow, window.attachedSheet == nil,
+              let root = window.contentView else { return }
+        let tips = controlTips()
+        guard tips.needs(tip) else { return }
+        let area = (musicDisplayArea() ?? root.bounds).intersection(root.bounds)
+        guard area.width >= 240, area.height >= 100 else { return }
+        let anchor = CGRect(x: area.minX + 12, y: root.isFlipped ? area.minY + 4 : area.maxY - 4,
+                            width: min(350, area.width - 24), height: 0)
+        tipHelp.update(.init(id: String(tip.rawValue), title: L10n.text("Controls"),
+            text: tip.text(for: .mouse), anchor: anchor), in: root, at: ProcessInfo.processInfo.systemUptime, focused: true)
+        guard tipHelp.panel != nil else { return }
+        tips.didShow(tip)
+        tipExpiry?.cancel()
+        tipExpiry = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 5_000_000_000)
+            guard !Task.isCancelled else { return }
+            self?.tipHelp.reset()
+        }
+    }
+
     private lazy var navigationButton: GameplayMenuButton = {
         let button = GameplayMenuButton(frame: .zero)
         button.fadeAppearance = navigationAppearance; button.glyph = .menu
@@ -239,6 +271,8 @@ import NxlvKit
         inspectionHover.removeFromSuperview(); hoverSnapshot = nil; hoverRevision = nil
         navigationButtons.forEach { $0.resetAppearance(); $0.removeFromSuperview() }
         navigationHitArea.removeFromSuperview()
+        tipExpiry?.cancel()
+        tipHelp.reset()
         controlHelp.reset()
         nowPlayingNotice.removeFromSuperview()
     }
@@ -429,6 +463,7 @@ import NxlvKit
 
     // Kept separate from the monitor so input routing can be tested with real events.
     func handle(_ event: NSEvent) -> NSEvent? {
+        if event.type == .keyDown, event.window === window, tipHelp.panel != nil { tipHelp.dismissForInput() }
         let now = event.timestamp
         if event.type == .keyUp, event.keyCode == fKeyCode {
             guard pressedF else { return event }
@@ -625,6 +660,7 @@ import NxlvKit
         }
     }
     func controllerAction(_ action: ControllerBindings.Action) {
+        if tipHelp.panel != nil { tipHelp.dismissForInput() }
         switch action {
         case .assign: assignSelected()
         case .repeatAssignment: repeatAssignment()
@@ -655,6 +691,7 @@ import NxlvKit
     static func playCommands(pauseKey: String, retry: Bool, nuke: Bool) -> [KeyboardCommand] {
         let gameplay = L10n.text("Gameplay"), camera = L10n.text("Camera")
         var rows = [
+            KeyboardCommand(keys: L10n.text("Level map"), action: GameplayControlTip.map.text(for: .mouse), group: camera),
             KeyboardCommand(keys: pauseKey, action: L10n.text("Pause / resume"), group: gameplay),
             KeyboardCommand(keys: "Hold , / <", action: L10n.text("Scrub backward"), group: gameplay),
             KeyboardCommand(keys: "Hold . / >", action: L10n.text("Scrub forward after rewind"), group: gameplay),
@@ -758,7 +795,13 @@ import NxlvKit
         guard let window, window.attachedSheet == nil, overlay == nil else { return }
         let resume = pauseForHelp()
         speedControl?.cancelInput()
-        let view = KeyboardOverlayView(commands: commandRows, modern: modern(), hints: hints != nil)
+        tipHelp.reset()
+        let tips = controlTips()
+        let view = KeyboardOverlayView(commands: commandRows, modern: modern(), hints: hints != nil,
+            tipToggle: (tips.toggleTitle, {
+                tips.enabled.toggle()
+                return tips.toggleTitle
+            }))
         overlay = view
         view.anchors = { [weak self, weak view] in
             guard let self, let view else { return [] }

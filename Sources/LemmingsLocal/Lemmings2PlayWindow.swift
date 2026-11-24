@@ -300,6 +300,10 @@ import NxlvKit
             self.hoverTribe = self.tribeAt(x, y); self.front.needsDisplay = true
         }
         front.onKey = { [weak self] key in self?.key(key) }
+        canvas.timeline.onMap = { [weak self] point in
+            self?.canvas.centreFromMap(point)
+            self?.gameplayKeyboard?.showControlTip(.map)
+        }
         canvas.onCameraChanged = { [weak self] in
             guard let self else { return }
             self.sounds.setViewport(self.canvas.soundViewport)
@@ -382,6 +386,7 @@ import NxlvKit
         canvas.onSpeedPress = { [weak self] time, count in self?.speedControl.pointerDown(at: time, clickCount: count) }
         canvas.onSpeedRelease = { [weak self] time in self?.speedControl.release(.mouse, at: time) }
         canvas.onSpeedStep = { [weak self] direction, time in self?.speedControl.step(direction, at: time) }
+        keyboard.allowsControlTips = { [weak self] in self?.canvas.readOnlyReplay == false }
         keyboard.speedControl = speedControl
         keyboard.precisionZoom = { [weak self] kind in self?.togglePrecisionZoom(kind) }
         keyboard.extraSkill = { [weak self] in self?.useExtraSkill() }
@@ -397,7 +402,12 @@ import NxlvKit
             self?.dj.setSpeedPitch(cents)
         }
         keyboard.modern = { [weak self] in self?.audioSettings.modernControlsEnabled ?? true }
-        speedControl.onChange = { [weak self] in self?.accumulator = 0; self?.refreshGame() }
+        speedControl.onChange = { [weak self] in
+            guard let self else { return }
+            accumulator = 0
+            if speedControl.isFast { gameplayKeyboard?.showControlTip(.speed) }
+            refreshGame()
+        }
         keyboard.cycle = { [weak self] direction in
             guard let self, let game = self.game,
                   let index = SkillShortcuts.cycle(from: self.selected, direction: direction, available: game.supplies.map { $0 > 0 }) else { return }
@@ -405,7 +415,8 @@ import NxlvKit
         }
         keyboard.selectGliderBeforeGoal = { [weak self] in
             guard let self, let slot = self.game?.configuration.skills.firstIndex(of: .hangGlider), self.selected != slot else { return false }
-            self.selected = slot; self.fanSelected = false; self.refreshGame(); return true
+            self.panelAction(slot)
+            return true
         }
         keyboard.centre = { [weak self] entrance in self?.canvas.centre(onEntrance: entrance) }
         keyboard.navigationReduceMotion = { [weak self] in
@@ -1368,6 +1379,7 @@ import NxlvKit
         } else { nukeGesture.reset(); nukeAction = .none }
         if slot < 8 {
             selected = slot; fanSelected = false
+            gameplayKeyboard?.showControlTip(.assignment)
         } else {
             switch Lemmings2Control(rawValue: slot) {
             case .pause:
@@ -1820,6 +1832,7 @@ import NxlvKit
         usedRewind = true; paused = true; accumulator = 0; updateUserMusicPause()
         assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub(); playRewindMusic()
         refreshGame(); saveCheckpoint(immediately: true)
+        gameplayKeyboard?.showControlTip(.rewind)
 
         return true
     }
@@ -1996,7 +2009,7 @@ import NxlvKit
         }
         ArcadeWindow.shared.actionReplayContext = { [weak self] in self?.leaderboardReplayContext() }
         ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
-            next: { [weak self] in self?.continueResult() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
+            next: { [weak self] in self?.continueResult() }, replay: runMovie.hasFrames ? { [weak self] save in self?.runMovie.review(save: save) } : nil,
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) },
             continueTitle: resultContinueTitle, background: arcadeBackdrop,
             rewardVolume: sounds.muted ? 0 : audioSettings.soundVolume,
@@ -2469,6 +2482,16 @@ import NxlvKit
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
         timeline.layoutSequelFooter(in: bounds)
+        if let game { timeline.mapSize = CGSize(width: game.configuration.width, height: game.configuration.height) }
+        let camera = soundViewport
+        timeline.visibleMapRect = CGRect(x: camera.x, y: camera.y, width: camera.width, height: camera.height)
+    }
+    func centreFromMap(_ point: CGPoint) {
+        let camera = soundViewport
+        cameraX += point.x - camera.x - camera.width / 2
+        cameraY += point.y - camera.y - camera.height / 2
+        clampCamera()
+        needsDisplay = true
     }
 
     var navigationFrame: CGRect?
@@ -2476,7 +2499,7 @@ import NxlvKit
     private var capturedPointer: CGPoint?
     func capturePointer(active: Bool) {
         capturedPointer = pointerCapture.update(in: self, active: active && controllerPointer == nil)
-        if let point = capturedPointer {
+        if let point = capturedPointer, !timeline.draggingMap {
             trackPointer(at: point, held: NSEvent.pressedMouseButtons & 1 != 0)
         }
     }
@@ -3316,7 +3339,12 @@ import NxlvKit
             }
         }
         layoutTimeline()
-        defer { if !readOnlyReplay { timeline.draw() } }
+        defer {
+            if !readOnlyReplay {
+                timeline.draw()
+                if !timeline.mapFrame.isEmpty { timeline.drawMap(image: terrain.flatMap(bitmapCache.pixels)) }
+            }
+        }
         defer { startCountdown.draw(in: gameplayRect) }
         defer {
             if let id = obviousID,
@@ -3533,7 +3561,7 @@ import NxlvKit
         window?.makeFirstResponder(self)
         let p = convert(event.locationInWindow, from: nil)
         layoutTimeline()
-        if timeline.click(at: p) { return }
+        if !readOnlyReplay, timeline.beginMapDrag(at: p) || timeline.click(at: p) { return }
         let source = gameplayRect.contains(p) ? precisionLens.source(p) : p
         let x = (source.x - origin.x) / zoom
         let y = (source.y - origin.y) / (zoom * 1.2)
@@ -3564,8 +3592,14 @@ import NxlvKit
         guard x >= 0, x < visibleWidth, y >= 0, y < 160 else { onRelease?(); return }
         onPointer?(Int(x+cameraX),Int(y+cameraY),held)
     }
-    override func mouseDragged(with event: NSEvent) { trackPointer(event,held:true); onHover?() }
-    override func mouseUp(with event: NSEvent) { onSpeedRelease?(event.timestamp); trackPointer(event,held:false); onRelease?() }
+    override func mouseDragged(with event: NSEvent) {
+        if timeline.draggingMap { timeline.dragMap(to: convert(event.locationInWindow, from: nil)); return }
+        trackPointer(event, held: true); onHover?()
+    }
+    override func mouseUp(with event: NSEvent) {
+        if timeline.draggingMap { timeline.endMapDrag(); return }
+        onSpeedRelease?(event.timestamp); trackPointer(event, held: false); onRelease?()
+    }
     override func keyDown(with event: NSEvent) {
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
         if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return }

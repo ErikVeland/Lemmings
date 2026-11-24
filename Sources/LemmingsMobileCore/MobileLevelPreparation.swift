@@ -82,22 +82,29 @@ public actor MobileMenuPreviewLoader {
 
     public nonisolated func prepare(_ index: Int, settings: ClassicSettings = .init(),
                         checkpoint: MobileCheckpointEnvelope? = nil,
-                        allowUnrelatedCheckpoint: Bool = false) async throws -> MobilePreparedLevel {
+                        allowUnrelatedCheckpoint: Bool = false, forPreview: Bool = false) async throws -> MobilePreparedLevel {
         let cancellation = MobilePreparationCancellation()
         return try await withTaskCancellationHandler {
             try await prepareOnWorker(index, settings: settings, checkpoint: checkpoint,
-                allowUnrelatedCheckpoint: allowUnrelatedCheckpoint, cancellation: cancellation)
+                allowUnrelatedCheckpoint: allowUnrelatedCheckpoint, forPreview: forPreview, cancellation: cancellation)
         } onCancel: { cancellation.cancel() }
     }
 
     private func prepareOnWorker(_ index: Int, settings: ClassicSettings,
-                        checkpoint: MobileCheckpointEnvelope?, allowUnrelatedCheckpoint: Bool,
+                        checkpoint: MobileCheckpointEnvelope?, allowUnrelatedCheckpoint: Bool, forPreview: Bool,
                         cancellation: MobilePreparationCancellation) throws -> MobilePreparedLevel {
         try cancellation.check()
         let opened = try library ?? makeLibrary()
         library = opened
         try cancellation.check()
-        let content = try prepared.removeValue(forKey: index) ?? opened.loadLevel(at: index)
+        let content: MobileLevelContent
+        if let cached = prepared.removeValue(forKey: index) {
+            content = cached
+        } else if forPreview, let campaign = opened as? any MobileCampaignPreviewLibrary {
+            content = try campaign.loadPreviewLevel(at: index)
+        } else {
+            content = try opened.loadLevel(at: index)
+        }
         try cancellation.check()
         MobileArtworkInstallation.install(on: content.session)
         content.session.applySettings(settings)
@@ -132,7 +139,13 @@ public actor MobileMenuPreviewLoader {
         let opened = try library ?? makeLibrary()
         library = opened
         try cancellation.check()
-        let content = try prepared[index] ?? opened.loadLevel(at: index)
+        let campaign = opened as? any MobileCampaignPreviewLibrary
+        let content: MobileLevelContent
+        if let campaign {
+            content = try campaign.loadPreviewLevel(at: index)
+        } else {
+            content = try prepared[index] ?? opened.loadLevel(at: index)
+        }
         try cancellation.check()
         let session = content.session
         MobileArtworkInstallation.install(on: session)
@@ -143,7 +156,7 @@ public actor MobileMenuPreviewLoader {
                                         renderScale: session.renderScale)
         try cancellation.check()
         recent.removeAll { $0 == index }; recent.append(index)
-        prepared[index] = content
+        if campaign == nil { prepared[index] = content }
         frames[index] = preview
         while recent.count > 3 || frames.values.reduce(0, { $0 + $1.frame.rgba.count }) > 12 * 1024 * 1024 && recent.count > 1 {
             let oldest = recent.removeFirst()

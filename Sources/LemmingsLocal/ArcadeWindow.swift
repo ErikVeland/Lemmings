@@ -23,7 +23,7 @@ import NxlvKit
         GameScreen.shared.present(arcadeView, owner: owner)
     }
     func showResult(_ report: ArcadeReport, owner: NSWindow? = nil, retry: @escaping () -> Void,
-                    next: @escaping () -> Void, replay: @escaping (Bool) -> Void, storedReplay: ((URL, String) -> Void)? = nil, continueTitle: String = L10n.text("Next level"), background: CGImage? = nil, rewardVolume: Double = 0,
+                    next: @escaping () -> Void, replay: ((Bool) -> Void)?, storedReplay: ((URL, String) -> Void)? = nil, continueTitle: String = L10n.text("Next level"), background: CGImage? = nil, rewardVolume: Double = 0,
                     rewardVolumeProvider: (() -> Double)? = nil,
                     continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil,
                     prepareSkip: (() throws -> Void)? = nil,
@@ -51,12 +51,13 @@ import NxlvKit
         if arcadeView.mode == .result { arcadeView.startCelebration() }
         GameCenterScores.shared.onChange = { [weak self] in self?.arcadeView.needsDisplay = true }
     }
-    func showRecords(level: ArcadeLevel?, owner: NSWindow? = nil, background: CGImage? = nil, levels: [ArcadeLevel] = []) {
+    func showRecords(level: ArcadeLevel?, owner: NSWindow? = nil, background: CGImage? = nil,
+                     levels: [ArcadeLevel] = [], assisted: Bool = false) {
         arcadeView.background = background
         arcadeView.mode = .records; arcadeView.report = nil
         arcadeView.level = level ?? ArcadeStore.shared.records.runs.last?.level
         arcadeView.recordLevels = levels.isEmpty ? RecordLevelNavigation.savedLevels(current: arcadeView.level) : levels
-        arcadeView.assisted = false; arcadeView.board = .fastestAllSaved; arcadeView.trolleyBoard = .fastestAllSaved
+        arcadeView.assisted = assisted; arcadeView.board = .fastestAllSaved; arcadeView.trolleyBoard = .fastestAllSaved
         arcadeView.boardScope = .level
         arcadeView.onLater = nil; arcadeView.onHints = nil; arcadeView.onStoredReplay = nil
         arcadeView.onRetry = nil; arcadeView.onContinue = nil; arcadeView.onSkip = nil; arcadeView.onReplay = nil
@@ -776,9 +777,10 @@ import NxlvKit
             let chosen = turn != nil
             let rect = CGRect(x: 64 + (index % 2) * 506, y: 150 + (index / 2) * 70, width: 486, height: 58)
             let host = profile.id == store.records.activeProfileID
-            let label = "\(index + 1). \(profile.initials)" + (turn.map { L10n.text("  Turn \($0 + 1)") } ?? "") + (host ? "  Host" : "")
+            let status = (turn.map { L10n.text("  Turn \($0 + 1)") } ?? "") + (host ? "  " + L10n.text("Host") : "")
+            let label = "\(index + 1). \(profile.initials)" + status
             let runs: [GameFrontEnd.TextRun] = [.init("\(index + 1). ", .blue), .init(profile.initials, .green),
-                .init((turn.map { L10n.text("  Turn \($0 + 1)") } ?? "") + (host ? "  Host" : ""), .blue)]
+                .init(status, .blue)]
             button(label, rect, selected: chosen, titleRuns: runs) { [weak self] in self?.changeSessionPlayer(profile.id) }
         }
         let needsPlayer = players.count < 2

@@ -45,8 +45,7 @@ import NxlvKit
         247 + resultSummaryOffset + (resultStatus != nil ? 38 : 0)
     }
     var resultActionsY: CGFloat {
-        let hasReviewRow = cleared || onLater == nil || nextSessionPlayer != nil || offersSkip
-        return resultCardsY + (hasReviewRow ? 220 : 168)
+        resultCardsY + 220
     }
     /// The level leaderboard sits below the result actions so the outcome and next step stay first.
     var resultLeaderboardY: CGFloat { resultActionsY + 66 }
@@ -65,9 +64,13 @@ import NxlvKit
         let retry = ResultAction(title: nextSessionPlayer == nil ? L10n.text("Retry") : L10n.text("Retry as \(player.initials)")) { [weak self] in self?.onRetry?() }
         let primary = ResultAction(title: primaryResultTitle, primary: true) { [weak self] in self?.performDefaultResultAction() }
         let skip = ResultAction(title: skipTitle, enabled: canSpendSkip) { [weak self] in self?.skipLevel() }
+        var review: [ResultAction] = []
+        if let onReplay {
+            review.append(ResultAction(title: L10n.text("Replay")) { onReplay(false) })
+        }
+        review.append(ResultAction(title: L10n.text("Records")) { [weak self] in self?.page(.records) })
         if !cleared, onLater != nil {
             let later = ResultAction(title: L10n.text("Try later")) { [weak self] in self?.onLater?() }
-            var review: [ResultAction] = []
             if nextSessionPlayer != nil { review.append(retry) }
             if offersSkip { review.append(later) }
             resultActionRow(review, y: y - 52, links: true)
@@ -75,9 +78,7 @@ import NxlvKit
             resultActionRow([back, hints, offersSkip ? skip : later, primary], y: y)
             return
         }
-        resultActionRow([
-            ResultAction(title: L10n.text("Replay")) { [weak self] in self?.onReplay?(false) },
-            ResultAction(title: L10n.text("Records")) { [weak self] in self?.page(.records) },
+        resultActionRow(review + [
             ResultAction(title: L10n.text("Details")) { [weak self] in self?.page(.details) },
             ResultAction(title: L10n.text("Hot Seat")) { [weak self] in self?.openSession() },
             ResultAction(title: L10n.text("Worldwide")) { [weak self] in self?.openWorldwideBoard() }

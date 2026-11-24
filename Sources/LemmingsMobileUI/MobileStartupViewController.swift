@@ -137,7 +137,7 @@ import UIKit
         backgroundColor = .clear
         isUserInteractionEnabled = false
         isAccessibilityElement = true
-        accessibilityLabel = "Loading..."
+        accessibilityLabel = L10n.text("Loading...")
         accessibilityTraits = .updatesFrequently
     }
 

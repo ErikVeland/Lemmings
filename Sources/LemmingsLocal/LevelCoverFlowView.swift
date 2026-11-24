@@ -90,6 +90,11 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     }
     var artworkLoader: ArtworkLoader?
     var onSelectionChanged: ((LevelCoverFlowItem) -> Void)?
+    var selectedActionTitle: String? {
+        didSet {
+            for card in cards { card.actionTitle = card.tag == selectedIndex ? selectedActionTitle : nil }
+        }
+    }
     var onStart: ((LevelCoverFlowItem) -> Void)?
 
     override var isFlipped: Bool { true }
@@ -413,6 +418,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
             let card = existing[index]
                 ?? LevelCoverCardButton(item: items[index], selected: index == selectedIndex)
             card.tag = index
+            card.actionTitle = index == selectedIndex ? selectedActionTitle : nil
             card.update(item: items[index], selected: index == selectedIndex)
             card.onPress = { [weak self, weak card] in
                 guard let self, let card else { return }
@@ -704,6 +710,12 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     }
     var onPress: (() -> Void)?
     var onMove: ((Int) -> Void)?
+    var actionTitle: String? {
+        didSet {
+            guard oldValue != actionTitle else { return }
+            update(item: item, selected: selected)
+        }
+    }
     var onStart: (() -> Void)?
     var presentation: Presentation = .cover {
         didSet {
@@ -902,7 +914,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
         setAccessibilityLabel(item.accessibilityName)
         setAccessibilitySelected(selected)
         setAccessibilityHelp(item.isAvailable
-            ? L10n.text("Play")
+            ? (actionTitle ?? L10n.text("Play"))
             : item.availability == .locked ? L10n.text("Locked item") : L10n.text("Unavailable item"))
         if selectionChanged, selected, window != nil {
             NSAccessibility.post(element: self, notification: .valueChanged)
@@ -1056,6 +1068,14 @@ struct LevelCoverFlowItem: Equatable, Sendable {
     private func drawArtworkCover(in content: CGRect, alpha: CGFloat) {
         let artworkFrame = coverArtworkFrame(in: content)
         drawArtwork(in: artworkFrame, alpha: alpha)
+        drawAction(in: artworkFrame)
+    }
+
+    private func drawAction(in frame: CGRect) {
+        guard selected, item.isAvailable, let actionTitle, let renderer = GameMenuArtwork.renderer(),
+              let context = NSGraphicsContext.current?.cgContext else { return }
+        LevelCoverArt.drawAction(actionTitle, in: frame,
+            typography: GameMenuTypography(interface: renderer.interface), context: context)
     }
 
     private func coverArtworkFrame(in content: CGRect) -> CGRect {
@@ -1075,6 +1095,7 @@ struct LevelCoverFlowItem: Equatable, Sendable {
             width: thumbnailWidth,
             height: content.height)
         drawArtwork(in: thumbnail, alpha: alpha)
+        drawAction(in: thumbnail)
         let title = CGRect(
             x: thumbnail.maxX + 12,
             y: content.minY,

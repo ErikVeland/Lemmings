@@ -122,20 +122,20 @@ import UIKit
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        heading.text = "SETTINGS"
+        heading.text = L10n.text("Settings").uppercased()
         heading.palette = .green
-        artwork.title = "LIX ARTWORK"
+        artwork.title = L10n.text("Lix artwork").uppercased()
         artwork.isToggle = true
         artwork.isEnabled = canUseOriginalCharacters
         artwork.accessibilityHint = canUseOriginalCharacters ? nil
-            : "Import your own Classic files to use original artwork."
+            : L10n.text("Import your own Classic files to use original artwork.")
         artwork.onPress = { [weak self] in
             guard let self, self.canUseOriginalCharacters else { return }
             self.preferences.lixArtworkEnabled.toggle()
             self.refresh()
             self.onChange()
         }
-        music.title = "LIX MUSIC"
+        music.title = L10n.text("Lix music").uppercased()
         music.isToggle = true
         music.onPress = { [weak self] in
             guard let self else { return }
@@ -143,7 +143,7 @@ import UIKit
             self.refresh()
             self.onChange()
         }
-        back.title = "BACK"
+        back.title = L10n.text("Back").uppercased()
         back.isPrimary = true
         back.onPress = { [weak self] in self?.dismiss(animated: true) }
         [heading, artwork, music, back].forEach(view.addSubview)

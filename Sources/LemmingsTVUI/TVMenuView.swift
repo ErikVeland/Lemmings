@@ -57,14 +57,15 @@ import UIKit
             ?? (page.rows + page.orderedFooter).first(where: \.enabled)?.id
         focusedID = initialFocus
         let ticket = generation
-        buttons = TVMenuArt.layout(page).targets.map { target in
+        let layout = TVMenuArt.layout(page)
+        buttons = TVMenuArt.inputTargets(page, layout: layout).map { target in
             let button = UIButton(type: .custom)
             switch target.action.id {
             case "previous", "previousSkills": button.accessibilityLabel = L10n.text("Previous page")
             case "more", "moreSkills", "playerMore", "rosterMore": button.accessibilityLabel = L10n.text("Next page")
             default: button.accessibilityLabel = target.action.title.replacingOccurrences(of: "*", with: "unlimited")
             }
-            button.accessibilityIdentifier = "tv.menu." + target.action.id
+            button.accessibilityIdentifier = "tv.menu." + (target.frame == layout.preview ? "preview" : target.action.id)
             button.isEnabled = target.action.enabled
             button.accessibilityTraits = target.action.selected ? [.button, .selected] : .button
             if !target.action.enabled { button.accessibilityTraits.insert(.notEnabled) }
@@ -82,7 +83,7 @@ import UIKit
         super.layoutSubviews()
         let transform = CGAffineTransform(scaleX: scale, y: scale).concatenating(CGAffineTransform(translationX: origin.x, y: origin.y))
         let layout = TVMenuArt.layout(page)
-        for (button, target) in zip(buttons, layout.targets) { button.frame = target.frame.applying(transform) }
+        for (button, target) in zip(buttons, TVMenuArt.inputTargets(page, layout: layout)) { button.frame = target.frame.applying(transform) }
         var elements: [Any] = []
         for (text, box) in [(page.title, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
             let element = UIAccessibilityElement(accessibilityContainer: self)

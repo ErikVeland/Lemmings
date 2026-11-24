@@ -216,6 +216,17 @@ enum PanelButton: Equatable {
         }
       }
     }
+    if !minimapContentFrame.isEmpty, onMinimapPosition != nil {
+      let map = accessibleElements.element(id: "level-map", owner: owner, label: L10n.text("Level map"),
+                                           frame: transform(minimapFrame))
+      map.setAccessibilityRole(.slider)
+      map.readNumber = { [weak self] in Double(self?.visibleLevelRect.midX ?? 0) }
+      map.adjustValue = { [weak self] direction in
+        guard let self else { return }
+        onMinimapPosition?(GameMinimapArt.adjustedCentre(in: visibleLevelRect, levelSize: levelSize, direction: direction))
+      }
+      result.append(map)
+    }
     return result + timeline.accessibleControls(owner: owner, transform: transform)
   }
   var controlBounds: CGRect {
@@ -224,6 +235,7 @@ enum PanelButton: Equatable {
   }
 
   private var buttonFrames: [(PanelButton, CGRect)] = []
+  private var draggingMinimap = false
   private var minimapFrame = CGRect.zero
   private var rateValueFrame = CGRect.zero
   /// The minimap's drag area, below the timeline controls.
@@ -427,6 +439,7 @@ enum PanelButton: Equatable {
     guard !isMenuMode else { return }
     layoutControls()
     pointerIsDown = true
+    draggingMinimap = false
     if timeline.click(at: point) { return }
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
       if match.0 == .fastForward, variableSpeedEnabled, let part = SpeedPanelControls.part(at: point, in: match.1) {
@@ -442,7 +455,8 @@ enum PanelButton: Equatable {
       return
     }
     nukeGesture.reset()
-    if minimapFrame.contains(point) { scrollFromMinimap(point) }
+    draggingMinimap = minimapContentFrame.contains(point)
+    if draggingMinimap { scrollFromMinimap(point) }
   }
 
   override func mouseUp(with event: NSEvent) { handlePointerUp(time: event.timestamp) }
@@ -466,6 +480,7 @@ enum PanelButton: Equatable {
   func handlePointerUp(time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     if speedPointerDown { speedPointerDown = false; onSpeedRelease?(time) }
     pointerIsDown = false
+    draggingMinimap = false
     stopRepeating()
   }
 
@@ -528,16 +543,14 @@ enum PanelButton: Equatable {
   func handlePointerDrag(at point: CGPoint) {
     guard !isMenuMode else { return }
     layoutControls()
-    if minimapFrame.contains(point) { scrollFromMinimap(point) }
+    if draggingMinimap { scrollFromMinimap(point, clamp: true) }
   }
 
-  private func scrollFromMinimap(_ point: CGPoint) {
-    let map = minimapContentFrame
-    guard map.width > 0, map.height > 0, levelSize.width > 0 else { return }
-    let fraction = max(0, min(1, (point.x - map.minX) / map.width))
-    onMinimapScroll?(Double(fraction) * levelSize.width)
-    let vertical = max(0, min(1, (point.y - map.minY) / map.height))
-    onMinimapPosition?(CGPoint(x: fraction * levelSize.width, y: vertical * levelSize.height))
+  private func scrollFromMinimap(_ point: CGPoint, clamp: Bool = false) {
+    guard let target = GameMinimapArt.levelPoint(at: point, content: minimapContentFrame,
+        levelSize: levelSize, clamp: clamp) else { return }
+    onMinimapScroll?(target.x)
+    onMinimapPosition?(target)
   }
 
   // MARK: - Drawing

@@ -26,6 +26,24 @@ struct MobileCheckpointIndexTests {
         #expect(try library.checkpointLevelIndex(for: checkpoint("retained-b", index: 2)) == 1)
     }
 
+    @Test func previewResumeRequiresTheSameLevelQueueAndPosition() {
+        var saved = checkpoint("pack/one", index: 0)
+        let run = UUID()
+        let context = MobileCheckpointEnvelope.JourneyContext(runID: run, position: 2)
+        #expect(saved.matchesPreview(levelIdentifier: "pack/one", journey: .init()))
+        #expect(!saved.matchesPreview(levelIdentifier: "pack/one", journey: context))
+        saved.journeyContext = context
+        #expect(saved.matchesPreview(levelIdentifier: "pack/one", journey: context))
+        #expect(!saved.matchesPreview(levelIdentifier: "pack/two", journey: context))
+        #expect(!saved.matchesPreview(levelIdentifier: nil, journey: context))
+        #expect(!saved.matchesPreview(levelIdentifier: "pack/one", journey: .init()))
+        #expect(!saved.matchesPreview(levelIdentifier: "pack/one", journey: .init(runID: UUID(), position: 2)))
+        #expect(!saved.matchesPreview(levelIdentifier: "pack/one", journey: .init(runID: run, position: 3)))
+        saved.journeyContext = nil
+        #expect(saved.matchesPreview(levelIdentifier: "pack/one", journey: context))
+        #expect(!saved.matchesPreview(levelIdentifier: "pack/two", journey: context))
+    }
+
     @Test func removedLevelsNeverResumeTheirReplacement() {
         let library = ReorderedCheckpointLibrary(["retained-a", "retained-b"])
         #expect(throws: MobileSessionError.changedLevel) {

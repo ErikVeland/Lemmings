@@ -38,6 +38,11 @@ public enum TVMenuArt {
             preview: preview, details: details, targets: targets)
     }
 
+    public static func inputTargets(_ page: GameFrontEnd.Page, layout: Layout) -> [Target] {
+        guard let action = page.previewAction else { return layout.targets }
+        return layout.targets + [.init(action: action, frame: layout.preview)]
+    }
+
     public static func draw(_ page: GameFrontEnd.Page, focused: String? = nil,
                             preview: CGImage? = nil, typography: GameMenuTypography? = nil,
                             portraits: GamePortraitArt? = nil, textScale: CGFloat = 1,
@@ -61,6 +66,10 @@ public enum TVMenuArt {
         if page.preview {
             GameDisplayArt.draw(in: context, frame: layout.preview, pixel: 2)
             if let preview { fitted(preview, in: layout.preview.insetBy(dx: 10, dy: 10), context: context) }
+            if let action = page.previewAction, action.enabled, let typography {
+                LevelCoverArt.drawAction(action.title, in: layout.preview.insetBy(dx: 6, dy: 6), typography: typography, context: context)
+            }
+            if focused == "preview" { GameDisplayArt.outline(in: context, frame: layout.preview, color: CGColor(gray: 1, alpha: 1), pixel: 2) }
         }
         for (index, pair) in zip(page.details, layout.details).enumerated() {
             text(pair.0, box: pair.1, reading: page.readsDetail(index), typography: typography, context: context)

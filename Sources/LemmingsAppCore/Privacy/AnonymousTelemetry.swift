@@ -127,7 +127,7 @@ public struct AnonymousTelemetrySummary: Codable, Sendable {
     }
 }
 
-@MainActor public struct SavedLemmingsCounter {
+public struct SavedLemmingsCounter: Sendable {
     public let local: Int
     public let global: Int?
 

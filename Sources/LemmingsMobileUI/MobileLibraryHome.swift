@@ -80,7 +80,7 @@ extension MobileLibraryViewController {
 
     func handleHome(_ id: String) -> Bool {
         switch id {
-        case "play": navigate(.play)
+        case "play" where route == .home: navigate(.play)
         case "playBack": navigate(.home)
         case "profile": navigate(.progress)
         default: return false

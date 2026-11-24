@@ -8,10 +8,10 @@ explicit request.
 
 The level owns its assigned composition. The Adaptive DJ selects its version
 from the campaign position. Reaching the rescue target permits one lift to a
-documented remix or composer recording of that same tune. It keeps looping
-through the result screen. A completed win does not trigger another change.
+documented remix or composer recording of that same tune. At the result screen
+the outgoing track fades over 0.6 seconds and stops on both wins and losses.
 With alternate soundtracks disabled or no suitable version installed, the
-current theme continues. Danger, release rate, nuking and elapsed time do not
+current theme continues during play. Danger, release rate, nuking and elapsed time do not
 replace it. See [Soundtrack journey](SoundtrackJourney.md) for the selection and
 recording rules.
 
@@ -264,6 +264,8 @@ No audible playback test was run.
 | Win or loss | The outgoing music decks fade once over 0.6 seconds, then stop. Result notes and rescue effects keep their own gain. |
 | Retry or next level | Retire any result fade before handing the decks to the next attempt. |
 | Back during a fade | Retire the outgoing music before selecting the destination theme. |
+
+iOS and tvOS rebuild the fade with the playback engines after a media-services reset. The next completed attempt fades the replacement engines.
 
 Tempo and filter recovery after the final nuke pop continue independently of the output gain.
 Completing that recovery does not select a track or resume a stopped transport.

@@ -46,6 +46,16 @@ import Testing
         #expect((playing.content.session as? PreparationSession)?.serial == 2)
     }
 
+    @Test func inspectingCampaignPreviewsDoesNotSelectOrStartTheLevel() async throws {
+        let loader = MobileMenuPreviewLoader { CampaignPreparationLibrary() }
+        _ = try await loader.load(1)
+        let details = try await loader.prepare(1, forPreview: true)
+        #expect((details.content.session as? PreparationSession)?.serial == -1)
+        let played = try await loader.prepare(1)
+        #expect((played.content.session as? PreparationSession)?.serial == 1)
+        #expect(played.content.session !== details.content.session)
+    }
+
     @Test func previewTransfersPreparedSessionOnceAndRetryStartsFresh() async throws {
         let loader = MobileMenuPreviewLoader { PreparationLibrary() }
         let preview = try await loader.load(0)
@@ -128,7 +138,13 @@ import Testing
     }
 }
 
-private final class PreparationLibrary: MobileGameLibrary {
+private final class CampaignPreparationLibrary: PreparationLibrary, MobileCampaignPreviewLibrary {
+    func loadPreviewLevel(at index: Int) throws -> MobileLevelContent {
+        .init(summary: levels[index], session: PreparationSession(index: index, serial: -1))
+    }
+}
+
+private class PreparationLibrary: MobileGameLibrary {
     let displayName = "Fixture"
     let levels = (0..<4).map { MobileLevelSummary(index: $0, rank: "Fixture", number: $0 + 1, title: "Level") }
     private var serial = 0

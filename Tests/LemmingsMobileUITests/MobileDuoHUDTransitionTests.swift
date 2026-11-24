@@ -6,6 +6,48 @@ import LemmingsMobileCore
 @testable import LemmingsMobileUI
 
 @MainActor struct MobileDuoHUDTransitionTests {
+    @Test func changingSpeedControlsKeepsSkillAndPauseButtonsAndReturnsToTheVisibleSpeedTarget() throws {
+        let hud = MobileHUDView()
+        let snapshot = MobileGameSnapshot(tick: 42, released: 4, total: 10, saved: 1, required: 5,
+            remainingSeconds: 120, releaseRate: 50, isComplete: false, didWin: false,
+            isEndingRun: false, skills: (0..<8).map { .init(name: "Skill \($0)", count: 10) })
+        var actions: [MobileHUDAction] = []
+        hud.onAction = { actions.append($0) }
+        var previousSkill: UIButton?
+        var previousPause: UIButton?
+        for (width, tiers, expected) in [
+            (495, [1.0, 2, 3, 5, 10], MobileHUDAction.speedPicker),
+            (834, [1.0, 2, 3, 5, 10], .speedTier(5)),
+            (495, [], .speed),
+            (495, [1.0, 2, 3, 5, 10], .speedPicker),
+        ] {
+            let size = MobileSize(width: CGFloat(width), height: 1100)
+            hud.frame.size = CGSize(width: size.width, height: size.height)
+            let layout = MobileHUDLayout.make(container: size, safeArea: .init(), hasRate: true,
+                skillCount: 8, supportsRewind: true).addingSpeedTiers(tiers)
+            hud.update(layout: layout, snapshot: snapshot, selectedSkill: 2, paused: true,
+                speed: 5, endRunArmed: false, panel: nil)
+            let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: 2,
+                paused: true, speed: 5, endRunArmed: false)
+            func button(_ action: MobileHUDAction) throws -> UIButton {
+                let target = try #require(targets.first { $0.action == action })
+                let point = CGPoint(x: target.inputFrame.midX, y: target.inputFrame.midY)
+                return try #require(hud.hitTest(point, with: nil) as? UIButton)
+            }
+            let skill = try button(.skill(2))
+            let pause = try button(.pause)
+            if let previousSkill { #expect(previousSkill === skill) }
+            if let previousPause { #expect(previousPause === pause) }
+            previousSkill = skill
+            previousPause = pause
+            #expect(skill.accessibilityTraits.contains(.selected))
+            let speed = try button(expected)
+            #expect(hud.speedFocusButton === speed)
+            #expect(speed.accessibilityActivate())
+            #expect(actions.last == expected)
+        }
+    }
+
     @Test func resizingAScrollableSkillBankKeepsTheSelectedSkillVisible() throws {
         let hud = MobileHUDView(frame: CGRect(x: 0, y: 0, width: 834, height: 1194))
         let snapshot = MobileGameSnapshot(tick: 42, released: 4, total: 10, saved: 1, required: 5,

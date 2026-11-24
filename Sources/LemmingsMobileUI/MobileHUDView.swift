@@ -49,7 +49,7 @@ import LemmingsAppCore
     override func accessibilityIncrement() { seek(1) }
     override func accessibilityDecrement() { seek(-1) }
     private func seek(_ direction: CGFloat) {
-        onSeek?(CGPoint(x: min(levelSize.width, max(0, visible.midX + direction * visible.width / 2)), y: visible.midY))
+        onSeek?(GameMinimapArt.adjustedCentre(in: visible, levelSize: levelSize, direction: direction))
     }
 }
 
@@ -95,13 +95,17 @@ import LemmingsAppCore
     /// A touch on the map, as a point in level pixels.
     var onMinimap: ((CGPoint) -> Void)?
     private let minimapView = MobileMinimapView()
+    private var draggingMinimap = false
     private let skillScroll = MobileSkillScrollView()
     private let skillCanvas = MobileSkillCanvas()
 
     private var items: [Item] = []
-    private var buttons: [UIButton] = []
-    var speedPickerButton: UIButton? {
-        items.firstIndex(where: { $0.action == .speedPicker }).map { buttons[$0] }
+    private var buttons: [MobileHUDButton] = []
+    var speedFocusButton: UIButton? {
+        for action in [MobileHUDAction.speedPicker, .speedTier(speed), .speed] {
+            if let index = items.firstIndex(where: { $0.action == action }) { return buttons[index] }
+        }
+        return nil
     }
     private var layout: MobileHUDLayout?
     private var snapshot: MobileGameSnapshot?
@@ -240,13 +244,25 @@ import LemmingsAppCore
     }
 
     @objc private func minimapTouched(_ recognizer: UILongPressGestureRecognizer) {
-        guard recognizer.state == .began || recognizer.state == .changed else { return }
-        let map = minimapView.content
-        guard !map.isEmpty else { return }
-        let point = recognizer.location(in: minimapView)
-        let fraction = CGPoint(x: min(1, max(0, (point.x - map.minX) / map.width)),
-                               y: min(1, max(0, (point.y - map.minY) / map.height)))
-        onMinimap?(CGPoint(x: fraction.x * minimapView.levelSize.width, y: fraction.y * minimapView.levelSize.height))
+        let point = recognizer.location(in: self)
+        switch recognizer.state {
+        case .began:
+            guard let levelPoint = mapPoint(at: point) else { draggingMinimap = false; return }
+            draggingMinimap = true
+            onMinimap?(levelPoint)
+        case .changed where draggingMinimap:
+            if let levelPoint = GameMinimapArt.levelPoint(at: minimapView.convert(point, from: self),
+                content: minimapView.content, levelSize: minimapView.levelSize, clamp: true) { onMinimap?(levelPoint) }
+        default:
+            draggingMinimap = false
+        }
+    }
+
+    func mapPoint(at point: CGPoint) -> CGPoint? {
+        guard isUserInteractionEnabled, !isHidden, !minimapView.isHidden,
+              minimapView.frame.contains(point), !isTransportForwardDeadZone(point) else { return nil }
+        return GameMinimapArt.levelPoint(at: minimapView.convert(point, from: self), content: minimapView.content,
+                                         levelSize: minimapView.levelSize)
     }
 
     func update(
@@ -333,10 +349,21 @@ import LemmingsAppCore
         let previousActions = items.map(\.action)
         items = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: selectedSkill,
                                           paused: paused, speed: speed, endRunArmed: endRunArmed)
-        if previousActions != items.map(\.action) { rebuildButtons() }
+        let actions = items.map(\.action)
+        var restoreSpeedFocus = false
+        if previousActions != actions {
+            restoreSpeedFocus = zip(previousActions, buttons).contains { action, button in
+                guard !actions.contains(action), button.accessibilityElementIsFocused() else { return false }
+                switch action {
+                case .speedPicker, .speedTier, .speedStep, .speed: return true
+                default: return false
+                }
+            }
+            rebuildButtons(previousActions: previousActions)
+        }
         for (button, item) in zip(buttons, items) {
             let inputFrame = MobileHUDRenderer.edgeInputFrame(for: item, layout: layout, displayBounds: bounds, screenEdges: screenEdges)
-            (button as? MobileHUDButton)?.activatesOnPress = item.action == .pause && !paused
+            button.activatesOnPress = item.action == .pause && !paused
             if case .skill = item.action, let portrait = layout.portrait {
                 if button.superview !== skillCanvas { skillCanvas.addSubview(button) }
                 button.frame = inputFrame.offsetBy(dx: -portrait.skills.minX, dy: -portrait.skills.minY)
@@ -354,6 +381,9 @@ import LemmingsAppCore
         }
         if layoutChanged || previousSkill != selectedSkill, let button = buttons.first(where: { $0.accessibilityTraits.contains(.selected) }),
            button.superview === skillCanvas { skillScroll.scrollRectToVisible(button.frame, animated: false) }
+        if restoreSpeedFocus, !accessibilityElementsHidden, let button = speedFocusButton {
+            UIAccessibility.post(notification: .layoutChanged, argument: button)
+        }
         if presentationChanged { setNeedsDisplay() }
         if layoutChanged { setNeedsLayout() }
         if skillsChanged { skillCanvas.setNeedsDisplay() }
@@ -427,9 +457,10 @@ import LemmingsAppCore
                           displayCornerRadius: max(cornerInsets.top, cornerInsets.bottom), displayCornerRadii: displayCorners)
     }
 
-    private func rebuildButtons() {
-        buttons.forEach { ($0 as? MobileHUDButton)?.cancelPress(); $0.removeFromSuperview() }
+    private func rebuildButtons(previousActions: [MobileHUDAction]) {
+        var existing = Dictionary(uniqueKeysWithValues: zip(previousActions, buttons))
         buttons = items.map { item in
+            if let button = existing.removeValue(forKey: item.action) { return button }
             let kind: MobileHUDPress.Kind
             switch item.action {
             case .releaseRate: kind = .releaseRate
@@ -473,10 +504,14 @@ import LemmingsAppCore
             addSubview(button)
             return button
         }
+        for button in existing.values {
+            button.cancelPress()
+            button.removeFromSuperview()
+        }
     }
 
     func cancelHeldControls() {
-        buttons.forEach { ($0 as? MobileHUDButton)?.cancelPress() }
+        buttons.forEach { $0.cancelPress() }
         rateValueTap.isEnabled = false
         rateValueTap.isEnabled = true
         for recognizer in minimapView.gestureRecognizers ?? [] {
