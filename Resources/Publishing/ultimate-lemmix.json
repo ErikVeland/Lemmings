@@ -20,7 +20,7 @@
       }
     },
     "tvos": {
-      "build": 112,
+      "build": 113,
       "bundleIdentifier": "academy.glasscode.ultimatelemmix",
       "project": "Apps/UltimateLemmixTVOS/UltimateLemmixTVOS.xcodeproj",
       "scheme": "UltimateLemmixTVOS",

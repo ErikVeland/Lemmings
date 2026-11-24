@@ -1,6 +1,6 @@
 # Ultimate Lemmix release history
 
-The current source version is **2.4.4** (Mac build 116, iOS build 113, tvOS build 112).
+The current source version is **2.4.4** (Mac build 116, iOS build 113, tvOS build 113).
 
 [Current candidate: Ultimate Lemmix 2.4.4 build 116](ReleaseNotes-UltimateLemmix-2.4.4-build116.md).
 

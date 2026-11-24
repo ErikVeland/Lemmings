@@ -2,7 +2,7 @@
 
 Build: 116
 Release base: 6892e2f9
-Platform builds: Mac 116, iPhone/iPad/Duo 113, Apple TV 112
+Platform builds: Mac 116, iPhone/iPad/Duo 113, Apple TV 113
 
 Play 5,051 Classic fan levels across 487 packs and the 120 NeoLemmix Introduction levels.
 The level data, sprites, objects and terrain are included for offline play.
