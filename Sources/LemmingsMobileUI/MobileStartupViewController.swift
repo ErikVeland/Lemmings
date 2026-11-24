@@ -31,6 +31,9 @@ import UIKit
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        #if os(iOS)
+        if UIApplication.shared.alternateIconName == "RestoredIcon" { logo.image = nil }
+        #endif
         logo.contentMode = .scaleAspectFit
         logo.isAccessibilityElement = false
         view.addSubview(logo)
@@ -73,6 +76,9 @@ import UIKit
             let resourceNotice: String?
             do {
                 try GameResources.activate(bundleURL: try restored.get())
+                if GameMenuLogo.usesRestoredArtwork, let image = MobileGameArt.typography?.menuLogo {
+                    logo.image = UIImage(cgImage: image)
+                }
                 resourceNotice = nil
             } catch {
                 resourceNotice = error.localizedDescription
@@ -84,7 +90,7 @@ import UIKit
             let catalogue = await MobileCatalogueLoader().load(resources: GameResources.resourceURL, support: support)
             guard !Task.isCancelled else { return }
             #if os(tvOS)
-            let controller = MobileTVBootstrap()
+            let controller = MobileTVBootstrap(configuration: configuration)
             controller.catalogue = catalogue
             controller.resourceNotice = resourceNotice
             #else
@@ -131,7 +137,7 @@ import UIKit
         backgroundColor = .clear
         isUserInteractionEnabled = false
         isAccessibilityElement = true
-        accessibilityLabel = "Loading..."
+        accessibilityLabel = L10n.text("Loading...")
         accessibilityTraits = .updatesFrequently
     }
 

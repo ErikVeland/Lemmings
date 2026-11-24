@@ -36,6 +36,17 @@ public enum LemmingsMobileApplication {
         library.presentDeskClock(reason: .widget)
     }
     #endif
+    #if os(tvOS)
+    @MainActor public static func makeReplayViewController(content: MobileLevelContent, document: Data) throws -> UIViewController {
+        guard let replay = try content.session.makeReplaySession(document: document), replay.isReadOnly else {
+            throw MobileSessionError.invalidCheckpoint
+        }
+        let checkpoints = MobileCheckpointStore(url: FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString))
+        let controller = MobileGameViewController(summary: content.summary, session: replay, checkpointStore: checkpoints, restoredCheckpoint: nil)
+        controller.modalPresentationStyle = .fullScreen
+        return controller
+    }
+    #endif
     @MainActor public static func makeRootViewController(configuration: LemmingsMobileConfiguration = .current) -> UIViewController {
 #if targetEnvironment(simulator)
         if ProcessInfo.processInfo.arguments.contains("--verify-offline-fan-catalogue") {

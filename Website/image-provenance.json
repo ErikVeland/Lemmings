@@ -219,6 +219,16 @@
     "output": "forest-ravine.webp",
     "direction": "A broken bridge above a dark pool. Four walkers approach the cliff while one Lix bobs in the current. Illustrated woodland scenery."
   },
+  "music": {
+    "output": "forest-music.webp",
+    "tool": "Built-in image generation",
+    "direction": "Keep the carved ocarina and its acorn bell on the mossy stump. On the far bank, a Blocker holds out both arms, a Bomber has a white 2 overhead, and a Builder lays a brick step."
+  },
+  "miner": {
+    "output": "forest-miner.webp",
+    "tool": "Built-in image generation",
+    "direction": "Replace the satchel with a blond Lix miner striking the mossy ledge with a pickaxe. Keep the miner in focus. Three distant Floaters descend under softly blurred yellow umbrellas."
+  },
   "detonator": {
     "output": "forest-detonator.webp",
     "tool": "Built-in image generation",

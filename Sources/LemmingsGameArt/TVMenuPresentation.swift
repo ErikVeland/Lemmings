@@ -28,18 +28,21 @@ public enum TVMenuPresentation {
         let gap: CGFloat = 6, inset: CGFloat = 16
         let boardWidth = min(1200, width - 16), x = (width - boardWidth) / 2
         let inner = boardWidth - inset * 2
-        let leadingWidth = floor(inner * 0.30)
+        let library = page.rows.filter { $0.id.hasPrefix("family.") || ["classic", "neolemmix", "l2", "l3"].contains($0.id) }
+        // Home has no game rows: its few actions form one centred column, readable from the sofa.
+        let centred = library.isEmpty
+        let leadingWidth = centred ? min(inner, max(floor(inner * 0.45), 420)) : floor(inner * 0.30)
+        let leadingX = centred ? x + (boardWidth - leadingWidth) / 2 : x + inset
         let libraryX = x + inset + leadingWidth + 16
         let libraryWidth = inner - leadingWidth - 16
-        let library = page.rows.filter { $0.id.hasPrefix("family.") || ["classic", "neolemmix", "l2", "l3"].contains($0.id) }
         let libraryIDs = Set(library.map(\.id))
         let saved = page.rows.filter { !libraryIDs.contains($0.id) }
-        var heading = CGRect(x: x + inset, y: 20, width: leadingWidth, height: 56)
+        var heading = CGRect(x: leadingX, y: 20, width: leadingWidth, height: 56)
         var targets: [GameFrontEnd.Target] = []
         var leftY = heading.maxY + 12
         for action in saved {
-            let rowHeight = max(36, GameTextLayout.height(action.title, width: leadingWidth - 48) + 8)
-            targets.append(.init(action: action, frame: CGRect(x: x + inset, y: leftY, width: leadingWidth, height: rowHeight)))
+            let rowHeight = max(centred ? 48 : 36, GameTextLayout.height(action.title, width: leadingWidth - 48) + 8)
+            targets.append(.init(action: action, frame: CGRect(x: leadingX, y: leftY, width: leadingWidth, height: rowHeight)))
             leftY += rowHeight + gap
         }
         var rightY: CGFloat = 20

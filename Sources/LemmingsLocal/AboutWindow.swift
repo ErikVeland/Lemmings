@@ -57,7 +57,9 @@ import NxlvKit
             tabs.addTabViewItem(item)
         }
         page.body.addSubview(tabs)
+        #if !ULTIMATE_LEMMIX_STORE
         page.addPrimaryAction(L10n.text("Buy me a coffee")) { NSWorkspace.shared.open(Self.coffeeURL) }
+        #endif
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         page.preferControllerControl(page.controllerBackButton)
         self.page = page

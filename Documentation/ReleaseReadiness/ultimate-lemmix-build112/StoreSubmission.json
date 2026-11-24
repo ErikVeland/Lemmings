@@ -1,0 +1,238 @@
+{
+  "product": "Ultimate Lemmix",
+  "appStoreID": "6836347807",
+  "locale": "en-AU",
+  "reason": "Apple refused to add 2.4.3 to review while its store artwork was locked in standalone media submission e10860fd-a8ec-4a0c-9c1e-b4ac9a5a22da (17 build 110 files, Waiting for Review since 2026-11-20T23:17:48Z).",
+  "treatment": "Uploaded new copies of the 10 build 110 files placed on the iOS and tvOS 2.4.3 pages. Moved those placements to the copies and removed the locked placements. The copies are reviewed with each 2.4.3 version. The standalone media submission and the live 2.4.2 page are unchanged. The approved build 108 iPad 10.5 screenshot stays on iOS 2.4.3.",
+  "assets": [
+    {
+      "file": "Creative/Product-Page-Header.mp4",
+      "appleFilename": "UL243-Product-Page-Header.mp4",
+      "referenceName": "Ultimate Lemmix 2.4.3 Product-Page-Header 840b6a5ce5",
+      "sha256": "840b6a5ce51a7cb7f6ddcfad13484e1e460d6db38192b624ae39303c657cda78",
+      "oldAsset": "08000019-77a6-839f-8133-963b452cf8ab",
+      "newAsset": "b5000019-77a6-839f-8124-33818f082a7c",
+      "type": "appAssetLibraryVideos"
+    },
+    {
+      "file": "Creative/Search-Results.mp4",
+      "appleFilename": "UL243-Search-Results.mp4",
+      "referenceName": "Ultimate Lemmix 2.4.3 Search-Results a0d66329ea",
+      "sha256": "a0d66329ea2560453b9e840777e0d1108abbef0be6ca146c1f197b3c8d2629a0",
+      "oldAsset": "85400019-77a6-839f-8118-fc32f460621a",
+      "newAsset": "c4800019-77a6-839f-8139-13570ca37794",
+      "type": "appAssetLibraryVideos"
+    },
+    {
+      "file": "Screenshots/en-AU/Apple TV/01-First-Steps.png",
+      "appleFilename": "UL243-AppleTV-01-First-Steps.png",
+      "referenceName": "Ultimate Lemmix 2.4.3 AppleTV-01-First-Steps d1727fd9d8",
+      "sha256": "d1727fd9d8d8adb0828f74de5e7764dde22618829e6fa46bac257ef37e1320df",
+      "oldAsset": "e3000019-77a6-839f-8033-24aa89a84778",
+      "newAsset": "e4000019-77a6-839f-8005-df7b58ca00a0",
+      "type": "appAssetLibraryImages"
+    },
+    {
+      "file": "Screenshots/en-AU/Apple TV/02-Hot-Seat.png",
+      "appleFilename": "UL243-AppleTV-02-Hot-Seat.png",
+      "referenceName": "Ultimate Lemmix 2.4.3 AppleTV-02-Hot-Seat 852ee526bf",
+      "sha256": "852ee526bfd9f461627bcf3ba6c1d741c55463cdfd95e1a88efbf051fd902d29",
+      "oldAsset": "f8000019-77a6-839f-8025-7964cabb74b1",
+      "newAsset": "4b000019-77a6-839f-801f-09c1b7fc9a84",
+      "type": "appAssetLibraryImages"
+    },
+    {
+      "file": "Screenshots/en-AU/iPad/01-Over-the-Rise.png",
+      "appleFilename": "UL243-iPad-01-Over-the-Rise.png",
+      "referenceName": "Ultimate Lemmix 2.4.3 iPad-01-Over-the-Rise 10952b1ac0",
+      "sha256": "10952b1ac00fd24242a9f65fe85eeb11b40509b5606d23d7e17fbc042c9b3b19",
+      "oldAsset": "70400019-77a6-839f-800b-5ef8108c607b",
+      "newAsset": "66800019-77a6-839f-801e-3712e7c19a9a",
+      "type": "appAssetLibraryImages"
+    },
+    {
+      "file": "Screenshots/en-AU/iPad/02-Choose-a-Route.png",
+      "appleFilename": "UL243-iPad-02-Choose-a-Route.png",
+      "referenceName": "Ultimate Lemmix 2.4.3 iPad-02-Choose-a-Route 7f25aed119",
+      "sha256": "7f25aed11905e7458ed15b58ddc93de528af7ddaeeea3a11845aab7999d8d6ef",
+      "oldAsset": "8f800019-77a6-839f-802c-a2d75e15a643",
+      "newAsset": "55800019-77a6-839f-8035-40261cf2edf6",
+      "type": "appAssetLibraryImages"
+    },
+    {
+      "file": "Screenshots/en-AU/iPhone Duo/01-Tabletop.png",
+      "appleFilename": "UL243-iPhoneDuo-01-Tabletop.png",
+      "referenceName": "Ultimate Lemmix 2.4.3 iPhoneDuo-01-Tabletop 548cb97462",
+      "sha256": "548cb974628be3500b978312fb2c66c98c9b86bbc54de68b84808b1028ebef2d",
+      "oldAsset": "d8800019-77a6-839f-8006-3655b58a9ae0",
+      "newAsset": "9e000019-77a6-839f-8037-bbc6382ad841",
+      "type": "appAssetLibraryImages"
+    },
+    {
+      "file": "Screenshots/en-AU/iPhone Duo/02-Book.png",
+      "appleFilename": "UL243-iPhoneDuo-02-Book.png",
+      "referenceName": "Ultimate Lemmix 2.4.3 iPhoneDuo-02-Book c3546f54a5",
+      "sha256": "c3546f54a5ac94be78d6e4f21461a26e91d41b1ac17cd6eddead644863546452",
+      "oldAsset": "5e800019-77a6-839f-803e-024f94934687",
+      "newAsset": "2a400019-77a6-839f-800b-a379a5da3351",
+      "type": "appAssetLibraryImages"
+    },
+    {
+      "file": "Screenshots/en-AU/iPhone/01-Float-to-Safety.png",
+      "appleFilename": "UL243-iPhone-01-Float-to-Safety.png",
+      "referenceName": "Ultimate Lemmix 2.4.3 iPhone-01-Float-to-Safety 1500cd06d3",
+      "sha256": "1500cd06d346ea848de207142dc549c60fecf6ace28b7d95986d3971a0129830",
+      "oldAsset": "c6800019-77a6-839f-8032-b23d794b4ff4",
+      "newAsset": "48000019-77a6-839f-8034-5e82727262a8",
+      "type": "appAssetLibraryImages"
+    },
+    {
+      "file": "Screenshots/en-AU/iPhone/02-Rescue-Record.png",
+      "appleFilename": "UL243-iPhone-02-Rescue-Record.png",
+      "referenceName": "Ultimate Lemmix 2.4.3 iPhone-02-Rescue-Record 2f65836d8f",
+      "sha256": "2f65836d8f98d9cecac8fb8c4a10a26cf44908f9532acea3177a49735c4cfcdb",
+      "oldAsset": "21400019-77a6-839f-801a-519636b1c3ac",
+      "newAsset": "2c800019-77a6-839f-800e-a74c3f22d495",
+      "type": "appAssetLibraryImages"
+    }
+  ],
+  "placements": [
+    {
+      "platform": "IOS",
+      "placement": "PRODUCT_PAGE_HEADER_ASSET",
+      "group": "DEFAULT_PROFILE",
+      "removed": [
+        "3b800019-77a6-839f-8f35-28ba85914135"
+      ],
+      "placed": [
+        "53400019-77a6-839f-8f06-edefffa60de8"
+      ],
+      "assets": [
+        "b5000019-77a6-839f-8124-33818f082a7c"
+      ],
+      "orderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "placement": "APP_STORE_SEARCH_RESULTS_ASSET",
+      "group": "DEFAULT_PROFILE",
+      "removed": [
+        "74800019-77a6-839f-8f16-ce87eb459d8f"
+      ],
+      "placed": [
+        "22800019-77a6-839f-8f12-e5aa87aa5658"
+      ],
+      "assets": [
+        "c4800019-77a6-839f-8139-13570ca37794"
+      ],
+      "orderVerified": true
+    },
+    {
+      "platform": "TV_OS",
+      "placement": "APP_SCREENSHOT",
+      "group": "TV_PROFILE",
+      "removed": [
+        "fe400019-77a6-839f-8f1c-345710b5838e",
+        "96c00019-77a6-839f-8f10-c65244220c8d"
+      ],
+      "placed": [
+        "d1c00019-77a6-839f-8f33-9a4517bfe3ba",
+        "cec00019-77a6-839f-8f1a-acb00835c045"
+      ],
+      "assets": [
+        "e4000019-77a6-839f-8005-df7b58ca00a0",
+        "4b000019-77a6-839f-801f-09c1b7fc9a84"
+      ],
+      "orderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "placement": "APP_SCREENSHOT",
+      "group": "IPAD_13_PROFILE",
+      "removed": [
+        "1fc00019-77a6-839f-8f39-7c828398be0f",
+        "2f000019-77a6-839f-8f03-d211672be911"
+      ],
+      "placed": [
+        "98400019-77a6-839f-8f37-c66db835f75a",
+        "bc800019-77a6-839f-8f09-ab675453e6cd"
+      ],
+      "assets": [
+        "66800019-77a6-839f-801e-3712e7c19a9a",
+        "55800019-77a6-839f-8035-40261cf2edf6"
+      ],
+      "orderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "placement": "APP_SCREENSHOT",
+      "group": "IPHONE_DUO_PROFILE",
+      "removed": [
+        "28800019-77a6-839f-8f3c-dc072bc6f190",
+        "1d800019-77a6-839f-8f22-2c4975435c53"
+      ],
+      "placed": [
+        "e6800019-77a6-839f-8f36-b890fb502538",
+        "efc00019-77a6-839f-8f17-92de9f342f35"
+      ],
+      "assets": [
+        "9e000019-77a6-839f-8037-bbc6382ad841",
+        "2a400019-77a6-839f-800b-a379a5da3351"
+      ],
+      "orderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "placement": "APP_SCREENSHOT",
+      "group": "IPHONE_DYNAMIC_ISLAND_MEDIUM_PROFILE",
+      "removed": [
+        "77400019-77a6-839f-8f33-7cf0fd2721ad",
+        "cbc00019-77a6-839f-8f1b-a2e0a92f158a"
+      ],
+      "placed": [
+        "87800019-77a6-839f-8f35-de51edd48e30",
+        "9e000019-77a6-839f-8f3c-16e0ea12c425"
+      ],
+      "assets": [
+        "48000019-77a6-839f-8034-5e82727262a8",
+        "2c800019-77a6-839f-800e-a74c3f22d495"
+      ],
+      "orderVerified": true
+    }
+  ],
+  "submissions": [
+    {
+      "checkedAt": "2026-11-22T21:45:34.996689+00:00",
+      "platform": "IOS",
+      "version": "2.4.3",
+      "build": "112",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88",
+      "buildID": "bd7dbc72-1801-48c2-9dfc-df124ab22b53",
+      "reviewSubmissionID": "9fd04d55-acb3-4245-8a49-965e7fc1f398",
+      "reviewState": "WAITING_FOR_REVIEW",
+      "submittedDate": "2026-11-22T21:45:32.81Z",
+      "versionState": "WAITING_FOR_REVIEW",
+      "releaseType": "AFTER_APPROVAL"
+    },
+    {
+      "checkedAt": "2026-11-22T21:45:47.458051+00:00",
+      "platform": "TV_OS",
+      "version": "2.4.3",
+      "build": "112",
+      "versionID": "3809e541-17ca-4321-8e85-59fd5a0b3b40",
+      "buildID": "68807877-35d8-43c9-a3d0-f17051f7029b",
+      "reviewSubmissionID": "03d7337c-2170-43f9-a2bc-d78c1cefab4b",
+      "reviewState": "WAITING_FOR_REVIEW",
+      "submittedDate": "2026-11-22T21:45:45.609Z",
+      "versionState": "WAITING_FOR_REVIEW",
+      "releaseType": "AFTER_APPROVAL"
+    }
+  ],
+  "skippedChecks": [
+    "Automated test suites, under the release schedule. Build 112 delivery evidence is in IOSDelivery.json."
+  ],
+  "openItems": [
+    "App Review result and App Store availability for iOS and tvOS 2.4.3.",
+    "Standalone media submission e10860fd remains Waiting for Review."
+  ]
+}

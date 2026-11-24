@@ -15,7 +15,7 @@ struct MobileBookHomeFitTests {
                 .init("l2", "Lemmings 2", gameLogo: .lemmings2),
                 .init("l3", "Lemmings 3", gameLogo: .lemmings3)],
             initials: hotSeat ? "ALICE v BOB" : "PLA", nextPlayerIndex: hotSeat ? 0 : nil,
-            subtitle: hotSeat ? "" : "Next: PLA", deskClock: true)
+            subtitle: hotSeat ? "" : "Next: PLA")
     }
 
     @Test func standardOpenDuoHomeFitsWithoutScrolling() {
@@ -47,10 +47,11 @@ struct MobileBookHomeFitTests {
 
     @Test func insufficientHeightKeepsEveryActionReachableByScrolling() {
         let page = page(resume: true, hotSeat: false)
-        let panes = [CGRect(x: 0, y: 0, width: 318, height: 425),
-                     CGRect(x: 332, y: 0, width: 318, height: 425)]
-        let layout = GameFrontEnd.layout(page, width: 650, minimumHeight: 425, bookHomePanes: panes)
-        #expect(layout.size.height > 425)
+        // Home has five actions, so only a very short pane forces scrolling.
+        let panes = [CGRect(x: 0, y: 0, width: 318, height: 160),
+                     CGRect(x: 332, y: 0, width: 318, height: 160)]
+        let layout = GameFrontEnd.layout(page, width: 650, minimumHeight: 160, bookHomePanes: panes)
+        #expect(layout.size.height > 160)
         #expect(Set(layout.targets.map { $0.action.id }) == Set((page.rows + page.footer).map { $0.id }))
         #expect(layout.targets.allSatisfy { CGRect(origin: .zero, size: layout.size).contains($0.frame) })
     }

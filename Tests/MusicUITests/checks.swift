@@ -184,7 +184,7 @@ extension SettingsWindow {
         show()
         let tabs = page!.body.subviews.first { $0 is GameTabs } as! GameTabs
         let buttons = tabs.subviews.compactMap { $0 as? GameTabButton }
-        try checkUI(buttons.map(\.title) == ["Gameplay", "Controller", "Graphics", "Video", "Audio", "Accessibility", "Privacy"], "Settings tab order changed")
+        try checkUI(buttons.map(\.title) == ["Gameplay", "Controls", "Artwork", "Display", "Audio", "Accessibility", "Privacy"], "Settings tab order changed")
         func descendants(_ view: NSView) -> [NSView] { [view] + view.subviews.flatMap(descendants) }
         for size in [NSSize(width: 1120, height: 720), NSSize(width: 900, height: 620)] {
             window.setContentSize(size)
@@ -279,7 +279,7 @@ extension SettingsWindow {
         try checkUI(help.panel == nil, "Privacy popover did not close")
         try checkUI(!descendants(telemetryCheck!.superview!).compactMap { $0 as? GameLabel }.contains { $0.stringValue.contains("network address") }, "Privacy detail remains inline")
         try checkUI(pointerCaptureCheck!.superview === experiencePopUp!.superview, "Pointer capture is outside Gameplay")
-        buttons.first { $0.title == "Controller" }!.performClick(nil)
+        buttons.first { $0.title == "Controls" }!.performClick(nil)
         controllerRemapButton!.performClick(nil)
         let mappingPage = GameScreen.shared.controllerPage(in: window) as! GameMenuPage
         mappingPage.layoutSubtreeIfNeeded()

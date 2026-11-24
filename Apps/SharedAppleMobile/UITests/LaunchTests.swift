@@ -6,12 +6,94 @@ final class LaunchTests: XCTestCase {
         continueAfterFailure = false
     }
 
+    @MainActor func testFirstPlayerStartsLevelAndReturnsHomeOnRelaunch() throws {
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "NO"]
+        app.launch()
+
+        let portrait = app.buttons["menu.playerPortrait"]
+        let initials = app.buttons["menu.nameField"]
+        let play = app.buttons["menu.firstPlay"]
+        let total = app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] %@", "saved worldwide")).firstMatch
+        XCTAssertTrue(total.waitForExistence(timeout: 20))
+        XCTAssertTrue(app.staticTexts["Create profile"].exists)
+        assertTarget(portrait)
+        let originalPortrait = portrait.label
+        tap(portrait)
+        XCTAssertNotEqual(portrait.label, originalPortrait)
+        tap(initials)
+        app.typeText("LEM\n")
+        capture(app, name: "First player")
+        tap(play)
+        XCTAssertTrue(app.buttons["Pause"].waitForExistence(timeout: 30))
+        app.terminate()
+        app.launchArguments = []
+        app.launch()
+        assertTarget(app.buttons["menu.settings"])
+        XCTAssertFalse(portrait.exists)
+        let homeCount = app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] %@ AND label CONTAINS[c] %@", "saved here", "Worldwide")).firstMatch
+        XCTAssertTrue(homeCount.exists)
+    }
+
+    @MainActor func testNoDataButtonOffersAssetDownload() throws {
+        try XCTSkipUnless(Bundle(for: Self.self).bundleIdentifier?.contains("ultimatelemmix") == true)
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
+        app.launch()
+        let missing = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "No data")).firstMatch
+        XCTAssertTrue(missing.waitForExistence(timeout: 30))
+        let source = app.buttons[missing.identifier]
+        tap(source)
+        assertTarget(app.buttons["menu.gameAssets.agree"])
+        let cancel = app.buttons["menu.gameAssets.cancel"]
+        assertTarget(cancel)
+        capture(app, name: "Download from No data")
+        tap(cancel)
+        assertTarget(source)
+        XCTAssertFalse(cancel.exists)
+    }
+
+    /// Downloads the real asset pack. Set LEMMINGS_TEST_ASSET_DOWNLOAD=1 in the test plan environment to run it.
+    @MainActor func testGameAssetDownloadInstallsAndSurvivesRelaunch() throws {
+        try XCTSkipUnless(Bundle(for: Self.self).bundleIdentifier?.contains("ultimatelemmix") == true)
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["LEMMINGS_TEST_ASSET_DOWNLOAD"] == "1")
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
+        app.launch()
+        let missing = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "No data")).firstMatch
+        XCTAssertTrue(missing.waitForExistence(timeout: 30))
+        tap(app.buttons["menu.settings"])
+        tap(app.buttons.matching(NSPredicate(format: "identifier IN %@", ["menu.data", "data"])).firstMatch)
+        tap(app.buttons["menu.download.gameAssets"])
+        tap(app.buttons["menu.gameAssets.agree"])
+        let progress = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Downloading")).firstMatch
+        XCTAssertTrue(progress.waitForExistence(timeout: 30))
+        capture(app, name: "Asset Download Progress")
+        XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@ OR label CONTAINS %@", "Next:", "Turn:")).firstMatch.exists, "Game Data shows a player turn")
+        let settings = app.buttons["menu.settings"]
+        XCTAssertTrue(settings.waitForExistence(timeout: 900), "The asset install did not return Home")
+        XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] %@", "failed verification")).firstMatch.exists)
+        XCTAssertFalse(missing.waitForExistence(timeout: 5), "A game still reports No data after the install")
+        capture(app, name: "Home After Asset Install")
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(settings.waitForExistence(timeout: 30))
+        XCTAssertFalse(missing.waitForExistence(timeout: 5), "The installed assets did not survive a relaunch")
+        capture(app, name: "Home After Relaunch")
+    }
+
     @MainActor func testGameAssetDownloadRequiresALicence() throws {
         try XCTSkipUnless(Bundle(for: Self.self).bundleIdentifier?.contains("ultimatelemmix") == true)
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
         app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
-        app.launchArguments = ["-mobile.whatsNew.seenBuild", "9999", "-AnonymousTelemetryDecisionV1", "YES"]
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
         app.launch()
         tap(app.buttons["menu.settings"])
         let data = app.buttons.matching(NSPredicate(format: "identifier IN %@", ["menu.data", "data"])).firstMatch
@@ -43,6 +125,7 @@ final class LaunchTests: XCTestCase {
 
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
         app.launch()
 
         // A data-free install starts on Game Data; bundled builds start at Home.
@@ -81,6 +164,7 @@ final class LaunchTests: XCTestCase {
 
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
         app.launch()
         let family = app.buttons["menu.family.classic"]
         let classic = app.buttons["menu.classic"]

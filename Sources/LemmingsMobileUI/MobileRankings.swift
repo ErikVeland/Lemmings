@@ -170,7 +170,8 @@ extension MobileLibraryViewController {
         return MobileCareerArt.leaderboards(world: rankings.world, category: rankings.category, rows: rows,
             busy: rankings.world && community.busy, status: rankings.world ? community.status : "",
             sharing: community.endpoint == nil ? nil : community.sharing(profiles.activeID),
-            gameCenter: rankings.gameCenter.available)
+            gameCenter: rankings.gameCenter.available,
+            worldwide: SavedLemmingsCounter(local: AnonymousTelemetry.shared.localSavedTotal, global: worldwideSavedTotal).homeCaption)
     }
 
     func handleRankings(_ id: String) -> Bool {

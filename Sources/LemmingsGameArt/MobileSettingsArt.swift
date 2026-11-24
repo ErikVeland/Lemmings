@@ -18,6 +18,11 @@ public enum MobileSettingsArt {
         }
         return min(CGFloat(size.scale), max(1, width / 280))
     }
+    /// About-the-app actions live in Settings rather than on Home.
+    public static var aboutActions: [GameFrontEnd.Action] {
+        [.init("whatsNew", L10n.text("What's New")), GameSupport.menuAction]
+    }
+
     public static func groups(inGame: Bool = false, television: Bool = false,
                               deskClockAvailable: Bool = true) -> GameFrontEnd.Page {
         // The Desk Clock is an iPhone and iPad menu feature, so a level and the TV leave it out.
@@ -39,7 +44,7 @@ public enum MobileSettingsArt {
                             displayAvailable: Bool = false, inGame: Bool = false,
                             language: InterfaceLanguage = .system, respectMuteAvailable: Bool = true,
                             foldable: Bool = false, calendarDenied: Bool = false,
-                            ghostsVisible: Bool = true) -> GameFrontEnd.Page {
+                            ghostsVisible: Bool? = nil) -> GameFrontEnd.Page {
         let c = settings.classic
         typealias Action = GameFrontEnd.Action
         func toggle(_ id: String, _ title: String, _ selected: Bool, enabled: Bool = true) -> Action {
@@ -56,7 +61,6 @@ public enum MobileSettingsArt {
             rows = [choice("language", L10n.text("Language"), language.title),
                     choice("preset", L10n.text("Presentation"), c.experiencePreset.title),
                     toggle("inspect", L10n.text("Inspect lemmings while paused"), c.inspectWhilePaused),
-                    toggle("hotSeatGhosts", L10n.text("Hot Seat ghosts"), ghostsVisible),
                     toggle("planning", L10n.text("Pause to assign"), settings.pauseToAssign),
                     choice("speed", L10n.text("Fast speed"), "\(settings.fastSpeed)X"),
                     toggle("variableSpeed", L10n.text("Variable speed"), c.variableSpeedEnabled),
@@ -120,8 +124,12 @@ public enum MobileSettingsArt {
         case .privacy:
             rows = [toggle("telemetry", L10n.text("Share counts and records"), sharing, enabled: sharingAvailable),
                     .init("familiarNames", L10n.text("Familiar names")),
-                    .init("cloudSaves", L10n.text("Cloud saves")),
-                    .init("playInsights", L10n.text("Play Insights"))]
+                    .init("cloudSaves", L10n.text("Cloud saves"))]
+        }
+        // Hot Seat ghosts belong to the Hot Seat page. During a Hot Seat level, in-game Settings is the point of use.
+        if group == .gameplay, let ghostsVisible,
+           let index = rows.firstIndex(where: { $0.id == "setting.inspect" }) {
+            rows.insert(toggle("hotSeatGhosts", L10n.text("Hot Seat ghosts"), ghostsVisible), at: index + 1)
         }
         if inGame { rows.removeAll { $0.id == "cloudSaves" || $0.id == "familiarNames" } }
         var page = GameFrontEnd.Page(title: group.title, rows: rows,

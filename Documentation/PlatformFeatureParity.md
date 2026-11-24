@@ -1,5 +1,86 @@
 # Cross-platform feature parity
 
+## Preview, catalogue and save recovery · 25 November 2026
+
+| Player task | Implemented behaviour | Verification boundary |
+| --- | --- | --- |
+| Browse then play | Campaign and collection previews inspect neighbouring levels without changing the active level. An eligible saved attempt can resume from its cover. The preview and its forward button use the same action. | Mac result footers, shared preview actions and Apple TV input geometry run headlessly. Physical touch and VoiceOver remain open. |
+| Find a fan level or a personal record | Fan and NeoLemmix catalogues offer search and completion filters. Profile → Statistics counts recorded attempts, distinct clears, stars and three-star levels. | Native Mac controls and shared phone, iPad, Duo and TV renderers. Legacy records contribute the information they retained. |
+| Resume a multiplayer Journey | Manual Apple TV transfer preserves an archived roster, turn, house rule, completions and a compatible mid-level checkpoint. Automatic cloud sync covers Journey progress. | Two isolated roots restored an exact Classic checkpoint. Offline and reconnect used a mock service. Physical transfers and production sync remain open. |
+| Navigate while data arrives | A late preview or community total preserves the selected action. Cancelling a load prevents a delayed result reopening it. | Headless AppKit, shared bitmap geometry and portable load tests. UIKit routes compile against both SDKs. |
+| Keep focus through layout changes | The mobile HUD reuses controls by action. A closed speed chooser returns focus to the visible control after a width change. A temporary fold size preserves Ready and chooser state. | Narrow Mac pointer and accessibility actions, TV binding tests and shared HUD renders. Physical folds, VoiceOver and Siri Remote remain open. |
+
+The [UX checklist](UXRedesign.md) lists the repeatable checks and the remaining device observations.
+
+## First profile, Home and gameplay HUD — 24 November 2026
+
+| Player task | Shared behaviour | Verification |
+| --- | --- | --- |
+| Start or resume | Home presents one session-specific primary action and Play, Hot Seat, Profile and Community. Play contains the game families and collections. Profile contains personal records and cloud saves. Community shows the worldwide rescue count. | Mac bitmap controls, mouse and keyboard selection, mobile menu renders and the selected-session resolver. |
+| First play | Save the local initials and portrait, then offer participation if the service is configured and the player has no saved choice. Either answer continues. The original game or open starter depends on the product and available assets. | An isolated Mac profile and consent page accepted initials and declined sharing with an offline transport. Reopening the stores retained both choices. Mobile profile controls were rendered at phone, iPad, Duo and TV sizes. |
+| Inspect a moving level | Status fields occupy measured slots. The release-rate controls govern emergence. The transport displays the current simulation multiplier. | Classic, L2 and L3 engine-backed before/after renders. Four count snapshots per engine had identical after-rectangles. A one-skill NeoLemmix Redux level ran to tick 100 with unchanged control targets at three sizes. |
+| Finish an attempt | The outgoing music fades for 0.6 seconds. A new attempt waits for live play. Results effects have their own output. | Muted fade ownership and cancellation checks. See [Audio coverage](AudioCoverage.md). |
+
+The shipping Apple TV entry point uses the shared mobile frontend. TV controller bindings, focus layout and handover tests run without a physical remote. The optional controller that accepts custom TV source folders has its own menus. Mobile hardware, VoiceOver, full app launches and audible quality need separate acceptance. See [the redesign evidence](UXRedesign.md#implementation-and-verification--24-november-2026).
+
+## First-use control tips and level maps
+
+Classic, supported NeoLemmix levels, L2 and L3 share four brief tips for skill
+assignment, returning to 1×, repeated rewind and moving the camera on the map.
+Each tip appears once per local player profile and device. Profiles with an
+existing run record start with tips hidden. Controls help offers Show control
+tips or Hide control tips. The notices use game lettering and leave playfield
+input, pause and speed under player control. Replays omit first-use tips.
+
+| Platform | Map input and layout |
+| --- | --- |
+| Mac | Click or drag the level image. Classic and NeoLemmix keep their panel maps. The native sequel canvases show the current terrain and camera rectangle beside the timeline, leaving the original skill panel and transport targets in place. |
+| iPhone, iPad and Duo | Tap or drag a point on the map to centre both axes. Starting in a letterbox margin leaves the camera still. |
+| Apple TV | Aim at a point on the map and press Select. The camera menu retains its entrance, exit and movement actions. |
+
+The offscreen checks in `GameplayControlTipTests` verify dismissal, reopening
+the preference, focus and speed. They render the shared sequel footer at 640,
+700, 850 and 1024 points and exercise pointer and accessibility input.
+`MobileControlTipMapTests` verifies two-axis seeking, vertical adjustment and
+camera bounds under square and non-square pixel aspect ratios. First-time
+player observation, VoiceOver, touch and Siri Remote use still need hardware
+acceptance.
+
+## Speed selection and skill supply
+
+iPhone, iPad, Duo and Apple TV show exact tiers beside the minimap when the
+overview can accommodate them. Compact layouts offer a Speed chooser beside
+the map when at least 120 points remain for seeking. The existing input
+positions for skills, transport and the pedal stay fixed. iPhone, iPad and Duo
+also offer exact speed selection from the pause menu. Apple TV
+offers the same bitmap page under Game controls and restores focus to Speed on
+return. Fixed mode offers the session’s normal and fast multipliers. Variable
+mode offers 1×, 2×, 3×, 5× and 10×, with 25× when enabled. The shared mobile HUD
+displays the chosen tier throughout the clock ramp and removes the arrow hit
+targets in fixed mode. On native Mac, the wide flat Classic/NeoLemmix HUD and both sequel
+footers have direct multiplier buttons. Shift-number shortcuts also reach each
+tier in narrow windows and Classic CRT mode. Offscreen checks exercised the
+mouse targets, accessibility actions, Shift release and the 700-point layout
+boundary. Physical keyboard and VoiceOver acceptance remain open.
+
+Classic, L2, L3 and supported NeoLemmix use the shared mobile skill supply
+state. A zero count with the unlimited flag retains full icon brightness in
+the adaptive HUD. Read-only playback dims skills. Physical touch, Siri Remote
+focus, VoiceOver and older-device timing require hardware acceptance.
+
+## Mac fast-forward and skill input — 21 November 2026
+
+Classic, supported NeoLemmix, Lemmings 2 and Lemmings 3 use the Mac effects budget.
+Intel Macs start with speed trails and the full-screen speed effect off. Both
+effects require full CPU and GPU quality. Late game updates count towards CPU
+pressure, including delays between timer callbacks. Minimum quality disables
+bloom and enhanced overlays. Classic and NeoLemmix also stop testing nearby
+actors once the targeting rules identify the preferred eligible lemming.
+
+The policy check simulates sustained 25 Hz delivery on an Intel-class profile.
+Actual fast-forward speed and click-to-action latency on a 2018 Mac still need
+hardware measurements.
+
 ## Lemmix Game Assets download — 21 November 2026
 
 The Lemmix importer on Mac and the Game Data screen on iPhone, iPad, Duo and Apple TV
@@ -20,6 +101,15 @@ A separate native check downloaded, installed and reopened all 23,001 assets.
 The hosted ZIP matched the release checksum. The iOS and tvOS device builds passed.
 Physical-device input and interrupted transfers still need device acceptance.
 Build 110 requires manual folder import. [Game Assets release](https://github.com/ErikVeland/Lemmings/releases/tag/ultimate-lemmix-game-assets-1)
+
+On 24 November, an iPhone simulator reproduced the build 112 import failure with
+the published pack and the archived iOS app. The installer rejected the signed
+inventory because it contained the new `FanRuntime` folder. The corrected importer
+retained that folder, installed all 23,001 assets and verified them on reopen.
+The simulator also reproduced a transfer that stayed at 0% while data arrived.
+The corrected downloader reported progress through 100% from the GitHub mirror.
+A separate check cancelled the Archive.org transfer at 1% before import.
+iPad, Duo, Apple TV and physical devices still need this build-specific check.
 
 ## Lemmix button backgrounds — 20 November 2026
 
@@ -1359,6 +1449,9 @@ See the [Store submission evidence](ReleaseReadiness/ultimate-lemmix-2.4.2-build
 for the final package and service state. Public redistribution of the full
 restoration collection remains uncleared.
 
+### Ultimate Lemmix on the Mac App Store
+
+The Desk Clock widget can show the next timed calendar event after the player grants Calendar access in the Mac app menu. Build 113 shows the time only. Home and About omit external donation actions.
 
 ### Owned game-data downloads
 

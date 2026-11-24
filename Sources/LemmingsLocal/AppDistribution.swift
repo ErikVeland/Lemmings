@@ -18,7 +18,7 @@ enum AppDistribution {
     #endif
   }
 
-  static var name: String { isStore ? "Ultimate Lemmix" : "Ultimate Lemmings" }
+  static var name: String { isStore && !GameMenuLogo.usesRestoredArtwork ? "Ultimate Lemmix" : "Ultimate Lemmings" }
 
   /**
    * Shares the selected clock artwork with the separately hosted widget.

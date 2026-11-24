@@ -112,6 +112,9 @@ extension MenuAudit {
             let layout = MobileHUDLayout.make(container: .init(width: size.width, height: size.height),
                 safeArea: .init(), hasRate: rate, skillCount: skills.count, supportsRewind: true,
                 hasPlayer: true, engineIdentifier: engine, showsMenuButton: false, television: true)
+                .addingSpeedTiers(GameplaySpeed.ridiculousSteps)
+            guard layout.speedTiers == GameplaySpeed.ridiculousSteps,
+                  layout.minimapFrame?.intersects(layout.speedTierFrame) == false else { throw invalidTargets(line: #line) }
             guard layout.television, layout.panel == nil, layout.portrait != nil else { throw invalidTargets(line: #line) }
             let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: 0,
                 paused: false, speed: 1, endRunArmed: false)

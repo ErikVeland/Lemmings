@@ -27,7 +27,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 @MainActor final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
   private let launchStartedAt = ProcessInfo.processInfo.systemUptime
   private var preparingLaunch = false
-  private var wasExistingPlayer = false
+  private static let firstProfileKey = "FirstLaunchProfileCompleteV1"
+  private weak var firstProfilePage: ArcadeView?
 
   private func traceLaunch(_ stage: String) {
     guard ProcessInfo.processInfo.environment["LEMMINGS_LAUNCH_TRACE"] == "1" else { return }
@@ -177,14 +178,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case fullQuest
     case collections
     case browse(HomeContentFamily)
+    case play
+    case hotSeat
+    case profile
+    case community
   }
+  /// The title screen shows Play's routes and games instead of Home's destinations.
+  private var homeShowsPlay = false
   private struct HomeMenuItem {
     let title: String
     let action: HomeMenuAction
   }
   private var homeGlobalSaved: Int?
   private var homeSavedRefreshTask: Task<Void, Never>?
-  private var homeSavedRefreshID = UUID()
   private var homeSavedLastRefreshAt = -Double.infinity
   private var activeTitle: ClassicTitle?
   private var sequelIsActive: Bool { nativeL2Window != nil || nativeL3Window != nil }
@@ -230,6 +236,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var levelGraphics: ClassicGraphicsSource?
   /// The soundtrack this level plays, on the same basis.
   private var levelMusic: ClassicMusicSource?
+  private lazy var resultMusic = ResultMusicFade(module: music, recordings: soundtrack, dj: dj)
+  private var needsAttemptMusic = false
   private var startedMusicIdentity: String?
   private var legacyMusicHandoffTask: Task<Void, Never>?
   private var legacyMusicHandoffPosition: Double?
@@ -399,6 +407,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var levelBrowserLaunchTask: Task<Void, Never>?
   private var levelBrowserLaunchID: UUID?
   private weak var levelBrowserCurrentLevelPage: GameMenuPage?
+  private weak var levelBrowserPackFilter: CatalogueFilterBar?
   private weak var levelBrowserPackPage: GameMenuPage?
   private weak var levelBrowserPackCarousel: LevelCoverFlowView?
   private var levelBrowserVisiblePackKeys: Set<String> = []
@@ -532,7 +541,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  private func restoreRun(_ checkpoint: RunRecovery) {
+  private func restoreRun(_ checkpoint: RunRecovery, fromBrowser identity: LevelCatalogueIdentity? = nil) {
     do {
       _ = try checkpoint.validated()
       // A newer engine must not strand a saved run. The session restores from
@@ -576,7 +585,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
         restoringCheckpoint = false
         refreshClassicLevelPickerAvailability()
       }
-      returnToLibrary()
+      if let identity {
+        retainBrowserForReturn()
+        browserPlayingIdentity = identity
+        browserPlayingFingerprint = checkpoint.levelFingerprint
+        browserResume = nil
+        LevelHintWindow.shared.clearSolution()
+        prepareLibrary(preservingMusic: true)
+        sequencePlaylistStore = nil
+      } else {
+        returnToLibrary()
+      }
       if let fan = checkpoint.fan, let path = checkpoint.sourcePath {
         if let base = fan.baseDataSetID, let index = dataSetIndex(matching: base) {
           gamePicker.selectItem(at: index); selectDataSet()
@@ -713,7 +732,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     window.beginSheet(sheet)
   }
   private var cloudCanImport: Bool {
-    guard !sequelIsActive, phase != .playing else { return false }
+    guard firstProfilePage == nil, !sequelIsActive, phase != .playing else { return false }
     switch flow?.screen {
     case .title, .rankSelect, nil: return true
     default: return false
@@ -811,8 +830,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   func applicationDidFinishLaunching(_ notification: Notification) {
     preparingLaunch = true
-    wasExistingPlayer = UserDefaults.standard.bool(forKey: EffectsWelcome.choiceKey)
-      || UserDefaults.standard.object(forKey: settingsKey) != nil
+    migrateStandaloneSaves()
+    let needsFirstProfile = Self.needsFirstProfile(in: .current())
     traceLaunch("begin")
     if AppDistribution.isStore { UserResourceAccess.shared.restore() }
     if let installed = try? AppDistribution.ownedResourceLibrary.refreshBaseIfNeeded() {
@@ -832,7 +851,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.playfield.needsDisplay = true
     }
     updates.start()
-    migrateStandaloneSaves()
     buildMenu()
     NotificationCenter.default.addObserver(self, selector: #selector(interfaceLanguageChanged),
                                           name: L10n.languageDidChange, object: nil)
@@ -904,7 +922,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     traceLaunch("content")
     startFanUpdates()
     startTimer()
-    presentLaunchPages()
+    if needsFirstProfile { presentFirstProfile() }
     // Present the completed opening screen before asking AppKit for full screen.
     // A full-screen transition does not replace ordering the window.
     window.contentView?.layoutSubtreeIfNeeded()
@@ -951,15 +969,61 @@ let achievementProgressKey = "ClassicAchievementProgress"
     apply(updated)
   }
 
-  private func presentLaunchPages() {
-    EffectsWelcome.acknowledgeDefaults()
-    releaseWelcome.showIfNeeded(in: window, existingPlayer: wasExistingPlayer) { [weak self] in
-      guard let self else { return }
-      TelemetryConsentWindow.shared.showIfNeeded(in: self.window) { [weak self] in
-        guard let self else { return }
-        MusicLibraryWindow.shared.showIfNeeded(in: self.window)
+  static func needsFirstProfile(in storage: AppStorage) -> Bool {
+    let defaults = storage.defaults
+    if let complete = defaults.object(forKey: firstProfileKey) as? Bool { return !complete }
+    let records = ArcadeStore.recordsFile(storage: storage)
+    let returning = defaults.bool(forKey: EffectsWelcome.choiceKey)
+      || defaults.object(forKey: settingsKey) != nil
+      || defaults.dictionaryRepresentation().keys.contains(where: LegacySaveMigration.isProgress)
+      || [records, ArcadeRecordFile(url: records).backupURL].contains { FileManager.default.fileExists(atPath: $0.path) }
+    defaults.set(returning, forKey: firstProfileKey)
+    return !returning
+  }
+
+  private func presentFirstProfile() {
+    firstProfilePage = Self.presentFirstProfile(in: window, storage: .current(), consent: .shared,
+      worldwide: SavedLemmingsCounter.worldwideText(homeGlobalSaved)) { [weak self] in
+      self?.firstProfilePage = nil
+      self?.playFirstLevel()
+    }
+  }
+
+  @discardableResult static func presentFirstProfile(in window: NSWindow, storage: AppStorage,
+    consent: TelemetryConsentWindow, worldwide: String, onPlay: @escaping () -> Void) -> ArcadeView {
+    let page = ArcadeView()
+    page.mode = .profiles
+    page.selectProfile(ArcadeStore.shared.records.activeProfile)
+    page.onFirstPlay = { [weak window, weak page] in
+      guard let window, let page else { return }
+      storage.defaults.set(true, forKey: firstProfileKey)
+      GameScreen.shared.dismiss(page)
+      consent.showIfNeeded(in: window, worldwide: worldwide, completion: onPlay)
+    }
+    GameScreen.shared.present(page, owner: window, focus: page)
+    return page
+  }
+
+  private func playFirstLevel() {
+    let preferred = AppDistribution.isStore
+      ? dataSets.firstIndex { GameStarterContent.isStarter(directory: $0.directory) }
+      : nonFanQuestDataSetIndex(for: .lemmings)
+    let candidates = [preferred].compactMap { $0 } + dataSets.indices.filter { $0 != preferred }
+    for index in candidates where !dataSets[index].set.campaign.levels.isEmpty {
+      gamePicker.selectItem(at: index)
+      do { try applyDataSetSelection(at: index) } catch { continue }
+      launchMode = .singleTitle
+      activeTitle = dataSets[index].set.title
+      picker.selectItem(at: 0)
+      session = nil
+      levelChanged()
+      if session != nil, case .briefing = flow?.screen {
+        advancePhase()
+        return
       }
     }
+    returnToLibrary()
+    GameScreen.shared.message(L10n.text("Level unavailable"), detail: L10n.text("Add a game folder to play."))
   }
 
   private func migrateStandaloneSaves() {
@@ -996,19 +1060,24 @@ let achievementProgressKey = "ClassicAchievementProgress"
     achievementsItem.keyEquivalentModifierMask = [.command, .shift]
     achievementsItem.target = self
     appMenu.addItem(achievementsItem)
-    let profiles = NSMenuItem(title: L10n.text("Player Profiles…"), action: #selector(showProfiles), keyEquivalent: "p")
+    let profiles = NSMenuItem(title: L10n.text("Profile…"), action: #selector(showProfiles), keyEquivalent: "p")
     profiles.keyEquivalentModifierMask = [.command, .shift]; profiles.target = self; appMenu.addItem(profiles)
     let cloudSaves = NSMenuItem(title: L10n.text("Cloud Saves…"), action: #selector(showCloudSaves), keyEquivalent: "")
     cloudSaves.target = self; appMenu.addItem(cloudSaves)
     let hotSeat = NSMenuItem(title: L10n.text("Hot Seat…"), action: #selector(showHotSeat), keyEquivalent: "")
     hotSeat.target = self; appMenu.addItem(hotSeat)
-    let records = NSMenuItem(title: L10n.text("Level Records…"), action: #selector(showLevelRecords), keyEquivalent: "b")
+    let records = NSMenuItem(title: L10n.text("Records…"), action: #selector(showLevelRecords), keyEquivalent: "b")
     records.keyEquivalentModifierMask = [.command, .shift]; records.target = self; appMenu.addItem(records)
     let insights = NSMenuItem(title: L10n.text("Play Insights…"), action: #selector(showPlayInsights), keyEquivalent: "")
     insights.target = self; appMenu.addItem(insights)
     let replay = NSMenuItem(title: L10n.text("Replay Last Game"), action: #selector(reviewLastGame), keyEquivalent: "v")
     replay.keyEquivalentModifierMask = [.command, .shift]; replay.target = self
     appMenu.addItem(replay)
+    // A developer tool: it appears in place of Replay Last Game only while Option is held.
+    let recordedRoutes = NSMenuItem(title: L10n.text("Show Recorded Routes"), action: #selector(showRecordedRoutes), keyEquivalent: "v")
+    recordedRoutes.keyEquivalentModifierMask = [.command, .shift, .option]
+    recordedRoutes.isAlternate = true; recordedRoutes.target = self
+    appMenu.addItem(recordedRoutes)
     let openReplay = NSMenuItem(title: L10n.text("Open Replay Movie…"), action: #selector(openReplayMovie), keyEquivalent: "o")
     openReplay.keyEquivalentModifierMask = [.command, .shift]; openReplay.target = self
     appMenu.addItem(openReplay)
@@ -1016,9 +1085,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
     nativeL2.keyEquivalentModifierMask = [.command, .shift]
     nativeL2.target = self
     appMenu.addItem(nativeL2)
-    let recordedRoutes = NSMenuItem(title: L10n.text("Show Recorded Routes"), action: #selector(showRecordedRoutes), keyEquivalent: "")
-    recordedRoutes.target = self
-    appMenu.addItem(recordedRoutes)
     let nativeL3 = NSMenuItem(title: L10n.text("Play \(Lemmings3Brand.current.displayName) Beta…"), action: #selector(chooseNativeL3), keyEquivalent: "3")
     nativeL3.keyEquivalentModifierMask = [.command, .shift]
     nativeL3.target = self
@@ -1102,6 +1168,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     _ = add(helpMenu, L10n.text("What's New…"), #selector(showWhatsNew))
     _ = add(helpMenu, L10n.text("Keyboard commands…"), #selector(showKeyboardCommands), "?", modifiers: [.command])
     _ = add(helpMenu, L10n.text("Level hints…"), #selector(showLevelHints), "/")
+    #if !ULTIMATE_LEMMIX_STORE
+    helpMenu.addItem(.separator())
+    _ = add(helpMenu, L10n.text("Donate…"), #selector(openDonation))
+    #endif
     NSApplication.shared.helpMenu = helpMenu
 
     NSApplication.shared.mainMenu = mainMenu
@@ -1551,7 +1621,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     openNativeL2()
   }
 
-  private func suspendCurrentEngine(savesProgress: Bool = true, preservingMusic: Bool = false) {
+  private func suspendCurrentEngine(savesProgress: Bool = true) {
     stopMenuWorkForGameplay()
     LevelHintWindow.shared.clearSolution()
     panel.handlePointerUp()
@@ -1562,16 +1632,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     nativeL3Window?.stop()
     nativeL2Window = nil
     nativeL3Window = nil
-    if !preservingMusic {
-      legacyMusicHandoffTask?.cancel()
-      legacyMusicHandoffTask = nil
-      legacyMusicHandoffPosition = nil
-      legacyMusicHandoffReversing = false
-      music.stop()
-      soundtrack.stop()
-      dj.stop()
-      startedMusicIdentity = nil
-    }
+    resultMusic.retire()
+    legacyMusicHandoffTask?.cancel()
+    legacyMusicHandoffTask = nil
+    legacyMusicHandoffPosition = nil
+    legacyMusicHandoffReversing = false
+    music.stop()
+    soundtrack.stop()
+    dj.stop()
+    startedMusicIdentity = nil
     effects.stop()
     accumulator = 0
   }
@@ -1788,6 +1857,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
        checkpoint.runID == attempt, checkpoint.levelFingerprint == browserPlayingFingerprint, checkpoint.sequence == nil {
       browserResume = (identity, checkpoint)
     }
+    menuRecovery = browserResume?.checkpoint
     let previous = browserReturn
     browserReturn = nil
     LevelHintWindow.shared.clearSolution()
@@ -1795,9 +1865,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let previous { GameScreen.shared.restoreNavigation(previous); refreshBrowserPrimary?() }
   }
 
+  @objc private func openDonation() { NSWorkspace.shared.open(GameSupport.coffeeURL) }
+
   @objc private func goToMainMenu() {
     guard canLeaveCurrentAttempt() else { return }
+    homeShowsPlay = false
     returnToLibrary()
+  }
+
+  /// Opens or leaves Play on the title screen. Back from Play returns Home.
+  private func showHomePlay(_ shows: Bool) {
+    guard homeShowsPlay != shows else { return }
+    homeShowsPlay = shows
+    launchChoice = shows ? 0 : (homeMenuItems().firstIndex { $0.action == .play } ?? 0)
+    renderScreen()
   }
 
   @objc private func returnToLibrary() {
@@ -1822,7 +1903,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     fanScreen = .off
     fanPlaying = false
     fanQueue = []
-    suspendCurrentEngine(savesProgress: !wasSequenceActive, preservingMusic: preservingMusic)
+    suspendCurrentEngine(savesProgress: !wasSequenceActive)
     activeTitle = nil
     currentNxlvURL = nil
     currentNeoStylesRoot = nil
@@ -1848,11 +1929,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // engages when the setting is next touched, so a player who chose a
     // monitor last time comes back to a flat picture.
     applyDisplayMode()
-    // A sequence passes through the library between lessons. Keep the
-    // outgoing lesson music there instead of starting the menu theme.
-    preservingLibraryMusic = preservingMusic
+    // An intermediate library render must not start a theme between attempts.
+    suppressLibraryTheme = preservingMusic || !resumeMusic
     renderScreen()
-    preservingLibraryMusic = false
+    suppressLibraryTheme = false
     measureFanPacks()
     if resumeMusic { playMusicForCurrentLevel() }
     window.makeKeyAndOrderFront(nil)
@@ -2010,12 +2090,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     playfield.onRecords = { [weak self] in self?.showLevelRecords() }
     playfield.onLeaderboards = { [weak self] in
       guard let self else { return }
+      self.refreshHomeSavedCountsIfNeeded()
+      ArcadeWindow.shared.arcadeView.worldwideSaved = self.homeGlobalSaved
       ArcadeWindow.shared.showLeaderboards(owner: self.window, background: self.playfield.levelImage)
     }
-    playfield.onPlaylists = { [weak self] in self?.openLevelBrowser(family: nil, showsPlaylists: true) }
+    playfield.onPlaylists = { [weak self] in self?.presentLevelCollections() }
+    playfield.onHomeBack = { [weak self] in self?.showHomePlay(false) }
     playfield.onUpdate = { [weak self] in self?.updates.showUpdate() }
     playfield.onSettings = { [weak self] in self?.showSettings() }
-    playfield.onDonate = { NSWorkspace.shared.open(GameSupport.coffeeURL) }
     playfield.onSelectOverlayLine = { [weak self] index in
       guard let self else { return }
       if self.fanScreen != .off {
@@ -2029,6 +2111,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.advancePhase()
     }
     panel.onButton = { [weak self] button in self?.handle(button) }
+    panel.timeline.speedState = { [weak self] in self?.speedControl.state }
+    panel.timeline.canChooseSpeed = { [weak self] in
+        guard let self else { return false }
+        return self.phase == .playing && self.session?.isComplete == false && !self.speedControl.bulletTimeActive
+    }
+    panel.timeline.chooseSpeed = { [weak self] tier in self?.speedControl.select(tier, at: ProcessInfo.processInfo.systemUptime) }
     panel.timeline.enabled = { [weak self] action in
       guard let self, self.phase == .playing, let session = self.session else { return false }
       switch action {
@@ -2048,6 +2136,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     panel.onMinimapPosition = { [weak self] point in
       guard let self else { return }
+      self.gameplayKeyboard?.showControlTip(.map)
       self.playfield.viewport.scroll(dx: point.x - self.playfield.viewport.scrollX - self.playfield.viewport.visibleSize.width / 2,
         dy: point.y - self.playfield.viewport.scrollY - self.playfield.viewport.visibleSize.height / 2)
       self.playfield.needsDisplay = true
@@ -2195,7 +2284,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   // MARK: - Content
 
-  private func showOwnedGameImport() {
+  private func showOwnedGameImport(promptForDownload: Bool = false) {
     ownedGameImport.onInstalled = { [weak self] game, directory in
       guard let self else { return }
       self.returnToLibrary()
@@ -2217,7 +2306,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           detail: L10n.text("Import the resource folder again."))
       }
     }
-    ownedGameImport.show(owner: window)
+    ownedGameImport.show(owner: window, promptForDownload: promptForDownload)
   }
 
   @objc private func artworkSkinChanged() {
@@ -2751,8 +2840,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     .flatMap { ClassicMacMusicLibrary(root: $0.appendingPathComponent("MacMusic")) }
   /// One main theme plays on the menus for the whole launch.
   private var menuTheme: MenuThemeSelection.Choice?
-  /// True while a library render must keep the music that is playing.
-  private var preservingLibraryMusic = false
+  /// Suppress the theme when passing through the library to another attempt.
+  private var suppressLibraryTheme = false
   private var showsMainMenu: Bool {
     guard !fanPlaying, currentNxlvURL == nil, phase != .playing, let screen = flow?.screen else { return false }
     switch screen {
@@ -3581,18 +3670,23 @@ let achievementProgressKey = "ClassicAchievementProgress"
     refreshOpenLevelPackBrowser()
   }
 
-  private func fanLevelGroups() -> FanLevelOrganisation.Group {
-    FanLevelOrganisation.library(levelBrowserPacks(for: .fan).map { .init(id: $0.id, title: $0.name) })
+  private func fanLevelGroups(query: String = "") -> FanLevelOrganisation.Group {
+    FanLevelOrganisation.library(levelBrowserPacks(for: .fan).map { .init(id: $0.id, title: $0.name) }, query: query)
   }
 
-  private func presentFanLevelGroups(path: [String] = []) {
-    let page = FanLevelGroupPage(root: fanLevelGroups(), path: path)
-    page.onSelect = { [weak self] group in
+  private func presentFanLevelGroups(path: [String] = [], query: String = "") {
+    let page = FanLevelGroupPage(root: fanLevelGroups(query: query), path: path, query: query)
+    page.onSearch = { [weak self, weak page] query in
+      guard let self else { return }
+      self.cancelPendingLevelPreparation()
+      page?.reload(self.fanLevelGroups(query: query))
+    }
+    page.onSelect = { [weak self, weak page] group in
       guard let self else { return }
       if let id = group.packID, let pack = self.levelCatalogue.packs.first(where: { $0.id == id }) {
         self.presentLevelBrowser(for: pack)
       } else if group.packID == nil {
-        self.presentFanLevelGroups(path: path + [group.id])
+        self.presentFanLevelGroups(path: path + [group.id], query: page?.query ?? "")
       }
     }
     if path.isEmpty {
@@ -3607,12 +3701,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func refreshOpenLevelPackBrowser() {
     if !fanGroupPages.isEmpty {
-      let root = fanLevelGroups()
-      fanGroupPages.forEach { $0.reload(root) }
+      fanGroupPages.forEach { $0.reload(fanLevelGroups(query: $0.query)) }
     }
     guard let page = levelBrowserPackPage,
           let carousel = levelBrowserPackCarousel,
           GameScreen.shared.contains(page) else { return }
+    if let filter = levelBrowserPackFilter {
+      filter.onChange?(filter.search.stringValue, .all)
+      return
+    }
     let packs = levelCatalogue.packs.filter {
       levelBrowserVisiblePackKeys.contains(browserPackKey($0))
     }
@@ -3661,10 +3758,31 @@ let achievementProgressKey = "ClassicAchievementProgress"
     carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
 
     configureLevelPreviewLoader(carousel)
-    carousel.configure(
-      items: levelPackItems(for: packs),
-      selectedID: levelBrowserPackSelection,
-      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    if packs.allSatisfy({ $0.engine == .neolemmix }) {
+      let controls = CatalogueFilterBar(searchTitle: L10n.text("Search"), progressEnabled: false)
+      let empty = controls.install(in: page.body, above: carousel, emptyTitle: L10n.text("No matching packs"))
+      controls.onChange = { [weak self, weak carousel, weak primary, weak empty] query, _ in
+        guard let self, let carousel else { return }
+        self.cancelPendingLevelPreparation()
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let matching = self.levelCatalogue.packs.filter {
+          permittedPackKeys.contains(self.browserPackKey($0)) && (query.isEmpty || $0.name.localizedStandardContains(query))
+        }
+        let items = self.levelPackItems(for: matching)
+        self.configureLevelPreviewLoader(carousel)
+        let selected = items.first(where: { $0.id == self.levelBrowserPackSelection }) ?? items.first
+        carousel.configure(items: items, selectedID: selected?.id,
+          reduceMotion: self.settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+        primary?.isEnabled = carousel.selectedItem?.isAvailable == true
+        empty?.isHidden = !items.isEmpty
+      }
+      controls.onChange?("", .all)
+      levelBrowserPackFilter = controls
+    } else {
+      levelBrowserPackFilter = nil
+      carousel.configure(items: levelPackItems(for: packs), selectedID: levelBrowserPackSelection,
+        reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    }
     levelBrowserPackPage = page
     levelBrowserPackCarousel = carousel
     levelBrowserVisiblePackKeys = permittedPackKeys
@@ -3674,6 +3792,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       focus: carousel,
       onDismiss: { [weak self, weak page] in
         guard let self, let page, self.levelBrowserPackPage === page else { return }
+        self.levelBrowserPackFilter = nil
         self.levelBrowserPackPage = nil
         self.levelBrowserPackCarousel = nil
         self.levelBrowserVisiblePackKeys = []
@@ -3793,10 +3912,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let page = GameMenuPage(title: pack.name, subtitle: L10n.text("Ratings"))
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
     var first: NSButton?
+    let filterable = pack.engine == .neolemmix || levelBrowserPackFamilies[browserPackKey(pack)] == .fan
+    if filterable {
+      first = page.addListAction(L10n.text("All levels"), at: 0) { [weak self] in self?.presentResolvedLevelBrowser(pack) }
+    }
     for (index, rating) in ratings.enumerated() {
       let button = page.addListAction(
         L10n.text("\(rating.name)  \(L10n.plural("count.levels", count: rating.levels.count, one: "%ld level", other: "%ld levels"))"),
-        at: index
+        at: index + (filterable ? 1 : 0)
       ) { [weak self] in
         self?.presentResolvedLevelBrowser(
           pack,
@@ -3828,7 +3951,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
     let identities = Dictionary(displayedLevels.map { ($0.identity.levelID, $0.identity) },
       uniquingKeysWith: { first, _ in first })
-    let primary = page.addPrimaryAction(L10n.text("Start")) { [weak self, weak carousel] in
+    let primary = page.addPrimaryAction(L10n.text("Play")) { [weak self, weak carousel] in
       guard let item = carousel?.selectedItem,
             let identity = identities[item.id] else { return }
       self?.startBrowserLevel(identity)
@@ -3836,7 +3959,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     refreshBrowserPrimary = { [weak self, weak primary, weak carousel] in
       guard let self else { return }
       let identity = carousel?.selectedItem.flatMap { identities[$0.id] }
-      primary?.title = identity != nil && self.browserResume?.identity == identity ? L10n.text("Resume") : L10n.text("Start")
+      let title = identity.flatMap { self.previewRecovery(for: $0) } == nil ? L10n.text("Play") : L10n.text("Resume")
+      primary?.title = title
+      carousel?.selectedActionTitle = title
       primary?.needsDisplay = true
     }
     primary.keyEquivalent = "\r"
@@ -3846,6 +3971,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let item = carousel?.selectedItem,
             let identity = identities[item.id] else { return }
       self?.addToSelectedPlaylist(identity)
+    }
+    let details = page.addSecondaryAction(L10n.text("Details")) { [weak self, weak carousel] in
+      guard let self, let id = carousel?.selectedItem?.id, let identity = identities[id] else { return }
+      presentPreviewDetails(identity)
     }
     let favourite = page.addFavouriteAction(at: 1)
     let collectionOwner = ArcadeStore.shared.playingProfileID
@@ -3862,49 +3991,59 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self?.levelBrowserLevelSelections[
         rating.map { pack.id + "#" + $0 } ?? pack.id
       ] = item.id
+      self?.refreshBrowserPrimary?()
       primary?.isEnabled = item.isAvailable
       primary?.needsDisplay = true
       add?.isEnabled = item.isAvailable
       add?.needsDisplay = true
+      favourite?.isEnabled = item.isAvailable
       if let self, let identity = identities[item.id], let entry = try? self.collectionEntry(for: identity) {
         favourite?.showSaved(LevelCollections.isFavourite(entry, profileID: collectionOwner))
       }
     }
     carousel.onStart = { [weak primary] _ in primary?.performClick(nil) }
 
-    let total = displayedLevels.count
+    let family = levelBrowserPackFamilies[browserPackKey(pack)]
+    let filterable = family == .fan || pack.engine == .neolemmix
+    let cleared = filterable ? completedCatalogueLevels(in: pack) : []
     let items = displayedLevels.enumerated().map { index, entry in
-      let completed = entry.identity.engine == .neolemmix
-        && ArcadeStore.shared.records.trolley.attempts.contains { attempt in
-          guard attempt.run.profileID == ArcadeStore.shared.records.activeProfileID,
-                attempt.run.didWin,
-                let conditions = attempt.run.level.conditions else { return false }
-          return conditions.gameID == "neolemmix"
-            && conditions.packID == entry.identity.packID
-            && conditions.levelID == entry.identity.levelID
-      }
-      let completion = completed ? "  ✓" : ""
+      let completion = cleared.contains(entry.identity) ? "  (" + CatalogueProgressFilter.cleared.title + ")" : ""
       return LevelCoverFlowItem(
         id: entry.identity.levelID,
         title: entry.levelName,
         subtitle: entry.identity.originLabel + " / " + entry.packName + " / " + entry.identity.engine.displayName,
         detail: rating.map {
-          "\($0) \(index + 1)/\(total)  \(entry.status.displayName)\(completion)"
-        } ?? L10n.text("Level \(entry.number)  \(entry.status.displayName)  \(index + 1)/\(total)\(completion)"),
+          "\($0) \(index + 1)/\(displayedLevels.count)  \(entry.status.displayName)\(completion)"
+        } ?? L10n.text("Level \(entry.number)  \(entry.status.displayName)  \(index + 1)/\(displayedLevels.count)\(completion)"),
         isAvailable: entry.isAvailable,
         artworkKey: levelPreviewRequests[entry.identity]?.artworkKey,
         availability: entry.availability)
     }
     configureLevelPreviewLoader(carousel)
-    carousel.configure(
-      items: items,
-      selectedID: levelBrowserLevelSelections[
-        rating.map { pack.id + "#" + $0 } ?? pack.id
-      ],
-      reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
-    add.isEnabled = carousel.selectedItem?.isAvailable == true
-    if let item = carousel.selectedItem, let identity = identities[item.id], let entry = try? collectionEntry(for: identity) {
-      favourite.showSaved(LevelCollections.isFavourite(entry, profileID: collectionOwner))
+    let selectionKey = rating.map { pack.id + "#" + $0 } ?? pack.id
+    let reducedMotion = settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+    if filterable {
+      let controls = CatalogueFilterBar(searchTitle: L10n.text("Search levels"), progressEnabled: true)
+      let empty = controls.install(in: page.body, above: carousel, emptyTitle: L10n.text("No matching levels"))
+      let clearedIDs = Set(cleared.map(\.levelID))
+      controls.onChange = { [weak self, weak carousel, weak primary, weak details, weak add, weak favourite, weak empty] query, filter in
+        guard let self, let carousel else { return }
+        self.cancelPendingLevelPreparation()
+        let matches = filter.levelsInPack(items, query: query, title: { $0.title }, completed: { clearedIDs.contains($0.id) })
+        let prior = self.levelBrowserLevelSelections[selectionKey]
+        let selected = matches.first(where: { $0.id == prior }) ?? matches.first
+        carousel.configure(items: matches, selectedID: selected?.id, reduceMotion: reducedMotion)
+        let available = carousel.selectedItem?.isAvailable == true
+        details?.isEnabled = selected != nil
+        primary?.isEnabled = available
+        add?.isEnabled = available
+        favourite?.isEnabled = available
+        empty?.isHidden = !matches.isEmpty
+      }
+      controls.onChange?("", .all)
+    } else {
+      carousel.configure(items: items, selectedID: levelBrowserLevelSelections[selectionKey], reduceMotion: reducedMotion)
+      add.isEnabled = carousel.selectedItem?.isAvailable == true
     }
     levelBrowserCurrentLevelPage = page
     GameScreen.shared.present(
@@ -3915,6 +4054,37 @@ let achievementProgressKey = "ClassicAchievementProgress"
         guard let self, let page, self.levelBrowserCurrentLevelPage === page else { return }
         self.levelBrowserCurrentLevelPage = nil
       })
+  }
+
+  private func completedCatalogueLevels(in pack: LevelCataloguePack) -> Set<LevelCatalogueIdentity> {
+    let store = ArcadeStore.shared
+    if pack.engine == .neolemmix {
+      return store.records.clearedNeoLemmixLevels(profileID: store.playingProfileID).filter { $0.packID == pack.id }
+    }
+    if let archive = levelBrowserFanPacks[pack.id] {
+      let passed = FanLevelLibrary.Progress.passed
+      return Set(pack.levels.compactMap { level in
+        let label = level.levelName
+        let won = passed.contains(FanLevelLibrary.Progress.identifier(pack: archive, label: label))
+          || passed.contains(FanLevelLibrary.Progress.legacyIdentifier(pack: archive, label: label))
+        return won ? level.identity : nil
+      })
+    }
+    let journeyWins = GameProgressPreferences.learning(profileID: store.records.activeProfileID, sessionID: store.hotSeatID).completed
+    var wins = Set(pack.levels.map(\.identity)).intersection(journeyWins)
+    guard let first = pack.levels.first,
+          case let .classic(directory, set, _, _, _)? = levelBrowserRoutes[first.identity],
+          let data = savedClassicProgressData(for: (set: set, directory: directory)),
+          let saved = try? JSONDecoder().decode(ClassicGameFlow.Progress.self, from: data) else { return wins }
+    var flow = ClassicGameFlow(campaign: set.campaign)
+    flow.restore(set.migrateProgress(saved))
+    for rank in flow.ranks {
+      for (position, index) in rank.levelIndices.enumerated()
+        where flow.hasPassed(rank: rank.name, position: position) && pack.levels.indices.contains(index) {
+        wins.insert(pack.levels[index].identity)
+      }
+    }
+    return wins
   }
 
   private func resolveBrowserPack(
@@ -3981,6 +4151,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let page = GameMenuPage(title: L10n.text("Collections"), subtitle: ArcadeStore.shared.playingProfile?.initials ?? "")
     let favourite = page.addListAction(L10n.text("Favourites"), at: 0) { [weak self] in self?.openLevelCollection(recent: false) }
     page.addListAction(L10n.text("Recently Played"), at: 1) { [weak self] in self?.openLevelCollection(recent: true) }
+    page.addListAction(L10n.text("Playlists"), at: 2) { [weak self] in self?.openLevelBrowser(family: nil, showsPlaylists: true) }
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
     GameScreen.shared.present(page, owner: window, focus: favourite)
   }
@@ -4013,7 +4184,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let carousel = LevelCoverFlowView(frame: page.body.bounds)
     carousel.autoresizingMask = [.width, .height]; page.body.addSubview(carousel)
     let byID = Dictionary(uniqueKeysWithValues: entries.map { ($0.id.uuidString, $0) })
-    let start = page.addPrimaryAction(L10n.text("Start")) { [weak self, weak carousel] in
+    let start = page.addPrimaryAction(L10n.text("Play")) { [weak self, weak carousel] in
       guard let self, let id = carousel?.selectedItem?.id, let entry = byID[id],
             ArcadeStore.shared.playingProfileID == profile,
             self.playlistResolution(for: entry).canStart else { return }
@@ -4022,10 +4193,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     refreshBrowserPrimary = { [weak self, weak start, weak carousel] in
       guard let self else { return }
       let identity = carousel?.selectedItem.flatMap { byID[$0.id]?.identity }
-      start?.title = identity != nil && self.browserResume?.identity == identity ? L10n.text("Resume") : L10n.text("Start")
+      let title = identity.flatMap { self.previewRecovery(for: $0) } == nil ? L10n.text("Play") : L10n.text("Resume")
+      start?.title = title
+      carousel?.selectedActionTitle = title
       start?.needsDisplay = true
     }
     start.keyEquivalent = "\r"; start.keyEquivalentModifierMask = []
+    let details = page.addSecondaryAction(L10n.text("Details")) { [weak self, weak carousel] in
+      guard let self, let id = carousel?.selectedItem?.id, let entry = byID[id] else { return }
+      presentPreviewDetails(entry.identity)
+    }
     let favourite = page.addFavouriteAction()
     favourite.onPress = { [weak self, weak carousel, weak favourite, weak page] in
       guard let self, let page, let id = carousel?.selectedItem?.id, let entry = byID[id],
@@ -4035,8 +4212,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       if !recent { GameScreen.shared.dismiss(page); self.presentLevelCollection((try? LevelCollections.store(profileID: profile).favourites) ?? [], recent: false, profile: profile) }
     }
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
-    carousel.onSelectionChanged = { [weak self, weak start, weak favourite] item in
+    carousel.onSelectionChanged = { [weak self, weak start, weak details, weak favourite] item in
       self?.cancelPendingLevelPreparation(); start?.isEnabled = item.isAvailable
+      details?.isEnabled = byID[item.id].flatMap { self?.levelCatalogue.resolve($0.identity) } != nil
       self?.refreshBrowserPrimary?()
       if let entry = byID[item.id] { favourite?.showSaved(LevelCollections.isFavourite(entry, profileID: profile)) }
     }
@@ -4052,6 +4230,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         availabilityLabel: resolution.stateLabel)
     }, selectedID: nil, reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
     start.isEnabled = carousel.selectedItem?.isAvailable == true
+    details.isEnabled = carousel.selectedItem.flatMap { byID[$0.id] }.flatMap { levelCatalogue.resolve($0.identity) } != nil
     favourite.isEnabled = carousel.selectedItem != nil
     if let id = carousel.selectedItem?.id, let entry = byID[id] { favourite.showSaved(LevelCollections.isFavourite(entry, profileID: profile)) }
     if entries.isEmpty {
@@ -6169,12 +6348,79 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  private func previewRecovery(for identity: LevelCatalogueIdentity) -> RunRecovery? {
+    let saved = browserResume?.identity == identity ? browserResume?.checkpoint : menuRecovery
+    guard let saved, saved.sequence == nil, saved.fullQuest != true,
+      saved.profileID == ArcadeStore.shared.playingProfileID, saved.hotSeatID == ArcadeStore.shared.hotSeatID,
+      let route = levelBrowserRoutes[identity] else { return nil }
+    let matches: Bool
+    switch route {
+    case let .classic(directory, set, index, _, _):
+      matches = saved.dataSetID == dataSetID((set, directory)) && saved.levelIndex == index
+    case let .fan(pack, entry, _):
+      guard let fan = saved.fan, fan.queue.indices.contains(fan.index) else { return nil }
+      let selected = fan.queue[fan.index]
+      matches = saved.sourcePath == pack.path && selected.file == entry.file && selected.section == entry.section
+    case let .neolemmix(level, _, packID, _, _, _):
+      matches = saved.neo != nil && saved.neoPackID == packID && saved.neoLevelID == level.levelID
+    case let .lemmings2(root, selection, _, _):
+      matches = saved.sourcePath == root.path && saved.l2?.practice == nil && saved.l2?.progress.tribe == selection.tribe
+        && saved.l2?.progress.level == selection.level
+    case let .lemmings3(root, selection, _, _):
+      matches = saved.sourcePath == root.path && saved.l3?.progress.tribe == selection.tribe
+        && saved.l3?.progress.index == selection.level
+    }
+    return matches ? saved : nil
+  }
+
+  private func presentPreviewDetails(_ identity: LevelCatalogueIdentity) {
+    guard let entry = levelCatalogue.resolve(identity), let route = levelBrowserRoutes[identity] else { return }
+    let gameID: String, packID: String, levelID: String, source: String
+    switch route {
+    case let .classic(directory, set, index, _, _):
+      gameID = set.title?.rawValue ?? "lemmings"
+      packID = dataSetID((set, directory))
+      levelID = "level-\(index)"
+      source = set.campaign.levels[index].rank + " / " + String(set.campaign.levels[index].number)
+    case let .fan(archive, item, _):
+      gameID = "fan"; packID = archive.lastPathComponent
+      levelID = item.file + ":" + (item.section.map(String.init) ?? "whole-file")
+      source = archive.lastPathComponent + " / " + item.file
+    case let .neolemmix(level, _, pack, _, _, _):
+      gameID = "neolemmix"; packID = pack; levelID = level.levelID; source = level.url.lastPathComponent
+    case let .lemmings2(_, selection, _, _):
+      gameID = "lemmings2"; packID = "tribes"; levelID = "\(selection.tribe):\(selection.level)"
+      source = Lemmings2Campaign.tribeNames[selection.tribe]
+    case let .lemmings3(_, selection, _, _):
+      gameID = "lemmings3"; packID = "chronicles"; levelID = String(selection.tribe.firstLevel + selection.level)
+      source = selection.tribe.title
+    }
+    let store = ArcadeStore.shared
+    let runs = store.records.runs.filter { run in
+      guard let c = run.level.conditions else { return false }
+      return run.profileID == store.playingProfileID && c.gameID == gameID && c.packID == packID && c.levelID == levelID
+    }
+    let page = GameMenuPage(title: entry.levelName, subtitle: entry.packName)
+    let origin = [identity.originLabel, identity.engine.displayName, source].filter { !$0.isEmpty }.joined(separator: " / ")
+    page.setDetail(runs.isEmpty ? origin + "\n" + L10n.text("No records") : origin)
+    if let run = runs.last {
+      page.addSecondaryAction(L10n.text("Records")) { [weak self] in
+        ArcadeWindow.shared.showRecords(level: run.level, owner: self?.window, levels: [run.level], assisted: run.assisted)
+      }
+    }
+    if let movie = runs.reversed().lazy.compactMap({ store.replayURL(attemptID: $0.id) }).first {
+      page.addSecondaryAction(L10n.text("Replay")) { ReplayMovieWindow.shared.open(movie, title: entry.levelName, save: false) }
+    }
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    GameScreen.shared.present(page, owner: window)
+  }
+
   private func startBrowserLevel(
     _ identity: LevelCatalogueIdentity,
     sequenceRunID: UUID? = nil,
     recovery suppliedRecovery: RunRecovery? = nil
   ) {
-    let saved = sequenceRunID == nil && browserResume?.identity == identity ? browserResume?.checkpoint : nil
+    let saved = sequenceRunID == nil ? previewRecovery(for: identity) : nil
     let recovery = suppliedRecovery ?? saved
     if let sequenceRunID {
       let sequenceStore = sequencePlaylistStore ?? (try? playlistStore())
@@ -6273,6 +6519,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
         }
       }
     case let .fan(pack, fanEntry, archiveFingerprint):
+      if sequenceRunID == nil, let recovery {
+        restoreRun(recovery, fromBrowser: identity)
+        return
+      }
       guard let portsRoot = GameResources.resourceURL?.appendingPathComponent("Ports") else {
         playMusicForCurrentLevel()
         GameScreen.shared.message(entry.levelName,
@@ -6609,7 +6859,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return L10n.text("FAN LEMMINGS  \(passed)/\(total)  — COUNTING")
   }
 
-  private func homeContentRow(_ family: HomeContentFamily) -> String {
+  private func homeContentRow(_ family: HomeContentFamily) -> String? {
     if family == .fan { return fanHomeRow() }
     if family == .neolemmix {
       guard !neoLemmixSources.isEmpty else { return L10n.text("NEOLEMMIX  — NO PACKS") }
@@ -6627,7 +6877,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     let starters = family == .classic ? dataSets.filter { GameStarterContent.isStarter(directory: $0.directory) } : []
     guard !installed.isEmpty || !starters.isEmpty else {
-      return family.displayName.uppercased() + "  — NO DATA"
+      return nil
     }
     let wins = Set(homeLearningEntries().map(\.identity))
     let passed = installed.reduce(0) { count, item in
@@ -6647,7 +6897,52 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return store.records.profile(profileID)?.initials ?? L10n.text("LEM")
   }
 
+  private func homeContinueAction(journey: LevelSequenceRun?, sequence: LevelSequenceRun?,
+                                  recovery: RunRecovery?) -> HomeMenuAction? {
+    let attempt = { (run: LevelSequenceRun?) in
+      recovery.flatMap { run != nil && $0.sequence?.runID == run?.id ? $0.savedAt : nil }
+    }
+    var candidates: [ContinueResolver.Candidate] = []
+    if let journey {
+      candidates.append(.journey(position: journey.currentIndex + 1, total: journey.entries.count,
+                                 attemptSavedAt: attempt(journey)))
+    }
+    if let sequence, sequence.source != .playlist(LearningJourney.playlistID) {
+      candidates.append(.sequence(title: sequence.pool.summary, position: sequence.currentIndex + 1,
+                                  total: sequence.entries.count, attemptSavedAt: attempt(sequence)))
+    }
+    if let recovery, attempt(journey) == nil, attempt(sequence) == nil {
+      candidates.append(.savedLevel(savedAt: recovery.savedAt, owner: recovery.profileID))
+    }
+    switch ContinueResolver.resolve(candidates, journeyAvailable: true) {
+    case let .resume(candidate):
+      switch candidate {
+      case .savedLevel: return .resume
+      case .journey: return .fullQuest
+      case .sequence: return .resumeSequence
+      case .playlist: return nil
+      }
+    case .startJourney: return .fullQuest
+    case .none: return nil
+    }
+  }
+
+  /// Home: Continue, then Play, Hot Seat, Profile and Community. Play lists every route and game.
   private func homeMenuItems() -> [HomeMenuItem] {
+    let routes = playMenuItems()
+    if homeShowsPlay { return routes }
+    let continueItem = routes.first { if case .browse = $0.action { return false }; return true }
+    return [continueItem].compactMap { $0 } + [
+      HomeMenuItem(title: L10n.text("PLAY"), action: .play),
+      HomeMenuItem(title: ArcadeStore.shared.hotSeatIsActive
+        ? L10n.text("HOT SEAT: \(ArcadeStore.shared.records.profile(ArcadeStore.shared.playingProfileID)?.initials ?? "")")
+        : L10n.text("HOT SEAT"), action: .hotSeat),
+      HomeMenuItem(title: L10n.text("PROFILE"), action: .profile),
+      HomeMenuItem(title: L10n.text("COMMUNITY"), action: .community),
+    ]
+  }
+
+  private func playMenuItems() -> [HomeMenuItem] {
     let store = try? playlistStore()
     let journey = store?.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)?.run
     var items = [HomeMenuItem(title: MobileHomeArt.journeyAction(run: journey).title.uppercased(), action: .fullQuest)]
@@ -6665,46 +6960,31 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
       items.append(HomeMenuItem(title: L10n.text("RESUME LEVEL - \(players)"), action: .resume))
     }
+    // Continue leads Home and takes the initial selection. Other routes stay below it.
+    if let index = items.firstIndex(where: { $0.action == homeContinueAction(journey: journey, sequence: savedSequence, recovery: recovery) }) {
+      items.insert(items.remove(at: index), at: 0)
+    }
     items += HomeContentFamily.allCases.map {
-      HomeMenuItem(title: [.lemmings2, .lemmings3].contains($0) ? $0.displayName : homeContentRow($0), action: .browse($0))
+      HomeMenuItem(title: [.lemmings2, .lemmings3].contains($0) ? $0.displayName : (homeContentRow($0) ?? ($0.displayName.uppercased() + "  — NO DATA")), action: .browse($0))
     }
     return items
   }
 
-  private func showHomeSavedCounts() {
-    guard flow?.screen == .title, fanScreen == .off, !fanPlaying, !sequelIsActive else { return }
-    let telemetry = AnonymousTelemetry.shared
-    playfield.overlaySavedCounts = SavedLemmingsCounter(
-      local: telemetry.localSavedTotal,
-      global: telemetry.sharesCounts ? homeGlobalSaved : nil).text
-    playfield.needsDisplay = true
-  }
-
   private func homeSavedCountsChanged() {
-    if !AnonymousTelemetry.shared.sharesCounts {
-      homeSavedRefreshTask?.cancel()
-      homeSavedRefreshTask = nil
-      homeSavedRefreshID = UUID()
-      homeGlobalSaved = nil
-    }
     homeSavedLastRefreshAt = -Double.infinity
-    showHomeSavedCounts()
-    refreshHomeSavedCountsIfNeeded()
   }
 
   private func refreshHomeSavedCountsIfNeeded(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     guard flow?.screen == .title, fanScreen == .off, !fanPlaying, !sequelIsActive,
-      AnonymousTelemetry.shared.sharesCounts, homeSavedRefreshTask == nil,
+      homeSavedRefreshTask == nil,
       now - homeSavedLastRefreshAt >= 60 else { return }
     homeSavedLastRefreshAt = now
-    let requestID = UUID()
-    homeSavedRefreshID = requestID
     homeSavedRefreshTask = Task { [weak self] in
       let total = try? await AnonymousTelemetry.shared.publicSavedTotal()
-      guard let self, self.homeSavedRefreshID == requestID else { return }
+      guard let self else { return }
       self.homeSavedRefreshTask = nil
-      self.homeGlobalSaved = AnonymousTelemetry.shared.sharesCounts ? total : nil
-      self.showHomeSavedCounts()
+      self.homeGlobalSaved = total
+      ArcadeWindow.shared.arcadeView.worldwideSaved = total
     }
   }
 
@@ -7436,8 +7716,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     panel.terrainImage = playfield.levelImage
     syncPanelViewport()
     updateStatus()
-    playMusicForCurrentLevel()
-    try? music.resumeOutput(); soundtrack.resumeOutput(); dj.resumeOutput()
+    resultMusic.retire()
+    legacyMusicHandoffTask?.cancel()
+    legacyMusicHandoffTask = nil
+    legacyMusicHandoffPosition = nil
+    legacyMusicHandoffReversing = false
+    music.stop(); soundtrack.stop(); dj.stop()
+    startedMusicIdentity = nil
+    needsAttemptMusic = true
   }
 
   // MARK: - The game shell
@@ -7519,6 +7805,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.overlayTitle = L10n.text("LEMMINGS")
       menuRecovery = try? recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID)
       let homeItems = homeMenuItems()
+      playfield.overlayHomePlay = homeShowsPlay
       playfield.overlayHomeLeadingCount = homeItems.firstIndex { if case .browse = $0.action { return true }; return false } ?? homeItems.count
       playfield.overlayLines = homeItems.map(\.title)
       playfield.overlayHomeLogos = Dictionary(uniqueKeysWithValues: homeItems.enumerated().compactMap { index, item in
@@ -7539,14 +7826,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
         : nil
       launchChoice = max(0, min(launchChoice, playfield.homeActionCount - 1))
       playfield.overlayHighlight = launchChoice
-      showHomeSavedCounts()
-      refreshHomeSavedCountsIfNeeded()
+      playfield.overlaySavedCounts = nil
       refreshHomeBackdrop()
-      if !preservingLibraryMusic { playMusicForCurrentLevel() }
+      if !suppressLibraryTheme { playMusicForCurrentLevel() }
 
     case .rankSelect:
       phase = .briefing
-      if !preservingLibraryMusic { playMusicForCurrentLevel() }
+      if !suppressLibraryTheme { playMusicForCurrentLevel() }
       playfield.phase = .briefing
       playfield.overlayShowsLemmings = false
       playfield.overlayTitle = L10n.text("Choose a rating")
@@ -7735,7 +8021,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
         } else { openLevelBrowser(family: nil, showsJourney: true) }
       case .collections:
         presentLevelCollections()
+      case .play:
+        showHomePlay(true)
+      case .hotSeat:
+        // Every saved Hot Seat stays choosable. With none active, choose a session before the roster.
+        if !ArcadeStore.shared.hotSeatIsActive, !ArcadeStore.shared.savedHotSeats.isEmpty {
+          ArcadeWindow.shared.showSavedSessions(owner: window)
+        } else { showHotSeat() }
+      case .profile:
+        showProfileHub()
+      case .community:
+        playfield.onLeaderboards?()
       case let .browse(family):
+        if AppDistribution.isStore, !family.titles.isEmpty, homeContentRow(family) == nil {
+          showOwnedGameImport(promptForDownload: true)
+          return
+        }
         if family == .neolemmix, neoLemmixSources.isEmpty {
           chooseNeoLemmixPacks()
           return
@@ -7865,6 +8166,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func setStatus(_ text: String) {
+    panel.gameplayStatus = nil
     panel.statusText = text
     panel.needsDisplay = true
   }
@@ -7907,7 +8209,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
     } else if !fanPlaying, currentNxlvURL == nil, let flow, let rank = flow.currentRank {
       parts.append("\(rank.name.uppercased()) \(flow.currentNumber)/\(rank.levelIndices.count)")
     }
-    parts.append(L10n.text("SAVED \(session.saved)/\(session.required)"))
     if let conditions = arcadeLevel?.conditions {
       let best = ArcadeStore.shared.records.trolley.maximum(
         conditions: conditions, assisted: session.usedRewind)
@@ -7918,7 +8219,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
         parts.append("\(proven ? L10n.text("BEST") : L10n.text("KNOWN")) \(value)")
       }
     }
-    if session.released < session.total { parts.append(L10n.text("OUT \(session.released)/\(session.total)")) }
     panel.progressText = parts.joined(separator: "   ")
   }
 
@@ -7944,7 +8244,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
     updateFailureMood(at: now)
     refreshTurnDisplay()
     refreshProgressText()
-    refreshHomeSavedCountsIfNeeded(at: now)
     refreshHomeBackdrop()
     // Limit catch-up after sleep or a long modal interaction.
     let elapsed = min(0.25, max(0, lastStepTime.map { now - $0 } ?? displayInterval))
@@ -8007,6 +8306,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     effects.setViewport(playfield.soundViewport)
     if let session, phase == .playing { updateDJTelemetry(session) }
     if advanceFreshLevelStart(seconds: elapsed, visible: window.isKeyWindow) { return }
+    if needsAttemptMusic, phase == .playing, !isPaused, session?.isComplete == false {
+      needsAttemptMusic = false
+      playMusicForCurrentLevel()
+    }
     guard phase == .playing, let session else { return }
     // A nuke before any release completes the run without a tick.
     if session.isComplete { finishSessionIfNeeded(); return }
@@ -8155,15 +8458,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     if let conditions = arcadeLevel?.conditions,
        ArcadeStore.shared.solutionTargetIsPending(for: conditions) { return }
-    if session.didWin && isPaused {
-      userPausedMusic = false
-      try? music.resumeOutput(); soundtrack.resumeOutput(); dj.resumeOutput()
-    }
     if let arcadeLevel {
       AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
                                        attemptID: arcadeRunID, won: session.didWin, saved: session.saved)
     }
+    legacyMusicHandoffTask?.cancel()
+    legacyMusicHandoffTask = nil
+    legacyMusicHandoffPosition = nil
     updateDJTelemetry(session)
+    resultMusic.begin(attempt: arcadeRunID)
     let recordsPlayerArtifacts = sequencePlayingIdentity == nil
     runMovie.finish()
     do { try recoveryStore.clear(arcadeRunID) } catch { setStatus(L10n.text("Could not clear completed checkpoint: \(error.localizedDescription)")) }
@@ -8297,8 +8600,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       L10n.text("Home \(session.saved)/\(session.required)") + " (\(session.saved * 100 / max(1, session.total))%)",
       "\(session.rateLabel) \(session.rate)",
     ]
+    let active = session.lemmings.count
     let deathCounter = FailureMoodDecision.deathCounter(
-      saved: session.saved, active: session.lemmings.count,
+      saved: session.saved, active: active,
       unreleased: session.total - session.released, required: session.required, total: session.total,
       isComplete: session.isComplete, didWin: session.didWin)
     playfield.deathCountdownText = deathCounter.visible
@@ -8313,6 +8617,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
       parts.append(session.didWin ? L10n.text("COMPLETE — press N") : L10n.text("FAILED — press R"))
     }
     setStatus(parts.joined(separator: "   "))
+    panel.gameplayStatus = (.init(tick: 0, released: session.released, total: session.total,
+      saved: session.saved, required: session.required, remainingSeconds: session.remainingSeconds,
+      releaseRate: session.rate, isComplete: session.isComplete, didWin: session.didWin,
+      isEndingRun: session.isNuking, skills: []), .init(lostCount: max(0, session.released - session.saved - active),
+      deathCounter: deathCounter, engineIdentifier: session is NeoLemmixSession ? "neo-interval" : "classic",
+      clockLimitSeconds: panel.clockLimitSeconds))
   }
 
   // MARK: - Commands
@@ -8326,6 +8636,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       rateFeedback(from: oldRate, session: session)
     case let .skill(index):
       panel.selectedSkillIndex = index
+      gameplayKeyboard?.showControlTip(.assignment)
       // The gameplay reticle owns the selected-skill artwork. Redraw it as
       // soon as the panel selection changes, including while the run is paused.
       playfield.needsDisplay = true
@@ -8609,7 +8920,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func updateDJTelemetry(_ telemetry: AdaptiveDJEngine.Telemetry) {
-    guard activeMusic != .silent, activeMusic == .adaptiveDJ || isLearningJourneyActive else { return }
+    guard !telemetry.isComplete, activeMusic != .silent, activeMusic == .adaptiveDJ || isLearningJourneyActive else { return }
     if isLearningJourneyActive, !dj.isPlaying,
        RescueCelebration.isSecured(saved: telemetry.savedCount, required: telemetry.requiredCount,
                                   isComplete: telemetry.isComplete, didWin: telemetry.didWin) {
@@ -8637,7 +8948,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       startedMusicIdentity = nil
       return
     }
-    if showsMainMenu { playMenuTheme(); return }
+    if showsMainMenu { resultMusic.retire(); playMenuTheme(); return }
+    guard phase == .playing, !needsAttemptMusic, session?.isComplete == false else { return }
     let identity = arcadeRunID.uuidString + String(describing: activeMusic)
     guard startedMusicIdentity != identity else { return }
     startedMusicIdentity = identity
@@ -9117,7 +9429,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         owner: window,
         retry: { [weak self] in self?.retry() },
         next: { [weak self] in self?.advancePhase() },
-        replay: { [weak self] save in self?.runMovie.review(save: save) },
+        replay: runMovie.hasFrames ? { [weak self] save in self?.runMovie.review(save: save) } : nil,
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) },
         continueTitle: title,
         background: playfield.levelImage,
@@ -9133,7 +9445,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let hasNext = currentNxlvURL != nil ? nextNeoPackIdentity != nil : fanPlaying ? fanQueueIndex + 1 < fanQueue.count
       : flow.map { $0.currentNumber < ($0.currentRank?.levelIndices.count ?? 0) } ?? false
     ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retry() },
-      next: { [weak self] in self?.advancePhase() }, replay: { [weak self] save in self?.runMovie.review(save: save) },
+      next: { [weak self] in self?.advancePhase() }, replay: runMovie.hasFrames ? { [weak self] save in self?.runMovie.review(save: save) } : nil,
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) },
       continueTitle: hasNext ? L10n.text("Next level") : currentNxlvURL != nil ? L10n.text("Library") : fanPlaying ? L10n.text("Level select") : L10n.text("Continue"), background: playfield.levelImage, rewardVolume: effects.muted ? 0 : effects.volume,
       rewardVolumeProvider: { [weak self] in self?.effects.effectiveVolume ?? 0 },
@@ -9193,6 +9505,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   @objc private func showHotSeat() {
     ArcadeWindow.shared.showSession(owner: window)
+  }
+
+  private func showProfileHub() {
+    let page = GameMenuPage(title: L10n.text("Profile"), subtitle: ArcadeStore.shared.playingProfile?.initials ?? "")
+    let players = page.addListAction(L10n.text("Players"), at: 0) { [weak self] in self?.showProfiles() }
+    page.addListAction(L10n.text("Records"), at: 1) { [weak self] in self?.showLevelRecords() }
+    page.addListAction(L10n.text("Cloud saves"), at: 2) { [weak self] in self?.showCloudSaves() }
+    page.addListAction(L10n.text("Statistics"), at: 3) { [weak self] in
+      let store = ArcadeStore.shared
+      let model = MobileCareerArt.profileStatisticsPage(records: store.records, profileID: store.playingProfileID,
+        name: store.playingProfile?.initials ?? "", storageError: store.storageError)
+      let statistics = GameMenuPage(title: model.title, subtitle: model.subtitle)
+      statistics.setDetail(model.details.joined(separator: "\n"))
+      GameScreen.shared.present(statistics, owner: self?.window)
+    }
+    GameScreen.shared.present(page, owner: window, focus: players)
   }
 
   @objc private func showProfiles() {
@@ -9459,6 +9787,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     speedControl.onChange = { [weak self] in
       guard let self else { return }
       self.accumulator = 0
+      if self.speedControl.isFast { self.gameplayKeyboard?.showControlTip(.speed) }
       self.panel.isFastForward = self.isFastForward
       self.panel.speedChoiceLabel = self.speedControl.choiceLabel
       self.panel.speedLabel = self.speedControl.panelLabel
@@ -9613,6 +9942,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return nil
     }
     if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return nil }
+    // Escape on Play returns to Home, like Play's Back button.
+    if event.keyCode == 53, homeShowsPlay, flow?.screen == .title, phase != .playing, !GameScreen.shared.isPresented {
+      if !event.isARepeat { showHomePlay(false) }
+      return nil
+    }
 
     // A directly launched or restored game can outlive the campaign menu state.
     // Pause the active game before considering Space as a menu continuation.
@@ -9818,6 +10152,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return
     }
     playfield.endRewindCue()
+    gameplayKeyboard?.showControlTip(.rewind)
   }
 
   @discardableResult

@@ -46,7 +46,7 @@ extension MobileLibraryViewController {
         #else
         var page = MobileSettingsArt.groups(inGame: inGame)
         #endif
-        if !inGame { page.footer = [.init("settingsBack", L10n.text("Back"))] }
+        if !inGame { page.footer = [.init("settingsBack", L10n.text("Back"), backNavigation: true)] + MobileSettingsArt.aboutActions }
         return page
     }
     func controllerMappingsPage() -> GameFrontEnd.Page {
@@ -74,7 +74,7 @@ extension MobileLibraryViewController {
                                sharingAvailable: AnonymousTelemetry.shared.sharingAvailable, displayAvailable: true, inGame: inGame,
                                language: interfaceLanguage, respectMuteAvailable: respectMuteAvailable,
                                foldable: foldable, calendarDenied: calendarDenied,
-                               ghostsVisible: arcadeStore.hotSeatGhostsVisible)
+                               ghostsVisible: inGame && hotSeat != nil ? arcadeStore.hotSeatGhostsVisible : nil)
         if group == .graphics, GameArtworkResources.lixArtwork != nil {
             let source = GameArtworkSkin.lixEnabled ? "Lix" : L10n.text("Original")
             page.rows.insert(.init("setting.characterArtwork", L10n.text("Art set") + ": " + source,
@@ -91,14 +91,18 @@ extension MobileLibraryViewController {
                           .init("setting.tvTriggerFeedback", L10n.text("Adaptive triggers"), selected: input.triggerFeedback != false)]
         }
         #endif
-        if usesSettingsTabs && !inGame { page.footer = [.init("settingsBack", L10n.text("Back"))] }
+        if group == .deskClock, !inGame, deskClockAvailable {
+            page.rows.insert(.init("deskClock", L10n.text("Open Desk Clock")), at: 0)
+        }
+        if usesSettingsTabs && !inGame { page.footer = [.init("settingsBack", L10n.text("Back"), backNavigation: true)] + MobileSettingsArt.aboutActions }
         return page
     }
     func soundtrackPage() -> GameFrontEnd.Page {
             let libraries = MobileMusicLibraries.shared
             let packs = libraries.catalogue?.packs ?? []
             let status = libraries.failure ?? (libraries.isDownloading ? L10n.text("Downloading...") : "\(packs.filter { libraries.isBundled($0) || libraries.isInstalled($0) }.count)/\(packs.count)")
-            var page = GameFrontEnd.Page(title: L10n.text("Soundtrack"), subtitle: status,
+            let credit = L10n.text("WillLem arranged and produced the eight Christmas tracks referenced by the NeoLemmix packs Xmas Lemmings and Holiday Lemmings.")
+            var page = GameFrontEnd.Page(title: L10n.text("Soundtrack"), subtitle: [status, credit].joined(separator: "\n"),
                                 rows: packs.map { pack in
                                     let included = libraries.isBundled(pack)
                                     let percent = libraries.progress[pack.id].map { "  \(Int($0 * 100))%" }

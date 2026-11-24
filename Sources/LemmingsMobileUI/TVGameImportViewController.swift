@@ -1,5 +1,6 @@
 #if os(tvOS)
 import CoreImage.CIFilterBuiltins
+import NxlvKit
 import UIKit
 
 /**
@@ -31,7 +32,7 @@ import UIKit
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        titleLabel.text = "IMPORT OWNED GAMES"
+        titleLabel.text = L10n.text("Import owned games").uppercased()
         titleLabel.palette = .green
         titleLabel.maximumScale = 6
         addressLabel.maximumScale = 3
@@ -40,10 +41,10 @@ import UIKit
         qrView.contentMode = .scaleAspectFit
         qrView.layer.magnificationFilter = .nearest
         qrView.isAccessibilityElement = true
-        qrView.accessibilityLabel = "Transfer address QR code"
-        backButton.title = "BACK"
+        qrView.accessibilityLabel = L10n.text("Transfer address QR code")
+        backButton.title = L10n.text("Back").uppercased()
         backButton.onPress = { [weak self] in self?.dismiss(animated: true) }
-        restartButton.title = "NEW ADDRESS"
+        restartButton.title = L10n.text("New address").uppercased()
         restartButton.isPrimary = true
         restartButton.isHidden = true
         restartButton.onPress = { [weak self] in self?.startTransfer() }
@@ -55,7 +56,7 @@ import UIKit
         ) { [weak self] _ in
             MainActor.assumeIsolated {
                 self?.server?.stop()
-                self?.showFailure("Transfer paused. Choose a new address.")
+                self?.showFailure(L10n.text("Transfer paused. Choose a new address."))
             }
         })
     }
@@ -100,7 +101,7 @@ import UIKit
         server?.stop()
         restartButton.isHidden = true
         statusLabel.palette = .blue
-        statusLabel.text = "STARTING"
+        statusLabel.text = L10n.text("Starting").uppercased()
         let next = TVGameImportServer(importDirectory: importDirectory, helperURL: helperURL)
         server = next
         next.onState = { [weak self] state in
@@ -116,11 +117,11 @@ import UIKit
                    let cg = CIContext().createCGImage(image, from: image.extent) {
                     self.qrView.image = UIImage(cgImage: cg)
                 }
-                self.statusLabel.text = "SCAN OR OPEN THIS ADDRESS ON A PHONE OR COMPUTER"
+                self.statusLabel.text = L10n.text("Scan or open this address on a phone or computer").uppercased()
             case let .receiving(bytes):
-                self.statusLabel.text = "RECEIVED \(bytes / 1_024) KB"
+                self.statusLabel.text = L10n.text("Received \(bytes / 1_024) KB").uppercased()
             case .validating:
-                self.statusLabel.text = "CHECKING GAME FILES"
+                self.statusLabel.text = L10n.text("Checking game files").uppercased()
             case let .failed(message):
                 self.showFailure(message)
             }

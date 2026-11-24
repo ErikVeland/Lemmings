@@ -25,7 +25,7 @@ enum PanelButton: Equatable {
 
   var session: (any GameSession)? {
     didSet {
-      if oldValue !== session { nukeGesture.reset(); needsDisplay = true; window?.invalidateCursorRects(for: self) }
+      if oldValue !== session { clockLimitSeconds = session?.remainingSeconds; gameplayStatus = nil; nukeGesture.reset(); needsDisplay = true; window?.invalidateCursorRects(for: self) }
       toolTip = nil
     }
   }
@@ -42,6 +42,10 @@ enum PanelButton: Equatable {
   var onSpeedStep: ((Int, TimeInterval) -> Void)?
   private var speedPointerDown = false
   var onSpeedClick: ((TimeInterval, Int) -> Void)?
+  private(set) var clockLimitSeconds: Int?
+  var gameplayStatus: (MobileGameSnapshot, MobileHUDRenderer.StatusDetails)?
+  private weak var measuredInterface: MacInterfaceRenderer?
+  private var statusTypography: GameMenuTypography?
   var statusText = "" { didSet { if oldValue != statusText { needsDisplay = true } } }
   /// Right-hand half of the status strip. Tells the player where they are in the
   /// journey at a glance: rank position, rescue progress against the target and
@@ -191,10 +195,10 @@ enum PanelButton: Equatable {
         label = L10n.text("\(SkillVocabulary.title(value.name)), \(remaining)\((selectedSkillIndex == skill ? L10n.text(", selected") : ""))")
       case .pause: label = isPaused ? L10n.text("Resume") : L10n.text("Pause")
       case .nuke: label = session?.canUndoNuke == true ? L10n.text("Undo end run") : L10n.text("End run")
-      case .fastForward: label = isFastForward ? L10n.text("Return to normal speed") : L10n.text("Start fast-forward at ") + speedChoiceLabel
+      case .fastForward: label = L10n.text("Game speed \(speedLabel)")
       }
       let action = item.0
-      let element = accessibleElements.element(id: "button-\(index)", owner: owner, label: label, frame: transform(item.1)) { [weak self] in
+      let element = accessibleElements.element(id: "button-\(index)", owner: owner, label: label, frame: transform(action == .fastForward && variableSpeedEnabled ? SpeedPanelArt.boxes(in: item.1)[1] : item.1)) { [weak self] in
         guard let self, self.isEnabled(action) else { return }
         if action == .fastForward { self.onSpeedClick?(ProcessInfo.processInfo.systemUptime, 1) }
         else { self.onButton?(action) }
@@ -212,6 +216,17 @@ enum PanelButton: Equatable {
         }
       }
     }
+    if !minimapContentFrame.isEmpty, onMinimapPosition != nil {
+      let map = accessibleElements.element(id: "level-map", owner: owner, label: L10n.text("Level map"),
+                                           frame: transform(minimapFrame))
+      map.setAccessibilityRole(.slider)
+      map.readNumber = { [weak self] in Double(self?.visibleLevelRect.midX ?? 0) }
+      map.adjustValue = { [weak self] direction in
+        guard let self else { return }
+        onMinimapPosition?(GameMinimapArt.adjustedCentre(in: visibleLevelRect, levelSize: levelSize, direction: direction))
+      }
+      result.append(map)
+    }
     return result + timeline.accessibleControls(owner: owner, transform: transform)
   }
   var controlBounds: CGRect {
@@ -220,6 +235,7 @@ enum PanelButton: Equatable {
   }
 
   private var buttonFrames: [(PanelButton, CGRect)] = []
+  private var draggingMinimap = false
   private var minimapFrame = CGRect.zero
   private var rateValueFrame = CGRect.zero
   /// The minimap's drag area, below the timeline controls.
@@ -286,7 +302,11 @@ enum PanelButton: Equatable {
     panelScale = 2
     panelFrame = CGRect(x: deckX, y: 0, width: available, height: metrics.height - statusStripHeight)
     let timelineInRow = available >= 504
-    let mapWidth = min(800, max(0, available - (timelineInRow ? 0 : 140)))
+    let tierWidth = bounds.width >= 700 ? timeline.tierWidth : 0
+    let tierSpace = tierWidth > 0 ? tierWidth + 8 : 0
+    let mapWidth = min(800, max(0, available - tierSpace - (timelineInRow ? 0 : 140)))
+    timeline.tierFrame = tierWidth > 0
+      ? CGRect(x: deckX + mapWidth + 8, y: 4, width: tierWidth, height: 44) : .zero
     minimapFrame = CGRect(x: deckX, y: 4, width: mapWidth, height: 44)
     let skillY: CGFloat = 60
     let nukeWidth: CGFloat = metrics.inline ? 104 : 64
@@ -358,6 +378,7 @@ enum PanelButton: Equatable {
   }
 
   private func layoutTimeline() {
+    timeline.tierFrame = .zero
     let height = min(24 * max(1, panelScale / 2), minimapFrame.height * 0.6)
     timeline.frame = CGRect(x: minimapFrame.minX, y: minimapFrame.maxY - height, width: minimapFrame.width, height: height)
     minimapFrame.size.height -= height + 2
@@ -418,6 +439,7 @@ enum PanelButton: Equatable {
     guard !isMenuMode else { return }
     layoutControls()
     pointerIsDown = true
+    draggingMinimap = false
     if timeline.click(at: point) { return }
     if let match = buttonFrames.first(where: { $0.1.contains(point) }) {
       if match.0 == .fastForward, variableSpeedEnabled, let part = SpeedPanelControls.part(at: point, in: match.1) {
@@ -433,7 +455,8 @@ enum PanelButton: Equatable {
       return
     }
     nukeGesture.reset()
-    if minimapFrame.contains(point) { scrollFromMinimap(point) }
+    draggingMinimap = minimapContentFrame.contains(point)
+    if draggingMinimap { scrollFromMinimap(point) }
   }
 
   override func mouseUp(with event: NSEvent) { handlePointerUp(time: event.timestamp) }
@@ -457,6 +480,7 @@ enum PanelButton: Equatable {
   func handlePointerUp(time: TimeInterval = ProcessInfo.processInfo.systemUptime) {
     if speedPointerDown { speedPointerDown = false; onSpeedRelease?(time) }
     pointerIsDown = false
+    draggingMinimap = false
     stopRepeating()
   }
 
@@ -519,16 +543,14 @@ enum PanelButton: Equatable {
   func handlePointerDrag(at point: CGPoint) {
     guard !isMenuMode else { return }
     layoutControls()
-    if minimapFrame.contains(point) { scrollFromMinimap(point) }
+    if draggingMinimap { scrollFromMinimap(point, clamp: true) }
   }
 
-  private func scrollFromMinimap(_ point: CGPoint) {
-    let map = minimapContentFrame
-    guard map.width > 0, map.height > 0, levelSize.width > 0 else { return }
-    let fraction = max(0, min(1, (point.x - map.minX) / map.width))
-    onMinimapScroll?(Double(fraction) * levelSize.width)
-    let vertical = max(0, min(1, (point.y - map.minY) / map.height))
-    onMinimapPosition?(CGPoint(x: fraction * levelSize.width, y: vertical * levelSize.height))
+  private func scrollFromMinimap(_ point: CGPoint, clamp: Bool = false) {
+    guard let target = GameMinimapArt.levelPoint(at: point, content: minimapContentFrame,
+        levelSize: levelSize, clamp: clamp) else { return }
+    onMinimapScroll?(target.x)
+    onMinimapPosition?(target)
   }
 
   // MARK: - Drawing
@@ -596,12 +618,12 @@ enum PanelButton: Equatable {
   }
 
   private func drawSpeedControls() {
-    guard variableSpeedEnabled, let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
+    guard let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
     // Match the skill sockets' bevel so the speed box reads as the same stone.
     SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward,
       bevelPixel: max(1, panelScale / 2), backdrop: rockImage(fitting: frame.size), monochrome: isMonochrome,
       drawBackground: { [self] in drawStoneButton(frame, selected: isFastForward, button: .fastForward) },
-      textInset: 2,
+      textInset: 2, arrows: variableSpeedEnabled,
       text: { [self] text, box in drawGameLabel(text, in: box, maxPixelScale: .greatestFiniteMagnitude) })
   }
 
@@ -1053,6 +1075,25 @@ enum PanelButton: Equatable {
   private func drawStatus() {
     let y = isMenuMode ? inset : panelFrame.maxY + 4
     let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
+    if !isMenuMode, let (snapshot, details) = gameplayStatus {
+      if measuredInterface !== macInterface {
+        measuredInterface = macInterface
+        statusTypography = measuredInterface.map { GameMenuTypography(interface: $0.interface) }
+      }
+      let locationWidth = box.width >= 900 ? min(320, floor(box.width / 4)) : 0
+      let stats = CGRect(x: box.minX, y: box.minY, width: box.width - locationWidth, height: box.height)
+      let fields = MobileHUDRenderer.statusFields(in: stats, snapshot: snapshot, details: details,
+        engineIdentifier: details.engineIdentifier, paused: isPaused,
+        speed: Double(speedLabel.replacingOccurrences(of: "×", with: "")) ?? 1, typography: statusTypography)
+      for field in fields {
+        drawStatusField(field.text, in: field.frame, scale: field.scale, face: field.face)
+      }
+      if locationWidth > 0 {
+        drawStatusField(progressText, in: CGRect(x: stats.maxX + 8, y: box.minY,
+          width: locationWidth - 8, height: box.height), scale: 1, face: .small)
+      }
+      return
+    }
     let text = gameText(statusText)
     if let macInterface, let font = macInterface.font(.small), font.covers(text), font.height(of: text) <= Int(box.height) {
       macInterface.menuLine(text, in: box, alignment: .left, palette: panelPalette)
@@ -1064,6 +1105,18 @@ enum PanelButton: Equatable {
       NSGraphicsContext.restoreGraphicsState()
     }
     drawProgress(in: box, y: y)
+  }
+
+  private func drawStatusField(_ text: String, in box: CGRect, scale: CGFloat, face: GameMenuTypography.Face) {
+    NSGraphicsContext.saveGraphicsState()
+    defer { NSGraphicsContext.restoreGraphicsState() }
+    NSBezierPath(rect: box).addClip()
+    let text = gameText(text)
+    if let macInterface, let font = macInterface.font(face), font.covers(text), font.height(of: text) <= Int(box.height) {
+      macInterface.menuLine(text, in: box, face: face, alignment: .left, palette: panelPalette)
+    } else {
+      GamePixelText.draw(text, in: box, maxScale: scale, palette: panelPalette, alignment: .left)
+    }
   }
 
   /// GamePixelText fits `width + 1` columns per scale step, so the box must too.

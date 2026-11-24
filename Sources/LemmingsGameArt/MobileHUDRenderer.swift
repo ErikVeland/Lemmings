@@ -3,13 +3,15 @@ import Foundation
 import NxlvKit
 import LemmingsMobileCore
 
-public enum MobileHUDAction: Equatable, Sendable {
+public enum MobileHUDAction: Hashable, Sendable {
     case releaseRate(Int)
     case skill(Int)
     case pause
     case endRun
     case speed
     case speedStep(Int)
+    case speedTier(Double)
+    case speedPicker
     case rewind
     case stepBackward
     case step
@@ -20,13 +22,17 @@ public enum MobileHUDAction: Equatable, Sendable {
 @MainActor public final class MobileHUDRenderer {
     /// The controller supplies the Mac's shared failure decision using live engine counts.
     public struct StatusDetails: Equatable {
+        public let clockLimitSeconds: Int?
+        public let populationLimit: Int?
         public let lost: Int
         public let deathCounter: String
         public let accessibility: String
         public let engineIdentifier: String
 
         public init(lostCount: Int,
-                    deathCounter: (visible: String, accessibility: String), engineIdentifier: String = "classic") {
+                    deathCounter: (visible: String, accessibility: String), engineIdentifier: String = "classic", clockLimitSeconds: Int? = nil, populationLimit: Int? = nil) {
+            self.populationLimit = populationLimit
+            self.clockLimitSeconds = clockLimitSeconds
             lost = max(0, lostCount)
             self.deathCounter = deathCounter.visible
             self.engineIdentifier = engineIdentifier
@@ -163,9 +169,9 @@ public enum MobileHUDAction: Equatable, Sendable {
             ? L10n.text("Undo end run")
             : (endRunArmed ? L10n.text("Confirm end run") : L10n.text("End run"))
         descriptors.append((.endRun, 11, endRunLabel))
-        descriptors.append((.speed, nil, L10n.text("Game speed \(Self.speedLabel(speed)), tap to toggle, hold to accelerate")))
+        descriptors.append((.speed, nil, L10n.text("Speed \(Self.speedValue(speed))X")))
         if layout.supportsRewind {
-            descriptors.append((.rewind, nil, L10n.text("Rewind two seconds")))
+            descriptors.append((.rewind, nil, L10n.text("Rewind")))
             descriptors.append((.stepBackward, nil, L10n.text("Step backward one tick")))
         }
         descriptors.append((.step, nil, L10n.text("Advance one tick")))
@@ -192,6 +198,17 @@ public enum MobileHUDAction: Equatable, Sendable {
                               accessibilityLabel: L10n.text("Slower"), speedInputFrame: nil))
             items.append(Item(action: .speedStep(1), frame: layout.speedArrows[1], sourceCell: nil,
                               accessibilityLabel: L10n.text("Faster"), speedInputFrame: nil))
+        }
+        if layout.speedTiers.isEmpty, !layout.speedTierFrame.isEmpty {
+            items.append(Item(action: .speedPicker, frame: layout.speedTierFrame, sourceCell: nil,
+                              accessibilityLabel: L10n.text("Choose speed"), speedInputFrame: nil))
+        }
+        for (index, tier) in layout.speedTiers.enumerated() {
+            let strip = layout.speedTierFrame
+            let width = strip.width / CGFloat(layout.speedTiers.count)
+            let frame = CGRect(x: strip.minX + CGFloat(index) * width, y: strip.minY, width: width, height: strip.height)
+            items.append(Item(action: .speedTier(tier), frame: frame, sourceCell: nil,
+                              accessibilityLabel: L10n.text("Speed \(Self.speedValue(tier))X"), speedInputFrame: nil))
         }
         return items
     }
@@ -298,11 +315,11 @@ public enum MobileHUDAction: Equatable, Sendable {
                 drawIconButton(item, context: context)
             case .menu:
                 drawTextButton(item, context: context)
-            case .speedStep:
+            case .speedStep, .speedTier, .speedPicker:
                 break
             case let .skill(index):
                 if let icon = skillIcons[safe: index] ?? nil { drawNativeSkill(item, icon: icon, context: context, pixel: panel.bevel) }
-                else if readOnly { context.setFillColor(CGColor(gray: 0, alpha: 0.65)); context.fill(item.frame) }
+                else if readOnly || snapshot.skills[safe: index]?.hasSupply == false { context.setFillColor(CGColor(gray: 0, alpha: 0.65)); context.fill(item.frame) }
             case .releaseRate:
                 drawRateButton(item, frame: item.frame, pixel: panel.bevel, context: context)
             }
@@ -374,7 +391,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         let fit = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
         let width = CGFloat(icon.width) * fit, height = CGFloat(icon.height) * fit
         context.saveGState()
-        context.setAlpha(readOnly || snapshot.skills[safe: index]?.count == 0 ? 0.35 : 1)
+        context.setAlpha(readOnly || snapshot.skills[safe: index]?.hasSupply == false ? 0.35 : 1)
         GameStoneArt.drawImage(icon, in: CGRect(x: floor(art.midX - width / 2), y: SkillArtworkAlignment.originY(for: icon, scale: fit, centredIn: art), width: width, height: height), context: context)
         context.restoreGState()
     }
@@ -437,22 +454,15 @@ public enum MobileHUDAction: Equatable, Sendable {
         if layout.speedArrows.count == 2 {
             let left = layout.speedArrows[0], right = layout.speedArrows[1]
             boxes = [left, CGRect(x: left.maxX, y: frame.minY, width: right.minX - left.maxX, height: frame.height), right]
-        } else if layout.portrait != nil {
-            drawGameLabel(Self.speedLabel(speed), in: CGRect(x: frame.minX + 4, y: frame.minY + 4,
-                width: frame.width - 8, height: 22), context: context)
-            if frame.height >= 70, let glyph = Self.glyphImage(.fastForward, fitting: CGSize(width: 28, height: 24)) {
-                GameStoneArt.drawImage(glyph.image, in: CGRect(x: floor(frame.midX - glyph.size.width / 2),
-                    y: floor(frame.midY - glyph.size.height / 2), width: glyph.size.width, height: glyph.size.height), context: context)
-            }
-            GamePixelTypography.draw(L10n.text("HOLD"), in: CGRect(x: frame.minX + 4, y: frame.maxY - 16,
-                width: frame.width - 8, height: 10), context: context, typography: typography,
-                palette: active ? .green : .blue, maximumScale: 1, bitmapOnly: true)
+        } else {
+            let well = frame.insetBy(dx: 3, dy: 2)
+            drawGameLabel(Self.speedLabel(speed), in: SpeedPanelArt.multiplierBox(in: well, context: context), context: context)
             return
-        } else { boxes = SpeedPanelArt.boxes(in: frame) }
+        }
         SpeedPanelArt.drawArrow(in: context, box: boxes[0], pointsRight: false)
         SpeedPanelArt.drawArrow(in: context, box: boxes[2], pointsRight: true)
         let label = boxes[1].insetBy(dx: frame.height >= 60 ? 4 * pixel : pixel, dy: 6 * pixel)
-        drawGameLabel(Self.speedLabel(speed), in: label, context: context)
+        drawGameLabel(Self.speedLabel(speed), in: SpeedPanelArt.multiplierBox(in: label, context: context), context: context)
     }
 
     private func outline(_ frame: CGRect, context: CGContext) {
@@ -495,7 +505,7 @@ public enum MobileHUDAction: Equatable, Sendable {
             let well = GameStoneArt.well(visibleFrame, pixel: 1)
             context.saveGState()
             context.clip(to: well)
-            if readOnly { context.setAlpha(0.35) }
+            if readOnly || snapshot.skills[safe: index]?.hasSupply == false { context.setAlpha(0.35) }
             let nativePanel = selected && !readOnly ? pressedPanelImage : panelImage
             let nativeGlyph = pressedPanelImage == nil ? nil
                 : nativePanel.flatMap { Lemmings3PanelArt.skillGlyph(in: $0, index: index) }
@@ -525,6 +535,23 @@ public enum MobileHUDAction: Equatable, Sendable {
             else { drawTextButton(item, context: context) }
         case .rewind, .stepBackward, .step:
             drawIconButton(item, context: context)
+        case .speedPicker:
+            GameControlGroupArt.draw(in: context, frame: frame, group: frame, selected: false, face: .speed)
+            drawGameLabel(L10n.text("Speed"), in: frame.insetBy(dx: 4, dy: 6).offsetBy(dx: 0, dy: -3), context: context)
+            context.setFillColor(CGColor(gray: 1, alpha: 1))
+            for row in 0..<3 {
+                let half = CGFloat(2 - row)
+                context.fill(CGRect(x: floor(frame.midX) - half, y: frame.maxY - 9 + CGFloat(row), width: 2 * half + 1, height: 1))
+            }
+        case let .speedTier(tier):
+            let chosen = speed == tier
+            GameControlGroupArt.draw(in: context, frame: frame, group: layout.speedTierFrame,
+                                     selected: chosen, face: .speed)
+            drawGameLabel(Self.speedLabel(tier), in: frame.insetBy(dx: 3, dy: 6), context: context)
+            if chosen {
+                context.setFillColor(CGColor(gray: 1, alpha: 1))
+                context.fill(CGRect(x: frame.midX - 8, y: frame.maxY - 5, width: 16, height: 2))
+            }
         case .speedStep:
             break
         }
@@ -829,7 +856,7 @@ public enum MobileHUDAction: Equatable, Sendable {
 
     /// Prioritise rescue progress and the clock. Extra statistics use available horizontal space.
     /// Each statistic owns a fixed slot sized for its widest possible value, and its text stays
-    /// centred in that slot. Changing digits, states or speeds never moves another statistic.
+    /// left aligned in that slot. Changing digits, states or speeds never moves another statistic.
     public static func statusFields(in frame: CGRect, snapshot: MobileGameSnapshot, details: StatusDetails?,
                                     engineIdentifier: String, paused: Bool, speed: Double,
                                     typography: GameMenuTypography?) -> [StatusField] {
@@ -838,7 +865,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         let gap: CGFloat = compact ? 8 : 20
         let row = frame.insetBy(dx: 6, dy: 2)
         let percent = snapshot.saved * 100 / max(1, snapshot.total)
-        let minutes = max(0, snapshot.remainingSeconds ?? 0) / 60
+        let minutes = max(0, details?.clockLimitSeconds ?? 5999) / 60
         let time = snapshot.remainingSeconds.map { String(format: "%d:%02d", max(0, $0) / 60, max(0, $0) % 60) } ?? "--:--"
         // Narrow bars abbreviate labels, but retain the regular game lettering.
         let bitmap = typography == nil || row.height < 12
@@ -847,12 +874,13 @@ public enum MobileHUDAction: Equatable, Sendable {
             return typography?.width(of: GameMenuTypography.menuText(text), face: face, scale: Int(scale)) ?? 0
         }
         // Slot templates use the widest digit at the largest digit count a value can reach.
-        let digit = (0...9).map(String.init).max { width($0) < width($1) } ?? "8"
+        let digit = bitmap ? Self.pixelDigit : typography?.smallNumericDigit ?? "8"
         func wide(_ bound: Int) -> String { String(repeating: digit, count: String(max(0, bound)).count) }
-        let count = wide(max(snapshot.total, snapshot.saved, snapshot.released))
+        let population = details?.populationLimit ?? snapshot.total
+        let count = wide(population)
         let clockTemplate = "\(wide(max(10, minutes))):\(digit)\(digit)"
         let clock = compact ? time : L10n.text("TIME \(time)")
-        let clockWidth = max(width(clock), width(compact ? clockTemplate : L10n.text("TIME \(clockTemplate)")))
+        let clockWidth = max(width(compact ? "--:--" : L10n.text("TIME --:--")), width(compact ? clockTemplate : L10n.text("TIME \(clockTemplate)")))
         let scoreScale: CGFloat = bitmap ? 2 : 1
         let scoreFace: GameMenuTypography.Face = !bitmap && frame.width >= 1200 ? .large : .small
         func scoreText(_ saved: String, _ percent: String, full: Bool) -> String {
@@ -860,15 +888,14 @@ public enum MobileHUDAction: Equatable, Sendable {
             return compact ? "\(saved)/\(snapshot.required) \(percent)%"
                 : L10n.text("HOME \(saved)/\(snapshot.required)") + " (\(percent)%)"
         }
-        let full = width(scoreText(count, wide(100), full: true), scale: scoreScale, face: scoreFace) + clockWidth + gap <= row.width
+        let scoreDigit = scoreFace == .large ? typography?.largeNumericDigit ?? digit : digit
+        let scoreCount = String(repeating: scoreDigit, count: count.count)
+        let percentBound = String(repeating: scoreDigit, count: 3)
+        let full = width(scoreText(scoreCount, percentBound, full: true), scale: scoreScale, face: scoreFace) + clockWidth + gap <= row.width
         let score = scoreText("\(snapshot.saved)", "\(percent)", full: full)
-        let scoreSlot = min(row.width, width(scoreText(count, wide(100), full: full), scale: scoreScale, face: scoreFace))
+        let scoreSlot = min(row.width, width(scoreText(scoreCount, percentBound, full: full), scale: scoreScale, face: scoreFace))
         let scoreFrame = CGRect(x: row.maxX - scoreSlot, y: row.minY, width: scoreSlot, height: row.height)
-        func centred(_ text: String, in slot: CGRect, scale: CGFloat = 1, face: GameMenuTypography.Face = .small) -> CGRect {
-            let extent = min(slot.width, width(text, scale: scale, face: face))
-            return CGRect(x: floor(slot.midX - extent / 2), y: slot.minY, width: extent, height: slot.height)
-        }
-        var fields = [StatusField(id: "score", text: score, frame: centred(score, in: scoreFrame, scale: scoreScale, face: scoreFace),
+        var fields = [StatusField(id: "score", text: score, frame: scoreFrame,
                                   palette: .green, bitmapOnly: bitmap, scale: scoreScale, face: scoreFace)]
         let available = max(0, scoreFrame.minX - gap - row.minX)
         guard available >= clockWidth else { return fields }
@@ -876,25 +903,27 @@ public enum MobileHUDAction: Equatable, Sendable {
         let states = [L10n.text("COMPLETE"), L10n.text("FAILED"), L10n.text("NUKING"), L10n.text("PAUSED")]
         let state = snapshot.isComplete ? (snapshot.didWin ? states[0] : states[1])
             : snapshot.isEndingRun ? states[2] : paused ? states[3] : ""
-        let speeds = ["\(digit)\(digit)X", "\(digit).\(digit)X"].map { L10n.text("SPEED \($0)") }
+        let speedWidth = width(L10n.text("SPEED \(digit)\(digit).\(digit)X"))
         var candidates: [(id: String, text: String, slot: CGFloat)] = [("time", clock, clockWidth),
             ("state", state, states.map { width($0) }.max() ?? 0)]
         if let details {
-            candidates.append(("allowance", details.deathCounter,
-                max(width("SAFE"), width("\(count)/\(count) 💀"), width(details.deathCounter))))
+            let allowance = wide(max(0, min(Int.max - 1, population) - snapshot.required + 1))
+            candidates.append(("allowance", details.deathCounter, max(width("SAFE"), width("\(allowance)/\(allowance) 💀"))))
         }
         candidates.append(("out", L10n.text("OUT \(snapshot.released)/\(snapshot.total)"),
-                           width(L10n.text("OUT \(count)/\(snapshot.total)"))))
+                           width(L10n.text("OUT \(count)/\(count)"))))
         if let details { candidates.append(("lost", L10n.text("LOST \(details.lost)"), width(L10n.text("LOST \(count)")))) }
         if engineIdentifier == "lemmings3" {
             candidates.append(("reserve", L10n.text("LEFT \(max(0, snapshot.total - snapshot.released))"),
                                width(L10n.text("LEFT \(count)"))))
         }
         if let rate = snapshot.releaseRate {
-            candidates.append(("rate", L10n.text("RATE \(rate)"), width(L10n.text("RATE \(wide(max(99, rate)))"))))
+            let interval = engineIdentifier == "neo-interval"
+            let title = interval ? L10n.text("Interval") : L10n.text("Rate")
+            candidates.append(("rate", "\(title) \(rate)", width("\(title) \(wide(interval ? 999 : 100))")))
         }
         let speedText = L10n.text("SPEED \(speedLabel(speed))")
-        candidates.append(("speed", speedText, max(width(speedText), speeds.map { width($0) }.max() ?? 0)))
+        candidates.append(("speed", speedText, speedWidth))
         var selected: [(id: String, text: String, slot: CGFloat)] = []
         var used: CGFloat = 0
         for candidate in candidates {
@@ -908,7 +937,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         for candidate in selected {
             let slot = CGRect(x: floor(x), y: row.minY, width: candidate.slot, height: row.height)
             if !candidate.text.isEmpty {
-                fields.append(StatusField(id: candidate.id, text: candidate.text, frame: centred(candidate.text, in: slot),
+                fields.append(StatusField(id: candidate.id, text: candidate.text, frame: slot,
                     palette: .blue, bitmapOnly: bitmap, scale: 1, face: .small))
             }
             x += candidate.slot + spacing
@@ -923,7 +952,7 @@ public enum MobileHUDAction: Equatable, Sendable {
         for field in fields {
             if field.bitmapOnly {
                 GamePixelTypography.draw(field.text, in: field.frame, context: context, typography: nil,
-                    palette: field.palette, maximumScale: field.scale, bitmapOnly: true)
+                    palette: field.palette, maximumScale: field.scale, alignment: .left, bitmapOnly: true)
             } else { drawStatusLabel(field.text, in: field.frame, palette: field.palette, face: field.face, context: context) }
             if field.id == "score", snapshot.didWin {
                 context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.10, alpha: 1))
@@ -972,13 +1001,18 @@ public enum MobileHUDAction: Equatable, Sendable {
     }
 
     private static func speedLabel(_ speed: Double) -> String {
-        speed.rounded() == speed ? "\(Int(speed))X" : String(format: "%.1fX", speed)
+        speedValue(speed) + "X"
+    }
+
+    private static func speedValue(_ speed: Double) -> String {
+        speed.rounded() == speed ? "\(Int(speed))" : String(format: "%.1f", speed)
     }
 
     private static func cgRect(_ rect: MobileRect) -> CGRect {
         CGRect(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
     }
 
+    private static let pixelDigit = (0...9).map(String.init).max { GamePixelTypography.width(of: $0) < GamePixelTypography.width(of: $1) } ?? "8"
     private static var glyphCache: [String: (image: CGImage, size: CGSize)] = [:]
 
     private static func glyphImage(_ glyph: PanelGlyphArt, fitting box: CGSize, transparentRock: Bool = false) -> (image: CGImage, size: CGSize)? {

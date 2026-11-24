@@ -294,7 +294,9 @@ struct ReticleFeedback {
   var onRecords: (() -> Void)?
   var onLeaderboards: (() -> Void)?
   var onPlaylists: (() -> Void)?
-  var onDonate: (() -> Void)?
+  /// The title screen shows Play: routes and games under a Play heading, with Back to Home.
+  var overlayHomePlay = false
+  var onHomeBack: (() -> Void)?
   var overlayShowsSettingsButton = false
   var onSettings: (() -> Void)?
   var overlayAvailableUpdate: String?
@@ -305,15 +307,15 @@ struct ReticleFeedback {
         case records
         case leaderboards
         case playlists
-        case donate
+        case homeBack
 
         var accessibilityLabel: String {
             switch self {
             case .profiles: return L10n.text("Player profiles")
             case .records: return L10n.text("Records")
             case .leaderboards: return L10n.text("Leaderboards")
-            case .playlists: return L10n.text("Playlists")
-            case .donate: return L10n.text("Donate")
+            case .playlists: return L10n.text("Collections")
+            case .homeBack: return L10n.text("Back")
             }
         }
     }
@@ -324,7 +326,7 @@ struct ReticleFeedback {
         case .records: onRecords?()
         case .leaderboards: onLeaderboards?()
         case .playlists: onPlaylists?()
-        case .donate: onDonate?()
+        case .homeBack: onHomeBack?()
         }
     }
   /// Which overlay line is currently chosen, when the screen offers a choice.
@@ -661,7 +663,7 @@ struct ReticleFeedback {
 
   private var usesTrails: Bool {
     hdEffectsEnabled && !reduceMotion && phase == .playing
-      && (isFastForward || (!reduceFlashes && speedTrails.isRewinding))
+      && (isFastForward || (!reduceFlashes && speedTrails.isRewinding)) && MacFXPerformance.shared.allowsSpeedEffects
   }
 
   /// Updates the transport cue after a deterministic history seek.
@@ -878,16 +880,16 @@ struct ReticleFeedback {
        }) {
       return builder
     }
-    let eligible = candidates.filter { session.canAssign(skillIndex: skill, to: $0.id) }
-    if favorBombBlockers, name == "bomber", let blocker = eligible.first(where: { $0.pose == .blocking }) {
+    func eligible(_ actor: SessionLemming) -> Bool { session.canAssign(skillIndex: skill, to: actor.id) }
+    if favorBombBlockers, name == "bomber", let blocker = candidates.first(where: { $0.pose == .blocking && eligible($0) }) {
       return blocker
     }
-    if favorBuilders, let worker = eligible.first(where: {
-      $0.isPerformingSkill && !(name == "bomber" && !favorBombBlockers && $0.pose == .blocking)
+    if favorBuilders, let worker = candidates.first(where: {
+      $0.isPerformingSkill && !(name == "bomber" && !favorBombBlockers && $0.pose == .blocking) && eligible($0)
     }) {
       return worker
     }
-    guard let nearest = eligible.first else { return nil }
+    guard let nearest = candidates.first(where: eligible) else { return nil }
     if favorApproachingLemmings, nearest.pose == .building {
       // A follower behind the builder can sit outside the click's own pick
       // box, so look for one near the builder instead of near the click.
@@ -907,8 +909,8 @@ struct ReticleFeedback {
         LemmingApproachTargeting.isApproaching(x: lemming.x, direction: lemming.facingLeft ? -1 : 1,
           clickX: Double(point.x), wallDirection: wallDirection)
       }
-      if !approaching(nearest), let preferred = eligible.first(where: {
-        $0.facingLeft != nearest.facingLeft && approaching($0)
+      if !approaching(nearest), let preferred = candidates.first(where: {
+        $0.facingLeft != nearest.facingLeft && approaching($0) && eligible($0)
       }) { return preferred }
     }
     return nearest
@@ -1149,22 +1151,25 @@ struct ReticleFeedback {
   private func homeOverlay() -> (page: GameFrontEnd.Page, layout: GameFrontEnd.Layout, scale: CGFloat) {
     let rows = overlayLines.enumerated().map { index, title in
       var action = GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
-        primary: index == overlayHighlight, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
+        primary: index == 0, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
       action.titleRuns = index < overlayHomeLeadingCount ? GameSemanticText.resume(title)
         : action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .blue)]
       return action
     }
-    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Progress")), .init("leaderboards", L10n.text("Leaderboards")), .init("playlists", L10n.text("Collections / Playlists")), GameSupport.menuAction]
+    // Home's destinations are rows. Play keeps Back and Collections. Settings stays in the header.
+    var footer: [GameFrontEnd.Action] = overlayHomePlay
+      ? [.init("homeBack", L10n.text("Back")), .init("playlists", L10n.text("Collections"))] : []
     if overlayShowsSettingsButton { footer.append(.init("settings", L10n.text("Settings"))) }
     if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", L10n.text("Update"))) }
     for index in footer.indices {
       footer[index].selected = overlayHighlight == rows.count + index
       footer[index].busy = footer[index].id == "whatsNew" && overlayUpdateIsBusy
     }
-    var page = GameFrontEnd.Page(title: L10n.text("Lemmings"),
-      home: true, rows: rows, footer: footer,
-      footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayProfileInitials ?? "")
-    page.homeNextPlayerIndex = overlayNextPlayerIndex
+    var page = GameFrontEnd.Page(title: overlayHomePlay ? L10n.text("Play") : L10n.text("Lemmings"),
+      home: !overlayHomePlay, rows: rows, footer: footer,
+      footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayHomePlay ? "" : overlayProfileInitials ?? "")
+    page.gameLibrary = overlayHomePlay
+    page.homeNextPlayerIndex = overlayHomePlay ? nil : overlayNextPlayerIndex
     let scale = max(1, min(2, floor(min(bounds.width / 1400, homeViewport.height / 1000))))
     return (page, GameFrontEnd.layout(page, width: min(1100, bounds.width / scale),
       minimumHeight: homeViewport.height / scale), scale)
@@ -1495,8 +1500,7 @@ struct ReticleFeedback {
       let buttons: [(action: OverlayFooterAction, title: String)] = [
           (.profiles, L10n.text("PROFILES")),
           (.records, L10n.text("RECORDS")),
-          (.playlists, L10n.text("PLAYLISTS")),
-          (.donate, L10n.text("Donate"))
+          (.playlists, L10n.text("PLAYLISTS"))
       ]
       let count = CGFloat(buttons.count)
       // Let the roster grow while keeping each footer action readable.
@@ -2091,7 +2095,8 @@ struct ReticleFeedback {
     let height = RewindTransportCue.draw(
       origin: CGPoint(x: 12, y: y),
       currentTick: rewindCurrentTick,
-      originTick: rewindOriginTick
+      originTick: rewindOriginTick,
+      ticksPerSecond: Double(session?.ticksPerSecond ?? ClassicDOSRules.ticksPerSecond)
     )
     return y + height + 4
   }

@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -43,8 +44,7 @@ extension MenuAudit {
                     var page = MobileHomeArt.page(resume: resume, journey: .init("journey", "Journey map 1/227 solved"),
                         families: families, initials: state == "hot-seat" ? "ALICE v BOB" : "PLA",
                         nextPlayerIndex: state == "hot-seat" ? 0 : nil,
-                        subtitle: state == "hot-seat" ? "" : "Next: PLA", collectionsAvailable: state != "unavailable",
-                        deskClock: true)
+                        subtitle: SavedLemmingsCounter(local: 42, global: state == "unavailable" ? nil : 130662).homeCaption)
                     if state == "unavailable" {
                         page.rows[page.rows.count - 3].selected = true
                         if let index = page.footer.firstIndex(where: { $0.id == "whatsNew" }) { page.footer[index].busy = true }
@@ -78,7 +78,7 @@ extension MenuAudit {
                     for region in regions where region.kind == .division {
                         guard layout.action(at: .init(x: region.frame.midX / scale, y: 200)) == nil else { throw invalidTargets(line: #line) }
                     }
-                    let footer = layout.targets.first { $0.action.id == "donate" }!.frame
+                    guard let footer = layout.targets.last?.frame else { throw invalidTargets(line: #line) }
                     for (position, scroll) in [("top", CGFloat.zero), ("footer", max(0, min(layout.size.height - viewport.height, footer.maxY - viewport.height + 12)))] {
                         let context = try bitmapContext(size: .init(width: size.width, height: size.height))
                         context.setFillColor(CGColor(gray: 0, alpha: 1)); context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
@@ -103,7 +103,7 @@ extension MenuAudit {
             .init("family.fan", "Fan Lemmings 0/6020"), .init("neolemmix", "NeoLemmix Preview"),
             .init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
         let page = MobileHomeArt.page(journey: .init("journey", "Resume Journey"), families: families,
-                                      initials: "PLA", collectionsAvailable: true, deskClock: true)
+                                      initials: "PLA")
         let screen = MobileRect(x: 0, y: 0, width: 950, height: 667)
         let region = screen
         let layout = GameFrontEnd.layout(page, width: region.width, minimumHeight: region.height, boxedHome: true)

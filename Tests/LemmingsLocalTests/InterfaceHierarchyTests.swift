@@ -14,6 +14,9 @@ final class InterfaceHierarchyTests: XCTestCase {
                      LevelCoverFlowItem(id: "locked", title: "Locked", subtitle: "Lemmings 3", detail: "3", isAvailable: false)]
         var started: [String] = []
         carousel.onStart = { started.append($0.id) }
+        carousel.onSelectionChanged = { [weak carousel] item in
+            carousel?.selectedActionTitle = item.id == "second" ? NxlvKit.L10n.text("Resume") : NxlvKit.L10n.text("Play")
+        }
         for reduced in [false, true] {
             carousel.configure(items: items, selectedID: "first", reduceMotion: reduced)
             carousel.layoutSubtreeIfNeeded()
@@ -21,6 +24,9 @@ final class InterfaceHierarchyTests: XCTestCase {
                 let card = try XCTUnwrap(carousel.subviews.compactMap { $0 as? NSButton }.first { $0.tag == index })
                 XCTAssertTrue(card.accessibilityPerformPress())
                 XCTAssertEqual(carousel.selectedItem?.id, items[index].id)
+                let help = index == 2 ? NxlvKit.L10n.text("Unavailable item") : index == 1 ? NxlvKit.L10n.text("Resume") : NxlvKit.L10n.text("Play")
+                let selectedCard = try XCTUnwrap(carousel.subviews.compactMap { $0 as? NSButton }.first { $0.tag == index })
+                XCTAssertEqual(selectedCard.accessibilityHelp(), help)
                 XCTAssertEqual(started.last, index == 2 ? "second" : items[index].id)
             }
         }

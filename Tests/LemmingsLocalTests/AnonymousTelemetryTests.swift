@@ -244,7 +244,7 @@ final class AnonymousTelemetryTests: XCTestCase {
                        "LEMMINGS SAVED   LOCAL 1,239   GLOBAL 34,567")
     }
 
-    @MainActor func testPublicSavedTotalRequiresConsentAndUsesNoOwnerToken() async throws {
+    @MainActor func testPublicSavedTotalIsReadOnlyBeforeAndAfterDecliningSharing() async throws {
         let suite = UUID().uuidString
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }
@@ -253,25 +253,23 @@ final class AnonymousTelemetryTests: XCTestCase {
         transport.responseData = Data("{\"saved\":12345}".utf8)
         let telemetry = AnonymousTelemetry(defaults: defaults,
             endpoint: URL(string: "https://counts.example.org")!, transport: transport)
-        do {
-            _ = try await telemetry.publicSavedTotal()
-            XCTFail("A declined player must not contact the count service")
-        } catch { XCTAssertTrue(transport.requests.isEmpty) }
-        telemetry.setSharing(true)
-        for _ in 0..<20 where transport.requests.count < 2 { await Task.yield() }
-        transport.requests.removeAll()
-        let total = try await telemetry.publicSavedTotal()
-        XCTAssertEqual(total, 12_345)
-        let request = try XCTUnwrap(transport.requests.first)
-        XCTAssertEqual(request.url?.path, "/v1/saved")
-        XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
-        XCTAssertNil(request.httpBody)
-        telemetry.setSharing(false)
-        transport.requests.removeAll()
-        do {
-            _ = try await telemetry.publicSavedTotal()
-            XCTFail("An opted-out player must not contact the count service")
-        } catch { XCTAssertTrue(transport.requests.isEmpty) }
+        for declined in [false, true] {
+            if declined { telemetry.setSharing(false) }
+            telemetry.recordActiveDay()
+            let total = try await telemetry.publicSavedTotal()
+            XCTAssertEqual(total, 12_345)
+            XCTAssertEqual(telemetry.consentDecided, declined)
+            XCTAssertFalse(telemetry.sharesCounts)
+            XCTAssertEqual(transport.requests.count, 1)
+            let request = try XCTUnwrap(transport.requests.first)
+            XCTAssertEqual(request.httpMethod, "GET")
+            XCTAssertEqual(request.url?.path, "/v1/saved")
+            XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
+            XCTAssertNil(request.httpBody)
+            transport.requests.removeAll()
+        }
+        XCTAssertTrue(SavedLemmingsCounter.worldwideText(nil).hasSuffix("—"))
+        XCTAssertTrue(SavedLemmingsCounter.worldwideText(12_345).hasSuffix("12,345"))
     }
 
     @MainActor func testSavedCountUploadsOneWeightedEvent() async throws {
@@ -678,6 +676,50 @@ final class AnonymousTelemetryTests: XCTestCase {
         }
     }
 
+    @MainActor func testFreshProfileThenOptionalOfflineConsentAndRelaunch() throws {
+        _ = NSApplication.shared
+        let storage = try AppStorage.temporary(named: "offline-first-profile")
+        let previousStore = ArcadeStore.shared
+        defer {
+            GameScreen.shared.dismissAll()
+            GameScreen.shared.gameWindow = nil
+            ArcadeStore.shared = previousStore
+            storage.removeTemporaryFiles()
+        }
+        XCTAssertTrue(AppDelegate.needsFirstProfile(in: storage))
+        ArcadeStore.shared = ArcadeStore(file: ArcadeStore.recordsFile(storage: storage))
+        let offline = FakeTelemetryTransport()
+        offline.failure = URLError(.notConnectedToInternet)
+        let telemetry = AnonymousTelemetry(storage: storage, endpoint: URL(string: "https://counts.example.org"), transport: offline)
+        let consent = TelemetryConsentWindow(telemetry: telemetry)
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 1120, height: 720),
+                              styleMask: [.titled], backing: .buffered, defer: false)
+        var played = false
+        let page = AppDelegate.presentFirstProfile(in: window, storage: storage, consent: consent,
+            worldwide: SavedLemmingsCounter.worldwideText(nil)) { played = true }
+        XCTAssertFalse(consent.isShowing)
+        window.contentView?.layoutSubtreeIfNeeded()
+        let bitmap = try XCTUnwrap(page.bitmapImageRepForCachingDisplay(in: page.bounds))
+        page.displayIgnoringOpacity(page.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap)))
+        let controls = page.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+        XCTAssertFalse(controls.contains { $0.accessibilityLabel()?.contains("worldwide") == true })
+        try XCTUnwrap(controls.first { $0.accessibilityRole() == .textField }).setAccessibilityValue("EKV")
+        XCTAssertTrue(try XCTUnwrap(controls.first { $0.accessibilityLabel() == "Play" }).accessibilityPerformPress())
+        XCTAssertEqual(ArcadeStore.shared.records.activeProfile.initials, "EKV")
+        XCTAssertTrue(consent.isShowing)
+        XCTAssertFalse(played)
+        let choice = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
+        XCTAssertEqual(choice.controllerInitialControl, choice.controllerBackButton)
+        choice.controllerBackButton.performClick(nil)
+        XCTAssertTrue(played)
+        XCTAssertFalse(AppDelegate.needsFirstProfile(in: storage))
+        XCTAssertEqual(ArcadeStore(file: ArcadeStore.recordsFile(storage: storage)).records.activeProfile.initials, "EKV")
+        let reopened = AnonymousTelemetry(storage: storage, endpoint: URL(string: "https://counts.example.org"), transport: offline)
+        XCTAssertTrue(reopened.consentDecided)
+        XCTAssertFalse(reopened.sharesCounts)
+        XCTAssertTrue(offline.requests.isEmpty)
+    }
+
     @MainActor func testConsentDefaultsToDeclineAndRendersBothChoices() throws {
         _ = NSApplication.shared
         let suite = UUID().uuidString
@@ -702,7 +744,7 @@ final class AnonymousTelemetryTests: XCTestCase {
         func buttons(in view: NSView) -> [NSButton] {
             (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
         }
-        let share = try XCTUnwrap(buttons(in: page).first { $0.title == "Share" })
+        let share = try XCTUnwrap(buttons(in: page).first { $0.title == "Join" })
         for control in [page.controllerBackButton, share] {
             let rect = control.convert(control.bounds, to: page)
             XCTAssertTrue(page.bounds.contains(rect))

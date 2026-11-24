@@ -76,6 +76,48 @@ extension MobileLibraryViewController {
                                         replayAvailable: recordReplay(key) != nil, hintAvailable: detail?.deck != nil,
                                         playable: detail?.pack != nil, preview: detail?.preview != nil)
     }
+    func contextualRecordPage(level: ArcadeLevel, owner: String, assisted: Bool, source: String) -> GameFrontEnd.Page {
+        let key = (assisted ? "assisted|" : "direct|") + level.boardID
+        guard arcadeStore.records.runs.contains(where: {
+            $0.level.boardID == level.boardID && $0.profileID == owner && $0.assisted == assisted
+        }) else {
+            return .init(title: level.title, subtitle: source, details: [L10n.text("No records")],
+                footer: [.init("levelDetailsBack", L10n.text("Back"))])
+        }
+        var page = MobileCareerArt.recordLevelPage(key, records: arcadeStore.records, profileID: owner,
+            profileName: playerName(owner), subtitle: source, replayAvailable: false)
+        page.subtitle = [playerName(owner), source].filter { !$0.isEmpty }.joined(separator: " / ")
+            + "\n" + L10n.text("\(level.total) Lemmings   Save \(level.required)")
+        page.footer = [.init("levelDetailsBack", L10n.text("Back"))]
+        return page
+    }
+
+    private var previewRecordOwner: String { hotSeat?.turn ?? profiles.activeID }
+
+    func previewRecordReplay(for level: ArcadeLevel) -> (url: URL, title: String)? {
+        for run in arcadeStore.records.runs.reversed() where run.level.boardID == level.boardID && run.profileID == previewRecordOwner {
+            if let url = arcadeStore.actionReplayURL(attemptID: run.id) { return (url, run.level.title) }
+        }
+        return nil
+    }
+
+    func levelDetailsPage() -> GameFrontEnd.Page {
+        guard let library, library.levels.indices.contains(selectedIndex) else {
+            return .init(title: L10n.text("Details"), footer: [.init("levelDetailsBack", L10n.text("Back"))])
+        }
+        let summary = library.levels[selectedIndex]
+        let source = [summary.sourceLabel, summary.locationLabel].filter { !$0.isEmpty }.joined(separator: " / ")
+        guard let level = previewRecordLevel else {
+            return .init(title: summary.title, subtitle: source, details: [loading ? L10n.text("Loading...") : notice],
+                footer: [.init("levelDetailsBack", L10n.text("Back"))])
+        }
+        let latest = arcadeStore.records.runs.last { $0.level.boardID == level.boardID && $0.profileID == previewRecordOwner }
+        var page = contextualRecordPage(level: level, owner: previewRecordOwner, assisted: latest?.assisted ?? false, source: source)
+        if previewRecordReplay(for: level) != nil { page.footer.append(.init("previewReplay", L10n.text("Replay"))) }
+        if !notice.isEmpty { page.details.append(notice) }
+        return page
+    }
+
     func recordHintPage(_ key: String) -> GameFrontEnd.Page {
         guard let detail = recordDetail, detail.key == key, let deck = detail.deck, !deck.stages.isEmpty else {
             return recordLevelPage(key, subtitle: "")
@@ -101,7 +143,7 @@ extension MobileLibraryViewController {
         recordDetail?.pack = location.pack; recordDetail?.index = location.index
         let ports = catalogue.portsRoot, fan = catalogue.fanFolders, pack = location.pack, index = location.index
         let settings = mobileSettings.classic
-        let content = try? location.library.loadLevel(at: index)
+        let content = try? location.library.levelForInspection(at: index)
         let initial = (content?.session as? ClassicMobileSession)?.initialSimulation
         let title = content?.summary.title ?? ""
         let skills = content?.session.snapshot.skills.filter { $0.count != 0 }.map(\.name) ?? []
@@ -141,7 +183,7 @@ extension MobileLibraryViewController {
             present(player, animated: false)
         } catch { notice = error.localizedDescription; rebuild() }
     }
-    /// The newest retained action replay for a record key. Only Classic sessions retain actions.
+    /// The newest retained action replay for a record key.
     func recordReplay(_ key: String) -> (url: URL, title: String)? {
         let assisted = key.hasPrefix("assisted|")
         let board = String(key.dropFirst(assisted ? 9 : key.hasPrefix("direct|") ? 7 : 0))
@@ -153,6 +195,9 @@ extension MobileLibraryViewController {
     }
     private func playRecordReplay(_ key: String) {
         guard let saved = recordReplay(key) else { return }
+        playRecordReplay(saved)
+    }
+    func playRecordReplay(_ saved: (url: URL, title: String)) {
         do {
             let replay = try JSONDecoder().decode(LeaderboardActionReplay.self, from: Data(contentsOf: saved.url))
             showRankedActionReplay(replay, title: saved.title)

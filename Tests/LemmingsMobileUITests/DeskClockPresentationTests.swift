@@ -89,10 +89,9 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
     }
 
     @Test func menuOpensClock() async {
-        let home = MobileHomeArt.page(journey: nil, families: [], initials: "PLA", deskClock: true)
-        let footer = home.footer.map(\.id)
-        #expect(footer.firstIndex(of: "deskClock").map { $0 + 1 } == footer.firstIndex(of: "settings"))
-        #expect(!MobileHomeArt.page(journey: nil, families: [], initials: "PLA").footer.contains { $0.id == "deskClock" })
+        // The Desk Clock opens from Settings > Desk Clock, not from Home.
+        let home = MobileHomeArt.page(journey: nil, initials: "PLA")
+        #expect(!(home.rows + home.footer).contains { $0.id == "deskClock" })
 
         let fixture = DeskClockFixture()
         let clock = await fixture.open(.menu)
@@ -266,11 +265,13 @@ private final class FakeDeskClockEvents: DeskClockEventSource, @unchecked Sendab
 
     @Test func hotSeatGhostSettingUsesStoredVisibility() {
         for visible in [false, true] {
-            let page = MobileSettingsArt.page(.gameplay, settings: .init(), ghostsVisible: visible)
+            let page = MobileSettingsArt.page(.gameplay, settings: .init(), inGame: true, ghostsVisible: visible)
             let toggle = page.rows.first { $0.id == "setting.hotSeatGhosts" }
             #expect(toggle?.selected == visible)
             #expect(toggle?.toggleValue == visible)
         }
+        // Outside a Hot Seat level the Hot Seat page owns the choice.
+        #expect(!MobileSettingsArt.page(.gameplay, settings: .init()).rows.contains { $0.id == "setting.hotSeatGhosts" })
     }
 
     @Test func accessibilityLabelReadsTimeAndEvent() {

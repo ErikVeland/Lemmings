@@ -152,8 +152,10 @@ public actor GameAssetPack {
         #if os(iOS)
         let recoveredSource = await GameAssetBackgroundTransfer.shared.pendingSource
         #else
-        let session = URLSession(configuration: Self.configuration())
-        defer { session.invalidateAndCancel() }
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        do { try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false) }
+        catch { throw Self.explained(error) }
+        defer { try? FileManager.default.removeItem(at: directory) }
         let recoveredSource: URL? = nil
         #endif
         await progress(.connecting)
@@ -169,13 +171,18 @@ public actor GameAssetPack {
                     progress(phase == .connecting && source == Self.fallback ? .alternateMirror : phase)
                 }
                 #else
-                let monitor = TransferProgress(update: progress)
-                let (file, response) = try await session.download(from: source, delegate: monitor)
+                let file = directory.appendingPathComponent(UUID().uuidString)
+                let (phases, transfer) = AsyncThrowingStream<Progress, Error>.makeStream(bufferingPolicy: .bufferingNewest(1))
+                let delegate = AssetDownloadDelegate(file: file, transfer: transfer)
+                let session = URLSession(configuration: Self.configuration(), delegate: delegate, delegateQueue: nil)
+                defer { session.invalidateAndCancel() }
+                session.downloadTask(with: source).resume()
+                for try await phase in phases {
+                    try Task.checkCancellation()
+                    await progress(phase)
+                }
                 #endif
                 do {
-                    #if !os(iOS)
-                    try Self.validateResponse(response)
-                    #endif
                     try Task.checkCancellation()
                     try Self.verifyArchive(file)
                     return file
@@ -214,7 +221,7 @@ public actor GameAssetPack {
               try MusicLibraryStore.hash(file) == digest else { throw Failure.invalid }
     }
 
-    private static func installVerifiedArchive<Result>(_ file: URL, install: (URL) throws -> Result) throws -> Result {
+    static func installVerifiedArchive<Result>(_ file: URL, install: (URL) throws -> Result) throws -> Result {
         let archive = try ZipArchive(contentsOf: file)
         let prefix = "Ultimate-Lemmix-Restoration-Game-Assets/Resources/"
         let manager = FileManager.default
@@ -244,19 +251,39 @@ public actor GameAssetPack {
     }
 }
 
-private final class TransferProgress: NSObject, URLSessionDownloadDelegate {
-    let update: @MainActor @Sendable (GameAssetPack.Progress) -> Void
-    init(update: @escaping @MainActor @Sendable (GameAssetPack.Progress) -> Void) { self.update = update }
+private final class AssetDownloadDelegate: NSObject, URLSessionDownloadDelegate {
+    let file: URL
+    let transfer: AsyncThrowingStream<GameAssetPack.Progress, Error>.Continuation
+
+    init(file: URL, transfer: AsyncThrowingStream<GameAssetPack.Progress, Error>.Continuation) {
+        self.file = file
+        self.transfer = transfer
+    }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64,
                     totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        guard totalBytesWritten <= GameAssetPack.bytes else { downloadTask.cancel(); return }
+        guard totalBytesWritten <= GameAssetPack.bytes, totalBytesExpectedToWrite <= GameAssetPack.bytes else {
+            transfer.finish(throwing: GameAssetPack.Failure.invalid)
+            downloadTask.cancel()
+            return
+        }
         let phase = GameAssetPack.Progress.transfer(totalBytesWritten)
         let previous = GameAssetPack.Progress.transfer(totalBytesWritten - bytesWritten)
         if phase != previous {
-            Task { @MainActor in update(phase) }
+            transfer.yield(phase)
         }
     }
 
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {}
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        do {
+            try GameAssetPack.validateResponse(downloadTask.response)
+            try FileManager.default.moveItem(at: location, to: file)
+        } catch {
+            transfer.finish(throwing: error)
+        }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        transfer.finish(throwing: error)
+    }
 }

@@ -2,6 +2,7 @@
 import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
+import LemmingsTVCore
 import NxlvKit
 import UIKit
 
@@ -9,19 +10,87 @@ extension MobileLibraryViewController {
     private var mobileBuild: Int { Int(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0") ?? 0 }
     private var mobileVersion: String { Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "2.0" }
 
-    func beginWelcomeIfNeeded() {
-        guard game == nil else { return }
+    static let firstPlayerCompleteKey = "FirstLaunchProfileCompleteV1"
+
+    func beginFirstLaunch() {
         let defaults = UserDefaults.standard
-        // Presentation choices are available in Settings. Preserve every saved preference.
-        defaults.set(true, forKey: "mobile.effectsChoice.v1")
-        #if os(tvOS)
-        if tvBuildInfo.needsWelcome(in: defaults) { navigate(.whatsNew); return }
-        if AnonymousTelemetry.shared.sharingAvailable, !AnonymousTelemetry.shared.consentDecided { navigate(.telemetryConsent) }
-        #else
-        if mobileBuild > defaults.integer(forKey: "mobile.whatsNew.seenBuild") { navigate(.whatsNew) }
-        else if AnonymousTelemetry.shared.sharingAvailable, !AnonymousTelemetry.shared.consentDecided { navigate(.telemetryConsent) }
-        #endif
+        if defaults.object(forKey: Self.firstPlayerCompleteKey) == nil {
+            let saved = MobileStorage.standard(profile: "_players").load(MobileProfiles.self, name: "players")
+            var returning = saved != nil || defaults.object(forKey: "mobile.effectsChoice.v1") != nil
+                || defaults.object(forKey: "mobile.whatsNew.seenBuild") != nil
+                || defaults.object(forKey: "mobile.completed.Lemmings") != nil
+                || defaults.object(forKey: "mobile.completed.release/lemmings") != nil
+            #if os(tvOS)
+            returning = returning || TVMobileMigration.hasLegacyPlayer(in: defaults)
+            #endif
+            defaults.set(returning, forKey: Self.firstPlayerCompleteKey)
+        }
+        guard !defaults.bool(forKey: Self.firstPlayerCompleteKey) else { return }
+        route = .firstPlayer
+        nameDraft = profiles.active.name == "Player 1" ? "" : ArcadeProfile(initials: profiles.active.name).initials
+        draftPortrait = profiles.active.portrait
+        searchField.text = nameDraft
     }
+
+    func syncSavedCountRefresh(visible: Bool) {
+        guard visible, AnonymousTelemetry.shared.sharingAvailable else {
+            savedCountTask?.cancel()
+            savedCountTask = nil
+            return
+        }
+        guard savedCountTask == nil else { return }
+        savedCountTask = Task { [weak self] in
+            while !Task.isCancelled, let nextRefresh = self?.nextSavedTotalRefresh {
+                let delay = nextRefresh - ProcessInfo.processInfo.systemUptime
+                if delay > 0 {
+                    do { try await Task.sleep(for: .seconds(delay)) } catch { return }
+                }
+                guard !Task.isCancelled else { return }
+                let total = try? await AnonymousTelemetry.shared.publicSavedTotal()
+                guard !Task.isCancelled, let self else { return }
+                nextSavedTotalRefresh = ProcessInfo.processInfo.systemUptime + 60
+                if total != worldwideSavedTotal {
+                    worldwideSavedTotal = total
+                    rebuild()
+                }
+            }
+        }
+    }
+
+    var firstPlayerPack: MobileContentPack? {
+        let id = configuration == .ultimateLemmix && !GameMenuLogo.usesRestoredArtwork ? "authored/" + GameStarterContent.identifier : "release/lemmings"
+        return catalogue?.pack(id: id) ?? catalogue?.packs(in: .classic).first
+    }
+
+    func startFirstLevel() {
+        guard let initials = nameDraft, !initials.isEmpty else { return }
+        searchField.resignFirstResponder()
+        let previous = profiles
+        profiles.rename(profiles.activeID, to: initials)
+        profiles.setPortrait(profiles.activeID, to: draftPortrait)
+        guard saveProfiles() else { profiles = previous; rebuild(); return }
+        UserDefaults.standard.set(true, forKey: Self.firstPlayerCompleteKey)
+        // Community participation is offered only once the player has an identity.
+        if AnonymousTelemetry.shared.sharingAvailable, !AnonymousTelemetry.shared.consentDecided {
+            firstLevelAfterConsent = true
+            navigate(.telemetryConsent)
+            return
+        }
+        playFirstLevel()
+    }
+
+    func playFirstLevel() {
+        firstLevelAfterConsent = false
+        if let pack = firstPlayerPack {
+            openPack(pack, back: .home, play: 0)
+        } else if library?.levels.isEmpty == false {
+            startLevel(0, checkpoint: nil)
+        } else {
+            navigate(.data)
+            dataBackRoute = .home
+        }
+    }
+
     func effectsWelcomePage() -> GameFrontEnd.Page { MobileInformationArt.effectsWelcome() }
     func whatsNewPage() -> GameFrontEnd.Page {
         #if os(tvOS)
@@ -30,26 +99,32 @@ extension MobileLibraryViewController {
         MobileInformationArt.whatsNew(version: mobileVersion)
         #endif
     }
-    func telemetryConsentPage() -> GameFrontEnd.Page { MobileInformationArt.telemetryConsent() }
+    func telemetryConsentPage() -> GameFrontEnd.Page {
+        MobileInformationArt.telemetryConsent(worldwide: SavedLemmingsCounter.worldwideText(worldwideSavedTotal))
+    }
     func handleWelcome(_ id: String) -> Bool {
         switch id {
-        case "whatsNew": navigate(.whatsNew)
+        case "whatsNew":
+            whatsNewReturn = route == .whatsNew ? whatsNewReturn : route
+            navigate(.whatsNew)
         case "welcomeOriginal", "welcomeModern":
             var saved = mobileSettings
             saved.applyExperiencePreset(modern: id == "welcomeModern")
             mobileSettings = saved
             UserDefaults.standard.set(true, forKey: "mobile.effectsChoice.v1")
             UserDefaults.standard.set(mobileBuild, forKey: "mobile.whatsNew.seenBuild")
-            navigate(.home); beginWelcomeIfNeeded()
+            navigate(.home)
         case "welcomeContinue":
             #if os(tvOS)
             tvBuildInfo.acknowledge(in: .standard)
             #endif
             UserDefaults.standard.set(mobileBuild, forKey: "mobile.whatsNew.seenBuild")
-            navigate(.home); beginWelcomeIfNeeded()
+            let source = whatsNewReturn ?? .home
+            whatsNewReturn = nil
+            navigate(source)
         case "telemetryYes", "telemetryNo":
             AnonymousTelemetry.shared.setSharing(id == "telemetryYes")
-            navigate(.home)
+            if firstLevelAfterConsent { playFirstLevel() } else { navigate(.home) }
         default: return false
         }
         return true

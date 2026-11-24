@@ -170,11 +170,11 @@ import NxlvKit
   private func setGain(_ gain: Float, for deck: DJDeck?) {
     guard let deck else { return }
     deck.mixGain = max(0, min(1, gain))
-    deck.volume = (isMuted ? 0 : masterVolume) * deck.mixGain
+    deck.volume = (isMuted ? 0 : masterVolume) * resultGain * deck.mixGain
   }
 
   private func refreshVolumes() {
-    for deck in allDecks { deck.volume = (isMuted ? 0 : masterVolume) * deck.mixGain }
+    for deck in allDecks { deck.volume = (isMuted ? 0 : masterVolume) * resultGain * deck.mixGain }
   }
 
   private func retiringLayers(for decks: [DJDeck]) -> [OutgoingLayer] {
@@ -786,6 +786,8 @@ import NxlvKit
   }
 
   // MARK: - Levels
+
+  var resultGain: Float = 1 { didSet { refreshVolumes() } }
 
   public func setVolume(_ volume: Double) {
     masterVolume = Float(min(1, max(0, volume)))

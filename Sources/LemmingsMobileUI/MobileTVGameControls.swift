@@ -33,7 +33,7 @@ extension MobileGameViewController {
         } else { highlightedTarget = previewPoint.flatMap { target(at: $0, control: control) } }
     }
     /// Every touch HUD action also has a focused remote action.
-    func showTVControls() {
+    func showTVControls(focusSpeed: Bool = false) {
         pausePlay(showControls: false)
         let snapshot = session.snapshot
         var commands: [(String, () -> Void)] = [
@@ -65,10 +65,8 @@ extension MobileGameViewController {
                 (L10n.text("REWIND"), { [weak self] in self?.tvCommand(.rewind) }),
             ]
         }
-        commands += [
-            (L10n.text("SLOWER"), { [weak self] in self?.tvCommand(.speedStep(-1)) }),
-            (L10n.text("FASTER"), { [weak self] in self?.tvCommand(.speedStep(1)) }),
-        ]
+        let speedID = String(commands.count)
+        commands.append((L10n.text("Speed \(Int(inputSpeed.target))X"), { [weak self] in self?.showSpeedSelection { [weak self] in self?.showTVControls(focusSpeed: true) } }))
         commands.append((L10n.text("RESUME"), { [weak self] in self?.resumeSelectedView() }))
         if snapshot.releaseRate != nil && !session.isReadOnly {
             commands += [
@@ -87,6 +85,7 @@ extension MobileGameViewController {
             ]
         }
         tvPage(title: L10n.text("Game controls"), actions: commands)
+        if focusSpeed { overlayCanvas.focusAction(speedID) }
     }
 
     private func showTVSkills() {
@@ -99,7 +98,7 @@ extension MobileGameViewController {
             }
         tvPage(title: L10n.text("Skills"), actions: actions)
         for index in skills.indices {
-            overlayCanvas.page.rows[index].enabled = !session.isReadOnly && (skills[index].isUnlimited || skills[index].count > 0)
+            overlayCanvas.page.rows[index].enabled = !session.isReadOnly && skills[index].hasSupply
             overlayCanvas.page.rows[index].selected = index == selectedControl
         }
     }

@@ -93,6 +93,11 @@ public struct MobileViewport: Codable, Equatable, Sendable {
         clamp()
     }
 
+    public mutating func centre(on point: MobilePoint) {
+        origin = MobilePoint(x: point.x - visibleLevelSize.width / 2, y: point.y - visibleLevelSize.height / 2)
+        clamp()
+    }
+
     /// Moves the level with the finger. The camera moves in the opposite direction.
     public mutating func pan(viewDelta: MobilePoint) {
         origin.x -= viewDelta.x / max(0.1, zoom * pixelAspect)

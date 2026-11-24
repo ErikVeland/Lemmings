@@ -371,9 +371,11 @@ extension MobileGameViewController {
         inputSpeed.ridiculousEnabled = gameSettings.classic.ridiculousSpeedEnabled
         if !overlay.isHidden || !lifecycle.isForeground || lifecycle.isInterrupted { inputSpeed.suspend(at: now) }
         inputSpeed.update(at: now)
+        if speed <= 1, inputSpeed.multiplier > 1 { showControlTip(.speed) }
         let changed = speed != inputSpeed.multiplier
         speed = inputSpeed.multiplier; clock.speed = speed
-        if changed { updatePerformanceBudget(); updateHUD() }
+        if changed { updatePerformanceBudget() }
+        if changed || hud.speed != inputSpeed.target { updateHUD() }
     }
     func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false, soundtrack: Bool = false, insights: Bool = false,
                             language: Bool = false, returningTo caller: (() -> Void)? = nil, preservingPosition: Bool = false) {
@@ -439,8 +441,8 @@ extension MobileGameViewController {
         view.setNeedsLayout()
     }
 
-    func showControlsHelp() {
-        let returnToPreviousPage = overlayReturnAction()
+    func showControlsHelp(returningTo caller: (() -> Void)? = nil) {
+        let returnToPreviousPage = caller ?? overlayReturnAction()
         #if os(tvOS)
         let help = TVControllerBindings.help.components(separatedBy: "\n") + [L10n.text("DualSense touchpad swipe: step back / forward")]
         #else
@@ -452,8 +454,28 @@ extension MobileGameViewController {
             L10n.text("L2 / LT + L3: DJ shuffle"), L10n.text("DualSense touchpad click: DJ shuffle"),
             L10n.text("DualSense touchpad swipe: step back / forward")]
         #endif
-        showCustomOverlay(title: L10n.text("Controls"), details: help, reading: true, list: true,
-                          actions: [(L10n.text("BACK"), returnToPreviousPage)])
+        #if os(tvOS)
+        let input = GameplayControlTip.Input.remote
+        #else
+        let input = GameplayControlTip.Input.touch
+        #endif
+        let topics = GameplayControlTip.allCases.filter { topic in
+            switch topic {
+            case .assignment: !session.isReadOnly && !session.snapshot.skills.isEmpty
+            case .rewind: session.supportsRewind
+            default: true
+            }
+        }
+        var actions = [(L10n.text("BACK"), returnToPreviousPage)]
+        if !session.isReadOnly {
+            actions.append((controlTips.toggleTitle, { [weak self] in
+                guard let self else { return }
+                controlTips.enabled.toggle()
+                showControlsHelp(returningTo: returnToPreviousPage)
+                overlayCanvas.focusAction("1")
+            }))
+        }
+        showCustomOverlay(title: L10n.text("Controls"), details: topics.map { $0.text(for: input) } + help, reading: true, list: true, actions: actions)
     }
 }
 #endif

@@ -6,7 +6,7 @@ import NxlvKit
 /**
  * Opens supported levels from bundled or player-imported NeoLemmix CE packs.
  */
-final class NeoLemmixMobileLibrary: MobileGameLibrary {
+final class NeoLemmixMobileLibrary: MobileCampaignPreviewLibrary {
     private struct Entry {
         let pack: NeoLemmixPack
         let level: NeoLemmixPackLevel
@@ -26,6 +26,8 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
     let directory: URL
     let displayName = L10n.text("NeoLemmix")
     let levels: [MobileLevelSummary]
+    let cataloguePacks: [[MobileLevelSummary]]
+    let unavailableIndices: Set<Int>
     private let entries: [Entry]
     private let storage: MobileStorage
     private let progressLock = NSRecursiveLock()
@@ -52,16 +54,19 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
             stylesRoot: MobileNeoLemmixDataLayout.stylesRoot(in: directory))
         let resolvedPacks = NeoLemmixLibrary.discover([source])
         var entries: [Entry] = []
+        var packs: [[MobileLevelSummary]] = []
         for resolvedPack in resolvedPacks {
+            let start = entries.count
             for (index, level) in resolvedPack.pack.levels.enumerated() {
                 let stylesRoot = resolvedPack.stylesRoot(for: level)
                 let group = level.groups.last ?? resolvedPack.pack.title
                 let title = level.title.isEmpty ? L10n.text("Level \(index + 1)") : level.title
                 let summary = MobileLevelSummary(index: entries.count, rank: group,
-                    number: index + 1, title: title)
+                    number: index + 1, title: title, origin: .fanMade, packName: resolvedPack.pack.title)
                 entries.append(Entry(pack: resolvedPack.pack, level: level,
                                      stylesRoot: stylesRoot, summary: summary))
             }
+            if entries.count > start { packs.append(entries[start...].map(\.summary)) }
         }
         guard !entries.isEmpty else { throw NeoLemmixMobileLibraryError.noSupportedLevels }
         if let identifier = progress.currentLevelIdentifier,
@@ -70,8 +75,17 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
         } else if !entries.indices.contains(progress.currentIndex) {
             progress.currentIndex = 0
         }
+        cataloguePacks = packs
+        unavailableIndices = Set(entries.indices.filter { entries[$0].stylesRoot == nil })
         self.entries = entries
         levels = entries.map(\.summary)
+    }
+
+    func clearedIndices(in wins: Set<LevelCatalogueIdentity>) -> Set<Int> {
+        Set(entries.indices.filter { index in
+            let entry = entries[index]
+            return wins.contains(.init(engine: .neolemmix, packID: entry.pack.id, levelID: entry.level.levelID))
+        })
     }
 
     func levelKey(at index: Int) -> String {
@@ -86,7 +100,11 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
         return entry.identifier
     }
 
-    func loadLevel(at index: Int) throws -> MobileLevelContent {
+    func loadLevel(at index: Int) throws -> MobileLevelContent { try loadLevel(at: index, preview: false) }
+
+    func loadPreviewLevel(at index: Int) throws -> MobileLevelContent { try loadLevel(at: index, preview: true) }
+
+    private func loadLevel(at index: Int, preview: Bool) throws -> MobileLevelContent {
         try Task.checkCancellation()
         guard entries.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let entry = entries[index]
@@ -124,7 +142,7 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
         progressLock.lock()
         defer { progressLock.unlock() }
         if let progressFailure { throw NeoLemmixMobileLibraryError.progressSave(progressFailure) }
-        if progress.currentIndex != index || progress.currentLevelIdentifier != identifier {
+        if !preview, progress.currentIndex != index || progress.currentLevelIdentifier != identifier {
             var updated = progress
             updated.currentIndex = index
             updated.currentLevelIdentifier = identifier
@@ -137,7 +155,7 @@ final class NeoLemmixMobileLibrary: MobileGameLibrary {
             ghostRenderer: renderer.render,
             gadgetSounds: gadgetSounds,
             soundDirectory: stylesRoot.deletingLastPathComponent().appendingPathComponent("sound")) { [weak self] result in
-                self?.record(result, key: identifier, at: index)
+                if !preview { self?.record(result, key: identifier, at: index) }
             }
         session.spriteProvider = renderer.spriteHighlight
         return MobileLevelContent(summary: entry.summary, session: session)

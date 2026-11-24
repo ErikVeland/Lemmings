@@ -114,6 +114,22 @@ public struct TVSaveBackup: Codable, Sendable {
                   let value = wrapper["value"] else { throw CocoaError(.fileReadCorruptFile) }
             decoded[key] = value
         }
+        for name in ["players", "hotseat"] {
+            let key = "tv.mobile.players." + name
+            if decoded[key] == nil {
+                let path = "Mobile/_players/" + name + ".json"
+                for candidate in [path, path + ".bak"] {
+                    guard let data = archive.files[candidate] else { continue }
+                    if name == "players" {
+                        guard (try? Self.validateProfiles(data)) != nil else { continue }
+                    } else {
+                        guard (try? JSONDecoder().decode(MobileHotSeatStore.self, from: data)) != nil else { continue }
+                    }
+                    decoded[key] = data
+                    break
+                }
+            }
+        }
         for (path, data) in archive.files {
             let target = staging.appendingPathComponent(path)
             try manager.createDirectory(at: target.deletingLastPathComponent(), withIntermediateDirectories: true)

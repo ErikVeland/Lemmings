@@ -24,6 +24,9 @@ struct SavedHotSeatPageTests {
         #expect(page.rows.allSatisfy { $0.title.hasPrefix("EKV + UVA\n") && $0.enabled })
         #expect(page.rows[0].title != page.rows[1].title)
         #expect(page.footer.first?.id == "players" && page.footer.first?.isBackNavigation == true)
+        // Choosing a session comes first: the newest is primary and a new session is one press away.
+        #expect(page.rows.filter(\.primary).map(\.id) == ["seatResume.recent"])
+        #expect(page.footer.map(\.id) == ["players", "seatFresh"])
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let typography = try #require(GameMenuTypography(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings")))
         let output = root.appendingPathComponent(".build/saved-hot-seats/renders")

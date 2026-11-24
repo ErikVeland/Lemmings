@@ -232,7 +232,7 @@ public enum HostedLeaderboardText {
     }
     public func refresh(conditions: TrolleyConditions?, category: HostedCategory, assisted: Bool, page: Int = 0) {
         requestID = UUID(); let ticket = requestID
-        board = nil; busy = true; status = "Loading..."; onChange?()
+        board = nil; busy = true; status = L10n.text("Loading..."); onChange?()
         retryRemovals()
         guard category.career || conditions != nil else { busy = false; status = L10n.text("Select a level first."); onChange?(); return }
         Task { [weak self] in
@@ -243,7 +243,7 @@ public enum HostedLeaderboardText {
                 try checked(response)
                 let loaded = try JSONDecoder().decode(HostedBoard.self, from: data)
                 guard ticket == requestID else { return }
-                board = loaded; status = "Community records"
+                board = loaded; status = L10n.text("Community records")
             } catch {
                 guard ticket == requestID else { return }
                 status = L10n.text("Offline. Local records are saved.")
@@ -347,7 +347,7 @@ public enum HostedLeaderboardText {
                     if (response as? HTTPURLResponse)?.statusCode != 401 { try checked(response) }
                     defaults.set(false, forKey: "HostedRankings.hasShared." + profile)
                     removals.remove(profile)
-                    submitted = []; actions = []; board = nil; status = "Shared records removed"
+                    submitted = []; actions = []; board = nil; status = L10n.text("Shared records removed")
                 } catch { status = L10n.text("Removal queued. Retry when connected.") }
             }
         }
@@ -356,7 +356,7 @@ public enum HostedLeaderboardText {
                          opened: @escaping (LeaderboardActionReplay, String) -> Void) {
         guard let id = entry.runID, entry.actionReplay == true, (1...10).contains(entry.rank),
               let conditions, !busy else { return }
-        busy = true; status = "Loading replay..."; onChange?()
+        busy = true; status = L10n.text("Loading replay..."); onChange?()
         Task {
             defer { busy = false; onChange?() }
             do {
@@ -371,13 +371,13 @@ public enum HostedLeaderboardText {
                 let replay = try JSONDecoder().decode(LeaderboardActionReplay.self, from: data)
                 try replay.validateStructure()
                 guard replay.runID == id, replay.conditions == conditions else { throw RunRecoveryError.differentGame }
-                opened(replay, L10n.text("\(entry.name) - worldwide replay")); status = "Community records"
+                opened(replay, L10n.text("\(entry.name) - worldwide replay")); status = L10n.text("Community records")
             } catch { status = L10n.text("Replay unavailable. Retry when connected.") }
         }
     }
     public func playback(_ entry: HostedBoard.Entry, opened: @escaping (URL, String) -> Void) {
         guard let id = entry.runID, entry.replay, !busy else { return }
-        busy = true; status = "Loading replay..."; onChange?()
+        busy = true; status = L10n.text("Loading replay..."); onChange?()
         Task {
             defer { busy = false; onChange?() }
             do {
@@ -386,7 +386,7 @@ public enum HostedLeaderboardText {
                 try checked(response)
                 guard response.mimeType == "video/mp4", let size = try file.resourceValues(forKeys: [.fileSizeKey]).fileSize,
                       size > 0, size <= Self.movieLimit else { throw URLError(.dataLengthExceedsMaximum) }
-                opened(file, L10n.text("\(entry.name) - worldwide replay")); status = "Community records"
+                opened(file, L10n.text("\(entry.name) - worldwide replay")); status = L10n.text("Community records")
             } catch { status = L10n.text("Replay unavailable. Retry when connected.") }
         }
     }

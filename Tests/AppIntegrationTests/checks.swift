@@ -436,6 +436,82 @@ extension AppDelegate {
     print("PASS repeated Solo/Hot Seat mode, campaign, save namespace and library round trips")
     store.endHotSeat(); selectDataSet(); returnToLibrary()
   }
+  fileprivate func testFirstProfileLaunch() throws {
+    let storage = try AppStorage.temporary(named: "first-profile")
+    defer { storage.removeTemporaryFiles() }
+    try check(Self.needsFirstProfile(in: storage), "Fresh installation skipped profile setup")
+    storage.defaults.set(true, forKey: EffectsWelcome.choiceKey)
+    try check(Self.needsFirstProfile(in: storage), "Interrupted setup sent the player to Home")
+    storage.defaults.removeObject(forKey: Self.firstProfileKey)
+    try check(!Self.needsFirstProfile(in: storage), "An existing installation repeated setup")
+
+    settings.music = .silent
+    settings.sound = .silent
+    if window == nil { buildInterface() }
+    loadContent()
+    presentFirstProfile()
+    guard let page = firstProfilePage else { throw IntegrationFailure(message: "No first player page") }
+    let id = ArcadeStore.shared.records.activeProfileID
+    let sharesCounts = AnonymousTelemetry.shared.sharesCounts
+    window.contentView?.layoutSubtreeIfNeeded()
+    let render = { () throws -> [GameAccessibleElement] in
+      guard let bitmap = page.bitmapImageRepForCachingDisplay(in: page.bounds) else {
+        throw IntegrationFailure(message: "Cannot render the first player page")
+      }
+      page.cacheDisplay(in: page.bounds, to: bitmap)
+      let directory = URL(fileURLWithPath: ".build/first-profile-renders")
+      try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+      let name = "first-profile.png"
+      try bitmap.representation(using: .png, properties: [:])?.write(to: directory.appendingPathComponent(name))
+      return page.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    }
+    let elements = try render()
+    guard let field = elements.first(where: { $0.accessibilityRole() == .textField }),
+          let portrait = elements.first(where: { $0.accessibilityLabel() == "Portrait: Digger" }) else {
+      throw IntegrationFailure(message: "Missing initials or portrait target")
+    }
+    // Identity comes first: the worldwide total belongs to the later consent step.
+    try check(!elements.contains { $0.accessibilityLabel()?.contains(L10n.text("Lemmings saved worldwide")) == true },
+      "The first profile page showed the worldwide total")
+    page.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
+      windowNumber: window.windowNumber, context: nil, characters: "a", charactersIgnoringModifiers: "a",
+      isARepeat: false, keyCode: 0)!)
+    try check(page.initials == "A", "Typing did not replace the default initials")
+    field.setAccessibilityValue("AX")
+    let whereToClick = page.convert(CGPoint(x: portrait.localFrame.midX, y: portrait.localFrame.midY), to: nil)
+    page.mouseDown(with: NSEvent.mouseEvent(with: .leftMouseDown, location: whereToClick, modifierFlags: [],
+      timestamp: 1, windowNumber: window.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 1)!)
+    let edited = try render()
+    try check(page.initials == "AX" && page.portrait == 6, "Rendering lost the player's edits")
+    guard let play = edited.first(where: { $0.accessibilityLabel() == "Play" }) else {
+      throw IntegrationFailure(message: "Missing Play target")
+    }
+    let asksToJoin = AnonymousTelemetry.shared.sharingAvailable && !AnonymousTelemetry.shared.consentDecided
+    try check(play.accessibilityPerformPress(), "Play did not respond")
+    if asksToJoin {
+      try check(TelemetryConsentWindow.shared.isShowing && phase != .playing,
+        "Community participation was not offered after the profile")
+      TelemetryConsentWindow.shared.respond(join: sharesCounts)
+    }
+    try check(phase == .playing && activeTitle == .lemmings && flow?.currentLevelIndex == 0
+      && session != nil && !GameScreen.shared.isPresented, "Play did not start Classic Fun 1")
+    try check(AnonymousTelemetry.shared.sharesCounts == sharesCounts, "Saving a profile changed sharing consent")
+    try check(ArcadeStore.shared.records.activeProfile == ArcadeProfile(id: id, initials: "AX", portrait: 6)
+      && !Self.needsFirstProfile(in: .current()), "The next launch lost the profile or repeated setup")
+    returnToLibrary()
+    let starter = storage.applicationSupport.appendingPathComponent("starter")
+    let generator = Process()
+    generator.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+    generator.arguments = ["python3", "Tools/AlternativeAssets/prepare_open_starter.py", "--output", starter.path]
+    try generator.run(); generator.waitUntilExit()
+    try check(generator.terminationStatus == 0, "Could not prepare the Open Starter fixture")
+    let set = try GameStarterContent.dataSet(in: starter)
+    dataSets = [(set, starter)]
+    playFirstLevel()
+    try check(phase == .playing && arcadeLevel?.title == "First Steps", "Open Starter did not start its first level")
+    returnToLibrary()
+    print("PASS first-launch counter, offline editing, portrait input, saved identity, Fun 1 and First Steps")
+  }
   fileprivate func testProfileSessionActions() throws {
     if window == nil { buildInterface() }
     loadContent(); returnToLibrary(); installKeyboardShortcuts()
@@ -1819,7 +1895,7 @@ extension AppDelegate {
     let reopenedBackpacks = descendants(root).compactMap { $0 as? NSButton }.first { $0.title == "Show skill backpacks" }
     try check(reopenedBackpacks?.state == .off && !reopened.current.showClassicSkillBackpacks,
       "Backpack opt-out did not survive save and reopen")
-    let videoTab = descendants(root).compactMap { $0 as? GameTabButton }.first { $0.title == "Video" }!
+    let videoTab = descendants(root).compactMap { $0 as? GameTabButton }.first { $0.title == "Display" }!
     videoTab.performClick(nil)
     root.layoutSubtreeIfNeeded()
     guard let screen = descendants(root).compactMap({ $0 as? GamePopUpButton }).first(where: { $0.accessibilityLabel() == "Screen" }) else {
@@ -4828,9 +4904,9 @@ extension AppDelegate {
     try check(library.entries.first(where: { $0.title == .lemmings2TheTribes })?.detail == "COMPLETE"
       && library.entries.first(where: { $0.title == .lemmings3TheChronicles })?.detail == "BETA",
       "The library has the wrong sequel release status")
-    try check(!homeContentRow(.lemmings2).contains("BETA")
-      && !homeContentRow(.lemmings2).contains("PREVIEW")
-      && homeContentRow(.lemmings3).hasSuffix(" — BETA"),
+    try check(homeContentRow(.lemmings2)?.contains("BETA") == false
+      && homeContentRow(.lemmings2)?.contains("PREVIEW") == false
+      && homeContentRow(.lemmings3)?.hasSuffix(" — BETA") == true,
       "The home rows have the wrong sequel release status")
     returnToLibrary()
     window.setContentSize(CGSize(width: 900, height: 620))
@@ -5678,7 +5754,7 @@ extension AppDelegate {
     stylesDirectory = nil
     neoLevelsDirectory = nil
     let bundled = try BundledGameResources.neoLemmix()
-    try check(neoLemmixSources == [bundled] && !homeContentRow(.neolemmix).contains("NO PACKS"),
+    try check(neoLemmixSources == [bundled] && homeContentRow(.neolemmix)?.contains("NO PACKS") == false,
       "Bundled NeoLemmix packs still need a folder choice")
     let library = NeoLemmixLibrary.discover(neoLemmixSources)
     rebuildLevelCatalogue(LevelBrowserDiscovery(
@@ -6706,35 +6782,27 @@ extension AppDelegate {
     try check(AboutWindow.coffeeURL.absoluteString == "https://coff.ee/generik", "Incorrect coffee destination")
     try check(AboutWindow.coffeeURL == GameSupport.coffeeURL, "Home and About donation destinations differ")
     GameScreen.shared.dismissAll()
+    // Donate is an About action in the Help menu. Home keeps only its five rows and Settings.
     let home = PlayfieldView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
     window.contentView!.addSubview(home)
     defer { home.removeFromSuperview() }
     home.phase = .briefing
     home.overlayTitle = L10n.text("LEMMINGS")
     home.overlayProfileInitials = "PLA"
-    home.overlayLines = ["Journey", "Classic Lemmings", "Oh No! More Lemmings", "Holiday Lemmings", "Lemmings 2", "Lemmings 3"]
+    home.overlayLines = ["RESUME JOURNEY (4/120)", "PLAY", "HOT SEAT", "PROFILE", "COMMUNITY"]
+    home.overlayHomeLeadingCount = home.overlayLines.count
     home.overlayShowsSettingsButton = true
-    var donations = 0
-    home.onDonate = { donations += 1 }
     for size in [CGSize(width: 640, height: 420), CGSize(width: 1120, height: 720), CGSize(width: 1600, height: 1000)] {
       home.frame.size = size
-      home.overlayHighlight = home.overlayLines.count + 3
-      try capture(home, "home-donate-\(Int(size.width))")
-      guard let donate = home.accessibleControls(owner: home).compactMap({ $0 as? GameAccessibleElement })
-        .first(where: { $0.accessibilityLabel() == L10n.text("Donate") }) else {
-        throw IntegrationFailure(message: "Home Donate target is missing")
-      }
-      try check(home.bounds.contains(donate.localFrame) && donate.localFrame.width >= 44 && donate.localFrame.height >= 28,
-        "Home Donate target left its viewport")
-      let before = donations
-      home.handleClick(at: CGPoint(x: donate.localFrame.midX, y: donate.localFrame.midY))
-      try check(donations == before + 1, "Home mouse dispatched the wrong action")
-      try check(home.activateHomeSelection(home.overlayLines.count + 3) && donations == before + 2,
-        "Keyboard cannot activate Donate")
-      try check(donate.accessibilityPerformPress() && donations == before + 3,
-        "Home accessibility dispatched the wrong action")
+      home.overlayHighlight = 0
+      try capture(home, "home-destinations-\(Int(size.width))")
+      let labels = home.accessibleControls(owner: home).compactMap { ($0 as? GameAccessibleElement)?.accessibilityLabel() }
+      try check(!labels.contains(L10n.text("Donate")), "Home still shows Donate")
+      try check(home.homeActionCount == home.overlayLines.count + 1, "Home lost a destination or Settings")
     }
-    print("PASS Home Donate mouse, keyboard and accessibility actions at three sizes; Home and About share the coffee destination")
+    try check(NSApplication.shared.helpMenu?.items.contains { $0.title == L10n.text("Donate…") } == true,
+      "The Help menu has no Donate item")
+    print("PASS Home shows Continue, four destinations and Settings at three sizes; Donate is in the Help menu")
     print("PASS About tabs, contributor cache/offline state, pixel renders and input targets; confirmed reset and recovery retain new rescues")
   }
 
@@ -6893,27 +6961,29 @@ extension AppDelegate {
     gamePicker.selectItem(at: christmas)
     fanPlaying = false; currentNxlvURL = nil
     arcadeRunID = UUID(); startedMusicIdentity = nil
+    playFirstLevel()
+    guard let session, !session.isComplete else { throw IntegrationFailure(message: "Missing handover level") }
+    playfield.startCountdown.cancel()
+    needsAttemptMusic = false
+    phase = .playing
+    isPaused = false
     applyAudioSettings()
     playMusicForCurrentLevel()
-    let outgoing = dj.currentURL
-    try check(outgoing != nil && dj.isPlaying, "Missing outgoing handover music")
-    var announced: [String] = []
-    dj.onTrackChange = { announced.append($0) }
+    try check(dj.isPlaying && dj.currentURL != nil, "Missing live attempt music")
+    resultMusic.begin(attempt: arcadeRunID)
     prepareLibrary(preservingMusic: true)
-    try check(dj.isPlaying && dj.currentURL == outgoing && announced.isEmpty,
-      "Internal library cleanup stopped or replaced the outgoing track")
-    // The destination fan session owns the next selection, despite the stale
-    // seasonal campaign picker underneath the library.
-    fanPlaying = true
-    arcadeRunID = UUID()
+    try check(!dj.isPlaying && resultMusic.owner == nil, "Outgoing music survived the handover")
+    playFirstLevel()
+    try check(needsAttemptMusic && !dj.isPlaying, "New attempt played before Ready")
+    playfield.startCountdown.cancel()
+    needsAttemptMusic = false
+    isPaused = false
     playMusicForCurrentLevel()
-    try check(!seasonalMusic && dj.isCrossfading && dj.isPlaying,
-      "Fan handover did not retain the outgoing deck for its transition")
     let identity = startedMusicIdentity
     playMusicForCurrentLevel()
-    try check(startedMusicIdentity == identity && dj.isCrossfading,
-      "Handover refresh restarted level music")
-    print("PASS seasonal-to-fan handover retains music and starts one destination crossfade")
+    try check(identity != nil && startedMusicIdentity == identity && dj.isPlaying,
+      "Destination failed to acquire one level track")
+    print("PASS live level, result fade, silent handover and next attempt track")
   }
 
   fileprivate func testSeasonalMusic() throws {
@@ -7244,6 +7314,7 @@ extension AppDelegate {
         fanPlaying = fan
         fanPack = URL(fileURLWithPath: "/test-pack.zip")
         fanQueue = [FanLevelLibrary.Entry(file: "test.lvl", section: nil, label: label)]
+        resultMusic.retire()
         music.stop(); _ = music.play(url: selectedTrack); try music.start()
         isPaused = true; applyUserMusicPause()
         try check(!music.isOutputRunning, "Paused final-tick fixture did not suspend selected music")
@@ -7251,8 +7322,8 @@ extension AppDelegate {
         try check(phase == .results, "single-step did not show results (fan=\(fan), win=\(win))")
         try check(isPaused && session?.isComplete == true,
           "Completed single-step resumed gameplay")
-        try check(music.isOutputRunning == win,
-          "Final single-step did not preserve win music or paused failure (fan=\(fan), win=\(win))")
+        try check(!music.isOutputRunning && resultMusic.owner == arcadeRunID,
+          "Finishing a paused attempt restarted music or lost fade ownership (fan=\(fan), win=\(win))")
         try check(music.currentURL == selectedTrack && music.muted,
           "Completion replaced the selected tune or cleared mute")
         try check(arcadeReport?.run.saved == (win ? 1 : 0), "Completion did not record the actual rescue result")
@@ -8291,7 +8362,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !PLAYFIELD_TESTS && !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
+    #if !PLAYFIELD_TESTS && !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !FIRST_PROFILE_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -8348,6 +8419,8 @@ Task { @MainActor in
     print("Gameplay quick controls integration tests passed.")
     #elseif HOME_BACKDROP_TESTS
     try await subject.testHomeBackdrop()
+    #elseif FIRST_PROFILE_TESTS
+    try subject.testFirstProfileLaunch()
     #elseif MAC_FIDELITY_TESTS
     try await subject.testMacintoshFidelity()
     print("Macintosh fidelity integration tests passed.")

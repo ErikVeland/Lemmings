@@ -40,6 +40,81 @@ final class GameAssetPackTests: XCTestCase {
         XCTAssertEqual(attempts, 1)
     }
 
+    #if os(iOS) || os(tvOS)
+    func testRestoreKeepsBundledFanRuntime() throws {
+        let manager = FileManager.default
+        let root = manager.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? manager.removeItem(at: root) }
+        let base = root.appendingPathComponent("Base", isDirectory: true)
+        let source = root.appendingPathComponent("Import", isDirectory: true)
+        let runtime = "FanRuntime/holiday_native_1994/GROUND2O.DAT"
+        let file = base.appendingPathComponent(runtime)
+        try manager.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let data = Data("abc".utf8)
+        try data.write(to: file)
+        let inventory = """
+        {"schemaVersion":1,"kind":"ultimate-lemmix-trusted-base-data","files":[
+          {"path":"\(runtime)","bytes":3,"sha256":"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"}]}
+        """
+        try Data(inventory.utf8).write(to: base.appendingPathComponent(OwnedResourceLibrary.trustedBaseInventoryName))
+        let music = source.appendingPathComponent("Music/example.dat")
+        try manager.createDirectory(at: music.deletingLastPathComponent(), withIntermediateDirectories: true)
+        try data.write(to: music)
+
+        let library = OwnedResourceLibrary(root: root.appendingPathComponent("Installed"), bundledResources: base)
+        let receipt = try library.install(directory: source)
+        XCTAssertEqual(try Data(contentsOf: receipt.resourcesDirectory.appendingPathComponent(runtime)), data)
+        XCTAssertEqual(try library.verifyInstalled()?.contentID, receipt.contentID)
+    }
+    #endif
+
+    /// Set LEMMINGS_GAME_ASSET_ARCHIVE to a downloaded pack to check extraction and import end to end.
+    func testDownloadedArchiveInstallsIntoResourceLibrary() throws {
+        guard let path = ProcessInfo.processInfo.environment["LEMMINGS_GAME_ASSET_ARCHIVE"] else {
+            throw XCTSkip("LEMMINGS_GAME_ASSET_ARCHIVE is not set.")
+        }
+        let manager = FileManager.default
+        let root = manager.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? manager.removeItem(at: root) }
+        let base = root.appendingPathComponent("Base", isDirectory: true)
+        try manager.createDirectory(at: base, withIntermediateDirectories: true)
+        let archive = URL(fileURLWithPath: path)
+        try GameAssetPack.verifyArchive(archive)
+        let library = OwnedResourceLibrary(root: root.appendingPathComponent("Installed"), bundledResources: base)
+        let receipt = try GameAssetPack.installVerifiedArchive(archive) { try library.install(directory: $0) }
+        XCTAssertEqual(try library.verifyInstalled()?.contentID, receipt.contentID)
+        for folder in ["MacArtwork", "AmigaArtwork", "Fonts/OriginalLemmings"] {
+            XCTAssertTrue(manager.fileExists(atPath: receipt.resourcesDirectory.appendingPathComponent(folder).path), folder)
+        }
+    }
+
+    /// Set LEMMINGS_TEST_ASSET_DOWNLOAD=1 to download the real pack through the app's own transfer path.
+    func testLiveDownloadReportsProgressAndInstalls() async throws {
+        guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_ASSET_DOWNLOAD"] == "1" else {
+            throw XCTSkip("LEMMINGS_TEST_ASSET_DOWNLOAD is not set.")
+        }
+        let manager = FileManager.default
+        let root = manager.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? manager.removeItem(at: root) }
+        let base = root.appendingPathComponent("Base", isDirectory: true)
+        try manager.createDirectory(at: base, withIntermediateDirectories: true)
+        let library = OwnedResourceLibrary(root: root.appendingPathComponent("Installed"), bundledResources: base)
+        let phases = PhaseLog()
+        let receipt = try await GameAssetPack.shared.downloadAndInstall(progress: { phases.add($0) }) {
+            try library.install(directory: $0)
+        }
+        let observed = await MainActor.run { phases.values }
+        XCTAssertEqual(observed.first, .connecting)
+        XCTAssertEqual(observed.last, .installing)
+        let progress = observed.compactMap { phase -> Int? in
+            if case .downloading(let value) = phase { return value }
+            return nil
+        }
+        XCTAssertFalse(progress.isEmpty)
+        XCTAssertTrue(progress.allSatisfy { (1...99).contains($0) })
+        XCTAssertEqual(try library.verifyInstalled()?.contentID, receipt.contentID)
+    }
+
     func testWaitingIsNotZeroAndAllPreImportStatesCancel() {
         XCTAssertEqual(GameAssetPack.Progress.transfer(0), .connecting)
         XCTAssertEqual(GameAssetPack.Progress.transfer(1), .downloading(1))
@@ -184,4 +259,10 @@ final class GameAssetPackTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at: file) }
         XCTAssertThrowsError(try GameAssetPack.verifyArchive(file)) { XCTAssertEqual($0 as? GameAssetPack.Failure, .invalid) }
     }
+}
+
+@MainActor private final class PhaseLog: @unchecked Sendable {
+    var values: [GameAssetPack.Progress] = []
+    nonisolated init() {}
+    func add(_ phase: GameAssetPack.Progress) { values.append(phase) }
 }

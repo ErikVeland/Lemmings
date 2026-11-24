@@ -118,9 +118,9 @@ import NxlvKit
     let tabs = GameTabs()
     tabs.onSelectionChanged = { [weak self] in self?.help.dismiss() }
     tabs.addTabViewItem(tab(L10n.text("Gameplay"), gameplayPane()))
-    tabs.addTabViewItem(tab(L10n.text("Controller"), controllerPane()))
-    tabs.addTabViewItem(tab(L10n.text("Graphics"), graphicsPane()))
-    tabs.addTabViewItem(tab(L10n.text("Video"), videoPane()))
+    tabs.addTabViewItem(tab(L10n.text("Controls"), controllerPane()))
+    tabs.addTabViewItem(tab(L10n.text("Artwork"), graphicsPane()))
+    tabs.addTabViewItem(tab(L10n.text("Display"), videoPane()))
     tabs.addTabViewItem(tab(L10n.text("Audio"), audioPane()))
     tabs.addTabViewItem(tab(L10n.text("Accessibility"), accessibilityPane()))
     tabs.addTabViewItem(tab(L10n.text("Privacy"), privacyPane()))
@@ -461,7 +461,7 @@ import NxlvKit
     source.setAccessibilityLabel(L10n.text("Controller button"))
     role.setAccessibilityLabel(L10n.text("Gameplay action"))
     let reset = GameButton(title: L10n.text("Reset button mappings"), target: self, action: #selector(resetControllerMapping))
-    let note = GameLabel(wrappingLabelWithString: L10n.text("If another button has that action, the two bindings swap. Modifier combinations follow the new buttons. Menu navigation always uses the standard controls. Sticks can be swapped in Controller settings."))
+    let note = GameLabel(wrappingLabelWithString: L10n.text("If another button has that action, the two bindings swap. Modifier combinations follow the new buttons. Menu navigation always uses the standard controls. Sticks can be swapped in Controls."))
     let content = pane([(L10n.text("Button"), source), (L10n.text("Action"), role), (L10n.text("Defaults"), reset), (L10n.text("How it works"), note)])
     content.frame = page.body.bounds; content.autoresizingMask = [.width, .height]
     page.body.addSubview(content)

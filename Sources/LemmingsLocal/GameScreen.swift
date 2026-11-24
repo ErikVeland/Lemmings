@@ -367,7 +367,7 @@ import LemmingsGameArt
     }
     override func layout() {
         super.layout()
-        let visible = GameScreen.shared.onMainMenu != nil
+        let visible = GameScreen.shared.onMainMenu != nil && (page as? ArcadeView)?.onFirstPlay == nil
         home.isHidden = !visible
         let showsBack = (page as? GameMenuPage)?.controllerBackButton.isHidden != true
         back.title = (page as? GameMenuPage)?.backTitle ?? (page as? SolutionReplayPage)?.navigationBackButton?.title ?? L10n.text("Back")
@@ -453,6 +453,7 @@ import LemmingsGameArt
     var onBack: (() -> Void)?
     var onHorizontalNavigation: ((Int) -> Void)?
     let body = NSView()
+    var listTopInset: CGFloat = 0
     var listMinimumHeight: CGFloat = 56
     private var listActions: [(index: Int, button: GameActionButton)] = []
     var adaptsToViewport: Bool { !listActions.isEmpty }
@@ -621,7 +622,7 @@ import LemmingsGameArt
         guard listScroll.superview != nil else { return }
         listActions.removeAll { $0.button.superview == nil }
         let ordered = listActions.sorted { $0.index < $1.index }
-        listScroll.frame = body.bounds
+        listScroll.frame = CGRect(x: 0, y: 0, width: body.bounds.width, height: max(0, body.bounds.height - listTopInset))
         let viewport = listScroll.contentSize
         let grid = GameListGrid(actions: ordered.enumerated().map { .init(String($0.offset), $0.element.button.title) },
             width: max(1, viewport.width - 24), columnsEnabled: ordered.count >= 2,

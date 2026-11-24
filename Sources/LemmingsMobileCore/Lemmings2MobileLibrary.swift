@@ -4,7 +4,7 @@ import NxlvKit
 /**
  * Loads player-owned L2 data and creates campaign-aware mobile sessions.
  */
-public final class Lemmings2MobileLibrary: MobileGameLibrary {
+public final class Lemmings2MobileLibrary: MobileCampaignPreviewLibrary {
     public static let engineFingerprint = "lemmings2-mobile-runtime-v1"
 
     public let directory: URL
@@ -66,7 +66,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
             let tribe = index / 10
             return MobileLevelSummary(index: index,
                 rank: Lemmings2Campaign.tribeNames[tribe], number: index % 10 + 1,
-                title: level.title.isEmpty ? "Level \(index % 10 + 1)" : level.title)
+                title: level.title.isEmpty ? "Level \(index % 10 + 1)" : level.title, origin: .official, packName: L10n.text("Lemmings 2"))
         }
     }
 
@@ -104,7 +104,15 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
     }
 
     /// Explicit populations create isolated sampler/replay sessions.
-    public func loadLevel(at index: Int, population override: Int?) throws -> MobileLevelContent {
+    public func loadPreviewLevel(at index: Int) throws -> MobileLevelContent {
+        try loadLevel(at: index, population: nil, preview: true)
+    }
+
+    public func loadLevel(at index: Int, population: Int?) throws -> MobileLevelContent {
+        try loadLevel(at: index, population: population, preview: false)
+    }
+
+    private func loadLevel(at index: Int, population override: Int?, preview: Bool) throws -> MobileLevelContent {
         try Task.checkCancellation()
         guard levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let tribe = index / 10
@@ -117,7 +125,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
             if let progressFailure { throw Lemmings2MobileLibraryError.progressSave(progressFailure) }
             var proposed = campaign
             if override == nil { try proposed.select(tribe: tribe, level: levelNumber) }
-            if override == nil, proposed.progress != campaign.progress {
+            if !preview, override == nil, proposed.progress != campaign.progress {
                 try storage.save(proposed.progress, name: "lemmings2-campaign")
                 campaign = proposed
             }
@@ -140,7 +148,7 @@ public final class Lemmings2MobileLibrary: MobileGameLibrary {
 
         return try makeContent(level: selectedLevel, style: style, population: population,
             skills: nil, summary: levels[index], identifier: "lemmings2/\(levelFingerprints[index])",
-            fingerprint: levelFingerprints[index], recordsProgress: override == nil)
+            fingerprint: levelFingerprints[index], recordsProgress: !preview && override == nil)
     }
 
     public func loadPractice(at index: Int, skills: [Lemmings2Runtime.Skill]) throws -> MobileLevelContent {

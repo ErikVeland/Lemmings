@@ -15,7 +15,11 @@ for module in "${sdk_modules[@]}"; do
   rm -rf "$build_dir/Sources/$module"
   cp -R "$project_dir/Sources/$module" "$build_dir/Sources/$module"
 done
-cp "$project_dir/Apps/$application/AppDelegate.swift" "$build_dir/Sources/AppDelegate.swift"
+cp "$project_dir"/Apps/SharedAppleMobile/{AppDelegate,LaunchURL}.swift "$build_dir/Sources/"
+mkdir -p "$build_dir/Sources/UXTests"
+for suite in MobileDestinationBackTests MobileDuoHUDTransitionTests MobileJourneyReturnTests MobileMenuPreviewTargetTests MobileOverlayReturnTests; do
+  cp "$project_dir/Tests/LemmingsMobileUITests/$suite.swift" "$build_dir/Sources/UXTests/"
+done
 python3 - "$build_dir/Sources" "$build_dir/inputs.json" <<'PY'
 import hashlib, json, pathlib, sys
 root = pathlib.Path(sys.argv[1])
@@ -26,7 +30,7 @@ PY
 for module in "${sdk_modules[@]}"; do
   mkdir -p "$build_dir/Modules/$module.swiftmodule"
   local_sources=("${(@f)$(rg --files "$build_dir/Sources/$module" -g '*.swift')}")
-  swiftc -swift-version 6 -parse-as-library -target "$target" -sdk "$sdk" \
+  swiftc -swift-version 6 -parse-as-library -enable-testing -target "$target" -sdk "$sdk" \
     -module-cache-path "$build_dir/ModuleCache" -I "$build_dir/Modules" \
     -module-name "$module" -emit-module \
     -emit-module-path "$build_dir/Modules/$module.swiftmodule/$module_target.swiftmodule" \
@@ -35,5 +39,13 @@ for module in "${sdk_modules[@]}"; do
 done
 swiftc -swift-version 6 -parse-as-library -target "$target" -sdk "$sdk" \
   -module-cache-path "$build_dir/ModuleCache" -I "$build_dir/Modules" \
-  -typecheck "$build_dir/Sources/AppDelegate.swift"
+  -typecheck "$build_dir"/Sources/{AppDelegate,LaunchURL}.swift
 print "PASS $application application entry point"
+developer="$(xcode-select -p)"
+platform_dir="$(xcrun --sdk "$sdk_name" --show-sdk-platform-path)/Developer"
+swiftc -swift-version 6 -parse-as-library -target "$target" -sdk "$sdk" \
+  -module-cache-path "$build_dir/ModuleCache" -I "$build_dir/Modules" \
+  -load-plugin-library "$developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing/libTestingMacros.dylib" \
+  -F "$platform_dir/Library/Frameworks" -I "$platform_dir/usr/lib" \
+  -module-name UXPlatformTests -typecheck "$build_dir"/Sources/UXTests/*.swift
+print "PASS $1 UIKit regression sources typechecked"

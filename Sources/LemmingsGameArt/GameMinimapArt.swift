@@ -18,6 +18,20 @@ public enum GameMinimapArt {
         return CGRect(x: bounds.midX - size.width / 2, y: bounds.midY - size.height / 2, width: size.width, height: size.height)
     }
 
+    public static func levelPoint(at point: CGPoint, content: CGRect, levelSize: CGSize, clamp: Bool = false) -> CGPoint? {
+        guard content.width > 0, content.height > 0, levelSize.width > 0, levelSize.height > 0,
+              clamp || content.contains(point) else { return nil }
+        return CGPoint(x: min(1, max(0, (point.x - content.minX) / content.width)) * levelSize.width,
+                       y: min(1, max(0, (point.y - content.minY) / content.height)) * levelSize.height)
+    }
+
+    public static func adjustedCentre(in visible: CGRect, levelSize: CGSize, direction: CGFloat) -> CGPoint {
+        if visible.width >= levelSize.width, visible.height < levelSize.height {
+            return CGPoint(x: visible.midX, y: min(levelSize.height, max(0, visible.midY + direction * visible.height / 2)))
+        }
+        return CGPoint(x: min(levelSize.width, max(0, visible.midX + direction * visible.width / 2)), y: visible.midY)
+    }
+
     public static func draw(in context: CGContext, bounds: CGRect, image: CGImage?, visible: CGRect, levelSize: CGSize, overlay: Bool = false,
                             thumbnail: GameMinimapThumbnail? = nil, displayBounds: CGRect? = nil) {
         let bounds = drawingFrame(in: bounds, displayBounds: displayBounds)

@@ -26,6 +26,14 @@ import UIKit
         }
     }
     var onSelectionChanged: ((Int) -> Void)?
+    var actionTitle: String? {
+        didSet {
+            guard oldValue != actionTitle else { return }
+            accessibilityHint = actionTitle
+            rendered[selectedIndex] = nil
+            setNeedsLayout()
+        }
+    }
     var onActivate: ((Int) -> Void)?
 
     private(set) var selectedIndex = 0
@@ -89,7 +97,7 @@ import UIKit
         super.pressesBegan(presses, with: event)
     }
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        if presses.contains(where: { $0.type == .select }) { onActivate?(selectedIndex); return }
+        if presses.contains(where: { $0.type == .select }) { _ = accessibilityActivate(); return }
         super.pressesEnded(presses, with: event)
     }
     #endif
@@ -119,7 +127,7 @@ import UIKit
     override func accessibilityIncrement() { select(selectedIndex + 1, animated: true) }
     override func accessibilityDecrement() { select(selectedIndex - 1, animated: true) }
     override func accessibilityActivate() -> Bool {
-        guard !titles.isEmpty else { return false }
+        guard !titles.isEmpty, actionTitle != nil else { return false }
         onActivate?(selectedIndex)
         return true
     }
@@ -215,7 +223,7 @@ import UIKit
         let image = UIGraphicsImageRenderer(size: state.size, format: format).image { context in
             LevelCoverArt.draw(in: context.cgContext, bounds: CGRect(origin: .zero, size: state.size),
                                title: titles[index], artwork: artwork[index], selected: state.selected,
-                               typography: MobileGameArt.typography)
+                               typography: MobileGameArt.typography, actionTitle: actionTitle)
         }
         card.contents = image.cgImage
         card.contentsScale = format.scale
@@ -299,7 +307,7 @@ import UIKit
             let local = card.convert(point, from: layer)
             return LevelCoverArt.coverBounds(for: CGRect(origin: .zero, size: geometry.cardSize)).contains(local)
         }
-        guard let hit else { return }
+        guard let hit, actionTitle != nil else { return }
         onActivate?(hit)
     }
 }

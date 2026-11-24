@@ -12,6 +12,7 @@ import AVFAudio
     private var module = ModuleMusicPlayer()
     private var recordings = SoundtrackPlayer()
     private var dj = AdaptiveDJPlayer()
+    private lazy var resultFade = ResultMusicFade(module: module, recordings: recordings, dj: dj)
     private var playing: String?
     private var usingRecording = false
     private var usingDJ = false
@@ -96,6 +97,7 @@ import AVFAudio
                 self.module = ModuleMusicPlayer()
                 self.recordings = SoundtrackPlayer()
                 self.dj = AdaptiveDJPlayer()
+                self.resultFade = ResultMusicFade(module: self.module, recordings: self.recordings, dj: self.dj)
                 self.appliedRespectMuteSetting = nil
                 self.applySettings()
                 if resumeMenu && UIApplication.shared.applicationState == .active {
@@ -281,7 +283,12 @@ import AVFAudio
         applySettings()
         guard isEnabled, settings.classic.musicVolume > 0, !isTestAudioMuted else { return }
         let key = attemptID.uuidString + "|" + soundtrack
-        guard playing != key else { return }
+        guard resultFade.owner != attemptID, playing != key else { return }
+        resultFade.retire()
+        resultTransitionTask?.cancel()
+        resultTransitionTask = nil
+        resultComplete = false
+        nukeMood.reset()
         lastPitchCents = nil
         let position = context.scorePosition ?? index
         if (soundtrack == "Lix" || soundtrack == "Traditional Remixes"), playLix(index: position, identity: key) { return }
@@ -423,9 +430,9 @@ import AVFAudio
         applyPitch()
         if changed { applyOutputState() }
     }
-    func update(_ snapshot: MobileGameSnapshot, active: Int? = nil, nukeRemainingTicks: Int? = nil,
+    func update(_ snapshot: MobileGameSnapshot, attemptID: UUID, active: Int? = nil, nukeRemainingTicks: Int? = nil,
                 allNukePopped: Bool? = nil, ticksPerSecond: Double = 17) {
-        guard !menuAudioReady, !menuActivationPending, playing != menuKey, !isTestAudioMuted else { return }
+        guard playing?.hasPrefix(attemptID.uuidString + "|") == true else { return }
         if resultComplete != snapshot.isComplete { resultComplete = snapshot.isComplete; applyOutputState() }
         let failed = snapshot.isComplete ? !snapshot.didWin : active.map {
             FailureMoodDecision.isUnrecoverable(saved: snapshot.saved, active: $0,
@@ -448,7 +455,8 @@ import AVFAudio
                 }
             }
         }
-        guard usingDJ else { return }
+        if snapshot.isComplete { resultFade.begin(attempt: attemptID) }
+        guard usingDJ, resultFade.owner == nil else { return }
         dj.updateTelemetry(.init(releasedCount: snapshot.released, totalCount: snapshot.total,
             savedCount: snapshot.saved, requiredCount: snapshot.required, releaseRate: snapshot.releaseRate ?? 50,
             remainingSeconds: snapshot.remainingSeconds, isNuking: snapshot.isEndingRun,
@@ -476,7 +484,8 @@ import AVFAudio
             return
         }
         guard playing != nil else { return }
-        if paused && !resultComplete {
+        if resultComplete { return }
+        if paused {
             let rhythm = settings.classic.pauseMusicBeatOnly
             module.suspendOutput(rhythmOnly: rhythm)
             recordings.suspendOutput(rhythmOnly: rhythm)
@@ -489,7 +498,10 @@ import AVFAudio
         guard !inactive, isEnabled, !isTestAudioMuted else { return }
         module.playRewind(); recordings.playRewind(); dj.playRewind()
     }
-    func vinylStop() { module.vinylStop(); recordings.vinylStop(); dj.vinylStop(); playing = nil }
+    func vinylStop() {
+        if resultFade.owner != nil { stop(); return }
+        module.vinylStop(); recordings.vinylStop(); dj.vinylStop(); playing = nil
+    }
     func suspend(attemptID: UUID? = nil) {
         if let attemptID, !acceptsGameplay(attemptID: attemptID) { return }
         menuSpinDownTask?.cancel(); menuSpinDownTask = nil
@@ -510,7 +522,12 @@ import AVFAudio
         }
         inactive = false; applyOutputState()
     }
+    func retireAttempt(_ attempt: UUID) {
+        if playing?.hasPrefix(attempt.uuidString + "|") == true { stop() }
+    }
+
     func stop() {
+        resultFade.retire()
         menuSpinDownTask?.cancel(); menuSpinDownTask = nil
         releaseMenuAudio()
         resultTransitionTask?.cancel(); resultTransitionTask = nil

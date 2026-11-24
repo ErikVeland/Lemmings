@@ -1,4 +1,5 @@
 #if os(iOS) || os(tvOS)
+import LemmingsGameArt
 import NxlvKit
 import UIKit
 
@@ -6,7 +7,7 @@ import UIKit
  * Shares the bundled Lix interface pixels across touch and remote controls.
  */
 @MainActor enum MobileLixInterface {
-    static var enabled: Bool { LemmingsMobileConfiguration.current == .ultimateLemmix }
+    static var enabled: Bool { LemmingsMobileConfiguration.current == .ultimateLemmix && GameArtworkSkin.usesLixInterface }
     private static let artwork = Bundle.main.resourceURL.flatMap {
         try? LixInterfaceArtwork(directory: $0.appendingPathComponent("AlternativeAssets/Lix"))
     }
