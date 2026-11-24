@@ -25,20 +25,22 @@ export LEMMINGS_TEST_AUDIO=muted
 export IOS_SOURCE_GATE_ONLY=1
 export IOS_MUSIC_SCOPE=main
 
+project="$(python3 Tools/Publication/ios_source_gate.py project)"
+app_dir="${project:h}"
 plutil -lint \
-  Apps/UltimateLemmingsIOS/Info.plist \
-  Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy \
-  Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj >/dev/null
+  "$app_dir/Info.plist" \
+  "$app_dir/PrivacyInfo.xcprivacy" \
+  "$project/project.pbxproj" >/dev/null
 
 grep -q 'LemmingsMobileCore' Package.swift
 grep -q 'LemmingsMobileUI' Package.swift
 grep -q 'com.apple.product-type.application' \
-  Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj
+  "$project/project.pbxproj"
 grep -q 'TARGETED_DEVICE_FAMILY = "1,2"' \
-  Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj
+  "$project/project.pbxproj"
 grep -q 'MTKView' Sources/LemmingsMobileUI/MobileCRTView.swift
 grep -q 'MobileCheckpointStore' Sources/LemmingsMobileCore/MobileCheckpoint.swift
-grep -q 'AppIcon-1024.png' Apps/UltimateLemmingsIOS/Assets.xcassets/AppIcon.appiconset/Contents.json
+grep -q 'AppIcon-1024.png' "$app_dir/Assets.xcassets/AppIcon.appiconset/Contents.json"
 grep -q 'import LemmingsMobileCore' Apps/SharedAppleMobile/UITests/MobileCoreIOSSmokeTests.swift
 
 for source in Sources/LemmingsMobileCore/*.swift Sources/LemmingsMobileUI/*.swift \
@@ -88,47 +90,13 @@ fi
 
 asset_settings=()
 if (( !runtime_available )); then
-  asset_settings=(EXCLUDED_SOURCE_FILE_NAMES=Assets.xcassets)
+  asset_settings=(--without-asset-catalogue)
 fi
 
 zsh Scripts/run-source-tests.sh
-xcodebuild -quiet \
-  -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
-  -target UltimateLemmingsIOSUITests \
-  -configuration Debug \
-  -sdk iphonesimulator \
-  -clonedSourcePackagesDirPath "$project_dir/.build/ios-packages" \
-  OBJROOT="$project_dir/.build/ios-obj" \
-  SYMROOT="$project_dir/.build/ios-products" \
-  ONLY_ACTIVE_ARCH=NO \
-  CODE_SIGNING_ALLOWED=NO \
-  "${asset_settings[@]}" \
-  build
-
-xcodebuild -quiet \
-  -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
-  -target UltimateLemmingsIOS \
-  -configuration Release \
-  -sdk iphonesimulator \
-  -clonedSourcePackagesDirPath "$project_dir/.build/ios-packages" \
-  OBJROOT="$project_dir/.build/ios-release-obj" \
-  SYMROOT="$project_dir/.build/ios-release-products" \
-  ONLY_ACTIVE_ARCH=NO \
-  CODE_SIGNING_ALLOWED=NO \
-  "${asset_settings[@]}" \
-  build
-
-xcodebuild -quiet \
-  -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
-  -target UltimateLemmingsIOS \
-  -configuration Release \
-  -sdk iphoneos \
-  -clonedSourcePackagesDirPath "$project_dir/.build/ios-packages" \
-  OBJROOT="$project_dir/.build/ios-device-release-obj" \
-  SYMROOT="$project_dir/.build/ios-device-release-products" \
-  CODE_SIGNING_ALLOWED=NO \
-  "${asset_settings[@]}" \
-  build
+for stage in debug release device; do
+  python3 Tools/Publication/ios_source_gate.py "$stage" "${asset_settings[@]}"
+done
 
 if (( runtime_available )); then
   print "PASS 1.3 tests, Debug and Release Simulator builds, and unsigned Release device build"

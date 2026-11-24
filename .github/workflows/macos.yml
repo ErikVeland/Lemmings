@@ -24,6 +24,8 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - name: Select Xcode
         run: sudo xcode-select -s /Applications/Xcode_16.4.app
       - name: Repository hygiene and release metadata
