@@ -2236,7 +2236,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   // MARK: - Content
 
-  private func showOwnedGameImport() {
+  private func showOwnedGameImport(promptForDownload: Bool = false) {
     ownedGameImport.onInstalled = { [weak self] game, directory in
       guard let self else { return }
       self.returnToLibrary()
@@ -2258,7 +2258,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
           detail: L10n.text("Import the resource folder again."))
       }
     }
-    ownedGameImport.show(owner: window)
+    ownedGameImport.show(owner: window, promptForDownload: promptForDownload)
   }
 
   @objc private func artworkSkinChanged() {
@@ -6650,7 +6650,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return L10n.text("FAN LEMMINGS  \(passed)/\(total)  — COUNTING")
   }
 
-  private func homeContentRow(_ family: HomeContentFamily) -> String {
+  private func homeContentRow(_ family: HomeContentFamily) -> String? {
     if family == .fan { return fanHomeRow() }
     if family == .neolemmix {
       guard !neoLemmixSources.isEmpty else { return L10n.text("NEOLEMMIX  — NO PACKS") }
@@ -6668,7 +6668,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     let starters = family == .classic ? dataSets.filter { GameStarterContent.isStarter(directory: $0.directory) } : []
     guard !installed.isEmpty || !starters.isEmpty else {
-      return family.displayName.uppercased() + "  — NO DATA"
+      return nil
     }
     let wins = Set(homeLearningEntries().map(\.identity))
     let passed = installed.reduce(0) { count, item in
@@ -6707,7 +6707,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       items.append(HomeMenuItem(title: L10n.text("RESUME LEVEL - \(players)"), action: .resume))
     }
     items += HomeContentFamily.allCases.map {
-      HomeMenuItem(title: [.lemmings2, .lemmings3].contains($0) ? $0.displayName : homeContentRow($0), action: .browse($0))
+      HomeMenuItem(title: [.lemmings2, .lemmings3].contains($0) ? $0.displayName : (homeContentRow($0) ?? ($0.displayName.uppercased() + "  — NO DATA")), action: .browse($0))
     }
     return items
   }
@@ -7770,6 +7770,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .collections:
         presentLevelCollections()
       case let .browse(family):
+        if AppDistribution.isStore, !family.titles.isEmpty, homeContentRow(family) == nil {
+          showOwnedGameImport(promptForDownload: true)
+          return
+        }
         if family == .neolemmix, neoLemmixSources.isEmpty {
           chooseNeoLemmixPacks()
           return
