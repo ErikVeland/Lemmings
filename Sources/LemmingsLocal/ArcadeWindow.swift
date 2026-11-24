@@ -637,7 +637,6 @@ import NxlvKit
                    hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     var onFirstPlay: (() -> Void)?
-    var worldwideSaved: Int? { didSet { needsDisplay = true } }
     private var editorOffset: CGFloat { onFirstPlay == nil ? 0 : -176 }
     private var initialsRect: CGRect { CGRect(x: 564 + editorOffset, y: 204, width: 430, height: 60) }
     var profilesReturnToHotSeat = false
@@ -862,7 +861,7 @@ import NxlvKit
         let store = ArcadeStore.shared
         let records = store.records
         if onFirstPlay != nil {
-            header(L10n.text("Create profile"), subtitle: SavedLemmingsCounter.worldwideText(worldwideSaved))
+            header(L10n.text("Create profile"), subtitle: L10n.text("Keeps your progress, saves and records"))
             drawProfileEditor()
             button(L10n.text("Play"), CGRect(x: 400, y: 627, width: 320, height: 55), primary: true,
                    enabled: store.profilesAreWritable && !initials.isEmpty) { [weak self] in self?.performProfilePrimaryAction() }

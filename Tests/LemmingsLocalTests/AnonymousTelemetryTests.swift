@@ -700,7 +700,7 @@ final class AnonymousTelemetryTests: XCTestCase {
         func buttons(in view: NSView) -> [NSButton] {
             (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
         }
-        let share = try XCTUnwrap(buttons(in: page).first { $0.title == "Share" })
+        let share = try XCTUnwrap(buttons(in: page).first { $0.title == "Join" })
         for control in [page.controllerBackButton, share] {
             let rect = control.convert(control.bounds, to: page)
             XCTAssertTrue(page.bounds.contains(rect))

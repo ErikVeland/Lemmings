@@ -55,7 +55,7 @@ final class DeviceMenuLayoutTests: XCTestCase {
         let output = root.appendingPathComponent(".build/journey-session-ui")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         for width in [390, 1120] {
-            let page = MobileHomeArt.page(journey: nil, families: [.init("classic", "Classic"), .init("l2", "Lemmings 2"), .init("l3", "Lemmings 3")], initials: "ALICE v BOB")
+            let page = MobileHomeArt.playPage(journey: nil, families: [.init("classic", "Classic"), .init("l2", "Lemmings 2"), .init("l3", "Lemmings 3")])
             let layout = GameFrontEnd.layout(page, width: CGFloat(width), minimumHeight: 720)
             XCTAssertFalse(layout.targets.contains { $0.action.id == "journey" })
             for target in layout.targets where target.action.enabled {
@@ -214,8 +214,9 @@ final class DeviceMenuLayoutTests: XCTestCase {
         let libraries = (0..<6).map { GameFrontEnd.Action("family.\($0)", "Library \($0) 0/120") }
             + [.init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
         for size in [CGSize(width: 1194, height: 834), .init(width: 834, height: 1194), .init(width: 740, height: 430)] {
-            let page = MobileHomeArt.page(resume: [.init("journeyResume", "Resume journey"), .init("resume", "Resume level - UVA")],
-                journey: .init("journey", "Journey map 33/295 solved"), families: libraries, initials: "UVA v EKV")
+            // Play owns the game grid that Home once carried.
+            let page = MobileHomeArt.playPage(journey: .init("journey", "Journey map 33/295 solved"),
+                resume: [.init("journeyResume", "Resume journey"), .init("resume", "Resume level - UVA")], families: libraries)
             let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
             XCTAssertTrue(page.rows.first { $0.id == "journey" }!.titleRuns.allSatisfy { $0.palette == .blue })
             let grid = layout.targets.filter { $0.action.id.hasPrefix("family.") }
@@ -224,12 +225,14 @@ final class DeviceMenuLayoutTests: XCTestCase {
             let sequels = layout.targets.filter { $0.action.gameLogo != nil }
             XCTAssertEqual(sequels.count, 2)
             XCTAssertTrue(sequels.allSatisfy { $0.frame.minY > grid.last!.frame.maxY && $0.frame.height == 112 })
-            // Four footer actions balance as two full rows of two, not three over one.
-            let footer = layout.targets.filter { ["players", "records", "collections", "donate"].contains($0.action.id) }
-            XCTAssertEqual(footer.count, 4)
+            // Back and Collections share one footer row at equal widths.
+            let footer = layout.targets.filter { ["playBack", "collections"].contains($0.action.id) }
+            XCTAssertEqual(footer.count, 2)
             let footerRows = Dictionary(grouping: footer, by: { $0.frame.minY })
-            XCTAssertEqual(footerRows.count, 2)
-            XCTAssertTrue(footerRows.values.allSatisfy { $0.count == 2 && abs($0[0].frame.width - $0[1].frame.width) < 0.01 })
+            if size.width >= 600 {
+                XCTAssertEqual(footerRows.count, 1)
+                XCTAssertTrue(footerRows.values.allSatisfy { $0.count == 2 && abs($0[0].frame.width - $0[1].frame.width) < 0.01 })
+            }
             for target in layout.targets {
                 XCTAssertEqual(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
             }
@@ -250,11 +253,11 @@ final class DeviceMenuLayoutTests: XCTestCase {
         XCTAssertEqual(GameSemanticText.players(otherTurn.homeInitials,
             nextPlayerIndex: otherTurn.homeNextPlayerIndex).map(\.palette), [.green, .blue, .gold])
         let phone = GameFrontEnd.layout(otherTurn, width: 390, minimumHeight: 763)
-        XCTAssertLessThan(phone.initials.maxY, phone.targets.first { $0.action.id == "classic" }!.frame.minY)
+        XCTAssertLessThan(phone.initials.maxY, phone.targets.first { $0.action.id == "play" }!.frame.minY)
         let book = MobileBookHomeArt.layout(otherTurn, width: 650, height: 465,
             panes: [CGRect(x: 0, y: 0, width: 318, height: 465),
                     CGRect(x: 332, y: 0, width: 318, height: 465)])
-        XCTAssertLessThan(book.initials.maxY, book.targets.first { $0.action.id == "classic" }!.frame.minY)
+        XCTAssertLessThan(book.initials.maxY, book.targets.first { $0.action.id == "play" }!.frame.minY)
         XCTAssertLessThan(book.initials.maxY, 465)
         let solo = MobileHomeArt.page(journey: nil, families: [], initials: "EKV", subtitle: "Saved")
         XCTAssertEqual(solo.subtitle, "Saved")
@@ -311,23 +314,21 @@ final class DeviceMenuLayoutTests: XCTestCase {
         let output = root.appendingPathComponent(".build/device-layout-native")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         let families = ["CLASSIC LEMMINGS  93/120", "OH NO! MORE LEMMINGS  45/100", "HOLIDAY LEMMINGS  17/72",
-            "OH YES! MORE LEMMINGS  20/60", "FAN LEMMINGS  12/15000", "NEOLEMMIX  4/500", "LEMMINGS 2  0/120", "LEMMINGS 3  0/90 - BETA", "COLLECTIONS"]
+            "OH YES! MORE LEMMINGS  20/60", "FAN LEMMINGS  12/15000", "NEOLEMMIX  4/500", "LEMMINGS 2  0/120", "LEMMINGS 3  0/90 - BETA"]
+        let destinations = ["PLAY", "HOT SEAT", "PROFILE", "COMMUNITY"]
         for size in [CGSize(width: 640, height: 480), .init(width: 900, height: 600), .init(width: 1120, height: 720),
                      .init(width: 1600, height: 900), .init(width: 2560, height: 1600)] {
             for saved in 0...2 {
                 let field = PlayfieldView(frame: CGRect(origin: .zero, size: size))
                 field.interfaceArtwork = art; field.macArtwork = art; field.phase = .briefing
                 field.overlayTitle = "LEMMINGS"; field.overlayShowsLemmings = true
-                field.overlayHomeLeadingCount = saved + 1
-                field.overlayLines = Array(["CONTINUE JOURNEY - ALICE v BOB", "RESUME LEVEL - ALICE"].prefix(saved))
-                    + ["JOURNEY  29/295 SOLVED"] + families
+                let routes = Array(["CONTINUE JOURNEY - ALICE v BOB", "RESUME LEVEL - ALICE"].prefix(saved)) + ["JOURNEY  29/295 SOLVED"]
                 field.overlayProfileInitials = saved == 0 ? "LEM" : "ALICE v BOB"
                 field.overlaySavedCounts = "LEMMINGS SAVED  1239"
                 field.overlayShowsSettingsButton = true; field.overlayAvailableUpdate = "Version 2.0"
-                field.overlayHighlight = 0
-                var selected: Int?, settings = false, update = false, profiles = false
+                var selected: Int?, settings = false, update = false, back = false, collections = false
                 field.onSelectOverlayLine = { selected = $0 }; field.onSettings = { settings = true }
-                field.onUpdate = { update = true }; field.onProfiles = { profiles = true }
+                field.onUpdate = { update = true }; field.onHomeBack = { back = true }; field.onPlaylists = { collections = true }
                 func capture(_ state: String) throws -> [GameAccessibleElement] {
                     let bitmap = try XCTUnwrap(field.bitmapImageRepForCachingDisplay(in: field.bounds))
                     field.displayIgnoringOpacity(field.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap)))
@@ -338,34 +339,42 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 func click(_ element: GameAccessibleElement) {
                     field.handleClick(at: CGPoint(x: element.localFrame.midX, y: element.localFrame.midY))
                 }
+
+                // Home: Continue, four destinations, Settings and Update in the header.
+                field.overlayHomePlay = false
+                field.overlayHomeLeadingCount = 5
+                field.overlayLines = [routes[0]] + destinations
+                field.overlayHighlight = 0
                 var elements = try capture("home")
-                XCTAssertEqual(field.homeSelection(from: saved + 1, direction: "right"), saved + 2)
-                XCTAssertEqual(field.homeSelection(from: saved + 2, direction: "left"), saved + 1)
-                XCTAssertEqual(field.homeSelection(from: saved + 1, direction: "down"), saved + 3)
+                XCTAssertEqual(field.homeActionCount, 7)
                 for label in ["Settings", "Version 2.0. Show update and release notes", field.overlayLines[0]] {
                     let element = try XCTUnwrap(elements.first { $0.accessibilityLabel() == label })
                     XCTAssertTrue(field.bounds.contains(element.localFrame)); click(element)
                 }
                 XCTAssertTrue(settings); XCTAssertTrue(update); XCTAssertEqual(selected, 0)
-                field.overlayHighlight = field.overlayLines.count - 1
-                elements = try capture("selected-last")
-                let last = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "COLLECTIONS" })
-                XCTAssertTrue(field.bounds.contains(last.localFrame)); click(last)
-                XCTAssertEqual(selected, field.overlayLines.count - 1)
-                let footerChoice = try XCTUnwrap(field.homeSelection(from: field.overlayLines.count - 1, direction: "down"))
-                XCTAssertGreaterThanOrEqual(footerChoice, field.overlayLines.count)
-                XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count)); XCTAssertTrue(profiles)
-                XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count + 4)); XCTAssertTrue(settings)
-                field.overlayHighlight = footerChoice
-                _ = try capture("keyboard-footer")
-                let event = try XCTUnwrap(NSEvent(cgEvent: try XCTUnwrap(CGEvent(scrollWheelEvent2Source: nil,
-                    units: .pixel, wheelCount: 1, wheel1: -2000, wheel2: 0, wheel3: 0))))
-                field.handleScroll(event, at: .init(x: 100, y: 100))
-                elements = try capture("footer")
-                let profile = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "Player profiles" })
-                XCTAssertTrue(field.bounds.contains(profile.localFrame)); click(profile); XCTAssertTrue(profiles)
+                let community = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "COMMUNITY" })
+                field.handleScroll(try XCTUnwrap(NSEvent(cgEvent: try XCTUnwrap(CGEvent(scrollWheelEvent2Source: nil,
+                    units: .pixel, wheelCount: 1, wheel1: -2000, wheel2: 0, wheel3: 0)))), at: .init(x: 100, y: 100))
+                elements = try capture("home-scrolled")
+                let lastRow = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "COMMUNITY" })
+                XCTAssertTrue(field.bounds.contains(lastRow.localFrame)); click(lastRow)
+                XCTAssertEqual(selected, 4)
                 let savedCount = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "LEMMINGS SAVED  1239" })
-                XCTAssertFalse(savedCount.localFrame.intersects(profile.localFrame))
+                XCTAssertFalse(savedCount.localFrame.intersects(lastRow.localFrame))
+                XCTAssertFalse(community.localFrame.isEmpty)
+
+                // Play: saved routes, then the game grid, with Back and Collections below.
+                field.overlayHomePlay = true
+                field.overlayHomeLeadingCount = routes.count
+                field.overlayLines = routes + families
+                field.overlayHighlight = 0
+                elements = try capture("play")
+                let firstGame = routes.count
+                XCTAssertEqual(field.homeSelection(from: firstGame, direction: "right"), firstGame + 1)
+                XCTAssertEqual(field.homeSelection(from: firstGame + 1, direction: "left"), firstGame)
+                XCTAssertFalse(elements.contains { $0.accessibilityLabel() == "PLAY" })
+                XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count)); XCTAssertTrue(back)
+                XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count + 1)); XCTAssertTrue(collections)
             }
         }
     }
