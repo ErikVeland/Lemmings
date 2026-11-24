@@ -65,7 +65,7 @@ public enum GameArtworkSkin {
     public static let key = isLemmix ? "LemmixCharactersEnabledV1" : "LixCharactersEnabledV1"
     public static let changed = Notification.Name("LixCharactersChanged")
     public static var lixEnabled: Bool {
-        UserDefaults.standard.object(forKey: key) as? Bool ?? (isLemmix || GameResources.directory("MacArtwork/lemmings") == nil)
+        UserDefaults.standard.object(forKey: key) as? Bool ?? (isLemmix ? !GameMenuLogo.usesRestoredArtwork : GameResources.directory("MacArtwork/lemmings") == nil)
     }
     public static var usesLixInterface: Bool {
         GameArtworkResources.lixInterface != nil && (lixEnabled || GameArtworkResources.interface == nil)
