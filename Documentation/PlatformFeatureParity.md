@@ -1,5 +1,17 @@
 # Cross-platform feature parity
 
+## Preview, catalogue and save recovery · 25 November 2026
+
+| Player task | Implemented behaviour | Verification boundary |
+| --- | --- | --- |
+| Browse then play | Campaign and collection previews inspect neighbouring levels without changing the active level. An eligible saved attempt can resume from its cover. The preview and its forward button use the same action. | Mac result footers, shared preview actions and Apple TV input geometry run headlessly. Physical touch and VoiceOver remain open. |
+| Find a fan level or a personal record | Fan and NeoLemmix catalogues offer search and completion filters. Profile → Statistics counts recorded attempts, distinct clears, stars and three-star levels. | Native Mac controls and shared phone, iPad, Duo and TV renderers. Legacy records contribute the information they retained. |
+| Resume a multiplayer Journey | Manual Apple TV transfer preserves an archived roster, turn, house rule, completions and a compatible mid-level checkpoint. Automatic cloud sync covers Journey progress. | Two isolated roots restored an exact Classic checkpoint. Offline and reconnect used a mock service. Physical transfers and production sync remain open. |
+| Navigate while data arrives | A late preview or community total preserves the selected action. Cancelling a load prevents a delayed result reopening it. | Headless AppKit, shared bitmap geometry and portable load tests. UIKit routes compile against both SDKs. |
+| Keep focus through layout changes | The mobile HUD reuses controls by action. A closed speed chooser returns focus to the visible control after a width change. A temporary fold size preserves Ready and chooser state. | Narrow Mac pointer and accessibility actions, TV binding tests and shared HUD renders. Physical folds, VoiceOver and Siri Remote remain open. |
+
+The [UX checklist](UXRedesign.md) lists the repeatable checks and the remaining device observations.
+
 ## First profile, Home and gameplay HUD — 24 November 2026
 
 | Player task | Shared behaviour | Verification |
@@ -10,6 +22,29 @@
 | Finish an attempt | The outgoing music fades for 0.6 seconds. A new attempt waits for live play. Results effects have their own output. | Muted fade ownership and cancellation checks. See [Audio coverage](AudioCoverage.md). |
 
 The shipping Apple TV entry point uses the shared mobile frontend. TV controller bindings, focus layout and handover tests run without a physical remote. The optional controller that accepts custom TV source folders has its own menus. Mobile hardware, VoiceOver, full app launches and audible quality need separate acceptance. See [the redesign evidence](UXRedesign.md#implementation-and-verification--24-november-2026).
+
+## First-use control tips and level maps
+
+Classic, supported NeoLemmix levels, L2 and L3 share four brief tips for skill
+assignment, returning to 1×, repeated rewind and moving the camera on the map.
+Each tip appears once per local player profile and device. Profiles with an
+existing run record start with tips hidden. Controls help offers Show control
+tips or Hide control tips. The notices use game lettering and leave playfield
+input, pause and speed under player control. Replays omit first-use tips.
+
+| Platform | Map input and layout |
+| --- | --- |
+| Mac | Click or drag the level image. Classic and NeoLemmix keep their panel maps. The native sequel canvases show the current terrain and camera rectangle beside the timeline, leaving the original skill panel and transport targets in place. |
+| iPhone, iPad and Duo | Tap or drag a point on the map to centre both axes. Starting in a letterbox margin leaves the camera still. |
+| Apple TV | Aim at a point on the map and press Select. The camera menu retains its entrance, exit and movement actions. |
+
+The offscreen checks in `GameplayControlTipTests` verify dismissal, reopening
+the preference, focus and speed. They render the shared sequel footer at 640,
+700, 850 and 1024 points and exercise pointer and accessibility input.
+`MobileControlTipMapTests` verifies two-axis seeking, vertical adjustment and
+camera bounds under square and non-square pixel aspect ratios. First-time
+player observation, VoiceOver, touch and Siri Remote use still need hardware
+acceptance.
 
 ## Speed selection and skill supply
 

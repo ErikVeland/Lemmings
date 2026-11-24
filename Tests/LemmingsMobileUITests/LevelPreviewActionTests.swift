@@ -4,7 +4,7 @@ import LemmingsGameArt
 
 struct LevelPreviewActionTests {
     @Test func previewsFollowTheExistingForwardActionAndItsDisabledState() {
-        for action in [GameFrontEnd.Action("play", "Play"), .init("0", "Ready", primary: true),
+        for action in [GameFrontEnd.Action("play", "Play"), .init("play", "Resume", primary: true), .init("0", "Ready", primary: true),
                        .init("0", "Next level", primary: true), .init("0", "Retry", primary: true),
                        .init("recordPlay", "Play again", primary: true)] {
             var page = GameFrontEnd.Page(title: "Level", footer: [.init("back", "Back"), action], preview: true)
@@ -19,6 +19,17 @@ struct LevelPreviewActionTests {
         }
         let backOnly = GameFrontEnd.Page(title: "Unavailable", footer: [.init("back", "Back", primary: true)], preview: true)
         #expect(backOnly.previewAction == nil)
+    }
+
+    @Test func televisionPreviewUsesTheSameReadyResumeAndResultActions() throws {
+        for action in [GameFrontEnd.Action("ready", "Play", primary: true), .init("ready", "Ready", primary: true),
+                       .init("ready", "Resume", primary: true), .init("next", "Next", primary: true), .init("retry", "Retry", primary: true)] {
+            let page = GameFrontEnd.Page(title: "Level", rows: [action], footer: [.init("back", "Back")], preview: true)
+            let layout = TVMenuArt.layout(page)
+            let target = try #require(TVMenuArt.inputTargets(page, layout: layout).first(where: { $0.frame == layout.preview }))
+            #expect(target.action == action)
+            #expect(layout.targets.allSatisfy { !$0.frame.intersects(target.frame) })
+        }
     }
 
     @Test func levelPreviewBoundsRemainSeparateFromItsNavigationTargets() {

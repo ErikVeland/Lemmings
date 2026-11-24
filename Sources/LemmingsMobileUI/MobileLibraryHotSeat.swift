@@ -99,7 +99,7 @@ extension MobileLibraryViewController {
         case "seatBack":
             hotSeatRoster = nil
             confirmingRestart = false
-            navigate(hotSeatBackRoute)
+            navigate(route == .hotSeat && previousRoute == .hotSeats ? .hotSeats : hotSeatBackRoute)
         case "seatNew":
             newPlayer()
         case "seatRule":

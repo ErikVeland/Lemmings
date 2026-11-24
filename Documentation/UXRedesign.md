@@ -1,8 +1,8 @@
 # UX redesign
 
-## Checkpoint 1 · 25 November 2026
+## Checkpoint 2 · 25 November 2026
 
-Shared game source at `66fce92fc89fa85e1fed0e4a840e9b5a9b36df43` is the reference for this checkpoint. Use the boxes here for current progress. Sections A–K below preserve the design brief and the later phase notes describe earlier revisions. For example, the proposal explored a welcome screen and several result themes. The implemented flow starts at profile creation and fades the level track on results.
+This checkpoint builds on shared main at `66fce92f`. The repeatable checks below exercise the implementation in this checkout. Use the boxes here for current progress. Sections A–K below preserve the design brief and the later phase notes describe earlier revisions. For example, the proposal explored a welcome screen and several result themes. The implemented flow starts at profile creation and fades the level track on results.
 
 ### Verified behaviour
 
@@ -14,13 +14,13 @@ Tick a row when its stated check passes. Keep its ID when updating the requireme
 - [x] **UX-04 · Saved Hot Seat.** Previously synced rosters have distinct resume targets, the selected session identifies the next player, and the turn and house rule survive a local save and reopen. Check group `hot-seat`.
 - [x] **UX-05 · Result music.** Completing an attempt twice fades and stops the track once. Starting the next track retires the old fade before it can change the replacement track. Check group `music`.
 
-### Remaining implementation and design review
+### Preview, navigation and recovery
 
-- [ ] **UX-06 · Review preview and result details.** Show Play or Resume from the preview image and the correct Next or Retry on success and failure. Verify access to records, replay and provenance across Classic, L2, L3 and supported fan content.
-- [ ] **UX-07 · Finish catalogue and Profile review.** Record the default ordering, active filters, empty results and return path for Fan and NeoLemmix. Check which personal statistics can be shown accurately from existing records.
-- [ ] **UX-08 · Finish terminology, Settings and accessibility review.** Trace player-facing names, translations, focus order and Back through Home, Play, Profile, Community, Hot Seat and Settings. Record remaining untranslated strings and justified platform differences.
-- [ ] **UX-09 · Review first-use teaching and the minimap.** Check that a new player can assign a skill, return to 1×, rewind and use the map without losing the playfield. Record where optional help is needed and verify it stays dismissed.
-- [ ] **UX-10 · Check asynchronous navigation and recovery.** Test late artwork and community totals, offline/online transitions, cancelled loads and retry. Compare target rectangles before and after data arrives. Reopen an archived journey with its original roster, next turn and checkpoint on another device.
+- [x] **UX-06 · Previews and results.** Inspecting a neighbouring cover leaves the campaign selection alone. A matching level, queue and position can resume its checkpoint. The preview activates its enabled forward action. On the native Mac the loss footer offers Retry across the game families, including fan levels. Records, replay availability and source details follow the selected level. The sequel restore check replays a 2,000-tick L2 attempt with and without a cached preview. Check group `preview`.
+- [x] **UX-07 · Catalogue and personal statistics.** Fan and NeoLemmix retain pack order and show incomplete levels first within a pack. Search and All, Incomplete or Cleared filters can be reset from an empty result. Returning from a level restores the catalogue context. Profile → Statistics counts recorded attempts, distinct clears, rated career stars and three-star levels for the selected player. An assisted win counts as a clear. Check group `catalogue`.
+- [x] **UX-08 · Navigation and terminology.** Home, Play, Profile, Community, Hot Seat and Settings share translated destination names and Back roles. The navigation checks exercise rendered targets, accessible names and returning to the originating destination. The language check verifies the source catalogue, eight translation packs, placeholders and language picker. Native-speaker review and physical VoiceOver are separate from those checks. Check group `navigation`.
+- [x] **UX-09 · First-use controls and minimap.** Optional tips cover assignment, normal speed, rewind and map seeking. The choice is saved per profile, and returning players and replay viewers start quietly. The native sequels have a terrain map beside the transport. Touch and TV use both axes to seek on the shared map. Check group `teaching`.
+- [x] **UX-10 · Late data and recovery.** Delayed artwork, a worldwide count and a cancelled load preserve the current selection and input targets. Retry starts fresh. A manual Apple TV backup restored an archived Hot Seat Journey to a second isolated save root with the original roster, next player, house rule, completion record and exact 45-tick Classic checkpoint despite a newer solo save. A separate mocked cloud round trip covers offline, reopen and reconnect. Automatic sync carries Journey progress. Exact mid-level state travels in the explicit TV backup. Live service and two-device acceptance remain open. Check group `recovery`. See [Save recovery](SaveRecovery.md).
 
 ### Device acceptance
 
@@ -32,11 +32,11 @@ Tick a row when its stated check passes. Keep its ID when updating the requireme
 
 ### Repeat the checkpoint
 
-On 25 November, all 20 named regression tests and all four render audits passed. The rounded HUD audit covered 209 captures, and the Hot Seat flow covered 135. Each device box above remains open until tested on hardware.
+Run `python3 Scripts/check-ux.py` from the repository root on macOS. To repeat one area, append `home`, `hud`, `hot-seat`, `preview`, `catalogue`, `navigation`, `teaching`, `recovery`, `input`, `music`, `renders` or `sdk`. Each run prints its own evidence directory in `.build`. A source edit during the run invalidates the checkpoint. Its summary records the Git revision, working-tree status, each result and whether the run finished. Missing or skipped named regressions fail their group.
 
-From the repository root on macOS, run `python3 Scripts/check-ux.py`. For a focused change append `home`, `hud`, `hot-seat`, `music` or `renders`. Each run prints its own evidence directory beneath `.build`, including the revision, working-tree status, results, logs and any audit renders. A missing or skipped named test leaves its group failed. An interrupted run has no completion line.
+The render checks need the original bitmap export at `.build/mac-artwork/export/lemmings` and the installed game's resources, including NeoLemmix and the Classic, L2 and L3 Ports directories. Pass `--resources` to select another game resource root. Native tests run offscreen and muted. The SDK checks compile both mobile frontends and application entry points and typecheck the UIKit regression sources. CoreSimulator refused the runtime connection on this host. Only the Mac appeared in the connected-device inventory.
 
-The HUD and Hot Seat checks use the project's original bitmap export in `.build/mac-artwork/export/lemmings`. The fan and multi-engine render checks use the installed game's resources, including `NeoLemmix` and the Classic, L2 and L3 `Ports` directories. Supply another resource root with `--resources`. The runner keeps native tests offscreen and muted. For changes to UIKit or the TV entry point, the existing SDK checks are `zsh Scripts/check-apple-ui-sdk.sh ios` and `zsh Scripts/check-apple-ui-sdk.sh tvos`.
+The muted audio-session checks exercise interruptions and rapid fold transitions. A separate live-clock probe could not create its AVFAudio environment node on this host. Listening on speakers and headphones and measuring the A10X under gameplay load remain device checks.
 
 This proposal reorganises the existing depth of Ultimate Lemmings. It does not
 remove features. It builds on [UI clarity](UIPrinciples.md),

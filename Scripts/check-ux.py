@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run the UX redesign checkpoints on macOS and retain the evidence for each run."""
 import argparse
+import hashlib
 import os
 from pathlib import Path
 import re
@@ -36,14 +37,74 @@ CHECKS = {
         "MobileHotSeatTests/sessionsSurviveSavingAndKeepTheirRule",
         "MobileHotSeatTests/resultChoicesFollowTheHouseRule",
     ],
-    "music": ["ResultMusicFadeTests/testFinishingOnceAndRetiringBeforeAnotherTrackStarts"],
+    "catalogue": [
+        "CatalogueReviewTests/orderSearchProgressEmptyResetAndTargets",
+        "CatalogueReviewTests/reopenedProfilesCountRecordedAttemptsAndDistinctClears",
+        "MacCatalogueReviewTests/testPackSearchResetAndLevelFilterTargets",
+    ],
+    "teaching": [
+        "GameplayControlTipTests/testGameplayTipsDismissWithoutChangingFocusOrSpeedAndStayDismissed",
+        "GameplayControlTipTests/testSequelMapRendersAndSeeksWithoutActivatingTransport",
+        "MobileControlTipMapTests/testMapCoordinatesMoveBothCameraAxesAndClampAtEveryEdge",
+    ],
+    "preview": [
+        "MobileCheckpointIndexTests/previewResumeRequiresTheSameLevelQueueAndPosition",
+        "MobileLevelPreparationTests/inspectingCampaignPreviewsDoesNotSelectOrStartTheLevel",
+        "MobileResumePreparationTests/beachResumeRestoresTheExactAttempt",
+        "MobileResumePreparationTests/cancelledNativeSequelRestoreDoesNotReplaceTheSession",
+        "LevelPreviewActionTests/previewsFollowTheExistingForwardActionAndItsDisabledState",
+        "LevelPreviewActionTests/televisionPreviewUsesTheSameReadyResumeAndResultActions",
+        "LevelPreviewActionTests/levelPreviewBoundsRemainSeparateFromItsNavigationTargets",
+        "InterfaceHierarchyTests/testPreviewPressStartsItsLevelAndKeepsUnavailableLevelsBlocked",
+        "FooterNavigationTests/testNativeLossHasBackMenuAndWorkingRetryAcrossAllGames",
+        "LevelLeaderboardResultTests/testResultShowsLevelLeaderboardAndLeadersAcrossAllGames",
+    ],
+    "navigation": [
+        "DestinationLocalisationTests/testTranslatedDestinationsKeepNamesBackRolesAndTargets",
+        "GlobalNavigationTests/testMainMenuStaysOutsideNestedScrollingPagesAndControllerCanReachIt",
+        "GlobalNavigationArtTests/fanEntriesNeverContainListToolsAndNavigationFitsEveryViewport",
+    ],
+    "recovery": [
+        "ArchivedJourneyBackupTests/portableBackupReopensArchivedJourneyAndOwnedCheckpoint",
+        "DeferredArtworkNavigationTests/lateCoverCannotReplaceTheSelectionOrMoveItsTarget",
+        "CommunityTotalLayoutTests/arrivingCommunityTotalsPreserveTargets",
+        "MobileLevelPreparationTests/cancelledLibraryOpeningDoesNotTransferStaleContent",
+        "MobileLevelPreparationTests/previewTransfersPreparedSessionOnceAndRetryStartsFresh",
+        "CloudLibraryTests/previousSyncedHotSeatSurvivesAnotherSelectedPlayerOfflineAndReopen",
+    ],
+    "input": [
+        "MacSpeedTierTests/testNarrowPedalKeepsAccessibleAndPointerTargetsAcrossResize",
+        "TVControllerBindingsTests/triggersControlTheTimelineWithoutAChord",
+        "TVControllerBindingsTests/heldHandoverInputsCannotStartRewindOrHelp",
+        "MobilePortraitHUDTests/originalIPadProKeepsPlayfieldHeightWithAdaptiveLandscapeDeck",
+    ],
+    "music": [
+        "ResultMusicFadeTests/testFinishingOnceAndRetiringBeforeAnotherTrackStarts",
+        "MobileLifecycleRecoveryTests/routeLossCanResumeWithoutAnEndNotification",
+        "MobileLifecycleRecoveryTests/backgroundResumeCannotClearTheInterruption",
+    ],
 }
-AUDITS = ("first-player", "rounded-hud", "grid-hud", "hot-seat-flow")
+AUDITS = ("first-player", "rounded-hud", "grid-hud", "hot-seat-flow", "preview-fill",
+          "table-result", "cloud-sync", "level-loading", "navigation")
+
+
+def source_stamp():
+    revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+    changes = subprocess.check_output(["git", "diff", "--binary", "HEAD", "--"])
+    files = subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard", "-z"])
+    digest = hashlib.sha256(changes)
+    for name in files.split(b"\0"):
+        if name:
+            path = Path(os.fsdecode(name))
+            digest.update(name + b"\0")
+            content = os.fsencode(os.readlink(path)) if path.is_symlink() else path.read_bytes()
+            digest.update(hashlib.sha256(content).digest())
+    return revision, bool(changes or files), digest.hexdigest()
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("group", nargs="?", default="all", choices=["all", *CHECKS, "renders"])
+    parser.add_argument("group", nargs="?", default="all", choices=["all", *CHECKS, "renders", "sdk"])
     parser.add_argument("--resources", type=Path, default=os.environ.get("LEMMINGS_MOBILE_BUNDLED_RESOURCES",
                         "/Applications/Ultimate Lemmings.app/Contents/Resources"),
                         help="Game resources containing NeoLemmix and Ports")
@@ -53,10 +114,10 @@ def main():
     cache = ROOT / ".build" / "ModuleCache"
     cache.mkdir(parents=True, exist_ok=True)
     output = Path(tempfile.mkdtemp(prefix="ux-check-", dir=ROOT / ".build"))
-    revision = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-    dirty = subprocess.check_output(["git", "status", "--porcelain"], text=True)
+    start = source_stamp()
+    revision, dirty, fingerprint = start
     print(f"Evidence: {output}", flush=True)
-    summary = [f"Revision {revision}" + (" (working tree modified)" if dirty else ""), f"Group {args.group}"]
+    summary = [f"Revision {revision}" + (f" (working tree {fingerprint})" if dirty else ""), f"Group {args.group}"]
     report = output / "summary.txt"
     report.write_text("\n".join(summary) + "\n")
     env = dict(os.environ, LEMMINGS_TEST_WINDOWS="offscreen", LEMMINGS_TEST_AUDIO="muted",
@@ -73,16 +134,16 @@ def main():
         with report.open("a") as evidence:
             evidence.write(line + "\n")
 
-    def run(label, command):
+    def run(label, command, **variables):
         print(f"Running {label}", flush=True)
         path = output / (label + ".log")
         with path.open("w") as log:
-            result = subprocess.run(command, env=env, stdout=log, stderr=subprocess.STDOUT)
+            result = subprocess.run(command, env={**env, **variables}, stdout=log, stderr=subprocess.STDOUT)
         if result.returncode:
             print(f"Exit {result.returncode}. See {path}", flush=True)
         return result.returncode == 0, path.read_text(errors="replace")
 
-    if args.group != "renders":
+    if args.group in CHECKS or args.group == "all":
         groups = CHECKS if args.group == "all" else {args.group: CHECKS[args.group]}
         tests = [test for group in groups.values() for test in group]
         ok, log = run("tests", runner + ["swift", "test", "--disable-sandbox", "--jobs", "4",
@@ -91,12 +152,24 @@ def main():
             missing = []
             for case in cases:
                 suite, name = map(re.escape, case.split("/"))
-                passed = rf"(?:\.{suite} {name}\]' passed|\bTest {name}\(\) passed)"
+                passed = rf"(?:\.{suite} {name}\]' passed|\bTest {name}\([^)]*\)(?: with [0-9]+ test cases?)? passed)"
                 if not re.search(passed, log):
                     missing.append(case)
             record(not missing, group + (" — no passing result for " + ", ".join(missing) if missing else ""))
         if not ok:
             record(False, "Swift test process")
+
+    if args.group in ("all", "navigation"):
+        ok, _ = run("localisation", ["zsh", "Scripts/run-localisation-tests.sh"])
+        record(ok, "localisation")
+
+    if args.group in ("all", "input"):
+        ok, _ = run("effects-budget", ["zsh", "Scripts/run-adaptive-fx-policy-tests.sh"])
+        record(ok, "effects-budget")
+
+    if args.group in ("all", "music"):
+        ok, _ = run("audio-session", ["zsh", "Scripts/run-mobile-audio-session-tests.sh"])
+        record(ok, "audio-session")
 
     if args.group in ("all", "renders"):
         artwork = ROOT / ".build/mac-artwork/export/lemmings"
@@ -107,11 +180,18 @@ def main():
             binary_dir = subprocess.check_output(["swift", "build", "--disable-sandbox", "--show-bin-path"],
                                                  env=env, text=True).strip()
             for audit in AUDITS:
-                ok, _ = run(audit, runner + [str(Path(binary_dir) / "LemmingsMobileMenuAudit"), str(artwork),
+                ok, _ = run("render-" + audit, runner + [str(Path(binary_dir) / "LemmingsMobileMenuAudit"), str(artwork),
                                              str(classic), str(output / audit), "--" + audit])
-                record(ok, audit)
+                record(ok, "render-" + audit)
         else:
             record(False, "Build menu audit")
+    if args.group in ("all", "sdk"):
+        for platform in ("ios", "tvos"):
+            ok, _ = run(platform, ["zsh", "Scripts/check-apple-ui-sdk.sh", platform],
+                        APPLE_UI_SDK_BUILD_DIR=str(output / ("sdk-" + platform)))
+            record(ok, platform + " SDK")
+
+    record(start == source_stamp(), "source revision and working files stable during checks")
     with report.open("a") as evidence:
         evidence.write("Run failed\n" if failed else "Run complete\n")
     return int(failed)

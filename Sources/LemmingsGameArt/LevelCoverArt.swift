@@ -67,7 +67,7 @@ public enum LevelCoverArt {
 
     /// Draws the card and its faded reflection into `bounds`.
     public static func draw(in context: CGContext, bounds: CGRect, title: String, artwork: CGImage?,
-                            selected: Bool, typography: GameMenuTypography?) {
+                            selected: Bool, typography: GameMenuTypography?, actionTitle: String? = nil) {
         let cover = coverBounds(for: bounds)
         GameDisplayArt.draw(in: context, frame: cover)
         if selected {
@@ -86,7 +86,20 @@ public enum LevelCoverArt {
             }
         }
 
+        if selected, let actionTitle, let typography {
+            drawAction(actionTitle, in: frame, typography: typography, context: context)
+        }
+
         drawReflection(in: context, bounds: bounds, cover: cover, frame: frame, artwork: artwork, selected: selected)
+    }
+
+    public static func drawAction(_ title: String, in frame: CGRect, typography: GameMenuTypography, context: CGContext) {
+        let width = GameTextLayout.width(of: title, font: typography.font(.small)) + 16
+        let height = CGFloat(typography.font(.small)?.cellHeight ?? 18) + 8
+        guard width + 8 <= frame.width, height + 8 <= frame.height else { return }
+        let badge = CGRect(x: floor(frame.maxX - width - 4), y: floor(frame.maxY - height - 4), width: width, height: height)
+        GameStoneArt.draw(in: context, frame: badge, selected: true, pixel: 1)
+        GameTextLayout.draw(title, in: badge.insetBy(dx: 5, dy: 2), typography: typography, palette: .green, context: context)
     }
 
     private static func drawArtwork(_ artwork: CGImage?, in frame: CGRect, context: CGContext) {

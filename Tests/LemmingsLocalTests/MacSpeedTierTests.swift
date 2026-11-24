@@ -27,6 +27,58 @@ final class MacSpeedTierTests: XCTestCase {
         XCTAssertFalse(speed.handleTierShortcut(digit))
     }
 
+    @MainActor func testNarrowPedalKeepsAccessibleAndPointerTargetsAcrossResize() throws {
+        _ = NSApplication.shared
+        let panel = PanelView(frame: CGRect(x: 0, y: 0, width: 699, height: 400))
+        let window = NSWindow(contentRect: panel.bounds, styleMask: [], backing: .buffered, defer: true)
+        window.isReleasedWhenClosed = false
+        window.contentView = panel
+        defer { window.close() }
+        let speed = GameSpeedControl()
+        panel.variableSpeedEnabled = true
+        panel.timeline.speedState = { speed.state }
+        panel.onSpeedStep = { direction, time in speed.step(direction, at: time) }
+        panel.onSpeedPress = { speed.pointerDown(at: $0, clickCount: $1) }
+        panel.onSpeedRelease = { time in speed.release(.mouse, at: time) }
+        panel.onSpeedClick = { time, _ in speed.tap(at: time) }
+        var originalPedal: GameAccessibleElement?
+        for width in [699, 1024, 480] {
+            panel.setFrameSize(CGSize(width: width, height: 400))
+            let targets = panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+            let pedal = try XCTUnwrap(targets.first { $0.accessibilityLabel() == "Game speed 1×" })
+            if let originalPedal { XCTAssertTrue(pedal === originalPedal) }
+            originalPedal = pedal
+            let down = try XCTUnwrap(targets.first { $0.accessibilityLabel() == "Decrease fast speed" })
+            let up = try XCTUnwrap(targets.first { $0.accessibilityLabel() == "Increase fast speed" })
+            for button in [down, pedal, up] {
+                XCTAssertTrue(panel.bounds.contains(button.localFrame))
+                XCTAssertFalse(panel.timeline.tierFrame.intersects(button.localFrame))
+            }
+            XCTAssertTrue(up.accessibilityPerformPress())
+            XCTAssertEqual(speed.target, 2)
+            let point = CGPoint(x: pedal.localFrame.midX, y: pedal.localFrame.midY)
+            panel.handlePointerDown(at: point, time: 10)
+            panel.handlePointerUp(time: 10.05)
+            XCTAssertEqual(speed.target, 1)
+            XCTAssertTrue(pedal.accessibilityPerformPress())
+            XCTAssertEqual(speed.target, 2)
+            let arrow = CGPoint(x: down.localFrame.midX, y: down.localFrame.midY)
+            panel.handlePointerDown(at: arrow, time: 11)
+            panel.handlePointerUp(time: 11.05)
+            XCTAssertEqual(speed.target, 1)
+        }
+        try capture(panel, as: "mac-narrow-speed-pedal.png")
+    }
+
+    @MainActor private func capture(_ panel: PanelView, as filename: String) throws {
+        let render = try XCTUnwrap(panel.bitmapImageRepForCachingDisplay(in: panel.bounds))
+        panel.displayIgnoringOpacity(panel.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: render)))
+        let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().appendingPathComponent(".build/status-strip-renders")
+        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        try XCTUnwrap(render.representation(using: .png, properties: [:])).write(to: output.appendingPathComponent(filename))
+    }
+
     @MainActor func testStripTargetsAndRenders() throws {
         _ = NSApplication.shared
         let speed = GameSpeedControl()
@@ -63,12 +115,7 @@ final class MacSpeedTierTests: XCTestCase {
                 XCTAssertTrue(button.accessibilityLabel()?.contains("selected") == true)
             }
         }
-        let render = try XCTUnwrap(panel.bitmapImageRepForCachingDisplay(in: panel.bounds))
-        panel.displayIgnoringOpacity(panel.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: render)))
-        let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
-            .deletingLastPathComponent().appendingPathComponent(".build/status-strip-renders")
-        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-        try XCTUnwrap(render.representation(using: .png, properties: [:])).write(to: output.appendingPathComponent("mac-speed-tiers.png"))
+        try capture(panel, as: "mac-speed-tiers.png")
         var enabled = false
         timeline.canChooseSpeed = { enabled }
         let disabled = try XCTUnwrap(elements().first)

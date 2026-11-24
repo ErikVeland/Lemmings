@@ -98,7 +98,7 @@ final class FooterNavigationTests: XCTestCase {
         let font = MacInterfaceRenderer(interface: try XCTUnwrap(ClassicMacUserInterface(artwork: artwork)))
         let output = root.appendingPathComponent(".build/result-failure-native")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-        for game in ["Classic", "Lemmings 2", "Lemmings 3"] {
+        for game in ["Classic", "Lemmings 2", "Lemmings 3", "NeoLemmix", "Classic fan"] {
             let level = ArcadeLevel(id: game, title: "Failure navigation", game: game, rules: "fixture", total: 10, required: 5)
             let report = try XCTUnwrap(store.previewReport(for: .init(profileID: host, level: level, saved: 0, didWin: false, skills: [:], seconds: 20)))
             for hotSeat in [false, true] {
@@ -107,7 +107,7 @@ final class FooterNavigationTests: XCTestCase {
                     if !store.sessionProfileIDs.contains(guest.id) { store.toggleSessionProfile(guest.id) }
                 } else { store.endHotSeat() }
                 for later in [false, true] {
-                    let view = ArcadeView(frame: CGRect(x: 0, y: 0, width: 1120, height: 720))
+                    let view = ArcadeView(frame: CGRect(x: 0, y: 0, width: later ? 760 : 1120, height: later ? 490 : 720))
                     let window = NSWindow(contentRect: view.bounds, styleMask: [.titled], backing: .buffered, defer: false)
                     window.isReleasedWhenClosed = false
                     window.contentView = view
@@ -115,7 +115,8 @@ final class FooterNavigationTests: XCTestCase {
                     view.mode = .result; view.report = report; view.level = level; view.font = font
                     var backs = 0, menus = 0, retries = 0
                     view.onClose = { backs += 1 }; view.onMenu = { menus += 1 }; view.onRetry = { retries += 1 }
-                    if later { view.onLater = {} }
+                    var reviews = 0
+                    if later { view.onLater = {}; view.onReplay = { _ in reviews += 1 } }
                     let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
                     view.cacheDisplay(in: view.bounds, to: bitmap)
                     try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
@@ -128,6 +129,17 @@ final class FooterNavigationTests: XCTestCase {
                     XCTAssertEqual(back.localFrame.minX, buttons.map { $0.localFrame.minX }.min())
                     XCTAssertTrue(buttons.filter { $0 !== back }.allSatisfy { !$0.localFrame.intersects(back.localFrame) })
                     XCTAssertTrue(back.accessibilityPerformPress()); XCTAssertEqual(menus, 1)
+                    let records = try XCTUnwrap(buttons.first { $0.accessibilityLabel() == "Records" })
+                    XCTAssertTrue(view.bounds.contains(records.localFrame))
+                    XCTAssertFalse(buttons.contains { $0 !== records && $0.localFrame.intersects(records.localFrame) })
+                    let replay = buttons.first { $0.accessibilityLabel() == "Replay" }
+                    XCTAssertEqual(replay != nil, later)
+                    if let replay {
+                        XCTAssertTrue(view.bounds.contains(replay.localFrame))
+                        XCTAssertFalse(buttons.contains { $0 !== replay && $0.localFrame.intersects(replay.localFrame) })
+                        XCTAssertTrue(replay.accessibilityPerformPress())
+                        XCTAssertEqual(reviews, 1)
+                    }
                     XCTAssertEqual(backs, 0)
                     let point = view.convert(CGPoint(x: back.localFrame.midX, y: back.localFrame.midY), to: nil)
                     view.mouseDown(with: try XCTUnwrap(NSEvent.mouseEvent(with: .leftMouseDown, location: point,

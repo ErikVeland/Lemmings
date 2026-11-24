@@ -11,7 +11,7 @@ import NxlvKit
             case .rewind: return "Rewind two seconds"
             case .backward: return "Step backward one tick"
             case .forward: return "Step forward one tick"
-            case .hints: return "Level hints (H)"
+            case .hints: return L10n.text("Level hints")
             }
         }
         var glyph: PanelGlyph? {
@@ -35,6 +35,39 @@ import NxlvKit
     var canChooseSpeed: () -> Bool = { true }
     var chooseSpeed: (Double) -> Void = { _ in }
     var tierFrame = CGRect.zero
+    private(set) var mapFrame = CGRect.zero
+    var mapSize = CGSize.zero
+    var visibleMapRect = CGRect.zero
+    var onMap: ((CGPoint) -> Void)?
+    private let mapThumbnail = GameMinimapThumbnail()
+    private(set) var draggingMap = false
+
+    func drawMap(image: CGImage?) {
+        guard let image, !mapFrame.isEmpty, let context = NSGraphicsContext.current?.cgContext else { return }
+        GameMinimapArt.draw(in: context, bounds: mapFrame, image: image, visible: visibleMapRect,
+                            levelSize: mapSize, overlay: true, thumbnail: mapThumbnail)
+    }
+
+    func beginMapDrag(at point: CGPoint) -> Bool {
+        draggingMap = false
+        guard onMap != nil, mapFrame.contains(point) else { return false }
+        let content = GameMinimapArt.content(in: mapFrame.insetBy(dx: 4, dy: 4), levelSize: mapSize)
+        if let target = GameMinimapArt.levelPoint(at: point, content: content, levelSize: mapSize) {
+            draggingMap = true
+            onMap?(target)
+        }
+        return true
+    }
+
+    func dragMap(to point: CGPoint) {
+        guard draggingMap else { return }
+        let content = GameMinimapArt.content(in: mapFrame.insetBy(dx: 4, dy: 4), levelSize: mapSize)
+        if let target = GameMinimapArt.levelPoint(at: point, content: content, levelSize: mapSize, clamp: true) {
+            onMap?(target)
+        }
+    }
+
+    func endMapDrag() { draggingMap = false }
     var tierWidth: CGFloat {
         guard let speed = speedState(), speed.variableEnabled else { return 0 }
         return CGFloat(speed.availableSteps.count) * 44
@@ -47,6 +80,9 @@ import NxlvKit
         frame = CGRect(x: floor(bounds.midX - (width + gap + tiers) / 2), y: bounds.maxY - 34,
                        width: width, height: 30)
         tierFrame = tiers > 0 ? CGRect(x: frame.maxX + gap, y: frame.minY, width: tiers, height: frame.height) : .zero
+        let mapWidth = min(220, frame.minX - bounds.minX - 16)
+        mapFrame = mapWidth >= 44 ? CGRect(x: frame.minX - 8 - mapWidth, y: frame.minY,
+            width: mapWidth, height: frame.height) : .zero
     }
 
     private var tierButtons: [(tier: Double, rect: CGRect)] {
@@ -140,7 +176,18 @@ import NxlvKit
             element.setAccessibilityEnabled(enabled(action))
             return element
         }
-        return actions + tierButtons.map { tier, rect in
+        var controls = actions
+        if !mapFrame.isEmpty, onMap != nil, mapSize.width > 0 {
+            let element = accessibility.element(id: "map", owner: owner, label: L10n.text("Level map"), frame: transform(mapFrame))
+            element.setAccessibilityRole(.slider)
+            element.adjustValue = { [weak self] direction in
+                guard let self else { return }
+                onMap?(GameMinimapArt.adjustedCentre(in: visibleMapRect, levelSize: mapSize, direction: direction))
+            }
+            element.readNumber = { [weak self] in Double(self?.visibleMapRect.midX ?? 0) }
+            controls.append(element)
+        }
+        return controls + tierButtons.map { tier, rect in
             let selected = canChooseSpeed() && speedState()?.target == tier
             let label = L10n.text("Game speed \(Int(tier))×") + (selected ? L10n.text(", selected") : "")
             let element = accessibility.element(id: "tier-\(Int(tier))", owner: owner, label: label,

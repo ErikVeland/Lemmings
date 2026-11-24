@@ -12,7 +12,8 @@ import LemmingsGameArt
         for size in [CGSize(width: 390, height: 700), .init(width: 465, height: 610),
                      .init(width: 589, height: 794), .init(width: 834, height: 549)] {
             for action in [GameFrontEnd.Action("play", "Play", primary: true),
-                           .init("0", "Ready", primary: true), .init("0", "Next level", primary: true)] {
+                           .init("play", "Resume", primary: true), .init("0", "Ready", primary: true),
+                           .init("0", "Retry", primary: true), .init("0", "Next level", primary: true)] {
                 canvas.page = .init(title: "Level", footer: [.init("back", "Back"), action], preview: true)
                 canvas.frame = CGRect(origin: .zero, size: canvas.size(width: size.width, minimumHeight: size.height))
                 canvas.layoutIfNeeded()

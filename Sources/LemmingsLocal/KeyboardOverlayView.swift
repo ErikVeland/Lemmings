@@ -14,7 +14,7 @@ import NxlvKit
     private var buttons: [NSButton] = []
     override var acceptsFirstResponder: Bool { true }
 
-    init(commands: [KeyboardCommand], modern: Bool, hints: Bool) {
+    init(commands: [KeyboardCommand], modern: Bool, hints: Bool, tipToggle: (String, () -> String)? = nil) {
         super.init(frame: .zero)
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
@@ -54,6 +54,12 @@ import NxlvKit
             if action == #selector(closeOverlay) { button.keyEquivalent = "\u{1b}" }
             addSubview(button); buttons.append(button)
         }
+        if let (title, toggle) = tipToggle {
+            let button = GameActionButton(title: title, primary: false)
+            button.onPress = { [weak button] in button?.title = toggle() }
+            addSubview(button)
+            buttons.append(button)
+        }
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func layout() {
@@ -76,7 +82,11 @@ import NxlvKit
         title.frame = NSRect(x: inset, y: height - inset - measured(title, width: titleWidth), width: titleWidth, height: measured(title, width: titleWidth))
         var x = inset
         let buttonY = title.frame.minY - 40
-        for button in buttons { button.frame = NSRect(x: x, y: buttonY, width: 174, height: 30); x += 184 }
+        let buttonWidth = min(174, (width - 2 * inset - CGFloat(buttons.count - 1) * 8) / CGFloat(buttons.count))
+        for button in buttons {
+            button.frame = NSRect(x: x, y: buttonY, width: buttonWidth, height: 30)
+            x += buttonWidth + 8
+        }
         let skills = cards.first { $0.1 == "skills" }!.0
         let floor = max(90, (anchors().map { $0.1.maxY }.max() ?? 54) + 36)
         skills.frame = NSRect(x: inset, y: floor, width: width - 2 * inset, height: measured(skills, width: width - 2 * inset))

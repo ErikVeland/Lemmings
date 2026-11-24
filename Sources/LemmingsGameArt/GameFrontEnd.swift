@@ -53,6 +53,7 @@ public struct GameFrontEnd {
     public struct Page: Equatable, Sendable {
         @GameDisplayText public var title: String
         @GameDisplayText public var subtitle: String
+        var subtitleSizingText: String?
         public var home: Bool
         /// Play's game list: Home's route and game grid under a plain page title.
         public var gameLibrary = false
@@ -284,7 +285,11 @@ public struct GameFrontEnd {
         let titleScale = textOnly ? 2 : (boardWidth >= 620 ? 2 : 1)
         let headingHeight = max(compact ? 40 : 52, GameTextLayout.height(page.title, width: boardWidth - 40, face: .large, scale: titleScale))
         let heading = CGRect(x: x + 20, y: compact ? 28 : 32, width: boardWidth - 40, height: headingHeight)
-        let subtitle = CGRect(x: x + 20, y: heading.maxY + (compact ? 2 : 8), width: boardWidth - 40, height: GameTextLayout.height(page.subtitle, width: boardWidth - 40))
+        let subtitleWidth = boardWidth - 40
+        let subtitleHeight = GameTextLayout.height(page.subtitle, width: subtitleWidth)
+        let reservedHeight = page.subtitleSizingText.map { GameTextLayout.height($0, width: subtitleWidth) } ?? 0
+        let subtitle = CGRect(x: x + 20, y: heading.maxY + (compact ? 2 : 8), width: subtitleWidth,
+            height: max(subtitleHeight, reservedHeight))
         var y = subtitle.maxY + (compact ? 8 : 16)
         var stars = CGRect.zero
         if page.stars != nil {
@@ -398,14 +403,18 @@ public struct GameFrontEnd {
         let footerCell = (inner - CGFloat(footerGrid.columns - 1) * gap) / CGFloat(footerGrid.columns)
         // A short status such as Loading... sits in a fixed header slot beside Settings,
         // so it never moves the logo or the actions when it appears.
-        let statusSlot = GameTextLayout.width(of: L10n.text("Loading...")) + 8
+        let loading = L10n.text("Loading...")
+        let statusSlot = GameTextLayout.width(of: loading) + 8
         let statusWidth = GameTextLayout.width(of: page.subtitle)
-        let headerStatus = !page.subtitle.contains("\n") && statusWidth <= statusSlot
-        let headerInset = 62 + (headerStatus ? statusSlot / 2 : 0)
+        let edgeInset: CGFloat = page.footer.contains { headerIDs.contains($0.id) } ? 62 : 12
+        let titleWidth = page.home ? min(180, inner / 2) : GameTextLayout.width(of: page.title, face: .large)
+        let canShareHeader = boardWidth >= 2 * (edgeInset + statusSlot) + titleWidth
+        let headerStatus = canShareHeader && !page.subtitle.contains("\n") && statusWidth <= statusSlot
+        let headerInset = edgeInset + (headerStatus ? statusSlot : 0)
         let heading = CGRect(x: x + headerInset, y: 22, width: boardWidth - 2 * headerInset, height: 44)
-        let statusHeight = GameTextLayout.height(page.subtitle, width: inner)
+        let statusHeight = GameTextLayout.height(!canShareHeader && page.subtitle.isEmpty ? loading : page.subtitle, width: inner)
         let subtitle = headerStatus
-            ? CGRect(x: x + boardWidth - 62 - statusWidth, y: 22 + floor((44 - statusHeight) / 2),
+            ? CGRect(x: x + boardWidth - edgeInset - statusWidth, y: 22 + floor((44 - statusHeight) / 2),
                      width: statusWidth, height: statusHeight)
             : CGRect(x: x + 12, y: 70, width: inner, height: statusHeight)
         let showsTurnAtTop = page.homeNextPlayerIndex != nil
@@ -456,8 +465,8 @@ public struct GameFrontEnd {
             targets.append(Target(action: action, frame: CGRect(x: action.id == "settings" ? x + boardWidth - 56 : x + 12,
                 y: 22, width: 44, height: 44)))
         }
-        let logoGrowth = min(height - contentHeight,
-            max(0, GameMenuLogo.preferredHeight(width: heading.width) - heading.height))
+        let logoGrowth = page.home ? min(height - contentHeight,
+            max(0, GameMenuLogo.preferredHeight(width: heading.width) - heading.height)) : 0
         let offset = floor(max(0, (height - contentHeight - logoGrowth) / 2))
         return Layout(size: CGSize(width: width, height: height),
             board: CGRect(x: x, y: 12 + offset, width: boardWidth, height: contentHeight + logoGrowth - 24),
@@ -585,6 +594,10 @@ public struct GameFrontEnd {
                 }
             } else {
                 GameDisplayArt.drawPreview(in: context, frame: layout.preview, image: image, shape: shape)
+                if let action = page.previewAction, action.id == "play", action.enabled {
+                    LevelCoverArt.drawAction(action.title, in: GameStoneArt.well(layout.preview, pixel: 2),
+                        typography: typography, context: context)
+                }
             }
         }
         if let earned = page.stars, layout.stars != .zero {

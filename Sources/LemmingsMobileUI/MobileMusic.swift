@@ -97,6 +97,7 @@ import AVFAudio
                 self.module = ModuleMusicPlayer()
                 self.recordings = SoundtrackPlayer()
                 self.dj = AdaptiveDJPlayer()
+                self.resultFade = ResultMusicFade(module: self.module, recordings: self.recordings, dj: self.dj)
                 self.appliedRespectMuteSetting = nil
                 self.applySettings()
                 if resumeMenu && UIApplication.shared.applicationState == .active {

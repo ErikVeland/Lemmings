@@ -70,7 +70,16 @@ public protocol MobileGameLibrary: AnyObject {
     func checkpointLevelIdentifier(at index: Int) throws -> String?
 }
 
+/// Browsing campaign scenery must not select a level in the player's saved campaign.
+public protocol MobileCampaignPreviewLibrary: MobileGameLibrary {
+    func loadPreviewLevel(at index: Int) throws -> MobileLevelContent
+}
+
 public extension MobileGameLibrary {
+    func levelForInspection(at index: Int) throws -> MobileLevelContent {
+        if let campaign = self as? any MobileCampaignPreviewLibrary { return try campaign.loadPreviewLevel(at: index) }
+        return try loadLevel(at: index)
+    }
     func canSkipLevel(at index: Int) -> Bool { false }
     func prepareLevelSkip(at index: Int) throws -> () throws -> Void { throw MobileSessionError.changedLevel }
     func checkpointLevelIdentifier(at index: Int) throws -> String? { nil }
