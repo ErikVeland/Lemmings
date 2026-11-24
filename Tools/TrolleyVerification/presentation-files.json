@@ -25,5 +25,7 @@
   "PrecisionZoomLedger.swift",
   "PrecisionZoomScrollGesture.swift",
   "FanLevelOrganisation.swift",
-  "Lemmings3OriginalMovie.swift"
+  "Lemmings3OriginalMovie.swift",
+  "CatalogueLevelFilter.swift",
+  "GameplayControlTips.swift"
 ]
