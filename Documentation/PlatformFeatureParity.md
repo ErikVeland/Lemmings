@@ -1358,3 +1358,19 @@ save recovery remain separate from these source and packaging checks.
 See the [Store submission evidence](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/store-submission/README.md)
 for the final package and service state. Public redistribution of the full
 restoration collection remains uncleared.
+
+
+### Owned game-data downloads
+
+Ultimate Lemmix iPhone and iPad (including Duo) use an OS-managed download after
+the existing licence confirmation. The explicit 253 MB transfer allows cellular,
+expensive, and constrained connections when iOS and the carrier allow them.
+The OS can continue transferring while suspended; reopen Game Data after a
+relaunch to collect a completed transfer or reattach to an active one, before
+the existing size, SHA-256 and archive checks and foreground import. A missing
+OS task (including manual force quit) reports the interruption without silently
+starting another full transfer. Mac and any TV front-end using this downloader
+retain foreground transport; phone background lifecycle does not change TV's
+separate local-browser import. A primary timeout tries the existing alternate
+mirror once, with distinct waiting, retry, and final error states. Cellular use,
+suspension/lock and relaunch are separate physical iOS acceptance checks.

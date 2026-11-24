@@ -6,7 +6,7 @@ public actor GameAssetPack {
     public static let shared = GameAssetPack()
     private static let primary = URL(string: "https://archive.org/download/ultimate-lemmix-restoration-extra-soundtracks/Ultimate-Lemmix-Restoration-Game-Assets.zip")!
     private static let fallback = URL(string: "https://github.com/ErikVeland/Lemmings/releases/download/ultimate-lemmix-game-assets-1/Ultimate-Lemmix-Restoration-Game-Assets.zip")!
-    fileprivate static let bytes: Int64 = 252_732_885
+    static let bytes: Int64 = 252_732_885
     private static let digest = "142b37b8b7ff42e818b46d7f72f676706e4c86c90e379fc819e36f91c7a55ca1"
     private var busy = false
 
@@ -20,12 +20,22 @@ public actor GameAssetPack {
         public static var accept: String { L10n.text("Agree and download") }
     }
 
-    public enum Progress: Sendable {
+    public enum Progress: Sendable, Equatable {
+        case connecting, alternateMirror
         case downloading(Int)
         case installing
 
+        public var canCancel: Bool { self != .installing }
+
+        static func transfer(_ received: Int64) -> Self {
+            guard received > 0 else { return .connecting }
+            return .downloading(max(1, min(99, Int(100 * min(received, GameAssetPack.bytes) / GameAssetPack.bytes))))
+        }
+
         public var title: String {
             switch self {
+            case .connecting: L10n.text("Waiting for download to start")
+            case .alternateMirror: L10n.text("Trying another download server")
             case .downloading(let percent): L10n.text("Downloading") + " \(percent)%"
             case .installing: L10n.text("Importing resources")
             }
@@ -33,15 +43,67 @@ public actor GameAssetPack {
     }
 
     enum Failure: LocalizedError {
-        case busy, unavailable, invalid
+        case busy, unavailable, invalid, offline, interrupted, timedOut, storage, prohibited, resumeUnavailable
         var errorDescription: String? {
             switch self {
             case .busy: L10n.text("Game assets are already downloading.")
             case .unavailable: L10n.text("Game assets are unavailable. Try again later.")
+            case .offline: L10n.text("No internet connection. Reconnect and try again.")
+            case .interrupted: L10n.text("The connection dropped. Try the download again.")
+            case .resumeUnavailable: L10n.text("The background download stopped. Try the download again.")
+            case .timedOut: L10n.text("The download timed out. Check your connection and try again.")
+            case .storage: L10n.text("Not enough free storage for game assets. Free up space and try again.")
+            case .prohibited: L10n.text("Mobile data is unavailable. Check cellular access for this app or try Wi-Fi.")
             case .invalid: L10n.text("Game assets failed verification. Download them again.")
             }
         }
     }
+
+    static func configuration(backgroundIdentifier: String? = nil) -> URLSessionConfiguration {
+        let configuration = backgroundIdentifier.map { URLSessionConfiguration.background(withIdentifier: $0) } ?? .ephemeral
+        configuration.allowsCellularAccess = true
+        configuration.allowsExpensiveNetworkAccess = true
+        configuration.allowsConstrainedNetworkAccess = true
+        configuration.isDiscretionary = false
+        configuration.timeoutIntervalForRequest = 45
+        configuration.timeoutIntervalForResource = 30 * 60
+        if backgroundIdentifier != nil { configuration.sessionSendsLaunchEvents = true }
+        return configuration
+    }
+
+    static func validateResponse(_ response: URLResponse?) throws {
+        guard let response = response as? HTTPURLResponse,
+              response.statusCode == 200, response.url?.scheme == "https" else { throw Failure.unavailable }
+        guard response.expectedContentLength <= bytes else { throw Failure.invalid }
+    }
+
+    static func explained(_ error: any Error) -> any Error {
+        if error is CancellationError || error is Failure { return error }
+        switch (error as NSError).domain {
+        case NSURLErrorDomain:
+            switch URLError.Code(rawValue: (error as NSError).code) {
+            case .notConnectedToInternet: return Failure.offline
+            case .networkConnectionLost: return Failure.interrupted
+            case .timedOut: return Failure.timedOut
+            case .dataNotAllowed, .internationalRoamingOff: return Failure.prohibited
+            default: return Failure.unavailable
+            }
+        case NSCocoaErrorDomain where (error as NSError).code == CocoaError.fileWriteOutOfSpace.rawValue:
+            return Failure.storage
+        default: return error
+        }
+    }
+
+    #if os(iOS)
+    @MainActor public static func handleBackgroundEvents(identifier: String, completion: @escaping @MainActor () -> Void) {
+        guard identifier == GameAssetBackgroundTransfer.identifier else { completion(); return }
+        GameAssetBackgroundTransfer.shared.restoreEvents(completion)
+    }
+
+    @MainActor public static var hasPendingDownload: Bool {
+        GameAssetBackgroundTransfer.shared.pendingSource != nil
+    }
+    #endif
 
     public func downloadAndInstall<Result: Sendable>(
         progress: @escaping @MainActor @Sendable (Progress) -> Void,
@@ -50,36 +112,62 @@ public actor GameAssetPack {
         guard !busy else { throw Failure.busy }
         busy = true
         defer { busy = false }
-        let session = URLSession(configuration: .ephemeral)
+        #if os(iOS)
+        let recoveredSource = await GameAssetBackgroundTransfer.shared.pendingSource
+        #else
+        let session = URLSession(configuration: Self.configuration())
         defer { session.invalidateAndCancel() }
-        let file = try await Self.withDownloadFallback { source in
-            try Task.checkCancellation()
-            await progress(.downloading(0))
-            let monitor = TransferProgress(update: progress)
-            let (file, response) = try await session.download(from: source, delegate: monitor)
-            do {
-                guard (response as? HTTPURLResponse)?.statusCode == 200, response.url?.scheme == "https" else {
-                    throw Failure.unavailable
-                }
+        let recoveredSource: URL? = nil
+        #endif
+        await progress(.connecting)
+        let file: URL
+        do {
+            file = try await Self.withDownloadFallback(startingAt: recoveredSource, fallbackProgress: {
+                await progress(.alternateMirror)
+            }) { source in
                 try Task.checkCancellation()
-                try Self.verifyArchive(file)
-                return file
-            } catch {
-                try? FileManager.default.removeItem(at: file)
-                throw error
+                #if os(iOS)
+                let transfer = await GameAssetBackgroundTransfer.shared
+                let file = try await transfer.transfer(from: source) { phase in
+                    progress(phase == .connecting && source == Self.fallback ? .alternateMirror : phase)
+                }
+                #else
+                let monitor = TransferProgress(update: progress)
+                let (file, response) = try await session.download(from: source, delegate: monitor)
+                #endif
+                do {
+                    #if !os(iOS)
+                    try Self.validateResponse(response)
+                    #endif
+                    try Task.checkCancellation()
+                    try Self.verifyArchive(file)
+                    return file
+                } catch {
+                    try? FileManager.default.removeItem(at: file)
+                    throw error
+                }
             }
+        } catch {
+            throw Self.explained(error)
         }
         defer { try? FileManager.default.removeItem(at: file) }
         try Task.checkCancellation()
         await progress(.installing)
-        return try Self.installVerifiedArchive(file, install: install)
+        do { return try Self.installVerifiedArchive(file, install: install) }
+        catch { throw Self.explained(error) }
     }
 
-    static func withDownloadFallback(_ download: (URL) async throws -> URL) async throws -> URL {
+    static func withDownloadFallback(
+        startingAt recoveredSource: URL? = nil,
+        fallbackProgress: () async -> Void = {},
+        _ download: (URL) async throws -> URL) async throws -> URL {
         do {
-            return try await download(primary)
+            return try await download(recoveredSource ?? primary)
         } catch {
             try Task.checkCancellation()
+            let failure = explained(error) as? Failure
+            if recoveredSource == fallback || failure == .storage || failure == .resumeUnavailable { throw error }
+            await fallbackProgress()
             return try await download(fallback)
         }
     }
@@ -126,10 +214,10 @@ private final class TransferProgress: NSObject, URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64,
                     totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         guard totalBytesWritten <= GameAssetPack.bytes else { downloadTask.cancel(); return }
-        let percent = Int(100 * totalBytesWritten / GameAssetPack.bytes)
-        let previous = Int(100 * (totalBytesWritten - bytesWritten) / GameAssetPack.bytes)
-        if percent != previous {
-            Task { @MainActor in update(.downloading(percent)) }
+        let phase = GameAssetPack.Progress.transfer(totalBytesWritten)
+        let previous = GameAssetPack.Progress.transfer(totalBytesWritten - bytesWritten)
+        if phase != previous {
+            Task { @MainActor in update(phase) }
         }
     }
 

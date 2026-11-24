@@ -1125,7 +1125,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let download: [GameFrontEnd.Action] = MobileResourceAccess.isStore
                 ? [.init("download.gameAssets", GameAssetPack.actionTitle, enabled: !loading, primary: true)] : []
             let back: GameFrontEnd.Action
-            if case .downloading = gameAssetProgress {
+            if gameAssetProgress?.canCancel == true {
                 back = .init("dataBack", L10n.text("Cancel"), backNavigation: true)
             } else {
                 back = .init("dataBack", L10n.text("Back"), enabled: !restoringResources)
@@ -1258,6 +1258,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if game == nil { becomeFirstResponder() }
         scrollView.setContentOffset(.zero, animated: false)
         rebuild()
+        #if os(iOS)
+        // An existing transfer already has licence approval from the player's original tap.
+        if next == .data, MobileResourceAccess.isStore, GameAssetPack.hasPendingDownload {
+            beginGameAssetDownload()
+        }
+        #endif
         if let restore {
             view.layoutIfNeeded()
             let maximum = max(0, scrollView.contentSize.height - scrollView.bounds.height)
@@ -1270,18 +1276,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             guard id == "gameAssets.cancel" || id == "gameAssets.agree" else { return }
             confirmingGameAssetLicence = false
             rebuild()
-            if id == "gameAssets.agree" {
-                restoreResources { [self] library in
-                    try await GameAssetPack.shared.downloadAndInstall(progress: { [weak self] phase in
-                        guard let self, self.restoringResources else { return }
-                        self.gameAssetProgress = phase
-                        self.rebuild()
-                    }) { try library.install(directory: $0) }
-                }
-            }
+            if id == "gameAssets.agree" { beginGameAssetDownload() }
             return
         }
-        if id == "dataBack", case .downloading = gameAssetProgress { resourceTask?.cancel(); return }
+        if id == "dataBack", gameAssetProgress?.canCancel == true { resourceTask?.cancel(); return }
         guard !restoringResources else { return }
         if handleL2Practice(id) { return }
         if handleCloudSync(id) { return }
@@ -1783,6 +1781,18 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             return try await Task.detached(priority: .userInitiated) {
                 try library.install(directory: source)
             }.value
+        }
+    }
+
+    private func beginGameAssetDownload() {
+        guard !restoringResources, game == nil, MobileResourceAccess.library != nil else { return }
+        gameAssetProgress = .connecting
+        restoreResources { [weak self] library in
+            try await GameAssetPack.shared.downloadAndInstall(progress: { [weak self] phase in
+                guard let self, self.restoringResources else { return }
+                self.gameAssetProgress = phase
+                self.rebuild()
+            }) { try library.install(directory: $0) }
         }
     }
 
