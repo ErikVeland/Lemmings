@@ -1,10 +1,42 @@
-# UX redesign proposal
+# UX redesign
 
-Home, Play, Profile, Community and profile-first onboarding are on shared main.
-The gameplay changes include fixed HUD counters, speed selection, rewind feedback
-and the result music fade. Settings group names and saved Hot Seat navigation
-are also merged. The phase sections below keep the original proposals and their
-dated checks.
+## Checkpoint 1 · 25 November 2026
+
+Shared game source at `66fce92fc89fa85e1fed0e4a840e9b5a9b36df43` is the reference for this checkpoint. Use the boxes here for current progress. Sections A–K below preserve the design brief and the later phase notes describe earlier revisions. For example, the proposal explored a welcome screen and several result themes. The implemented flow starts at profile creation and fades the level track on results.
+
+### Verified behaviour
+
+Tick a row when its stated check passes. Keep its ID when updating the requirement. For a regression, reopen the row and record the failing revision and check. Keep hardware observations against the device and revision where someone observed them.
+
+- [x] **UX-01 · Home and first play.** Home prioritises the selected session or offers Start Journey when available. Play retains manual browsing. On Mac a fresh player can create initials, decline sharing offline, start play and reopen the same choices. Check group `home`.
+- [x] **UX-02 · Stable counters and input.** The counter rectangles stay fixed across 9, 10, 99 and 100. Mac rate, pause and speed targets stay put. A supported NeoLemmix level with a nonstandard skill count keeps its targets after the simulation advances. Check group `hud`.
+- [x] **UX-03 · Speed and rewind.** Mac direct speed selection survives Shift release. The touch control distinguishes taps and holds. Rewind reports elapsed game seconds and repeated presses increase the cue. The rounded HUD and TV grid checks exercise the visible targets. Check groups `hud` and `renders`.
+- [x] **UX-04 · Saved Hot Seat.** Previously synced rosters have distinct resume targets, the selected session identifies the next player, and the turn and house rule survive a local save and reopen. Check group `hot-seat`.
+- [x] **UX-05 · Result music.** Completing an attempt twice fades and stops the track once. Starting the next track retires the old fade before it can change the replacement track. Check group `music`.
+
+### Remaining implementation and design review
+
+- [ ] **UX-06 · Review preview and result details.** Show Play or Resume from the preview image and the correct Next or Retry on success and failure. Verify access to records, replay and provenance across Classic, L2, L3 and supported fan content.
+- [ ] **UX-07 · Finish catalogue and Profile review.** Record the default ordering, active filters, empty results and return path for Fan and NeoLemmix. Check which personal statistics can be shown accurately from existing records.
+- [ ] **UX-08 · Finish terminology, Settings and accessibility review.** Trace player-facing names, translations, focus order and Back through Home, Play, Profile, Community, Hot Seat and Settings. Record remaining untranslated strings and justified platform differences.
+- [ ] **UX-09 · Review first-use teaching and the minimap.** Check that a new player can assign a skill, return to 1×, rewind and use the map without losing the playfield. Record where optional help is needed and verify it stays dismissed.
+- [ ] **UX-10 · Check asynchronous navigation and recovery.** Test late artwork and community totals, offline/online transitions, cancelled loads and retry. Compare target rectangles before and after data arrives. Reopen an archived journey with its original roster, next turn and checkpoint on another device.
+
+### Device acceptance
+
+- [ ] **UX-11 · Mac.** Use keyboard, pointer and VoiceOver through first launch, preview, gameplay, results and return. Check focus restoration and the narrow-window speed pedal.
+- [ ] **UX-12 · iPhone and iPad.** Check touch targets and VoiceOver at narrow and wide sizes. On the 2017 A10X iPad Pro, record input response, frame cadence and audio continuity while changing speed, pausing and rewinding.
+- [ ] **UX-13 · Duo.** Fold and unfold in Home, a level and the speed chooser. Record whether the route, focus, pause state and selected skill survive each transition.
+- [ ] **UX-14 · Apple TV.** Use a Siri Remote through Ready, speed selection, repeated rewind and results. Check viewing-distance legibility, focus return and long labels.
+- [ ] **UX-15 · Audio.** Listen through preview, gameplay, pause, success, failure, rapid retry and background/foreground transitions on speakers and headphones. Record any click, overlap or crackle with the music source and device.
+
+### Repeat the checkpoint
+
+On 25 November, all 20 named regression tests and all four render audits passed. The rounded HUD audit covered 209 captures, and the Hot Seat flow covered 135. Each device box above remains open until tested on hardware.
+
+From the repository root on macOS, run `python3 Scripts/check-ux.py`. For a focused change append `home`, `hud`, `hot-seat`, `music` or `renders`. Each run prints its own evidence directory beneath `.build`, including the revision, working-tree status, results, logs and any audit renders. A missing or skipped named test leaves its group failed. An interrupted run has no completion line.
+
+The HUD and Hot Seat checks use the project's original bitmap export in `.build/mac-artwork/export/lemmings`. The fan and multi-engine render checks use the installed game's resources, including `NeoLemmix` and the Classic, L2 and L3 `Ports` directories. Supply another resource root with `--resources`. The runner keeps native tests offscreen and muted. For changes to UIKit or the TV entry point, the existing SDK checks are `zsh Scripts/check-apple-ui-sdk.sh ios` and `zsh Scripts/check-apple-ui-sdk.sh tvos`.
 
 This proposal reorganises the existing depth of Ultimate Lemmings. It does not
 remove features. It builds on [UI clarity](UIPrinciples.md),
