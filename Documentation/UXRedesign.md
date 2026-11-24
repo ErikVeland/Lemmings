@@ -11,6 +11,70 @@ Those documents keep their rules about bitmap typography, stone controls,
 Back/Main menu placement and footer order. Where this proposal changes a rule,
 the change is stated explicitly.
 
+## Implementation and verification — 24 November 2026
+
+Phase 1 started at `e11bd49a`. The Mac Home and onboarding work followed in `2b983a66`, with follow-up tests through `6c965c4a`. Shared main incorporated these in `c3bd406d`.
+
+### Navigation and onboarding
+
+| Task | Previous route or behaviour | Implemented route |
+| --- | --- | --- |
+| Start or continue playing | Games, Journey and multiple resume choices shared Home | Home prioritises the selected session. Other routes and games remain under Play. Hot Seat identifies the next player and hands over at Ready. |
+| Find a collection | The Mac Collections control opened Playlists first | Play → Collections. Playlists remains accessible within Collections. Back restores Play. Main menu returns Home. |
+| Find personal data | Mac Profile opened player selection. Records and sync lived elsewhere | Profile → Players, Records or Cloud saves. |
+| See public progress | Mac Home included a separate worldwide count | Community shows the public total above the leaderboard tabs. A missing total displays a dash. |
+| Start offline | Identity and public counters appeared together | Profile → optional “Join the count?” → first level. Completed setup and a saved participation choice survive relaunch. |
+
+The isolated Mac test filled the on-screen initials field, activated Play and then Not now. It observed the play callback, reopened the profile and participation stores, and counted zero network requests. A separate opt-in test reopened the consent store. The standalone native app integration test compiled but aborted during macOS application registration before launch. The offscreen Mac test host exercised the profile and consent pages. Mobile startup screens and both answers were checked at the renderer and routing layers.
+
+### Gameplay
+
+The original mobile bitmap renderer centred each live string inside a slot and exposed the ink rectangle as the field. The native Mac Classic/Neo panel laid changing statistics out in one string. The L3 readout used the changing string to place its neighbouring Menu target. The L2 original panel already had fixed digit, name and timer cells.
+
+Classic wide-iPad coordinates below are the left edges in a 1366 × 1024 render. Each variant uses the same level image at tick 100. The audit changes the displayed counters, time and multiplier together to exercise digit boundaries.
+
+| Status field | Before, 9 → 100 | After, 9 → 100 |
+| --- | --- | --- |
+| Released | 409 → 394 | 391 → 391 |
+| Rate | 603 → 591 | 585 → 585 |
+| Speed | 760 → 757 | 742 → 742 |
+| Clock | 942 → 942 | 936 → 936 |
+| Rescue score | 1100 → 1076 | 1076 → 1076 |
+
+Across 9, 10, 99 and 100 the old renderer produced three different sets of field rectangles for Classic and L2 and four for L3. Each engine now produces one. The middle 1366 × 700 playfield crop was pixel-identical before and after. The tests also cover a 100-minute countdown, decimal speed and 25×, bitmap fallback text and Macintosh lettering. A separate test opened the one-skill Redux “Just dig!” level, advanced the simulation and compared the control rectangles at 320, 1024 and 1920 pixels wide.
+
+The native Mac pointer test presses the centre, sides and corners of rate, speed, speed arrows and Pause and checks the resulting action. The rounded HUD audit checks nine input points per visible target plus horizontal gaps. Other checks include grid/TV transport, 150 open-Duo Home captures, 135 Hot Seat states and 83 navigation states across 1,992 layouts. The iOS and tvOS SDK checks compile the application entry points.
+
+### Sound
+
+[Audio coverage](AudioCoverage.md#attempt-music-ownership) records the music owner by screen. No new result theme or speed tier was added. Muted regression tests cover duplicate completion, the end of the fade, retiring it early and a later run-loop wakeup after replacement. Device speaker/headphone quality, real controller and touch input and VoiceOver still require device acceptance. CoreSimulator was unavailable on this host.
+
+
+### Transport and skill follow-up
+
+Shared main incorporated the rewind cue in `d6c0f135`. The working gameplay
+changes include that cue, the fixed status slots and the single result fade.
+The Apple TV HUD already draws its visible counters through
+`MobileHUDRenderer.statusFields`. The two strings from
+`televisionStatusLines` supply the accessibility summary.
+
+| Area | Implemented in the working source | Further implementation or acceptance |
+| --- | --- | --- |
+| Speed | The iOS and TV socket displays the chosen tier immediately. Fixed-speed mode gives the whole socket to its toggle. The touch pause menu and TV Game controls offer an exact tier, including 1×. | The proposed always-visible wide speed strip and compact in-play picker are still open. Existing hold, controller and keyboard bindings retain their functions. |
+| Rewind | The shared cue expresses distance in game seconds. Touch and TV indicate changes in rewind speed. | Check visibility on real playfields and repeated Siri Remote presses. |
+| Skills | Stocked and unlimited skills retain their artwork brightness. Exhausted skills dim on the shared mobile HUD. Native L3 panel artwork uses its own original control states. | Check physical-device contrast, selected outlines and remote focus. |
+| Navigation | Home, Play, Profile, Community, first launch and the saved-route resolver are implemented. | The Settings and saved Hot Seat changes have their own concurrent work. Preview details, remaining terminology and fan catalogue filters need review against their actual routes. |
+| Polish | Results fade the outgoing level track. | First-use teaching for transport and assignments, minimap/tracking grouping, Duo fold transitions, audible playback and older-device input timing remain open. |
+
+The muted follow-up ran 25 targeted tests and 209 offscreen HUD and speed-page
+renders. On the wide iPad fixture, changing one stocked skill to unlimited changed
+only its 11 × 15 counter in Classic, L2 and L3. Exhausting it also changed the
+sprite pixels. The chooser checked every fixed, standard and optional tier at
+320 and 960 logical pixels, including selected state, Back and button centre
+hits. The iOS and tvOS SDK checks compiled both application entry points.
+CoreSimulator refused the connection, so live UIKit focus and touch remain
+unverified.
+
 ## Evidence and limits
 
 This audit comes from source review on `release/ultimate-lemmings` and the

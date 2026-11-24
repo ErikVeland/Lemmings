@@ -4904,9 +4904,9 @@ extension AppDelegate {
     try check(library.entries.first(where: { $0.title == .lemmings2TheTribes })?.detail == "COMPLETE"
       && library.entries.first(where: { $0.title == .lemmings3TheChronicles })?.detail == "BETA",
       "The library has the wrong sequel release status")
-    try check(!homeContentRow(.lemmings2).contains("BETA")
-      && !homeContentRow(.lemmings2).contains("PREVIEW")
-      && homeContentRow(.lemmings3).hasSuffix(" — BETA"),
+    try check(homeContentRow(.lemmings2)?.contains("BETA") == false
+      && homeContentRow(.lemmings2)?.contains("PREVIEW") == false
+      && homeContentRow(.lemmings3)?.hasSuffix(" — BETA") == true,
       "The home rows have the wrong sequel release status")
     returnToLibrary()
     window.setContentSize(CGSize(width: 900, height: 620))
@@ -5754,7 +5754,7 @@ extension AppDelegate {
     stylesDirectory = nil
     neoLevelsDirectory = nil
     let bundled = try BundledGameResources.neoLemmix()
-    try check(neoLemmixSources == [bundled] && !homeContentRow(.neolemmix).contains("NO PACKS"),
+    try check(neoLemmixSources == [bundled] && homeContentRow(.neolemmix)?.contains("NO PACKS") == false,
       "Bundled NeoLemmix packs still need a folder choice")
     let library = NeoLemmixLibrary.discover(neoLemmixSources)
     rebuildLevelCatalogue(LevelBrowserDiscovery(
@@ -6961,27 +6961,29 @@ extension AppDelegate {
     gamePicker.selectItem(at: christmas)
     fanPlaying = false; currentNxlvURL = nil
     arcadeRunID = UUID(); startedMusicIdentity = nil
+    playFirstLevel()
+    guard let session, !session.isComplete else { throw IntegrationFailure(message: "Missing handover level") }
+    playfield.startCountdown.cancel()
+    needsAttemptMusic = false
+    phase = .playing
+    isPaused = false
     applyAudioSettings()
     playMusicForCurrentLevel()
-    let outgoing = dj.currentURL
-    try check(outgoing != nil && dj.isPlaying, "Missing outgoing handover music")
-    var announced: [String] = []
-    dj.onTrackChange = { announced.append($0) }
+    try check(dj.isPlaying && dj.currentURL != nil, "Missing live attempt music")
+    resultMusic.begin(attempt: arcadeRunID)
     prepareLibrary(preservingMusic: true)
-    try check(dj.isPlaying && dj.currentURL == outgoing && announced.isEmpty,
-      "Internal library cleanup stopped or replaced the outgoing track")
-    // The destination fan session owns the next selection, despite the stale
-    // seasonal campaign picker underneath the library.
-    fanPlaying = true
-    arcadeRunID = UUID()
+    try check(!dj.isPlaying && resultMusic.owner == nil, "Outgoing music survived the handover")
+    playFirstLevel()
+    try check(needsAttemptMusic && !dj.isPlaying, "New attempt played before Ready")
+    playfield.startCountdown.cancel()
+    needsAttemptMusic = false
+    isPaused = false
     playMusicForCurrentLevel()
-    try check(!seasonalMusic && dj.isCrossfading && dj.isPlaying,
-      "Fan handover did not retain the outgoing deck for its transition")
     let identity = startedMusicIdentity
     playMusicForCurrentLevel()
-    try check(startedMusicIdentity == identity && dj.isCrossfading,
-      "Handover refresh restarted level music")
-    print("PASS seasonal-to-fan handover retains music and starts one destination crossfade")
+    try check(identity != nil && startedMusicIdentity == identity && dj.isPlaying,
+      "Destination failed to acquire one level track")
+    print("PASS live level, result fade, silent handover and next attempt track")
   }
 
   fileprivate func testSeasonalMusic() throws {
@@ -7312,6 +7314,7 @@ extension AppDelegate {
         fanPlaying = fan
         fanPack = URL(fileURLWithPath: "/test-pack.zip")
         fanQueue = [FanLevelLibrary.Entry(file: "test.lvl", section: nil, label: label)]
+        resultMusic.retire()
         music.stop(); _ = music.play(url: selectedTrack); try music.start()
         isPaused = true; applyUserMusicPause()
         try check(!music.isOutputRunning, "Paused final-tick fixture did not suspend selected music")
@@ -7319,8 +7322,8 @@ extension AppDelegate {
         try check(phase == .results, "single-step did not show results (fan=\(fan), win=\(win))")
         try check(isPaused && session?.isComplete == true,
           "Completed single-step resumed gameplay")
-        try check(music.isOutputRunning == win,
-          "Final single-step did not preserve win music or paused failure (fan=\(fan), win=\(win))")
+        try check(!music.isOutputRunning && resultMusic.owner == arcadeRunID,
+          "Finishing a paused attempt restarted music or lost fade ownership (fan=\(fan), win=\(win))")
         try check(music.currentURL == selectedTrack && music.muted,
           "Completion replaced the selected tune or cleared mute")
         try check(arcadeReport?.run.saved == (win ? 1 : 0), "Completion did not record the actual rescue result")

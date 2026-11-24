@@ -34,7 +34,7 @@ extension MobileLibraryViewController {
             candidates.append(.sequence(title: run.pool.summary, position: run.currentIndex + 1,
                                         total: run.entries.count, attemptSavedAt: sequenceAttempt))
         }
-        if resume.isEmpty, catalogue != nil, let run = playlists.run,
+        if catalogue != nil, let run = playlists.run,
            run.playlist != LearningJourney.playlistID {
             resume.append(.init("runResume", L10n.text("Resume \(run.name)  \(run.position + 1)/\(run.entries.count)")))
             candidates.append(.playlist(name: run.name, position: run.position + 1, total: run.entries.count))

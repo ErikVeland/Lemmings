@@ -282,6 +282,8 @@ public final class Lemmings2MobileSession: MobileGameSession {
 
     public var isSimulationComplete: Bool { runtime.isComplete }
 
+    public var maximumHUDSeconds: Int? { initial.remainingSeconds }
+
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
             tick: runtime.tick,
@@ -850,6 +852,8 @@ public final class Lemmings3MobileSession: MobileGameSession {
 
     public var isSimulationComplete: Bool { runtime.isComplete }
 
+    public var maximumHUDSeconds: Int? { initial.configuration.timeLimit + initial.pickups.filter { $0.tool == .clock }.reduce(0) { $0 + 60 * $1.quantity } }
+
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
             tick: runtime.tick,
@@ -1377,6 +1381,16 @@ public final class NeoLemmixMobileSession: MobileGameSession {
     }
 
     public var isSimulationComplete: Bool { simulation.isComplete }
+
+    public var maximumHUDPopulation: Int {
+        let config = initial.configuration
+        guard case let .finite(inventory) = config.skills[.cloner] ?? .finite(0) else { return Int.max }
+        let pickups = config.zones.filter { $0.effect == .pickupSkill && $0.skill == .cloner }
+        let bonus = controls.contains(.cloner) ? 1 : 0
+        return pickups.reduce(config.totalLemmings + inventory + bonus) { $0 + ($1.skillCount ?? 0) }
+    }
+
+    public var maximumHUDSeconds: Int? { initial.configuration.timeLimitTicks.map { $0 / NeoLemmixRules.ticksPerSecond } }
 
     public var snapshot: MobileGameSnapshot {
         let state = simulation.snapshot()

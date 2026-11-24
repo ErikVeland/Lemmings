@@ -324,7 +324,6 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 field.overlayTitle = "LEMMINGS"; field.overlayShowsLemmings = true
                 let routes = Array(["CONTINUE JOURNEY - ALICE v BOB", "RESUME LEVEL - ALICE"].prefix(saved)) + ["JOURNEY  29/295 SOLVED"]
                 field.overlayProfileInitials = saved == 0 ? "LEM" : "ALICE v BOB"
-                field.overlaySavedCounts = "LEMMINGS SAVED  1239"
                 field.overlayShowsSettingsButton = true; field.overlayAvailableUpdate = "Version 2.0"
                 var selected: Int?, settings = false, update = false, back = false, collections = false
                 field.onSelectOverlayLine = { selected = $0 }; field.onSettings = { settings = true }
@@ -359,8 +358,7 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 let lastRow = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "COMMUNITY" })
                 XCTAssertTrue(field.bounds.contains(lastRow.localFrame)); click(lastRow)
                 XCTAssertEqual(selected, 4)
-                let savedCount = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "LEMMINGS SAVED  1239" })
-                XCTAssertFalse(savedCount.localFrame.intersects(lastRow.localFrame))
+                XCTAssertFalse(elements.contains { $0.accessibilityLabel()?.contains("LEMMINGS SAVED") == true })
                 XCTAssertFalse(community.localFrame.isEmpty)
 
                 // Play: saved routes, then the game grid, with Back and Collections below.

@@ -314,8 +314,8 @@ import NxlvKit
         let hintCard = MobileCareerArt.recordHintPage(level: level.title, deck: hintDeck, stage: 1,
             solution: true, playable: true, preview: true)
         let savedSeats = MobileCareerArt.players(profiles, subtitle: "", canDelete: true, hasSavedHotSeats: true)
-        // Progress is the one hub for records, awards, rankings and counts. Each child page returns to it.
-        guard progress.rows.map(\.id) == ["recordList", "achievements", "worldwide", "playInsights"],
+        // Profile owns personal records, players and saves. Community owns public rankings.
+        guard progress.rows.map(\.id) == ["recordList", "achievements", "players", "cloudSaves", "playInsights"],
               progress.footer.map(\.id) == ["home"],
               MobileCareerArt.recordsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "").footer.map(\.id) == ["records"],
               MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "").footer.map(\.id) == ["records"],

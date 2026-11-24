@@ -314,7 +314,7 @@ struct ReticleFeedback {
             case .profiles: return L10n.text("Player profiles")
             case .records: return L10n.text("Records")
             case .leaderboards: return L10n.text("Leaderboards")
-            case .playlists: return L10n.text("Playlists")
+            case .playlists: return L10n.text("Collections")
             case .homeBack: return L10n.text("Back")
             }
         }
@@ -1151,7 +1151,7 @@ struct ReticleFeedback {
   private func homeOverlay() -> (page: GameFrontEnd.Page, layout: GameFrontEnd.Layout, scale: CGFloat) {
     let rows = overlayLines.enumerated().map { index, title in
       var action = GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
-        primary: index == overlayHighlight, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
+        primary: index == 0, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
       action.titleRuns = index < overlayHomeLeadingCount ? GameSemanticText.resume(title)
         : action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .blue)]
       return action

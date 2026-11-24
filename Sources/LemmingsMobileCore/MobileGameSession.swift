@@ -130,6 +130,7 @@ public struct MobileSkillState: Codable, Equatable, Sendable {
     public let name: String
     public let count: Int
     public let isUnlimited: Bool
+    public var hasSupply: Bool { isUnlimited || count > 0 }
 
     public init(name: String, count: Int, isUnlimited: Bool = false) {
         self.name = name
@@ -218,6 +219,8 @@ public enum MobileSessionError: Error, LocalizedError, Equatable {
 
 /// The mobile shell depends on this contract, not on one game's concrete runtime.
 public protocol MobileGameSession: AnyObject {
+    var maximumHUDSeconds: Int? { get }
+    var maximumHUDPopulation: Int { get }
     var engineIdentifier: String { get }
     var engineFingerprint: String { get }
     var levelIdentifier: String { get }
@@ -311,6 +314,8 @@ public protocol MobileGameSession: AnyObject {
 }
 
 public extension MobileGameSession {
+    var maximumHUDSeconds: Int? { snapshot.remainingSeconds }
+    var maximumHUDPopulation: Int { snapshot.total }
     var minimapActorPoints: [MobilePoint] { [] }
     func renderMinimap() throws -> MobilePixelFrame {
         try SceneRasterContext.drawActors.withValue(false) { try render(highlight: nil).sampled() }

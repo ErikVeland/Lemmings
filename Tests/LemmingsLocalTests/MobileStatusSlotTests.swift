@@ -4,7 +4,7 @@ import LemmingsGameArt
 import LemmingsMobileCore
 import XCTest
 
-/// The iPad and tvOS top bar keeps every statistic centred in a fixed slot.
+/// The iPad and tvOS top bar keeps every statistic in a fixed slot.
 @MainActor final class MobileStatusSlotTests: XCTestCase {
     private func snapshot(released: Int, saved: Int, seconds: Int?, rate: Int?, complete: Bool = false,
                           ending: Bool = false) -> MobileGameSnapshot {
@@ -20,6 +20,28 @@ import XCTest
         let fields = MobileHUDRenderer.statusFields(in: CGRect(x: 0, y: 0, width: width, height: 44),
             snapshot: snapshot, details: details, engineIdentifier: engine, paused: paused, speed: speed, typography: nil)
         return Dictionary(uniqueKeysWithValues: fields.map { ($0.id, $0.frame.midX) })
+    }
+
+    func testCompleteFieldRectanglesAtDigitBoundaries() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let artwork = try XCTUnwrap(GameMenuTypography(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings")))
+        for typography in [nil, artwork] {
+            for width in [CGFloat(280), 400, 900, 1700] {
+                for engine in ["classic", "lemmings2", "lemmings3", "neolemmix"] {
+                    var reference: [String: CGRect]?
+                    for (value, seconds, speed) in [(9, 6000, 1.0), (10, 5999, 10.0), (99, 600, 0.5), (100, 59, 25.0)] {
+                        let sample = snapshot(released: value, saved: value, seconds: seconds, rate: value)
+                        let details = MobileHUDRenderer.StatusDetails(lostCount: 0,
+                            deathCounter: (value < 80 ? "21/21 💀" : "SAFE", ""), engineIdentifier: engine, clockLimitSeconds: 6000)
+                        let fields = MobileHUDRenderer.statusFields(in: .init(x: 0, y: 0, width: width, height: 44),
+                            snapshot: sample, details: details, engineIdentifier: engine, paused: false, speed: speed, typography: typography)
+                        let frames = Dictionary(uniqueKeysWithValues: fields.map { ($0.id, $0.frame) })
+                        if let reference { XCTAssertEqual(frames, reference, "\(engine) at \(width), count \(value)") }
+                        else { reference = frames }
+                    }
+                }
+            }
+        }
     }
 
     func testStatisticsKeepTheirCentresAsValuesChange() {

@@ -31,10 +31,10 @@ extension MenuAudit {
             ("hints", "AB", .current, .init(title: "Hints", details: ["Use a digger."], footer: [.init("back", "Back")])),
             ("settings", "AB", .current, .init(title: "Settings", rows: [.init("audio", "Audio")], footer: [.init("back", "Back")])),
             ("save-error", "AB", .current, .init(title: "Hot Seat was not saved", footer: [.init("retry", "Try again", primary: true)])),
-            ("saved-shared-journey", "UVA", .next, MobileHomeArt.page(resume: [.init("learningRunResume", "Resume journey run  4/120")], journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "ERI vs UVA")),
-            ("saved-solo-journey", "ERI", .next, MobileHomeArt.page(resume: [.init("learningRunResume", "Resume journey run  2/120")], journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "ERI")),
-            ("saved-progression", "UVA", .next, MobileHomeArt.page(resume: [.init("learningRunResume", "Resume Easy to hard  3/10")], journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "ERI vs UVA")),
-            ("saved-playlist", "UVA", .next, MobileHomeArt.page(resume: [.init("runResume", "Resume My levels  2/10"), .init("resume", "Resume level - UVA")], journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "ERI vs UVA")),
+            ("saved-shared-journey", "UVA", .next, MobileHomeArt.page(continueAction: .init("learningRunResume", "Resume journey run  4/120"), initials: "ERI vs UVA")),
+            ("saved-solo-journey", "ERI", .next, MobileHomeArt.page(continueAction: .init("learningRunResume", "Resume journey run  2/120"), initials: "ERI")),
+            ("saved-progression", "UVA", .next, MobileHomeArt.page(continueAction: .init("learningRunResume", "Resume Easy to hard  3/10"), initials: "ERI vs UVA")),
+            ("saved-playlist", "UVA", .next, MobileHomeArt.page(continueAction: .init("runResume", "Resume My levels  2/10"), initials: "ERI vs UVA")),
             ("next-library", "LEM", .next, MobileHomeArt.page(journey: .init("journey", "Learning Journey"), families: [.init("classic", "Classic Lemmings")], initials: "LEM v AB")),
             ("level-selection", "LEM", .next, .init(title: "Just Dig!", subtitle: "Fun 1/30", footer: [.init("back", "Back"), .init("play", "Play", primary: true)], preview: true)),
             ("profiles", "LEM", .next, .init(title: "Players", rows: [.init("lem", "LEM"), .init("ab", "AB")], footer: [.init("back", "Back")])),
@@ -66,7 +66,7 @@ extension MenuAudit {
             guard let restored = try await checkpoints.load(owner: "LEM", scope: selected.scope), restored == shared,
                   let owner = restored.owner else { throw Failure.invalidTargets }
             let resumed = MobileHomeArt.page(resume: [.init("resume", "Resume level - " + owner)],
-                journey: .init("journey", "Learning Journey"), families: [.init("game", familyTitle)], initials: "LEM vs AB")
+                journey: .init("journey", "Learning Journey"), families: [.init("game", familyTitle)], continueID: "resume", initials: "LEM vs AB")
             states.append(("selected-seat-" + engine + "-saved-level", "AB", .next, resumed))
         }
         var captures: [[String: Any]] = []
