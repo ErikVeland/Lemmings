@@ -50,18 +50,24 @@ public actor GameAssetPack {
         guard !busy else { throw Failure.busy }
         busy = true
         defer { busy = false }
-        let session = URLSession(configuration: .ephemeral)
-        defer { session.invalidateAndCancel() }
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
+        defer { try? FileManager.default.removeItem(at: directory) }
         let file = try await Self.withDownloadFallback { source in
             try Task.checkCancellation()
             await progress(.downloading(0))
-            let monitor = TransferProgress(update: progress)
-            let (file, response) = try await session.download(from: source, delegate: monitor)
-            do {
-                guard (response as? HTTPURLResponse)?.statusCode == 200, response.url?.scheme == "https" else {
-                    throw Failure.unavailable
-                }
+            let file = directory.appendingPathComponent(UUID().uuidString)
+            let (percentages, transfer) = AsyncThrowingStream<Int, Error>.makeStream(bufferingPolicy: .bufferingNewest(1))
+            let delegate = AssetDownloadDelegate(file: file, transfer: transfer)
+            let session = URLSession(configuration: .ephemeral, delegate: delegate, delegateQueue: nil)
+            defer { session.invalidateAndCancel() }
+            session.downloadTask(with: source).resume()
+            for try await percent in percentages {
                 try Task.checkCancellation()
+                await progress(.downloading(percent))
+            }
+            try Task.checkCancellation()
+            do {
                 try Self.verifyArchive(file)
                 return file
             } catch {
@@ -69,7 +75,6 @@ public actor GameAssetPack {
                 throw error
             }
         }
-        defer { try? FileManager.default.removeItem(at: file) }
         try Task.checkCancellation()
         await progress(.installing)
         return try Self.installVerifiedArchive(file, install: install)
@@ -119,9 +124,14 @@ public actor GameAssetPack {
     }
 }
 
-private final class TransferProgress: NSObject, URLSessionDownloadDelegate {
-    let update: @MainActor @Sendable (GameAssetPack.Progress) -> Void
-    init(update: @escaping @MainActor @Sendable (GameAssetPack.Progress) -> Void) { self.update = update }
+private final class AssetDownloadDelegate: NSObject, URLSessionDownloadDelegate {
+    let file: URL
+    let transfer: AsyncThrowingStream<Int, Error>.Continuation
+
+    init(file: URL, transfer: AsyncThrowingStream<Int, Error>.Continuation) {
+        self.file = file
+        self.transfer = transfer
+    }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64,
                     totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
@@ -129,9 +139,23 @@ private final class TransferProgress: NSObject, URLSessionDownloadDelegate {
         let percent = Int(100 * totalBytesWritten / GameAssetPack.bytes)
         let previous = Int(100 * (totalBytesWritten - bytesWritten) / GameAssetPack.bytes)
         if percent != previous {
-            Task { @MainActor in update(.downloading(percent)) }
+            transfer.yield(percent)
         }
     }
 
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {}
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        do {
+            guard let response = downloadTask.response as? HTTPURLResponse,
+                  response.statusCode == 200, response.url?.scheme == "https" else {
+                throw GameAssetPack.Failure.unavailable
+            }
+            try FileManager.default.moveItem(at: location, to: file)
+        } catch {
+            transfer.finish(throwing: error)
+        }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        transfer.finish(throwing: error)
+    }
 }
