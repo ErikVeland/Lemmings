@@ -1154,7 +1154,8 @@ struct ReticleFeedback {
         : action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .blue)]
       return action
     }
-    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Progress")), .init("leaderboards", L10n.text("Leaderboards")), .init("playlists", L10n.text("Collections / Playlists")), GameSupport.menuAction]
+    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Progress")), .init("leaderboards", L10n.text("Leaderboards")), .init("playlists", L10n.text("Collections / Playlists"))]
+    if onDonate != nil { footer.append(GameSupport.menuAction) }
     if overlayShowsSettingsButton { footer.append(.init("settings", L10n.text("Settings"))) }
     if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", L10n.text("Update"))) }
     for index in footer.indices {
@@ -1492,12 +1493,12 @@ struct ReticleFeedback {
         width: board.width - 40 * scale, height: max(36, 48 * scale))
       let footerScale = max(1, Int(scale.rounded()))
       let gap: CGFloat = 12 * scale
-      let buttons: [(action: OverlayFooterAction, title: String)] = [
+      var buttons: [(action: OverlayFooterAction, title: String)] = [
           (.profiles, L10n.text("PROFILES")),
           (.records, L10n.text("RECORDS")),
-          (.playlists, L10n.text("PLAYLISTS")),
-          (.donate, L10n.text("Donate"))
+          (.playlists, L10n.text("PLAYLISTS"))
       ]
+      if onDonate != nil { buttons.append((.donate, L10n.text("Donate"))) }
       let count = CGFloat(buttons.count)
       // Let the roster grow while keeping each footer action readable.
       let cell = CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * footerScale)
