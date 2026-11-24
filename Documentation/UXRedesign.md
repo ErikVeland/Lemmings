@@ -1,7 +1,8 @@
 # UX redesign proposal
 
-Status: proposal, November 2026. Nothing in this document is implemented yet.
-It is the plan that Phase 1–4 work must follow. Update it when a phase lands.
+Status: Phase 1 structure implemented on `feature/ux-phase1-home` (November 2026).
+Phases 2–4 remain proposals. See [Phase 1 status](#phase-1-status) for what
+landed, what changed from the proposal and what is not yet verified.
 
 This proposal reorganises the existing depth of Ultimate Lemmings. It does not
 remove features. It builds on [UI clarity](UIPrinciples.md),
@@ -268,8 +269,9 @@ developer logs only.
    world total and your initials and best runs can appear on leaderboards.
    Actions: Join (primary) and Not now. Route the existing consent page here
    and rewrite it. The six-line policy list moves to Settings > Online.
-4. **How it looks.** Original or Modern presentation (the existing
-   `effectsWelcome` choice). Two preview images, one tap.
+4. **How it looks.** Not implemented. [Variable speed](SuperSpeed.md) records
+   the owner's decision that presentation choices stay in Settings with no
+   first-launch screen. Phase 1 keeps that decision.
 5. **Play.** The first level briefing opens with the 3–2–1 countdown.
    First-use hints appear during play (see Phase 4).
 
@@ -324,7 +326,7 @@ in non-store builds or with the Option key.
 | Move into Play | Classic, Oh No, Holiday, Oh Yes, Fan, NeoLemmix, L2, L3 rows. Collections becomes a Play tab. Import/Game Data becomes the empty state of a game card. |
 | Move to Settings > About | What's New, Donate, credits, legal, version. Desk Clock settings join Visual on mobile. |
 | Make contextual | Speed and music volume (HUD popover), hints (pause), level provenance (preview detail sheet), house rules (Hot Seat setup). |
-| Hide (owner tools) | Play Insights, insights token, Show Recorded Routes, Familiar Names admin, L3 beta entry. |
+| Hide (owner tools) | Show Recorded Routes (Mac: Option alternate of Replay Last Game). Play Insights keeps its local counts for players, so it stays on Profile and leaves Settings > Privacy. |
 | Keep unchanged | Skill panel order and position. Back/Home corners. Footer order rule. 3–2–1 countdown. Hot Seat Ready gate. Result Next/Retry. |
 | Rename | Collections (one name). Community (replaces Leaderboards/Worldwide/Rankings). Profile (replaces Players/Player Profiles). Home (replaces Main menu/Library in labels). |
 
@@ -387,3 +389,46 @@ checkpoints readable. No phase may change the engine fingerprint.
 - Audio-state tests that check state transitions without audible output.
 - Physical device checks remain manual: iPhone, iPad (A10X), Duo fold,
   Apple TV remote and VoiceOver. Record them separately from source checks.
+
+## Phase 1 status
+
+### Implemented
+
+| Area | Mac | iOS and tvOS |
+| --- | --- | --- |
+| Continue | `homeContinueAction` uses `ContinueResolver` and puts Continue first with the initial selection | `homeContinuations()` uses `ContinueResolver`; Continue is the only primary row |
+| Home | Continue, Play, Hot Seat, Profile, Community; Settings and Update in the header | Same five rows; Settings in the header |
+| Play | Title screen Play mode (`homeShowsPlay`) with the game grid; Back and Escape return Home | `.play` route with the game grid (`Page.gameLibrary`); Back from pages under Play returns to Play |
+| Profile | Profile… opens player profiles | Profile replaces Progress and adds Players and Cloud saves |
+| Community | Leaderboards window titled Community | Community page shows the local and worldwide saved totals |
+| About items | Donate moves to the Help menu | What's New and Donate move to Settings; Open Desk Clock moves to Settings > Desk Clock |
+| First launch | Profile, then Join the count?, then the first level | Profile, then Join the count?, then the first level |
+| Owner tools | Show Recorded Routes is an Option alternate | Play Insights leaves Settings > Privacy |
+| tvOS Home | — | Centred column when Home has no game rows; Play uses the TV game grid |
+
+The Mac title screen keeps the local and worldwide saved totals as a quiet
+status line at its foot. Mobile Home no longer shows them.
+
+### Validation
+
+- `ContinueResolverTests` (8) and `HomeContinueTests` (6) pass.
+- `LemmingsMobileUITests` (45) pass, including the open-Duo Home fit test that
+  failed on `main` before the smaller Home. The Mac `DeviceMenuLayoutTests`,
+  `LevelLeaderboardResultTests` and `FooterNavigationTests` (23) pass, muted and offscreen.
+- iOS and tvOS SDK modules compile with the SDK check. The tvOS application
+  entry point typechecks. The iOS entry point check needs the script update below.
+- No simulator, device or rendered Mac window was inspected. Touch, focus,
+  VoiceOver and Siri Remote behaviour remain manual checks.
+
+### Known gaps
+
+- New and renamed strings fall back to English in all eight translated locales.
+  The committed English catalogue on `main` is already stale from other work,
+  so the catalogue regeneration belongs to the localisation integration worker.
+- The Mac integration checks do not compile on `main`: commit `35a4235b` made
+  `homeContentRow` optional without updating six checks. The updated first-profile
+  and Home checks in this branch are therefore not yet run.
+- `Scripts/check-apple-ui-sdk.sh` uses a removed app delegate path and `rg`.
+  `Scripts/run-playfield-draw-tests.sh` lists a moved `RunRecovery.swift`.
+- Mac Community does not yet show the worldwide total in its header.
+- The legacy `TVLibraryViewController` source-folder path keeps its own menu.

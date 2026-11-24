@@ -283,7 +283,7 @@ import NxlvKit
     }
     /// Leaderboards pick who in the first row and what in the second. Both rows are tabs.
     func leaderboardTabs() {
-        title(L10n.text("Leaderboards"), x: 96, y: 40, width: 928, height: 40)
+        title(L10n.text("Community"), x: 96, y: 40, width: 928, height: 40)
         let gameCenter = GameCenterScores.shared.available
         let scopes: [(String, Bool, () -> Void)] = [
             (L10n.text("World"), boardScope == .worldwide && !usesGameCenter, { [weak self] in self?.openWorldwideBoard() }),

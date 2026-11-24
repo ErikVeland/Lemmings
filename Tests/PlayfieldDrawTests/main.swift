@@ -516,14 +516,15 @@ private func require(
     view.overlayProfileInitials = "LEM"
     view.overlayShowsSettingsButton = home
     if home { view.interfaceArtwork = artwork }
-    let expected = home ? ["Player profiles", "Records", "Leaderboards", "Playlists", "Donate"]
-      : ["Player profiles", "Records", "Playlists", "Donate"]
+    // Home's destinations are rows, so the artwork home checks Play's footer: Back and Collections.
+    view.overlayHomePlay = home
+    let expected = home ? ["Back", "Playlists"] : ["Player profiles", "Records", "Playlists"]
     var actions: [String] = []
     view.onProfiles = { actions.append("Player profiles") }
     view.onRecords = { actions.append("Records") }
     view.onLeaderboards = { actions.append("Leaderboards") }
     view.onPlaylists = { actions.append("Playlists") }
-    view.onDonate = { actions.append("Donate") }
+    view.onHomeBack = { actions.append("Back") }
     let bitmap = view.bitmapImageRepForCachingDisplay(in: view.bounds)!
     view.cacheDisplay(in: view.bounds, to: bitmap)
     let controls = view.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []

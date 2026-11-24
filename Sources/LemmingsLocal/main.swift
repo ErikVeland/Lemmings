@@ -178,7 +178,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case fullQuest
     case collections
     case browse(HomeContentFamily)
+    case play
+    case hotSeat
+    case profile
+    case community
   }
+  /// The title screen shows Play's routes and games instead of Home's destinations.
+  private var homeShowsPlay = false
   private struct HomeMenuItem {
     let title: String
     let action: HomeMenuAction
@@ -966,13 +972,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let page = ArcadeView()
     page.mode = .profiles
     page.selectProfile(ArcadeStore.shared.records.activeProfile)
-    page.worldwideSaved = homeGlobalSaved
     page.onFirstPlay = { [weak self, weak page] in
       guard let self, let page else { return }
       UserDefaults.standard.set(true, forKey: Self.firstProfileKey)
       GameScreen.shared.dismiss(page)
       self.firstProfilePage = nil
-      self.playFirstLevel()
+      // Community participation follows identity, then the first level starts.
+      TelemetryConsentWindow.shared.showIfNeeded(in: self.window,
+        worldwide: SavedLemmingsCounter.worldwideText(self.homeGlobalSaved)) { [weak self] in self?.playFirstLevel() }
     }
     firstProfilePage = page
     GameScreen.shared.present(page, owner: window, focus: page)
@@ -1035,19 +1042,24 @@ let achievementProgressKey = "ClassicAchievementProgress"
     achievementsItem.keyEquivalentModifierMask = [.command, .shift]
     achievementsItem.target = self
     appMenu.addItem(achievementsItem)
-    let profiles = NSMenuItem(title: L10n.text("Player Profiles…"), action: #selector(showProfiles), keyEquivalent: "p")
+    let profiles = NSMenuItem(title: L10n.text("Profile…"), action: #selector(showProfiles), keyEquivalent: "p")
     profiles.keyEquivalentModifierMask = [.command, .shift]; profiles.target = self; appMenu.addItem(profiles)
     let cloudSaves = NSMenuItem(title: L10n.text("Cloud Saves…"), action: #selector(showCloudSaves), keyEquivalent: "")
     cloudSaves.target = self; appMenu.addItem(cloudSaves)
     let hotSeat = NSMenuItem(title: L10n.text("Hot Seat…"), action: #selector(showHotSeat), keyEquivalent: "")
     hotSeat.target = self; appMenu.addItem(hotSeat)
-    let records = NSMenuItem(title: L10n.text("Level Records…"), action: #selector(showLevelRecords), keyEquivalent: "b")
+    let records = NSMenuItem(title: L10n.text("Records…"), action: #selector(showLevelRecords), keyEquivalent: "b")
     records.keyEquivalentModifierMask = [.command, .shift]; records.target = self; appMenu.addItem(records)
     let insights = NSMenuItem(title: L10n.text("Play Insights…"), action: #selector(showPlayInsights), keyEquivalent: "")
     insights.target = self; appMenu.addItem(insights)
     let replay = NSMenuItem(title: L10n.text("Replay Last Game"), action: #selector(reviewLastGame), keyEquivalent: "v")
     replay.keyEquivalentModifierMask = [.command, .shift]; replay.target = self
     appMenu.addItem(replay)
+    // A developer tool: it appears in place of Replay Last Game only while Option is held.
+    let recordedRoutes = NSMenuItem(title: L10n.text("Show Recorded Routes"), action: #selector(showRecordedRoutes), keyEquivalent: "v")
+    recordedRoutes.keyEquivalentModifierMask = [.command, .shift, .option]
+    recordedRoutes.isAlternate = true; recordedRoutes.target = self
+    appMenu.addItem(recordedRoutes)
     let openReplay = NSMenuItem(title: L10n.text("Open Replay Movie…"), action: #selector(openReplayMovie), keyEquivalent: "o")
     openReplay.keyEquivalentModifierMask = [.command, .shift]; openReplay.target = self
     appMenu.addItem(openReplay)
@@ -1055,9 +1067,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
     nativeL2.keyEquivalentModifierMask = [.command, .shift]
     nativeL2.target = self
     appMenu.addItem(nativeL2)
-    let recordedRoutes = NSMenuItem(title: L10n.text("Show Recorded Routes"), action: #selector(showRecordedRoutes), keyEquivalent: "")
-    recordedRoutes.target = self
-    appMenu.addItem(recordedRoutes)
     let nativeL3 = NSMenuItem(title: L10n.text("Play \(Lemmings3Brand.current.displayName) Beta…"), action: #selector(chooseNativeL3), keyEquivalent: "3")
     nativeL3.keyEquivalentModifierMask = [.command, .shift]
     nativeL3.target = self
@@ -1141,6 +1150,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     _ = add(helpMenu, L10n.text("What's New…"), #selector(showWhatsNew))
     _ = add(helpMenu, L10n.text("Keyboard commands…"), #selector(showKeyboardCommands), "?", modifiers: [.command])
     _ = add(helpMenu, L10n.text("Level hints…"), #selector(showLevelHints), "/")
+    #if !ULTIMATE_LEMMIX_STORE
+    helpMenu.addItem(.separator())
+    _ = add(helpMenu, L10n.text("Donate…"), #selector(openDonation))
+    #endif
     NSApplication.shared.helpMenu = helpMenu
 
     NSApplication.shared.mainMenu = mainMenu
@@ -1834,9 +1847,20 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let previous { GameScreen.shared.restoreNavigation(previous); refreshBrowserPrimary?() }
   }
 
+  @objc private func openDonation() { NSWorkspace.shared.open(GameSupport.coffeeURL) }
+
   @objc private func goToMainMenu() {
     guard canLeaveCurrentAttempt() else { return }
+    homeShowsPlay = false
     returnToLibrary()
+  }
+
+  /// Opens or leaves Play on the title screen. Back from Play returns Home.
+  private func showHomePlay(_ shows: Bool) {
+    guard homeShowsPlay != shows else { return }
+    homeShowsPlay = shows
+    launchChoice = 0
+    renderScreen()
   }
 
   @objc private func returnToLibrary() {
@@ -2052,11 +2076,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       ArcadeWindow.shared.showLeaderboards(owner: self.window, background: self.playfield.levelImage)
     }
     playfield.onPlaylists = { [weak self] in self?.openLevelBrowser(family: nil, showsPlaylists: true) }
+    playfield.onHomeBack = { [weak self] in self?.showHomePlay(false) }
     playfield.onUpdate = { [weak self] in self?.updates.showUpdate() }
     playfield.onSettings = { [weak self] in self?.showSettings() }
-    #if !ULTIMATE_LEMMIX_STORE
-    playfield.onDonate = { NSWorkspace.shared.open(GameSupport.coffeeURL) }
-    #endif
     playfield.onSelectOverlayLine = { [weak self] index in
       guard let self else { return }
       if self.fanScreen != .off {
@@ -6718,7 +6740,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
+  /// Home: Continue, then Play, Hot Seat, Profile and Community. Play lists every route and game.
   private func homeMenuItems() -> [HomeMenuItem] {
+    let routes = playMenuItems()
+    if homeShowsPlay { return routes }
+    let continueItem = routes.first { if case .browse = $0.action { return false }; return true }
+    return [continueItem].compactMap { $0 } + [
+      HomeMenuItem(title: L10n.text("PLAY"), action: .play),
+      HomeMenuItem(title: ArcadeStore.shared.hotSeatIsActive
+        ? L10n.text("HOT SEAT: \(ArcadeStore.shared.records.profile(ArcadeStore.shared.playingProfileID)?.initials ?? "")")
+        : L10n.text("HOT SEAT"), action: .hotSeat),
+      HomeMenuItem(title: L10n.text("PROFILE"), action: .profile),
+      HomeMenuItem(title: L10n.text("COMMUNITY"), action: .community),
+    ]
+  }
+
+  private func playMenuItems() -> [HomeMenuItem] {
     let store = try? playlistStore()
     let journey = store?.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)?.run
     var items = [HomeMenuItem(title: MobileHomeArt.journeyAction(run: journey).title.uppercased(), action: .fullQuest)]
@@ -6771,7 +6808,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let self else { return }
       self.homeSavedRefreshTask = nil
       self.homeGlobalSaved = total
-      self.firstProfilePage?.worldwideSaved = total
       self.showHomeSavedCounts()
     }
   }
@@ -7587,6 +7623,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       playfield.overlayTitle = L10n.text("LEMMINGS")
       menuRecovery = try? recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID)
       let homeItems = homeMenuItems()
+      playfield.overlayHomePlay = homeShowsPlay
       playfield.overlayHomeLeadingCount = homeItems.firstIndex { if case .browse = $0.action { return true }; return false } ?? homeItems.count
       playfield.overlayLines = homeItems.map(\.title)
       playfield.overlayHomeLogos = Dictionary(uniqueKeysWithValues: homeItems.enumerated().compactMap { index, item in
@@ -7803,6 +7840,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
         } else { openLevelBrowser(family: nil, showsJourney: true) }
       case .collections:
         presentLevelCollections()
+      case .play:
+        showHomePlay(true)
+      case .hotSeat:
+        showHotSeat()
+      case .profile:
+        showProfiles()
+      case .community:
+        playfield.onLeaderboards?()
       case let .browse(family):
         if AppDistribution.isStore, !family.titles.isEmpty, homeContentRow(family) == nil {
           showOwnedGameImport(promptForDownload: true)
@@ -9685,6 +9730,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return nil
     }
     if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return nil }
+    // Escape on Play returns to Home, like Play's Back button.
+    if event.keyCode == 53, homeShowsPlay, flow?.screen == .title, phase != .playing, !GameScreen.shared.isPresented {
+      if !event.isARepeat { showHomePlay(false) }
+      return nil
+    }
 
     // A directly launched or restored game can outlive the campaign menu state.
     // Pause the active game before considering Space as a menu continuation.

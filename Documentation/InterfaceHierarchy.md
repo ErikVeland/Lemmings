@@ -36,37 +36,35 @@ footer positions, and return controls lead movie, replay and result rows.
 ## iOS and tvOS page tree
 
 iOS and tvOS share `MobileLibraryViewController`. The tree below shows each page
-and every place that opens it. Footer action IDs stay the same on Mac, book Home
-and the TV board. Only the iOS and tvOS captions changed.
+and every place that opens it. The Mac title screen uses the same Home and Play
+split. See [UX redesign](UXRedesign.md) for the reasons behind this structure.
 
 ```text
 Home
-├─ Resume rows: saved level, journey run, playlist run
-├─ Journey map ─ Choose level, Revisit, Progression playlists ¹
-├─ Classic, Oh No, Holiday, Oh Yes, Fan ─ packs ─ level select
-│   └─ Fan ─ Search, Shuffle all ², Check for new packs
-├─ NeoLemmix, Lemmings 2, Lemmings 3 (or Game Data when absent)
-├─ Players  [players]
-│   ├─ player rows, Edit, New player
-│   ├─ Hot Seat ─ Saved Hot Seats ³
-│   ├─ Saved Hot Seats ³ (when one exists)
-│   └─ Cloud saves ⁴
-├─ Progress  [records]
+├─ Continue  [one resolved action: saved level, Journey, sequence or playlist]
+├─ Play  [play]
+│   ├─ Journey ─ Choose level, Revisit, Progression playlists ¹
+│   ├─ Other saved routes: saved level, sequence run, playlist run
+│   ├─ Classic, Oh No, Holiday, Oh Yes, Fan ─ packs ─ level select
+│   │   └─ Fan ─ Search, Shuffle all ², Check for new packs
+│   ├─ NeoLemmix, Lemmings 2, Lemmings 3 (or Game Data when absent)
+│   └─ Collections ─ Favourites, Recently played, Playlists, Shuffle all ²
+├─ Hot Seat  [hotSeat] ─ roster, Saved Hot Seats ³
+├─ Profile  [profile]
 │   ├─ Records ─ record card ─ Hints, Replay, Play (Classic)
 │   ├─ Achievements ─ award detail
-│   ├─ Worldwide ─ community replays, Game Center boards
-│   └─ Play Insights ⁵
-├─ Playlists  [collections]
-│   ├─ Favourites, Recently played, Playlists ─ playlist
-│   ├─ Progression playlists ¹ ─ Technique curriculum ─ Techniques
-│   └─ Shuffle all ²
-├─ Settings icon ─ groups, Game Data
-│   ├─ Audio ─ Soundtrack libraries
-│   └─ Privacy ─ Cloud saves ⁴, Play Insights ⁵
-└─ What's New icon
+│   ├─ Players ─ player rows, Edit, New player, Hot Seat, Saved Hot Seats ³
+│   ├─ Cloud saves ⁴
+│   └─ Play Insights
+├─ Community  [worldwide] ─ World, This device, Game Center
+└─ Settings icon ─ groups, Game Data, What's New, Donate
+    ├─ Audio ─ Soundtrack libraries
+    ├─ Desk Clock ─ Open Desk Clock (iPhone and iPad)
+    └─ Privacy ─ sharing, Familiar names, Cloud saves ⁴
 ```
 
 Numbered pages open from two places. Back returns to the page that opened them.
+Back from a page under Play returns to Play. Main menu always returns to Home.
 Level select keeps Favourite and Playlist actions for the selected level.
 
 The ghost solution is an in-game feature. Open Pause, then Hint, then Ghost
