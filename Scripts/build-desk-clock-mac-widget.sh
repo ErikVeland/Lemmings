@@ -49,6 +49,9 @@ info.update(CFBundleIdentifier=app['CFBundleIdentifier'] + '.DeskClockWidget',
             CFBundleVersion=app['CFBundleVersion'], LSMinimumSystemVersion='12.3')
 info['DeskClockURLScheme'] = 'ultimatelemmix' if app.get('UltimateLemmixStore') else 'ultimatelemmings'
 info['UltimateLemmixStore'] = bool(app.get('UltimateLemmixStore'))
+if info['UltimateLemmixStore']:
+    info.pop('NSCalendarsUsageDescription', None)
+    info.pop('NSCalendarsFullAccessUsageDescription', None)
 (widget / 'Contents/Info.plist').write_bytes(plistlib.dumps(info))
 PY
 if [[ "${ULTIMATE_LEMMIX_STORE:-0}" == 1 ]]; then

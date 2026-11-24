@@ -229,6 +229,8 @@ def audit(args):
     if info != plistlib.loads((ROOT / "Resources/UltimateLemmix/Info.plist").read_bytes()):
         raise ValueError("The application metadata differs from the selected product identity.")
     widget_info = plistlib.loads((ROOT / "Apps/DeskClockWidget/Mac/Info.plist").read_bytes())
+    widget_info.pop("NSCalendarsUsageDescription", None)
+    widget_info.pop("NSCalendarsFullAccessUsageDescription", None)
     widget_info.update(CFBundleIdentifier=info["CFBundleIdentifier"] + ".DeskClockWidget",
                        CFBundleExecutable="DeskClockMacWidget", CFBundleName="DeskClockMacWidget",
                        CFBundleShortVersionString=info["CFBundleShortVersionString"], CFBundleVersion=info["CFBundleVersion"],
