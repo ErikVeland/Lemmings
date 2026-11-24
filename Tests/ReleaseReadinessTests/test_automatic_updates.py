@@ -1,6 +1,7 @@
 import base64
 from pathlib import Path
 import plistlib
+import subprocess
 import tempfile
 import unittest
 from xml.etree import ElementTree
@@ -8,7 +9,7 @@ from xml.etree import ElementTree
 ROOT = Path(__file__).resolve().parents[2]
 import sys
 sys.path.insert(0, str(ROOT / "Tools/ReleaseReadiness"))
-from automatic_updates import validate_appcast, validate_info_plist, validate_repository
+from automatic_updates import published_release_for_checkout, validate_appcast, validate_info_plist, validate_repository
 
 
 class AutomaticUpdateTests(unittest.TestCase):
@@ -32,13 +33,40 @@ class AutomaticUpdateTests(unittest.TestCase):
                             validate_info_plist(path)
 
     def test_current_repository_inputs_are_valid(self):
-        version, build, items = validate_repository(ROOT, allow_empty=True, allow_stale_release=True)
+        version, build, items = validate_repository(ROOT, allow_empty=True, allow_stale_release=True, verify_published_source=True)
         info = plistlib.loads((ROOT / "Resources/Info.plist").read_bytes())
         self.assertEqual(version, info["CFBundleShortVersionString"])
         self.assertEqual(build, info["CFBundleVersion"])
         self.assertRegex(version, r"^\d+\.\d+(?:\.\d+)?$")
         self.assertTrue(build.isdigit())
         self.assertGreaterEqual(items, 0)
+
+    def test_a_newer_feed_requires_its_release_commit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "appcast.xml").write_text(
+                '<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">'
+                '<channel><item><sparkle:version>109</sparkle:version></item></channel></rss>')
+            with self.assertRaisesRegex(ValueError, "published release commit"):
+                published_release_for_checkout(root, ("2.4.3", "107"))
+            self.assertEqual(published_release_for_checkout(root, ("2.4.3", "109")), ("2.4.3", "109"))
+
+    def test_checkout_resolves_the_plist_from_the_recorded_release(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            subprocess.run(["git", "init", "--quiet", directory], check=True)
+            info = root / "Resources/Info.plist"
+            info.parent.mkdir()
+            info.write_bytes(plistlib.dumps({"CFBundleShortVersionString": "2.4.3", "CFBundleVersion": "109"}))
+            subprocess.run(["git", "add", "Resources/Info.plist"], cwd=root, check=True)
+            subprocess.run(["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                            "commit", "--quiet", "-m", "Record the shipped plist"], cwd=root, check=True)
+            commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+            (root / "appcast.xml").write_text(
+                '<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"><channel><item>'
+                '<sparkle:version>110</sparkle:version><description><![CDATA[<!-- Release commit: '
+                + commit + ' -->]]></description></item></channel></rss>')
+            self.assertEqual(published_release_for_checkout(root, ("2.4.3", "107")), ("2.4.3", "109"))
 
     def test_polish_release_versions(self):
         with tempfile.TemporaryDirectory() as directory:

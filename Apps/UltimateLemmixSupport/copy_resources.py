@@ -58,7 +58,12 @@ def main():
     if args.destination.name not in {"UltimateLemmixIOS.app", "UltimateLemmixTVOS.app", "DeskClockWidget.appex"}:
         raise ValueError("Copy resources only into the separate Ultimate Lemmix mobile products.")
     manifest = json.loads((args.source / MANIFEST).read_bytes())
-    if manifest.get("kind") != "ultimate-lemmix-full-game-mobile-resources" or manifest.get("schemaVersion") != 1:
+    fixture = manifest.get("kind") == "ultimate-lemmix-ios-source-fixture"
+    if fixture and (os.environ.get("IOS_SOURCE_GATE_ONLY") != "1" or os.environ.get("CODE_SIGNING_ALLOWED") != "NO"
+                    or os.environ.get("ULTIMATE_LEMMIX_RELEASE_CHECKS") == "1"
+                    or args.destination.name == "UltimateLemmixTVOS.app"):
+        raise ValueError("The iOS source fixture requires an unsigned iOS source check.")
+    if (not fixture and manifest.get("kind") != "ultimate-lemmix-full-game-mobile-resources") or manifest.get("schemaVersion") != 1:
         raise ValueError("The full-game mobile resource manifest is invalid.")
     rows = manifest["files"]
     if os.environ.get("ULTIMATE_LEMMIX_RELEASE_CHECKS") == "1" or any(row["path"].split("/", 1)[0] in fan_catalogue.FOLDERS for row in rows):
@@ -109,7 +114,8 @@ def main():
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(verified[row["path"]])
     receipt.write_text(json.dumps({"schemaVersion": 1, "scope": args.scope, "files": selected}, indent=2, sort_keys=True) + "\n")
-    print(f"Copied {len(selected)} verified full-game {args.scope} resources.")
+    profile = "source fixture" if fixture else "full-game"
+    print(f"Copied {len(selected)} verified {profile} {args.scope} resources.")
 
 
 if __name__ == "__main__":
