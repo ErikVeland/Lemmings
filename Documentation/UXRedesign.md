@@ -413,8 +413,8 @@ status line at its foot. Mobile Home no longer shows them.
 
 - `ContinueResolverTests` (8) and `HomeContinueTests` (6) pass.
 - `LemmingsMobileUITests` (45) pass, including the open-Duo Home fit test that
-  failed on `main` before the smaller Home. The Mac `DeviceMenuLayoutTests`,
-  `LevelLeaderboardResultTests` and `FooterNavigationTests` (23) pass, muted and offscreen.
+  failed on `main` before the smaller Home. The Mac Home, Play, consent, Profile
+  and footer tests pass, muted and offscreen.
 - iOS and tvOS SDK modules compile with the SDK check. The tvOS application
   entry point typechecks. The iOS entry point check needs the script update below.
 - No simulator, device or rendered Mac window was inspected. Touch, focus,
@@ -430,5 +430,10 @@ status line at its foot. Mobile Home no longer shows them.
   and Home checks in this branch are therefore not yet run.
 - `Scripts/check-apple-ui-sdk.sh` uses a removed app delegate path and `rg`.
   `Scripts/run-playfield-draw-tests.sh` lists a moved `RunRecovery.swift`.
+- Seven Mac unit tests already fail on `main` (`fa0f67be`) and still fail here:
+  JourneySolution opening renders, release-notes language targets, Journey pages,
+  Mac monochrome artwork, timeline transport targets and two Tamil render checks.
+- Mobile catalogue and artwork tests need the `.build/ios-ports` fixture, which
+  this worktree does not have.
 - Mac Community does not yet show the worldwide total in its header.
 - The legacy `TVLibraryViewController` source-folder path keeps its own menu.
