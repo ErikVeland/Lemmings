@@ -978,13 +978,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       action: #selector(showAbout), keyEquivalent: "")
     aboutItem.target = self
     appMenu.addItem(aboutItem)
-    #if !ULTIMATE_LEMMIX_STORE
     let clockCalendar = NSMenuItem(title: L10n.text("Show next event in Desk Clock widget…"),
       action: #selector(requestDeskClockCalendar), keyEquivalent: "")
     clockCalendar.state = EventKitDeskClockSource().authorization() == .granted ? .on : .off
     clockCalendar.target = self
     appMenu.addItem(clockCalendar)
-    #endif
     appMenu.addItem(.separator())
     let updatesItem = NSMenuItem(
       title: L10n.text("Check for Updates…"),
@@ -1520,7 +1518,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if userPausedMusic && isPaused { applyUserMusicPause() }
   }
 
-  #if !ULTIMATE_LEMMIX_STORE
   @objc private func requestDeskClockCalendar(_ sender: NSMenuItem) {
     Task { @MainActor in
       let source = EventKitDeskClockSource()
@@ -1532,8 +1529,6 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
   }
-
-  #endif
 
   @objc private func showAbout() {
     AboutWindow.shared.show(owner: window)
