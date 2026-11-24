@@ -18,7 +18,11 @@ offers the same bitmap page under Game controls and restores focus to Speed on
 return. Fixed mode offers the session’s normal and fast multipliers. Variable
 mode offers 1×, 2×, 3×, 5× and 10×, with 25× when enabled. The shared mobile HUD
 displays the chosen tier throughout the clock ramp and removes the arrow hit
-targets in fixed mode. Native Mac shows the tier through its existing socket.
+targets in fixed mode. On native Mac, the wide flat Classic/NeoLemmix HUD and both sequel
+footers have direct multiplier buttons. Shift-number shortcuts also reach each
+tier in narrow windows and Classic CRT mode. Offscreen checks exercised the
+mouse targets, accessibility actions, Shift release and the 700-point layout
+boundary. Physical keyboard and VoiceOver acceptance remain open.
 
 Classic, L2, L3 and supported NeoLemmix use the shared mobile skill supply
 state. A zero count with the unlimited flag retains full icon brightness in

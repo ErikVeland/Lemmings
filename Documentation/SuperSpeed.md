@@ -20,6 +20,15 @@ The arrows change the active tier immediately, including from 1×. The panel
 shows the selected multiplier throughout the short clock ramp. In fixed-speed
 mode the entire mobile speed socket toggles between normal and fast speed.
 
+On Mac, click a multiplier to select it directly. In windows at least 700 points
+wide, Classic and NeoLemmix show the strip beside the minimap in flat mode.
+Lemmings 2 and 3 show it beside the timeline. The underline marks the chosen
+tier during acceleration. The speed pedal still accepts taps and holds.
+
+With variable speed enabled, Shift+1 through Shift+5 select 1×, 2×, 3×, 5×
+and 10× in order. Shift+6 selects 25× when enabled. These shortcuts also work
+in narrow windows and Classic CRT mode. Releasing Shift keeps the chosen tier.
+
 On iPhone, iPad and Duo, Pause menu → Speed opens the available multipliers.
 On Apple TV the same picker is under Game controls → Speed. It initially focuses
 the active tier. Choosing a multiplier returns to the paused controls. Back

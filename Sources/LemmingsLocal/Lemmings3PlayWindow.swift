@@ -350,6 +350,12 @@ import NxlvKit
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
         keyboard.navigationControlHeight = { [weak self] in self?.canvas.skillGroupFrame.height ?? 44 }
+        canvas.timeline.speedState = { [weak self] in self?.speedControl.state }
+        canvas.timeline.canChooseSpeed = { [weak self] in
+            guard let self else { return false }
+            return self.canvas.menuRows == nil && self.canvas.directionPoint == nil && !self.game.isComplete && !self.canvas.readOnlyReplay && !self.speedControl.bulletTimeActive
+        }
+        canvas.timeline.chooseSpeed = { [weak self] tier in self?.speedControl.select(tier, at: ProcessInfo.processInfo.systemUptime) }
         canvas.timeline.enabled = { [weak self] action in
             guard let self, self.canvas.menuRows == nil else { return false }
             let game = self.game
@@ -1922,8 +1928,7 @@ import NxlvKit
     var readOnlyReplay = false
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
-        let width = min(260, bounds.width - 16)
-        timeline.frame = CGRect(x: (bounds.width - width) / 2, y: bounds.height - 34, width: width, height: 30)
+        timeline.layoutSequelFooter(in: bounds)
     }
 
     var navigationFrame: CGRect?
@@ -1932,6 +1937,7 @@ import NxlvKit
     func capturePointer(active: Bool) {
         layoutTimeline()
         var frame = CGRect(origin: screenOrigin, size: CGSize(width: 320 * zoom, height: 212 * zoom)).union(timeline.frame)
+        if !timeline.tierFrame.isEmpty { frame = frame.union(timeline.tierFrame) }
         if let navigationFrame { frame = frame.union(navigationFrame) }
         if let point = pointerCapture.update(in: self, rect: frame, active: active && confinePointer && controllerPointer == nil) {
             updateSystemCursor(at: point)

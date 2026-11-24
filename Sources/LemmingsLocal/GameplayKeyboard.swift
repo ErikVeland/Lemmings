@@ -49,6 +49,19 @@ import NxlvKit
     func tap(at now: TimeInterval = ProcessInfo.processInfo.systemUptime, clickCount: Int = 1) {
         state.tap(at: now, clickCount: clickCount); onChange()
     }
+    func select(_ tier: Double, at now: TimeInterval) {
+        state.select(tier, at: now)
+        onChange()
+    }
+    func handleTierShortcut(_ event: NSEvent) -> Bool {
+        guard variableEnabled, !bulletTimeActive, event.type == .keyDown,
+              event.modifierFlags.intersection([.shift, .command, .option, .control]) == .shift else { return false }
+        let digit = Int(event.charactersIgnoringModifiers ?? "") ?? Int(event.characters ?? "")
+            ?? Int(event.characters(byApplyingModifiers: []) ?? "")
+        guard let digit, (1...state.availableSteps.count).contains(digit) else { return false }
+        if !event.isARepeat { select(state.availableSteps[digit - 1], at: event.timestamp) }
+        return true
+    }
     func step(_ direction: Int, at now: TimeInterval) { state.step(direction, at: now); onChange() }
     func press(_ key: GameplaySpeed.Hold, at now: TimeInterval, tapEnabled: Bool = true) { state.press(key, at: now, tapEnabled: tapEnabled); onChange() }
     func release(_ key: GameplaySpeed.Hold, at now: TimeInterval, allowTap: Bool = true) { state.release(key, at: now, allowTap: allowTap); onChange() }
@@ -514,6 +527,7 @@ import NxlvKit
             }
             return nil
         }
+        if speedControl?.handleTierShortcut(event) == true { return nil }
         if speedControl?.variableEnabled == true,
            key == "|" {
             speedControl?.reset(at: now); return nil
@@ -700,6 +714,8 @@ import NxlvKit
             if speedControl.variableEnabled {
                 rows += [.init(keys: "Hold F", action: (speedControl.ridiculousEnabled ? L10n.text("Ramp up to 25×; release to keep speed") : L10n.text("Ramp up to 10×; release to keep speed")), group: speed),
                          .init(keys: "Hold Shift", action: L10n.text("Temporary boost; release to restore speed"), group: speed),
+                         .init(keys: speedControl.ridiculousEnabled ? "Shift+1–6" : "Shift+1–5",
+                               action: speedControl.state.availableSteps.map { "\(Int($0))×" }.joined(separator: " / "), group: speed),
                          .init(keys: "Shift+[ / Shift+]", action: L10n.text("Decrease / increase speed"), group: speed),
                          .init(keys: "Shift + \\ (|)", action: L10n.text("Immediately return to normal speed (1×)"), group: speed)]
             }

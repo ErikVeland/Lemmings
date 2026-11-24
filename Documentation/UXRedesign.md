@@ -76,6 +76,21 @@ hits. The iOS and tvOS SDK checks compiled both application entry points.
 CoreSimulator refused the connection, so live UIKit focus and touch remain
 unverified.
 
+### Native Mac speed controls — 25 November 2026
+
+At 700 points and wider, the flat Classic and NeoLemmix HUD has space beside
+the minimap for one 44-point button per speed tier. Both sequel canvases use
+the same controls beside the timeline in their reserved footer. The strip
+shows the chosen tier with an underline. The original speed pedal still
+supports a temporary boost. Narrow windows and Classic CRT retain the pedal.
+Shift+1 through Shift+5 choose the five standard tiers on every native Mac
+panel. Shift+6 chooses 25× when enabled.
+
+The offscreen check rendered the Mac panel and pressed nine points on each
+tier with the optional tier both enabled and disabled. It checked the minimap
+and timeline boundaries, accessibility activation, and Shift release after a
+temporary boost. Live play with a physical keyboard and VoiceOver remains open.
+
 ## Evidence and limits
 
 This audit comes from source review on `release/ultimate-lemmings` and the
