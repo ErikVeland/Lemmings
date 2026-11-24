@@ -62,7 +62,9 @@ not queue an early click. Honour the reduced-flash setting.
 Ultimate Lemmix uses its own Ultimate Lemmix logo, based on the existing project
 wordmark and gold Ultimate badge. Its logo characters and default game characters
 use the Lix appearance. After the original game artwork is installed, Home uses the restored Ultimate
-Lemmings logo. The iOS app also selects the matching Home Screen icon. Ultimate Lemmings retains its separate branding and artwork choice.
+Lemmings logo. Original character and interface artwork become the default.
+Players can still choose Lix artwork in Settings. The iOS app also selects
+the matching Home Screen icon. Ultimate Lemmings retains its separate branding and artwork choice.
 
 Ultimate Lemmix keeps typography independent from imported level artwork.
 Use the original Lemmings bitmap lettering across menus, pages and the full HUD.
