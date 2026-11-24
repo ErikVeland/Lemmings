@@ -980,18 +980,35 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         switch route {
         case .home:
             var resume: [GameFrontEnd.Action] = []
+            var candidates: [ContinueResolver.Candidate] = []
             let savedLevel = pendingCheckpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
-            if let saved = savedLevel, !checkpointResumesLearningRun(saved), !checkpointResumesLearningRun(saved, journeyOnly: true) {
-                resume.append(.init("resume", L10n.text("Resume level - \(playerName(saved.owner ?? profiles.activeID))")))
+            let journeyAttempt = savedLevel.flatMap { checkpointResumesLearningRun($0, journeyOnly: true) ? $0.savedAt : nil }
+            let sequenceAttempt = savedLevel.flatMap { checkpointResumesLearningRun($0) ? $0.savedAt : nil }
+            if let saved = savedLevel, sequenceAttempt == nil, journeyAttempt == nil {
+                let owner = saved.owner ?? profiles.activeID
+                resume.append(.init("resume", L10n.text("Resume level - \(playerName(owner))")))
+                candidates.append(.savedLevel(savedAt: saved.savedAt, owner: owner))
             }
-            if catalogue != nil, let saved = resumableLearningRun,
-               saved.state.run?.source != .playlist(LearningJourney.playlistID) {
+            if catalogue != nil, let saved = resumableLearningRun, let run = saved.state.run,
+               run.source != .playlist(LearningJourney.playlistID) {
                 let session = saved.seat?.id != hotSeat?.id ? saved.seat.map { " - " + $0.players.map(playerName).joined(separator: " vs ") } ?? " - " + profiles.active.name : ""
                 resume.append(.init("learningRunResume", saved.resumeTitle + session))
+                candidates.append(.sequence(title: run.pool.summary, position: run.currentIndex + 1,
+                                            total: run.entries.count, attemptSavedAt: sequenceAttempt))
             }
             if resume.isEmpty, catalogue != nil, let run = playlists.run,
                run.playlist != LearningJourney.playlistID {
                 resume.append(.init("runResume", L10n.text("Resume \(run.name)  \(run.position + 1)/\(run.entries.count)")))
+                candidates.append(.playlist(name: run.name, position: run.position + 1, total: run.entries.count))
+            }
+            if bundledJourney != nil, let run = resumableLearningJourney?.state.run {
+                candidates.append(.journey(position: run.currentIndex + 1, total: run.entries.count,
+                                           attemptSavedAt: journeyAttempt))
+            }
+            let continueID: String? = switch ContinueResolver.resolve(candidates, journeyAvailable: catalogue != nil && bundledJourney != nil) {
+            case let .resume(candidate): candidate.actionID
+            case .startJourney: "journey"
+            case .none: nil
             }
             let families: [GameFrontEnd.Action] = MobileFamily.allCases.map { family in
                 let packs = catalogue?.packs(in: family) ?? []
@@ -1017,7 +1034,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = MobileHomeArt.page(resume: resume,
                 journey: MobileHomeArt.journeyAction(run: resumableLearningJourney?.state.run,
                     enabled: catalogue != nil && journey != nil),
-                families: families, initials: initials, nextPlayerIndex: nextPlayerIndex,
+                families: families, continueID: continueID, initials: initials, nextPlayerIndex: nextPlayerIndex,
                 subtitle: homeSubtitle, collectionsAvailable: catalogue != nil,
                 deskClock: deskClockAvailable)
             canvas.preview = nil

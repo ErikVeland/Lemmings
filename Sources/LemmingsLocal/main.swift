@@ -6688,6 +6688,36 @@ let achievementProgressKey = "ClassicAchievementProgress"
     return store.records.profile(profileID)?.initials ?? L10n.text("LEM")
   }
 
+  private func homeContinueAction(journey: LevelSequenceRun?, sequence: LevelSequenceRun?,
+                                  recovery: RunRecovery?) -> HomeMenuAction? {
+    let attempt = { (run: LevelSequenceRun?) in
+      recovery.flatMap { run != nil && $0.sequence?.runID == run?.id ? $0.savedAt : nil }
+    }
+    var candidates: [ContinueResolver.Candidate] = []
+    if let journey {
+      candidates.append(.journey(position: journey.currentIndex + 1, total: journey.entries.count,
+                                 attemptSavedAt: attempt(journey)))
+    }
+    if let sequence, sequence.source != .playlist(LearningJourney.playlistID) {
+      candidates.append(.sequence(title: sequence.pool.summary, position: sequence.currentIndex + 1,
+                                  total: sequence.entries.count, attemptSavedAt: attempt(sequence)))
+    }
+    if let recovery, attempt(journey) == nil, attempt(sequence) == nil {
+      candidates.append(.savedLevel(savedAt: recovery.savedAt, owner: recovery.profileID))
+    }
+    switch ContinueResolver.resolve(candidates, journeyAvailable: true) {
+    case let .resume(candidate):
+      switch candidate {
+      case .savedLevel: return .resume
+      case .journey: return .fullQuest
+      case .sequence: return .resumeSequence
+      case .playlist: return nil
+      }
+    case .startJourney: return .fullQuest
+    case .none: return nil
+    }
+  }
+
   private func homeMenuItems() -> [HomeMenuItem] {
     let store = try? playlistStore()
     let journey = store?.resumableLearningJourney(hotSeatID: ArcadeStore.shared.hotSeatID)?.run
@@ -6705,6 +6735,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
        savedSequence == nil || recovery.sequence?.runID != savedSequence?.id {
       let players = homeResumePlayers(hotSeatID: recovery.hotSeatID, profileID: recovery.profileID)
       items.append(HomeMenuItem(title: L10n.text("RESUME LEVEL - \(players)"), action: .resume))
+    }
+    // Continue leads Home and takes the initial selection. Other routes stay below it.
+    if let index = items.firstIndex(where: { $0.action == homeContinueAction(journey: journey, sequence: savedSequence, recovery: recovery) }) {
+      items.insert(items.remove(at: index), at: 0)
     }
     items += HomeContentFamily.allCases.map {
       HomeMenuItem(title: [.lemmings2, .lemmings3].contains($0) ? $0.displayName : (homeContentRow($0) ?? ($0.displayName.uppercased() + "  — NO DATA")), action: .browse($0))

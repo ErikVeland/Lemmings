@@ -31,18 +31,26 @@ public enum MobileHomeArt {
     }
 
     public static func page(resume: [GameFrontEnd.Action] = [], journey: GameFrontEnd.Action?,
-                            families: [GameFrontEnd.Action], initials: String, nextPlayerIndex: Int? = nil,
+                            families: [GameFrontEnd.Action], continueID: String? = nil,
+                            initials: String, nextPlayerIndex: Int? = nil,
                             subtitle: String = "", collectionsAvailable: Bool = true,
                             deskClock: Bool = false) -> GameFrontEnd.Page {
-        var rows = [journey].compactMap { $0 } + resume + families
+        var continuations = [journey].compactMap { $0 } + resume
+        // Continue leads Home. The other resumable rows stay reachable below it.
+        if let continueID, let index = continuations.firstIndex(where: { $0.id == continueID && $0.enabled }) {
+            continuations.insert(continuations.remove(at: index), at: 0)
+        }
+        var rows = continuations + families
         for index in rows.indices {
             rows[index].title = rows[index].title.replacingOccurrences(
                 of: #"[ \t]+(?=\d+/\d+(?:\s|$))"#, with: "\n", options: .regularExpression)
-            rows[index].titleRuns = index < resume.count + (journey == nil ? 0 : 1) ? GameSemanticText.resume(rows[index].title)
+            rows[index].titleRuns = index < continuations.count ? GameSemanticText.resume(rows[index].title)
                 : rows[index].gameLogo == nil ? GameSemanticText.title(rows[index].title) : [.init(rows[index].title, .blue)]
         }
-        if let index = rows.firstIndex(where: { $0.enabled }) {
-            for row in rows.indices { rows[row].primary = row == index }
+        let primary = continueID.flatMap { id in rows.firstIndex { $0.id == id && $0.enabled } }
+            ?? rows.firstIndex(where: \.enabled)
+        if let primary {
+            for row in rows.indices { rows[row].primary = row == primary }
         }
         var page = GameFrontEnd.Page(title: L10n.text("Lemmings"),
             subtitle: subtitle,
