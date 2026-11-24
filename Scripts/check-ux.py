@@ -159,6 +159,10 @@ def main():
         if not ok:
             record(False, "Swift test process")
 
+    if args.group in ("all", "catalogue"):
+        ok, _ = run("replay-proofs", [sys.executable, "Tools/TrolleyVerification/catalogue.py", "check"])
+        record(ok, "replay-proofs")
+
     if args.group in ("all", "navigation"):
         ok, _ = run("localisation", ["zsh", "Scripts/run-localisation-tests.sh"])
         record(ok, "localisation")
