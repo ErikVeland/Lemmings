@@ -2095,7 +2095,8 @@ struct ReticleFeedback {
     let height = RewindTransportCue.draw(
       origin: CGPoint(x: 12, y: y),
       currentTick: rewindCurrentTick,
-      originTick: rewindOriginTick
+      originTick: rewindOriginTick,
+      ticksPerSecond: Double(session?.ticksPerSecond ?? ClassicDOSRules.ticksPerSecond)
     )
     return y + height + 4
   }

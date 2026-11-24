@@ -1,7 +1,7 @@
 # UX redesign proposal
 
-Status: Phase 1 structure implemented on `feature/ux-phase1-home` (November 2026).
-Phases 2–4 remain proposals. See [Phase 1 status](#phase-1-status) for what
+Status: Phase 1 is merged (ErikVeland/Lemmings#40). Phase 2 is in progress: see
+[Phase 2 status](#phase-2-status). Phases 3 and 4 remain proposals. See [Phase 1 status](#phase-1-status) for what
 landed, what changed from the proposal and what is not yet verified.
 
 This proposal reorganises the existing depth of Ultimate Lemmings. It does not
@@ -437,3 +437,48 @@ status line at its foot. Mobile Home no longer shows them.
   this worktree does not have.
 - Mac Community does not yet show the worldwide total in its header.
 - The legacy `TVLibraryViewController` source-folder path keeps its own menu.
+
+## Phase 2 status
+
+### Rewind cue (implemented on `feature/ux-phase2-rewind`)
+
+`RewindCue` in `LemmingsMobileCore` describes rewind for every platform:
+
+- It shows game seconds: `<< REWIND -4.2s`. Tenths appear below ten seconds.
+  Engine ticks no longer appear. Each engine supplies its own rate:
+  Classic and NeoLemmix 17, Lemmings 2 17.5 and Lemmings 3 23 ticks per second.
+- One to three chevrons show rewind speed. On iOS and tvOS, rapid presses build
+  speed through `MobileRewindPressAcceleration`. Held rewind follows its existing
+  0.4, 0.8 and 1.6 second steps. Mac keys rewind at one constant speed.
+- `RewindCue.widestText` sizes the label, so it never changes width as it counts.
+- The rail places the shown moment between the level start and where rewind began.
+
+The Mac playfields (Classic, Lemmings 2 and Lemmings 3) draw it with
+`RewindTransportCue`. iOS and tvOS draw it with `MobileRewindCueView`, a small view
+at the safe-area top left of the playfield. Before this change they showed nothing.
+The cue appears on the first press and shows the destination at once. Forward
+play, or a forward step past the starting point, clears it. VoiceOver announces
+the cue when it appears and when its speed changes.
+
+Validation: `RewindCueTests` (5) and `LemmingsMobileUITests` (45) pass, muted.
+The Mac target builds. The iOS and tvOS SDK modules compile. The cue has not
+been seen on a device, simulator or Mac window.
+
+### Coordinated with in-progress work
+
+On 24 November 2026 other uncommitted work in the main checkout
+(`release/ultimate-lemmings`) changes these Phase 2 areas:
+
+- fixed, left-aligned status slots sized for each value's largest digit count, on
+  mobile and Mac (`MobileHUDRenderer.statusFields`, `PanelView.drawStatus`)
+- a speed socket that always shows the current multiplier with a forward mark,
+  and drops the HOLD caption (`SpeedPanelArt.multiplierBox`)
+- a result music fade (`ResultMusicFade`, Phase 4)
+
+This branch does not edit those areas. The remaining Phase 2 items wait until
+that work lands, because they change the same files:
+
+- the speed strip on wide layouts and the compact speed popover
+- skill selection and zero-count states
+- the minimap frame and its tracking buttons
+- tvOS status slots in `MobileHUDRenderer.televisionStatusLines`

@@ -78,6 +78,11 @@ public struct MobileHUDPress: Sendable {
     public static func rewindSeconds(heldFor duration: TimeInterval) -> Double {
         duration >= 2 ? 1.6 : duration >= 1 ? 0.8 : 0.4
     }
+
+    /// The rewind cue's chevrons for a held rewind: one per step of `rewindSeconds(heldFor:)`.
+    public static func rewindCueSpeed(heldFor duration: TimeInterval) -> Int {
+        duration >= 2 ? 3 : duration >= 1 ? 2 : 1
+    }
 }
 
 /// Accumulates rewind distance while an exact seek is still being reconstructed.
@@ -122,6 +127,10 @@ public struct MobileRewindQueue: Sendable {
 public struct MobileRewindPressAcceleration: Sendable {
     private var lastPress: Double?
     private var burstIndex = 0
+    /// When the latest rewind press arrived. Nil before the first press.
+    public var lastPressTime: Double? { lastPress }
+    /// 0 for a single press, rising to 4 as rapid presses build rewind speed.
+    public var burstLevel: Int { burstIndex }
 
     public init() {}
 

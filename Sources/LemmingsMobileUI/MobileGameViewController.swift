@@ -137,6 +137,8 @@ typealias MobileGameControllerBase = UIViewController
         overlayCanvas.page.rows = [.init("resultAward", L10n.text("Awards (\(awards.count))"))]
     }
     private var rewindHeld = false
+    /// The tick where the current rewind began. Nil once play continues forward.
+    private var rewindCueOrigin: Int?
     private var rewindStartedAt = 0.0
     private var nextHeldRewindAt = 0.0
     private var rewindQueue = MobileRewindQueue()
@@ -1655,6 +1657,7 @@ typealias MobileGameControllerBase = UIViewController
 
     func resumePlay() {
         cancelSeek()
+        clearRewindCue()
         cancelPendingL3ToolDirection()
         let wasReady = playState.phase == .ready
         guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
@@ -2631,8 +2634,11 @@ typealias MobileGameControllerBase = UIViewController
 
     private func queueRewind(ticks: Int, backwardSteps: Int = 1) {
         if rewindQueue.targetTick == nil && rewindPresentationTask == nil { cancelSeek(clearRewindQueue: false) }
-        guard rewindQueue.append(ticks: ticks, from: session.snapshot.tick,
+        let startTick = session.snapshot.tick
+        guard rewindQueue.append(ticks: ticks, from: startTick,
                                  earliestTick: session.earliestRewindTick, backwardSteps: backwardSteps) else { return }
+        if rewindCueOrigin == nil { rewindCueOrigin = startTick }
+        updateRewindCue()
         // Do not throw away reconstruction progress when another press arrives.
         if seekOperation == nil && rewindPresentationTask == nil { drainRewindQueue() }
     }
@@ -2698,7 +2704,26 @@ typealias MobileGameControllerBase = UIViewController
         }
     }
 
+    /// Shows the destination as soon as a press arrives, then the committed tick.
+    private func updateRewindCue() {
+        guard let origin = rewindCueOrigin else { playfieldView.rewindCue = nil; return }
+        let tick = rewindQueue.targetTick ?? session.snapshot.tick
+        guard tick < origin else { clearRewindCue(); return }
+        let now = ProcessInfo.processInfo.systemUptime
+        let speed = rewindHeld ? MobileHUDPress.rewindCueSpeed(heldFor: now - rewindStartedAt)
+            : rewindPressAcceleration.cueSpeed(at: now)
+        playfieldView.rewindCue = RewindCue(currentTick: tick, originTick: origin,
+                                            ticksPerSecond: session.ticksPerSecond, speed: speed)
+    }
+
+    /// Forward play, a forward step or a new attempt ends the rewind cue.
+    private func clearRewindCue() {
+        rewindCueOrigin = nil
+        playfieldView.rewindCue = nil
+    }
+
     private func finishRewindPresentation() {
+        updateRewindCue()
         if rewindQueue.targetTick != nil { drainRewindQueue() }
         else if !rewindHeld { saveCheckpoint(reason: .periodic) }
     }
@@ -2759,6 +2784,7 @@ typealias MobileGameControllerBase = UIViewController
             var advanced = false
             for _ in 0..<count { guard session.stepForward() else { break }; advanced = true }
             guard advanced else { return }
+            updateRewindCue()
             effects.update(session: session, viewport: playfieldView.gameViewport)
             clock.suspend()
             renderCurrentFrame(force: true)
