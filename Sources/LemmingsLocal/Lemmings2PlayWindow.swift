@@ -318,6 +318,12 @@ import NxlvKit
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
         keyboard.navigationControlHeight = { [weak self] in self?.canvas.skillGroupFrame.height ?? 44 }
+        canvas.timeline.speedState = { [weak self] in self?.speedControl.state }
+        canvas.timeline.canChooseSpeed = { [weak self] in
+            guard let self else { return false }
+            return self.screen == .playing && self.game?.isComplete == false && !self.canvas.readOnlyReplay && !self.speedControl.bulletTimeActive
+        }
+        canvas.timeline.chooseSpeed = { [weak self] tier in self?.speedControl.select(tier, at: ProcessInfo.processInfo.systemUptime) }
         canvas.timeline.enabled = { [weak self] action in
             guard let self, self.screen == .playing, let game = self.game else { return false }
             switch action {
@@ -2462,8 +2468,7 @@ import NxlvKit
     var readOnlyReplay = false
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
-        let width = min(260, bounds.width - 16)
-        timeline.frame = CGRect(x: (bounds.width - width) / 2, y: bounds.height - 34, width: width, height: 30)
+        timeline.layoutSequelFooter(in: bounds)
     }
 
     var navigationFrame: CGRect?
