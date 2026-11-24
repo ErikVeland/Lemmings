@@ -1,0 +1,37 @@
+{
+  "product": "Ultimate Lemmix",
+  "platform": "IOS",
+  "appStoreID": "6836347807",
+  "version": "2.4.4",
+  "build": "113",
+  "source": "3b3c10a6",
+  "scope": "iOS game asset download, restoration with the bundled fan runtime, download progress, No data entry points and the switch to the original presentation and icon. Game Data stays independent of player profiles. Gameplay engine unchanged.",
+  "reasonForVersion": "iOS 2.4.3 build 112 was already Ready for Sale, so Apple closed the 2.4.3 train.",
+  "ipaSHA256": "a7742f074d8b751ad8dec09b6a3880ecc0923622694a4d1ddf8f9fa6ff6b1993",
+  "resources": "Build 112 mobile resource set, verified by mobile_store.py verify (allChecksPassed).",
+  "fanRuntimeSHA256": "5b573f15a6f3905670c6fa399f0bcd2012c40a7f6c2e5ce33db88b4bb0895a6b",
+  "uploadDeliveryUUID": "dedba300-0885-486a-b91a-2361ec385213",
+  "buildID": "dedba300-0885-486a-b91a-2361ec385213",
+  "processing": "VALID",
+  "submission": {
+    "versionID": "20ef45ac-9bda-45bd-b6d8-ecac8ac90ea2",
+    "reviewSubmissionID": "c7bc41d3-70a7-4299-a658-b4bf49b7fa67",
+    "reviewState": "WAITING_FOR_REVIEW",
+    "versionState": "WAITING_FOR_REVIEW",
+    "releaseType": "AFTER_APPROVAL",
+    "submittedOn": "2026-11-24"
+  },
+  "verification": [
+    "Simulator UI test downloaded the live asset pack, installed it, returned Home without No data and kept the assets after relaunch.",
+    "Licence prompt and No data entry point UI tests passed on a fresh simulator.",
+    "Live download through the app transfer path and archive import passed on Mac."
+  ],
+  "skippedChecks": [
+    "Full automated test suites, under the release schedule. No engine change."
+  ],
+  "openItems": [
+    "App Review result and App Store availability.",
+    "Physical-device download acceptance.",
+    "tvOS 2.4.3 build 112 lacks the same mobile fixes; a tvOS 2.4.4 build follows in priority order."
+  ]
+}
