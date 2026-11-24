@@ -30,37 +30,68 @@ public enum MobileHomeArt {
             footer: footer)
     }
 
-    public static func page(resume: [GameFrontEnd.Action] = [], journey: GameFrontEnd.Action?,
-                            families: [GameFrontEnd.Action], continueID: String? = nil,
+    /// Home destinations after Continue. Settings stays in the footer.
+    public static let destinationIDs = ["play", "hotSeat", "profile", "worldwide"]
+
+    /// Home answers "what next?": one Continue action, then four destinations.
+    /// Games, saved routes and collections live on Play.
+    public static func page(continueAction: GameFrontEnd.Action?, hotSeatTurn: String? = nil,
                             initials: String, nextPlayerIndex: Int? = nil,
-                            subtitle: String = "", collectionsAvailable: Bool = true,
-                            deskClock: Bool = false) -> GameFrontEnd.Page {
-        var continuations = [journey].compactMap { $0 } + resume
-        // Continue leads Home. The other resumable rows stay reachable below it.
-        if let continueID, let index = continuations.firstIndex(where: { $0.id == continueID && $0.enabled }) {
-            continuations.insert(continuations.remove(at: index), at: 0)
+                            subtitle: String = "") -> GameFrontEnd.Page {
+        var rows: [GameFrontEnd.Action] = []
+        if var action = continueAction {
+            action.title = lineBreakProgress(action.title)
+            action.titleRuns = GameSemanticText.resume(action.title)
+            rows.append(action)
         }
-        var rows = continuations + families
-        for index in rows.indices {
-            rows[index].title = rows[index].title.replacingOccurrences(
-                of: #"[ \t]+(?=\d+/\d+(?:\s|$))"#, with: "\n", options: .regularExpression)
-            rows[index].titleRuns = index < continuations.count ? GameSemanticText.resume(rows[index].title)
-                : rows[index].gameLogo == nil ? GameSemanticText.title(rows[index].title) : [.init(rows[index].title, .blue)]
-        }
-        let primary = continueID.flatMap { id in rows.firstIndex { $0.id == id && $0.enabled } }
-            ?? rows.firstIndex(where: \.enabled)
-        if let primary {
+        rows += [.init("play", L10n.text("Play")),
+                 .init("hotSeat", hotSeatTurn.map { L10n.text("Hot Seat: \($0)") } ?? L10n.text("Hot Seat")),
+                 .init("profile", L10n.text("Profile")),
+                 .init("worldwide", L10n.text("Community"))]
+        if let primary = rows.firstIndex(where: \.enabled) {
             for row in rows.indices { rows[row].primary = row == primary }
         }
-        var page = GameFrontEnd.Page(title: L10n.text("Lemmings"),
-            subtitle: subtitle,
-            home: true, rows: rows,
-            footer: [.init("players", L10n.text("Players")), .init("records", L10n.text("Progress")),
-                     .init("worldwide", L10n.text("Leaderboards")),
-                     .init("collections", L10n.text("Collections"), enabled: collectionsAvailable), GameSupport.menuAction]
-                + (deskClock ? [GameFrontEnd.Action("deskClock", L10n.text("Desk Clock"))] : [])
-                + [.init("settings", L10n.text("Settings")), .init("whatsNew", L10n.text("What's New"))], homeInitials: initials)
+        var page = GameFrontEnd.Page(title: L10n.text("Lemmings"), subtitle: subtitle, home: true, rows: rows,
+            footer: [.init("settings", L10n.text("Settings"))], homeInitials: initials)
         page.homeNextPlayerIndex = nextPlayerIndex
         return page
+    }
+
+    /// Builds the current Home from route rows, as render audits and tests describe a session.
+    /// Continue is `continueID` when present, otherwise the first enabled Journey or resume row.
+    /// Game rows belong to Play, so `families` does not appear on Home.
+    public static func page(resume: [GameFrontEnd.Action] = [], journey: GameFrontEnd.Action?,
+                            families: [GameFrontEnd.Action] = [], continueID: String? = nil,
+                            initials: String, nextPlayerIndex: Int? = nil,
+                            subtitle: String = "", hotSeatTurn: String? = nil) -> GameFrontEnd.Page {
+        let routes = [journey].compactMap { $0 } + resume
+        let chosen = continueID.flatMap { id in routes.first { $0.id == id && $0.enabled } }
+            ?? routes.first(where: \.enabled)
+        return page(continueAction: chosen, hotSeatTurn: hotSeatTurn, initials: initials,
+                    nextPlayerIndex: nextPlayerIndex, subtitle: subtitle)
+    }
+
+    /// Play holds every way into a level: the Journey, other saved routes, the games and collections.
+    public static func playPage(journey: GameFrontEnd.Action?, resume: [GameFrontEnd.Action] = [],
+                                families: [GameFrontEnd.Action], collectionsAvailable: Bool = true,
+                                subtitle: String = "") -> GameFrontEnd.Page {
+        let continuations = [journey].compactMap { $0 } + resume
+        var rows = continuations + families
+        for index in rows.indices {
+            rows[index].title = lineBreakProgress(rows[index].title)
+            rows[index].titleRuns = index < continuations.count ? GameSemanticText.resume(rows[index].title)
+                : rows[index].gameLogo == nil ? GameSemanticText.title(rows[index].title) : [.init(rows[index].title, .blue)]
+            rows[index].primary = false
+        }
+        if let primary = rows.firstIndex(where: \.enabled) { rows[primary].primary = true }
+        var page = GameFrontEnd.Page(title: L10n.text("Play"), subtitle: subtitle, rows: rows,
+            footer: [.init("playBack", L10n.text("Back")),
+                     .init("collections", L10n.text("Collections"), enabled: collectionsAvailable)])
+        page.gameLibrary = true
+        return page
+    }
+
+    private static func lineBreakProgress(_ title: String) -> String {
+        title.replacingOccurrences(of: #"[ \t]+(?=\d+/\d+(?:\s|$))"#, with: "\n", options: .regularExpression)
     }
 }

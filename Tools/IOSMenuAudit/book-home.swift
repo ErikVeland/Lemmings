@@ -44,9 +44,7 @@ extension MenuAudit {
                     var page = MobileHomeArt.page(resume: resume, journey: .init("journey", "Journey map 1/227 solved"),
                         families: families, initials: state == "hot-seat" ? "ALICE v BOB" : "PLA",
                         nextPlayerIndex: state == "hot-seat" ? 0 : nil,
-                        subtitle: SavedLemmingsCounter(local: 42, global: state == "unavailable" ? nil : 130662).homeCaption,
-                        collectionsAvailable: state != "unavailable",
-                        deskClock: true)
+                        subtitle: SavedLemmingsCounter(local: 42, global: state == "unavailable" ? nil : 130662).homeCaption)
                     if state == "unavailable" {
                         page.rows[page.rows.count - 3].selected = true
                         if let index = page.footer.firstIndex(where: { $0.id == "whatsNew" }) { page.footer[index].busy = true }
@@ -105,7 +103,7 @@ extension MenuAudit {
             .init("family.fan", "Fan Lemmings 0/6020"), .init("neolemmix", "NeoLemmix Preview"),
             .init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
         let page = MobileHomeArt.page(journey: .init("journey", "Resume Journey"), families: families,
-                                      initials: "PLA", collectionsAvailable: true, deskClock: true)
+                                      initials: "PLA")
         let screen = MobileRect(x: 0, y: 0, width: 950, height: 667)
         let region = screen
         let layout = GameFrontEnd.layout(page, width: region.width, minimumHeight: region.height, boxedHome: true)

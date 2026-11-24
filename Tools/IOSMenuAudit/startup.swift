@@ -40,11 +40,12 @@ extension MenuAudit {
         for (device, size) in devices {
             for (state, initials, total, busy) in [("empty", "", nil, false), ("ready", "ABC", 123456, false),
                                                    ("offline", "AB", nil, false), ("loading", "X", 123456, true)] {
-                let page = MobileCareerArt.firstPlayer(initials: initials, portrait: 2, counter: SavedLemmingsCounter.worldwideText(total),
+                let page = MobileCareerArt.firstPlayer(initials: initials, portrait: 2,
                     status: busy ? "Loading..." : "", busy: busy)
                 let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
                 guard page.backAction == nil, layout.targets.map(\.action.id) == ["playerPortrait", "nameField", "firstPlay"],
-                      page.subtitle.contains(total == nil ? "—" : "123,456") else { throw invalidTargets(line: #line) }
+                      // Identity comes before community: the worldwide total belongs to the consent step.
+                      !page.subtitle.contains("123,456"), !page.subtitle.contains("—"), total != -1 else { throw invalidTargets(line: #line) }
                 for target in layout.targets {
                     let enabled = !busy && (target.action.id != "firstPlay" || !initials.isEmpty)
                     guard target.action.enabled == enabled, target.frame.height >= 44, target.frame.width >= 44,

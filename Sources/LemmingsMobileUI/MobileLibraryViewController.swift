@@ -21,7 +21,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     required init?(coder: NSCoder) { nil }
 
     enum Route: Equatable {
-        case home, support, family(MobileFamily), fanGroup([String]), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
+        case home, play, support, family(MobileFamily), fanGroup([String]), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case firstPlayer, whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
         case journey, progression, techniques, rankings
         case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, progressPlayer(String), progressLevel(String, String?), records, achievements, recordLevel(String), recordHint(String)
@@ -124,13 +124,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private let activityObservers = MobileNotificationObserverBag()
     override var canBecomeFirstResponder: Bool { game == nil && !deskClockShown && !searchField.isFirstResponder && mobileInsights.field?.isFirstResponder != true && familiarNames.field?.isFirstResponder != true }
     var store: MobileContentStore?
-    private var hasLemmings2Data: Bool {
+    var hasLemmings2Data: Bool {
         store?.resolvedDataDirectory(for: .lemmings2) != nil
     }
-    private var hasLemmings3Data: Bool {
+    var hasLemmings3Data: Bool {
         store?.resolvedDataDirectory(for: .lemmings3) != nil
     }
-    private var hasNeoLemmixData: Bool {
+    var hasNeoLemmixData: Bool {
         store?.resolvedDataDirectory(for: .neoLemmix) != nil
     }
     private var selectedImportKind: MobileGameDataKind = .classic
@@ -195,6 +195,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var renamingPlayer = false
     var hotSeats = MobileHotSeatStore.load(from: MobileStorage.standard(profile: "_players"))
     var hotSeatBackRoute: Route = .players
+    /// True after the player opens Play, until they return Home.
+    var cameFromPlay = false
+    /// The first profile is saved and the consent answer leads straight into the first level.
+    var firstLevelAfterConsent = false
+    /// The page that opened What's New. Nil when the app showed it after an update.
+    var whatsNewReturn: Route?
     var hotSeatRoster: MobileHotSeatRoster?
     var confirmingRestart = false
     var shufflePool: (entries: [MobileFavourites.Entry], packs: Int)?
@@ -220,7 +226,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var libraryGeneration = UUID()
     var selectedPreview: MobileMenuPreview?
     var notice = ""
-    private var loading = false
+    var loading = false
     private var preparingLevel = false
     var preparingCloudLevel: Bool { preparingLevel }
     var game: MobileGameViewController?
@@ -235,7 +241,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         false
         #endif
     }
-    private var solved: Set<Int> {
+    var solved: Set<Int> {
         // Favourites mirror the progress of the packs their levels belong to.
         if let list = library as? MobileFavouritesLibrary {
             // Resolving a level opens its pack, so only packs with progress are resolved.
@@ -446,7 +452,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         #endif
     }
-    private var deskClockAvailable: Bool {
+    var deskClockAvailable: Bool {
         #if os(iOS)
         true
         #else
@@ -654,7 +660,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     private func updateLibraryDisplayLink() {
         let active = viewIsVisible && sceneIsActive && game == nil && !deskClockShown
-        syncSavedCountRefresh(visible: active && (route == .home || route == .firstPlayer))
+        syncSavedCountRefresh(visible: active && (route == .rankings || route == .telemetryConsent))
         if !active { unfold.stop() }
         let animatedBackdrop = usesHomeBox && route == .home && homeBackdropView.canAnimate
             && !mobileSettings.classic.staticHomeScreen && !mobileSettings.classic.reduceMotion
@@ -668,7 +674,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
         #if os(tvOS)
         if game == nil, presentedViewController == nil, presses.contains(where: { $0.type == .menu }), route != .home {
-            if browserShown { navigate(levelsBackRoute) } else { canvas.goBack() }
+            if browserShown { levelsBackRoute == .home ? navigateToBrowseRoot() : navigate(levelsBackRoute) } else { canvas.goBack() }
             return
         }
         #endif
@@ -979,64 +985,22 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let subtitle = loading ? L10n.text("Loading...") : notice
         switch route {
         case .home:
-            var resume: [GameFrontEnd.Action] = []
-            var candidates: [ContinueResolver.Candidate] = []
-            let savedLevel = pendingCheckpoint.flatMap { checkpointMatchesSession($0) ? $0 : nil }
-            let journeyAttempt = savedLevel.flatMap { checkpointResumesLearningRun($0, journeyOnly: true) ? $0.savedAt : nil }
-            let sequenceAttempt = savedLevel.flatMap { checkpointResumesLearningRun($0) ? $0.savedAt : nil }
-            if let saved = savedLevel, sequenceAttempt == nil, journeyAttempt == nil {
-                let owner = saved.owner ?? profiles.activeID
-                resume.append(.init("resume", L10n.text("Resume level - \(playerName(owner))")))
-                candidates.append(.savedLevel(savedAt: saved.savedAt, owner: owner))
-            }
-            if catalogue != nil, let saved = resumableLearningRun, let run = saved.state.run,
-               run.source != .playlist(LearningJourney.playlistID) {
-                let session = saved.seat?.id != hotSeat?.id ? saved.seat.map { " - " + $0.players.map(playerName).joined(separator: " vs ") } ?? " - " + profiles.active.name : ""
-                resume.append(.init("learningRunResume", saved.resumeTitle + session))
-                candidates.append(.sequence(title: run.pool.summary, position: run.currentIndex + 1,
-                                            total: run.entries.count, attemptSavedAt: sequenceAttempt))
-            }
-            if resume.isEmpty, catalogue != nil, let run = playlists.run,
-               run.playlist != LearningJourney.playlistID {
-                resume.append(.init("runResume", L10n.text("Resume \(run.name)  \(run.position + 1)/\(run.entries.count)")))
-                candidates.append(.playlist(name: run.name, position: run.position + 1, total: run.entries.count))
-            }
-            if bundledJourney != nil, let run = resumableLearningJourney?.state.run {
-                candidates.append(.journey(position: run.currentIndex + 1, total: run.entries.count,
-                                           attemptSavedAt: journeyAttempt))
-            }
-            let continueID: String? = switch ContinueResolver.resolve(candidates, journeyAvailable: catalogue != nil && bundledJourney != nil) {
-            case let .resume(candidate): candidate.actionID
-            case .startJourney: "journey"
-            case .none: nil
-            }
-            let families: [GameFrontEnd.Action] = MobileFamily.allCases.map { family in
-                let packs = catalogue?.packs(in: family) ?? []
-                if catalogue == nil, family == .classic {
-                    return .init("classic", L10n.text("Classic Lemmings  \(solved.count)/\(count)"), enabled: count > 0)
-                }
-                let total = packs.reduce(0) { $0 + ($1.levelCount ?? 0) }
-                let passed = packs.reduce(0) { $0 + solvedLevels(for: $1.id).count }
-                let title = family.title + (packs.isEmpty ? L10n.text(" - No data") : "  \(passed)/\(total)")
-                return .init("family." + family.rawValue, title, enabled: !packs.isEmpty || (MobileResourceAccess.isStore && catalogue != nil && !loading))
-            } + [.init("neolemmix", hasNeoLemmixData ? L10n.text("NeoLemmix Preview") : L10n.text("Import NeoLemmix data")),
-                 .init("l2", hasLemmings2Data ? L10n.text("Lemmings 2") : L10n.text("Import Lemmings 2 data"), gameLogo: .lemmings2),
-                 .init("l3", hasLemmings3Data ? Lemmings3Brand.current.displayName : L10n.text("Import \(Lemmings3Brand.current.displayName) data"), enabled: true, gameLogo: .lemmings3)]
-            let journey = bundledJourney
             let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
             let nextPlayerIndex = hotSeat.flatMap { $0.players.firstIndex(of: $0.turn) }
-            let savedCounter = SavedLemmingsCounter(local: AnonymousTelemetry.shared.localSavedTotal, global: worldwideSavedTotal)
+            // Community totals live on Community. Home shows only what the player needs next.
             #if os(tvOS)
-            let homeSubtitle = [savedCounter.homeCaption, tvBuildInfo.label, tvBuildInfo.dateLabel, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
+            let homeSubtitle = [tvBuildInfo.label, tvBuildInfo.dateLabel, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
             #else
-            let homeSubtitle = [savedCounter.homeCaption, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
+            let homeSubtitle = subtitle
             #endif
-            canvas.page = MobileHomeArt.page(resume: resume,
-                journey: MobileHomeArt.journeyAction(run: resumableLearningJourney?.state.run,
-                    enabled: catalogue != nil && journey != nil),
-                families: families, continueID: continueID, initials: initials, nextPlayerIndex: nextPlayerIndex,
-                subtitle: homeSubtitle, collectionsAvailable: catalogue != nil,
-                deskClock: deskClockAvailable)
+            canvas.page = MobileHomeArt.page(continueAction: homeContinuations().continueAction,
+                hotSeatTurn: hotSeat.map { playerName($0.turn) },
+                initials: initials, nextPlayerIndex: nextPlayerIndex, subtitle: homeSubtitle)
+            canvas.preview = nil
+        case .play:
+            let routes = homeContinuations()
+            canvas.page = MobileHomeArt.playPage(journey: routes.journey, resume: routes.resume,
+                families: gameFamilyActions(), collectionsAvailable: catalogue != nil, subtitle: subtitle)
             canvas.preview = nil
         case .support:
             canvas.page = GameSupport.page
@@ -1112,7 +1076,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = whatsNewPage(); canvas.preview = nil
         case .firstPlayer:
             canvas.page = MobileCareerArt.firstPlayer(initials: nameDraft ?? "", portrait: draftPortrait,
-                counter: SavedLemmingsCounter.worldwideText(worldwideSavedTotal), status: subtitle, busy: loading)
+                status: subtitle, busy: loading)
             canvas.preview = nil
         case .effectsWelcome:
             canvas.page = effectsWelcomePage(); canvas.preview = nil
@@ -1269,7 +1233,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             navigationHistory.append(position)
         }
         detailReturnPosition = nil
-        if case .home = next { progressProfileID = nil }
+        if case .home = next { progressProfileID = nil; cameFromPlay = false }
+        if case .play = next { cameFromPlay = true }
         if next == .home { settingsReturn = nil }
         if next == .data, route != .data { dataBackRoute = route }
         if next != .familiarNames { familiarNames.clear() }
@@ -1359,7 +1324,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if handleL2Practice(id) { return }
         if handleCloudSync(id) { return }
         if handleWelcome(id) || handleInsights(id) { return }
-        if handleLearning(id) || handleRankings(id) { return }
+        if handleHome(id) || handleLearning(id) || handleRankings(id) { return }
         if handleSettings(id) { return }
         switch id {
         case "classic": levelsBackRoute = .home; navigate(.levels); selectLevel(selectedIndex)
@@ -1370,8 +1335,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if hasLemmings3Data { openLemmings3() } else { showMissingGameData(for: id) }
         case "neolemmix":
             if hasNeoLemmixData { openNeoLemmix() } else { showMissingGameData(for: id) }
-        case "home": navigate(.home)
-        case "back": navigate(levelsBackRoute)
+        case "home": navigateToBrowseRoot()
+        case "back": levelsBackRoute == .home ? navigateToBrowseRoot() : navigate(levelsBackRoute)
         case "dataBack": navigate(dataBackRoute)
         case "addPlaylistBack": navigate(.levels); selectLevel(selectedIndex)
         case "favourite": toggleFavourite(selectedIndex)

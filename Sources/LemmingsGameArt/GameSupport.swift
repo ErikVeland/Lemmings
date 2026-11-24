@@ -9,7 +9,7 @@ public enum GameSupport {
     public static var menuAction: GameFrontEnd.Action { .init("donate", L10n.text("Donate")) }
     public static var page: GameFrontEnd.Page {
         var page = GameFrontEnd.Page(title: L10n.text("Buy me a coffee"), details: ["coff.ee/generik"],
-              footer: [.init("home", L10n.text("Back"))], preview: true)
+              footer: [.init("settings", L10n.text("Back"))], preview: true)
         page.previewFitsImage = true
         return page
     }

@@ -26,27 +26,18 @@ extension MenuAudit {
         var captures = 0
         for (pose, size, tv) in poses {
             for interface in ClassicInterfaceSize.allCases {
-                for available in [true, false] {
-                    var page = MobileHomeArt.page(resume: [.init("resume", "Resume journey")],
-                        journey: .init("journey", "Journey map 1/227 solved"), families: [
-                            .init("family.classic", "Classic Lemmings 0/120"),
-                            .init("family.ohNo", "Oh No! More Lemmings 0/100"),
-                            .init("family.holiday", "Holiday Lemmings 0/72"),
-                            .init("family.fan", "Fan Lemmings 0/6020"),
-                            .init("l2", "Lemmings 2"), .init("l3", "All New World of Lemmings")],
-                        initials: "PLA", collectionsAvailable: available, deskClock: !tv)
-                    if tv { page = TVMenuPresentation.homePage(page) }
-                    var scale = MobileSettingsArt.interfaceScale(interface, width: size.width, television: tv)
-                    if tv { scale = TVMenuPresentation.homeScale(scale, page: page, width: size.width, height: size.height) }
+                for available in [true] {
+                    // Donate lives with the other About actions in Settings.
+                    var page = MobileSettingsArt.groups(television: tv)
+                    page.footer += MobileSettingsArt.aboutActions
+                    let scale = MobileSettingsArt.interfaceScale(interface, width: size.width, television: tv)
                     let viewport = CGSize(width: size.width / scale, height: size.height / scale)
-                    let layout = tv ? TVMenuPresentation.homeLayout(page, width: viewport.width, height: viewport.height)
-                        : GameFrontEnd.layout(page, width: viewport.width, minimumHeight: viewport.height, boxedHome: true)
+                    let layout = GameFrontEnd.layout(page, width: viewport.width, minimumHeight: viewport.height)
                     guard let donate = layout.targets.first(where: { $0.action.id == "donate" }),
                           donate.action.enabled, !donate.action.primary,
-                          layout.targets.filter({ $0.action.primary }).count == 1,
                           layout.action(at: CGPoint(x: donate.frame.midX, y: donate.frame.midY)) == "donate"
                     else { throw invalidTargets(line: #line) }
-                    let scroll = tv ? 0 : max(0, min(layout.size.height - viewport.height, donate.frame.maxY - viewport.height + 12))
+                    let scroll = max(0, min(layout.size.height - viewport.height, donate.frame.maxY - viewport.height + 12))
                     guard CGRect(origin: .zero, size: viewport).contains(donate.frame.offsetBy(dx: 0, dy: -scroll)),
                           donate.frame.width * scale >= 44, donate.frame.height * scale >= 44,
                           layout.targets.filter({ $0.action.id != "donate" }).allSatisfy({ !donate.frame.intersects($0.frame) })
@@ -66,14 +57,14 @@ extension MenuAudit {
                 let context = try bitmapContext(size: size)
                 context.scaleBy(x: scale, y: scale)
                 context.translateBy(x: 0, y: -scroll)
-                GameFrontEnd.draw(page, layout: layout, typography: typography, preview: qr, highlighted: "home", in: context)
+                GameFrontEnd.draw(page, layout: layout, typography: typography, preview: qr, highlighted: "settings", in: context)
                 try save(context: context, to: output.appendingPathComponent("\(pose)-\(interface.rawValue)-qr.png"))
                 let previewFrame = layout.preview.offsetBy(dx: 0, dy: -scroll).applying(.init(scaleX: scale, y: scale))
                 guard let image = context.makeImage(), let renderedCode = image.cropping(to: previewFrame.integral) else { throw invalidTargets(line: #line) }
                 let decoded = scans(renderedCode)
                 guard decoded,
-                      let back = layout.targets.first(where: { $0.action.id == "home" }),
-                      layout.action(at: CGPoint(x: back.frame.midX, y: back.frame.midY)) == "home",
+                      let back = layout.targets.first(where: { $0.action.id == "settings" }),
+                      layout.action(at: CGPoint(x: back.frame.midX, y: back.frame.midY)) == "settings",
                       CGRect(origin: .zero, size: viewport).contains(back.frame.offsetBy(dx: 0, dy: -max(0, layout.size.height - viewport.height))),
                       layout.size.height <= viewport.height
                 else {

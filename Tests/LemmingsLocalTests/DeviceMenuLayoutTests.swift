@@ -55,7 +55,7 @@ final class DeviceMenuLayoutTests: XCTestCase {
         let output = root.appendingPathComponent(".build/journey-session-ui")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         for width in [390, 1120] {
-            let page = MobileHomeArt.page(journey: nil, families: [.init("classic", "Classic"), .init("l2", "Lemmings 2"), .init("l3", "Lemmings 3")], initials: "ALICE v BOB")
+            let page = MobileHomeArt.playPage(journey: nil, families: [.init("classic", "Classic"), .init("l2", "Lemmings 2"), .init("l3", "Lemmings 3")])
             let layout = GameFrontEnd.layout(page, width: CGFloat(width), minimumHeight: 720)
             XCTAssertFalse(layout.targets.contains { $0.action.id == "journey" })
             for target in layout.targets where target.action.enabled {
@@ -214,8 +214,9 @@ final class DeviceMenuLayoutTests: XCTestCase {
         let libraries = (0..<6).map { GameFrontEnd.Action("family.\($0)", "Library \($0) 0/120") }
             + [.init("l2", "Lemmings 2", gameLogo: .lemmings2), .init("l3", "Lemmings 3", gameLogo: .lemmings3)]
         for size in [CGSize(width: 1194, height: 834), .init(width: 834, height: 1194), .init(width: 740, height: 430)] {
-            let page = MobileHomeArt.page(resume: [.init("journeyResume", "Resume journey"), .init("resume", "Resume level - UVA")],
-                journey: .init("journey", "Journey map 33/295 solved"), families: libraries, initials: "UVA v EKV")
+            // Play owns the game grid that Home once carried.
+            let page = MobileHomeArt.playPage(journey: .init("journey", "Journey map 33/295 solved"),
+                resume: [.init("journeyResume", "Resume journey"), .init("resume", "Resume level - UVA")], families: libraries)
             let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
             XCTAssertTrue(page.rows.first { $0.id == "journey" }!.titleRuns.allSatisfy { $0.palette == .blue })
             let grid = layout.targets.filter { $0.action.id.hasPrefix("family.") }
@@ -224,12 +225,14 @@ final class DeviceMenuLayoutTests: XCTestCase {
             let sequels = layout.targets.filter { $0.action.gameLogo != nil }
             XCTAssertEqual(sequels.count, 2)
             XCTAssertTrue(sequels.allSatisfy { $0.frame.minY > grid.last!.frame.maxY && $0.frame.height == 112 })
-            // Four footer actions balance as two full rows of two, not three over one.
-            let footer = layout.targets.filter { ["players", "records", "collections", "donate"].contains($0.action.id) }
-            XCTAssertEqual(footer.count, 4)
+            // Back and Collections share one footer row at equal widths.
+            let footer = layout.targets.filter { ["playBack", "collections"].contains($0.action.id) }
+            XCTAssertEqual(footer.count, 2)
             let footerRows = Dictionary(grouping: footer, by: { $0.frame.minY })
-            XCTAssertEqual(footerRows.count, 2)
-            XCTAssertTrue(footerRows.values.allSatisfy { $0.count == 2 && abs($0[0].frame.width - $0[1].frame.width) < 0.01 })
+            if size.width >= 600 {
+                XCTAssertEqual(footerRows.count, 1)
+                XCTAssertTrue(footerRows.values.allSatisfy { $0.count == 2 && abs($0[0].frame.width - $0[1].frame.width) < 0.01 })
+            }
             for target in layout.targets {
                 XCTAssertEqual(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
             }
@@ -250,11 +253,11 @@ final class DeviceMenuLayoutTests: XCTestCase {
         XCTAssertEqual(GameSemanticText.players(otherTurn.homeInitials,
             nextPlayerIndex: otherTurn.homeNextPlayerIndex).map(\.palette), [.green, .blue, .gold])
         let phone = GameFrontEnd.layout(otherTurn, width: 390, minimumHeight: 763)
-        XCTAssertLessThan(phone.initials.maxY, phone.targets.first { $0.action.id == "classic" }!.frame.minY)
+        XCTAssertLessThan(phone.initials.maxY, phone.targets.first { $0.action.id == "play" }!.frame.minY)
         let book = MobileBookHomeArt.layout(otherTurn, width: 650, height: 465,
             panes: [CGRect(x: 0, y: 0, width: 318, height: 465),
                     CGRect(x: 332, y: 0, width: 318, height: 465)])
-        XCTAssertLessThan(book.initials.maxY, book.targets.first { $0.action.id == "classic" }!.frame.minY)
+        XCTAssertLessThan(book.initials.maxY, book.targets.first { $0.action.id == "play" }!.frame.minY)
         XCTAssertLessThan(book.initials.maxY, 465)
         let solo = MobileHomeArt.page(journey: nil, families: [], initials: "EKV", subtitle: "Saved")
         XCTAssertEqual(solo.subtitle, "Saved")
