@@ -233,6 +233,28 @@ struct MobilePortraitHUDTests {
         }
     }
 
+    @Test func choosingSpeedCancelsHeldInputAndHonoursTheMode() {
+        var speed = GameplaySpeed(legacyMultiplier: 8)
+        speed.press(.controller, at: 1)
+        speed.update(at: 2)
+        speed.select(10, at: 2)
+        speed.release(.controller, at: 2.1)
+        #expect(speed.target == 10 && speed.cruise == 10 && !speed.isHeld)
+        speed.select(25, at: 3)
+        #expect(speed.target == 10)
+        speed.ridiculousEnabled = true
+        speed.select(25, at: 4)
+        #expect(speed.target == 25)
+        speed.select(1, at: 5)
+        #expect(speed.multiplier == 1 && speed.cruise == 25)
+        speed.variableEnabled = false
+        #expect(speed.selectableSteps == [1, 8])
+        speed.select(2, at: 6)
+        #expect(speed.multiplier == 1)
+        speed.select(8, at: 7)
+        #expect(speed.multiplier == 8 && speed.cruise == 25)
+    }
+
     @Test func speedTouchHoldKeepsReachedTierAndNextTapResets() {
         for variable in [true, false] {
             var speed = GameplaySpeed()

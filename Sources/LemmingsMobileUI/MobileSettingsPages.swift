@@ -46,7 +46,7 @@ extension MobileLibraryViewController {
         #else
         var page = MobileSettingsArt.groups(inGame: inGame)
         #endif
-        if !inGame { page.footer = [.init("settingsBack", L10n.text("Back"))] }
+        if !inGame { page.footer = [.init("settingsBack", L10n.text("Back"))] + MobileSettingsArt.aboutActions }
         return page
     }
     func controllerMappingsPage() -> GameFrontEnd.Page {
@@ -91,7 +91,10 @@ extension MobileLibraryViewController {
                           .init("setting.tvTriggerFeedback", L10n.text("Adaptive triggers"), selected: input.triggerFeedback != false)]
         }
         #endif
-        if usesSettingsTabs && !inGame { page.footer = [.init("settingsBack", L10n.text("Back"))] }
+        if group == .deskClock, !inGame, deskClockAvailable {
+            page.rows.insert(.init("deskClock", L10n.text("Open Desk Clock")), at: 0)
+        }
+        if usesSettingsTabs && !inGame { page.footer = [.init("settingsBack", L10n.text("Back"))] + MobileSettingsArt.aboutActions }
         return page
     }
     func soundtrackPage() -> GameFrontEnd.Page {

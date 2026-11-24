@@ -66,18 +66,18 @@
       levelIndex: 0, levelFingerprint: "test", initialStateHash: "test", tick: 0, events: [], stateHash: "test",
       usedRewind: false, nukeCount: 0, rewindCount: 0, undoCount: 0, selectedSkill: 0, scrollX: 0, scrollY: 0)
     menuRecovery?.hotSeatID = seat
-    var resumes = homeMenuItems().filter { [.resume, .resumeSequence, .fullQuest].contains($0.action) }
-    try check(resumes.count == 2 && resumes[0].action == .fullQuest && resumes[1].action == .resume,
+    var resumes = playMenuItems().filter { [.resume, .resumeSequence, .fullQuest].contains($0.action) }
+    try check(resumes.count == 2 && resumes.contains { $0.action == .fullQuest } && resumes.contains { $0.action == .resume },
       "An independent checkpoint replaced the session's Journey button")
     menuRecovery?.sequence = .init(runID: run.id, entry: run.currentEntry)
-    resumes = homeMenuItems().filter { [.resume, .resumeSequence, .fullQuest].contains($0.action) }
+    resumes = playMenuItems().filter { [.resume, .resumeSequence, .fullQuest].contains($0.action) }
     try check(resumes.count == 1 && resumes[0].action == .fullQuest,
       "A checkpoint in the current route produced duplicate Resume actions")
     try check(homeMenuItems().first?.title == "RESUME JOURNEY (1/\(run.entries.count))",
       "Home omitted the saved Journey position")
     let originalCampaign = UserDefaults.standard.dictionaryRepresentation().filter { $0.key.hasPrefix("HotSeat.\(seat).") }
     rebuildLibrary()
-    let classicTitle = homeContentRow(.classic)
+    let classicTitle = homeContentRow(.classic) ?? ""
     try check(classicTitle.contains("1/120"), "Home ignored a Classic Journey win: \(classicTitle)")
     try check(!fanHomeRow().contains("  0/"), "Home ignored the fan Journey win")
     try check(store.learningProgress.completed.isEmpty, "Home copied Hot Seat wins into Solo")
@@ -129,7 +129,7 @@
       "Resolving an archived queue changed its roster or next turn")
     arcade.endHotSeat()
     try check(homeMenuItems().first?.title == "START JOURNEY", "An archived Hot Seat replaced Solo's Journey action")
-    try check(!homeContentRow(.classic).contains("1/120"), "Solo inherited the Hot Seat Home count")
+    try check(homeContentRow(.classic)?.contains("1/120") == false, "Solo inherited the Hot Seat Home count")
     print("PASS historical Journey counts, unique Resume, Solo/Hot Seat isolation, Classic/L2/L3 records, two renders and input targets")
   }
 }

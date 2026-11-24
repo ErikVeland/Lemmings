@@ -676,6 +676,50 @@ final class AnonymousTelemetryTests: XCTestCase {
         }
     }
 
+    @MainActor func testFreshProfileThenOptionalOfflineConsentAndRelaunch() throws {
+        _ = NSApplication.shared
+        let storage = try AppStorage.temporary(named: "offline-first-profile")
+        let previousStore = ArcadeStore.shared
+        defer {
+            GameScreen.shared.dismissAll()
+            GameScreen.shared.gameWindow = nil
+            ArcadeStore.shared = previousStore
+            storage.removeTemporaryFiles()
+        }
+        XCTAssertTrue(AppDelegate.needsFirstProfile(in: storage))
+        ArcadeStore.shared = ArcadeStore(file: ArcadeStore.recordsFile(storage: storage))
+        let offline = FakeTelemetryTransport()
+        offline.failure = URLError(.notConnectedToInternet)
+        let telemetry = AnonymousTelemetry(storage: storage, endpoint: URL(string: "https://counts.example.org"), transport: offline)
+        let consent = TelemetryConsentWindow(telemetry: telemetry)
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 1120, height: 720),
+                              styleMask: [.titled], backing: .buffered, defer: false)
+        var played = false
+        let page = AppDelegate.presentFirstProfile(in: window, storage: storage, consent: consent,
+            worldwide: SavedLemmingsCounter.worldwideText(nil)) { played = true }
+        XCTAssertFalse(consent.isShowing)
+        window.contentView?.layoutSubtreeIfNeeded()
+        let bitmap = try XCTUnwrap(page.bitmapImageRepForCachingDisplay(in: page.bounds))
+        page.displayIgnoringOpacity(page.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap)))
+        let controls = page.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+        XCTAssertFalse(controls.contains { $0.accessibilityLabel()?.contains("worldwide") == true })
+        try XCTUnwrap(controls.first { $0.accessibilityRole() == .textField }).setAccessibilityValue("EKV")
+        XCTAssertTrue(try XCTUnwrap(controls.first { $0.accessibilityLabel() == "Play" }).accessibilityPerformPress())
+        XCTAssertEqual(ArcadeStore.shared.records.activeProfile.initials, "EKV")
+        XCTAssertTrue(consent.isShowing)
+        XCTAssertFalse(played)
+        let choice = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
+        XCTAssertEqual(choice.controllerInitialControl, choice.controllerBackButton)
+        choice.controllerBackButton.performClick(nil)
+        XCTAssertTrue(played)
+        XCTAssertFalse(AppDelegate.needsFirstProfile(in: storage))
+        XCTAssertEqual(ArcadeStore(file: ArcadeStore.recordsFile(storage: storage)).records.activeProfile.initials, "EKV")
+        let reopened = AnonymousTelemetry(storage: storage, endpoint: URL(string: "https://counts.example.org"), transport: offline)
+        XCTAssertTrue(reopened.consentDecided)
+        XCTAssertFalse(reopened.sharesCounts)
+        XCTAssertTrue(offline.requests.isEmpty)
+    }
+
     @MainActor func testConsentDefaultsToDeclineAndRendersBothChoices() throws {
         _ = NSApplication.shared
         let suite = UUID().uuidString
@@ -700,7 +744,7 @@ final class AnonymousTelemetryTests: XCTestCase {
         func buttons(in view: NSView) -> [NSButton] {
             (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
         }
-        let share = try XCTUnwrap(buttons(in: page).first { $0.title == "Share" })
+        let share = try XCTUnwrap(buttons(in: page).first { $0.title == "Join" })
         for control in [page.controllerBackButton, share] {
             let rect = control.convert(control.bounds, to: page)
             XCTAssertTrue(page.bounds.contains(rect))

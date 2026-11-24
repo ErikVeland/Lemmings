@@ -16,9 +16,16 @@ on, or hold for a temporary boost. The first fast tier is 2×.
 | Speed **‹ / ›**, **Shift+[ / Shift+]**, or **LT + D-pad left/right** | Choose 2×, 3×, 5× or 10× |
 | **F**, **Escape**, controller **B**, or click **Speed** while fast | Return to 1× |
 
-The arrows stop at 1× and 10×. While fast-forward is off, they choose the tier
-for the next toggle without accelerating play. The panel shows the current multiplier and lights green while fast-forward is active.
-At 1×, a smaller arrow label shows the tier for the next toggle. Its tooltip explains the hold.
+The arrows change the active tier immediately, including from 1×. The panel
+shows the selected multiplier throughout the short clock ramp. In fixed-speed
+mode the entire mobile speed socket toggles between normal and fast speed.
+
+On iPhone, iPad and Duo, Pause menu → Speed opens the available multipliers.
+On Apple TV the same picker is under Game controls → Speed. It initially focuses
+the active tier. Choosing a multiplier returns to the paused controls. Back
+returns without changing speed. The 1× choice restores normal speed and keeps
+the last variable fast tier available for the next toggle.
+
 Each level starts at 1× with a 2× first fast tier. Within a level, toggling off
 preserves the chosen tier. Temporary boosts never replace it.
 

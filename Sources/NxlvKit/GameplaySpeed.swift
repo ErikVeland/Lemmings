@@ -57,6 +57,7 @@ public struct GameplaySpeed: Sendable {
         }
     }
     public var availableSteps: [Double] { ridiculousEnabled ? Self.ridiculousSteps : Self.steps }
+    public var selectableSteps: [Double] { variableEnabled ? availableSteps : [1, legacyMultiplier] }
     public let legacyMultiplier: Double
     public private(set) var selected: Double = 1
     public private(set) var target: Double = 1
@@ -113,11 +114,16 @@ public struct GameplaySpeed: Sendable {
     /// Apply the chosen tier, including when starting from normal speed.
     public mutating func step(_ direction: Int, at now: TimeInterval) {
         guard variableEnabled else { return }
-        cancelHolds()
         let index = availableSteps.firstIndex(of: target) ?? 0
-        selected = availableSteps[min(availableSteps.count - 1, max(0, index + (direction < 0 ? -1 : 1)))]
-        if selected > 1 { cruise = selected }
-        changeTarget(selected, at: now)
+        select(availableSteps[min(availableSteps.count - 1, max(0, index + (direction < 0 ? -1 : 1)))], at: now)
+    }
+
+    public mutating func select(_ tier: Double, at now: TimeInterval) {
+        guard selectableSteps.contains(tier) else { return }
+        cancelHolds()
+        selected = tier
+        if variableEnabled, tier > 1 { cruise = tier }
+        changeTarget(tier, at: now, immediate: !variableEnabled)
     }
 
     public mutating func press(_ input: Hold, at now: TimeInterval, tapEnabled: Bool = true) {
