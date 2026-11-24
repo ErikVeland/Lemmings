@@ -3,7 +3,7 @@ import Foundation
 import NxlvKit
 import LemmingsMobileCore
 
-public enum MobileHUDAction: Equatable, Sendable {
+public enum MobileHUDAction: Hashable, Sendable {
     case releaseRate(Int)
     case skill(Int)
     case pause

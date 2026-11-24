@@ -83,16 +83,21 @@ extension MobileGameViewController {
         tvPointerView.frame = view.bounds
         tvPointerView.isHidden = !overlay.isHidden || !playState.canEdit || isChoosingToolDirection
         tvPointerView.point = tvPointerPoint
-        let control = tvPointerPoint.flatMap { hud.pointerAction(at: hud.convert($0, from: view)) }
-        tvPointerView.eligible = control != nil || highlightedTarget?.state == .eligible
-        tvPointerView.occupied = control != nil || highlightedTarget != nil
+        let overControl = tvPointerPoint.map {
+            let location = hud.convert($0, from: view)
+            return hud.pointerAction(at: location) != nil || hud.mapPoint(at: location) != nil
+        } ?? false
+        tvPointerView.eligible = overControl || highlightedTarget?.state == .eligible
+        tvPointerView.occupied = overControl || highlightedTarget != nil
         view.bringSubviewToFront(tvPointerView)
     }
 
     @discardableResult func activateTVPointerControl() -> Bool {
-        guard let point = tvPointerPoint, !hud.isHidden,
-              let action = hud.pointerAction(at: hud.convert(point, from: view)) else { return false }
-        handle(action)
+        guard let point = tvPointerPoint, !hud.isHidden else { return false }
+        let location = hud.convert(point, from: view)
+        if let action = hud.pointerAction(at: location) { handle(action) }
+        else if let target = hud.mapPoint(at: location) { centreFromMap(target) }
+        else { return hud.hitTest(location, with: nil) != nil }
         updateTVPointer()
         return true
     }

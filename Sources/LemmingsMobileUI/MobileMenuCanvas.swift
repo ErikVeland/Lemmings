@@ -581,7 +581,10 @@ import LemmingsAppCore
     func focusAction(_ id: String) {
         guard focusableActions.contains(where: { $0.id == id }) else { return }
         focusedID = id; highlighted = id
-        if let target = targets.first(where: { $0.accessibilityIdentifier == "menu." + id }) { revealAction(target) }
+        if let target = targets.first(where: { $0.accessibilityIdentifier == "menu." + id }) {
+            revealAction(target)
+            if UIAccessibility.isVoiceOverRunning { UIAccessibility.post(notification: .layoutChanged, argument: target) }
+        }
         #if os(tvOS)
         setNeedsFocusUpdate()
         #endif
@@ -616,6 +619,7 @@ import LemmingsAppCore
             return
         }
         #endif
+        focusedID = id
         onAction?(id)
     }
     func scrollInput(delta: CGFloat) {

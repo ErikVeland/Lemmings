@@ -1,4 +1,5 @@
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 import LemmingsMobileCore
 
@@ -38,6 +39,7 @@ public enum MobileInformationArt {
                         L10n.text("Anonymous play counts show which levels need work. The service sees your network address."),
                         L10n.text("Change this later in Settings > Privacy.")],
               footer: [.init("telemetryNo", L10n.text("Not now")), .init("telemetryYes", L10n.text("Join"), primary: true)], footerColumns: 2)
+        if !worldwide.isEmpty { page.subtitleSizingText = SavedLemmingsCounter.worldwideText(.max) }
         page.backActionID = "telemetryNo"
         return page
     }

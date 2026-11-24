@@ -24,7 +24,8 @@ public enum FanLevelLibraryArt {
             tools.append(.init("fanUpdate", updating ? L10n.text("Checking for new packs...") : L10n.text("Check for new packs"), enabled: !updating))
         }
         var page = GameFrontEnd.Page(title: group.title, subtitle: status.isEmpty ? count : status,
-                                     rows: rows, footer: footer, footerColumns: 2)
+                                     rows: rows, details: rows.isEmpty && !query.isEmpty ? [L10n.text("No matching packs")] : [],
+                                     footer: footer, footerColumns: 2)
         page.pairsRows = true
         page.listTools = tools
         return page

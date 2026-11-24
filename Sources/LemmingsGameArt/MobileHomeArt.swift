@@ -85,7 +85,7 @@ public enum MobileHomeArt {
         }
         if let primary = rows.firstIndex(where: \.enabled) { rows[primary].primary = true }
         var page = GameFrontEnd.Page(title: L10n.text("Play"), subtitle: subtitle, rows: rows,
-            footer: [.init("playBack", L10n.text("Back")),
+            footer: [.init("playBack", L10n.text("Back"), backNavigation: true),
                      .init("collections", L10n.text("Collections"), enabled: collectionsAvailable)])
         page.gameLibrary = true
         return page

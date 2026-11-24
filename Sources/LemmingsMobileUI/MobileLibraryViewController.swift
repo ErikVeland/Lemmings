@@ -21,10 +21,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     required init?(coder: NSCoder) { nil }
 
     enum Route: Equatable {
-        case home, play, support, family(MobileFamily), fanGroup([String]), levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
+        case home, play, support, family(MobileFamily), fanGroup([String]), levelCatalogue, levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case firstPlayer, whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
+        case levelDetails
         case journey, progression, techniques, rankings
-        case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, progressPlayer(String), progressLevel(String, String?), records, achievements, recordLevel(String), recordHint(String)
+        case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, profileStatistics, progressPlayer(String), progressLevel(String, String?), records, achievements, recordLevel(String), recordHint(String)
     }
     #if os(tvOS)
     override var preferredFocusEnvironments: [any UIFocusEnvironment] {
@@ -92,6 +93,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let focus: String?
     }
     private var navigationHistory: [NavigationPosition] = []
+    var previousRoute: Route? { navigationHistory.last?.route }
     private var detailReturnPosition: NavigationPosition?
 
     func showLibraryDetail(_ page: GameFrontEnd.Page) {
@@ -211,6 +213,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var nameDraft: String?
     /// Set while a playlist run is the library being played.
     var activeRun: MobilePlaylistRun?
+    var cataloguePreviewLevels: [MobileLevelSummary] = []
+    var catalogueReturn = Route.home
+    var catalogueQuery = ""
+    var cataloguePageIndex = 0
+    var catalogueFilter = CatalogueProgressFilter.all
     var searchQuery = ""
     let searchField = UITextField()
     private var fanUpdateStatus = ""
@@ -224,6 +231,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private let libraryLoader = MobileLibraryLoader()
     private var libraryTask: Task<Void, Never>?
     private var libraryGeneration = UUID()
+    private var welcomeLibraryLoad = false
+    var previewRecordLevel: ArcadeLevel?
     var selectedPreview: MobileMenuPreview?
     var notice = ""
     var loading = false
@@ -242,6 +251,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         #endif
     }
     var solved: Set<Int> {
+        if let neo = library as? NeoLemmixMobileLibrary {
+            return neo.clearedIndices(in: arcadeStore.records.clearedNeoLemmixLevels(profileID: hotSeat?.turn ?? profiles.activeID))
+        }
         // Favourites mirror the progress of the packs their levels belong to.
         if let list = library as? MobileFavouritesLibrary {
             // Resolving a level opens its pack, so only packs with progress are resolved.
@@ -273,7 +285,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let passed = GameProgressPreferences.fanLevels(profileID: profiles.activeID, sessionID: hotSeat?.id)
             let previous = all
             all.formUnion(fan.entries.indices.filter {
-                passed.contains(GameProgressPreferences.fanIdentifier(pack: fan.pack.url, label: fan.entries[$0].label))
+                let label = fan.entries[$0].label
+                return passed.contains(GameProgressPreferences.fanIdentifier(pack: fan.pack.url, label: label))
+                    || passed.contains(fan.pack.displayName + "|" + label)
             })
             if all != previous {
                 defaults.set(all.sorted(), forKey: progressKey(for: pack, fallback: fan.displayName))
@@ -327,10 +341,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         browser.isHidden = true
         browser.onBack = { [weak self] in self?.handle("back") }
-        browser.onPlay = { [weak self] index in self?.selectedIndex = index; self?.startLevel(index, checkpoint: nil) }
+        browser.onPlay = { [weak self] index in self?.playLevelPreview(index) }
+        browser.onDetails = { [weak self] in self?.openLevelDetails() }
         browser.onSelect = { [weak self] index in
             guard let self else { return }
+            if self.browserShown, self.selectedIndex != index { self.selectLevel(index) }
             self.selectedIndex = index
+            self.browser.setPlayTitle(self.previewPlayTitle(index))
             self.browser.setFavourite(self.isFavourite(index))
             self.view.setNeedsLayout()
         }
@@ -401,6 +418,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 self.searchField.text = self.nameDraft
             }
             else if self.nameDraft != nil { self.nameDraft = String((self.searchField.text ?? "").prefix(40)) }
+            else if self.route == .levelCatalogue {
+                self.catalogueQuery = self.searchField.text ?? ""
+                self.cataloguePageIndex = 0
+                self.scrollView.setContentOffset(.zero, animated: false)
+            }
             else {
                 self.searchQuery = self.searchField.text ?? ""
                 if case .fanGroup = self.route { self.route = .family(.fan); self.canvas.focusedID = "search" }
@@ -813,7 +835,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         view.accessibilityElements = bottomSettingsNavigation
             ? (settingsTabs.isHidden ? [] : [settingsTabs]) + [scrollView, globalNavigation] : nil
         listTools.actions = canvas.page.listTools
-        listTools.searchQuery = searchQuery
+        listTools.searchQuery = route == .levelCatalogue ? catalogueQuery : searchQuery
         listTools.isHidden = globalNavigation.isHidden || listTools.actions.isEmpty
         if !listTools.isHidden {
             listTools.frame = CGRect(x: menuRegion.minX, y: menuRegion.minY, width: menuRegion.width, height: 0)
@@ -1017,6 +1039,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = .init(title: family.title, subtitle: subtitle,
                                 rows: rows, footer: [.init("home", L10n.text("Back"))])
             canvas.preview = nil
+        case .levelCatalogue:
+            canvas.page = levelCataloguePage(subtitle: subtitle); canvas.preview = nil
         case .levels:
             guard let library, library.levels.indices.contains(selectedIndex) else { route = .home; rebuild(); return }
             let level = library.levels[selectedIndex]
@@ -1026,9 +1050,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 canvas.previewSource = nil
                 break
             }
-            let rank = library is MobileJourneyLibrary ? library.levels : library.levels.filter { $0.rank == level.rank }
+            let browsable = previewBrowseLevels
+            let rank = library is MobileJourneyLibrary ? browsable : browsable.filter { $0.rank == level.rank }
             let rankIndex = rank.firstIndex(where: { $0.index == selectedIndex }) ?? 0
-            let ranksCount = library is MobileJourneyLibrary ? 1 : Set(library.levels.map(\.rank)).count
+            let ranksCount = library is MobileJourneyLibrary ? 1 : Set(browsable.map(\.rank)).count
             var stats: [String] = selectedPreview.map {
                 let s = $0.snapshot
                 return [L10n.text("\(s.total) Lemmings   Save \(s.required)"),
@@ -1043,13 +1068,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                 footer: (ranksCount > 1 ? [.init("rankPrevious", L10n.text("< Rank")), .init("rankNext", L10n.text("Rank >"))] : [])
                                     + [.init("previous", L10n.text("< Level"), enabled: rankIndex > 0),
                                          .init("next", L10n.text("Level >"), enabled: rankIndex + 1 < rank.count && canSelectJourneyLevel(selectedIndex + 1)),
+                                         .init("levelDetails", L10n.text("Details")),
                                          .init("favourite", isFavourite(selectedIndex) ? L10n.text("Remove favourite") : L10n.text("Add favourite"), selected: isFavourite(selectedIndex), icon: .favourite),
                                          .init("addPlaylist", L10n.text("Playlist"), enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
                                     + (library is Lemmings2MobileLibrary || library is Lemmings3MobileLibrary ? [.init("originalMovies", L10n.text("Original movies"))] : [])
                                     + (library is Lemmings2MobileLibrary ? [.init("l2Practice", L10n.text("Practice"))] : [])
                                     + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", L10n.text("Random 10"))] : [])
                                     + [.init("back", L10n.text("Back")),
-                                         .init("play", solved.contains(selectedIndex) ? L10n.text("Play again") : L10n.text("Play"), enabled: !loading, primary: true)],
+                                         .init("play", previewPlayTitle(selectedIndex), enabled: !loading, primary: true)],
                                 preview: true, footerColumns: 2)
             if let preview = selectedPreview {
                 canvas.preview = MobileBitmapRenderer.image(preview.frame)
@@ -1061,6 +1087,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
         case .journey:
             canvas.page = learningPage(subtitle: subtitle); canvas.preview = nil
+        case .levelDetails:
+            canvas.page = levelDetailsPage()
+            canvas.preview = nil
         case .l2Practice:
             canvas.page = l2PracticePage(subtitle: subtitle); canvas.preview = nil
         case .shortGames:
@@ -1105,6 +1134,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = CloudSyncArt.page(testerEnabled: libraryCloud.testerSyncEnabled, busy: syncBusy, message: syncMessage, status: libraryCloud.status, code: syncCode, draft: syncDraft); canvas.preview = nil
         case .progress:
             canvas.page = progressPage(subtitle: subtitle); canvas.preview = nil
+        case .profileStatistics:
+            let id = progressDisplayProfileID
+            canvas.page = MobileCareerArt.profileStatisticsPage(records: arcadeStore.records, profileID: id,
+                name: playerName(id), storageError: arcadeStore.storageError)
+            canvas.preview = nil
         case let .progressPlayer(profileID):
             canvas.page = MobileCareerArt.progressPlayerPage(records: arcadeStore.records, profileID: profileID, metric: progressMetric); canvas.preview = nil
         case let .progressLevel(key, parentProfileID):
@@ -1173,6 +1207,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         browser.playerName = playerName(hotSeat?.turn ?? profiles.activeID)
         browser.statusText = loading ? "" : notice
         browser.isLoading = loading
+        if route == .levels { browser.setPlayTitle(previewPlayTitle(selectedIndex)) }
         let available = MobileSystemRegions.usesFullDisplay(in: view) ? view.bounds : MobileSystemRegions.menuFrame(in: view)
         let coverBrowser = available.width >= 600 && available.height >= 300
         let show = game == nil && route == .levels && coverBrowser && library != nil && !preparingLevel
@@ -1181,7 +1216,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         browser.artworkLoadingEnabled = show && viewIsVisible && sceneIsActive && !preparingLevel && libraryTask == nil
         if show, !browserShown, let library {
             browser.frame = view.bounds
-            var levels = library.levels
+            var levels = previewBrowseLevels
             if library is MobileJourneyLibrary, let run = learning.run,
                !mobileSettings.classic.unlockAllClassicLevels {
                 levels = levels.filter { $0.index <= run.currentIndex }
@@ -1220,7 +1255,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let returning = navigationHistory.lastIndex { $0.route == next }
         let restore: NavigationPosition?
         if next == .home {
-            restore = nil
+            restore = returning.map { navigationHistory[$0] }
             navigationHistory.removeAll()
         } else if next == route {
             restore = detailReturnPosition ?? position
@@ -1241,7 +1276,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         confirmingRecordsReset = false
         // The launch notice must not cancel the library and saved-run load beneath it.
         let welcomeRoutes: [Route] = [.firstPlayer, .home, .support, .whatsNew, .effectsWelcome, .telemetryConsent]
-        let preserveWelcomeLoad = library == nil && libraryTask != nil
+        let preserveWelcomeLoad = welcomeLibraryLoad && library == nil && libraryTask != nil
             && welcomeRoutes.contains(route) && welcomeRoutes.contains(next)
         if next == .hotSeat, hotSeatRoster == nil {
             hotSeatRoster = MobileHotSeatRoster(host: profiles.activeID, players: defaultHotSeatPlayers)
@@ -1270,6 +1305,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if route != next { canvas.focusedID = nil }
         globalNavigation.focusedID = nil
         route = next; notice = ""
+        if next == .levelCatalogue { searchField.text = catalogueQuery }
+        if case .family(.fan) = next { searchField.text = searchQuery }
+        if case .fanGroup = next { searchField.text = searchQuery }
         libraryInput.reset()
         if game == nil { becomeFirstResponder() }
         scrollView.setContentOffset(.zero, animated: false)
@@ -1316,7 +1354,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             return
         }
-        if handleL2Practice(id) { return }
+        if handleLevelCatalogue(id) || handleL2Practice(id) { return }
         if handleCloudSync(id) { return }
         if handleWelcome(id) || handleInsights(id) { return }
         if handleHome(id) || handleLearning(id) || handleRankings(id) { return }
@@ -1350,6 +1388,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.focusedID = "search"
             scrollView.setContentOffset(.zero, animated: false)
             rebuild()
+        case "profileStatistics": navigate(.profileStatistics)
         case "settings": navigate(.settings)
         case "settingsBack":
             let source = settingsReturn
@@ -1391,7 +1430,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case "next": moveLevel(1)
         case "rankPrevious": moveRank(-1)
         case "rankNext": moveRank(1)
-        case "play": startLevel(selectedIndex, checkpoint: nil)
+        case "play": playLevelPreview(selectedIndex)
+        case "levelDetails": openLevelDetails()
+        case "levelDetailsBack":
+            navigate(.levels)
+            selectLevel(selectedIndex)
+        case "previewReplay":
+            if route == .levelDetails, let level = previewRecordLevel,
+               let replay = previewRecordReplay(for: level) {
+                playRecordReplay(replay)
+            }
         case "soundtrack":
             let libraries = MobileMusicLibraries.shared
             libraries.onChange = { [weak self] in
@@ -1524,7 +1572,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
     /// Makes a pack the current library and shows its levels.
     func openPack(_ pack: MobileContentPack, back: Route, checkpoint: MobileCheckpointEnvelope? = nil,
-                  play index: Int? = nil, browse browseIndex: Int = 0) {
+                  play index: Int? = nil, browse browseIndex: Int? = nil) {
         guard let catalogue else { return }
         let ports = catalogue.portsRoot, fan = catalogue.fanFolders
         openLibrary({ try MobileCatalogue(portsRoot: ports, fanFolders: fan).library(for: pack) }) { [self] loaded in
@@ -1534,6 +1582,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             currentPack = pack
             previewLoader = MobileMenuPreviewLoader { try MobileCatalogue(portsRoot: ports, fanFolders: fan).library(for: pack) }
             selectedIndex = 0; selectedPreview = nil; browserShown = false
+            if pack.family == .fan, checkpoint == nil, index == nil, browseIndex == nil {
+                openLevelCatalogue(back: back)
+                return
+            }
             levelsBackRoute = back
             if route != .firstPlayer { navigate(.levels) }
             if let checkpoint {
@@ -1541,18 +1593,20 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 catch { notice = error.localizedDescription; rebuild() }
             }
             else if let index, loaded.levels.indices.contains(index) { selectedIndex = index; startLevel(index, checkpoint: nil) }
-            else { selectLevel(loaded.levels.indices.contains(browseIndex) ? browseIndex : 0) }
+            else { selectLevel(browseIndex.flatMap { loaded.levels.indices.contains($0) ? $0 : nil } ?? 0) }
         }
     }
 
     /// Opens content on a worker. Only the current request can change the menu.
-    func openLibrary(_ makeLibrary: @escaping @Sendable () throws -> (any MobileGameLibrary)?,
+    func openLibrary(duringWelcome: Bool = false, _ makeLibrary: @escaping @Sendable () throws -> (any MobileGameLibrary)?,
                              completion: @escaping @MainActor ((any MobileGameLibrary)?) -> Void) {
         libraryTask?.cancel()
         stopMenuPreviews(); previewGeneration = UUID()
         preparingLevel = false
         let cancelledPreviews = previewDrain
         let generation = UUID(); libraryGeneration = generation
+        welcomeLibraryLoad = duringWelcome
+        if !duringWelcome { notice = "" }
         loading = true
         libraryTask = Task {
             do {
@@ -1600,18 +1654,22 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #endif
     private func moveLevel(_ offset: Int) {
         guard let library else { return }
-        let index = selectedIndex + offset
-        guard library.levels.indices.contains(index),
-              (library is MobileJourneyLibrary || library.levels[index].rank == library.levels[selectedIndex].rank) else { return }
-        selectLevel(index)
+        let levels = previewBrowseLevels
+        guard library.levels.indices.contains(selectedIndex) else { return }
+        let rank = library.levels[selectedIndex].rank
+        let peers = library is MobileJourneyLibrary ? levels : levels.filter { $0.rank == rank }
+        guard let current = peers.firstIndex(where: { $0.index == selectedIndex }),
+              peers.indices.contains(current + offset) else { return }
+        selectLevel(peers[current + offset].index)
     }
     private func moveRank(_ offset: Int) {
-        guard let library else { return }
+        guard let library, library.levels.indices.contains(selectedIndex) else { return }
+        let levels = previewBrowseLevels
         var ranks: [String] = []
-        for level in library.levels where !ranks.contains(level.rank) { ranks.append(level.rank) }
+        for level in levels where !ranks.contains(level.rank) { ranks.append(level.rank) }
         guard let current = ranks.firstIndex(of: library.levels[selectedIndex].rank) else { return }
         let next = (current + offset + ranks.count) % ranks.count
-        if let level = library.levels.first(where: { $0.rank == ranks[next] }) { selectLevel(level.index) }
+        if let level = levels.first(where: { $0.rank == ranks[next] }) { selectLevel(level.index) }
     }
     func canSelectJourneyLevel(_ index: Int) -> Bool {
         guard library is MobileJourneyLibrary, let run = learning.run else { return true }
@@ -1619,7 +1677,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     func selectLevel(_ index: Int) {
         guard game == nil, !preparingLevel, libraryTask == nil, canSelectJourneyLevel(index) else { return }
-        guard let previewLoader else { selectedIndex = index; rebuild(); return }
+        if selectedIndex != index { selectedPreview = nil }
+        selectedIndex = index
+        guard let previewLoader else { rebuild(); return }
         let previous = previewTask, draining = previewDrain
         previous?.cancel()
         previewDrain = Task {
@@ -1645,7 +1705,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         homeBackdropTask?.cancel(); homeBackdropTask = nil; homeBackdropKey = nil
         let store = store
         let directory = GameResources.resourceURL?.appendingPathComponent("BetaGameData", isDirectory: true)
-        openLibrary({ try store?.loadLibrary(bundledDirectory: directory) }) { [self] loaded in
+        openLibrary(duringWelcome: true, { try store?.loadLibrary(bundledDirectory: directory) }) { [self] loaded in
             library = loaded
             if let classic = loaded as? ClassicMobileLibrary {
                 let directory = classic.directory
@@ -1753,6 +1813,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let progressStorage = storage
             previewLoader = MobileMenuPreviewLoader {
                 try NeoLemmixMobileLibrary(directory: directory, storage: progressStorage)
+            }
+            if requestedIndex == nil, checkpoint == nil {
+                openLevelCatalogue(back: .home)
+                return
             }
             navigate(.levels)
             if let checkpoint {
@@ -1965,6 +2029,49 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
         }
     }
+    private func previewCheckpoint(_ index: Int) -> MobileCheckpointEnvelope? {
+        guard let saved = pendingCheckpoint, checkpointMatchesSession(saved), let library,
+              library.levels.indices.contains(index) else { return nil }
+        let runID = library is MobileJourneyLibrary ? learning.run?.id : activeRun?.id
+        let context = MobileCheckpointEnvelope.JourneyContext(runID: runID, position: runID == nil ? nil : index)
+        guard saved.matchesPreview(levelIdentifier: try? library.checkpointLevelIdentifier(at: index), journey: context) else { return nil }
+        return saved
+    }
+
+    private func previewPlayTitle(_ index: Int) -> String {
+        previewCheckpoint(index) == nil ? L10n.text("Play") : L10n.text("Resume")
+    }
+
+    private func playLevelPreview(_ index: Int) {
+        guard route == .levels, !loading else { return }
+        startLevel(index, checkpoint: previewCheckpoint(index))
+    }
+
+    private func openLevelDetails() {
+        guard route == .levels, !preparingLevel, let library, let previewLoader,
+              library.levels.indices.contains(selectedIndex) else { return }
+        let index = selectedIndex
+        let owner = hotSeat?.turn ?? profiles.activeID
+        previewRecordLevel = nil
+        navigate(.levelDetails)
+        loading = true
+        rebuild()
+        previewTask = Task { [weak self] in
+            guard let self else { return }
+            do {
+                let prepared = try await previewLoader.prepare(index, settings: mobileSettings.classic, forPreview: true)
+                guard !Task.isCancelled, route == .levelDetails, owner == (hotSeat?.turn ?? profiles.activeID) else { return }
+                previewRecordLevel = mobileArcadeLevel(session: prepared.content.session, summary: prepared.content.summary,
+                    pack: favouriteIdentity(index)?.pack ?? library.displayName)
+            } catch {
+                guard !Task.isCancelled, route == .levelDetails else { return }
+                notice = error.localizedDescription
+            }
+            loading = false
+            rebuild()
+        }
+    }
+
     func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, restoringMatchingCheckpoint: Bool = false) {
         guard !preparingLevel, libraryTask == nil, canSelectJourneyLevel(index), let library, let checkpointStore else { return }
         guard let previewLoader else { return }
@@ -2054,6 +2161,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             next.soloOwnerID = profiles.activeID
             let attemptID = checkpoint?.runID ?? next.recordRunID
             let ownerID = checkpoint?.owner ?? hotSeat?.turn ?? profiles.activeID
+            next.previouslyPlayed = arcadeStore.records.runs.contains { $0.profileID == ownerID }
             let recordLevel = mobileArcadeLevel(session: content.session, summary: content.summary,
                 pack: favouriteIdentity(index)?.pack ?? library.displayName)
             if checkpoint != nil, let use = checkpoint?.extraSkillUse
@@ -2178,6 +2286,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 }
             }
             next.onResultAchievements = { [weak self] in self?.mobileResultAchievements(runID: attemptID) ?? [] }
+            next.onResultRecord = { [weak self] in
+                guard let self, let run = arcadeStore.records.runs.last(where: { $0.id == attemptID }) else { return nil }
+                return contextualRecordPage(level: run.level, owner: ownerID, assisted: run.assisted,
+                    source: content.summary.sourceLabel)
+            }
             next.onResultAwards = { [weak self] in self?.mobileResultAwards(runID: attemptID) ?? (0, false) }
             next.onResultRewards = { [weak self] in self?.mobileResultRewards(runID: attemptID) ?? [] }
             next.onLevelLeaderboard = { [weak self] in self?.mobileLevelLeaderboard() }

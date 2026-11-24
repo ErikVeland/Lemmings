@@ -19,12 +19,12 @@
   ],
   "draft": {
     "path": "Tools/Localisation/drafts/fr.json",
-    "text_count": 3519,
+    "text_count": 3623,
     "missing_current_text_count": 0,
     "unknown_current_text_count": 0,
     "obsolete_key_count": 0,
-    "sha256": "5f7d1695b6f94c7ee1b3dd4a4ae352a4d86bcbc595c4d0a5a7307551d9ae9b1e",
-    "entry_count": 3519
+    "sha256": "29dcb0c0ddc8fc2bf08d3eae178a541850b12bcad098e11c6124c618c3f51206",
+    "entry_count": 3623
   },
   "candidate": {
     "path": ".build/localisation-tools/candidates/fr.json",
@@ -34,9 +34,9 @@
     "note": "The ignored machine-generated candidate was not merged; translations were drafted from the current English catalogue."
   },
   "catalogue_snapshot": {
-    "text_count": 3519,
+    "text_count": 3623,
     "plural_count": 8,
-    "sha256": "eb050b7d0e132f45e1946c53e124df9044a6a3cf60b4dcacaad79da4a93aed64"
+    "sha256": "1fd9759bdf86c78ec4ff2ca745d666a3bf9f4c0479175bf4c8d828b158ab7007"
   },
   "plural_review": {
     "status": "ai_translation_complete_human_linguistic_review_required",
@@ -390,5 +390,11 @@
     ],
     "removedObsoleteKeys": [],
     "humanReview": "pending"
+  },
+  "ux_redesign_checkpoint": {
+    "added": 145,
+    "removed": 92,
+    "revised": 40,
+    "human_review": "pending"
   }
 }

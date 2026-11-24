@@ -294,6 +294,10 @@ import NxlvKit
             self.canvas.needsDisplay = true
         }
         try warningSound.loadLemmings3Sounds(root: root)
+        canvas.timeline.onMap = { [weak self] point in
+            self?.canvas.centreFromMap(point)
+            self?.gameplayKeyboard?.showControlTip(.map)
+        }
         canvas.onCameraChanged = { [weak self] in
             guard let self else { return }
             self.warningSound.setViewport(self.canvas.soundViewport)
@@ -313,7 +317,7 @@ import NxlvKit
             guard let self else { return }
             self.pendingTool = nil; self.canvas.directionPoint = nil
             switch slot {
-            case 0...4: self.selected = slot; self.refresh()
+            case 0...4: self.selectAction(slot)
             case 6: self.speedControl.tap(clickCount: clicks)
             case 7: self.togglePause()
             case 8: if clicks >= 2 { self.confirmEndRun() }
@@ -340,7 +344,7 @@ import NxlvKit
             guard let self else { return }
             if self.game.isComplete, key.lowercased() == "v" { self.runMovie.review(); return }
             if self.game.isComplete, key.lowercased() == "s" { self.runMovie.review(save: true); return }
-            if let index = SkillShortcuts(names: Array(Lemmings3Panel.canonicalNames.prefix(5))).index(for: key, current: self.selected, modern: self.audioSettings.modernControlsEnabled) { self.pendingTool = nil; self.canvas.directionPoint = nil; self.selected = index; self.refresh() }
+            if let index = SkillShortcuts(names: Array(Lemmings3Panel.canonicalNames.prefix(5))).index(for: key, current: self.selected, modern: self.audioSettings.modernControlsEnabled) { self.selectAction(index) }
             else if key == " " { self.togglePause() }
             else if key == "." { self.singleStep() }
             else if key.lowercased() == "r" { self.retryLevel() }
@@ -423,6 +427,7 @@ import NxlvKit
         canvas.onSpeedRelease = { [weak self] time in self?.speedControl.release(.mouse, at: time) }
         canvas.onSpeedStep = { [weak self] direction, time in self?.speedControl.step(direction, at: time) }
         canvas.onPrecisionScroll = { [weak self] action, point in self?.scrollPrecisionZoom(action, at: point) }
+        keyboard.allowsControlTips = { [weak self] in self?.canvas.readOnlyReplay == false }
         keyboard.speedControl = speedControl
         keyboard.precisionZoom = { [weak self] kind in self?.togglePrecisionZoom(kind) }
         keyboard.extraSkill = { [weak self] in self?.useExtraSkill() }
@@ -438,12 +443,16 @@ import NxlvKit
             self?.dj.setSpeedPitch(cents)
         }
         keyboard.modern = { [weak self] in self?.audioSettings.modernControlsEnabled ?? true }
-        speedControl.onChange = { [weak self] in self?.accumulator = 0; self?.refresh() }
+        speedControl.onChange = { [weak self] in
+            guard let self else { return }
+            accumulator = 0
+            if speedControl.isFast { gameplayKeyboard?.showControlTip(.speed) }
+            refresh()
+        }
         keyboard.cycle = { [weak self] direction in
             guard let self else { return }
-            self.pendingTool = nil; self.canvas.directionPoint = nil
-            self.selected = SkillShortcuts.cycle(from: self.selected, direction: direction, available: Array(repeating: true, count: 5)) ?? self.selected
-            self.refresh()
+            let next = SkillShortcuts.cycle(from: self.selected, direction: direction, available: Array(repeating: true, count: 5))
+            if let next { self.selectAction(next) }
         }
         keyboard.centre = { [weak self] entrance in self?.canvas.centre(onEntrance: entrance) }
         keyboard.navigationReduceMotion = { [weak self] in
@@ -1224,6 +1233,7 @@ import NxlvKit
         updateUserMusicPause()
         assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); warningSound.silence(); warningSound.playRewindScrub(); playRewindMusic()
         refresh(); saveCheckpoint(immediately: true)
+        gameplayKeyboard?.showControlTip(.rewind)
 
         return true
     }
@@ -1646,6 +1656,14 @@ import NxlvKit
             && ArcadeStore.shared.records.extraSkillSpent(attemptID: arcadeRunID, profileID: arcadeProfileID) == nil
             && game.lemmings.contains { game.canGrantBonusTool(to: $0.id) }
     }
+    private func selectAction(_ slot: Int) {
+        pendingTool = nil
+        canvas.directionPoint = nil
+        selected = slot
+        gameplayKeyboard?.showControlTip(.assignment)
+        refresh()
+    }
+
     private func useExtraSkill() {
         guard extraSkillAvailable else { return }
         let attemptID = arcadeRunID
@@ -1734,7 +1752,7 @@ import NxlvKit
         ArcadeWindow.shared.actionReplayContext = { [weak self] in self?.leaderboardReplayContext() }
         ArcadeWindow.shared.showResult(arcadeReport, owner: window, retry: { [weak self] in self?.retryLevel() },
             next: { [weak self] in self?.continueArcadeResult() },
-            replay: { [weak self] save in self?.runMovie.review(save: save) },
+            replay: runMovie.hasFrames ? { [weak self] save in self?.runMovie.review(save: save) } : nil,
             storedReplay: { [weak self] url, title in self?.runMovie.reviewStored(url, title: title) }, continueTitle: resultContinueTitle, background: arcadeBackdrop, rewardVolume: warningSound.muted ? 0 : warningSound.volume,
             rewardVolumeProvider: { [weak self] in self?.warningSound.effectiveVolume ?? 0 },
             continueHandlesHandover: onSequenceContinue != nil,
@@ -1929,6 +1947,13 @@ import NxlvKit
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
         timeline.layoutSequelFooter(in: bounds)
+        timeline.mapSize = CGSize(width: mapWidth, height: mapHeight)
+        let camera = soundViewport
+        timeline.visibleMapRect = CGRect(x: camera.x, y: camera.y, width: camera.width, height: camera.height)
+    }
+    func centreFromMap(_ point: CGPoint) {
+        let camera = soundViewport
+        pan(point.x - camera.x - camera.width / 2, point.y - camera.y - camera.height / 2)
     }
 
     var navigationFrame: CGRect?
@@ -2470,7 +2495,10 @@ import NxlvKit
         defer {
             NSGraphicsContext.restoreGraphicsState()
             layoutTimeline()
-            if menuRows == nil && !readOnlyReplay { timeline.draw() }
+            if menuRows == nil && !readOnlyReplay {
+                timeline.draw()
+                if !timeline.mapFrame.isEmpty { timeline.drawMap(image: foreground.flatMap(bitmapCache.pixels)) }
+            }
         }
         defer { if menuRows == nil { startCountdown.draw(in: playfieldRect) } }
         defer {
@@ -2709,7 +2737,7 @@ import NxlvKit
         window?.makeFirstResponder(self)
         let point = convert(event.locationInWindow, from: nil)
         layoutTimeline()
-        if menuRows == nil, timeline.click(at: point) { return }
+        if menuRows == nil, directionPoint == nil, !readOnlyReplay, timeline.beginMapDrag(at: point) || timeline.click(at: point) { return }
         let sx = (point.x - screenOrigin.x) / zoom, sy = (point.y - screenOrigin.y) / zoom
         if let rows = menuRows {
             let row = Int((sy - 39) / 16)
@@ -2751,7 +2779,14 @@ import NxlvKit
         onCarrierClick?(Int((source.x - screenOrigin.x) / zoom + cameraX),
                         Int((source.y - screenOrigin.y) / zoom - 12 + cameraY))
     }
-    override func mouseUp(with event: NSEvent) { onSpeedRelease?(event.timestamp) }
+    override func mouseDragged(with event: NSEvent) {
+        if timeline.draggingMap { timeline.dragMap(to: convert(event.locationInWindow, from: nil)) }
+        else { super.mouseDragged(with: event) }
+    }
+    override func mouseUp(with event: NSEvent) {
+        if timeline.draggingMap { timeline.endMapDrag(); return }
+        onSpeedRelease?(event.timestamp)
+    }
     override func keyDown(with event: NSEvent) {
         guard event.modifierFlags.intersection([.command, .control, .option]).isEmpty else { super.keyDown(with: event); return }
         if event.isARepeat, [" ", "p"].contains(event.charactersIgnoringModifiers ?? "") { return }

@@ -109,8 +109,8 @@ final class InterfaceLocalisationTests: XCTestCase {
             }
         }
         XCTAssertGreaterThan(tamilForms.count, 100)
-        let help = "Tap a lemming to assign the selected skill. Drag a finger to pan. Pinch to zoom."
-        XCTAssertNotEqual(table[help], help)
+        let help = "Tap a lemming to assign the selected skill."
+        XCTAssertNotEqual(try XCTUnwrap(table[help]), help)
         XCTAssertNotNil(table["Eligible lemming {0} of {1}. Skill: {2}."])
     }
     func testTextExpansionLeavesInterpolatedDataAndPreferenceIDsIntact() throws {

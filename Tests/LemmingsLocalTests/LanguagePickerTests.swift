@@ -1,5 +1,6 @@
 #if os(macOS)
 import LemmingsAppCore
+import LemmingsGameArt
 import AppKit
 import NxlvKit
 import XCTest
@@ -124,8 +125,10 @@ final class LanguagePickerTests: XCTestCase {
             for choice in GameLocalisation.languageOptions where choice != .system {
                 GameScreen.shared.dismissAll()
                 GameLocalisation.setLanguage(choice)
-                XCTAssertEqual(ReleaseWelcome.subtitle, GameLocalisation.text("Your next level is ready."))
-                XCTAssertEqual(ReleaseWelcome.sections.first?.0, GameLocalisation.text("Find your way back"))
+                XCTAssertEqual(ReleaseWelcome.subtitle, GameLocalisation.text("Pull up a chair. We've got a level to finish."))
+                let expectedHeading = AppDistribution.isStore && !GameMenuLogo.usesRestoredArtwork
+                    ? GameLocalisation.text("Ultimate Lemmix") : GameLocalisation.text("Chronicles controls")
+                XCTAssertEqual(ReleaseWelcome.sections.first?.0, expectedHeading)
                 if choice != .english {
                     XCTAssertNotEqual(GameLocalisation.text("Continue"), "Continue")
                 }

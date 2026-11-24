@@ -32,6 +32,32 @@ import NxlvKit
         library.viewDidDisappear(false)
     }
 
+    @Test func leavingAColdPackLoadKeepsTheDestinationAndAllowsRetry() async throws {
+        let controller = MobileLibraryViewController()
+        controller.loadViewIfNeeded()
+        defer { controller.viewDidDisappear(false) }
+        controller.navigate(.settings)
+        controller.library = nil
+        controller.navigate(.home)
+        var completions = 0
+        controller.openLibrary({ nil }) { _ in completions += 1 }
+        controller.navigate(.support)
+        #expect(!controller.loading && controller.route == .support)
+        controller.openLibrary({ throw URLError(.notConnectedToInternet) }) { _ in completions += 1 }
+        func waitForLoad() async throws {
+            let deadline = ProcessInfo.processInfo.systemUptime + 5
+            while controller.loading {
+                try #require(ProcessInfo.processInfo.systemUptime < deadline)
+                try await Task.sleep(nanoseconds: 5_000_000)
+            }
+        }
+        try await waitForLoad()
+        #expect(completions == 0 && !controller.notice.isEmpty && controller.route == .support)
+        controller.openLibrary({ nil }) { _ in completions += 1 }
+        try await waitForLoad()
+        #expect(completions == 1 && controller.notice.isEmpty && controller.route == .support)
+    }
+
     @Test func awardBackRestoresTheListInsteadOfTheTopOfTheDetail() throws {
         let library = MobileLibraryViewController()
         library.loadViewIfNeeded()

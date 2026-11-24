@@ -5,7 +5,7 @@ import NxlvKit
 /**
  * Loads player-owned Chronicles data and creates native mobile sessions.
  */
-public final class Lemmings3MobileLibrary: MobileGameLibrary {
+public final class Lemmings3MobileLibrary: MobileCampaignPreviewLibrary {
     public static let engineFingerprint = "lemmings3-mobile-runtime-v1"
 
     public let directory: URL
@@ -51,7 +51,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
                 MobileLevelSummary(index: (tribe.rawValue - 1) * 30 + index,
                     rank: tribe.title,
                     number: index + 1,
-                    title: L10n.text("Level \(index + 1) • \(level.width)×\(level.height)"))
+                    title: L10n.text("Level \(index + 1) • \(level.width)×\(level.height)"), origin: .official, packName: Lemmings3Brand.current.displayName)
             }
         }
     }
@@ -96,7 +96,15 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
 
     public func loadLevel(at index: Int) throws -> MobileLevelContent { try loadLevel(at: index, population: nil) }
 
-    public func loadLevel(at index: Int, population override: Int?) throws -> MobileLevelContent {
+    public func loadPreviewLevel(at index: Int) throws -> MobileLevelContent {
+        try loadLevel(at: index, population: nil, preview: true)
+    }
+
+    public func loadLevel(at index: Int, population: Int?) throws -> MobileLevelContent {
+        try loadLevel(at: index, population: population, preview: false)
+    }
+
+    private func loadLevel(at index: Int, population override: Int?, preview: Bool) throws -> MobileLevelContent {
         try Task.checkCancellation()
         guard levels.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: index / 30 + 1)!
@@ -125,7 +133,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
             if let progress = savedProgress.progress(for: tribe) { try campaign.restore(progress) }
             if campaign.index != localIndex {
                 try campaign.select(localIndex)
-                if override == nil { try save(campaign.progress, tribe: tribe) }
+                if !preview, override == nil { try save(campaign.progress, tribe: tribe) }
             }
             loadedCampaign = campaign
             progressLock.unlock()
@@ -182,7 +190,7 @@ public final class Lemmings3MobileLibrary: MobileGameLibrary {
                 try renderer.render(runtime, highlight: highlight, ghosts: ghosts)
             },
             soundBank: soundBank) { [weak self] completed in
-                if override == nil { self?.record(completed, at: localIndex, tribe: tribe) }
+                if !preview, override == nil { self?.record(completed, at: localIndex, tribe: tribe) }
             }
         session.spriteProvider = renderer.spriteHighlight
         session.artworkRenderer = { runtime, highlight, ghosts, mac in

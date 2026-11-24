@@ -55,7 +55,7 @@ public struct MobileFavourites: Equatable, Sendable {
 ///
 /// A long list can open `lazily`: titles come from the entries, and a pack opens only
 /// when one of its levels is played.
-public final class MobileListLibrary: MobileGameLibrary {
+public final class MobileListLibrary: MobileCampaignPreviewLibrary {
     public let levels: [MobileLevelSummary]
     public let displayName: String
     /// For each level shown, its position in the entry list this library was built from.
@@ -168,6 +168,12 @@ public final class MobileListLibrary: MobileGameLibrary {
     public func loadLevel(at index: Int) throws -> MobileLevelContent {
         guard let target = resolve(index) else { throw MobileSessionError.changedLevel }
         let content = try target.library.loadLevel(at: target.index)
+        return MobileLevelContent(summary: levels[index], session: content.session)
+    }
+
+    public func loadPreviewLevel(at index: Int) throws -> MobileLevelContent {
+        guard let target = resolve(index) else { throw MobileSessionError.changedLevel }
+        let content = try target.library.levelForInspection(at: target.index)
         return MobileLevelContent(summary: levels[index], session: content.session)
     }
 
