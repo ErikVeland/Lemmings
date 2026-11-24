@@ -6,12 +6,16 @@ all solo profiles.
 
 ## Start or resume shared play
 
-Open **Hot Seat** from the Ultimate Lemmings menu or Player Profiles.
+Open **Hot Seat** from Home, the Ultimate Lemmings menu or Players.
 
-1. Select the player tiles to add or remove players. Number keys 1–8 do the same.
-2. To add a player who has no profile, select **+ New player** (or press N).
+1. If saved Hot Seats exist and none is active, **Saved Hot Seats** opens first.
+   Select a session to resume it, or select **New Hot Seat** to set up another.
+   The newest session is the primary choice.
+2. Select the player tiles to add or remove players. Number keys 1–8 do the same.
+3. To add a player who has no profile, select **+ New player** (or press N).
    After **Add player**, the new player joins the roster and the page returns.
-3. Select **Choose a game**.
+4. Select **Choose a game**. A new session opens Play to choose its game.
+   A resumed session returns Home, where Continue offers its next level.
 
 With only one profile, **+ New player** is the primary action. **Choose a game**
 is available when the roster has at least two players. The host stays in the roster.

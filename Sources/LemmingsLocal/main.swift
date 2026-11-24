@@ -7845,7 +7845,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .play:
         showHomePlay(true)
       case .hotSeat:
-        showHotSeat()
+        // Every saved Hot Seat stays choosable. With none active, choose a session before the roster.
+        if !ArcadeStore.shared.hotSeatIsActive, !ArcadeStore.shared.savedHotSeats.isEmpty {
+          ArcadeWindow.shared.showSavedSessions(owner: window)
+        } else { showHotSeat() }
       case .profile:
         showProfileHub()
       case .community:
