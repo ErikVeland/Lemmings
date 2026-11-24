@@ -68,10 +68,65 @@ final class GameAssetPackTests: XCTestCase {
     }
     #endif
 
+    /// Set LEMMINGS_GAME_ASSET_ARCHIVE to a downloaded pack to check extraction and import end to end.
+    func testDownloadedArchiveInstallsIntoResourceLibrary() throws {
+        guard let path = ProcessInfo.processInfo.environment["LEMMINGS_GAME_ASSET_ARCHIVE"] else {
+            throw XCTSkip("LEMMINGS_GAME_ASSET_ARCHIVE is not set.")
+        }
+        let manager = FileManager.default
+        let root = manager.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? manager.removeItem(at: root) }
+        let base = root.appendingPathComponent("Base", isDirectory: true)
+        try manager.createDirectory(at: base, withIntermediateDirectories: true)
+        let archive = URL(fileURLWithPath: path)
+        try GameAssetPack.verifyArchive(archive)
+        let library = OwnedResourceLibrary(root: root.appendingPathComponent("Installed"), bundledResources: base)
+        let receipt = try GameAssetPack.installVerifiedArchive(archive) { try library.install(directory: $0) }
+        XCTAssertEqual(try library.verifyInstalled()?.contentID, receipt.contentID)
+        for folder in ["MacArtwork", "AmigaArtwork", "Fonts/OriginalLemmings"] {
+            XCTAssertTrue(manager.fileExists(atPath: receipt.resourcesDirectory.appendingPathComponent(folder).path), folder)
+        }
+    }
+
+    /// Set LEMMINGS_TEST_ASSET_DOWNLOAD=1 to download the real pack through the app's own transfer path.
+    func testLiveDownloadReportsProgressAndInstalls() async throws {
+        guard ProcessInfo.processInfo.environment["LEMMINGS_TEST_ASSET_DOWNLOAD"] == "1" else {
+            throw XCTSkip("LEMMINGS_TEST_ASSET_DOWNLOAD is not set.")
+        }
+        let manager = FileManager.default
+        let root = manager.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? manager.removeItem(at: root) }
+        let base = root.appendingPathComponent("Base", isDirectory: true)
+        try manager.createDirectory(at: base, withIntermediateDirectories: true)
+        let library = OwnedResourceLibrary(root: root.appendingPathComponent("Installed"), bundledResources: base)
+        let phases = PhaseLog()
+        let receipt = try await GameAssetPack.shared.downloadAndInstall(progress: { phases.add($0) }) {
+            try library.install(directory: $0)
+        }
+        let (percents, installing) = await MainActor.run { (phases.percents, phases.installing) }
+        XCTAssertEqual(percents.first, 0)
+        XCTAssertEqual(percents.last, 100)
+        XCTAssertEqual(percents, percents.sorted())
+        XCTAssertTrue(installing)
+        XCTAssertEqual(try library.verifyInstalled()?.contentID, receipt.contentID)
+    }
+
     func testIncompleteDownloadDoesNotReachImporter() throws {
         let file = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try Data("Incomplete transfer".utf8).write(to: file)
         defer { try? FileManager.default.removeItem(at: file) }
         XCTAssertThrowsError(try GameAssetPack.verifyArchive(file)) { XCTAssertEqual($0 as? GameAssetPack.Failure, .invalid) }
+    }
+}
+
+@MainActor private final class PhaseLog: @unchecked Sendable {
+    var percents: [Int] = []
+    var installing = false
+    nonisolated init() {}
+    func add(_ phase: GameAssetPack.Progress) {
+        switch phase {
+        case .downloading(let percent): percents.append(percent)
+        case .installing: installing = true
+        }
     }
 }

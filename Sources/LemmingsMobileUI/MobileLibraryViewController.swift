@@ -971,7 +971,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         canvas.fitsSupportPage = route == .support
         canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
-        let hidePlayerName = route == .firstPlayer || (route == .home && hotSeat == nil) || confirmingGameAssetLicence || (route == .players && renamingPlayer)
+        // Game Data downloads, restores and imports belong to the whole app, not to a player.
+        let hidePlayerName = route == .firstPlayer || route == .data || (route == .home && hotSeat == nil) || (route == .players && renamingPlayer)
         canvas.playerName = hidePlayerName ? nil : playerName(hotSeat?.turn ?? profiles.activeID)
         unfold.stop()
         let count = library?.levels.count ?? 0
