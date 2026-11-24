@@ -270,6 +270,10 @@ def artwork_assets(platform):
                     images.append({'filename': filename, 'idiom': 'tv', 'scale': f'{scale}x'})
                 output[brand + title + '.imageset/Contents.json'] = encoded({'info': info, 'images': images})
             output[brand + 'Contents.json'] = encoded({'info': info, 'assets': assets})
+    if platform == 'ios':
+        original = ROOT / 'Apps/UltimateLemmingsIOS/Assets.xcassets/AppIcon.appiconset'
+        for name in ('Contents.json', 'AppIcon-1024.png'):
+            output['RestoredIcon.appiconset/' + name] = (original / name).read_bytes()
     return output
 
 
@@ -319,6 +323,8 @@ def audit_app(app, platform, files):
     generated = {'Info.plist', 'PkgInfo', 'Assets.car', executable, '_CodeSignature/CodeResources',
                  'embedded.mobileprovision', 'AppIcon60x60@2x.png', 'AppIcon60x60@3x.png',
                  'AppIcon76x76@2x~ipad.png', 'AppIcon83.5x83.5@2x~ipad.png'}
+    if platform == 'ios':
+        generated.update(name.replace('AppIcon', 'RestoredIcon', 1) for name in tuple(generated) if name.startswith('AppIcon'))
     for path in app.rglob('*'):
         if path.is_symlink():
             raise ValueError('The mobile application contains a symbolic link.')
