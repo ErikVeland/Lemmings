@@ -3347,7 +3347,8 @@ import NxlvKit
             var noticeY = gameplayRect.minY + 16 + badgeSize.height
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
                 noticeY += RewindTransportCue.draw(origin: CGPoint(x: noticeX, y: noticeY),
-                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom) + 4
+                    currentTick: rewindCurrentTick, originTick: origin,
+                    ticksPerSecond: Lemmings2Runtime.ticksPerSecond, scale: zoom) + 4
             }
             if let focusNotice { GameTypography.annotation(focusNotice,
                 at: CGPoint(x: noticeX, y: noticeY)) }

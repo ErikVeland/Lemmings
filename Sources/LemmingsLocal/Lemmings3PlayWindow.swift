@@ -2483,7 +2483,8 @@ import NxlvKit
             var noticeY = top + (badgeSize.height > 0 ? badgeSize.height + 4 : 0)
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
                 noticeY += RewindTransportCue.draw(origin: CGPoint(x: noticeX, y: noticeY),
-                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom) + 4
+                    currentTick: rewindCurrentTick, originTick: origin,
+                    ticksPerSecond: Lemmings3Runtime.ticksPerSecond, scale: zoom) + 4
             }
             assignmentHighlight.drawNotice(at: CGPoint(x: noticeX, y: noticeY))
         }
