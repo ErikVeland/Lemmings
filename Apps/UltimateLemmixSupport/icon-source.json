@@ -28,6 +28,16 @@
       "sha256": "a99c2374fdb8127f082b12b0974553aa7503cc2794ba2ce9a2275523e478c0d2"
     },
     {
+      "path": "Apps/UltimateLemmixIOS/Assets.xcassets/RestoredIcon.appiconset/AppIcon-1024.png",
+      "bytes": 1635916,
+      "sha256": "52f957ee35182675ef4fbe240544de813adea39e874d0ebc942d147d3bc11578"
+    },
+    {
+      "path": "Apps/UltimateLemmixIOS/Assets.xcassets/RestoredIcon.appiconset/Contents.json",
+      "bytes": 208,
+      "sha256": "3c6addf3f20972a12a0c33e6f6fe9e0857a0bdb512dce5d59f4bd007b236c157"
+    },
+    {
       "path": "Apps/UltimateLemmixIOS/Assets.xcassets/StartupLogo.imageset/Contents.json",
       "bytes": 156,
       "sha256": "e66741d5470e98047d4d6efd420d71a7ea086896973569c62f4f6eae63ec12f9"

@@ -37,6 +37,26 @@ final class LaunchTests: XCTestCase {
         XCTAssertTrue(homeCount.exists)
     }
 
+    @MainActor func testNoDataButtonOffersAssetDownload() throws {
+        try XCTSkipUnless(Bundle(for: Self.self).bundleIdentifier?.contains("ultimatelemmix") == true)
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
+        app.launch()
+        let missing = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "No data")).firstMatch
+        XCTAssertTrue(missing.waitForExistence(timeout: 30))
+        let source = app.buttons[missing.identifier]
+        tap(source)
+        assertTarget(app.buttons["menu.gameAssets.agree"])
+        let cancel = app.buttons["menu.gameAssets.cancel"]
+        assertTarget(cancel)
+        capture(app, name: "Download from No data")
+        tap(cancel)
+        assertTarget(source)
+        XCTAssertFalse(cancel.exists)
+    }
+
     @MainActor func testGameAssetDownloadRequiresALicence() throws {
         try XCTSkipUnless(Bundle(for: Self.self).bundleIdentifier?.contains("ultimatelemmix") == true)
         let app = XCUIApplication()
