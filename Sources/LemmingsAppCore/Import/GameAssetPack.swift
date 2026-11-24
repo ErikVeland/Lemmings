@@ -94,7 +94,7 @@ public actor GameAssetPack {
               try MusicLibraryStore.hash(file) == digest else { throw Failure.invalid }
     }
 
-    private static func installVerifiedArchive<Result>(_ file: URL, install: (URL) throws -> Result) throws -> Result {
+    static func installVerifiedArchive<Result>(_ file: URL, install: (URL) throws -> Result) throws -> Result {
         let archive = try ZipArchive(contentsOf: file)
         let prefix = "Ultimate-Lemmix-Restoration-Game-Assets/Resources/"
         let manager = FileManager.default
