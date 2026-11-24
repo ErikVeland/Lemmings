@@ -57,6 +57,37 @@ final class LaunchTests: XCTestCase {
         XCTAssertFalse(cancel.exists)
     }
 
+    /// Downloads the real asset pack. Set LEMMINGS_TEST_ASSET_DOWNLOAD=1 in the test plan environment to run it.
+    @MainActor func testGameAssetDownloadInstallsAndSurvivesRelaunch() throws {
+        try XCTSkipUnless(Bundle(for: Self.self).bundleIdentifier?.contains("ultimatelemmix") == true)
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["LEMMINGS_TEST_ASSET_DOWNLOAD"] == "1")
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
+        app.launch()
+        let missing = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "No data")).firstMatch
+        XCTAssertTrue(missing.waitForExistence(timeout: 30))
+        tap(app.buttons["menu.settings"])
+        tap(app.buttons.matching(NSPredicate(format: "identifier IN %@", ["menu.data", "data"])).firstMatch)
+        tap(app.buttons["menu.download.gameAssets"])
+        tap(app.buttons["menu.gameAssets.agree"])
+        let progress = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@", "Downloading")).firstMatch
+        XCTAssertTrue(progress.waitForExistence(timeout: 30))
+        capture(app, name: "Asset Download Progress")
+        XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@ OR label CONTAINS %@", "Next:", "Turn:")).firstMatch.exists, "Game Data shows a player turn")
+        let settings = app.buttons["menu.settings"]
+        XCTAssertTrue(settings.waitForExistence(timeout: 900), "The asset install did not return Home")
+        XCTAssertFalse(app.staticTexts.matching(NSPredicate(format: "label CONTAINS[c] %@", "failed verification")).firstMatch.exists)
+        XCTAssertFalse(missing.waitForExistence(timeout: 5), "A game still reports No data after the install")
+        capture(app, name: "Home After Asset Install")
+        app.terminate()
+        app.launch()
+        XCTAssertTrue(settings.waitForExistence(timeout: 30))
+        XCTAssertFalse(missing.waitForExistence(timeout: 5), "The installed assets did not survive a relaunch")
+        capture(app, name: "Home After Relaunch")
+    }
+
     @MainActor func testGameAssetDownloadRequiresALicence() throws {
         try XCTSkipUnless(Bundle(for: Self.self).bundleIdentifier?.contains("ultimatelemmix") == true)
         let app = XCUIApplication()
