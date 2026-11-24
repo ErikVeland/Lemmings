@@ -144,8 +144,8 @@ public enum MobileSettingsGroup: String, CaseIterable, Codable, Sendable {
     public var title: String {
         switch self {
         case .gameplay: L10n.text("Gameplay")
-        case .controller: L10n.text("Controller")
-        case .graphics: L10n.text("Graphics")
+        case .controller: L10n.text("Controls")
+        case .graphics: L10n.text("Artwork")
         case .display: L10n.text("Display")
         case .audio: L10n.text("Audio")
         case .accessibility: L10n.text("Accessibility")

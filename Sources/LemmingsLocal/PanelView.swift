@@ -290,7 +290,11 @@ enum PanelButton: Equatable {
     panelScale = 2
     panelFrame = CGRect(x: deckX, y: 0, width: available, height: metrics.height - statusStripHeight)
     let timelineInRow = available >= 504
-    let mapWidth = min(800, max(0, available - (timelineInRow ? 0 : 140)))
+    let tierWidth = bounds.width >= 700 ? timeline.tierWidth : 0
+    let tierSpace = tierWidth > 0 ? tierWidth + 8 : 0
+    let mapWidth = min(800, max(0, available - tierSpace - (timelineInRow ? 0 : 140)))
+    timeline.tierFrame = tierWidth > 0
+      ? CGRect(x: deckX + mapWidth + 8, y: 4, width: tierWidth, height: 44) : .zero
     minimapFrame = CGRect(x: deckX, y: 4, width: mapWidth, height: 44)
     let skillY: CGFloat = 60
     let nukeWidth: CGFloat = metrics.inline ? 104 : 64
@@ -362,6 +366,7 @@ enum PanelButton: Equatable {
   }
 
   private func layoutTimeline() {
+    timeline.tierFrame = .zero
     let height = min(24 * max(1, panelScale / 2), minimapFrame.height * 0.6)
     timeline.frame = CGRect(x: minimapFrame.minX, y: minimapFrame.maxY - height, width: minimapFrame.width, height: height)
     minimapFrame.size.height -= height + 2

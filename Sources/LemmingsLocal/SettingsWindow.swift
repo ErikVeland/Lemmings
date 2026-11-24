@@ -118,9 +118,9 @@ import NxlvKit
     let tabs = GameTabs()
     tabs.onSelectionChanged = { [weak self] in self?.help.dismiss() }
     tabs.addTabViewItem(tab(L10n.text("Gameplay"), gameplayPane()))
-    tabs.addTabViewItem(tab(L10n.text("Controller"), controllerPane()))
-    tabs.addTabViewItem(tab(L10n.text("Graphics"), graphicsPane()))
-    tabs.addTabViewItem(tab(L10n.text("Video"), videoPane()))
+    tabs.addTabViewItem(tab(L10n.text("Controls"), controllerPane()))
+    tabs.addTabViewItem(tab(L10n.text("Artwork"), graphicsPane()))
+    tabs.addTabViewItem(tab(L10n.text("Display"), videoPane()))
     tabs.addTabViewItem(tab(L10n.text("Audio"), audioPane()))
     tabs.addTabViewItem(tab(L10n.text("Accessibility"), accessibilityPane()))
     tabs.addTabViewItem(tab(L10n.text("Privacy"), privacyPane()))

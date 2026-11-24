@@ -59,15 +59,17 @@ public enum MobileCareerArt {
 
     public static func savedHotSeats(_ profiles: MobileProfiles, sessions: [MobileHotSeat],
                                      subtitle: String, backID: String) -> GameFrontEnd.Page {
-        let rows = sessions.map { seat -> GameFrontEnd.Action in
+        var rows = sessions.map { seat -> GameFrontEnd.Action in
             let names = seat.players.map { id in
                 profiles.players.first { $0.id == id }?.name ?? L10n.text("Player")
             }.joined(separator: " + ")
             let date = seat.savedAt == .distantPast ? "" : "\n" + seat.savedAt.formatted(date: .abbreviated, time: .shortened)
             return .init("seatResume." + seat.id, names + date)
         }
+        // The newest session is the likely choice. A new one is always available beside Back.
+        if !rows.isEmpty { rows[0].primary = true }
         return .init(title: L10n.text("Saved Hot Seats"), subtitle: subtitle, rows: rows,
-            footer: [.init(backID, L10n.text("Back"))])
+            footer: [.init(backID, L10n.text("Back")), .init("seatFresh", L10n.text("New Hot Seat"))])
     }
 
     public static func hotSeat(_ profiles: MobileProfiles, subtitle: String, roster: MobileHotSeatRoster,
