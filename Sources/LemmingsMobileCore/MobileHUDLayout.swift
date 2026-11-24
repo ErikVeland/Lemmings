@@ -36,6 +36,31 @@ public struct MobileHUDLayout: Equatable, Sendable {
         public let minimap: CGRect
     }
     public var portrait: Portrait? = nil
+    public private(set) var speedTiers: [Double] = []
+    public private(set) var speedTierFrame = CGRect.zero
+
+    public func addingSpeedTiers(_ tiers: [Double]) -> Self {
+        guard let portrait, !tiers.isEmpty, speedTierFrame.isEmpty else { return self }
+        let map = portrait.minimap
+        let cell: CGFloat = 44
+        let stripWidth = CGFloat(tiers.count) * cell
+        let fitsStrip = interface.safeFrame.width >= 700 && map.width - stripWidth - 4 >= max(220, map.width / 2)
+        let width: CGFloat = fitsStrip ? stripWidth : 64
+        let mapWidth = map.width - width - 4
+        guard map.height >= cell, mapWidth >= 120 else { return self }
+        let frame = CGRect(x: map.maxX - width, y: floor(map.midY - cell / 2), width: width, height: cell)
+        let region = MobileRect(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height)
+        guard !reservedRegions.contains(where: { $0.frame.intersects(region) }),
+              !interface.controlFrames.contains(where: { $0.intersects(region) }) else { return self }
+        var layout = self
+        layout.speedTiers = fitsStrip ? tiers : []
+        layout.speedTierFrame = frame
+        layout.portrait = Portrait(skills: portrait.skills, skillContentWidth: portrait.skillContentWidth,
+                                   rateValue: portrait.rateValue,
+                                   minimap: CGRect(x: map.minX, y: map.minY, width: mapWidth, height: map.height))
+        return layout
+    }
+
     public var minimapFrame: CGRect? {
         if let portrait { return portrait.minimap }
         guard panel?.style != .lemmings3 else { return nil }
