@@ -253,6 +253,21 @@ one failure outside audio: the learning journey has no usable hint replay for
 `Mienrs <--- lol, typo`. All 12 audio tests pass in that full run.
 No audible playback test was run.
 
+## Attempt music ownership
+
+| Destination | Music owner |
+| --- | --- |
+| Home and browsing | The configured menu theme, subject to the menu music preference. |
+| Preview, fresh countdown and Hot Seat Ready | No new level track. The incoming attempt waits for live play. |
+| Live attempt | The level assignment for this attempt, including its selected soundtrack. |
+| Pause and resume | The same attempt retains its existing pause transport. |
+| Win or loss | The outgoing music decks fade once over 0.6 seconds, then stop. Result notes and rescue effects keep their own gain. |
+| Retry or next level | Retire any result fade before handing the decks to the next attempt. |
+| Back during a fade | Retire the outgoing music before selecting the destination theme. |
+
+Tempo and filter recovery after the final nuke pop continue independently of the output gain.
+Completing that recovery does not select a track or resume a stopped transport.
+
 ## Music after a nuke
 
 The development build separates funeral tempo from the failed-run visual

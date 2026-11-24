@@ -29,10 +29,15 @@ public enum MobileInformationArt {
         page.reading = true
         return page
     }
-    public static func telemetryConsent() -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: L10n.text("Share counts and records?"), details: [L10n.text("Opted-in installs"), L10n.text("Daily use"), L10n.text("Level results"), L10n.text("Saved lemmings"),
-              L10n.text("Solo / Hot Seat"), L10n.text("Soundtrack use"), L10n.text("Public: initials, scores and action replays."), L10n.text("Service sees IP")],
-              footer: [.init("telemetryNo", L10n.text("Not now")), .init("telemetryYes", L10n.text("Share"), primary: true)], footerColumns: 2)
+    /// Asked after the player has a profile, when the worldwide total means something to them.
+    /// States each practical consequence once. The full list stays in Settings > Privacy.
+    public static func telemetryConsent(worldwide: String = "") -> GameFrontEnd.Page {
+        var page = GameFrontEnd.Page(title: L10n.text("Join the count?"), subtitle: worldwide,
+              details: [L10n.text("Your rescues add to the worldwide total."),
+                        L10n.text("Your initials, scores and replays can appear on public leaderboards."),
+                        L10n.text("Anonymous play counts show which levels need work. The service sees your network address."),
+                        L10n.text("Change this later in Settings > Privacy.")],
+              footer: [.init("telemetryNo", L10n.text("Not now")), .init("telemetryYes", L10n.text("Join"), primary: true)], footerColumns: 2)
         page.backActionID = "telemetryNo"
         return page
     }

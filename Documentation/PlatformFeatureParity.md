@@ -1,27 +1,29 @@
 # Cross-platform feature parity
 
-## First player profile — 21 November 2026
+## First profile, Home and gameplay HUD — 24 November 2026
 
-On Mac, iPhone, iPad, Duo and Apple TV, **Create profile** asks new players to
-choose a portrait and initials beside the worldwide rescue count. Play opens Classic Fun 1 in Ultimate
-Lemmings or the first bundled starter puzzle in Ultimate Lemmix. Returning players
-open Home. If the count service is unavailable, a dash takes the place of the
-count and the player can continue. Sharing stays off until the player enables it.
-Home shows local and worldwide rescues beneath the logo on iPhone, iPad and Duo.
-Apple TV shows the counts in its Home status area. The public total refreshes
-once a minute while Home or Create profile is visible in the foreground. An iPhone
-simulator showed both Home counts after profile creation and relaunch with sharing
-off. Offscreen checks covered the counter with and without a worldwide total,
-including touch targets and hinge clearance on Duo.
+| Player task | Shared behaviour | Verification |
+| --- | --- | --- |
+| Start or resume | Home presents one session-specific primary action and Play, Hot Seat, Profile and Community. Play contains the game families and collections. Profile contains personal records and cloud saves. Community shows the worldwide rescue count. | Mac bitmap controls, mouse and keyboard selection, mobile menu renders and the selected-session resolver. |
+| First play | Save the local initials and portrait, then offer participation if the service is configured and the player has no saved choice. Either answer continues. The original game or open starter depends on the product and available assets. | An isolated Mac profile and consent page accepted initials and declined sharing with an offline transport. Reopening the stores retained both choices. Mobile profile controls were rendered at phone, iPad, Duo and TV sizes. |
+| Inspect a moving level | Status fields occupy measured slots. The release-rate controls govern emergence. The transport displays the current simulation multiplier. | Classic, L2 and L3 engine-backed before/after renders. Four count snapshots per engine had identical after-rectangles. A one-skill NeoLemmix Redux level ran to tick 100 with unchanged control targets at three sizes. |
+| Finish an attempt | The outgoing music fades for 0.6 seconds. A new attempt waits for live play. Results effects have their own output. | Muted fade ownership and cancellation checks. See [Audio coverage](AudioCoverage.md). |
 
-Offscreen checks cover phone, iPad, folded Duo and TV layouts, including portrait
-selection, empty initials, an unavailable count and loading. TV migration checks
-cover existing rosters and checkpoints. A muted Mac check started Fun 1 and First
-Steps from profile setup. On an isolated iPhone simulator, the live counter appeared
-before consent. Selecting a portrait and initials, playing, then relaunching opened
-Home with the same player and a Resume Level action. The simulator UI test runner
-stalled during startup. The iPhone check used native controls in the installed app.
-Physical-device input remains unverified.
+The shipping Apple TV entry point uses the shared mobile frontend. TV controller bindings, focus layout and handover tests run without a physical remote. The optional controller that accepts custom TV source folders has its own menus. Mobile hardware, VoiceOver, full app launches and audible quality need separate acceptance. See [the redesign evidence](UXRedesign.md#implementation-and-verification--24-november-2026).
+
+## Speed selection and skill supply
+
+iPhone, iPad and Duo offer exact speed selection from the pause menu. Apple TV
+offers the same bitmap page under Game controls and restores focus to Speed on
+return. Fixed mode offers the session’s normal and fast multipliers. Variable
+mode offers 1×, 2×, 3×, 5× and 10×, with 25× when enabled. The shared mobile HUD
+displays the chosen tier throughout the clock ramp and removes the arrow hit
+targets in fixed mode. Native Mac shows the tier through its existing socket.
+
+Classic, L2, L3 and supported NeoLemmix use the shared mobile skill supply
+state. A zero count with the unlimited flag retains full icon brightness in
+the adaptive HUD. Read-only playback dims skills. Physical touch, Siri Remote
+focus, VoiceOver and older-device timing require hardware acceptance.
 
 ## Mac fast-forward and skill input — 21 November 2026
 

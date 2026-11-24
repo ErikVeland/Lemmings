@@ -34,6 +34,41 @@ final class StatusStripRenderTests: XCTestCase {
         return ((rows.last ?? 0) - (rows.first ?? 0) + 1) / max(1, scale)
     }
 
+    @MainActor func testSpeedAndRateMouseTargetsStayFixed() throws {
+        _ = NSApplication.shared
+        let panel = PanelView(frame: CGRect(x: 0, y: 0, width: 1120, height: 150))
+        panel.isMenuMode = false
+        panel.variableSpeedEnabled = true
+        var event = ""
+        panel.onButton = { event = String(describing: $0) }
+        panel.onSpeedPress = { _, _ in event = "speed" }
+        panel.onSpeedStep = { direction, _ in event = String(direction) }
+        var reference: [CGRect]?
+        for multiplier in ["1×", "10×", "25×"] {
+            panel.speedLabel = multiplier
+            let elements = panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+            var frames: [CGRect] = []
+            for (name, expected) in [("Game speed " + multiplier, "speed"), ("Decrease fast speed", "-1"), ("Increase fast speed", "1"),
+                                     ("Decrease release rate", "rateDown"), ("Increase release rate", "rateUp"), ("Pause", "pause")] {
+                let frame = try XCTUnwrap(elements.first { $0.accessibilityLabel() == name }, name).localFrame
+                frames.append(frame)
+                for x in [frame.minX + 0.25, frame.midX, frame.maxX - 0.25] {
+                    for y in [frame.minY + 0.25, frame.midY, frame.maxY - 0.25] {
+                        event = ""
+                        panel.handlePointerDown(at: CGPoint(x: x, y: y), time: 1)
+                        panel.handlePointerUp(time: 1.01)
+                        XCTAssertEqual(event, expected, name)
+                    }
+                }
+            }
+            if let reference { XCTAssertEqual(frames, reference) } else { reference = frames }
+        }
+        event = ""
+        panel.handlePointerDown(at: CGPoint(x: 1, y: 1))
+        panel.handlePointerUp()
+        XCTAssertEqual(event, "")
+    }
+
     @MainActor func testPixelFallbackUsesDoubleScaleWhenTheLineFits() throws {
         XCTAssertGreaterThanOrEqual(try inkHeight(artwork: nil, name: "pixel-fallback"), 14)
     }

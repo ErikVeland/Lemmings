@@ -361,6 +361,8 @@ public final class ClassicMobileSession: MobileGameSession {
         simulation.isComplete || (isReadOnly && playbackEndTick.map { simulation.tickCount >= $0 } == true)
     }
 
+    public var maximumHUDSeconds: Int? { levelInitial.remainingTimeSeconds }
+
     public var snapshot: MobileGameSnapshot {
         MobileGameSnapshot(
             tick: simulation.tickCount,

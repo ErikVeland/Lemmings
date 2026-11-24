@@ -70,6 +70,17 @@ extension MobileLibraryViewController {
         profiles.setPortrait(profiles.activeID, to: draftPortrait)
         guard saveProfiles() else { profiles = previous; rebuild(); return }
         UserDefaults.standard.set(true, forKey: Self.firstPlayerCompleteKey)
+        // Community participation is offered only once the player has an identity.
+        if AnonymousTelemetry.shared.sharingAvailable, !AnonymousTelemetry.shared.consentDecided {
+            firstLevelAfterConsent = true
+            navigate(.telemetryConsent)
+            return
+        }
+        playFirstLevel()
+    }
+
+    func playFirstLevel() {
+        firstLevelAfterConsent = false
         if let pack = firstPlayerPack {
             openPack(pack, back: .home, play: 0)
         } else if library?.levels.isEmpty == false {
@@ -88,10 +99,14 @@ extension MobileLibraryViewController {
         MobileInformationArt.whatsNew(version: mobileVersion)
         #endif
     }
-    func telemetryConsentPage() -> GameFrontEnd.Page { MobileInformationArt.telemetryConsent() }
+    func telemetryConsentPage() -> GameFrontEnd.Page {
+        MobileInformationArt.telemetryConsent(worldwide: SavedLemmingsCounter.worldwideText(worldwideSavedTotal))
+    }
     func handleWelcome(_ id: String) -> Bool {
         switch id {
-        case "whatsNew": navigate(.whatsNew)
+        case "whatsNew":
+            whatsNewReturn = route == .whatsNew ? whatsNewReturn : route
+            navigate(.whatsNew)
         case "welcomeOriginal", "welcomeModern":
             var saved = mobileSettings
             saved.applyExperiencePreset(modern: id == "welcomeModern")
@@ -104,10 +119,12 @@ extension MobileLibraryViewController {
             tvBuildInfo.acknowledge(in: .standard)
             #endif
             UserDefaults.standard.set(mobileBuild, forKey: "mobile.whatsNew.seenBuild")
-            navigate(.home)
+            let source = whatsNewReturn ?? .home
+            whatsNewReturn = nil
+            navigate(source)
         case "telemetryYes", "telemetryNo":
             AnonymousTelemetry.shared.setSharing(id == "telemetryYes")
-            navigate(.home)
+            if firstLevelAfterConsent { playFirstLevel() } else { navigate(.home) }
         default: return false
         }
         return true

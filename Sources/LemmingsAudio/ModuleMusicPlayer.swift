@@ -622,6 +622,8 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
 
   // MARK: - Controls
 
+  func setResultGain(_ value: Float) { outputMixer.outputVolume = value }
+
   /// Sets the output level, from silent to full.
   public func setVolume(_ value: Double) {
     lock.lock()

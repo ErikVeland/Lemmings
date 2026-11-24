@@ -179,7 +179,7 @@ import LemmingsAppCore
     }
     guard let made = MusicFileDeck(url: url, rhythmURL: MusicLibrary.rhythmURL(for: url),
       profile: Self.playbackProfile(for: url), originalMix: originalMix) else { return nil }
-    made.volume = muted ? 0 : volume
+    made.volume = muted ? 0 : volume * resultGain
     made.playbackRate = playbackRate
     made.setSpeedPitch(speedPitch)
     made.setNukeAmount(nukeAmount)
@@ -272,9 +272,11 @@ import LemmingsAppCore
     player?.setNukeAmount(amount)
   }
 
+  var resultGain: Float = 1 { didSet { player?.volume = muted ? 0 : volume * resultGain } }
+
   public func setVolume(_ value: Double) {
     volume = Float(min(1, max(0, value)))
-    player?.volume = muted ? 0 : volume
+    player?.volume = muted ? 0 : volume * resultGain
   }
 
   public func playRewind() { player?.playRewind() }
@@ -291,7 +293,7 @@ import LemmingsAppCore
 
   public func setMuted(_ value: Bool) {
     muted = value
-    player?.volume = muted ? 0 : volume
+    player?.volume = muted ? 0 : volume * resultGain
   }
 
   public var isPlaying: Bool { player?.isPlaying == true }

@@ -104,7 +104,7 @@ import LemmingsAppCore
     private var snapshot: MobileGameSnapshot?
     private var selectedSkill = 0
     private var paused = true
-    private var speed = 1.0
+    private(set) var speed = 1.0
     private var endRunArmed = false
     var skillIcons: [CGImage?] = [] { didSet { setNeedsDisplay(); skillCanvas.setNeedsDisplay() } }
     var counterStyle: ClassicCounterStyle = .game { didSet { if oldValue != counterStyle { setNeedsDisplay() } } }
@@ -342,6 +342,7 @@ import LemmingsAppCore
                 button.frame = inputFrame
             }
             button.accessibilityLabel = GamePresentationText.display(item.accessibilityLabel)
+            if item.action == .speed { button.accessibilityHint = speed > 1 ? L10n.text("Return to normal speed") : L10n.text("Fast-forward") }
             button.accessibilityTraits = item.action == .skill(selectedSkill)
                 ? [.button, .selected] : .button
             button.isEnabled = isEnabled(item.action)

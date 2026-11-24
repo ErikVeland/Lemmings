@@ -51,7 +51,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
     /// Whole-number scale of the panel art inside the touch grid used on narrow screens. Zero beside a panel.
     public let compactScale: CGFloat
     /// The slower and faster arrows over the speed control.
-    public let speedArrows: [CGRect]
+    public private(set) var speedArrows: [CGRect]
 
     /// The panel keeps its Mac layout on wide screens. A narrow screen keeps touch-sized cells.
     public var canPlay: Bool { !interface.controlFrames.isEmpty && interface.playfieldFrame.height >= 88 }
@@ -70,7 +70,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
                             hasPlayer: Bool = false, engineIdentifier: String = "classic",
                             showsMenuButton: Bool = true, television: Bool = false,
                             topBarInsets: MobileInsets = .init(), navigationRail: MobileRect? = nil,
-                            fillsDisplayWidth: Bool = false, menuLeading: Bool = false) -> MobileHUDLayout {
+                            fillsDisplayWidth: Bool = false, menuLeading: Bool = false, variableSpeed: Bool = true) -> MobileHUDLayout {
         let systemRegions = reservedRegions
         let reservedRegions = fillsDisplayWidth ? reservedRegions.filter { $0.kind == .division } : reservedRegions
         let deckSafeArea = fillsDisplayWidth && container.height > container.width
@@ -118,6 +118,7 @@ public struct MobileHUDLayout: Equatable, Sendable {
             let clear = MobileDisplayRegions.clearHorizontalFrame(header, avoiding: systemRegions)
             headerInsets = MobileInsets(left: clear.minX - header.minX, right: header.maxX - clear.maxX)
         }
+        if !variableSpeed { layout.speedArrows = [] }
         guard !showsMenuButton else { return insettingHeader(layout, by: headerInsets, menuLeading: menuLeading) }
         let original = layout.interface
         // Console navigation comes from Back or Options/Menu, with no HUD target.
