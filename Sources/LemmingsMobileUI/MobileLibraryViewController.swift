@@ -981,7 +981,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let hidePlayerName = route == .firstPlayer || route == .data || (route == .home && hotSeat == nil) || (route == .players && renamingPlayer)
         canvas.playerName = hidePlayerName ? nil : playerName(hotSeat?.turn ?? profiles.activeID)
         unfold.stop()
-        let count = library?.levels.count ?? 0
         let subtitle = loading ? L10n.text("Loading...") : notice
         switch route {
         case .home:
@@ -1240,14 +1239,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if next != .familiarNames { familiarNames.clear() }
         if route == .language && next != .language { finishLanguageSelection(apply: false) }
         confirmingRecordsReset = false
-        #if os(tvOS)
         // The launch notice must not cancel the library and saved-run load beneath it.
-        let welcomeRoutes: [Route] = [.home, .support, .whatsNew, .effectsWelcome, .telemetryConsent]
+        let welcomeRoutes: [Route] = [.firstPlayer, .home, .support, .whatsNew, .effectsWelcome, .telemetryConsent]
         let preserveWelcomeLoad = library == nil && libraryTask != nil
             && welcomeRoutes.contains(route) && welcomeRoutes.contains(next)
-        #else
-        let preserveWelcomeLoad = false
-        #endif
         if next == .hotSeat, hotSeatRoster == nil {
             hotSeatRoster = MobileHotSeatRoster(host: profiles.activeID, players: defaultHotSeatPlayers)
         }
@@ -1293,7 +1288,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             let homeAction = gameAssetHomeAction
             gameAssetHomeAction = nil
             if id == "gameAssets.cancel", let homeAction {
-                navigate(.home)
+                navigateToBrowseRoot()
                 canvas.focusAction(homeAction)
                 return
             }
@@ -1594,7 +1589,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     func goBack() {
         guard game == nil, !deskClockBlocksInput else { return }
         if searchField.isFirstResponder { searchField.resignFirstResponder(); rebuild(); return }
-        if browserShown { navigate(levelsBackRoute) } else { canvas.goBack() }
+        if browserShown { handle("back") } else { canvas.goBack() }
     }
     #if os(iOS)
     @objc private func edgeBack(_ gesture: UIScreenEdgePanGestureRecognizer) {
@@ -2206,8 +2201,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                           forKey: self.progressKey(for: pack, fallback: self.library?.displayName ?? "classic"))
                 self.arcadeStore.notifyProgressChanged()
             }
-            next.onExit = { [weak self] action in
-                guard let self else { return }
+            next.onExit = { [weak self, weak next] action in
+                guard let self, let next, self.game === next else { return }
+                MobileMusic.shared.retireAttempt(next.runID)
                 switch action {
                 case .library, .menu:
                     self.previewTask?.cancel(); self.previewGeneration = UUID()

@@ -25,7 +25,7 @@ enum PanelButton: Equatable {
 
   var session: (any GameSession)? {
     didSet {
-      if oldValue !== session { nukeGesture.reset(); needsDisplay = true; window?.invalidateCursorRects(for: self) }
+      if oldValue !== session { clockLimitSeconds = session?.remainingSeconds; gameplayStatus = nil; nukeGesture.reset(); needsDisplay = true; window?.invalidateCursorRects(for: self) }
       toolTip = nil
     }
   }
@@ -42,6 +42,10 @@ enum PanelButton: Equatable {
   var onSpeedStep: ((Int, TimeInterval) -> Void)?
   private var speedPointerDown = false
   var onSpeedClick: ((TimeInterval, Int) -> Void)?
+  private(set) var clockLimitSeconds: Int?
+  var gameplayStatus: (MobileGameSnapshot, MobileHUDRenderer.StatusDetails)?
+  private weak var measuredInterface: MacInterfaceRenderer?
+  private var statusTypography: GameMenuTypography?
   var statusText = "" { didSet { if oldValue != statusText { needsDisplay = true } } }
   /// Right-hand half of the status strip. Tells the player where they are in the
   /// journey at a glance: rank position, rescue progress against the target and
@@ -191,10 +195,10 @@ enum PanelButton: Equatable {
         label = L10n.text("\(SkillVocabulary.title(value.name)), \(remaining)\((selectedSkillIndex == skill ? L10n.text(", selected") : ""))")
       case .pause: label = isPaused ? L10n.text("Resume") : L10n.text("Pause")
       case .nuke: label = session?.canUndoNuke == true ? L10n.text("Undo end run") : L10n.text("End run")
-      case .fastForward: label = isFastForward ? L10n.text("Return to normal speed") : L10n.text("Start fast-forward at ") + speedChoiceLabel
+      case .fastForward: label = L10n.text("Game speed \(speedLabel)")
       }
       let action = item.0
-      let element = accessibleElements.element(id: "button-\(index)", owner: owner, label: label, frame: transform(item.1)) { [weak self] in
+      let element = accessibleElements.element(id: "button-\(index)", owner: owner, label: label, frame: transform(action == .fastForward && variableSpeedEnabled ? SpeedPanelArt.boxes(in: item.1)[1] : item.1)) { [weak self] in
         guard let self, self.isEnabled(action) else { return }
         if action == .fastForward { self.onSpeedClick?(ProcessInfo.processInfo.systemUptime, 1) }
         else { self.onButton?(action) }
@@ -596,12 +600,12 @@ enum PanelButton: Equatable {
   }
 
   private func drawSpeedControls() {
-    guard variableSpeedEnabled, let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
+    guard let frame = buttonFrames.first(where: { $0.0 == .fastForward })?.1 else { return }
     // Match the skill sockets' bevel so the speed box reads as the same stone.
     SpeedPanelControls.draw(in: frame, label: speedLabel, active: isFastForward,
       bevelPixel: max(1, panelScale / 2), backdrop: rockImage(fitting: frame.size), monochrome: isMonochrome,
       drawBackground: { [self] in drawStoneButton(frame, selected: isFastForward, button: .fastForward) },
-      textInset: 2,
+      textInset: 2, arrows: variableSpeedEnabled,
       text: { [self] text, box in drawGameLabel(text, in: box, maxPixelScale: .greatestFiniteMagnitude) })
   }
 
@@ -1053,6 +1057,25 @@ enum PanelButton: Equatable {
   private func drawStatus() {
     let y = isMenuMode ? inset : panelFrame.maxY + 4
     let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
+    if !isMenuMode, let (snapshot, details) = gameplayStatus {
+      if measuredInterface !== macInterface {
+        measuredInterface = macInterface
+        statusTypography = measuredInterface.map { GameMenuTypography(interface: $0.interface) }
+      }
+      let locationWidth = box.width >= 900 ? min(320, floor(box.width / 4)) : 0
+      let stats = CGRect(x: box.minX, y: box.minY, width: box.width - locationWidth, height: box.height)
+      let fields = MobileHUDRenderer.statusFields(in: stats, snapshot: snapshot, details: details,
+        engineIdentifier: details.engineIdentifier, paused: isPaused,
+        speed: Double(speedLabel.replacingOccurrences(of: "×", with: "")) ?? 1, typography: statusTypography)
+      for field in fields {
+        drawStatusField(field.text, in: field.frame, scale: field.scale, face: field.face)
+      }
+      if locationWidth > 0 {
+        drawStatusField(progressText, in: CGRect(x: stats.maxX + 8, y: box.minY,
+          width: locationWidth - 8, height: box.height), scale: 1, face: .small)
+      }
+      return
+    }
     let text = gameText(statusText)
     if let macInterface, let font = macInterface.font(.small), font.covers(text), font.height(of: text) <= Int(box.height) {
       macInterface.menuLine(text, in: box, alignment: .left, palette: panelPalette)
@@ -1064,6 +1087,18 @@ enum PanelButton: Equatable {
       NSGraphicsContext.restoreGraphicsState()
     }
     drawProgress(in: box, y: y)
+  }
+
+  private func drawStatusField(_ text: String, in box: CGRect, scale: CGFloat, face: GameMenuTypography.Face) {
+    NSGraphicsContext.saveGraphicsState()
+    defer { NSGraphicsContext.restoreGraphicsState() }
+    NSBezierPath(rect: box).addClip()
+    let text = gameText(text)
+    if let macInterface, let font = macInterface.font(face), font.covers(text), font.height(of: text) <= Int(box.height) {
+      macInterface.menuLine(text, in: box, face: face, alignment: .left, palette: panelPalette)
+    } else {
+      GamePixelText.draw(text, in: box, maxScale: scale, palette: panelPalette, alignment: .left)
+    }
   }
 
   /// GamePixelText fits `width + 1` columns per scale step, so the box must too.

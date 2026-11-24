@@ -68,6 +68,13 @@ public final class GameMenuTypography {
         CGFloat(font(face)?.width(of: GamePresentationText.display(text), scale: scale) ?? 0)
     }
 
+    lazy var smallNumericDigit = widestDigit(.small)
+    lazy var largeNumericDigit = widestDigit(.large)
+
+    private func widestDigit(_ face: Face) -> String {
+        (0...9).map(String.init).max { width(of: $0, face: face, scale: 1) < width(of: $1, face: face, scale: 1) } ?? "8"
+    }
+
     public func height(face: Face, scale: Int) -> CGFloat {
         CGFloat(font(face)?.height(scale: scale) ?? 0)
     }

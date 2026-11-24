@@ -1,4 +1,5 @@
 import Foundation
+import LemmingsGameArt
 import Testing
 import LemmingsMobileCore
 @testable import LemmingsMobileUI
@@ -29,6 +30,36 @@ struct NeoLemmixMobileDataTests {
             #expect(restored.snapshot == session.snapshot)
         }
         #expect(!FileManager.default.fileExists(atPath: store.root.path))
+    }
+
+    @MainActor @Test(.enabled(if: ProcessInfo.processInfo.environment["LEMMINGS_MOBILE_BUNDLED_RESOURCES"] != nil))
+    func fanPanelPreservesTargetsAcrossSpeedAndTimeChanges() throws {
+        let resources = URL(fileURLWithPath: try #require(ProcessInfo.processInfo.environment["LEMMINGS_MOBILE_BUNDLED_RESOURCES"]))
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let library = try NeoLemmixMobileLibrary(directory: resources.appendingPathComponent("NeoLemmix"), storage: .init(directory: root))
+        let resolved = library.styleResolvedLevelIndices
+        let authored = resolved.filter { library.levels[$0].title == "Central Fear" }
+        for index in authored + resolved {
+            guard let level = try? library.loadLevel(at: index), level.session.snapshot.skills.count != 8 else { continue }
+            let session = level.session
+            let initial = session.snapshot
+            for _ in 0..<100 { session.tick() }
+            let frame = try session.render(highlight: nil)
+            #expect(frame.width > 0 && frame.height > 0)
+            for size in [MobileSize(width: 320, height: 568), .init(width: 1024, height: 768), .init(width: 1920, height: 1080)] {
+                let layout = MobileHUDLayout.make(container: size, safeArea: .init(), hasRate: initial.releaseRate != nil,
+                    skillCount: initial.skills.count, supportsRewind: true, hasPlayer: true, engineIdentifier: session.engineIdentifier)
+                let first = MobileHUDRenderer.targets(layout: layout, snapshot: initial, selectedSkill: 0, paused: false, speed: 1, endRunArmed: false)
+                let later = MobileHUDRenderer.targets(layout: layout, snapshot: session.snapshot, selectedSkill: 0, paused: true, speed: 10, endRunArmed: false)
+                #expect(first.map(\.inputFrame) == later.map(\.inputFrame))
+                #expect(later.filter { if case .skill = $0.action { return true }; return false }.count == initial.skills.count)
+                #expect(later.first { $0.action == .speed }?.accessibilityLabel.contains("10") == true)
+            }
+            print("PASS NeoLemmix \(level.summary.title), \(initial.skills.count) skills, tick \(session.snapshot.tick)")
+            return
+        }
+        Issue.record("No supported fan level with a non-classic skill count")
     }
 
     @Test

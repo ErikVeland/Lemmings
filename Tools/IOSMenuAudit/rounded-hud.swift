@@ -64,23 +64,43 @@ extension MenuAudit {
                 let cornerSafe = duo
                     ? MobileInsets(top: max(safe.top, radius), bottom: max(safe.bottom, radius))
                     : MobileInsets(top: safe.top, left: max(safe.left, radius), bottom: safe.bottom, right: max(safe.right, radius))
-                for state in ["running", "paused", "selected-last", "armed", "undo"] {
+                let extraStates = pose == "ipad-wide" ? ["values-9", "values-10", "values-99", "values-100", "supply-empty", "supply-one", "supply-unlimited"] : []
+                for state in ["running", "paused", "selected-last", "armed", "undo", "fixed-speed"] + extraStates {
+                    let counter = state.hasPrefix("values-") ? Int(state.dropFirst(7)) : nil
+                    let speed: Double = (counter ?? 0) < 10 ? 1 : 10
                     let original = session.snapshot
-                    let snapshot = MobileGameSnapshot(tick: original.tick, released: original.released, total: original.total,
-                        saved: original.saved, required: original.required, remainingSeconds: original.remainingSeconds,
-                        releaseRate: original.releaseRate, isComplete: false, didWin: false,
-                        isEndingRun: state == "undo", skills: original.skills)
+                    var supplies = original.skills
+                    if state.hasPrefix("supply-"), let first = supplies.first {
+                        supplies[0] = .init(name: first.name, count: state == "supply-one" ? 1 : 0, isUnlimited: state == "supply-unlimited")
+                    }
+                    let snapshot = MobileGameSnapshot(tick: original.tick, released: counter ?? original.released, total: counter == nil ? original.total : 100,
+                        saved: counter ?? original.saved, required: counter == nil ? original.required : 80, remainingSeconds: counter ?? original.remainingSeconds,
+                        releaseRate: original.releaseRate.map { counter ?? $0 }, isComplete: false, didWin: false,
+                        isEndingRun: state == "undo", skills: supplies)
                     let layout = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
                         engineIdentifier: session.engineIdentifier, topBarInsets: duo ? .init() : clearance, navigationRail: rail,
-                        fillsDisplayWidth: menuLeading, menuLeading: menuLeading)
+                        fillsDisplayWidth: menuLeading, menuLeading: menuLeading, variableSpeed: state != "fixed-speed")
+                    if state == "fixed-speed" {
+                        let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot, selectedSkill: 0,
+                            paused: false, speed: speed, endRunArmed: false)
+                        guard let button = targets.first(where: { $0.action == .speed }), button.inputFrame == button.frame,
+                              !targets.contains(where: { if case .speedStep = $0.action { return true }; return false })
+                        else { throw invalidTargets(line: #line) }
+                    }
                     let baseline = MobileHUDLayout.make(container: size, safeArea: cornerSafe, hasRate: snapshot.releaseRate != nil,
                         skillCount: snapshot.skills.count, reservedRegions: regions, supportsRewind: true, hasPlayer: true,
                         engineIdentifier: session.engineIdentifier, navigationRail: rail, fillsDisplayWidth: menuLeading)
                     let selected = state == "selected-last" ? snapshot.skills.count - 1 : 0
                     let paused = state == "paused"
                     let targets = MobileHUDRenderer.targets(layout: layout, snapshot: snapshot,
-                        selectedSkill: selected, paused: paused, speed: 1, endRunArmed: state == "armed")
+                        selectedSkill: selected, paused: paused, speed: speed, endRunArmed: state == "armed")
+                    if counter != nil {
+                        let fields = MobileHUDRenderer.statusFields(in: MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: true).counters,
+                            snapshot: snapshot, details: nil, engineIdentifier: session.engineIdentifier, paused: paused, speed: speed, typography: typography)
+                        let geometry = fields.map { "\($0.id) \($0.frame)" }.joined(separator: "\n")
+                        try geometry.write(to: output.appendingPathComponent("\(session.engineIdentifier)-\(state).txt"), atomically: true, encoding: .utf8)
+                    }
                     let visibleTargets = targets.filter { item in
                         guard let portrait = layout.portrait, case .skill = item.action else { return true }
                         return portrait.skills.contains(item.inputFrame)
@@ -98,6 +118,22 @@ extension MenuAudit {
                           edgeTargets.enumerated().allSatisfy({ index, frame in
                               edgeTargets.dropFirst(index + 1).allSatisfy { !frame.intersects($0) }
                           }) else { throw invalidTargets(line: #line) }
+                    func action(at point: CGPoint) -> MobileHUDAction? {
+                        edgeTargets.firstIndex(where: { $0.contains(point) }).map { visibleTargets[$0].action }
+                    }
+                    for (item, rect) in zip(visibleTargets, edgeTargets) {
+                        let inner = rect.insetBy(dx: 0.25, dy: 0.25)
+                        for x in [inner.minX, inner.midX, inner.maxX] {
+                            for y in [inner.minY, inner.midY, inner.maxY] {
+                                guard action(at: CGPoint(x: x, y: y)) == item.action else { throw invalidTargets(line: #line) }
+                            }
+                        }
+                        if let neighbour = edgeTargets.filter({ $0.minX > rect.maxX && $0.minY <= rect.midY && $0.maxY > rect.midY }).min(by: { $0.minX < $1.minX }),
+                           !edgeTargets.contains(where: { $0.minX == rect.maxX && $0.minY <= rect.midY && $0.maxY > rect.midY }) {
+                            let gap = CGPoint(x: (rect.maxX + neighbour.minX) / 2, y: rect.midY)
+                            guard action(at: gap) == nil else { throw invalidTargets(line: #line) }
+                        }
+                    }
                     let identity = MobileHUDRenderer.statusFrames(layout: layout, hasPlayer: true)
                     if menuLeading, let menu = targets.first(where: { $0.action == .menu }),
                        menu.frame.maxX + 4 != layout.interface.statusFrame.minX {
@@ -139,7 +175,7 @@ extension MenuAudit {
                               regions.allSatisfy({ !frame.intersects(cg($0.frame)) }) else { throw invalidTargets(line: #line) }
                     }
                     for field in MobileHUDRenderer.statusFields(in: identity.counters, snapshot: snapshot, details: nil,
-                        engineIdentifier: session.engineIdentifier, paused: paused, speed: 1, typography: typography) {
+                        engineIdentifier: session.engineIdentifier, paused: paused, speed: speed, typography: typography) {
                         guard fits(field.frame), identity.counters.contains(field.frame) else { throw invalidTargets(line: #line) }
                     }
                     let context = try bitmapContext(size: bounds.size)
@@ -154,13 +190,36 @@ extension MenuAudit {
                         context.saveGState(); context.translateBy(x: field.minX, y: field.minY)
                         MobileBitmapRenderer.draw(image, viewport: viewport, in: context); context.restoreGState()
                     }
-                    MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selected, paused: paused, speed: 1,
+                    MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: selected, paused: paused, speed: speed,
                         endRunArmed: state == "armed", panelImage: panel, typography: typography, skillIcons: icons, playerName: "PLA", shape: .rounded,
                         duoCorners: !pose.hasPrefix("ipad-"), displayBounds: bounds)
                         .draw(in: context, bounds: bounds)
                     context.restoreGState()
                     for region in regions { context.setFillColor(CGColor(gray: 0.15, alpha: 1)); context.fill(cg(region.frame)) }
                     try save(context: context, to: output.appendingPathComponent("\(session.engineIdentifier)-\(pose)-\(state).png"))
+                    captures += 1
+                }
+            }
+        }
+        for (mode, expected) in [("fixed", [1, 3]), ("variable", [1, 2, 3, 5, 10]), ("extended", [1, 2, 3, 5, 10, 25])] {
+            var speed = GameplaySpeed()
+            speed.variableEnabled = mode != "fixed"
+            speed.ridiculousEnabled = mode == "extended"
+            for tier in expected {
+                speed.select(Double(tier), at: 0)
+                let page = SpeedPanelArt.selectionPage(speed)
+                guard page.rows.map(\.id) == expected.map(String.init),
+                      page.rows.filter(\.selected).map(\.id) == [String(tier)], page.backAction?.id == "back"
+                else { throw invalidTargets(line: #line) }
+                for width in [320, 960] {
+                    let layout = GameFrontEnd.layout(page, width: CGFloat(width), minimumHeight: 540)
+                    for target in layout.targets {
+                        guard layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)) == target.action.id
+                        else { throw invalidTargets(line: #line) }
+                    }
+                    let context = try bitmapContext(size: layout.size)
+                    GameFrontEnd.draw(page, layout: layout, typography: typography, highlighted: String(tier), in: context)
+                    try save(context: context, to: output.appendingPathComponent("speed-\(mode)-\(tier)-\(width).png"))
                     captures += 1
                 }
             }

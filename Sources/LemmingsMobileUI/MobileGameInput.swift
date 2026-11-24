@@ -373,7 +373,8 @@ extension MobileGameViewController {
         inputSpeed.update(at: now)
         let changed = speed != inputSpeed.multiplier
         speed = inputSpeed.multiplier; clock.speed = speed
-        if changed { updatePerformanceBudget(); updateHUD() }
+        if changed { updatePerformanceBudget() }
+        if changed || hud.speed != inputSpeed.target { updateHUD() }
     }
     func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false, soundtrack: Bool = false, insights: Bool = false,
                             language: Bool = false, returningTo caller: (() -> Void)? = nil, preservingPosition: Bool = false) {

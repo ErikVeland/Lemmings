@@ -15,7 +15,7 @@ for module in "${sdk_modules[@]}"; do
   rm -rf "$build_dir/Sources/$module"
   cp -R "$project_dir/Sources/$module" "$build_dir/Sources/$module"
 done
-cp "$project_dir/Apps/$application/AppDelegate.swift" "$build_dir/Sources/AppDelegate.swift"
+cp "$project_dir"/Apps/SharedAppleMobile/{AppDelegate,LaunchURL}.swift "$build_dir/Sources/"
 python3 - "$build_dir/Sources" "$build_dir/inputs.json" <<'PY'
 import hashlib, json, pathlib, sys
 root = pathlib.Path(sys.argv[1])
@@ -35,5 +35,5 @@ for module in "${sdk_modules[@]}"; do
 done
 swiftc -swift-version 6 -parse-as-library -target "$target" -sdk "$sdk" \
   -module-cache-path "$build_dir/ModuleCache" -I "$build_dir/Modules" \
-  -typecheck "$build_dir/Sources/AppDelegate.swift"
+  -typecheck "$build_dir"/Sources/{AppDelegate,LaunchURL}.swift
 print "PASS $application application entry point"
