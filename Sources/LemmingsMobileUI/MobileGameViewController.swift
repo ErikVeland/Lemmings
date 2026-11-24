@@ -854,7 +854,7 @@ typealias MobileGameControllerBase = UIViewController
             fillsDisplayWidth: MobileSystemRegions.usesFullDisplay(in: view),
             menuLeading: MobileSystemRegions.isFoldable(in: view),
             variableSpeed: gameSettings.classic.variableSpeedEnabled
-        )
+        ).addingSpeedTiers(inputSpeed.variableEnabled && !session.isReadOnly ? inputSpeed.availableSteps : [])
     }
 
     func handle(_ action: MobileHUDAction) {
@@ -922,6 +922,25 @@ typealias MobileGameControllerBase = UIViewController
             inputSpeed.ridiculousEnabled = gameSettings.classic.ridiculousSpeedEnabled
             inputSpeed.tap(at: ProcessInfo.processInfo.systemUptime)
             updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
+        case .speedPicker:
+            let wasRunning = playState.phase == .running
+            pauseForPlanning(preservingCountdown: true)
+            showSpeedSelection { [weak self] in
+                guard let self, playState.phase == .planning, lifecycle.isForeground,
+                      !lifecycle.isInterrupted, !lifecycle.requiresPlayerResume, !deskClockVisible else { return }
+                if wasRunning { resumePlay(offerSkillSelectionChoice: false) }
+                else {
+                    revealGameplayHUD()
+                    updateHUD()
+                    view.setNeedsLayout()
+                }
+                UIAccessibility.post(notification: .screenChanged, argument: hud.speedPickerButton)
+            }
+        case let .speedTier(tier):
+            guard inputSpeed.variableEnabled, !session.isReadOnly else { return }
+            let now = ProcessInfo.processInfo.systemUptime
+            inputSpeed.select(tier, at: now)
+            updateInputSpeed(at: now)
         case let .speedStep(direction):
             inputSpeed.step(direction, at: ProcessInfo.processInfo.systemUptime)
             updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
@@ -1672,11 +1691,13 @@ typealias MobileGameControllerBase = UIViewController
         overlayCanvas.page.detailTitles = [1]
     }
 
-    func pauseForPlanning() {
+    func pauseForPlanning(preservingCountdown: Bool = false) {
         (session as? Lemmings2MobileSession)?.releasePointerInput()
         updateFan(at: nil, active: false)
-        countdown.cancel()
-        countdownLabel.isHidden = true
+        if !preservingCountdown {
+            countdown.cancel()
+            countdownLabel.isHidden = true
+        }
         guard playState.pauseForPlanning() else { return }
         let needsSelectionRefresh = highlightedTarget != nil || hoverAimActive
         playfieldView.cancelInteraction()
@@ -1689,7 +1710,7 @@ typealias MobileGameControllerBase = UIViewController
         updateHUD()
     }
 
-    func resumePlay() {
+    func resumePlay(offerSkillSelectionChoice: Bool = true) {
         cancelSeek()
         clearRewindCue()
         cancelPendingL3ToolDirection()
@@ -1697,7 +1718,7 @@ typealias MobileGameControllerBase = UIViewController
         guard hudLayout(insets: view.safeAreaInsets).canPlay, !session.snapshot.isComplete,
               playState.phase != .completed, lifecycle.isForeground, !deskClockVisible else { return }
         // Let the tenth planning pause finish before asking on the player's next Play action.
-        if !wasReady, !session.isReadOnly, gameSettings.shouldOfferSkillSelectionPauseChoice {
+        if offerSkillSelectionChoice, !wasReady, !session.isReadOnly, gameSettings.shouldOfferSkillSelectionPauseChoice {
             showOverlay(title: L10n.text("Skill selection"), actions: [
                 (L10n.text("Turn off"), { [weak self] in self?.chooseSkillSelectionPause(false) }),
                 (L10n.text("Keep pausing"), { [weak self] in self?.chooseSkillSelectionPause(true) }),
@@ -1723,6 +1744,16 @@ typealias MobileGameControllerBase = UIViewController
         clock.suspend()
         resumeFramePending = true
         playfieldView.cancelInteraction()
+        revealGameplayHUD()
+        updateHUD()
+        #if os(tvOS)
+        renderCurrentFrame(force: true)
+        #endif
+        UIAccessibility.post(notification: .announcement, argument: L10n.text("Game resumed"))
+        view.setNeedsLayout()
+    }
+
+    private func revealGameplayHUD() {
         overlay.isHidden = true
         layoutSolutionSelector()
         overlay.accessibilityViewIsModal = false
@@ -1730,12 +1761,6 @@ typealias MobileGameControllerBase = UIViewController
         hud.isUserInteractionEnabled = true
         playfieldView.accessibilityElementsHidden = false
         hud.accessibilityElementsHidden = false
-        updateHUD()
-        #if os(tvOS)
-        renderCurrentFrame(force: true)
-        #endif
-        UIAccessibility.post(notification: .announcement, argument: L10n.text("Game resumed"))
-        view.setNeedsLayout()
     }
 
     private func chooseSkillSelectionPause(_ enabled: Bool) {
@@ -2638,9 +2663,7 @@ typealias MobileGameControllerBase = UIViewController
             self.completionPresented = false
             self.renderCurrentFrame(force: true)
             if showPlayfield {
-                self.overlay.isHidden = true; self.layoutSolutionSelector(); self.overlay.accessibilityViewIsModal = false
-                self.playfieldView.isUserInteractionEnabled = true; self.hud.isUserInteractionEnabled = true
-                self.playfieldView.accessibilityElementsHidden = false; self.hud.accessibilityElementsHidden = false
+                self.revealGameplayHUD()
                 self.inputAdapter.reset()
                 self.view.setNeedsLayout()
             } else { self.pausePlay(showControls: true) }
