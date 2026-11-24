@@ -1,18 +1,45 @@
 #!/bin/zsh
-# Validate the data-independent iPhone and iPad 1.3 source gate.
+# Validate the selected product’s iPhone and iPad targets.
 set -euo pipefail
 
 project_dir="${0:A:h:h}"
 require_sdk=0
+ui_destination=""
+ui_result=""
 
-if [[ "${1:-}" == "--require-sdk" ]]; then
+if [[ "${1:-}" == "--require-sdk" && $# == 1 ]]; then
   require_sdk=1
+elif [[ "${1:-}" == "--ui-test" && $# == 3 ]]; then
+  require_sdk=1
+  ui_destination="$2"
+  ui_result="$3"
 elif (( $# > 0 )); then
-  print -u2 "Usage: zsh Scripts/check-1.3-mobile.sh [--require-sdk]"
+  print -u2 "Usage: zsh Scripts/check-1.3-mobile.sh [--require-sdk | --ui-test <destination> <result-bundle>]"
   exit 2
 fi
 
 cd "$project_dir"
+
+product="$(python3 -c 'import json; print(json.load(open("Product.json"))["product"])')"
+case "$product" in
+  ultimate-lemmings) target=UltimateLemmingsIOS ;;
+  ultimate-lemmix) target=UltimateLemmixIOS ;;
+  *) print -u2 "FAILED: Unknown iOS product: $product"; exit 2 ;;
+esac
+app_dir="Apps/$target"
+xcodeproject="$app_dir/$target.xcodeproj"
+ui_target="${target}UITests"
+
+run_store_xcode() {
+  local resource_dir="${ULTIMATE_LEMMIX_RESOURCES_DIR:-$project_dir/.build/publication-resources/ultimate-lemmix}"
+  local fan_runtime="${ULTIMATE_LEMMIX_FAN_RUNTIME:-$project_dir/.build/FanRuntime.zip}"
+  if [[ ! -f "$resource_dir/ultimate-lemmix-mobile-resources.json" || ! -f "$fan_runtime" ]]; then
+    print -u2 "FAILED: Ultimate Lemmix requires its prepared Store resource inventory and pinned FanRuntime.zip. See Apps/UltimateLemmixSupport/README.md."
+    return 1
+  fi
+  ULTIMATE_LEMMIX_FAN_RUNTIME="$fan_runtime" zsh Apps/UltimateLemmixSupport/build.sh ios \
+    "ULTIMATE_LEMMIX_RESOURCES_DIR=$resource_dir" "$@"
+}
 
 developer_dir="${DEVELOPER_DIR:-$(xcode-select -p)}"
 if ! DEVELOPER_DIR="$developer_dir" xcrun --sdk iphonesimulator --show-sdk-path >/dev/null 2>&1 \
@@ -26,19 +53,19 @@ export IOS_SOURCE_GATE_ONLY=1
 export IOS_MUSIC_SCOPE=main
 
 plutil -lint \
-  Apps/UltimateLemmingsIOS/Info.plist \
-  Apps/UltimateLemmingsIOS/PrivacyInfo.xcprivacy \
-  Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj >/dev/null
+  "$app_dir/Info.plist" \
+  "$app_dir/PrivacyInfo.xcprivacy" \
+  "$xcodeproject/project.pbxproj" >/dev/null
 
 grep -q 'LemmingsMobileCore' Package.swift
 grep -q 'LemmingsMobileUI' Package.swift
 grep -q 'com.apple.product-type.application' \
-  Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj
+  "$xcodeproject/project.pbxproj"
 grep -q 'TARGETED_DEVICE_FAMILY = "1,2"' \
-  Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj/project.pbxproj
+  "$xcodeproject/project.pbxproj"
 grep -q 'MTKView' Sources/LemmingsMobileUI/MobileCRTView.swift
 grep -q 'MobileCheckpointStore' Sources/LemmingsMobileCore/MobileCheckpoint.swift
-grep -q 'AppIcon-1024.png' Apps/UltimateLemmingsIOS/Assets.xcassets/AppIcon.appiconset/Contents.json
+grep -q 'AppIcon-1024.png' "$app_dir/Assets.xcassets/AppIcon.appiconset/Contents.json"
 grep -q 'import LemmingsMobileCore' Apps/SharedAppleMobile/UITests/MobileCoreIOSSmokeTests.swift
 
 for source in Sources/LemmingsMobileCore/*.swift Sources/LemmingsMobileUI/*.swift \
@@ -47,7 +74,7 @@ for source in Sources/LemmingsMobileCore/*.swift Sources/LemmingsMobileUI/*.swif
   swiftc -frontend -parse "$source"
 done
 
-print "PASS 1.3 mobile project, target and source contracts"
+print "PASS $product iOS project, target and source contracts"
 
 if ! command -v xcodebuild >/dev/null 2>&1 || ! xcrun --sdk iphonesimulator --show-sdk-path >/dev/null 2>&1; then
   if (( require_sdk )); then
@@ -55,6 +82,17 @@ if ! command -v xcodebuild >/dev/null 2>&1 || ! xcrun --sdk iphonesimulator --sh
     exit 1
   fi
   print "SKIP iOS compilation: this Mac has Command Line Tools but no iOS SDK."
+  exit 0
+fi
+
+if [[ -n "$ui_destination" ]]; then
+  if [[ "$product" == ultimate-lemmix ]]; then
+    run_store_xcode test -destination "$ui_destination"   \
+      "-only-testing:$ui_target/MobileCoreIOSSmokeTests" -resultBundlePath "$ui_result" CODE_SIGNING_ALLOWED=NO
+  else
+    xcodebuild test -project "$xcodeproject" -scheme "$target" -destination "$ui_destination"   \
+      "-only-testing:$ui_target/MobileCoreIOSSmokeTests" -resultBundlePath "$ui_result" CODE_SIGNING_ALLOWED=NO
+  fi
   exit 0
 fi
 
@@ -92,9 +130,20 @@ if (( !runtime_available )); then
 fi
 
 zsh Scripts/run-source-tests.sh
+if [[ "$product" == ultimate-lemmix ]]; then
+  run_store_xcode -configuration Debug -destination 'generic/platform=iOS Simulator' \
+    -derivedDataPath "$project_dir/.build/lemmix-ios-debug" CODE_SIGNING_ALLOWED=NO build-for-testing
+  run_store_xcode -configuration Release -destination 'generic/platform=iOS Simulator' \
+    -derivedDataPath "$project_dir/.build/lemmix-ios-release" CODE_SIGNING_ALLOWED=NO build
+  run_store_xcode -configuration Release -destination 'generic/platform=iOS' \
+    -derivedDataPath "$project_dir/.build/lemmix-ios-device" CODE_SIGNING_ALLOWED=NO build
+  print "PASS Ultimate Lemmix tests, Simulator builds and unsigned Release device build"
+  exit 0
+fi
+
 xcodebuild -quiet \
-  -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
-  -target UltimateLemmingsIOSUITests \
+  -project "$xcodeproject" \
+  -target "$ui_target" \
   -configuration Debug \
   -sdk iphonesimulator \
   -clonedSourcePackagesDirPath "$project_dir/.build/ios-packages" \
@@ -106,8 +155,8 @@ xcodebuild -quiet \
   build
 
 xcodebuild -quiet \
-  -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
-  -target UltimateLemmingsIOS \
+  -project "$xcodeproject" \
+  -target "$target" \
   -configuration Release \
   -sdk iphonesimulator \
   -clonedSourcePackagesDirPath "$project_dir/.build/ios-packages" \
@@ -119,8 +168,8 @@ xcodebuild -quiet \
   build
 
 xcodebuild -quiet \
-  -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
-  -target UltimateLemmingsIOS \
+  -project "$xcodeproject" \
+  -target "$target" \
   -configuration Release \
   -sdk iphoneos \
   -clonedSourcePackagesDirPath "$project_dir/.build/ios-packages" \

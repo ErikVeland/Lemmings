@@ -71,6 +71,13 @@ compiled with `ULTIMATE_LEMMIX_STORE`. A package build with embedded original
 control tiles therefore fails compilation. A consumer target flag alone is
 insufficient.
 
+The shared iOS CI gate reads `Product.json` to choose the app and UI-test
+target. Lemmix builds and tests still require the verified Store resource
+inventory and pinned `FanRuntime.zip`; set `ULTIMATE_LEMMIX_RESOURCES_DIR` and
+`ULTIMATE_LEMMIX_FAN_RUNTIME` when the runner provisions them outside the
+default build folders. An unprovisioned runner fails explicitly rather than
+testing the classic app instead.
+
 These are separate products and build folders. Do not overwrite a running Mac
 app. Local SDK compilation does not establish device acceptance, service
 acceptance, distribution signing, App Store review or publication.

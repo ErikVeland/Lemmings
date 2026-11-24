@@ -63,13 +63,8 @@ jobs:
       - name: Run iOS layout and lifecycle tests
         run: |
           result_bundle="$RUNNER_TEMP/ios-${{ matrix.device }}.xcresult"
-          xcodebuild test \
-            -project Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj \
-            -scheme UltimateLemmingsIOS \
-            -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}" \
-            -only-testing:UltimateLemmingsIOSUITests/MobileCoreIOSSmokeTests \
-            -resultBundlePath "$result_bundle" \
-            CODE_SIGNING_ALLOWED=NO
+          zsh Scripts/check-1.3-mobile.sh --ui-test \
+            "platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}" "$result_bundle"
 
       - name: Retain iOS test diagnostics
         if: always()
