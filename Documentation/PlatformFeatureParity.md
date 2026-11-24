@@ -57,6 +57,12 @@ The hosted ZIP matched the release checksum. The iOS and tvOS device builds pass
 Physical-device input and interrupted transfers still need device acceptance.
 Build 110 requires manual folder import. [Game Assets release](https://github.com/ErikVeland/Lemmings/releases/tag/ultimate-lemmix-game-assets-1)
 
+On 24 November, an iPhone simulator reproduced the build 112 import failure with
+the published pack and the archived iOS app. The installer rejected the signed
+inventory because it contained the new `FanRuntime` folder. The corrected importer
+retained that folder, installed all 23,001 assets and verified them on reopen.
+iPad, Duo, Apple TV and physical devices still need this build-specific check.
+
 ## Lemmix button backgrounds — 20 November 2026
 
 Ultimate Lemmix forbids pale blue button backgrounds. The shared Lix background

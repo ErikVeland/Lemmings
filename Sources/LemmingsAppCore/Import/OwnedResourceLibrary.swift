@@ -503,7 +503,7 @@ public struct OwnedResourceLibrary: Sendable {
     let excludedExtensions: Set<String> = ["entitlements", "mobileprovision", "provisionprofile", "xcent", "p12", "key"]
     if excludedExtensions.contains(URL(fileURLWithPath: name).pathExtension.lowercased()) { return false }
     let dataFolders = assetFamilies.union(["Fonts", "Hints", "Progression", "Trolley", "GameCenter",
-      "AlternativeAssets", "Provenance", "Licences", "OpenStarter", "Integration"])
+      "AlternativeAssets", "Provenance", "Licences", "OpenStarter", "Integration", "FanRuntime"])
     let dataFiles: Set<String> = ["AppIcon.png", "AppIcon.icns", "Assets.car", "PrivacyInfo.xcprivacy",
       "store-resources-manifest.json", "personal-preview-resources.json", "PERSONAL-PREVIEW-NOTICE.txt",
       "ultimate-lemmix-mobile-resources.json"]
