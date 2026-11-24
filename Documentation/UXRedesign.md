@@ -1,7 +1,8 @@
 # UX redesign proposal
 
-Status: Phase 1 is merged (ErikVeland/Lemmings#40). Phase 2 is in progress: see
-[Phase 2 status](#phase-2-status). Phases 3 and 4 remain proposals. See [Phase 1 status](#phase-1-status) for what
+Status: Phase 1 is merged (ErikVeland/Lemmings#40). Phase 2 is partly merged
+(ErikVeland/Lemmings#41): see [Phase 2 status](#phase-2-status). Phase 3 is in progress:
+see [Phase 3 status](#phase-3-status). Phase 4 remains a proposal. See [Phase 1 status](#phase-1-status) for what
 landed, what changed from the proposal and what is not yet verified.
 
 This proposal reorganises the existing depth of Ultimate Lemmings. It does not
@@ -74,6 +75,21 @@ sprite pixels. The chooser checked every fixed, standard and optional tier at
 hits. The iOS and tvOS SDK checks compiled both application entry points.
 CoreSimulator refused the connection, so live UIKit focus and touch remain
 unverified.
+
+### Native Mac speed controls — 25 November 2026
+
+At 700 points and wider, the flat Classic and NeoLemmix HUD has space beside
+the minimap for one 44-point button per speed tier. Both sequel canvases use
+the same controls beside the timeline in their reserved footer. The strip
+shows the chosen tier with an underline. The original speed pedal still
+supports a temporary boost. Narrow windows and Classic CRT retain the pedal.
+Shift+1 through Shift+5 choose the five standard tiers on every native Mac
+panel. Shift+6 chooses 25× when enabled.
+
+The offscreen check rendered the Mac panel and pressed nine points on each
+tier with the optional tier both enabled and disabled. It checked the minimap
+and timeline boundaries, accessibility activation, and Shift release after a
+temporary boost. Live play with a physical keyboard and VoiceOver remains open.
 
 ## Evidence and limits
 
@@ -546,3 +562,53 @@ that work lands, because they change the same files:
 - skill selection and zero-count states
 - the minimap frame and its tracking buttons
 - tvOS status slots in `MobileHUDRenderer.televisionStatusLines`
+
+## Phase 3 status
+
+Implemented on `feature/ux-phase3`.
+
+### Settings names
+
+The groups keep their contents and saved identities. Only names change, and each
+new name already has a shipped translation in all eight locales.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Controller | Controls | The group also holds button mapping and stick choices. |
+| Graphics | Artwork | It chooses the machine artwork, colour depth and counters. Display holds screen effects. |
+| Video (Mac only) | Display | One name on every platform. |
+
+Privacy keeps its name. It has no translated alternative that is clearer.
+
+Hot Seat ghosts now appear where they are used. The Hot Seat page owns the choice.
+In-game Settings shows it only during a Hot Seat level. The out-of-game Gameplay
+group no longer repeats it.
+
+### Hot Seat as one mode
+
+The flow follows the redesign's order: choose a session, resume or start, play.
+
+1. Home → Hot Seat opens Saved Hot Seats when sessions exist and none is active.
+   It no longer resumes the first matching session without asking.
+2. The newest session is primary. New Hot Seat sits beside Back on iOS, tvOS and Mac.
+3. Resuming returns Home, where Continue already resolves that session's next level.
+4. Choose a game for a new session opens Play. A restarted session also opens Play.
+
+### Validation
+
+- `SavedHotSeatPageTests`, `DeskClockPresentationTests` and the 45
+  `LemmingsMobileUITests` pass, muted.
+- Mac settings, Hot Seat, privacy and profile unit tests (32) pass.
+- The Mac target builds. iOS and tvOS SDK modules compile.
+- The Mac settings tab checks in `MusicUITests`, `AppIntegrationTests`,
+  `UltimateLemmixAppTests` and `PersonalPreviewAppTests` were updated but not run.
+- No device, simulator or Mac window was inspected.
+
+### Not yet done
+
+- Profile statistics stay as they were: career stars, levels cleared and
+  three-star levels. A lifetime rescued total needs a per-profile count that the
+  records do not keep today.
+- Settings groups keep their current contents. Moving rows between groups, or a
+  Storage & Downloads group, would change the Mac panes' fixed layouts and needs
+  a visible layout check.

@@ -31,12 +31,57 @@ import NxlvKit
     var perform: (Action) -> Void = { _ in }
     private let accessibility = GameAccessibleElements()
 
+    var speedState: () -> GameplaySpeed? = { nil }
+    var canChooseSpeed: () -> Bool = { true }
+    var chooseSpeed: (Double) -> Void = { _ in }
+    var tierFrame = CGRect.zero
+    var tierWidth: CGFloat {
+        guard let speed = speedState(), speed.variableEnabled else { return 0 }
+        return CGFloat(speed.availableSteps.count) * 44
+    }
+
+    func layoutSequelFooter(in bounds: CGRect) {
+        let width = min(260, max(0, bounds.width - 16))
+        let tiers = bounds.width >= 700 ? tierWidth : 0
+        let gap: CGFloat = tiers > 0 ? 8 : 0
+        frame = CGRect(x: floor(bounds.midX - (width + gap + tiers) / 2), y: bounds.maxY - 34,
+                       width: width, height: 30)
+        tierFrame = tiers > 0 ? CGRect(x: frame.maxX + gap, y: frame.minY, width: tiers, height: frame.height) : .zero
+    }
+
+    private var tierButtons: [(tier: Double, rect: CGRect)] {
+        guard !tierFrame.isEmpty, let speed = speedState(), speed.variableEnabled else { return [] }
+        let steps = speed.availableSteps
+        let width = tierFrame.width / CGFloat(steps.count)
+        guard width >= 44 else { return [] }
+        return steps.enumerated().map { index, tier in
+            (tier, CGRect(x: tierFrame.minX + CGFloat(index) * width, y: tierFrame.minY,
+                          width: width, height: tierFrame.height))
+        }
+    }
+
     func rect(for action: Action) -> CGRect {
         let unit = frame.width / 4.5
         return CGRect(x: frame.minX + CGFloat(action.rawValue) * unit, y: frame.minY,
                       width: (action == .hints ? unit * 1.5 : unit) - 2, height: frame.height)
     }
     func draw() {
+        if let context = NSGraphicsContext.current?.cgContext, let speed = speedState() {
+            for (tier, rect) in tierButtons {
+                let selected = canChooseSpeed() && speed.target == tier
+                GameControlGroupArt.draw(in: context, frame: rect, group: tierFrame, selected: selected,
+                                         face: .speed, monochrome: monochrome)
+                context.saveGState()
+                if !canChooseSpeed() { context.setAlpha(0.4) }
+                GamePixelText.draw("\(Int(tier))×", in: rect.insetBy(dx: 3, dy: 5), maxScale: 2,
+                                   palette: monochrome ? .monochrome : selected ? .green : .blue)
+                context.restoreGState()
+                if selected {
+                    NSColor.white.setFill()
+                    CGRect(x: rect.midX - 8, y: rect.maxY - 5, width: 16, height: 2).fill()
+                }
+            }
+        }
         NSColor.black.setFill(); frame.fill()
         for action in Action.allCases {
             let box = rect(for: action)
@@ -75,6 +120,10 @@ import NxlvKit
     }
     /// Consume gaps and disabled buttons so input never reaches the playfield.
     @discardableResult func click(at point: CGPoint) -> Bool {
+        if let button = tierButtons.first(where: { $0.rect.contains(point) }) {
+            if canChooseSpeed() { chooseSpeed(button.tier) }
+            return true
+        }
         guard frame.contains(point) else { return false }
         if let action = Action.allCases.first(where: { rect(for: $0).contains(point) }), enabled(action) {
             perform(action)
@@ -82,13 +131,24 @@ import NxlvKit
         return true
     }
     func accessibleControls(owner: NSView, transform: (CGRect) -> CGRect = { $0 }) -> [Any] {
-        Action.allCases.map { action in
+        let actions = Action.allCases.map { action in
             let element = accessibility.element(id: "timeline-\(action.rawValue)", owner: owner,
                 label: action.label, frame: transform(rect(for: action))) { [weak self] in
                     guard let self, self.enabled(action) else { return }
                     self.perform(action)
                 }
             element.setAccessibilityEnabled(enabled(action))
+            return element
+        }
+        return actions + tierButtons.map { tier, rect in
+            let selected = canChooseSpeed() && speedState()?.target == tier
+            let label = L10n.text("Game speed \(Int(tier))×") + (selected ? L10n.text(", selected") : "")
+            let element = accessibility.element(id: "tier-\(Int(tier))", owner: owner, label: label,
+                                         frame: transform(rect)) { [weak self] in
+                guard let self, self.canChooseSpeed(), self.tierButtons.contains(where: { $0.tier == tier }) else { return }
+                self.chooseSpeed(tier)
+            }
+            element.setAccessibilityEnabled(canChooseSpeed())
             return element
         }
     }

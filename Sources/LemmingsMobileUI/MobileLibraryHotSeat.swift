@@ -84,9 +84,16 @@ extension MobileLibraryViewController {
         switch id {
         case "hotSeat":
             if route != .hotSeat && route != .hotSeats { hotSeatBackRoute = route }
-            if hotSeat == nil, let saved = hotSeats.sharedSessions(player: profiles.activeID).first {
-                guard resumeSharedSeat(saved.id) else { rebuild(); return true }
+            confirmingRestart = false
+            // Choose the session first: every saved Hot Seat stays visible, not only the latest one.
+            if hotSeat == nil, !hotSeats.savedSessions.isEmpty {
+                savedSeatsBackID = "seatBack"
+                navigate(.hotSeats)
+            } else {
+                navigate(.hotSeat)
             }
+        case "seatFresh":
+            hotSeatRoster = nil
             confirmingRestart = false
             navigate(.hotSeat)
         case "seatBack":
@@ -112,7 +119,7 @@ extension MobileLibraryViewController {
             confirmingRestart = false
             _ = hotSeats.restart()
             guard saveHotSeats() else { rebuild(); break }
-            leaveHotSeatPage()
+            leaveHotSeatPage(to: .play)
         case "seatSolo":
             hotSeats.endSession()
             guard saveHotSeats() else { rebuild(); break }
@@ -152,20 +159,22 @@ extension MobileLibraryViewController {
     /// Keeps the running session when the roster is unchanged. Otherwise a new shared campaign starts.
     private func startHotSeat() {
         guard let roster = hotSeatRoster, roster.canStart else { return }
-        if let seat = hotSeat, Set(seat.players) == Set(roster.players) {
+        let continuing = hotSeat.map { Set($0.players) == Set(roster.players) } ?? false
+        if continuing {
             // The same players continue where they stopped.
         } else {
             guard hotSeats.start(roster: roster) != nil else { return }
         }
         guard saveHotSeats() else { rebuild(); return }
-        leaveHotSeatPage()
+        // A continued session resumes from Home's Continue. A new session chooses its game on Play.
+        leaveHotSeatPage(to: continuing ? .home : .play)
     }
 
-    private func leaveHotSeatPage() {
+    private func leaveHotSeatPage(to destination: Route = .home) {
         hotSeatRoster = nil
         pendingCheckpoint = nil
         reloadPlayerData()
-        navigate(.home)
+        navigate(destination)
     }
 
     /// A saved level belongs to another session. Switching to that session lets it resume.

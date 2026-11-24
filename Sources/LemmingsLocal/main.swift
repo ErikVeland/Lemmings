@@ -2099,6 +2099,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
       self.advancePhase()
     }
     panel.onButton = { [weak self] button in self?.handle(button) }
+    panel.timeline.speedState = { [weak self] in self?.speedControl.state }
+    panel.timeline.canChooseSpeed = { [weak self] in
+        guard let self else { return false }
+        return self.phase == .playing && self.session?.isComplete == false && !self.speedControl.bulletTimeActive
+    }
+    panel.timeline.chooseSpeed = { [weak self] tier in self?.speedControl.select(tier, at: ProcessInfo.processInfo.systemUptime) }
     panel.timeline.enabled = { [weak self] action in
       guard let self, self.phase == .playing, let session = self.session else { return false }
       switch action {
@@ -7845,7 +7851,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .play:
         showHomePlay(true)
       case .hotSeat:
-        showHotSeat()
+        // Every saved Hot Seat stays choosable. With none active, choose a session before the roster.
+        if !ArcadeStore.shared.hotSeatIsActive, !ArcadeStore.shared.savedHotSeats.isEmpty {
+          ArcadeWindow.shared.showSavedSessions(owner: window)
+        } else { showHotSeat() }
       case .profile:
         showProfileHub()
       case .community:

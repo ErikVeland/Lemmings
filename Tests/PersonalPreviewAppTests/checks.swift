@@ -341,7 +341,7 @@ extension AppDelegate {
             showSettings()
             guard let page = GameScreen.shared.controllerPage(in: window),
                   let tabs = previewDescendants(page).compactMap({ $0 as? NSTabView }).first,
-                  let graphics = tabs.tabViewItems.first(where: { $0.label == "Graphics" }) else {
+                  let graphics = tabs.tabViewItems.first(where: { $0.label == "Artwork" }) else {
                 throw PersonalPreviewFailure(message: "The settings page is unavailable")
             }
             tabs.selectTabViewItem(graphics)
