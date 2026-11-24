@@ -61,6 +61,9 @@ On 24 November, an iPhone simulator reproduced the build 112 import failure with
 the published pack and the archived iOS app. The installer rejected the signed
 inventory because it contained the new `FanRuntime` folder. The corrected importer
 retained that folder, installed all 23,001 assets and verified them on reopen.
+The simulator also reproduced a transfer that stayed at 0% while data arrived.
+The corrected downloader reported progress through 100% from the GitHub mirror.
+A separate check cancelled the Archive.org transfer at 1% before import.
 iPad, Duo, Apple TV and physical devices still need this build-specific check.
 
 ## Lemmix button backgrounds — 20 November 2026
