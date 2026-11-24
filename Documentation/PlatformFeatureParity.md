@@ -1374,3 +1374,17 @@ retain foreground transport; phone background lifecycle does not change TV's
 separate local-browser import. A primary timeout tries the existing alternate
 mirror once, with distinct waiting, retry, and final error states. Cellular use,
 suspension/lock and relaunch are separate physical iOS acceptance checks.
+
+For physical acceptance, use a separately authorised development-only HTTPS
+fixture: have the primary accept the connection without sending any response
+body, and the alternate serve a known checksum-verified test archive. Disable
+Wi-Fi on an opted-in phone, leave 5G enabled, and confirm that at about 20 seconds
+of foreground online waiting the **Try another server** action appears without
+automatically cancelling the primary. Check server request logs before and after
+a double tap: exactly one primary is cancelled and exactly one alternate starts.
+Run again with offline connectivity, a primary that trickles even one byte, and
+screen lock during the wait; none may trigger the action prematurely. Reopen
+Game Data after locking mid-alternate to check background completion and verified
+import. Use an isolated test build/fixture, not the production mirror or any
+uncleared assets. Apple can retry idle timeouts within the background resource
+budget; the foreground action does not change those OS retries unless pressed.

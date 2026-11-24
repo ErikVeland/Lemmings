@@ -1,5 +1,6 @@
 #if os(iOS)
 import Foundation
+import Network
 
 /// One licensed transfer per app. The system owns the socket; its temporary file
 /// must be moved before returning from the download delegate, even on relaunch.
@@ -11,6 +12,7 @@ final class GameAssetBackgroundTransfer: NSObject, URLSessionDownloadDelegate, @
     private let defaults = UserDefaults.standard
     private let key = "gameAssetBackgroundTransfer"
     private var outcome: (String, Result<URL, any Error>)?
+    @MainActor private var switchPrimary: (() -> Void)?
     private var finishEvents: (@MainActor () -> Void)?
 
     @MainActor private lazy var session = URLSession(
@@ -44,7 +46,14 @@ final class GameAssetBackgroundTransfer: NSObject, URLSessionDownloadDelegate, @
         return folder.appendingPathComponent(token + ".zip")
     }
 
-    @MainActor func transfer(from source: URL, progress: @escaping @MainActor @Sendable (GameAssetPack.Progress) -> Void) async throws -> URL {
+    @MainActor func tryAlternateServer() { switchPrimary?() }
+
+    @MainActor func transfer(
+        from source: URL,
+        offerAlternate: Bool,
+        isForeground: @escaping @MainActor @Sendable () -> Bool,
+        progress: @escaping @MainActor @Sendable (GameAssetPack.Progress) -> Void
+    ) async throws -> URL {
         let tasks = await session.allTasks
         try Task.checkCancellation()
         let (token, reattaching): (String, Bool) = lock.withLock {
@@ -86,6 +95,24 @@ final class GameAssetBackgroundTransfer: NSObject, URLSessionDownloadDelegate, @
             task.taskDescription = token
             task.resume()
         }
+        let path = offerAlternate ? NWPathMonitor() : nil
+        path?.start(queue: DispatchQueue(label: "GameAssetDownloadPath"))
+        var stall = GameAssetPack.StallOffer()
+        var lastSample: TimeInterval?
+        let uptime = { ProcessInfo.processInfo.systemUptime }
+        if offerAlternate {
+            switchPrimary = {
+                guard self.result(token) == nil, task.state == .running,
+                      let lastSample, uptime() - lastSample <= 1.5,
+                      stall.requestSwitch(online: path?.currentPath.status == .satisfied,
+                                      foreground: isForeground(), bytes: task.countOfBytesReceived) else { return }
+                task.cancel()
+            }
+        }
+        defer {
+            switchPrimary = nil
+            path?.cancel()
+        }
         var last: GameAssetPack.Progress?
         defer {
             if Task.isCancelled {
@@ -100,8 +127,26 @@ final class GameAssetBackgroundTransfer: NSObject, URLSessionDownloadDelegate, @
         }
         while true {
             try Task.checkCancellation()
-            if let finished = result(token) { return try finished.get() }
-            let phase = GameAssetPack.Progress.transfer(task.countOfBytesReceived)
+            if let finished = result(token) {
+                if !stall.alternateRequested { return try finished.get() }
+                // A task that completed at the same time as the tap wins;
+                // keep its archive and let the normal verifier check it.
+                if case let .success(file) = finished { return file }
+                // Do not launch a replacement until the primary is terminal.
+                if stall.mayStartAlternate(primaryCompleted: task.state == .completed) {
+                    throw GameAssetPack.Failure.alternateRequested
+                }
+            }
+            let bytes = task.countOfBytesReceived
+            let now = uptime()
+            if let lastSample, now - lastSample > 1.5 {
+                _ = stall.observe(now: now, online: false, foreground: false, bytes: bytes)
+            }
+            lastSample = now
+            let stalled = offerAlternate && stall.observe(now: now, online: path?.currentPath.status == .satisfied,
+                                                           foreground: isForeground(), bytes: bytes)
+            let phase: GameAssetPack.Progress = stall.alternateRequested ? .alternateMirror
+                : (stalled ? .stalledPrimary : .transfer(bytes))
             if phase != last { progress(phase); last = phase }
             try await Task.sleep(for: .milliseconds(350))
         }

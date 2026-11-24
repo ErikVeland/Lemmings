@@ -21,7 +21,7 @@ public actor GameAssetPack {
     }
 
     public enum Progress: Sendable, Equatable {
-        case connecting, alternateMirror
+        case connecting, stalledPrimary, alternateMirror
         case downloading(Int)
         case installing
 
@@ -35,6 +35,7 @@ public actor GameAssetPack {
         public var title: String {
             switch self {
             case .connecting: L10n.text("Waiting for download to start")
+            case .stalledPrimary: L10n.text("Download hasn’t started")
             case .alternateMirror: L10n.text("Trying another download server")
             case .downloading(let percent): L10n.text("Downloading") + " \(percent)%"
             case .installing: L10n.text("Importing resources")
@@ -43,13 +44,14 @@ public actor GameAssetPack {
     }
 
     enum Failure: LocalizedError {
-        case busy, unavailable, invalid, offline, interrupted, timedOut, storage, prohibited, resumeUnavailable
+        case busy, unavailable, invalid, offline, interrupted, timedOut, storage, prohibited, resumeUnavailable, alternateRequested
         var errorDescription: String? {
             switch self {
             case .busy: L10n.text("Game assets are already downloading.")
             case .unavailable: L10n.text("Game assets are unavailable. Try again later.")
             case .offline: L10n.text("No internet connection. Reconnect and try again.")
             case .interrupted: L10n.text("The connection dropped. Try the download again.")
+            case .alternateRequested: L10n.text("Trying another download server")
             case .resumeUnavailable: L10n.text("The background download stopped. Try the download again.")
             case .timedOut: L10n.text("The download timed out. Check your connection and try again.")
             case .storage: L10n.text("Not enough free storage for game assets. Free up space and try again.")
@@ -94,10 +96,44 @@ public actor GameAssetPack {
         }
     }
 
+    struct StallOffer {
+        static let threshold: TimeInterval = 20
+        private var started: TimeInterval?
+        private var receivedData = false
+        private var offered = false
+        private(set) var alternateRequested = false
+
+        mutating func observe(now: TimeInterval, online: Bool, foreground: Bool, bytes: Int64) -> Bool {
+            receivedData = receivedData || bytes > 0
+            guard foreground, online, !receivedData, !alternateRequested else {
+                started = nil
+                offered = false
+                return false
+            }
+            if started == nil { started = now }
+            offered = now - (started ?? now) >= Self.threshold
+            return offered
+        }
+
+        mutating func requestSwitch(online: Bool, foreground: Bool, bytes: Int64) -> Bool {
+            guard !alternateRequested, offered, !receivedData, online, foreground, bytes <= 0 else { return false }
+            alternateRequested = true
+            return true
+        }
+
+        func mayStartAlternate(primaryCompleted: Bool) -> Bool {
+            alternateRequested && primaryCompleted
+        }
+    }
+
     #if os(iOS)
     @MainActor public static func handleBackgroundEvents(identifier: String, completion: @escaping @MainActor () -> Void) {
         guard identifier == GameAssetBackgroundTransfer.identifier else { completion(); return }
         GameAssetBackgroundTransfer.shared.restoreEvents(completion)
+    }
+
+    @MainActor public static func tryAlternateServer() {
+        GameAssetBackgroundTransfer.shared.tryAlternateServer()
     }
 
     @MainActor public static var hasPendingDownload: Bool {
@@ -106,6 +142,7 @@ public actor GameAssetPack {
     #endif
 
     public func downloadAndInstall<Result: Sendable>(
+        isForeground: @escaping @MainActor @Sendable () -> Bool = { false },
         progress: @escaping @MainActor @Sendable (Progress) -> Void,
         install: @Sendable (URL) throws -> Result
     ) async throws -> Result {
@@ -128,7 +165,7 @@ public actor GameAssetPack {
                 try Task.checkCancellation()
                 #if os(iOS)
                 let transfer = await GameAssetBackgroundTransfer.shared
-                let file = try await transfer.transfer(from: source) { phase in
+                let file = try await transfer.transfer(from: source, offerAlternate: source == Self.primary, isForeground: isForeground) { phase in
                     progress(phase == .connecting && source == Self.fallback ? .alternateMirror : phase)
                 }
                 #else

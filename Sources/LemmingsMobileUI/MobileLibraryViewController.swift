@@ -1122,8 +1122,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = agreement
             canvas.preview = nil
         case .data:
-            let download: [GameFrontEnd.Action] = MobileResourceAccess.isStore
+            var download: [GameFrontEnd.Action] = MobileResourceAccess.isStore
                 ? [.init("download.gameAssets", GameAssetPack.actionTitle, enabled: !loading, primary: true)] : []
+            if gameAssetProgress == .stalledPrimary {
+                download = [.init("gameAssets.alternate", L10n.text("Try another server"), primary: true)]
+            }
             let back: GameFrontEnd.Action
             if gameAssetProgress?.canCancel == true {
                 back = .init("dataBack", L10n.text("Cancel"), backNavigation: true)
@@ -1279,6 +1282,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if id == "gameAssets.agree" { beginGameAssetDownload() }
             return
         }
+        #if os(iOS)
+        if id == "gameAssets.alternate", gameAssetProgress == .stalledPrimary {
+            GameAssetPack.tryAlternateServer()
+            return
+        }
+        #endif
         if id == "dataBack", gameAssetProgress?.canCancel == true { resourceTask?.cancel(); return }
         guard !restoringResources else { return }
         if handleL2Practice(id) { return }
@@ -1788,8 +1797,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         guard !restoringResources, game == nil, MobileResourceAccess.library != nil else { return }
         gameAssetProgress = .connecting
         restoreResources { [weak self] library in
-            try await GameAssetPack.shared.downloadAndInstall(progress: { [weak self] phase in
-                guard let self, self.restoringResources else { return }
+            try await GameAssetPack.shared.downloadAndInstall(isForeground: {
+                UIApplication.shared.applicationState == .active
+            }, progress: { [weak self] phase in
+                guard let self, self.restoringResources, self.gameAssetProgress != phase else { return }
                 self.gameAssetProgress = phase
                 self.rebuild()
             }) { try library.install(directory: $0) }

@@ -143,6 +143,41 @@ final class GameAssetPackTests: XCTestCase {
         }
     }
 
+    func testZeroByteOfferRequiresContinuousForegroundOnlineWait() {
+        var offer = GameAssetPack.StallOffer()
+        XCTAssertFalse(offer.observe(now: 0, online: true, foreground: true, bytes: 0))
+        XCTAssertFalse(offer.observe(now: 19, online: true, foreground: true, bytes: 0))
+        XCTAssertFalse(offer.observe(now: 20, online: false, foreground: true, bytes: 0))
+        XCTAssertFalse(offer.observe(now: 80, online: true, foreground: false, bytes: 0))
+        XCTAssertFalse(offer.observe(now: 100, online: true, foreground: true, bytes: 0))
+        XCTAssertTrue(offer.observe(now: 120, online: true, foreground: true, bytes: 0))
+        XCTAssertFalse(offer.requestSwitch(online: false, foreground: true, bytes: 0))
+        XCTAssertFalse(offer.requestSwitch(online: true, foreground: false, bytes: 0))
+        XCTAssertFalse(offer.requestSwitch(online: true, foreground: true, bytes: 1))
+        XCTAssertTrue(offer.requestSwitch(online: true, foreground: true, bytes: 0))
+        XCTAssertFalse(offer.requestSwitch(online: true, foreground: true, bytes: 0))
+        XCTAssertFalse(offer.mayStartAlternate(primaryCompleted: false))
+        XCTAssertTrue(offer.mayStartAlternate(primaryCompleted: true))
+    }
+
+    func testAnyProgressPreventsZeroByteOfferAfterCounterReset() {
+        var offer = GameAssetPack.StallOffer()
+        XCTAssertFalse(offer.observe(now: 0, online: true, foreground: true, bytes: 1))
+        XCTAssertFalse(offer.observe(now: 40, online: true, foreground: true, bytes: 0))
+        XCTAssertFalse(offer.observe(now: 80, online: true, foreground: true, bytes: 0))
+    }
+
+    func testManualAlternateRequestReachesOnlyTheOtherMirror() async throws {
+        var requests: [String] = []
+        let completed = try await GameAssetPack.withDownloadFallback { source in
+            requests.append(source.host ?? "")
+            if requests.count == 1 { throw GameAssetPack.Failure.alternateRequested }
+            return source
+        }
+        XCTAssertEqual(requests, ["archive.org", "github.com"])
+        XCTAssertEqual(completed.host, "github.com")
+    }
+
     func testIncompleteDownloadDoesNotReachImporter() throws {
         let file = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try Data("Incomplete transfer".utf8).write(to: file)
