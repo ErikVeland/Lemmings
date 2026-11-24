@@ -6,8 +6,13 @@ import NxlvKit
 
 /// Places the Ultimate badge across the original logo's upper-left L.
 public enum GameMenuLogo {
-    /// Product branding stays with the app when the player imports game data.
-    public static let productImage: CGImage? = {
+    public static var usesRestoredArtwork: Bool {
+        GameResources.hasRestoredOriginalAssets && GameArtworkResources.interface?.logo != nil
+    }
+
+    public static var productImage: CGImage? { usesRestoredArtwork ? nil : bundledProductImage }
+
+    private static let bundledProductImage: CGImage? = {
         guard Bundle.main.object(forInfoDictionaryKey: "UltimateLemmixStore") as? Bool == true,
               let url = Bundle.main.resourceURL?.appendingPathComponent("MenuArtwork/ultimate-lemmix.png"),
               let source = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }

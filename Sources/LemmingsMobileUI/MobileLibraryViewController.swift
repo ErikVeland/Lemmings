@@ -136,6 +136,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private var selectedImportKind: MobileGameDataKind = .classic
     private var importingResources = false
     private var restoringResources = false
+    private var gameAssetHomeAction: String?
     private var confirmingGameAssetLicence = false {
         didSet {
             canvas.accessibilityViewIsModal = confirmingGameAssetLicence
@@ -544,11 +545,30 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         cloudBackgroundTask = nil
     }
 
+    #if os(iOS)
+    private static var changingAppIcon = false
+
+    private func updateRestoredAppIcon() {
+        let app = UIApplication.shared
+        guard MobileResourceAccess.isStore, GameMenuLogo.usesRestoredArtwork,
+              app.applicationState == .active, app.supportsAlternateIcons,
+              app.alternateIconName != "RestoredIcon", !Self.changingAppIcon else { return }
+        Self.changingAppIcon = true
+        app.setAlternateIconName("RestoredIcon") { error in
+            Task { @MainActor in
+                Self.changingAppIcon = false
+                if let error { NSLog("Could not set restored app icon: %@", error.localizedDescription) }
+            }
+        }
+    }
+    #endif
+
     @objc private func cloudForeground() {
         // Calendar access may have changed in iOS Settings.
         if route == .settingsGroup(.deskClock) { rebuild() }
         libraryCloud.requestSync(immediately: true)
         #if os(iOS)
+        updateRestoredAppIcon()
         if libraryCloud.enabled { cloudProgress.requestSync(); presentCloudAuthentication() }
         #endif
     }
@@ -570,6 +590,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewIsVisible = true
+        #if os(iOS)
+        updateRestoredAppIcon()
+        #endif
         observeLibraryPose()
         sceneIsActive = view.window?.windowScene?.activationState == .foregroundActive
         syncPages()
@@ -977,7 +1000,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 let total = packs.reduce(0) { $0 + ($1.levelCount ?? 0) }
                 let passed = packs.reduce(0) { $0 + solvedLevels(for: $1.id).count }
                 let title = family.title + (packs.isEmpty ? L10n.text(" - No data") : "  \(passed)/\(total)")
-                return .init("family." + family.rawValue, title, enabled: !packs.isEmpty)
+                return .init("family." + family.rawValue, title, enabled: !packs.isEmpty || (MobileResourceAccess.isStore && catalogue != nil && !loading))
             } + [.init("neolemmix", hasNeoLemmixData ? L10n.text("NeoLemmix Preview") : L10n.text("Import NeoLemmix data")),
                  .init("l2", hasLemmings2Data ? L10n.text("Lemmings 2") : L10n.text("Import Lemmings 2 data"), gameLogo: .lemmings2),
                  .init("l3", hasLemmings3Data ? Lemmings3Brand.current.displayName : L10n.text("Import \(Lemmings3Brand.current.displayName) data"), enabled: true, gameLogo: .lemmings3)]
@@ -1284,6 +1307,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if confirmingGameAssetLicence {
             guard id == "gameAssets.cancel" || id == "gameAssets.agree" else { return }
             confirmingGameAssetLicence = false
+            let homeAction = gameAssetHomeAction
+            gameAssetHomeAction = nil
+            if id == "gameAssets.cancel", let homeAction {
+                navigate(.home)
+                canvas.focusAction(homeAction)
+                return
+            }
             rebuild()
             if id == "gameAssets.agree" {
                 restoreResources { [self] library in
@@ -1317,11 +1347,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case "classic": levelsBackRoute = .home; navigate(.levels); selectLevel(selectedIndex)
         case "originalMovies": showOriginalMovies(); return
         case "l2":
-            if hasLemmings2Data { openLemmings2() } else { navigate(.data) }
+            if hasLemmings2Data { openLemmings2() } else { showMissingGameData(for: id) }
         case "l3":
-            if hasLemmings3Data { openLemmings3() } else { navigate(.data) }
+            if hasLemmings3Data { openLemmings3() } else { showMissingGameData(for: id) }
         case "neolemmix":
-            if hasNeoLemmixData { openNeoLemmix() } else { navigate(.data) }
+            if hasNeoLemmixData { openNeoLemmix() } else { showMissingGameData(for: id) }
         case "home": navigate(.home)
         case "back": navigate(levelsBackRoute)
         case "dataBack": navigate(dataBackRoute)
@@ -1371,10 +1401,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case "data": navigate(.data)
         case "download.gameAssets":
             guard route == .data, MobileResourceAccess.isStore, !loading else { return }
-            confirmingGameAssetLicence = true
-            scrollView.setContentOffset(.zero, animated: false)
-            rebuild()
-            canvas.focusAction("gameAssets.cancel")
+            confirmGameAssetDownload()
         case "import.resources": chooseResourceData()
         case "import": chooseGameData(for: .classic)
         case "import.classic": chooseGameData(for: .classic)
@@ -1403,7 +1430,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 else { libraries.download(pack) }
                 rebuild()
             } else if id.hasPrefix("family."), let family = MobileFamily(rawValue: String(id.dropFirst(7))) {
-                openFamily(family)
+                if catalogue?.packs(in: family).isEmpty == true {
+                    showMissingGameData(for: id)
+                } else {
+                    openFamily(family)
+                }
             } else if id.hasPrefix("fanGroup.") {
                 let path: [String]
                 if case let .fanGroup(current) = route { path = current } else { path = [] }
@@ -1488,6 +1519,21 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         return FanLevelLibraryArt.page(root: fanLibraryRoot(), path: path, query: searchQuery,
             editing: searchField.isFirstResponder, status: subtitle.isEmpty ? fanUpdateStatus : subtitle,
             updating: fanUpdating, packDetails: details)
+    }
+
+    private func showMissingGameData(for action: String) {
+        navigate(.data)
+        if MobileResourceAccess.isStore {
+            gameAssetHomeAction = action
+            confirmGameAssetDownload()
+        }
+    }
+
+    private func confirmGameAssetDownload() {
+        confirmingGameAssetLicence = true
+        scrollView.setContentOffset(.zero, animated: false)
+        rebuild()
+        canvas.focusAction("gameAssets.cancel")
     }
 
     private func openFamily(_ family: MobileFamily) {
@@ -1848,6 +1894,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 notice = ""
                 navigate(.home)
                 reloadLibrary()
+                #if os(iOS)
+                updateRestoredAppIcon()
+                #endif
             } catch {
                 restoringResources = false; loading = false
                 gameAssetProgress = nil

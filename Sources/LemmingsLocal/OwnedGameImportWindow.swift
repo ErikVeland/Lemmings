@@ -13,6 +13,7 @@ import UniformTypeIdentifiers
   var onResourcesInstalled: ((OwnedResourceLibrary.Installation) -> Void)?
   private let library: OwnedGameLibrary
   private let resourceLibrary: OwnedResourceLibrary?
+  private weak var downloadButton: NSButton?
   private var page: GameMenuPage?
   private var task: Task<Void, Never>?
 
@@ -21,9 +22,10 @@ import UniformTypeIdentifiers
     self.resourceLibrary = resourceLibrary
   }
 
-  func show(owner: NSWindow) {
+  func show(owner: NSWindow, promptForDownload: Bool = false) {
     if let page, GameScreen.shared.contains(page) {
       GameScreen.shared.present(page, owner: owner)
+      if promptForDownload { downloadButton?.performClick(nil) }
       return
     }
     let next = GameMenuPage(title: L10n.text("Import owned games"))
@@ -110,6 +112,7 @@ import UniformTypeIdentifiers
         GameScreen.shared.confirm(GameAssetPack.Licence.title, detail: GameAssetPack.Licence.detail,
           actionTitle: GameAssetPack.Licence.accept, cancelTitle: L10n.text("Cancel"), owner: owner, action: startDownload)
       }
+      downloadButton = download
       download.setAccessibilityIdentifier("download.gameAssets")
       next.addSecondaryAction(L10n.text("Restore original assets…")) { [weak self, weak next] in
         guard let self, self.task == nil else { return }
@@ -151,6 +154,7 @@ import UniformTypeIdentifiers
       self?.page = nil
     }
     GameScreen.shared.present(next, owner: owner)
+    if promptForDownload { downloadButton?.performClick(nil) }
   }
 
   func exportBundle() {
