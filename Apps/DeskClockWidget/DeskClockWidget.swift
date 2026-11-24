@@ -15,9 +15,6 @@ struct ClockProvider: @preconcurrency TimelineProvider {
 
     @MainActor func getSnapshot(in context: Context, completion: @escaping (ClockEntry) -> Void) {
         let now = Date()
-        #if os(macOS) && ULTIMATE_LEMMIX_STORE
-        completion(ClockEntry(date: now, event: nil))
-        #else
         guard !context.isPreview else {
             completion(ClockEntry(date: now, event: nil))
             return
@@ -26,17 +23,12 @@ struct ClockProvider: @preconcurrency TimelineProvider {
             let event = await EventKitDeskClockSource().nextEvent(now: now)
             completion(ClockEntry(date: now, event: event))
         }
-        #endif
     }
 
     @MainActor func getTimeline(in context: Context, completion: @escaping (Timeline<ClockEntry>) -> Void) {
         let now = Date()
         Task {
-            #if os(macOS) && ULTIMATE_LEMMIX_STORE
-            let candidates: [DeskClockCandidate] = []
-            #else
             let candidates = await EventKitDeskClockSource().candidates(now: now)
-            #endif
             let dates = DeskClockTimeline.entryDates(from: now)
             let entries = dates.map { date in
                 ClockEntry(date: date, event: DeskClockEvents.next(from: candidates, now: date))
@@ -157,11 +149,7 @@ struct DeskClockWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: ClockProvider()) { ClockWidgetView(entry: $0) }
             .configurationDisplayName(L10n.text("Desk Clock"))
-            #if os(macOS) && ULTIMATE_LEMMIX_STORE
-            .description(L10n.text("Lemmings keep the time."))
-            #else
             .description(L10n.text("Lemmings keep the time and watch for your next event."))
-            #endif
             .supportedFamilies(families)
             .contentMarginsDisabled()
     }
