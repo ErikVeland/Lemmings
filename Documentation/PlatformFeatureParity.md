@@ -1394,3 +1394,7 @@ save recovery remain separate from these source and packaging checks.
 See the [Store submission evidence](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/store-submission/README.md)
 for the final package and service state. Public redistribution of the full
 restoration collection remains uncleared.
+
+### Ultimate Lemmix on the Mac App Store
+
+Desk Clock shows the time without calendar access. Home and About omit external donation actions.
