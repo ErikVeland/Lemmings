@@ -1360,4 +1360,4 @@ restoration collection remains uncleared.
 
 ### Ultimate Lemmix on the Mac App Store
 
-Desk Clock shows the time without calendar access. Home and About omit external donation actions.
+The Desk Clock widget can show the next timed calendar event after the player grants Calendar access in the Mac app menu. Build 113 shows the time only. Home and About omit external donation actions.

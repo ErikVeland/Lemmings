@@ -61,8 +61,10 @@
 	<true/>
 	<key>LemmingsCloudProgressEnabled</key>
 	<false/>
-
-
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>The Desk Clock shows your next event on the signpost. Lemmix cannot change your calendar.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>The Desk Clock shows your next event on the signpost. Lemmix cannot change your calendar.</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
 	<key>UltimateLemmixStore</key>
