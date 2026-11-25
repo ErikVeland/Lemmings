@@ -78,7 +78,10 @@ extension MenuAudit {
             let panel = MobileReplaySkillArt.frame(in: field, below: field.minY + (layout.portrait != nil ? 56 : 8), avoiding: obstacles)
             if let panel {
                 guard field.contains(panel), obstacles.allSatisfy({ !panel.intersects($0) }) else { throw invalidTargets(line: #line) }
-                if layout.canPlay { MobileReplaySkillArt.draw(uses: uses, tick: 146, in: panel, typography: typography, context: context) }
+                if layout.canPlay {
+                    MobileReplaySkillArt.draw(uses: uses, tick: 146, rate: session.ticksPerSecond,
+                        in: panel, typography: typography, context: context)
+                }
             }
             MobileHUDRenderer(layout: layout, snapshot: session.snapshot, selectedSkill: 0, paused: true, speed: 1, endRunArmed: false,
                 panelImage: session.panelFrame.flatMap(MobileBitmapRenderer.image), typography: typography, readOnly: true)

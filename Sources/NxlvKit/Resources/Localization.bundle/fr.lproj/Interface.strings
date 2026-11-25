@@ -153,7 +153,7 @@
 "Achievements…" = "Succès…";
 "Across all recorded levels" = "Sur tous les niveaux enregistrés";
 "Action" = "Action";
-"Action replay. {0} of {1} saved. Tick {2} of {3}." = "Relecture des actions. {0} sur {1} enregistrées. Cycle {2} sur {3}.";
+"Action replay: {0}" = "Rediffusion des actions : {0}";
 "Actions and tools" = "Actions et outils";
 "Actions include minimum or maximum release rate." = "Les actions incluent le réglage minimal ou maximal du débit.";
 "Activate selected menu choice" = "Activer l’option sélectionnée";
@@ -178,8 +178,6 @@
 "Added effects" = "Effets ajoutés";
 "Added to {0}" = "Ajouté à {0}";
 "Adjust Classic pixel width with Monitor or Television. Flat Panel keeps the saved value." = "Règle la largeur des pixels du mode classique avec Moniteur ou Téléviseur. Écran plat conserve la valeur enregistrée.";
-"Adjust music volume independently of sound effects." = "Règle le volume de la musique indépendamment des effets sonores.";
-"Adjust sound-effects volume independently of music." = "Règle le volume des effets sonores indépendamment de la musique.";
 "Adjust the Classic tube effect. Available with Monitor or Television. Flat Panel keeps the saved value." = "Règle l’effet tube du mode classique. Disponible avec Moniteur ou Téléviseur. Écran plat conserve la valeur enregistrée.";
 "Advance one tick" = "Avancer d’un cycle";
 "Advance one tick." = "Avance d’un cycle.";
@@ -497,7 +495,6 @@
 "Choose at least two players for Hot Seat." = "Choisis au moins deux joueurs pour le Hot Seat.";
 "Choose at least two players, then try again." = "Choisissez au moins deux joueurs, puis réessayez.";
 "Choose contacts" = "Choisir des contacts";
-"Choose eight different skills" = "Choisissez huit compétences différentes";
 "Choose files first." = "Choisis d’abord des fichiers.";
 "Choose first names for your lemmings. Names stay on this device. Their stories are fictional." = "Choisissez des prénoms pour vos lemmings. Ils restent sur cet appareil. Leurs histoires sont fictives.";
 "Choose game folder" = "Choisir le dossier du jeu";
@@ -2019,7 +2016,6 @@
 "Pause" = "Pause";
 "Pause / play" = "Pause / jouer";
 "Pause / resume" = "Mettre en pause / reprendre";
-"Pause action replay" = "Mettre le replay en pause";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Mettez en pause et suivez le parcours de l’entrée à la sortie. Repérez le premier endroit qu’un lemming ne peut pas franchir sans danger.";
 "Pause and open controls" = "Mettre en pause et ouvrir les commandes";
 "Pause and open the game menu. (Esc)" = "Pause and open the game menu. (Esc)";
@@ -2048,7 +2044,6 @@
 "Play Lemmings 2…" = "Jouer à Lemmings 2…";
 "Play a death sound when a lemming falls out of the bottom of the level in any of the three games." = "Joue un son de mort lorsqu’un lemming tombe par le bas du niveau dans l’un des trois jeux.";
 "Play a level to set a record." = "Terminez un niveau pour établir un record.";
-"Play action replay" = "Lire le replay";
 "Play again" = "Rejouer";
 "Play as {0}" = "Jouer en tant que {0}";
 "Play death sound" = "Jouer le son de mort";
@@ -2281,6 +2276,7 @@
 "Replay movie" = "Lire le film";
 "Replay position" = "Position du replay";
 "Replay recording stopped because the encoder stalled." = "L’enregistrement du replay s’est arrêté car l’encodeur ne répondait plus.";
+"Replay resumed" = "Rediffusion reprise";
 "Replay section ${0} is not recognised." = "La section de replay ${0} n’est pas reconnue.";
 "Replay unavailable" = "Replay indisponible";
 "Replay unavailable. Retry when connected." = "Replay indisponible. Réessaie une fois connecté.";
@@ -2583,6 +2579,7 @@
 "Show the number of live lemmings inside the reticule." = "Affiche le nombre de lemmings vivants à l’intérieur du réticule.";
 "Show the selected skill beside the pointer at 1× or 2×, or hide it with None. L3 Use shows carried tool uses." = "Affiche la compétence sélectionnée à côté du pointeur en taille 1× ou 2×, ou masque-la avec Aucun. Dans L3, Utiliser indique le nombre d’utilisations de l’outil transporté.";
 "Show the song title and soundtrack briefly when the music changes." = "Affiche brièvement le titre du morceau et la bande-son lorsque la musique change.";
+"Shows a full winning route." = "Révèle un parcours gagnant complet.";
 "Shuffle" = "Aléatoire";
 "Shuffle all" = "Tout mélanger";
 "Shuffle artwork" = "Graphismes aléatoires";
@@ -2648,6 +2645,7 @@
 "Space / P: Pause" = "Espace / P : pause";
 "Space / Return" = "Espace / Retour";
 "Space Tribe" = "Tribu spatiale";
+"Space or P plays or pauses. Left and right seek one second." = "Espace ou P lance ou met en pause. Les flèches gauche et droite reculent ou avancent d’une seconde.";
 "Space pauses. Escape returns to the movie list." = "Espace met en pause. Échap revient à la liste des films.";
 "Space pauses. Escape skips to {0}." = "Espace met en pause. Échap passe à {0}.";
 "Spade" = "Pelle";
@@ -3165,7 +3163,6 @@
 "Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind, undo or a bonus skill." = "Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind, undo or a bonus skill.";
 "Three-star rescue" = "Sauvetage trois étoiles";
 "Thrower" = "Lanceur";
-"Tick {0}. {1}: {2}. Skills used: {3}" = "Cycle {0}. {1} : {2}. Compétences utilisées : {3}";
 "Time" = "Temps";
 "Time " = "Temps ";
 "Time and actions" = "Temps et actions";
@@ -3231,7 +3228,6 @@
 "UNDO END RUN" = "ANNULER LA FIN DE PARTIE";
 "UP AND DOWN TO CHOOSE  *  ENTER TO START" = "HAUT ET BAS POUR CHOISIR  *  ENTRÉE POUR DÉMARRER";
 "UP DOWN ENTER  *  ESC BACK" = "HAUT BAS ENTRÉE  *  ÉCHAP RETOUR";
-"USED @ TICK" = "UTILISÉ AU CYCLE";
 "Uh oh. That was a feeble effort." = "Aïe. C’était une piètre tentative.";
 "Ultimate Lemmings" = "Ultimate Lemmings";
 "Ultimate Lemmings — {0}" = "Ultimate Lemmings — {0}";
@@ -3349,7 +3345,6 @@
 "Wait for this lemming to land." = "Attendez que ce lemming se pose.";
 "Walker" = "Marcheur";
 "Walks home with accompaniment." = "Walks home with accompaniment.";
-"Shows a full winning route." = "Révèle un parcours gagnant complet.";
 "Was asked to judge a cucumber." = "Was asked to judge a cucumber.";
 "Was authorised to choose a cushion." = "Was authorised to choose a cushion.";
 "Was complimented on an ordinary sandwich." = "Was complimented on an ordinary sandwich.";
@@ -3551,7 +3546,7 @@
 "{0} achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections, and the collection names at the bottom of the page select them directly. {1}{2}" = "{0} succès sur tous les niveaux. Gauche et droite changent de page. Haut et bas, ou les touches 1 à 4, changent de collection. Tu peux aussi sélectionner une collection avec son nom en bas de page. {1}{2}";
 "{0} artwork unavailable for this level: {1}" = "Illustration {0} indisponible pour ce niveau : {1}";
 "{0} assigned to lemming {1}." = "{0} attribué au lemming {1}.";
-"{0} at tick {1}" = "{0} au cycle {1}";
+"{0} at {1}" = "{0} à {1}";
 "{0} complete" = "{0} terminé";
 "{0} eligible" = "{0} admissible";
 "{0} eligible lemmings. Skill: {1}." = "{0} lemmings aptes. Compétence : {1}.";
@@ -3576,7 +3571,9 @@
 "{0} needs {1} palette colors; found {2}." = "{0} nécessite {1} couleurs dans la palette ; {2} trouvées.";
 "{0} new awards >" = "{0} new awards >";
 "{0} of 8 selected" = "{0} sur 8 sélectionnés";
+"{0} of {1}" = "{0} sur {1}";
 "{0} of {1} achievements earned" = "{0} succès obtenus sur {1}";
+"{0} of {1} saved" = "{0} sauvés sur {1}";
 "{0} pixels" = "{0} pixels";
 "{0} reads {1} bytes at {2}, beyond {3} available bytes." = "{0} lit {1} octets à partir de {2}, au-delà des {3} octets disponibles.";
 "{0} remaining" = "{0} restants";
@@ -3601,7 +3598,6 @@
 "{0}, {1} remaining{2}" = "{0}, {1} restants{2}";
 "{0}, {1} tracks, {2}" = "{0}, {1} pistes, {2}";
 "{0}, {1}{2}" = "{0}, {1}{2}";
-"{0}. Action replay. Space or P plays or pauses. Left and right seek one second." = "{0}. Rejeu des actions. Espace ou P lance la lecture ou la met en pause. Les flèches gauche et droite reculent ou avancent d’une seconde.";
 "{0}. Give {1} {2} at marker {3}, facing {4}." = "{0}. Donne {1} {2} au repère {3}, orienté vers {4}.";
 "{0}. Rewinds: {1}. W switches the rewind filter. {2} local records. {3} Press 1 to 4 to choose a board. Escape returns." = "{0}. Retours arrière : {1}. W change le filtre de retour arrière. {2} records locaux. {3} Appuie sur 1 à 4 pour choisir un classement. Échap revient en arrière.";
 "{0}. Select the play style for an explanation. Escape returns." = "{0}. Sélectionne le style de jeu pour afficher une explication. Échap revient à l’écran précédent.";
@@ -3616,5 +3612,6 @@
 "{0}: 1 tick ago" = "{0}: 1 tick ago";
 "{0}: replay analysis failed: {1}" = "{0} : échec de l’analyse du rejeu : {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
+"{0}: {1}." = "{0} : {1}.";
 "{0}H {1}M" = "{0}H {1}M";
 "{0}{1} more to rescue for three stars." = "Encore {0}{1} à sauver pour obtenir trois étoiles.";
