@@ -524,7 +524,6 @@
 "Choose unlocked levels or all levels for direct Classic selection." = "Choisis les niveaux débloqués ou tous les niveaux pour sélectionner directement un niveau classique.";
 "Choose your {0} folder." = "Choisis ton dossier {0}.";
 "Chronicles attribute cell is outside its object." = "La cellule d’attribut des Chronicles se trouve hors de son objet.";
-"Chronicles controls" = "Commandes de Chronicles";
 "Chronicles creature count does not match its placements." = "Le nombre de créatures des Chronicles ne correspond pas à leurs positions.";
 "Chronicles extra-lemming count does not match its placements." = "Le nombre de lemmings supplémentaires des Chronicles ne correspond pas à leurs positions.";
 "Chronicles frame exceeds its dimensions." = "Une image des Chronicles dépasse ses dimensions.";
@@ -545,7 +544,6 @@
 "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only." = "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.";
 "Classic artwork" = "Graphismes classiques";
 "Classic follow-up" = "Suite de Classic";
-"Classic follow-up adds five levels from the original DOS game, Fun 6–10." = "La suite de Classic ajoute cinq niveaux du jeu DOS d’origine, Fun 6–10.";
 "Classic keeps recent rewind states close. Repeated rewind presses on Apple TV move further back, and scenes use less work while you play." = "Classic conserve les états récents pour le retour arrière. Sur Apple TV, des pressions successives font reculer davantage. Les scènes demandent moins de calculs pendant le jeu.";
 "Classic opening" = "Début de Classic";
 "Classic skill counters" = "Compteurs de compétences classiques";
@@ -2524,7 +2522,6 @@
 "Select player {0}" = "Sélectionner le joueur {0}";
 "Select {0}{1}" = "Sélectionner {0}{1}";
 "Selected" = "Sélectionné";
-"Selecting a skill in Chronicles shows the original pressed artwork." = "Sélectionner une compétence dans Chronicles affiche le dessin d’origine du bouton enfoncé.";
 "Selection" = "Sélection";
 "Selection effect" = "Effet de sélection";
 "Sequel artwork" = "Graphismes de la suite";
@@ -3612,3 +3609,7 @@
 "{0}: {1}." = "{0} : {1}.";
 "{0}H {1}M" = "{0}H {1}M";
 "{0}{1} more to rescue for three stars." = "Encore {0}{1} à sauver pour obtenir trois étoiles.";
+"Home and Play" = "Accueil et Jouer";
+"Home offers one next step. Play holds every game and collection." = "L’accueil propose une seule étape suivante. Jouer regroupe tous les jeux et collections.";
+"Speed and rewind" = "Vitesse et retour arrière";
+"Choose a speed directly. Rewind counts back in game seconds." = "Choisissez directement la vitesse. Le retour arrière compte en secondes de jeu.";

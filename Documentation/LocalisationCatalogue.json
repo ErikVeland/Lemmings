@@ -3211,6 +3211,12 @@
       "Sources/LemmingsLocal/SettingsWindow.swift:252"
     ]
   },
+  "Choose a speed directly. Rewind counts back in game seconds.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:26"
+    ]
+  },
   "Choose a technique": {
     "kind": "text",
     "references": [
@@ -3450,12 +3456,6 @@
       "Sources/NxlvKit/Lemmings3Style.swift:74"
     ]
   },
-  "Chronicles controls": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:25"
-    ]
-  },
   "Chronicles creature count does not match its placements.": {
     "kind": "text",
     "references": [
@@ -3581,12 +3581,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsAppCore/Collections/ShortPlayCatalogue.swift:24"
-    ]
-  },
-  "Classic follow-up adds five levels from the original DOS game, Fun 6–10.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:26"
     ]
   },
   "Classic keeps recent rewind states close. Repeated rewind presses on Apple TV move further back, and scenes use less work while you play.": {
@@ -7413,6 +7407,18 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ClassicSaga.swift:35"
+    ]
+  },
+  "Home and Play": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:25"
+    ]
+  },
+  "Home offers one next step. Play holds every game and collection.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:25"
     ]
   },
   "Home {0}/{1}": {
@@ -15178,7 +15184,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/GameRecoveryArt.swift:15",
-      "Sources/LemmingsLocal/AboutWindow.swift:185",
+      "Sources/LemmingsLocal/AboutWindow.swift:193",
       "Sources/LemmingsLocal/ControllerDevicePresentation.swift:78",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:709",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2324",
@@ -16437,12 +16443,6 @@
       "Sources/LemmingsLocal/SolutionSwitchView.swift:68"
     ]
   },
-  "Selecting a skill in Chronicles shows the original pressed artwork.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:25"
-    ]
-  },
   "Selection": {
     "kind": "text",
     "references": [
@@ -16670,7 +16670,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/ShortGamesArt.swift:12",
-      "Sources/LemmingsLocal/ReleaseWelcome.swift:26",
       "Sources/LemmingsLocal/main.swift:4565",
       "Sources/LemmingsLocal/main.swift:5079",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:17"
@@ -17306,6 +17305,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/LeaderboardReplayWindow.swift:51"
+    ]
+  },
+  "Speed and rewind": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsLocal/ReleaseWelcome.swift:26"
     ]
   },
   "Speed {0}X": {
