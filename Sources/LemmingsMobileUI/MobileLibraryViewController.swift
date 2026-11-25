@@ -1010,7 +1010,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         let subtitle = loading ? L10n.text("Loading...") : notice
         switch route {
         case .home:
-            let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") } ?? profiles.active.name
+            // With one profile, naming it on Home says nothing new.
+            let initials = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
+                ?? (profiles.players.count > 1 ? profiles.active.name : "")
             let nextPlayerIndex = hotSeat.flatMap { $0.players.firstIndex(of: $0.turn) }
             // Community totals live on Community. Home shows only what the player needs next.
             #if os(tvOS)
