@@ -133,8 +133,7 @@ import NxlvKit
         indexScroll.documentView = indexDocument
         addSubview(indexScroll); addSubview(detail)
         for (index, entry) in entries.enumerated() {
-            let title = entry.title.components(separatedBy: " · ").first ?? entry.title
-            let button = AboutReleaseButton(title: title, target: self, action: #selector(selectRelease))
+            let button = AboutReleaseButton(title: indexTitle(index), target: self, action: #selector(selectRelease))
             button.tag = index
             button.setButtonType(.pushOnPushOff)
             button.setAccessibilityLabel(entry.title)
@@ -145,6 +144,15 @@ import NxlvKit
         updateSelection()
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+    /// The version alone, or with its build when another release shares that version.
+    func indexTitle(_ index: Int) -> String {
+        func version(_ title: String) -> String { title.components(separatedBy: " · ").first ?? title }
+        let title = releases[index].title, shared = version(title)
+        guard releases.filter({ version($0.title) == shared }).count > 1,
+              let build = title.components(separatedBy: " · Build ").last, build != title else { return shared }
+        return "\(shared) (\(build))"
+    }
+
     @objc private func selectRelease(_ sender: NSButton) {
         selectedIndex = sender.tag
         detail.markdown = releases[selectedIndex].markdown
