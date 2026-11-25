@@ -1,10 +1,12 @@
 # Ultimate Lemmings 2.5 build 110
 
-Status: Release checks passed; GitHub publication is pending.
+Status: Published on 25 November 2026.
 
 Release source: `e2f29e52ac9af9747b040087d53753e4a9a697aa`  
 Release tag: `v2.5`  
 Scope: macOS 12.3 or later, Apple silicon and Intel.
+GitHub release: https://github.com/ErikVeland/Lemmings/releases/tag/v2.5  
+Sparkle feed commit on `main`: `f0344f4410c2fdfd4b6a0f5c44a0e737d29decad`
 
 Ultimate Lemmings ships Mac builds only. No iOS, iPadOS, Duo, tvOS or App Store
 package is part of this release. App Store updates are for Ultimate Lemmix.
