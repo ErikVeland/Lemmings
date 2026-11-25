@@ -12,6 +12,7 @@ mkdir -p "$widget/Contents/MacOS" "$widget/Contents/Resources"
 inputs=()
 widget_flags=()
 widget_entitlements="$project_dir/Apps/DeskClockWidget/Mac/DeskClockMacWidget.entitlements"
+sdk_path="$(xcrun --sdk macosx --show-sdk-path)"
 if [[ "${ULTIMATE_LEMMIX_STORE:-0}" == 1 ]]; then
   widget_flags=(-DULTIMATE_LEMMIX_STORE)
   widget_entitlements="$project_dir/Resources/UltimateLemmix/DeskClockMacWidget.entitlements"
@@ -21,7 +22,7 @@ for architecture in "${architectures[@]}"; do
   [[ "$architecture" == x86_64 ]] && compatibility=(-runtime-compatibility-version none)
   # Initialise the extension host before macOS calls the Swift widget entry point.
   swiftc "${compatibility[@]}" "${widget_flags[@]}" -swift-version 6 -parse-as-library -application-extension \
-    -target "$architecture-apple-macosx12.3" \
+    -sdk "$sdk_path" -target "$architecture-apple-macosx12.3" \
     -module-cache-path "$build_dir/ModuleCache" \
     -I "$build_dir/$architecture/modules" -L "$build_dir/$architecture" \
     -lLemmingsGameArt -lLemmingsMobileCore -lLemmingsAppCore -lLemmingsTVCore -lNxlvKit \
