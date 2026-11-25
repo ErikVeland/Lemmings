@@ -28,7 +28,8 @@ import NxlvKit
                     continueHandlesHandover: Bool = false, skip: (() -> Void)? = nil,
                     prepareSkip: (() throws -> Void)? = nil,
                     later: (() -> Void)? = nil, hints: (() -> Void)? = nil,
-                    status: String? = nil, menu: (() -> Void)? = nil) {
+                    status: String? = nil, sideAction: (String, () -> Void)? = nil,
+                    menuTitle: String? = nil, menu: (() -> Void)? = nil) {
         arcadeView.rewardVolume = rewardVolume
         arcadeView.rewardVolumeProvider = rewardVolumeProvider
         arcadeView.mode = .result; arcadeView.report = report; arcadeView.level = report.run.level
@@ -43,6 +44,8 @@ import NxlvKit
         arcadeView.onSkip = skip.map { skip in { [weak self] in self?.close(); skip() } }
         arcadeView.onLater = later.map { action in { [weak self] in self?.close(); action() } }
         arcadeView.onHints = hints
+        arcadeView.resultSideAction = sideAction.map { title, action in (title, { [weak self] in self?.close(); action() }) }
+        arcadeView.resultMenuTitle = menuTitle
         arcadeView.onMenu = menu.map { action in { [weak self] in self?.close(); action() } }
         arcadeView.onReplay = replay
         arcadeView.onStoredReplay = storedReplay
@@ -231,6 +234,8 @@ import NxlvKit
     var onReplay: ((Bool) -> Void)?
     var onStoredReplay: ((URL, String) -> Void)?
     var onClose: (() -> Void)?
+    var resultMenuTitle: String?
+    var resultSideAction: (String, () -> Void)?
     var onMenu: (() -> Void)?
     var continueTitle = L10n.text("Next level")
     var resultStatus: String?

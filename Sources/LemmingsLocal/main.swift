@@ -4582,8 +4582,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     items.append(LevelCoverFlowItem(
       id: "playlist:short-games",
       title: L10n.text("Short games"),
-      subtitle: L10n.text("Five-level openings"),
-      detail: L10n.text("Classic and The Tribes")))
+      subtitle: "",
+      detail: ""))
     items.append(LevelCoverFlowItem(
       id: "playlist:progression",
       title: L10n.text("Progression"),
@@ -5095,19 +5095,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func presentShortGames() {
-    let page = GameMenuPage(title: L10n.text("Short games"), subtitle: L10n.text("Five-level openings"))
+    let page = GameMenuPage(title: L10n.text("Short games"))
     let carousel = LevelCoverFlowView(frame: page.body.bounds)
     carousel.autoresizingMask = [.width, .height]
     page.body.addSubview(carousel)
     let play = page.addPrimaryAction(L10n.text("Play")) { [weak self, weak carousel] in
       guard let id = carousel?.selectedItem?.id else { return }
-      self?.startShortGame(id)
+      if id == "easy-puzzles" { self?.startEasyPuzzles() }
+      else { self?.startShortGame(id) }
     }
     play.keyEquivalent = "\r"; play.keyEquivalentModifierMask = []
     page.preferControllerControl(play)
     carousel.onSelectionChanged = { [weak play] item in play?.isEnabled = item.isAvailable }
     carousel.onStart = { [weak play] _ in play?.performClick(nil) }
-    let items = ShortPlayCatalogue.sequences.map { sequence in
+    var items = [LevelCoverFlowItem(id: "easy-puzzles", title: EasyPuzzleCatalogue.title, subtitle: "",
+      detail: "", isAvailable: !EasyPuzzleCatalogue.puzzles.isEmpty)]
+    items += ShortPlayCatalogue.sequences.map { sequence in
       let entries = shortGameEntries(sequence)
       return LevelCoverFlowItem(id: sequence.id, title: sequence.title, subtitle: sequence.caption,
         detail: !sequence.supportsCarriedSequence ? L10n.text("Reserve carry-over unavailable")
@@ -5121,6 +5124,96 @@ let achievementProgressKey = "ClassicAchievementProgress"
     play.isEnabled = carousel.selectedItem?.isAvailable == true
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
     GameScreen.shared.present(page, owner: window, focus: carousel)
+  }
+
+  private func startEasyPuzzles() {
+    let arcade = ArcadeStore.shared
+    let owner = arcade.records.activeProfileID, seat = arcade.hotSeatID
+    do {
+      let store = try playlistStore()
+      let previous = store.activeRun
+      if previous?.source == .easyPuzzles, store.activeRunHotSeatID == seat {
+        startActiveSequence()
+        return
+      }
+      if let saved = store.savedRuns.first(where: { $0.hotSeatID == seat && $0.run.source == .easyPuzzles }) {
+        try saveBeforeSessionChange()
+        try store.resumeRun(id: saved.run.id)
+        prepareLibrary(preservingMusic: false, resumeMusic: false)
+        sequencePlaylistStore = store
+        startActiveSequence()
+        return
+      }
+      let current = sequencePlayingIdentity ?? store.resumableLearningJourney(hotSeatID: seat)?.run.currentEntry.identity
+      let familiar = Set(LearningJourneyLibrary.journey?.lessons.first { $0.entry.identity == current }?.concepts ?? [])
+      let knownWins = learningWins(profileID: owner)
+      let excluded = EasyPuzzleCatalogue.exclusions(profileID: owner, sessionID: seat, current: current)
+        .union(store.learningProgress(hotSeatID: seat).completed)
+      let pool = EasyPuzzleCatalogue.puzzles.filter { puzzle in
+        let identity = puzzle.entry.identity
+        return (seat != nil || !knownWins(identity))
+          && (levelBrowserRoutes[identity] != nil || levelBrowserFanPacks[identity.packID] != nil)
+      }
+      let shortlist = EasyPuzzleCatalogue.queue(from: pool, familiarSkills: familiar,
+        excluding: excluded, seed: .random(in: UInt64.min...UInt64.max), limit: 10)
+      guard !shortlist.isEmpty else {
+        GameScreen.shared.message(L10n.text("No new easy puzzles"), detail: L10n.text("Choose another game or resume your journey."))
+        return
+      }
+      ensureFanPacksResolved(for: shortlist, title: EasyPuzzleCatalogue.title) { [weak self] failures in
+        guard let self, self.playlistStoreCache?.store === store, store.activeRun?.id == previous?.id,
+          arcade.records.activeProfileID == owner, arcade.hotSeatID == seat else { return }
+        do {
+          let available = shortlist.filter { entry in
+            guard !failures.contains(entry.identity.packID) else { return false }
+            switch self.playlistResolution(for: entry) {
+            case .available, .locked: return true
+            default: return false
+            }
+          }
+          let run = try EasyPuzzleCatalogue.run(entries: available)
+          try self.saveBeforeSessionChange()
+          try store.startRun(run, hotSeatID: seat)
+          self.prepareLibrary(preservingMusic: false, resumeMusic: false)
+          self.sequencePlaylistStore = store
+          self.startActiveSequence()
+        } catch {
+          GameScreen.shared.message(L10n.text("Easy puzzles unavailable"), detail: error.localizedDescription)
+        }
+      }
+    } catch {
+      GameScreen.shared.message(L10n.text("Easy puzzles unavailable"), detail: error.localizedDescription)
+    }
+  }
+
+  private func presentEasyPuzzlePause() {
+    let page = GamePauseMenu.page(title: sequencePlaylistStore?.activeRun?.currentEntry.levelNameSnapshot ?? "",
+      resume: { [weak self] in self?.togglePause() },
+      retry: { [weak self] in self?.retry() },
+      hints: { [weak self] in self?.showLevelHints() },
+      sideAction: (L10n.text("Another puzzle"), { [weak self] in self?.swapEasyPuzzle() }),
+      leave: { [weak self] in self?.returnToBrowsing() })
+    GameScreen.shared.present(page, owner: window)
+  }
+
+  private func swapEasyPuzzle() {
+    guard let store = sequencePlaylistStore, let run = store.activeRun, run.source == .easyPuzzles,
+      run.currentEntry.identity == sequencePlayingIdentity, session?.didWin != true else { return }
+    do {
+      try EasyPuzzleCatalogue.rememberSwap(run.currentEntry, profileID: ArcadeStore.shared.records.activeProfileID,
+        sessionID: store.activeRunHotSeatID)
+      if try store.advanceActiveRun() { startActiveSequence() }
+      else { try finishEasyPuzzles(store) }
+    } catch {
+      GameScreen.shared.message(L10n.text("Run not saved"), detail: error.localizedDescription)
+    }
+  }
+
+  private func finishEasyPuzzles(_ store: LevelPlaylistStore, passingTurnAfter player: String? = nil) throws {
+    try store.setActiveRun(nil)
+    if let player, ArcadeStore.shared.turnPolicy == .everyLevel { _ = ArcadeStore.shared.passSessionTurn(after: player) }
+    homeShowsPlay = false
+    returnToLibrary()
   }
 
   private func startShortGame(_ id: String) {
@@ -5198,7 +5291,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     switch playlistResolution(for: entry) {
     case .available: return true
     case .locked:
-      return (run.source == .playlist(LearningJourney.playlistID) && entry.identity.engine == .classic)
+      return ((run.source == .playlist(LearningJourney.playlistID) || run.source == .easyPuzzles) && entry.identity.engine == .classic)
         || ShortPlayCatalogue.permitsLocked(entry, in: run)
     default: return false
     }
@@ -5306,6 +5399,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       retry: { [weak self] in self?.retry() },
       hints: { [weak self] in self?.showLearningHints() },
       later: learning?.later, skip: skip,
+      sideAction: learning?.takeBreak.map { (L10n.text("Take a break"), $0) },
       leave: { [weak self] in self?.returnToLibrary(); self?.presentLearningJourney() })
     GameScreen.shared.present(page, owner: window)
   }
@@ -5340,7 +5434,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         self.presentLearningJourney()
       }
     }, later: { [weak self] in self?.deferLearningLevel(runID: runID, level: level) },
-       hints: { [weak self] in self?.showLearningHints() })
+       hints: { [weak self] in self?.showLearningHints() },
+       takeBreak: EasyPuzzleCatalogue.puzzles.isEmpty ? nil : { [weak self] in self?.startEasyPuzzles() })
   }
 
   private func deferLearningLevel(runID: UUID, level: LevelCatalogueIdentity) {
@@ -6058,6 +6153,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .available, .locked:
         sequencePlaylistStore = store
         let checkpoint = try sequenceCheckpoint(for: run, hotSeatID: store.activeRunHotSeatID)
+        if let checkpoint, let seat = store.activeRunHotSeatID,
+           seat == ArcadeStore.shared.hotSeatID, checkpoint.profileID != ArcadeStore.shared.playingProfileID,
+           !ArcadeStore.shared.restoreSessionTurn(checkpoint.profileID) {
+          throw LevelPlaylistStore.Failure.invalidDocument
+        }
         startBrowserLevel(run.currentEntry.identity, sequenceRunID: run.id, recovery: checkpoint)
       case .unavailable:
         playMusicForCurrentLevel()
@@ -6076,7 +6176,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func sequenceCheckpoint(for run: LevelSequenceRun, hotSeatID: String?) throws -> RunRecovery? {
-    try recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: hotSeatID,
+    let arcade = ArcadeStore.shared
+    let owner = arcade.playingProfileID
+    let owners = hotSeatID != nil && hotSeatID == arcade.hotSeatID
+      && (run.source == .playlist(LearningJourney.playlistID) || run.source == .easyPuzzles)
+      ? Set(arcade.sessionProfiles.map(\.id)) : [owner]
+    return try recoveryStore.latest(profileIDs: owners, hotSeatID: hotSeatID,
       sequence: SequenceRunRecovery(runID: run.id, entry: run.currentEntry))
   }
 
@@ -6176,8 +6281,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   private func recordSequenceWin(completed identity: LevelCatalogueIdentity, runID: UUID, won: Bool) {
-    guard won, let store = sequencePlaylistStore,
-      store.activeRun?.source == .playlist(LearningJourney.playlistID) else { return }
+    guard won, let store = sequencePlaylistStore, let source = store.activeRun?.source,
+      source == .playlist(LearningJourney.playlistID) || source == .easyPuzzles else { return }
     do { try store.recordLearningWin(runID: runID, level: identity); try saveCloudLearning(store) }
     catch { setStatus(L10n.text("Could not save completed lesson: \(error.localizedDescription)")) }
   }
@@ -6193,6 +6298,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
             run.id == runID,
             run.currentEntry.identity == identity else { return false }
       let learning = run.source == .playlist(LearningJourney.playlistID)
+      if run.source == .easyPuzzles {
+        try store.recordLearningWin(runID: runID, level: identity)
+        try saveCloudLearning(store)
+        if !EasyPuzzleCatalogue.canContinue(run, wins: store.learningProgress(hotSeatID: store.activeRunHotSeatID).completed) {
+          try finishEasyPuzzles(store)
+          return true
+        }
+      }
       let advanced = try (learning ? store.advanceLearningJourney(runID: runID, won: true) : store.advanceActiveRun())
       if learning { try saveCloudLearning(store) }
       if advanced, store.activeRun != nil {
@@ -9452,7 +9565,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     guard arcadeAutoPresent, let arcadeReport else { return }
     if sequencePlayingIdentity != nil,
        let run = sequencePlaylistStore?.activeRun {
-      let title = session?.didWin == true
+      let easy = run.source == .easyPuzzles
+      let canContinueEasy = easy && EasyPuzzleCatalogue.canContinue(run,
+        wins: sequencePlaylistStore?.learningProgress(hotSeatID: ArcadeStore.shared.hotSeatID).completed ?? [])
+      let title = easy && session?.didWin == true
+        ? (canContinueEasy ? L10n.text("Next puzzle") : L10n.text("Done for tonight"))
+        : session?.didWin == true
         ? (run.currentIndex + 1 < run.entries.count ? L10n.text("Next level") : L10n.text("Finish run"))
         : L10n.text("Retry level")
       let learning = learningResultActions(runID: run.id, level: run.currentEntry.identity)
@@ -9471,7 +9589,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
         skip: learning?.skip,
         prepareSkip: learning?.prepareSkip,
         later: learning?.later, hints: learning?.hints,
-        menu: { [weak self] in self?.returnToBrowsing() })
+        sideAction: easy ? (L10n.text("Another puzzle"), { [weak self] in self?.swapEasyPuzzle() })
+          : learning?.takeBreak.map { (L10n.text("Take a break"), $0) },
+        menuTitle: easy && session?.didWin == true ? L10n.text("Done for tonight") : nil,
+        menu: { [weak self] in
+          guard let self else { return }
+          if easy, self.session?.didWin == true, let store = self.sequencePlaylistStore {
+            do {
+              try store.recordLearningWin(runID: run.id, level: run.currentEntry.identity)
+              try self.saveCloudLearning(store)
+              try self.finishEasyPuzzles(store, passingTurnAfter: self.arcadeProfileID)
+            } catch { GameScreen.shared.message(L10n.text("Run not saved"), detail: error.localizedDescription) }
+          } else { self.returnToBrowsing() }
+        })
       return
     }
     let hasNext = currentNxlvURL != nil ? nextNeoPackIdentity != nil : fanPlaying ? fanQueueIndex + 1 < fanQueue.count
@@ -9955,6 +10085,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
       guard let self else { return }
       if self.cancelRewindToOrigin() { return }
       if self.isLearningJourneyActive { self.presentLearningPause(); return }
+      if self.sequencePlayingIdentity != nil, self.sequencePlaylistStore?.activeRun?.source == .easyPuzzles {
+        self.presentEasyPuzzlePause()
+        return
+      }
       _ = keyboard?.pauseForHelp()
       self.presentPauseMenu()
     }

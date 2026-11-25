@@ -145,6 +145,25 @@ general coaching when no checked hint exists. L2/L3 teaching sequences need
 native route and carry-over evidence; the Classic course is not sequel acceptance.
 No new human calibration is claimed by this plan.
 
+## Easy puzzles
+
+Short games offers Easy puzzles. Pause or finish an unsuccessful Journey attempt
+and select Take a break to open the same pool. The saved Journey keeps its queue
+and compatible checkpoint. Another puzzle sets the current easy puzzle aside for
+the selected solo player or Hot Seat session. Done for tonight ends the break.
+A break ends after three wins or when its queue runs out.
+
+The initial pool contains 38 Classic puzzles across 15 packs, including 19 fan
+levels. The selector favours familiar skills, varies packs and limits increases
+in estimated difficulty. It excludes recorded wins and puzzles set aside by the
+selected session. A break win counts in the original pack and in the Journey if
+it contains the same puzzle. The winning replay evidence still needs first-time
+human playtesting for discovery difficulty.
+
+Regenerate the exact-source pool with
+`python3 Tools/DifficultyDiagnostics/easy_puzzles.py`. The `--check` option
+compares the bundled manifest with the replay evidence.
+
 ## Components and evidence
 
 `DifficultyProfile` is Codable. It contains the precise score, confidence,

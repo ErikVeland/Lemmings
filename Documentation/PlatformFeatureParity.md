@@ -1063,6 +1063,16 @@ also Classic-only across platforms.
 | Manual familiar-name entry on TV | Native contact-picker difference. Do not silently request broader contact access. |
 | Duo hinge-triggered clock versus ordinary clock routes elsewhere | Device-specific hardware trigger. The shared clock remains available through platform-appropriate entry points. |
 
+### Easy puzzles and Journey breaks
+
+Mac, iPhone, iPad, Duo and Apple TV use the same Classic pool and level identities.
+Start from Short games or take a break from the Journey pause or failure screen.
+Both queues retain independent local checkpoints. Wins enter shared source
+progress and follow the usual sync path. Break queues and set-aside choices are
+local to the device. Native L2 and L3 Journey actions on Mac share the break
+entry point for legacy queues. The Easy puzzles pool uses Classic mechanics
+and needs separate source evidence for L2, L3 and NeoLemmix puzzles.
+
 ### Progress and Leaderboards — 26 October 2026
 
 Home has two separate entries. Progress belongs to the active local player.

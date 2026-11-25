@@ -189,6 +189,23 @@ public actor MobileCheckpointStore {
         return saved
     }
 
+    /// Loads the checkpoint for a specific queue, including the previous single-slot format.
+    public func load(owner: String, scope: String?, sequenceID: UUID) async throws -> MobileCheckpointEnvelope? {
+        let file = scopedURL(owner: owner, scope: scope, sequenceID: sequenceID)
+        if FileManager.default.fileExists(atPath: file.path)
+            || FileManager.default.fileExists(atPath: file.appendingPathExtension("backup").path) {
+            guard let saved = try await MobileCheckpointStore(url: file).load(),
+                  saved.scope == scope, saved.journeyContext?.runID == sequenceID,
+                  scope != nil || (saved.owner ?? MobileProfiles.defaultID) == owner else {
+                throw MobileCheckpointError.invalid
+            }
+            return saved
+        }
+        guard let saved = try await load(owner: owner, scope: scope),
+              saved.journeyContext == nil || saved.journeyContext?.runID == sequenceID else { return nil }
+        return saved
+    }
+
     public func save(_ envelope: MobileCheckpointEnvelope) throws {
         guard !retiredRuns.contains(envelope.runID) else { return }
         let validated = try envelope.validated()
@@ -242,7 +259,11 @@ public actor MobileCheckpointStore {
     /// Deletes only this player's solo checkpoints, including older backup runs.
     public func removeSoloRuns(owner: String) throws {
         let scoped = scopedURL(owner: owner, scope: nil)
-        let paths = [url, backupURL, scoped, scoped.appendingPathExtension("backup")]
+        let sequenceFiles = (try? FileManager.default.contentsOfDirectory(at: scoped.deletingLastPathComponent(),
+            includingPropertiesForKeys: nil))?.filter {
+                $0.lastPathComponent.hasPrefix(scoped.deletingPathExtension().lastPathComponent + "-")
+            } ?? []
+        let paths = [url, backupURL, scoped, scoped.appendingPathExtension("backup")] + sequenceFiles
         var owned: [(URL, UUID)] = []
         for path in paths where FileManager.default.fileExists(atPath: path.path) {
             let saved = try decode(read(path))
@@ -269,14 +290,23 @@ public actor MobileCheckpointStore {
         }
     }
 
-    private func scopedURL(owner: String, scope: String?) -> URL {
+    private func scopedURL(owner: String, scope: String?, sequenceID: UUID? = nil) -> URL {
         let key = scope.map { "shared:" + $0 } ?? "solo:" + owner
-        return url.deletingLastPathComponent().appendingPathComponent("scoped-" + Self.hash(Data(key.utf8)) + ".json")
+        let suffix = sequenceID.map { "-" + $0.uuidString } ?? ""
+        return url.deletingLastPathComponent().appendingPathComponent("scoped-" + Self.hash(Data(key.utf8)) + suffix + ".json")
     }
 
     private func saveScoped(_ envelope: MobileCheckpointEnvelope, bytes: Data) throws {
         guard !retiredRuns.contains(envelope.runID) else { return }
         let target = scopedURL(owner: envelope.owner ?? MobileProfiles.defaultID, scope: envelope.scope)
+        if let sequenceID = envelope.journeyContext?.runID {
+            let sequence = scopedURL(owner: envelope.owner ?? MobileProfiles.defaultID, scope: envelope.scope, sequenceID: sequenceID)
+            try saveScoped(envelope, bytes: bytes, to: sequence)
+        }
+        try saveScoped(envelope, bytes: bytes, to: target)
+    }
+
+    private func saveScoped(_ envelope: MobileCheckpointEnvelope, bytes: Data, to target: URL) throws {
         try rejectFutureVersion(at: target)
         let backup = target.appendingPathExtension("backup")
         try rejectFutureVersion(at: backup)

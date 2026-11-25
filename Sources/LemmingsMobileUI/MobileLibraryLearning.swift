@@ -71,7 +71,7 @@ extension MobileLibraryViewController {
             extra = try MobileCampaignProgress.capture(storage: learningStorage)
         } catch { notice = error.localizedDescription }
         let saved = learning
-        let entries = (saved.run?.entries ?? []) + (bundledJourney?.lessons.map(\.entry) ?? [])
+        let entries = (saved.run?.entries ?? []) + (bundledJourney?.lessons.map(\.entry) ?? []) + EasyPuzzleCatalogue.puzzles.map(\.entry)
         return JourneyCompletionSummary.count(profileID: profiles.activeID, hotSeatID: hotSeat?.id,
             learning: saved.progress, entries: entries, profileIDs: profiles.players.map(\.id),
             additionalProgress: extra)
@@ -170,14 +170,16 @@ extension MobileLibraryViewController {
         catch { notice = error.localizedDescription; rebuild(); return }
         hotSeatRoster = nil; activeRun = nil
         reloadPlayerData()
-        let owner = profiles.activeID, scope = hotSeat?.scope
+        let owner = profiles.activeID, scope = hotSeat?.scope, sequence = saved.state.run?.id
         learningTask?.cancel()
         learningTask = Task { [weak self] in
             guard let self, let checkpointStore else { return }
             do {
-                let checkpoint = try await checkpointStore.load(owner: owner, scope: scope)
+                let checkpoint: MobileCheckpointEnvelope?
+                if let sequence { checkpoint = try await checkpointStore.load(owner: owner, scope: scope, sequenceID: sequence) }
+                else { checkpoint = nil }
                 guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
-                let matching = checkpoint.flatMap { checkpointResumesLearningRun($0) ? $0 : nil }
+                let matching = checkpoint.flatMap { checkpointResumesLearningRun($0, journeyOnly: journeyOnly) ? $0 : nil }
                 if browse, matching == nil, MobileSettings.current(from: .standard).classic.unlockAllClassicLevels,
                    let journey = bundledJourney, let current = learning.run,
                    current.pool.id.hasPrefix("learning-"),
@@ -187,12 +189,11 @@ extension MobileLibraryViewController {
                         entries: journey.lessons.map(\.entry), currentIndex: position, createdAt: current.createdAt)
                     try saveLearningState(expanded)
                 }
-                openLearningRun()
-                if !browse, let run = learning.run { startLevel(run.currentIndex, checkpoint: matching, restoringMatchingCheckpoint: true) }
+                openLearningRun(checkpoint: browse ? nil : matching, startImmediately: !browse)
             } catch { notice = error.localizedDescription; rebuild() }
         }
     }
-    func openLearningRun(checkpoint: MobileCheckpointEnvelope? = nil) {
+    func openLearningRun(checkpoint: MobileCheckpointEnvelope? = nil, startImmediately: Bool = false) {
         guard let catalogue, let run = learning.run else { return }
         let ports = catalogue.portsRoot, fan = catalogue.fanFolders, entries = run.entries, name = run.pool.summary
         library = MobileJourneyLibrary(entries: entries, name: name, catalogue: catalogue)
@@ -201,10 +202,66 @@ extension MobileLibraryViewController {
             MobileJourneyLibrary(entries: entries, name: name, catalogue: MobileCatalogue(portsRoot: ports, fanFolders: fan))
         }
         selectedIndex = run.currentIndex; selectedPreview = nil; browserShown = false
-        levelsBackRoute = .journey
-        if let checkpoint { navigate(.levels); startLevel(run.currentIndex, checkpoint: checkpoint) }
+        levelsBackRoute = run.source == .easyPuzzles ? .shortGames : .journey
+        if checkpoint != nil || startImmediately {
+            navigate(.levels)
+            startLevel(run.currentIndex, checkpoint: checkpoint, restoringMatchingCheckpoint: checkpoint != nil)
+        }
         else { navigate(.levels); selectLevel(run.currentIndex) }
     }
+    func startEasyPuzzles() {
+        guard !learningPreparing, let catalogue else { return }
+        let profile = profiles.activeID, scope = hotSeat?.scope, seat = hotSeat?.id
+        let state = learning
+        var resumed = state
+        if resumed.resumeEasyPuzzles() {
+            do {
+                if resumed != state { try saveLearningState(resumed) }
+                resumeLearningJourney(journeyOnly: false)
+            } catch { notice = error.localizedDescription; rebuild() }
+            return
+        }
+        let current = state.run?.currentEntry.identity
+        let familiar = Set(bundledJourney?.lessons.first { $0.entry.identity == current }?.concepts ?? [])
+        let excluded = EasyPuzzleCatalogue.exclusions(profileID: profile, sessionID: seat, current: current)
+        let shortlist = EasyPuzzleCatalogue.queue(from: EasyPuzzleCatalogue.puzzles, familiarSkills: familiar,
+            excluding: excluded, seed: .random(in: UInt64.min...UInt64.max), limit: EasyPuzzleCatalogue.puzzles.count)
+        let ports = catalogue.portsRoot, fan = catalogue.fanFolders
+        learningTask?.cancel()
+        learningPreparing = true
+        rebuild()
+        learningTask = Task { [weak self] in
+            let worker = Task.detached(priority: .utility) {
+                let catalogue = MobileCatalogue(portsRoot: ports, fanFolders: fan)
+                let queue = MobileJourneyLibrary(entries: shortlist, name: EasyPuzzleCatalogue.title, catalogue: catalogue)
+                var entries: [LevelPlaylistEntry] = []
+                for index in shortlist.indices {
+                    if (try? queue.origin(of: index)) != nil { entries.append(shortlist[index]) }
+                    if entries.count == EasyPuzzleCatalogue.queueSize { break }
+                }
+                return entries
+            }
+            let entries = await worker.value
+            guard let self, !Task.isCancelled, profiles.activeID == profile, hotSeat?.scope == scope else { return }
+            learningPreparing = false
+            guard !entries.isEmpty else { notice = L10n.text("No new easy puzzles"); rebuild(); return }
+            do {
+                var saved = learning
+                guard saved.run?.id == state.run?.id else { rebuild(); return }
+                try saved.startEasyPuzzles(entries)
+                try saveLearningState(saved)
+                openLearningRun(startImmediately: true)
+            } catch { notice = error.localizedDescription; rebuild() }
+        }
+    }
+
+    func finishEasyPuzzles() throws {
+        var state = learning
+        state.endEasyPuzzles()
+        try saveLearningState(state)
+        navigate(.home)
+    }
+
     func recordLearningResult(_ snapshot: MobileGameSnapshot) throws {
         guard library is MobileJourneyLibrary else { return }
         var saved = learning; saved.record(won: snapshot.didWin); try saveLearningState(saved)

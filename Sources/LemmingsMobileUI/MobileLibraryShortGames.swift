@@ -36,13 +36,13 @@ extension MobileLibraryViewController {
         }
     }
     func shortGamesPage(subtitle: String) -> GameFrontEnd.Page {
-        ShortGamesArt.page(available: Set(shortGamesEntries.keys), selected: shortGamesSelection,
+        ShortGamesArt.page(available: Set(shortGamesEntries.keys).union(EasyPuzzleCatalogue.puzzles.isEmpty ? [] : ["easy-puzzles"]), selected: shortGamesSelection,
                            loading: shortGamesPreparing, subtitle: subtitle)
     }
 
     func openShortGames() {
         guard let catalogue else { return }
-        shortGamesEntries = [:]; shortGamesSelection = "classic"
+        shortGamesEntries = [:]; shortGamesSelection = EasyPuzzleCatalogue.puzzles.isEmpty ? "classic" : "easy-puzzles"
         let ports = catalogue.portsRoot, folders = catalogue.fanFolders, journey = bundledJourney
         let tribesRoot = store?.resolvedDataDirectory(for: .lemmings2)
         let owner = profiles.activeID, scope = hotSeat?.scope
@@ -69,8 +69,9 @@ extension MobileLibraryViewController {
     }
 
     func playShortGame() {
-        guard !shortGamesPreparing,
-              let entries = shortGamesEntries[shortGamesSelection],
+        guard !shortGamesPreparing else { return }
+        if shortGamesSelection == "easy-puzzles" { startEasyPuzzles(); return }
+        guard let entries = shortGamesEntries[shortGamesSelection],
               let sequence = ShortPlayCatalogue.sequence(id: shortGamesSelection),
               let id = playlists.create(name: sequence.title, entries: entries),
               let run = playlists.startRun(id, shuffle: false) else { return }

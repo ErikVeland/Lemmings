@@ -9,6 +9,7 @@ import NxlvKit
     var skip: () -> Void
     var later: () -> Void
     var hints: () -> Void
+    var takeBreak: (() -> Void)? = nil
 }
 
 @MainActor enum LearningJourneyMenu {
