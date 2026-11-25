@@ -23,6 +23,17 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             LemmingsMobileApplication.openDeskClock(in: window?.rootViewController)
         }
     }
+
+    @available(iOS 26.0, *)
+    func windowScene(_ windowScene: UIWindowScene, didUpdateEffectiveGeometry previous: UIWindowScene.Geometry) {
+        guard window?.windowScene === windowScene, let root = window?.rootViewController else { return }
+        invalidateLayout(from: root)
+    }
+
+    private func invalidateLayout(from controller: UIViewController) {
+        controller.viewIfLoaded?.setNeedsLayout()
+        for child in controller.children { invalidateLayout(from: child) }
+    }
     #endif
 
     func scene(

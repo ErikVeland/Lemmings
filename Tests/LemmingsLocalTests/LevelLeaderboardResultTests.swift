@@ -59,6 +59,8 @@ final class LevelLeaderboardResultTests: XCTestCase {
                 defer { window.close() }
                 view.mode = .result; view.report = report; view.level = level; view.font = font
                 view.onClose = {}; view.onMenu = {}; view.onRetry = {}
+                var replayOpened = false
+                if loaded { view.onReplay = { _ in replayOpened = true } }
                 func render(_ name: String) throws {
                     let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
                     view.cacheDisplay(in: view.bounds, to: bitmap)
@@ -69,6 +71,9 @@ final class LevelLeaderboardResultTests: XCTestCase {
                 try render("\(game)-\(loaded).png")
                 let label = view.accessibilityLabel() ?? ""
                 XCTAssertTrue(label.contains("Level leaderboard, Fastest 100%."), label)
+                XCTAssertTrue(label.contains("LEVEL COMPLETE"), label)
+                XCTAssertFalse(label.contains("V opens replay"), label)
+                XCTAssertFalse(label.contains("Enter:"), label)
                 XCTAssertTrue(transport.paths.last?.contains("assisted=0") == true)
                 if loaded {
                     XCTAssertTrue(label.contains("Leaders: AB, CD  0:41.00"), label)
@@ -78,6 +83,9 @@ final class LevelLeaderboardResultTests: XCTestCase {
                 }
                 let buttons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
                     .filter { $0.accessibilityRole() == .button }
+                let replay = buttons.first { $0.accessibilityLabel() == "Replay" }
+                if loaded { XCTAssertTrue(try XCTUnwrap(replay).accessibilityPerformPress()); XCTAssertTrue(replayOpened) }
+                else { XCTAssertNil(replay) }
                 let nextMetric = try XCTUnwrap(buttons.first { $0.accessibilityLabel() == "›" })
                 XCTAssertTrue(view.bounds.contains(nextMetric.localFrame))
                 XCTAssertFalse(buttons.contains { $0 !== nextMetric && $0.localFrame.intersects(nextMetric.localFrame) })
