@@ -1902,10 +1902,10 @@ extension AppDelegate {
       throw IntegrationFailure(message: "Screen setting lacks its accessible name")
     }
     let tubeControls = descendants(root).compactMap { $0 as? GameSlider }.filter {
-      ["Tube Strength", "Pixel Width"].contains($0.accessibilityLabel() ?? "")
+      ["Tube strength", "Pixel width"].contains($0.accessibilityLabel() ?? "")
     }
     let tubeLabels = descendants(root).compactMap { $0 as? GameLabel }.filter {
-      ["Tube Strength", "Pixel Width"].contains($0.stringValue)
+      ["Tube strength", "Pixel width"].contains($0.stringValue)
     }
     try check(tubeControls.count == 2 && tubeLabels.count == 2, "Tube options are missing")
     let tubeValues = tubeControls.map(\.doubleValue)
@@ -6672,8 +6672,11 @@ extension AppDelegate {
     try Data(contentsOf: Bundle.main.resourceURL!.appendingPathComponent("About/VersionHistory.md"))
       .write(to: aboutFolder.appendingPathComponent("VersionHistory.md"))
     let about = AboutWindow(resources: aboutResources, defaults: defaults,
-      loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter" })
+      loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter\n\nFlags 🏳️‍⚧️🇵🇸" })
     let page = about.show(owner: window)
+    let flags = "🏳️‍⚧️🇵🇸"
+    try check(GameMenuTypography.menuText(flags) == flags && GameMenuArtwork.renderer()?.font(.small)?.covers(flags) == true
+      && GameMenuArtwork.renderer()?.font(.large)?.covers(flags) == true, "Contributor flags lost their glyphs")
     try check(window.firstResponder === page.controllerBackButton, "About did not retain safe Back focus")
     for _ in 0..<100 where defaults.string(forKey: "ContributorsMarkdownV1") == nil {
       try await Task.sleep(nanoseconds: 10_000_000)

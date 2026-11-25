@@ -21,6 +21,48 @@ public enum BitmapLatinGlyphs {
         character.isASCII || covered.contains(character)
     }
 
+    /// Flags keep their own colours and span two cells.
+    public enum Flag: CaseIterable, Sendable {
+        case transgender, palestine
+
+        /// The fully qualified emoji. Glyph tables store each flag under this key.
+        public var character: Character { self == .transgender ? "🏳️‍⚧️" : "🇵🇸" }
+
+        /// Colour at a pixel of a flag that is `width` by `height`.
+        func colour(x: Int, y: Int, width: Int, height: Int) -> (UInt8, UInt8, UInt8) {
+            switch self {
+            case .transgender:
+                let blue: (UInt8, UInt8, UInt8) = (91, 206, 250), pink: (UInt8, UInt8, UInt8) = (245, 169, 184)
+                return [blue, pink, (255, 255, 255), pink, blue][y * 5 / height]
+            case .palestine:
+                // The red triangle reaches a third of the way in, with its point at the middle row.
+                let middle = Double(height - 1) / 2
+                let reach = Double(width) / 3 * (1 - abs(Double(y) - middle) / (Double(height) / 2))
+                if Double(x) < reach { return (206, 17, 38) }
+                return [(24, 24, 24), (255, 255, 255), (0, 122, 61)][y * 3 / height]
+            }
+        }
+    }
+
+    /// The flag a character shows, with or without emoji variation selectors.
+    public static func flag(_ character: Character) -> Flag? {
+        switch String(character).unicodeScalars.map(\.value).filter({ $0 != 0xFE0F }) {
+        case [0x1F3F3, 0x200D, 0x26A7]: .transgender
+        case [0x1F1F5, 0x1F1F8]: .palestine
+        default: nil
+        }
+    }
+
+    public static func flag(inSequence sequence: String) -> Flag? {
+        sequence.count == 1 ? sequence.first.flatMap(flag) : nil
+    }
+
+    /// Cells a sequence advances: two for a flag, one for anything else.
+    public static func cells(for sequence: String) -> Int { flag(inSequence: sequence) == nil ? 1 : 2 }
+
+    /// Pictographs drawn from their own artwork instead of a question mark.
+    public static func isPictograph(_ character: Character) -> Bool { character == "💀" || flag(character) != nil }
+
     /// Keep one cell for sharp S and canonical equivalents for combining accents.
     public static func uppercase(_ text: String, locale: Locale = Locale(identifier: "en")) -> String {
         text.precomposedStringWithCanonicalMapping.map {
@@ -74,6 +116,9 @@ public enum BitmapLatinGlyphs {
             result[character] = glyph
         }
         if result["💀"] == nil, let skull = builder.skull() { result["💀"] = skull }
+        for flag in Flag.allCases where result[flag.character] == nil {
+            if let glyph = builder.flag(flag) { result[flag.character] = glyph }
+        }
         return result
     }
 
@@ -333,6 +378,22 @@ public enum BitmapLatinGlyphs {
             }}
             let blank = Frame(x: 0, y: top, width: width, height: h, rgba: Data(repeating: 0, count: width * h * 4))
             return render(blank, adding: shape)
+        }
+        /// A full-colour flag at capital height across two cells. Palette fonts cannot hold
+        /// the colours, so only the Macintosh menu faces get one.
+        func flag(_ flag: Flag) -> Frame? {
+            guard style == .macintosh, !compact, let capital = base("H") else { return nil }
+            let w = 2 * width - 2 * outline - 2
+            let capitalHeight = capital.height - outline - shadow
+            let h = min(capitalHeight, (w * 3 + 4) / 5)
+            guard w >= 10, h >= 5 else { return nil }
+            var bytes = [UInt8](repeating: 255, count: w * h * 4)
+            for y in 0..<h { for x in 0..<w {
+                let (red, green, blue) = flag.colour(x: x, y: y, width: w, height: h)
+                let i = (y * w + x) * 4
+                bytes[i] = red; bytes[i + 1] = green; bytes[i + 2] = blue
+            }}
+            return Frame(x: outline, y: capital.y + (capitalHeight - h) / 2, width: w, height: h, rgba: Data(bytes))
         }
         func sharpS(lowercase: Bool) -> Frame? {
             guard let b = base(lowercase ? "b" : "B") else { return nil }
