@@ -67,11 +67,21 @@ final class LevelLeaderboardResultTests: XCTestCase {
                     try XCTUnwrap(bitmap.representation(using: .png, properties: [:])).write(to: output.appendingPathComponent(name))
                 }
                 try render("\(game)-\(loaded)-loading.png")
+                let resultButtons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
+                    .filter { $0.accessibilityRole() == .button }
+                let replay = resultButtons.first { $0.accessibilityLabel() == "Replay" }
+                if loaded { XCTAssertTrue(try XCTUnwrap(replay).accessibilityPerformPress()); XCTAssertTrue(replayOpened) }
+                else { XCTAssertNil(replay) }
+                XCTAssertFalse((view.accessibilityLabel() ?? "").contains("Level leaderboard"))
+                XCTAssertTrue(transport.paths.isEmpty)
+                let detail = try XCTUnwrap(resultButtons.first { $0.accessibilityLabel() == "Details" })
+                XCTAssertTrue(detail.accessibilityPerformPress())
+                try render("\(game)-\(loaded)-details.png")
                 for _ in 0..<200 where rankings.levelBusy { await Task.yield() }
                 try render("\(game)-\(loaded).png")
                 let label = view.accessibilityLabel() ?? ""
                 XCTAssertTrue(label.contains("Level leaderboard, Fastest 100%."), label)
-                XCTAssertTrue(label.contains("LEVEL COMPLETE"), label)
+                XCTAssertTrue(label.contains("Details"), label)
                 XCTAssertFalse(label.contains("V opens replay"), label)
                 XCTAssertFalse(label.contains("Enter:"), label)
                 XCTAssertTrue(transport.paths.last?.contains("assisted=0") == true)
@@ -83,9 +93,6 @@ final class LevelLeaderboardResultTests: XCTestCase {
                 }
                 let buttons = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }
                     .filter { $0.accessibilityRole() == .button }
-                let replay = buttons.first { $0.accessibilityLabel() == "Replay" }
-                if loaded { XCTAssertTrue(try XCTUnwrap(replay).accessibilityPerformPress()); XCTAssertTrue(replayOpened) }
-                else { XCTAssertNil(replay) }
                 let nextMetric = try XCTUnwrap(buttons.first { $0.accessibilityLabel() == "›" })
                 XCTAssertTrue(view.bounds.contains(nextMetric.localFrame))
                 XCTAssertFalse(buttons.contains { $0 !== nextMetric && $0.localFrame.intersects(nextMetric.localFrame) })
@@ -125,7 +132,7 @@ final class LocalLeaderboardPageTests: XCTestCase {
         XCTAssertEqual(board.listTools.filter(\.selected).map(\.id), ["rankScope.local", "rankCategory.clears"])
         XCTAssertEqual(board.footer.map(\.id), ["home", "rankGameCenter"])
         let progress = MobileCareerArt.progressPage(records: records, profileID: host, profileName: "Host", subtitle: "")
-        XCTAssertEqual(progress.rows.map(\.id), ["recordList", "achievements", "players", "cloudSaves", "playInsights"])
+        XCTAssertEqual(progress.rows.map(\.id), ["recordList", "achievements", "profileStatistics", "players", "cloudSaves", "playInsights"])
         XCTAssertEqual(progress.footer.map(\.id), ["home"])
         XCTAssertTrue(progress.listTools.isEmpty)
         let hotSeatProgress = MobileCareerArt.progressPage(records: records, profileID: guest.id,

@@ -178,6 +178,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var savedSeatsBackID = "hotSeat"
     /// The open record card's artwork, hints and catalogue location.
     var recordDetail: MobileRecordDetail?
+    var achievementSection = MobileCareerArt.AchievementSection.level
     var syncCode = ""
     var syncDraft: String?
     var syncMessage = ""
@@ -1015,14 +1016,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 ?? (profiles.players.count > 1 ? profiles.active.name : "")
             let nextPlayerIndex = hotSeat.flatMap { $0.players.firstIndex(of: $0.turn) }
             // Community totals live on Community. Home shows only what the player needs next.
-            #if os(tvOS)
-            let homeSubtitle = [tvBuildInfo.label, tvBuildInfo.dateLabel, subtitle].filter { !$0.isEmpty }.joined(separator: "\n")
-            #else
-            let homeSubtitle = subtitle
-            #endif
             canvas.page = MobileHomeArt.page(continueAction: homeContinuations().continueAction,
                 hotSeatTurn: hotSeat.map { playerName($0.turn) },
-                initials: initials, nextPlayerIndex: nextPlayerIndex, subtitle: homeSubtitle)
+                initials: initials, nextPlayerIndex: nextPlayerIndex, subtitle: subtitle)
             canvas.preview = nil
         case .play:
             let routes = homeContinuations()
@@ -1077,7 +1073,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                          .init("levelDetails", L10n.text("Details")),
                                          .init("favourite", isFavourite(selectedIndex) ? L10n.text("Remove favourite") : L10n.text("Add favourite"), selected: isFavourite(selectedIndex), icon: .favourite),
                                          .init("addPlaylist", L10n.text("Playlist"), enabled: catalogue != nil && favouriteIdentity(selectedIndex) != nil)]
-                                    + (library is Lemmings2MobileLibrary || library is Lemmings3MobileLibrary ? [.init("originalMovies", L10n.text("Original movies"))] : [])
                                     + (library is Lemmings2MobileLibrary ? [.init("l2Practice", L10n.text("Practice"))] : [])
                                     + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", L10n.text("Random 10"))] : [])
                                     + [.init("back", L10n.text("Back")),
@@ -1094,7 +1089,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case .journey:
             canvas.page = learningPage(subtitle: subtitle); canvas.preview = nil
         case .levelDetails:
-            canvas.page = levelDetailsPage()
+            var page = levelDetailsPage()
+            if library is Lemmings2MobileLibrary || library is Lemmings3MobileLibrary {
+                page.footer.append(.init("originalMovies", L10n.text("Original movies")))
+            }
+            canvas.page = page
             canvas.preview = nil
         case .l2Practice:
             canvas.page = l2PracticePage(subtitle: subtitle); canvas.preview = nil
@@ -1197,7 +1196,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                     return .init("import." + kind.rawValue,
                                                  "\(action) \(kind.displayTitle)", enabled: !loading)
                                 },
-                                details: library.map { ["\($0.displayName)", L10n.plural("count.levels", count: $0.levels.count, one: "%ld level", other: "%ld levels")] } ?? [],
                                 footer: [back])
             canvas.preview = nil
         }
@@ -2299,6 +2297,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             next.onResultAwards = { [weak self] in self?.mobileResultAwards(runID: attemptID) ?? (0, false) }
             next.onResultRewards = { [weak self] in self?.mobileResultRewards(runID: attemptID) ?? [] }
+            next.onOpenResultDetails = { [weak self] in
+                guard let self else { return }
+                let conditions = arcadeStore.records.runs.last { $0.id == attemptID }?.level.conditions ?? recordLevel.conditions
+                let community = mobileRankings.community
+                if community.levelConditions != conditions { community.refreshLevel(conditions: conditions) }
+            }
             next.onLevelLeaderboard = { [weak self] in self?.mobileLevelLeaderboard() }
             next.onLevelLeaderboardMetric = { [weak self] in
                 guard let community = self?.mobileRankings.community else { return }

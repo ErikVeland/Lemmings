@@ -5,7 +5,6 @@
 "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker." = "\n\nDisse endringene påvirker avstanden i flokken. Tidspunktet betyr også noe. Sett på pause ved hvert merke og sjekk arbeider og retning.";
 "\nHold F  Ramp to 10×; release to keep\nHold Shift  Temporary boost\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×" = "\nHold F  Øk til 10×; slipp for å beholde\nHold Shift  Midlertidig fartsøkning\nShift+[ / ]  Senk / øk farten\nShift+\\     Gå umiddelbart tilbake til 1×";
 "\n{0}  {1}/{2}" = "\n{0}  {1}/{2}";
-"   •   Later {0}" = "   •   Senere {0}";
 "  Turn {0}" = "  Tur {0}";
 " ({0} cycles matching skills)" = " ({0} sykluser med samsvarende ferdigheter)";
 " - Bonus skill used" = " - Bonus skill used";
@@ -32,7 +31,6 @@
 "12-character code" = "Kode på 12 tegn";
 "2× Superzoom at cursor, 0.5× time" = "2× superzoom ved markøren, 0,5× hastighet";
 "2× Zoom at cursor" = "2× zoom ved markøren";
-"3-STAR" = "TRE STJERNER";
 "5 levels" = "5 levels";
 "< Level" = "< Brett";
 "< Previous level" = "< Forrige brett";
@@ -391,7 +389,6 @@
 "CL" = "CL";
 "CLASSIC" = "CLASSIC";
 "CLASSIC LEMMINGS" = "CLASSIC LEMMINGS";
-"CLEARED" = "FULLFØRT";
 "CLICK OR PRESS ENTER FOR THE GAME LIBRARY" = "KLIKK ELLER TRYKK ENTER FOR SPILLBIBLIOTEKET";
 "CLICK OR PRESS ENTER TO CONTINUE" = "KLIKK ELLER TRYKK ENTER FOR Å FORTSETTE";
 "CLIMB" = "KLATRE";
@@ -485,6 +482,7 @@
 "Choose a rating" = "Velg en kategori";
 "Choose a second player" = "Velg en spiller til";
 "Choose a soundtrack or Adaptive DJ Mix." = "Velg et lydspor eller Adaptiv DJ-miks.";
+"Choose a speed directly. Rewind counts back in game seconds." = "Velg hastighet direkte. Tilbakespoling teller bakover i spillsekunder.";
 "Choose a technique" = "Velg en teknikk";
 "Choose an action, then click a lemming. Walker turns or releases a blocker." = "Velg en handling og klikk på en lemming. Walker snur den eller frigjør en blokkerer.";
 "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera." = "Velg en handling. Murstein og spader krever en retning. Piltastene flytter kameraet.";
@@ -866,7 +864,6 @@
 "Even when positions change." = "Even when positions change.";
 "Every 10 distinct levels · Rare" = "Every 10 distinct levels · Rare";
 "Every 3 distinct levels" = "Hvert 3. ulike nivå";
-"Every achievement earned. What a rescue!" = "Alle prestasjoner oppnådd. For en redning!";
 "Every level" = "Alle brett";
 "Every rating is finished." = "Alle kategorier er fullført.";
 "Everyone fitted underneath." = "Everyone fitted underneath.";
@@ -1138,6 +1135,8 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
+"Home and Play" = "Hjem og Spill";
+"Home offers one next step. Play holds every game and collection." = "Hjem viser ett neste steg. Spill samler alle spill og samlinger.";
 "Home {0}/{1}" = "Hjem {0}/{1}";
 "Hopper" = "Spretter";
 "Host" = "Vert";
@@ -2044,7 +2043,6 @@
 "Play as {0}" = "Spill som {0}";
 "Play death sound" = "Spill av dødslyd";
 "Play insights" = "Spillinnsikt";
-"Play levels in order to work towards the next trophy." = "Spill brettene i rekkefølge for å jobbe mot neste trofé.";
 "Play main theme" = "Spill hovedtemaet";
 "Play or pause. Space or P." = "Spill eller sett på pause. Mellomrom eller P.";
 "Play replay >" = "Spill av reprise >";
@@ -2440,7 +2438,6 @@
 "STACEY JAMIESON" = "STACEY JAMIESON";
 "STACK" = "STABLE";
 "STACKER" = "STABLER";
-"STARS" = "STJERNER";
 "START" = "START";
 "STEP" = "TRINN";
 "STEP BACK" = "ETT TRINN TILBAKE";
@@ -2650,6 +2647,7 @@
 "Speed +" = "Øk hastigheten";
 "Speed -" = "Senk hastigheten";
 "Speed 1x" = "Hastighet 1×";
+"Speed and rewind" = "Hastighet og tilbakespoling";
 "Speed {0}X" = "Hastighet {0}×";
 "Speed {0}x" = "Hastighet {0}×";
 "Spend one Level Skip in the journey menu to move past a level." = "Spend one Level Skip in the journey menu to move past a level.";
@@ -3609,7 +3607,3 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0}H {1}M";
 "{0}{1} more to rescue for three stars." = "{0}{1} flere å redde for tre stjerner.";
-"Home and Play" = "Hjem og Spill";
-"Home offers one next step. Play holds every game and collection." = "Hjem viser ett neste steg. Spill samler alle spill og samlinger.";
-"Speed and rewind" = "Hastighet og tilbakespoling";
-"Choose a speed directly. Rewind counts back in game seconds." = "Velg hastighet direkte. Tilbakespoling teller bakover i spillsekunder.";

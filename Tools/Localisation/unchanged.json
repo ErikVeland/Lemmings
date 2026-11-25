@@ -2739,7 +2739,6 @@
   },
   "nl": {
     "\n{0}  {1}/{2}": "Source-defined control, file/data token, format label or acronym; retain the exact identifier.",
-    "   •   Later {0}": "Source-defined control, file/data token, format label or acronym; retain the exact identifier.",
     " - Bonus skill used": "Explicit English fallback for new 2.1 text. Translation and human language review remain pending.",
     "+1 {0}": "Explicit English fallback for new 2.1 text. Translation and human language review remain pending.",
     "+1 {0}. Bonus skill used.": "Explicit English fallback for new 2.1 text. Translation and human language review remain pending.",

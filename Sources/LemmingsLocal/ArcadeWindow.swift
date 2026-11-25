@@ -130,7 +130,7 @@ import NxlvKit
 
 /// Results lead with the rescue. Records and details are separate game pages.
 @MainActor final class ArcadeView: NSView, GameDialogCustomNavigation {
-    enum Mode { case result, profiles, records, awards, details, goals, career, hotSeat, achievement, earnedRewards }
+    enum Mode { case result, resultReview, profiles, records, awards, details, goals, career, hotSeat, achievement, earnedRewards }
     var worldwideSaved: Int? { didSet { needsDisplay = true } }
     enum BoardScope { case level, career, worldwide }
     var mode = Mode.records {
@@ -407,6 +407,7 @@ import NxlvKit
         }
         switch mode {
         case .result: drawResult()
+        case .resultReview: drawResultReview()
         case .profiles: drawProfiles()
         case .hotSeat: drawSession()
         case .records: drawRecords()

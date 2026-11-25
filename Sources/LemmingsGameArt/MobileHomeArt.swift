@@ -17,8 +17,8 @@ public enum MobileHomeArt {
         if let resume {
             footer.append(.init("learningResume", L10n.text("Resume  \(resume.position)/\(resume.count)"), primary: true))
         }
-        if canContinue {
-            footer.append(.init("learningStart", solved == 0 && resume == nil ? L10n.text("Start journey") : L10n.text("Continue journey"), primary: resume == nil))
+        if canContinue && resume == nil {
+            footer.append(.init("learningStart", solved == 0 && resume == nil ? L10n.text("Start journey") : L10n.text("Continue journey"), primary: true))
         } else if resume == nil {
             footer[0].primary = true
         }

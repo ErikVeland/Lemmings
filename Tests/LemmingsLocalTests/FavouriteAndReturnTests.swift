@@ -160,6 +160,13 @@ final class FavouriteAndReturnTests: XCTestCase {
                 window.contentView = view
                 defer { window.close() }
                 view.mode = .result; view.report = report; view.level = level; view.font = font
+                let result = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
+                view.cacheDisplay(in: view.bounds, to: result)
+                let details = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first {
+                    $0.accessibilityRole() == .button && $0.accessibilityLabel() == GameLocalisation.text("Details")
+                }
+                XCTAssertTrue(try XCTUnwrap(details).accessibilityPerformPress())
+                XCTAssertEqual(view.mode, .resultReview)
                 for saved in [false, true] {
                     let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
                     view.needsDisplay = true

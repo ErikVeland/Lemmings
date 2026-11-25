@@ -5,7 +5,6 @@
 "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker." = "\n\nQueste modifiche influiscono sulla distanza tra i lemming. Anche il tempismo conta. Metti in pausa a ogni segnale e controlla lavoratore e direzione.";
 "\nHold F  Ramp to 10×; release to keep\nHold Shift  Temporary boost\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×" = "\nTieni premuto F  Inclina fino a 10×; rilascia per mantenere\nTieni premuto Shift  Accelerazione temporanea\nShift+[ / ]  Riduci / aumenta la velocità\nShift+\\     Torna subito a 1×";
 "\n{0}  {1}/{2}" = "\n{0}  {1}/{2}";
-"   •   Later {0}" = "   •   Dopo {0}";
 "  Turn {0}" = "  Turno {0}";
 " ({0} cycles matching skills)" = " ({0} cicli con abilità corrispondenti)";
 " - Bonus skill used" = " - Bonus skill used";
@@ -32,7 +31,6 @@
 "12-character code" = "Codice di 12 caratteri";
 "2× Superzoom at cursor, 0.5× time" = "Superzoom 2× sul puntatore, tempo 0,5×";
 "2× Zoom at cursor" = "Zoom 2× sul puntatore";
-"3-STAR" = "TRE STELLE";
 "5 levels" = "5 levels";
 "< Level" = "< Livello";
 "< Previous level" = "< Livello precedente";
@@ -391,7 +389,6 @@
 "CL" = "CL";
 "CLASSIC" = "CLASSICO";
 "CLASSIC LEMMINGS" = "CLASSIC LEMMINGS";
-"CLEARED" = "COMPLETATO";
 "CLICK OR PRESS ENTER FOR THE GAME LIBRARY" = "CLICCA O PREMI INVIO PER LA RACCOLTA";
 "CLICK OR PRESS ENTER TO CONTINUE" = "CLICCA O PREMI INVIO PER CONTINUARE";
 "CLIMB" = "ARRAMPICATA";
@@ -485,6 +482,7 @@
 "Choose a rating" = "Scegli una categoria";
 "Choose a second player" = "Scegli un secondo giocatore";
 "Choose a soundtrack or Adaptive DJ Mix." = "Scegli una colonna sonora o Mix DJ adattivo.";
+"Choose a speed directly. Rewind counts back in game seconds." = "Scegli direttamente la velocità. Il riavvolgimento conta all’indietro in secondi di gioco.";
 "Choose a technique" = "Scegli una tecnica";
 "Choose an action, then click a lemming. Walker turns or releases a blocker." = "Scegli un’azione e fai clic su un lemming. Walker lo fa girare o libera un bloccatore.";
 "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera." = "Scegli un’azione. Mattoni e pale richiedono una direzione. I tasti freccia spostano la visuale.";
@@ -866,7 +864,6 @@
 "Even when positions change." = "Even when positions change.";
 "Every 10 distinct levels · Rare" = "Every 10 distinct levels · Rare";
 "Every 3 distinct levels" = "Ogni 3 livelli diversi";
-"Every achievement earned. What a rescue!" = "Tutti gli obiettivi raggiunti. Che salvataggio!";
 "Every level" = "Tutti i livelli";
 "Every rating is finished." = "Tutte le categorie sono state completate.";
 "Everyone fitted underneath." = "Everyone fitted underneath.";
@@ -1138,6 +1135,8 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
+"Home and Play" = "Home e Gioca";
+"Home offers one next step. Play holds every game and collection." = "La Home offre un solo passo successivo. Gioca raccoglie tutti i giochi e le raccolte.";
 "Home {0}/{1}" = "A casa {0}/{1}";
 "Hopper" = "Saltellatore";
 "Host" = "Ospitante";
@@ -2044,7 +2043,6 @@
 "Play as {0}" = "Gioca come {0}";
 "Play death sound" = "Riproduci il suono della morte";
 "Play insights" = "Approfondimenti di gioco";
-"Play levels in order to work towards the next trophy." = "Completa i livelli in ordine per puntare al prossimo trofeo.";
 "Play main theme" = "Riproduci il tema principale";
 "Play or pause. Space or P." = "Avvia o metti in pausa. Spazio o P.";
 "Play replay >" = "Riproduci replay >";
@@ -2440,7 +2438,6 @@
 "STACEY JAMIESON" = "STACEY JAMIESON";
 "STACK" = "IMPILA";
 "STACKER" = "IMPILATORE";
-"STARS" = "STELLE";
 "START" = "AVVIA";
 "STEP" = "PASSO";
 "STEP BACK" = "INDIETRO DI UN PASSO";
@@ -2650,6 +2647,7 @@
 "Speed +" = "Velocità +";
 "Speed -" = "Velocità -";
 "Speed 1x" = "Velocità 1x";
+"Speed and rewind" = "Velocità e riavvolgimento";
 "Speed {0}X" = "Velocità {0}X";
 "Speed {0}x" = "Velocità {0}x";
 "Spend one Level Skip in the journey menu to move past a level." = "Spend one Level Skip in the journey menu to move past a level.";
@@ -3609,7 +3607,3 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0}H {1}M";
 "{0}{1} more to rescue for three stars." = "Salva altri {0}{1} per ottenere tre stelle.";
-"Home and Play" = "Home e Gioca";
-"Home offers one next step. Play holds every game and collection." = "La Home offre un solo passo successivo. Gioca raccoglie tutti i giochi e le raccolte.";
-"Speed and rewind" = "Velocità e riavvolgimento";
-"Choose a speed directly. Rewind counts back in game seconds." = "Scegli direttamente la velocità. Il riavvolgimento conta all’indietro in secondi di gioco.";

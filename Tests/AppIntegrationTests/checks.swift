@@ -1275,7 +1275,7 @@ extension AppDelegate {
       let report = store.record(run)!
       ArcadeWindow.shared.showResult(report, owner: window, retry: {}, next: {}, replay: { _ in })
       try render(game + "-result")
-      try press("Worldwide")
+      try press("Details"); try press("Worldwide")
       try check(!view.usesGameCenter && view.boardScope == .worldwide && service.busy, "Worldwide did not open community boards")
       try render(game + "-loading"); try await waitBoard()
       try check(service.board?.entries.first?.name == "PAL" && transport.requests.last?.url?.query?.contains(conditions.fingerprint) == true,
@@ -1283,12 +1283,12 @@ extension AppDelegate {
       try check(transport.requests.allSatisfy { $0.httpMethod == "GET" && $0.value(forHTTPHeaderField: "Authorization") == nil }
         && !service.sharing(host), "Browsing shared records or required an account")
       try render(game + "-worldwide")
-      try press("Back to result")
+      try press("Back"); try press("Back to result")
       try check(view.mode == .result && view.report?.run.id == run.id && store.hotSeatID == sharedID, "Returning from Worldwide changed the turn")
     }
     let lastReport = view.report!
     transport.board = .init(entries: [], page: 0, hasMore: false, verification: "community")
-    try press("Worldwide"); try await waitBoard(); try render("worldwide-empty")
+    try press("Details"); try press("Worldwide"); try await waitBoard(); try render("worldwide-empty")
     try check(service.board?.entries.isEmpty == true, "Empty community board was hidden")
     transport.code = 503
     try press("Worldwide *"); try await waitBoard(); try render("worldwide-offline")
@@ -10550,7 +10550,7 @@ extension AppDelegate {
       }
       try check(view.mode == .result && next == 0 && retries == 0 && store.playingProfileID == owner, "Acknowledging awards advanced the game or changed the attempt owner")
       _ = try capture("\(engine)-\(mode)-result")
-      let receiptLabel = view.achievementHints.first { $0.title == "Rewards earned" }?.label
+      let receiptLabel = L10n.text("Rewards earned (\(view.savedEarnedRewards.count)) >")
       let link = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel() == receiptLabel }
       try check(link?.accessibilityPerformPress() == true && view.mode == .earnedRewards, "Result cannot reopen the reward reasons")
       view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,

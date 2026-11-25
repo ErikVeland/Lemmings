@@ -526,6 +526,7 @@ public struct GameFrontEnd {
         let contentOffset = fillsPane
             ? max(0, floor((24 + footerY - 12 - heading.minY - contentBottom) / 2))
             : 0
+        targets = targets.map { Target(action: $0.action, frame: $0.frame.offsetBy(dx: 0, dy: contentOffset)) }
         for slot in footerGrid.slots {
             targets.append(Target(action: slot.action, frame: footerGrid.frame(for: slot, x: x + inset, y: footerY, width: inner,
                 height: footerHeight, gap: gap, rowGap: gap)))
@@ -705,7 +706,7 @@ public struct GameFrontEnd {
                     alpha: action.enabled ? 1 : 0.45, context: context)
             } else {
                 actionLabel(action.title, box: caption, typography: typography,
-                    palette: action.portrait == nil ? .blue : .green, alpha: action.enabled ? 1 : 0.45, context: context)
+                    palette: chosen || action.portrait != nil ? .green : .blue, alpha: action.enabled ? 1 : 0.45, context: context)
             }
         }
     }

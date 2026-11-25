@@ -31,26 +31,39 @@ import NxlvKit
         onAction?(id)
     }
     private func rebuild() {
-        buttons.forEach { $0.removeFromSuperview() }
+        var previous = Dictionary(uniqueKeysWithValues: buttons.compactMap { button in
+            button.accessibilityIdentifier.map { ($0, button) }
+        })
         buttons = actions.map { action in
-            let button = UIButton(type: .custom)
-            button.accessibilityIdentifier = "listTools." + action.id
+            let identifier = "listTools." + action.id
+            let button: UIButton
+            if let existing = previous.removeValue(forKey: identifier) {
+                button = existing
+            } else {
+                button = UIButton(type: .custom)
+                button.accessibilityIdentifier = identifier
+                button.addAction(UIAction { [weak self, id = action.id] _ in self?.activate(id) }, for: .gameActivation)
+                addSubview(button)
+            }
             button.accessibilityLabel = action.id == "search" ? L10n.text("Search")
                 : action.id == "searchClear" ? L10n.text("Clear") + ": " + L10n.text("Search") : action.title
             button.accessibilityValue = action.id == "search" && !searchQuery.isEmpty ? searchQuery : nil
             button.accessibilityTraits = action.id == "search" ? .searchField : .button
+            if action.selected { button.accessibilityTraits.insert(.selected) }
             button.isEnabled = action.enabled
-            button.addAction(UIAction { [weak self] _ in self?.activate(action.id) }, for: .gameActivation)
-            addSubview(button)
             return button
         }
+        previous.values.forEach { $0.removeFromSuperview() }
         accessibilityElements = buttons
         setNeedsLayout()
         setNeedsDisplay()
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        for (button, target) in zip(buttons, toolsLayout.targets) { button.frame = target.frame }
+        let targets = Dictionary(uniqueKeysWithValues: toolsLayout.targets.map { ("listTools." + $0.action.id, $0.frame) })
+        for button in buttons {
+            button.frame = targets[button.accessibilityIdentifier ?? ""] ?? .zero
+        }
     }
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
