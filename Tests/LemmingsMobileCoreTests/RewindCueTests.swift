@@ -15,6 +15,15 @@ import Testing
             #expect(cue.text.hasSuffix("REWIND -4.0s"))
             #expect(!cue.text.contains("TICK"))
         }
+        for (rate, time) in [(17.0, "0.06"), (17.5, "0.06"), (23.0, "0.04")] {
+            let keyboard = try #require(RewindCue(currentTick: 16, originTick: 17, ticksPerSecond: rate))
+            let remote = try #require(RewindCue(currentTick: 16, originTick: 17, ticksPerSecond: rate, speed: 2))
+            #expect(keyboard.text.hasSuffix("REWIND -" + time + "s"))
+            #expect(keyboard.accessibilityLabel == "Rewound " + time + " seconds")
+            #expect(remote.accessibilityLabel == keyboard.accessibilityLabel + ", speed 2 of 3")
+        }
+        let oneSecond = try #require(RewindCue(currentTick: 3, originTick: 20, ticksPerSecond: 17))
+        #expect(oneSecond.accessibilityLabel == "Rewound 1 second")
         let long = try #require(RewindCue(currentTick: 0, originTick: 17 * 42, ticksPerSecond: 17))
         #expect(long.text.hasSuffix("REWIND -42s"))
     }
