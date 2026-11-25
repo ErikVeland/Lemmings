@@ -1037,58 +1037,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let appItem = NSMenuItem()
     mainMenu.addItem(appItem)
 
+    // One menu per destination: the app menu keeps only app-level commands,
+    // Play and Profile mirror Home, and every existing shortcut keeps its key.
     let appMenu = NSMenu()
     let aboutItem = NSMenuItem(title: L10n.text("About \(AppDistribution.name)"),
       action: #selector(showAbout), keyEquivalent: "")
     aboutItem.target = self
     appMenu.addItem(aboutItem)
-    let clockCalendar = NSMenuItem(title: L10n.text("Show next event in Desk Clock widget…"),
-      action: #selector(requestDeskClockCalendar), keyEquivalent: "")
-    clockCalendar.state = EventKitDeskClockSource().authorization() == .granted ? .on : .off
-    clockCalendar.target = self
-    appMenu.addItem(clockCalendar)
-    appMenu.addItem(.separator())
     let updatesItem = NSMenuItem(
       title: L10n.text("Check for Updates…"),
       action: #selector(checkForUpdates),
       keyEquivalent: "")
     updatesItem.target = self
     appMenu.addItem(updatesItem)
-    appMenu.addItem(.separator())
-    let achievementsItem = NSMenuItem(
-      title: L10n.text("Achievements…"), action: #selector(showAchievements), keyEquivalent: "a")
-    achievementsItem.keyEquivalentModifierMask = [.command, .shift]
-    achievementsItem.target = self
-    appMenu.addItem(achievementsItem)
-    let profiles = NSMenuItem(title: L10n.text("Profile…"), action: #selector(showProfiles), keyEquivalent: "p")
-    profiles.keyEquivalentModifierMask = [.command, .shift]; profiles.target = self; appMenu.addItem(profiles)
-    let cloudSaves = NSMenuItem(title: L10n.text("Cloud Saves…"), action: #selector(showCloudSaves), keyEquivalent: "")
-    cloudSaves.target = self; appMenu.addItem(cloudSaves)
-    let hotSeat = NSMenuItem(title: L10n.text("Hot Seat…"), action: #selector(showHotSeat), keyEquivalent: "")
-    hotSeat.target = self; appMenu.addItem(hotSeat)
-    let records = NSMenuItem(title: L10n.text("Records…"), action: #selector(showLevelRecords), keyEquivalent: "b")
-    records.keyEquivalentModifierMask = [.command, .shift]; records.target = self; appMenu.addItem(records)
-    let insights = NSMenuItem(title: L10n.text("Play Insights…"), action: #selector(showPlayInsights), keyEquivalent: "")
-    insights.target = self; appMenu.addItem(insights)
-    let replay = NSMenuItem(title: L10n.text("Replay Last Game"), action: #selector(reviewLastGame), keyEquivalent: "v")
-    replay.keyEquivalentModifierMask = [.command, .shift]; replay.target = self
-    appMenu.addItem(replay)
-    // A developer tool: it appears in place of Replay Last Game only while Option is held.
-    let recordedRoutes = NSMenuItem(title: L10n.text("Show Recorded Routes"), action: #selector(showRecordedRoutes), keyEquivalent: "v")
-    recordedRoutes.keyEquivalentModifierMask = [.command, .shift, .option]
-    recordedRoutes.isAlternate = true; recordedRoutes.target = self
-    appMenu.addItem(recordedRoutes)
-    let openReplay = NSMenuItem(title: L10n.text("Open Replay Movie…"), action: #selector(openReplayMovie), keyEquivalent: "o")
-    openReplay.keyEquivalentModifierMask = [.command, .shift]; openReplay.target = self
-    appMenu.addItem(openReplay)
-    let nativeL2 = NSMenuItem(title: L10n.text("Play Lemmings 2…"), action: #selector(chooseNativeL2), keyEquivalent: "2")
-    nativeL2.keyEquivalentModifierMask = [.command, .shift]
-    nativeL2.target = self
-    appMenu.addItem(nativeL2)
-    let nativeL3 = NSMenuItem(title: L10n.text("Play \(Lemmings3Brand.current.displayName) Beta…"), action: #selector(chooseNativeL3), keyEquivalent: "3")
-    nativeL3.keyEquivalentModifierMask = [.command, .shift]
-    nativeL3.target = self
-    appMenu.addItem(nativeL3)
     appMenu.addItem(.separator())
     let settingsItem = NSMenuItem(
       title: L10n.text("Settings…"), action: #selector(showSettings), keyEquivalent: ",")
@@ -1119,36 +1080,67 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
 
     let fileMenu = addMenu(L10n.text("File"))
+    _ = add(fileMenu, L10n.text("Add Game…"), #selector(chooseContent), "o")
+    _ = add(fileMenu, L10n.text("Add Fan Level Folder…"), #selector(chooseFanFolder), "")
+    _ = add(fileMenu, L10n.text("Add NeoLemmix Packs…"), #selector(chooseNeoLemmixPacks), "")
+    fileMenu.addItem(.separator())
+    _ = add(fileMenu, L10n.text("Open Level File…"), #selector(chooseNxlvLevel), "O",
+            modifiers: [.command, .shift])
+    // Shift-Command-O belongs to Open Level File. The replay movie shared it, and
+    // AppKit sent the chord to whichever item came first.
+    _ = add(fileMenu, L10n.text("Open Replay Movie…"), #selector(openReplayMovie), "")
+
+    let playMenu = addMenu(L10n.text("Play"))
+    _ = add(playMenu, L10n.text("Main menu"), #selector(goToMainMenu), "l", modifiers: [.command, .shift])
     resumeSavedRunItem = add(
-      fileMenu,
+      playMenu,
       L10n.text("Resume Saved Run…"),
       #selector(resumeSavedRun),
       "r",
       modifiers: [.command, .shift])
-    _ = add(fileMenu, L10n.text("Game Library"), #selector(goToMainMenu), "l", modifiers: [.command, .shift])
-    fileMenu.addItem(.separator())
-    _ = add(fileMenu, L10n.text("Add Game…"), #selector(chooseContent), "o")
-    _ = add(fileMenu, L10n.text("Level Select…"), #selector(showLevelBrowser), "")
-    // Not Shift-Command-L: that already returns to the game library, and the
+    playMenu.addItem(.separator())
+    _ = add(playMenu, L10n.text("Level Select…"), #selector(showLevelBrowser), "")
+    // Not Shift-Command-L: that already returns to the main menu, and the
     // two chords are the same once AppKit has folded the shift in.
-    _ = add(fileMenu, L10n.text("Fan Levels…"), #selector(showFanLevels), "f",
+    _ = add(playMenu, L10n.text("Fan Levels…"), #selector(showFanLevels), "f",
       modifiers: [.command, .shift])
-    _ = add(fileMenu, L10n.text("Add Fan Level Folder…"), #selector(chooseFanFolder), "")
-    _ = add(fileMenu, L10n.text("Add NeoLemmix Packs…"), #selector(chooseNeoLemmixPacks), "")
-    _ = add(fileMenu, L10n.text("Open Level File…"), #selector(chooseNxlvLevel), "O",
-            modifiers: [.command, .shift])
-    fileMenu.addItem(.separator())
     let games = NSMenu(title: L10n.text("Games"))
     let gamesItem = NSMenuItem(title: L10n.text("Game"), action: nil, keyEquivalent: "")
     gamesItem.submenu = games
-    fileMenu.addItem(gamesItem)
+    playMenu.addItem(gamesItem)
     gamesMenu = games
     let levels = NSMenu(title: L10n.text("Levels"))
     let levelsItem = NSMenuItem(title: L10n.text("Level"), action: nil, keyEquivalent: "")
     levelsItem.submenu = levels
-    fileMenu.addItem(levelsItem)
+    playMenu.addItem(levelsItem)
     levelsMenu = levels
-    fileMenu.autoenablesItems = false
+    // The sequel titles keep their exact names, as they did in the app menu.
+    for (title, action, key) in [(L10n.text("Play Lemmings 2…"), #selector(chooseNativeL2), "2"),
+      (L10n.text("Play \(Lemmings3Brand.current.displayName) Beta…"), #selector(chooseNativeL3), "3")] {
+      let item = NSMenuItem(title: title, action: action, keyEquivalent: key)
+      item.keyEquivalentModifierMask = [.command, .shift]; item.target = self
+      playMenu.addItem(item)
+    }
+    playMenu.addItem(.separator())
+    _ = add(playMenu, L10n.text("Replay Last Game"), #selector(reviewLastGame), "v", modifiers: [.command, .shift])
+    // A developer tool: it appears in place of Replay Last Game only while Option is held.
+    let recordedRoutes = add(playMenu, L10n.text("Show Recorded Routes"), #selector(showRecordedRoutes), "v",
+                             modifiers: [.command, .shift, .option])
+    recordedRoutes.isAlternate = true
+    playMenu.addItem(.separator())
+    _ = add(playMenu, L10n.text("Hot Seat…"), #selector(showHotSeatDestination))
+    _ = add(playMenu, L10n.text("Community"), #selector(showCommunity))
+    playMenu.autoenablesItems = false
+
+    let profileMenu = addMenu(L10n.text("Profile"))
+    _ = add(profileMenu, L10n.text("Profile…"), #selector(showProfileHub), "p", modifiers: [.command, .shift])
+    profileMenu.addItem(.separator())
+    _ = add(profileMenu, L10n.text("Players"), #selector(showProfiles))
+    _ = add(profileMenu, L10n.text("Records…"), #selector(showLevelRecords), "b", modifiers: [.command, .shift])
+    _ = add(profileMenu, L10n.text("Achievements…"), #selector(showAchievements), "a", modifiers: [.command, .shift])
+    _ = add(profileMenu, L10n.text("Statistics"), #selector(showProfileStatistics))
+    _ = add(profileMenu, L10n.text("Cloud Saves…"), #selector(showCloudSaves))
+    _ = add(profileMenu, L10n.text("Play Insights…"), #selector(showPlayInsights))
 
     let editMenu = addMenu(L10n.text("Edit"))
     TextEditingMenu.populate(editMenu)
@@ -1156,6 +1148,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let viewMenu = addMenu(L10n.text("View"))
     _ = add(viewMenu, L10n.text("Zoom In"), #selector(zoomIn), "+")
     _ = add(viewMenu, L10n.text("Zoom Out"), #selector(zoomOut), "-")
+    viewMenu.addItem(.separator())
+    let clockCalendar = add(viewMenu, L10n.text("Show next event in Desk Clock widget…"),
+                            #selector(requestDeskClockCalendar))
+    clockCalendar.state = EventKitDeskClockSource().authorization() == .granted ? .on : .off
 
     let audioMenu = addMenu(L10n.text("Audio"))
     _ = add(audioMenu, L10n.text("Choose Music Folder…"), #selector(chooseMusic))
@@ -8024,14 +8020,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .play:
         showHomePlay(true)
       case .hotSeat:
-        // Every saved Hot Seat stays choosable. With none active, choose a session before the roster.
-        if !ArcadeStore.shared.hotSeatIsActive, !ArcadeStore.shared.savedHotSeats.isEmpty {
-          ArcadeWindow.shared.showSavedSessions(owner: window)
-        } else { showHotSeat() }
+        showHotSeatDestination()
       case .profile:
         showProfileHub()
       case .community:
-        playfield.onLeaderboards?()
+        showCommunity()
       case let .browse(family):
         if AppDistribution.isStore, !family.titles.isEmpty, homeContentRow(family) == nil {
           showOwnedGameImport(promptForDownload: true)
@@ -9507,20 +9500,38 @@ let achievementProgressKey = "ClassicAchievementProgress"
     ArcadeWindow.shared.showSession(owner: window)
   }
 
-  private func showProfileHub() {
+  /// Home and the Play menu share one Hot Seat entry. Every saved Hot Seat stays
+  /// choosable: with none active, choose a session before the roster.
+  @objc private func showHotSeatDestination() {
+    if !ArcadeStore.shared.hotSeatIsActive, !ArcadeStore.shared.savedHotSeats.isEmpty {
+      ArcadeWindow.shared.showSavedSessions(owner: window)
+    } else { showHotSeat() }
+  }
+
+  /// Community: the worldwide total above the leaderboards.
+  @objc private func showCommunity() {
+    playfield.onLeaderboards?()
+  }
+
+  /// Profile owns everything personal, in the same order as the mobile Profile page.
+  @objc private func showProfileHub() {
     let page = GameMenuPage(title: L10n.text("Profile"), subtitle: ArcadeStore.shared.playingProfile?.initials ?? "")
-    let players = page.addListAction(L10n.text("Players"), at: 0) { [weak self] in self?.showProfiles() }
-    page.addListAction(L10n.text("Records"), at: 1) { [weak self] in self?.showLevelRecords() }
-    page.addListAction(L10n.text("Cloud saves"), at: 2) { [weak self] in self?.showCloudSaves() }
-    page.addListAction(L10n.text("Statistics"), at: 3) { [weak self] in
-      let store = ArcadeStore.shared
-      let model = MobileCareerArt.profileStatisticsPage(records: store.records, profileID: store.playingProfileID,
-        name: store.playingProfile?.initials ?? "", storageError: store.storageError)
-      let statistics = GameMenuPage(title: model.title, subtitle: model.subtitle)
-      statistics.setDetail(model.details.joined(separator: "\n"))
-      GameScreen.shared.present(statistics, owner: self?.window)
-    }
-    GameScreen.shared.present(page, owner: window, focus: players)
+    let records = page.addListAction(L10n.text("Records"), at: 0) { [weak self] in self?.showLevelRecords() }
+    page.addListAction(L10n.text("Achievements"), at: 1) { [weak self] in self?.showAchievements() }
+    page.addListAction(L10n.text("Statistics"), at: 2) { [weak self] in self?.showProfileStatistics() }
+    page.addListAction(L10n.text("Players"), at: 3) { [weak self] in self?.showProfiles() }
+    page.addListAction(L10n.text("Cloud saves"), at: 4) { [weak self] in self?.showCloudSaves() }
+    page.addListAction(L10n.text("Play Insights"), at: 5) { [weak self] in self?.showPlayInsights() }
+    GameScreen.shared.present(page, owner: window, focus: records)
+  }
+
+  @objc private func showProfileStatistics() {
+    let store = ArcadeStore.shared
+    let model = MobileCareerArt.profileStatisticsPage(records: store.records, profileID: store.playingProfileID,
+      name: store.playingProfile?.initials ?? "", storageError: store.storageError)
+    let statistics = GameMenuPage(title: model.title, subtitle: model.subtitle)
+    statistics.setDetail(model.details.joined(separator: "\n"))
+    GameScreen.shared.present(statistics, owner: window)
   }
 
   @objc private func showProfiles() {

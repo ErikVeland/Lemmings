@@ -183,6 +183,7 @@ import LemmingsAppCore
     made.playbackRate = playbackRate
     made.setSpeedPitch(speedPitch)
     made.setNukeAmount(nukeAmount)
+    made.setResultFilter(resultFilter)
     player?.stop()
     player = made
     if vinylHeld {
@@ -271,6 +272,7 @@ import LemmingsAppCore
     nukeAmount = amount
     player?.setNukeAmount(amount)
   }
+  var resultFilter: Float = 0 { didSet { player?.setResultFilter(resultFilter) } }
 
   var resultGain: Float = 1 { didSet { player?.volume = muted ? 0 : volume * resultGain } }
 

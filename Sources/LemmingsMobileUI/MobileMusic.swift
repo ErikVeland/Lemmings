@@ -484,7 +484,8 @@ import AVFAudio
             return
         }
         guard playing != nil else { return }
-        if resultComplete { return }
+        // The result keeps the muffled track. Returning to the foreground restores it.
+        if resultComplete { try? module.resumeOutput(); recordings.resumeOutput(); dj.resumeOutput(); return }
         if paused {
             let rhythm = settings.classic.pauseMusicBeatOnly
             module.suspendOutput(rhythmOnly: rhythm)
