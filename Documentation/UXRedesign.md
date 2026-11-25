@@ -28,6 +28,8 @@ Tick a row when its stated check passes. Keep its ID when updating the requireme
 
 ### Device acceptance
 
+**Screen and menu review, 25 November 2026 — green by owner sign-off.** The acceptance covers physical VoiceOver, Siri Remote, native system sheets, signed-in Game Center, hosted replay delivery, and engine-specific campaign and movie screens. See the [screen review register](InterfaceHierarchy.md#screen-review-register).
+
 The owner reported all five device checks green on 25 November 2026. Each row below keeps the scope of that check.
 
 - [x] **UX-11 · Mac.** Use keyboard, pointer and VoiceOver through first launch, preview, gameplay, results and return. Check focus restoration and the narrow-window speed pedal.
@@ -44,7 +46,7 @@ The owner reported all five device checks green on 25 November 2026. Each row be
 - Solo menus use concise action names and reserve turn captions for Hot Seat or another player's save. Settings sliders use their existing labels and values. The Mac L2 practice screen gives one instruction while choosing skills, then shows how to start. Home names the profile only when more than one exists. Two copy passes include the bundled translations. The second removed Settings sentences that repeat a setting's scope or availability. It also made the native L2 and L3 rewind announcement use game seconds and gave the Step controls one translated name. Labels now use sentence case. Narrative, teaching, release and privacy text kept its sentences. Native-speaker review of the trimmed translations remains open.
 - The shared Undo icon has a continuous arrow and more clearance. Native Mac L2 shows the arrow and the accessible action name when Undo is available.
 - The Mac result announcement reads the outcome, rescue count and stars. Opening Details reads the level leaderboard. Screen readers reach Replay through its own enabled button when an attempt has a replay.
-- Replay skill history uses elapsed game time across Mac, touch and Apple TV. The Mac solution replay exposes action names and keeps the keyboard shortcuts in accessibility help. Physical VoiceOver and Siri Remote acceptance remain open.
+- Replay skill history uses elapsed game time across Mac, touch and Apple TV. The Mac solution replay exposes action names and keeps the keyboard shortcuts in accessibility help. The owner accepted physical VoiceOver and Siri Remote navigation.
 
 ### Mac menus and owner tools
 
