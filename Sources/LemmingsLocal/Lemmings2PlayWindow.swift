@@ -2265,7 +2265,7 @@ import NxlvKit
                 }
             }
             text(Lemmings2Campaign.tribeNames[Lemmings2Practice.tribes[practiceChoice]],160,168,"PRACTICE",centered:true)
-            text(practiceSkills.count == 8 ? L10n.text("Click or Return to practise") : L10n.text("Choose eight different skills"),160,186,"PRACTICE",centered:true)
+            if practiceSkills.count == 8 { text(L10n.text("Click or Return to practise"),160,186,"PRACTICE",centered:true) }
         case .map:
             picture("MAP", palette("MAP"))
             for (id, x, y) in [(2,232,59),(4,117,144),(3,288,141),(5,44,151),(6,47,104)] {

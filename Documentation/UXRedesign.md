@@ -35,9 +35,10 @@ Tick a row when its stated check passes. Keep its ID when updating the requireme
 - Apple TV Game controls retain Step and Rewind focus while pending timeline work finishes. The speed chooser returns to Speed.
 - Scrollable mobile menus keep the visible focused action in view across size changes and remember VoiceOver focus for return navigation.
 - The iPhone simulator showed that Play needed two presses after a fast rewind. Play now resumes at 1× in a single press. Pressing Pause while already running fast still returns to 1× first. The rewind tip leaves the live rewind readout visible. Check the native Mac tip placement in the device pass.
-- Solo menus use concise action names and reserve turn captions for Hot Seat or another player's save. The first copy pass includes the bundled translations. Review remaining Settings and Help descriptions, result and replay announcements, and near-duplicate labels.
+- Solo menus use concise action names and reserve turn captions for Hot Seat or another player's save. Settings sliders use their existing labels and values. The Mac L2 practice screen gives one instruction while choosing skills, then shows how to start.
 - The shared Undo icon has a continuous arrow and more clearance. Native Mac L2 shows the arrow and the accessible action name when Undo is available.
 - The Mac result announcement reads the outcome, rescue count, stars and leaderboard. Screen readers reach Replay through its own enabled button when an attempt has a replay.
+- Replay skill history uses elapsed game time across Mac, touch and Apple TV. The Mac solution replay exposes action names and keeps the keyboard shortcuts in accessibility help. Physical VoiceOver and Siri Remote acceptance remain open.
 
 ### Repeat the checkpoint
 

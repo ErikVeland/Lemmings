@@ -30,7 +30,7 @@ for source in "${app_sources[@]}"; do
   app_inputs+=("$build_dir/Sources/$source")
 done
 mkdir -p "$build_dir/Sources/UXTests"
-for suite in MobileDestinationBackTests MobileDuoHUDTransitionTests MobileJourneyReturnTests MobileMenuPreviewTargetTests MobileOverlayReturnTests; do
+for suite in MobileDestinationBackTests MobileDuoHUDTransitionTests MobileJourneyReturnTests MobileMenuPreviewTargetTests MobileOverlayReturnTests MobileReplayInteractionTests; do
   cp "$project_dir/Tests/LemmingsMobileUITests/$suite.swift" "$build_dir/Sources/UXTests/"
 done
 python3 - "$build_dir/Sources" "$build_dir/inputs.json" <<'PY'
