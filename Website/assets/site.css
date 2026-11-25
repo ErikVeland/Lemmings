@@ -255,4 +255,4 @@ h1, h2, .brand span {
   background: var(--paper);
   cursor: pointer;
 }
-#get-game-assets[hidden], #cancel-game-assets[hidden] { display: none; }
+[data-licence-open][hidden], [data-licence-cancel][hidden] { display: none; }
