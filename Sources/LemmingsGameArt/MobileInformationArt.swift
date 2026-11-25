@@ -14,7 +14,7 @@ public enum MobileInformationArt {
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
         var page = GameFrontEnd.Page(title: L10n.text("What's new in \(version)"),
               subtitle: GameReleaseCopy.invitation,
-              details: GameReleaseCopy.sections.map { $0.1 } + [GameReleaseCopy.compatibility],
+              details: GameReleaseCopy.sections.map { $0.1 },
               footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
         page.backActionID = "welcomeContinue"
         page.reading = true

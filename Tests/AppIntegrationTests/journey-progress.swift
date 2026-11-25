@@ -77,9 +77,9 @@
       "Home omitted the saved Journey position")
     let originalCampaign = UserDefaults.standard.dictionaryRepresentation().filter { $0.key.hasPrefix("HotSeat.\(seat).") }
     rebuildLibrary()
-    let classicTitle = homeContentRow(.classic) ?? ""
+    let classicTitle = homeContentStatus(.classic) ?? ""
     try check(classicTitle.contains("1/120"), "Home ignored a Classic Journey win: \(classicTitle)")
-    try check(!fanHomeRow().contains("  0/"), "Home ignored the fan Journey win")
+    try check(!fanHomeStatus().hasPrefix("0/"), "Home ignored the fan Journey win")
     try check(store.learningProgress.completed.isEmpty, "Home copied Hot Seat wins into Solo")
     if let root = try? BundledGameResources.lemmings2() {
       try check(Lemmings2PlayWindow.savedCompletion(root: root, journeyWins: [l2]) == 1,
@@ -129,7 +129,7 @@
       "Resolving an archived queue changed its roster or next turn")
     arcade.endHotSeat()
     try check(homeMenuItems().first?.title == "START JOURNEY", "An archived Hot Seat replaced Solo's Journey action")
-    try check(homeContentRow(.classic)?.contains("1/120") == false, "Solo inherited the Hot Seat Home count")
+    try check(homeContentStatus(.classic)?.contains("1/120") == false, "Solo inherited the Hot Seat Home count")
     print("PASS historical Journey counts, unique Resume, Solo/Hot Seat isolation, Classic/L2/L3 records, two renders and input targets")
   }
 }

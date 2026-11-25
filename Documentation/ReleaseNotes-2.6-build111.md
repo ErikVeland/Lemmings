@@ -18,4 +18,4 @@ Adaptive DJ uses soundtrack variants in a set order for campaign routes and foll
 
 ## Compatibility
 
-macOS 12.3 or later on Apple silicon and Intel. Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta.
+macOS 12.3 or later on Apple silicon and Intel.
