@@ -1131,6 +1131,7 @@
 "Highland" = "மலைநாடு";
 "Hints" = "குறிப்புகள்";
 "Hold a lemming, then slide left or right to browse the group." = "ஒரு லெம்மிங்கை அழுத்திப் பிடித்து, குழுவில் உலாவ இடது அல்லது வலதுபுறம் நகர்த்தவும்.";
+"Hold full stop scrubs forward. Escape cancels." = "முற்றுப்புள்ளி விசையை அழுத்திப் பிடித்தால் தொடர்ந்து முன்னேறும். Escape ரத்து செய்யும்.";
 "Hold to edit player" = "வீரரைத் திருத்த அழுத்திப் பிடி";
 "Hold: fixed fast-forward" = "அழுத்திப் பிடி: நிலையான வேக முன்னேற்றம்";
 "Hold: ramp up; release: previous speed" = "அழுத்திப் பிடி: வேகத்தை உயர்த்து. விட்டால்: முந்தைய வேகம்";
@@ -2362,13 +2363,13 @@
 "Rewards earned ({0}) >" = "பெற்ற வெகுமதிகள் ({0}) >";
 "Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "{0} பெற்ற வெகுமதிகள். {1} {2}. {4} இல் பக்கம் {3}. Escape முடிவிற்குத் திரும்பும்.";
 "Rewind" = "பின்னோக்கு";
-"Hold full stop scrubs forward. Escape cancels." = "முற்றுப்புள்ளி விசையை அழுத்திப் பிடித்தால் தொடர்ந்து முன்னேறும். Escape ரத்து செய்யும்.";
 "Rewind and busy scenes" = "பின்னோக்கும் பரபரப்பான காட்சிகளும்";
 "Rewind one second." = "ஒரு நொடி பின்னோக்கு.";
 "Rewind one tick" = "ஒரு நேரப்படியைப் பின்னோக்கு";
 "Rewind the current run" = "தற்போதைய ஓட்டத்தை மீண்டும் இயக்கவும்";
 "Rewinds" = "பின்னோக்குகள்";
-"Rewound {0} seconds, speed {1} of 3" = "{0} வினாடிகள் பின்னோக்கிச் சென்றது, 3 வேகங்களில் {1}";
+"Rewound {0}" = "{0} பின்னோக்கிச் சென்றது";
+"Rewound {0}, speed {1} of 3" = "{0} பின்னோக்கிச் சென்றது, 3 வேகங்களில் {1}";
 "Rhythm on pause" = "இடைநிறுத்தத்தில் தாளம்";
 "Ridiculous speed (25×)" = "அசுர வேகம் (25×)";
 "Right" = "வலது";

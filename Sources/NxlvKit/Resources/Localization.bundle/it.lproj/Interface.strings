@@ -1131,6 +1131,7 @@
 "Highland" = "Altopiano";
 "Hints" = "Suggerimenti";
 "Hold a lemming, then slide left or right to browse the group." = "Tieni premuto un lemming, poi scorri a sinistra o a destra per esplorare il gruppo.";
+"Hold full stop scrubs forward. Escape cancels." = "Tieni premuto il punto per avanzare rapidamente. Esc annulla.";
 "Hold to edit player" = "Tieni premuto per modificare il giocatore";
 "Hold: fixed fast-forward" = "Tieni premuto: avanzamento rapido a velocità fissa";
 "Hold: ramp up; release: previous speed" = "Tieni premuto: accelera; rilascia: torna alla velocità precedente";
@@ -2362,13 +2363,13 @@
 "Rewards earned ({0}) >" = "Ricompense ottenute ({0}) >";
 "Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "Ricompense ottenute da {0}. {1} {2}. Pagina {3} di {4}. Esc torna al risultato.";
 "Rewind" = "Riavvolgi";
-"Hold full stop scrubs forward. Escape cancels." = "Tieni premuto il punto per avanzare rapidamente. Esc annulla.";
 "Rewind and busy scenes" = "Riavvolgimento e scene intense";
 "Rewind one second." = "Riavvolgi di un secondo.";
 "Rewind one tick" = "Riavvolgi di uno scatto";
 "Rewind the current run" = "Riavvolgi la partita attuale";
 "Rewinds" = "Riavvolgimenti";
-"Rewound {0} seconds, speed {1} of 3" = "Indietro di {0} secondi, velocità {1} di 3";
+"Rewound {0}" = "Indietro di {0}";
+"Rewound {0}, speed {1} of 3" = "Indietro di {0}, velocità {1} di 3";
 "Rhythm on pause" = "Ritmo in pausa";
 "Ridiculous speed (25×)" = "Velocità assurda (25×)";
 "Right" = "Destra";

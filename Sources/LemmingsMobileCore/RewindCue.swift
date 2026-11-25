@@ -12,28 +12,40 @@ public struct RewindCue: Equatable, Sendable {
     public let position: Double
     /// One to three chevrons. More chevrons mean each press covers more time.
     public let speed: Int
+    private let announcesSpeed: Bool
 
     /// Nil while nothing has been rewound.
-    public init?(currentTick: Int, originTick: Int, ticksPerSecond: Double, speed: Int = 1) {
+    public init?(currentTick: Int, originTick: Int, ticksPerSecond: Double, speed: Int? = nil) {
         guard originTick > currentTick, ticksPerSecond > 0 else { return nil }
         secondsBack = Double(originTick - currentTick) / ticksPerSecond
         position = Double(max(0, min(currentTick, originTick))) / Double(originTick)
-        self.speed = min(3, max(1, speed))
+        self.speed = min(3, max(1, speed ?? 1))
+        announcesSpeed = speed != nil
     }
 
     public var chevrons: String { String(repeating: "<", count: speed + 1) }
 
-    /// "<< REWIND -4.2s": tenths below ten seconds, whole seconds above.
+    private var fractionDigits: Int {
+        if secondsBack < 0.1 { return 2 }
+        return secondsBack < 10 ? 1 : 0
+    }
+
     public var text: String {
-        let amount = secondsBack < 10 ? String(format: "%.1f", secondsBack) : String(Int(secondsBack.rounded()))
+        let amount = secondsBack.formatted(.number.grouping(.never).precision(.fractionLength(fractionDigits))
+            .rounded(rule: .toNearestOrAwayFromZero).locale(L10n.interface.locale))
         return chevrons + " " + L10n.text("REWIND -\(amount)s")
     }
 
     /// The widest text this cue can show, so the label never resizes while the value changes.
-    public static let widestText = "<<<< " + L10n.text("REWIND -\("88.8")s")
+    public static var widestText: String { "<<<< " + L10n.text("REWIND -\("88.8")s") }
 
     public var accessibilityLabel: String {
-        L10n.text("Rewound \(Int(secondsBack.rounded())) seconds, speed \(speed) of 3")
+        let duration = Measurement(value: secondsBack, unit: UnitDuration.seconds).formatted(
+            .measurement(width: .wide, usage: .asProvided, numberFormatStyle: .number.grouping(.never)
+                .precision(.fractionLength(0...fractionDigits)).rounded(rule: .toNearestOrAwayFromZero))
+                .locale(L10n.interface.locale))
+        if announcesSpeed { return L10n.text("Rewound \(duration), speed \(speed) of 3") }
+        return L10n.text("Rewound \(duration)")
     }
 }
 

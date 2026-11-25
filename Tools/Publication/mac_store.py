@@ -179,6 +179,7 @@ def inputs():
                   "Resources/UltimateLemmix/alternative-resource-source.json",
                   "Resources/UltimateLemmix/AppIcon/UltimateLemmix.png", "Resources/UltimateLemmix/AppIcon/README.md",
                   "Tools/TrolleyVerification/catalogue.py", "Tools/TrolleyVerification/presentation-files.json",
+                  "Tools/TrolleyVerification/legacy-presentation-hashes.json",
                   "Apps/DeskClockWidget/DeskClockWidget.swift", "Apps/DeskClockWidget/Mac/Info.plist",
                   "Resources/UltimateLemmix/Info.plist", "Resources/UltimateLemmix/AppStore.entitlements",
                   "Resources/UltimateLemmix/DeskClockMacWidget.entitlements", "Resources/Publishing/ultimate-lemmix.json"))
