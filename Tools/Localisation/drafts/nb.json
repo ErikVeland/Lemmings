@@ -523,7 +523,6 @@
   "Choose unlocked levels or all levels for direct Classic selection.": "Velg opplåste brett eller alle brett for direkte Classic-valg.",
   "Choose your {0} folder.": "Velg mappen din for {0}.",
   "Chronicles attribute cell is outside its object.": "Attributtcellen i Chronicles ligger utenfor objektet.",
-  "Chronicles controls": "Kontroller i Chronicles",
   "Chronicles creature count does not match its placements.": "Antallet skapninger i Chronicles samsvarer ikke med plasseringene.",
   "Chronicles extra-lemming count does not match its placements.": "Antallet ekstralemming-er i Chronicles samsvarer ikke med plasseringene.",
   "Chronicles frame exceeds its dimensions.": "Chronicles-framen overskrider dimensjonene sine.",
@@ -544,7 +543,6 @@
   "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.": "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.",
   "Classic artwork": "Classic-grafikk",
   "Classic follow-up": "Fortsettelsen av Classic",
-  "Classic follow-up adds five levels from the original DOS game, Fun 6–10.": "Fortsettelsen av Classic legger til fem brett fra det opprinnelige DOS-spillet, Fun 6–10.",
   "Classic keeps recent rewind states close. Repeated rewind presses on Apple TV move further back, and scenes use less work while you play.": "Classic holder nylige spilltilstander klare for tilbakespoling. Gjentatte trykk på Apple TV spoler lenger tilbake, og scenene krever mindre prosessorkraft under spill.",
   "Classic opening": "Starten av Classic",
   "Classic skill counters": "Classic-ferdighetstellere",
@@ -2523,7 +2521,6 @@
   "Select player {0}": "Velg spiller {0}",
   "Select {0}{1}": "Velg {0}{1}",
   "Selected": "Valgt",
-  "Selecting a skill in Chronicles shows the original pressed artwork.": "Når du velger en ferdighet i Chronicles, vises originalgrafikken for den inntrykte knappen.",
   "Selection": "Valg",
   "Selection effect": "Valgeffekt",
   "Sequel artwork": "Grafikk fra oppfølgerne",
@@ -3610,5 +3607,9 @@
   "{0}: {1} ticks ago": "{0}: {1} ticks ago",
   "{0}: {1}.": "{0}: {1}.",
   "{0}H {1}M": "{0}H {1}M",
-  "{0}{1} more to rescue for three stars.": "{0}{1} flere å redde for tre stjerner."
+  "{0}{1} more to rescue for three stars.": "{0}{1} flere å redde for tre stjerner.",
+  "Home and Play": "Hjem og Spill",
+  "Home offers one next step. Play holds every game and collection.": "Hjem viser ett neste steg. Spill samler alle spill og samlinger.",
+  "Speed and rewind": "Hastighet og tilbakespoling",
+  "Choose a speed directly. Rewind counts back in game seconds.": "Velg hastighet direkte. Tilbakespoling teller bakover i spillsekunder."
 }
