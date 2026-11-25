@@ -1,0 +1,139 @@
+{
+  "product": "Ultimate Lemmix",
+  "appStoreID": "6836347807",
+  "version": "2.6",
+  "source": "e21a86c0ea5b5b35fe19ce3db44cf5eee16195a7",
+  "checkedAt": "2026-11-26T09:16:14+10:00",
+  "verification": {
+    "macArchitectures": [
+      "arm64",
+      "x86_64"
+    ],
+    "macAppStoreAnalysisErrors": [],
+    "iosPackageChecksPassed": true,
+    "tvosPackageChecksPassed": true,
+    "focusedTestsPassed": 48,
+    "focusedTestScope": "Gameplay speed, frame pacing, replay navigation, seek state and replay movie timing.",
+    "testWindows": "offscreen",
+    "testAudio": "muted",
+    "skippedChecks": [
+      "Full campaign replay gates and full test suites. This candidate keeps the simulation rules and changes replay transport and frame pacing."
+    ]
+  },
+  "iOSPreviouslyAvailableVersion": "2.4.4",
+  "submissions": [
+    {
+      "platform": "MAC_OS",
+      "version": "2.6",
+      "build": "118",
+      "buildID": "d6869973-635c-43cd-999c-08ee4902ac8b",
+      "versionID": "ce8b39f1-caa5-4d02-9776-dc7bb34c83d0",
+      "reviewSubmissionID": "ae053e28-c4f0-4b3b-bf64-578abe1385c4",
+      "reviewState": "WAITING_FOR_REVIEW",
+      "versionState": "WAITING_FOR_REVIEW",
+      "releaseType": "AFTER_APPROVAL",
+      "submittedDate": "2026-11-25T23:15:14.36Z",
+      "replaced": {
+        "version": "2.4.3",
+        "versionID": "ce8b39f1-caa5-4d02-9776-dc7bb34c83d0",
+        "reviewSubmissionID": "3ca8e7a1-9a78-4421-ae0e-9d1fff7418c3",
+        "reviewState": "WAITING_FOR_REVIEW",
+        "submittedDate": "2026-11-24T08:03:40.997Z"
+      },
+      "appStoreProcessing": "VALID",
+      "uploadDeliveryUUID": "d6869973-635c-43cd-999c-08ee4902ac8b",
+      "packageName": "Ultimate Lemmix.pkg",
+      "packageSHA256": "be219e3f47bbe9b246c36f351100db53ce4d6d74e2ff8d97f562277394ba39d7",
+      "screenshotDisplayTypes": [
+        "APP_DESKTOP"
+      ],
+      "whatsNew": null,
+      "removedEarlierReviews": [
+        {
+          "reviewSubmissionID": "fa38d21e-d3f8-4a64-9c5f-5c7057c7d69d",
+          "submittedDate": "2026-11-24T04:59:01.238Z"
+        },
+        {
+          "reviewSubmissionID": "dca39769-8bf0-4b1a-be5c-ea87800ad9f9",
+          "submittedDate": "2026-11-24T04:16:33.048Z"
+        },
+        {
+          "reviewSubmissionID": "b83f1f47-7043-41a6-9d49-b859de6dda0d",
+          "submittedDate": "2026-11-20T08:39:56.049Z"
+        }
+      ],
+      "reviewNotesVerified": true
+    },
+    {
+      "platform": "IOS",
+      "version": "2.6",
+      "build": "115",
+      "buildID": "9358c22d-a700-4903-af75-a893a85919ec",
+      "versionID": "6cfe37b6-8833-4b70-86e4-7de2498ab94f",
+      "reviewSubmissionID": "796cfb21-9e06-4e89-a6a8-74ecf6be111f",
+      "reviewState": "WAITING_FOR_REVIEW",
+      "versionState": "WAITING_FOR_REVIEW",
+      "releaseType": "AFTER_APPROVAL",
+      "submittedDate": "2026-11-25T23:12:43.766Z",
+      "replaced": null,
+      "appStoreProcessing": "VALID",
+      "uploadDeliveryUUID": "9358c22d-a700-4903-af75-a893a85919ec",
+      "packageName": "UltimateLemmixIOS.ipa",
+      "packageSHA256": "ac7e8726efb0c8a4d9488b2cb511d975fea534776d8c4bb14e756becabbe20b7",
+      "screenshotDisplayTypes": [
+        "APP_IPAD_105",
+        "APP_IPAD_PRO_3GEN_129",
+        "APP_IPHONE_61",
+        "APP_IPHONE_DUO"
+      ],
+      "whatsNew": "Start or resume from Home. Play groups games, saved routes and Collections. Settings groups related controls. Your Journey keeps its place while you play Easy Puzzles. Choose a speed directly and use replay controls to revisit recorded moves. Soundtrack variants follow the route as you play.",
+      "removedEarlierReviews": [
+        {
+          "reviewSubmissionID": "73aea82c-c606-4f1a-bdeb-753779657381",
+          "submittedDate": "2026-11-20T01:00:52.673Z"
+        }
+      ]
+    },
+    {
+      "platform": "TV_OS",
+      "version": "2.6",
+      "build": "115",
+      "buildID": "5888eae5-8a02-42fa-ad3f-2c11327b9d73",
+      "versionID": "3809e541-17ca-4321-8e85-59fd5a0b3b40",
+      "reviewSubmissionID": "4d58586b-86f5-4fd9-a37c-8f4ef160391f",
+      "reviewState": "WAITING_FOR_REVIEW",
+      "versionState": "WAITING_FOR_REVIEW",
+      "releaseType": "AFTER_APPROVAL",
+      "submittedDate": "2026-11-25T23:14:56.442Z",
+      "replaced": {
+        "version": "2.4.4",
+        "versionID": "3809e541-17ca-4321-8e85-59fd5a0b3b40",
+        "reviewSubmissionID": "35810654-6a67-4e7a-a549-cf8033ffd9f8",
+        "reviewState": "WAITING_FOR_REVIEW",
+        "submittedDate": "2026-11-24T13:25:08.67Z"
+      },
+      "appStoreProcessing": "VALID",
+      "uploadDeliveryUUID": "5888eae5-8a02-42fa-ad3f-2c11327b9d73",
+      "packageName": "UltimateLemmixTVOS.ipa",
+      "packageSHA256": "da8d7eaee6731d9bd1af56137b93051563ccc303638d38f60ea249d22fcdefab",
+      "screenshotDisplayTypes": [
+        "APP_APPLE_TV"
+      ],
+      "whatsNew": null,
+      "removedEarlierReviews": [
+        {
+          "reviewSubmissionID": "03d7337c-2170-43f9-a2bc-d78c1cefab4b",
+          "submittedDate": "2026-11-22T21:45:45.609Z"
+        },
+        {
+          "reviewSubmissionID": "16496bf1-7480-4420-a538-c3fccd9cc605",
+          "submittedDate": "2026-11-20T08:40:30.139Z"
+        },
+        {
+          "reviewSubmissionID": "d81117c7-1292-4520-972c-e77c179c0e13",
+          "submittedDate": "2026-11-20T01:01:07.554Z"
+        }
+      ]
+    }
+  ]
+}
