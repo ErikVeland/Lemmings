@@ -26,9 +26,17 @@ Tick a row when its stated check passes. Keep its ID when updating the requireme
 
 - [ ] **UX-11 · Mac.** Use keyboard, pointer and VoiceOver through first launch, preview, gameplay, results and return. Check focus restoration and the narrow-window speed pedal.
 - [ ] **UX-12 · iPhone and iPad.** Check touch targets and VoiceOver at narrow and wide sizes. On the 2017 A10X iPad Pro, record input response, frame cadence and audio continuity while changing speed, pausing and rewinding.
-- [ ] **UX-13 · Duo.** Fold and unfold in Home, a level and the speed chooser. Record whether the route, focus, pause state and selected skill survive each transition.
+- [ ] **UX-13 · Duo.** The simulator acceptance pass saw Home stay sideways after unfolding until another rotation. A fresh launch while open laid out correctly. Reproduce on hardware and record scene orientation, view bounds and hinge regions on unfold. Check Home, a level and the speed chooser for preserved route, focus, pause state and selected skill.
 - [ ] **UX-14 · Apple TV.** Use a Siri Remote through Ready, speed selection, repeated rewind and results. Check viewing-distance legibility, focus return and long labels.
 - [ ] **UX-15 · Audio.** Listen through preview, gameplay, pause, success, failure, rapid retry and background/foreground transitions on speakers and headphones. Record any click, overlap or crackle with the music source and device.
+
+### Acceptance follow-up
+
+- Apple TV Game controls retain Step and Rewind focus while pending timeline work finishes. The speed chooser returns to Speed.
+- Scrollable mobile menus keep the visible focused action in view across size changes and remember VoiceOver focus for return navigation.
+- The iPhone simulator showed that Play needed two presses after a fast rewind. Play now resumes at 1× in a single press. Pressing Pause while already running fast still returns to 1× first. The rewind tip leaves the live rewind readout visible. Check the native Mac tip placement in the device pass.
+- Solo menus use concise action names and reserve turn captions for Hot Seat or another player's save. The first copy pass includes the bundled translations. Review remaining Settings and Help descriptions, result and replay announcements, and near-duplicate labels.
+- The shared Undo icon has a continuous arrow and more clearance. Native Mac L2 shows the arrow and the accessible action name when Undo is available.
 
 ### Repeat the checkpoint
 

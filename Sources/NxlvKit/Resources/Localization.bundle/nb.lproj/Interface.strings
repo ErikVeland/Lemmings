@@ -157,7 +157,7 @@
 "Actions and tools" = "Handlinger og verktøy";
 "Actions include minimum or maximum release rate." = "Handlingene omfatter laveste og høyeste utslippsfart.";
 "Activate selected menu choice" = "Aktiver valgt menyalternativ";
-"Active lemmings will be lost. Rescued lemmings and reserves will be retained. You can retry the level." = "Aktive lemminger går tapt. Reddede lemminger og reserver beholdes. Du kan prøve brettet igjen.";
+"Active lemmings will be lost. Rescued lemmings and reserves will be retained." = "Aktive lemminger går tapt. Reddede lemminger og reserver beholdes.";
 "Active players: {0}" = "Aktive spillere: {0}";
 "Active players: {0}. Next: {1}" = "Aktive spillere: {0}. Neste: {1}";
 "Ad-Lib FM" = "Ad-Lib FM";
@@ -602,7 +602,6 @@
 "Click speed to toggle. Hold to boost; release to return. Arrows apply the selected speed immediately." = "Click speed to toggle. Hold to boost; release to return. Arrows apply the selected speed immediately.";
 "Click to Continue" = "Trykk for å fortsette";
 "Click to continue" = "Klikk for å fortsette";
-"Click to continue. Your survivors will go on to the next level." = "Klikk for å fortsette. De overlevende går videre til neste brett.";
 "Click to return" = "Klikk for å gå tilbake";
 "Climber" = "Klatrer";
 "Clock" = "Klokke";
@@ -855,7 +854,7 @@
 "Enjoys its present condition." = "Enjoys its present condition.";
 "Enjoys the rain." = "Enjoys the rain.";
 "Enjoys waiting for bread to rise." = "Enjoys waiting for bread to rise.";
-"Enlarge menu pages and controls help. Scroll to reach controls when the enlarged page exceeds the window." = "Gjør menysider og kontrollhjelpen større. Rull for å nå kontrollene når den forstørrede siden er større enn vinduet.";
+"Enlarge menu pages and controls help." = "Gjør menysider og kontrollhjelpen større.";
 "Enter code" = "Skriv inn kode";
 "Enter the 12-character code." = "Skriv inn koden på 12 tegn.";
 "Enter the code from your other device." = "Skriv inn koden fra den andre enheten din.";
@@ -928,7 +927,7 @@
 "FLOAT" = "SVEV";
 "FLOATER" = "FALLSKJERMHOPPER";
 "FOR MANY GENERATION WE HAVE LIVED HERE" = "I MANGE GENERASJONER HAR VI BODD HER";
-"Fade Menu, Settings and Graphics during play. Turn this off to keep the buttons visible." = "Ton ned Meny, Innstillinger og Grafikk under spilling. Slå dette av for å holde knappene synlige.";
+"Fade Menu, Settings and Graphics during play." = "Ton ned Meny, Innstillinger og Grafikk under spilling.";
 "Fade gameplay buttons" = "Ton ned spillknapper";
 "Fails" = "Mislykkede forsøk";
 "Faithful" = "Trofast";
@@ -1356,7 +1355,6 @@
 "Keeps the ugly vase." = "Keeps the ugly vase.";
 "Keeps the written confirmation." = "Keeps the written confirmation.";
 "Keeps tickets from an uneventful journey." = "Keeps tickets from an uneventful journey.";
-"Keeps your progress, saves and records" = "Tar vare på fremdrift, lagringer og rekorder";
 "Kept the sympathetic envelope." = "Kept the sympathetic envelope.";
 "Keyboard commands" = "Tastaturkommandoer";
 "Keyboard commands…" = "Tastaturkommandoer…";
@@ -1497,7 +1495,6 @@
 "Lemmings 3 progress could not be saved: {0}" = "Kunne ikke lagre framdriften i Lemmings 3: {0}";
 "Lemmings 3 · {0}" = "Lemmings 3 · {0}";
 "Lemmings saved" = "Lemminger reddet";
-"Lemmings saved here" = "Lemen reddet her";
 "Lemmings saved worldwide" = "Lemen reddet i hele verden";
 "Less is more" = "Mindre er mer";
 "Let Adaptive DJ Mix include music from L2, L3 and other ports, when installed." = "La Adaptiv DJ-miks inkludere musikk fra L2, L3 og andre porter når de er installert.";
@@ -2030,7 +2027,7 @@
 "Pause on interruption" = "Sett på pause ved avbrudd";
 "Pause on skill change" = "Sett på pause ved ferdighetsendring";
 "Pause to assign" = "Sett på pause for å tildele";
-"Pause when you switch apps or disconnect a controller. Resume when you are ready." = "Sett på pause når du bytter app eller kobler fra en kontroller. Fortsett når du er klar.";
+"Pause when you switch apps or disconnect a controller." = "Sett på pause når du bytter app eller kobler fra en kontroller.";
 "Pause: Keep the rhythm" = "Pause: Hold rytmen";
 "Paused" = "Pauset";
 "Paused before correcting it." = "Paused before correcting it.";
@@ -2583,7 +2580,7 @@
 "Show skill backpacks" = "Vis ferdighetsryggsekker";
 "Show solution replay" = "Vis løsningsreprise";
 "Show song info" = "Vis sanginformasjon";
-"Show the number of live lemmings inside the reticule. This also works when the skill icon is hidden." = "Vis antallet levende lemminger innenfor siktemerket. Dette virker også når ferdighetsikonet er skjult.";
+"Show the number of live lemmings inside the reticule." = "Vis antallet levende lemminger innenfor siktemerket.";
 "Show the selected skill beside the pointer at 1× or 2×, or hide it with None. L3 Use shows carried tool uses." = "Vis valgt ferdighet ved siden av pekeren ved 1× eller 2×, eller skjul den med Ingen. L3 Bruk viser gjenværende verktøybruk.";
 "Show the song title and soundtrack briefly when the music changes." = "Vis sangtittelen og lydsporet en kort stund når musikken endres.";
 "Shuffle" = "Bland";
@@ -2773,7 +2770,6 @@
 "Take Most Saved, Least Skills and Clean Rescue from rivals in one clear." = "Ta Flest reddet, Færrest ferdigheter og Ren redning fra rivalene i én fullføring.";
 "Take a breather" = "Ta en pust i bakken";
 "Take your time" = "Ta den tiden du trenger";
-"Take your time. Reveal more when you want another nudge. The moves are still yours." = "Take your time. Reveal more when you want another nudge. The moves are still yours.";
 "Takes this seriously." = "Takes this seriously.";
 "Talks about it fondly." = "Talks about it fondly.";
 "Tap RT for fast-forward" = "Trykk RT for å spole fram";
@@ -3216,7 +3212,6 @@
 "Try later" = "Prøv senere";
 "Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns." = "Prøv én ferdighet i normal hastighet. Sett på pause og se hvor arbeideren lander og snur.";
 "Try these skills!" = "Prøv disse ferdighetene!";
-"Try this as an opening idea. Direction, crowd spacing, timing and changed terrain can affect the result." = "Try this as an opening idea. Direction, crowd spacing, timing and changed terrain can affect the result.";
 "Tube Strength" = "Rørstyrke";
 "Tube strength" = "Rørstyrke";
 "Turn off" = "Slå av";
@@ -3354,7 +3349,7 @@
 "Wait for this lemming to land." = "Vent til denne lemmingen lander.";
 "Walker" = "Vandrer";
 "Walks home with accompaniment." = "Walks home with accompaniment.";
-"Want to see one way through? This reveals a full winning route. Your game stays paused." = "Want to see one way through? This reveals a full winning route. Your game stays paused.";
+"Shows a full winning route." = "Viser en fullstendig vinnende rute.";
 "Was asked to judge a cucumber." = "Was asked to judge a cucumber.";
 "Was authorised to choose a cushion." = "Was authorised to choose a cushion.";
 "Was complimented on an ordinary sandwich." = "Was complimented on an ordinary sandwich.";

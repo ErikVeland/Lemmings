@@ -1282,7 +1282,7 @@ import NxlvKit
     @objc private func confirmEndRun() {
         guard !game.isComplete, !GameScreen.shared.isPresented else { return }
         GameScreen.shared.confirm(L10n.text("End this run?"),
-            detail: L10n.text("Active lemmings will be lost. Rescued lemmings and reserves will be retained. You can retry the level."),
+            detail: L10n.text("Active lemmings will be lost. Rescued lemmings and reserves will be retained."),
             actionTitle: L10n.text("End run"), owner: window) { [weak self] in
                 guard let self else { return }
                 self.game.abort(); self.paused = true; self.accumulator = 0; self.refresh()

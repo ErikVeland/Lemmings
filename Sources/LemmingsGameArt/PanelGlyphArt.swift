@@ -57,7 +57,19 @@ public enum PanelGlyphArt: String, Sendable {
       ]
       #endif
     case .undo:
-      return [".....####...", "...########.", "..###....###", "..##......##", "#.##........", "####........", "###.........", "####........", "#####.......", "...........#", "...#########", ".....#####.."]
+      return [
+        "...#.......",
+        "..##.......",
+        ".###.......",
+        "########...",
+        ".#########.",
+        "..##....###",
+        "...#.....##",
+        ".........##",
+        "........###",
+        "....######.",
+        "....####...",
+      ]
     case .menu:
       return ["############", "############", "............", "............", "############", "############", "............", "............", "############", "############"]
     case .mobileMenu:
@@ -285,6 +297,12 @@ public enum PanelGlyphArt: String, Sendable {
     if let tile = resourceTile { return (tile.width / 2, tile.height) }
     let rows = self.rows
     return ((rows.first?.count ?? 0) / (isOriginalTile ? 2 : 1), rows.count)
+  }
+
+  public func fittingSize(in controlSize: CGSize) -> CGSize {
+    guard self == .undo else { return controlSize }
+    let side = max(0, floor(min(controlSize.width, controlSize.height) * 0.7))
+    return CGSize(width: side, height: side)
   }
 
   /// The largest whole-number scale that fits a box, or 0 when none does.

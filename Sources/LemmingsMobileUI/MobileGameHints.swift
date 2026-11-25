@@ -70,7 +70,7 @@ extension MobileGameViewController {
     private func confirmSolution(_ solution: VerifiedSolution, stage: Int, title: String, confirm: String, ghostOnly: Bool) {
         let returnToHint = overlayReturnAction()
         showCustomOverlay(title: title,
-            details: [L10n.text("Want to see one way through? This reveals a full winning route. Your game stays paused.")],
+            details: [L10n.text("Shows a full winning route.")],
             reading: true, actions: [
             (L10n.text("CANCEL"), returnToHint),
             (confirm, { [weak self] in
