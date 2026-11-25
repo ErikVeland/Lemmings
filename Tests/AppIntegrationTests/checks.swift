@@ -5000,10 +5000,9 @@ extension AppDelegate {
     try check(library.entries.first(where: { $0.title == .lemmings2TheTribes })?.detail == "COMPLETE"
       && library.entries.first(where: { $0.title == .lemmings3TheChronicles })?.detail == "BETA",
       "The library has the wrong sequel release status")
-    try check(homeContentRow(.lemmings2)?.contains("BETA") == false
-      && homeContentRow(.lemmings2)?.contains("PREVIEW") == false
-      && homeContentRow(.lemmings3)?.hasSuffix(" — BETA") == true,
-      "The home rows have the wrong sequel release status")
+    let actions = playMenuItems().map(\.action)
+    try check(actions.contains(.browse(.lemmings2)) && actions.contains(.browse(.lemmings3)),
+      "The Play menu lost a sequel destination")
     returnToLibrary()
     window.setContentSize(CGSize(width: 900, height: 620))
     window.contentView?.layoutSubtreeIfNeeded()
@@ -5079,7 +5078,7 @@ extension AppDelegate {
     FanLevelLibrary.Progress.setCount(1, for: installedFanPack)
     fanPacks = [installedFanPack]
     dataSets = []
-    try check(fanHomeRow() == "FAN LEMMINGS  1/1",
+    try check(fanHomeStatus() == "1/1",
       "The Fan Lemmings home row included progress from a removed pack")
     library = UnifiedGameLibrary(entries: [
       .init(title: .lemmings, total: 1),
@@ -5850,7 +5849,7 @@ extension AppDelegate {
     stylesDirectory = nil
     neoLevelsDirectory = nil
     let bundled = try BundledGameResources.neoLemmix()
-    try check(neoLemmixSources == [bundled] && homeContentRow(.neolemmix)?.contains("NO PACKS") == false,
+    try check(neoLemmixSources == [bundled] && homeContentStatus(.neolemmix) != L10n.text("No packs"),
       "Bundled NeoLemmix packs still need a folder choice")
     let library = NeoLemmixLibrary.discover(neoLemmixSources)
     rebuildLevelCatalogue(LevelBrowserDiscovery(

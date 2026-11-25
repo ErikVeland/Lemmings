@@ -14,17 +14,8 @@ import NxlvKit
     static let lemmixNotesVersion = "2.5"
     static var subtitle: String { GameReleaseCopy.invitation }
     static var sections: [(String, String)] {
-        if AppDistribution.isStore && !GameMenuLogo.usesRestoredArtwork {
-            return [
-                (L10n.text("Ultimate Lemmix"), L10n.text("Three starter puzzles, pixel lettering and Lix characters.")),
-                (L10n.text("Your game"), L10n.text("Keep your journeys, Hot Seat games, hints, replays and HD effects.")),
-                (L10n.text("Game Data"), L10n.text("Import compatible levels or restore assets from your own collection."))
-            ]
-        }
-        return [
-            (L10n.text("Home and Play"), L10n.text("Home offers one next step. Play holds every game and collection.")),
-            (L10n.text("Speed and rewind"), L10n.text("Choose a speed directly. Rewind counts back in game seconds.")),
-            (L10n.text("Compatibility"), L10n.text("macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta."))
+        GameReleaseCopy.sections + [
+            (L10n.text("Compatibility"), L10n.text("macOS 12.3 or later on Apple silicon and Intel."))
         ]
     }
     private let defaults: UserDefaults

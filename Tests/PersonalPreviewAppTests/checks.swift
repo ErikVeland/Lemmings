@@ -204,9 +204,9 @@ extension AppDelegate {
             }
             try previewCheck(families == HomeContentFamily.allCases,
                              "The clean-content home lost an existing game family")
-            try previewCheck(homeContentRow(.classic).contains("/3"),
+            try previewCheck(homeContentStatus(.classic)?.contains("/3") == true,
                              "The Classic home family does not count the three generated starter levels")
-            try previewCheck(isClean || homeContentRow(.fan).contains(String(expectedCount)),
+            try previewCheck(isClean || fanHomeStatus().contains(String(expectedCount)),
                              "The fan home family does not count the selected community corpus")
             _ = try previewCapture(window.contentView!, name: "personal-restored-home-window")
             func event(_ key: String, code: UInt16, modifiers: NSEvent.ModifierFlags,

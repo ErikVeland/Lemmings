@@ -90,6 +90,12 @@ This schedule supersedes older delivery orders and routine Mac test requirements
 Historical release receipts remain unchanged. Product acceptance and feature
 work retain their recorded limits without becoming new non-engine Mac test gates.
 
+## Public update copy
+
+Keep GitHub release notes, Sparkle descriptions, App Store update text and the
+in-app What's New page focused on the app's features. Omit third-party names,
+asset references and licensing details from these notes.
+
 ## Version-history build gate
 
 Every Mac, iOS and tvOS app build must pass
