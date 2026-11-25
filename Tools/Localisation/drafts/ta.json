@@ -523,7 +523,6 @@
   "Choose unlocked levels or all levels for direct Classic selection.": "நேரடி Classic தேர்வுக்கு திறக்கப்பட்ட நிலைகள் அல்லது அனைத்து நிலைகளையும் தேர்ந்தெடுக்கவும்.",
   "Choose your {0} folder.": "உன் {0} கோப்புறையைத் தேர்ந்தெடு.",
   "Chronicles attribute cell is outside its object.": "Chronicles பண்புக்கூறு செல் அதன் பொருளுக்கு வெளியே உள்ளது.",
-  "Chronicles controls": "Chronicles கட்டுப்பாடுகள்",
   "Chronicles creature count does not match its placements.": "வரலாற்று உயிரினங்களின் எண்ணிக்கை அதன் இடங்களை பொருந்தாது.",
   "Chronicles extra-lemming count does not match its placements.": "வரலாறுகளின் கூடுதல் எண்ணிக்கை அதன் இடங்களை பொருந்தாது.",
   "Chronicles frame exceeds its dimensions.": "வரலாற்று சட்டம் அதன் பரிமாணங்களை மீறுகிறது.",
@@ -544,7 +543,6 @@
   "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.": "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.",
   "Classic artwork": "Classic ஓவியம்",
   "Classic follow-up": "Classic தொடர்ச்சி",
-  "Classic follow-up adds five levels from the original DOS game, Fun 6–10.": "Classic தொடர்ச்சியில் பழைய DOS ஆட்டத்தின் Fun 6–10 ஆகிய ஐந்து நிலைகள் சேர்க்கப்பட்டுள்ளன.",
   "Classic keeps recent rewind states close. Repeated rewind presses on Apple TV move further back, and scenes use less work while you play.": "பின்னோக்கிச் செல்ல Classic அண்மைய ஆட்ட நிலைகளைத் தயாராக வைத்திருக்கும். Apple TV-யில் மீண்டும் அழுத்தினால் மேலும் பின்னால் செல்லலாம். ஆட்டக் காட்சிகளுக்குத் தேவைப்படும் கணக்கீடும் குறைந்துள்ளது.",
   "Classic opening": "Classic தொடக்கம்",
   "Classic skill counters": "Classic திறன் எண்ணிகள்",
@@ -2523,7 +2521,6 @@
   "Select player {0}": "வீரர் {0} தேர்ந்தெடு",
   "Select {0}{1}": "{0}{1} தேர்ந்தெடு",
   "Selected": "தேர்ந்தெடுக்கப்பட்டது",
-  "Selecting a skill in Chronicles shows the original pressed artwork.": "Chronicles-இல் திறனைத் தேர்ந்தெடுத்தால் அழுத்திய பொத்தானின் அசல் ஓவியம் தெரியும்.",
   "Selection": "தேர்வு",
   "Selection effect": "தேர்வு விளைவு",
   "Sequel artwork": "தொடர் விளையாட்டு ஓவியம்",
@@ -3610,5 +3607,9 @@
   "{0}: {1} ticks ago": "{0}: {1} ticks ago",
   "{0}: {1}.": "{0}: {1}.",
   "{0}H {1}M": "{0}H {1}M",
-  "{0}{1} more to rescue for three stars.": "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்."
+  "{0}{1} more to rescue for three stars.": "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்.",
+  "Home and Play": "முகப்பு மற்றும் விளையாடு",
+  "Home offers one next step. Play holds every game and collection.": "முகப்பு ஒரே அடுத்த படியைக் காட்டும். விளையாடு எல்லா விளையாட்டுகளையும் தொகுப்புகளையும் கொண்டுள்ளது.",
+  "Speed and rewind": "வேகம் மற்றும் பின்னோக்கு",
+  "Choose a speed directly. Rewind counts back in game seconds.": "வேகத்தை நேரடியாகத் தேர்ந்தெடுக்கவும். பின்னோக்கு விளையாட்டு விநாடிகளில் எண்ணும்."
 }
