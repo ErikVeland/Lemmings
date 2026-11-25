@@ -16,7 +16,6 @@ import LemmingsMobileCore
 }
 #endif
 
-#if os(tvOS)
 private final class DeferredRewindSession: MobileGameSession {
     let engineIdentifier: String
     let engineFingerprint = "deferred-rewind"
@@ -61,7 +60,6 @@ private final class DeferredRewindSession: MobileGameSession {
         try .init(width: 128, height: 64, rgba: Data(repeating: 0, count: 128 * 64 * 4))
     }
 }
-#endif
 
 @MainActor struct MobileOverlayReturnTests {
     private func withGame(session suppliedSession: (any MobileGameSession)? = nil,
@@ -203,6 +201,34 @@ private final class DeferredRewindSession: MobileGameSession {
             #expect(game.globalNavigation.isUserInteractionEnabled)
         }
     }
+
+    #if os(iOS)
+    @Test(arguments: ["classic-dos", "lemmings2", "lemmings3", "neolemmix"])
+    func playResumesFromFastRewindInOnePress(engine: String) async throws {
+        let session = DeferredRewindSession(engineIdentifier: engine)
+        session.allowCommit = true
+        try await withGame(session: session) { game in
+            game.gameSettings.classic.reduceMotion = true
+            game.inputSpeed = GameplaySpeed(legacyMultiplier: 3)
+            game.resumePlay(offerSkillSelectionChoice: false)
+            let now = ProcessInfo.processInfo.systemUptime
+            game.inputSpeed.setFast(true, at: now)
+            game.updateInputSpeed(at: now)
+            #expect(game.speed == 3 && !game.paused)
+
+            game.hud.onAction?(.pause)
+            #expect(game.speed == 1 && !game.paused)
+            game.inputSpeed.setFast(true, at: now)
+            game.updateInputSpeed(at: now)
+
+            game.hud.onAction?(.rewind)
+            #expect(game.paused && game.speed == 3)
+            #expect(session.seeks.count == 1)
+            game.hud.onAction?(.pause)
+            #expect(game.speed == 1 && !game.paused)
+        }
+    }
+    #endif
 
     #if os(tvOS)
     @Test(arguments: ["classic-dos", "lemmings2", "lemmings3", "neolemmix"])

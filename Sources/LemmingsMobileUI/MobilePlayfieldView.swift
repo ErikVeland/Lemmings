@@ -131,6 +131,8 @@ import CoreImage.CIFilterBuiltins
         get { rewindCueView.cue }
         set { rewindCueView.cue = newValue }
     }
+    /// The cue's frame in this view, or nil while hidden. Notices avoid it.
+    var rewindCueFrame: CGRect? { rewindCueView.isHidden ? nil : rewindCueView.frame }
     private let failureMood = FailureMoodTransition()
     private var failureAmount: CGFloat = 0
     #if os(iOS)

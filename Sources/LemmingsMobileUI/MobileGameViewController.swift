@@ -439,7 +439,7 @@ typealias MobileGameControllerBase = UIViewController
         installTrackNoticeCallback()
         hud.playerName = turn?.ownerName ?? playerProfile.name
         hud.playerPortrait = MobileGameArt.portraits?.image(turn?.ownerPortrait ?? playerProfile.portrait)
-        overlayCanvas.playerName = turn?.ownerName ?? playerProfile.name
+        overlayCanvas.playerName = turn?.ownerName
         playfieldView.displaySettings = gameSettings.classic
         configureOverlay()
         view.addSubview(solutionSelector)
@@ -898,7 +898,9 @@ typealias MobileGameControllerBase = UIViewController
                 inputSpeed.reset(at: ProcessInfo.processInfo.systemUptime)
                 updateInputSpeed(at: ProcessInfo.processInfo.systemUptime)
                 #if !os(tvOS)
-                return
+                // While running, the first press only drops to normal speed.
+                // While paused (after a rewind, say), the press must also resume.
+                if !paused { return }
                 #endif
             }
             if session.isReadOnly, session.snapshot.isComplete { resumeSelectedView(); return }
@@ -1192,6 +1194,7 @@ typealias MobileGameControllerBase = UIViewController
         let overlays: [UIView] = [countdownLabel, solutionSelector]
         let frames = hud.noticeObstructions.map { hud.convert($0, to: view) }
             + overlays.filter { !$0.isHidden }.map(\.frame)
+            + [playfieldView.rewindCueFrame.map { playfieldView.convert($0, to: view) }].compactMap { $0 }
         let obstructions = frames.filter { available.intersects($0) }.map { frame in
             MobileReservedRegion(kind: .occlusion,
                 frame: .init(x: frame.minX, y: frame.minY, width: frame.width, height: frame.height))
@@ -2741,11 +2744,11 @@ typealias MobileGameControllerBase = UIViewController
         let startTick = session.snapshot.tick
         guard rewindQueue.append(ticks: ticks, from: startTick,
                                  earliestTick: session.earliestRewindTick, backwardSteps: backwardSteps) else { return }
-        if rewindCueOrigin == nil {
-            rewindCueOrigin = startTick
-            showControlTip(.rewind)
-        }
+        let firstPress = rewindCueOrigin == nil
+        if firstPress { rewindCueOrigin = startTick }
         updateRewindCue()
+        // Show the tip after the cue so the notice can lay out around it.
+        if firstPress { showControlTip(.rewind) }
         // Do not throw away reconstruction progress when another press arrives.
         if seekOperation == nil && rewindPresentationTask == nil { drainRewindQueue() }
     }
