@@ -1,5 +1,7 @@
 # UX redesign
 
+[Screen review register](InterfaceHierarchy.md#screen-review-register) tracks the newer progression, reward and ranking screens alongside the original menu tree. It distinguishes bitmap and target checks from device and service acceptance.
+
 ## Checkpoint 2 · 25 November 2026
 
 This checkpoint builds on shared main at `66fce92f`. The repeatable checks below exercise the implementation in this checkout. Use the boxes here for current progress. Sections A–K below preserve the design brief and the later phase notes describe earlier revisions. For example, the proposal explored a welcome screen and several result themes. The implemented flow starts at profile creation and fades the level track on results.
@@ -41,7 +43,7 @@ The owner reported all five device checks green on 25 November 2026. Each row be
 - The iPhone simulator showed that Play needed two presses after a fast rewind. Play now resumes at 1× in a single press. Pressing Pause while already running fast still returns to 1× first. The rewind tip leaves the live rewind readout visible. Check the native Mac tip placement in the device pass.
 - Solo menus use concise action names and reserve turn captions for Hot Seat or another player's save. Settings sliders use their existing labels and values. The Mac L2 practice screen gives one instruction while choosing skills, then shows how to start. Home names the profile only when more than one exists. Two copy passes include the bundled translations. The second removed Settings sentences that repeat a setting's scope or availability. It also made the native L2 and L3 rewind announcement use game seconds and gave the Step controls one translated name. Labels now use sentence case. Narrative, teaching, release and privacy text kept its sentences. Native-speaker review of the trimmed translations remains open.
 - The shared Undo icon has a continuous arrow and more clearance. Native Mac L2 shows the arrow and the accessible action name when Undo is available.
-- The Mac result announcement reads the outcome, rescue count, stars and leaderboard. Screen readers reach Replay through its own enabled button when an attempt has a replay.
+- The Mac result announcement reads the outcome, rescue count and stars. Opening Details reads the level leaderboard. Screen readers reach Replay through its own enabled button when an attempt has a replay.
 - Replay skill history uses elapsed game time across Mac, touch and Apple TV. The Mac solution replay exposes action names and keeps the keyboard shortcuts in accessibility help. Physical VoiceOver and Siri Remote acceptance remain open.
 
 ### Repeat the checkpoint

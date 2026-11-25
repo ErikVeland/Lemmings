@@ -17,6 +17,13 @@ extension MenuAudit {
             ("home-saves", MobileHomeArt.page(resume: [.init("resume", "Resume level - LEM")],
                 journey: MobileHomeArt.journeyAction(run: nil), families: families, initials: "LEM v PAL", nextPlayerIndex: 1,
                 subtitle: SavedLemmingsCounter(local: 42, global: nil).homeCaption)),
+            ("play", MobileHomeArt.playPage(journey: MobileHomeArt.journeyAction(run: nil), families: families)),
+            ("play-saved", MobileHomeArt.playPage(journey: MobileHomeArt.journeyAction(run: nil),
+                resume: [.init("resume", "Resume level")], families: families)),
+            ("result-details-offline", MobileCareerArt.resultDetails(footer: [.init("0", "Back")],
+                board: ("Most saved", ["Connection unavailable"]))),
+            ("result-details-tied", MobileCareerArt.resultDetails(footer: [.init("0", "Back"), .init("1", "Records")],
+                board: ("Most saved", ["#1  AB  10", "#1  CD  10"]))),
             ("journey-progress", MobileHomeArt.journeyPage(title: "Journey", completed: 812,
                 solved: 12, total: 227, revisit: 2, resume: nil, canContinue: true)),
             ("journey-resume", MobileHomeArt.journeyPage(title: "Journey", completed: 812,
@@ -118,7 +125,16 @@ extension MenuAudit {
             for (device, size, television) in devices {
                 for setting in ClassicInterfaceSize.allCases {
                     let scale = MobileSettingsArt.interfaceScale(setting, width: size.width, television: television)
-                    let layout = GameFrontEnd.layout(page, width: size.width / scale, minimumHeight: size.height / scale)
+                    let toolScale: CGFloat = television ? 2 : 1
+                    let toolbar = GameListToolsArt.layout(width: size.width, actions: page.listTools, scale: toolScale)
+                    let toolHeight = toolbar.size.height / scale
+                    let layout = GameFrontEnd.layout(page, width: size.width / scale,
+                        minimumHeight: max(0, size.height / scale - toolHeight))
+                    for target in toolbar.targets {
+                        guard target.frame.width >= 44, target.frame.height >= 44,
+                              toolbar.action(at: .init(x: target.frame.midX, y: target.frame.midY)) == (target.action.enabled ? target.action.id : nil)
+                        else { throw invalidTargets(line: #line) }
+                    }
                     let canvas = CGRect(origin: .zero, size: layout.size)
                     guard (page.home || footerNavigationIsValid(page, layout: layout)), layout.targets.count == actions.count else {
                         FileHandle.standardError.write(Data("Navigation: \(name), \(device), \(setting)\n".utf8))
@@ -138,7 +154,12 @@ extension MenuAudit {
                     }
                     let scrolls = layout.size.height * scale > size.height
                     if setting == .standard {
-                        let context = try makeNavigationContext(layout.size)
+                        let context = try makeNavigationContext(.init(width: layout.size.width, height: layout.size.height + toolHeight))
+                        context.saveGState()
+                        context.scaleBy(x: 1 / scale, y: 1 / scale)
+                        GameListToolsArt.draw(toolbar, typography: typography, scale: toolScale, in: context)
+                        context.restoreGState()
+                        context.translateBy(x: 0, y: toolHeight)
                         GameFrontEnd.draw(page, layout: layout, typography: typography,
                             highlighted: page.backAction?.id ?? actions.first(where: \.enabled)?.id, in: context)
                         guard let image = context.makeImage(), let destination = CGImageDestinationCreateWithURL(

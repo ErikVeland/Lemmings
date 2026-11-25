@@ -157,12 +157,10 @@ extension MobileLibraryViewController {
         let rows: [GameFrontEnd.Action]
         if rankings.world {
             let me = profiles.active.name
-            rows = (community.board?.entries ?? []).map { entry in
-                .init("rankReplay.\(entry.rank)", entry.stars == nil
-                      ? "\(entry.rank).  \(entry.name)   " + rankings.category.score(entry.score)
-                      : MobileCareerArt.careerRowTitle(rank: entry.rank, name: entry.name, stars: entry.stars ?? 0,
-                                                       clears: entry.clears ?? 0, perfect: entry.perfect ?? 0),
-                      enabled: entry.replay, selected: entry.name == me)
+            rows = (community.board?.entries ?? []).enumerated().map { index, entry in
+                let id = entry.runID.map { "rankReplay." + $0.uuidString } ?? "rankEntry.\(index)"
+                return .init(id, HostedLeaderboardText.row(entry, category: rankings.category),
+                    enabled: entry.runID != nil && entry.replay, selected: entry.name == me)
             }
         } else {
             rows = MobileCareerArt.localLeaderboardRows(records: arcadeStore.records, category: rankings.category, activeID: profiles.activeID)
@@ -193,8 +191,8 @@ extension MobileLibraryViewController {
                 if rankings.world { refreshRankings() }
                 rebuild(); return true
             }
-            guard id.hasPrefix("rankReplay."), let rank = Int(id.dropFirst(11)),
-                  let entry = rankings.community.board?.entries.first(where: { $0.rank == rank }) else { return false }
+            guard id.hasPrefix("rankReplay."), let runID = UUID(uuidString: String(id.dropFirst("rankReplay.".count))),
+                  let entry = rankings.community.board?.entries.first(where: { $0.runID == runID && $0.replay }) else { return false }
             rankings.community.playback(entry) { [weak self] file, _ in
                 guard let self else { return }
                 do {

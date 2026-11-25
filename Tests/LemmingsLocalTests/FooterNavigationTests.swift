@@ -129,7 +129,7 @@ final class FooterNavigationTests: XCTestCase {
                     XCTAssertEqual(back.localFrame.minX, buttons.map { $0.localFrame.minX }.min())
                     XCTAssertTrue(buttons.filter { $0 !== back }.allSatisfy { !$0.localFrame.intersects(back.localFrame) })
                     XCTAssertTrue(back.accessibilityPerformPress()); XCTAssertEqual(menus, 1)
-                    let records = try XCTUnwrap(buttons.first { $0.accessibilityLabel() == "Records" })
+                    let records = try XCTUnwrap(buttons.first { $0.accessibilityLabel() == "Details" })
                     XCTAssertTrue(view.bounds.contains(records.localFrame))
                     XCTAssertFalse(buttons.contains { $0 !== records && $0.localFrame.intersects(records.localFrame) })
                     let replay = buttons.first { $0.accessibilityLabel() == "Replay" }

@@ -21,20 +21,13 @@ import NxlvKit
     self.page = page
     let root = page.body
     let earned = ClassicAchievement.catalog.filter { progress.isUnlocked($0.id) }.count
-    let title = label(L10n.text("Your rescue story"), size: 26, weight: .bold)
-    let subtitle = label(L10n.text("\(earned) of \(ClassicAchievement.catalog.count) achievements earned"), size: 14)
-    let trophy = symbol(earned: true, size: 44)
-    let heading = NSStackView(views: [trophy, stack([title, subtitle], spacing: 5)])
-    heading.spacing = 18
+    let count = label(L10n.text("\(earned) of \(ClassicAchievement.catalog.count) achievements earned"), size: 14)
     let meter = GameProgressIndicator()
     meter.isIndeterminate = false
     meter.maxValue = Double(ClassicAchievement.catalog.count)
     meter.doubleValue = Double(earned)
     meter.setAccessibilityLabel(L10n.text("Achievements earned"))
-    let hint = label(earned == ClassicAchievement.catalog.count
-      ? L10n.text("Every achievement earned. What a rescue!")
-      : L10n.text("Play levels in order to work towards the next trophy."), size: 12)
-    let header = stack([heading, meter, hint], spacing: 12)
+    let header = stack([count, meter], spacing: 8)
     let scroll = NSScrollView()
     scroll.hasVerticalScroller = true
     scroll.drawsBackground = false

@@ -23,8 +23,7 @@ the level. Holding a result action key does not repeat it.
 All five Arcade pages, replay controls and confirmation pages use the shipped Macintosh bitmap
 fonts for every label, heading and paragraph. They share the briefing's stone
 edging, moss cap, black panels, silver menu selection and Lemming sprites.
-Result pages show the outcome, rescued count, three visible star thresholds,
-new level and career awards, personal records, near misses and leaderboard links.
+Results show the outcome, rescued count and three stars. Details opens level and career records, achievements and leaderboard comparisons.
 See [Results and rewards](ResultRewards.md) for the current presentation. Play style names open a native
 popover explaining the philosopher and the matching play style. New awards have
 a separate link. Records use aligned columns and a Rewinds filter with explicit

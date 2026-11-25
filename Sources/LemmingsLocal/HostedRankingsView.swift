@@ -22,22 +22,17 @@ import NxlvKit
         if usesGameCenter { drawGameCenterBoard(); return }
         leaderboardTabs()
         let service = HostedRankings.shared
-        // Same columns as This Mac. Older servers send only the selected total, so the others show a dash.
-        text(L10n.text("RANK"), 80, 214, 90); text(L10n.text("PLAYER"), 174, 214, 300); text(L10n.text("STARS"), 524, 214, 140)
-        text(L10n.text("CLEARED"), 724, 214, 160); text(L10n.text("3-STAR"), 924, 214, 120)
+        text(L10n.text("RANK"), 80, 214, 90)
+        text(L10n.text("PLAYER"), 174, 214, 500)
+        text(hostedCategory.title, 690, 214, 350, alignment: .right)
         if let board = service.board {
             for (i, row) in board.entries.prefix(6).enumerated() {
                 let y = CGFloat(254 + i * 47)
                 let rect = CGRect(x: 80, y: y - 5, width: 960, height: 44)
                 GameStyle.fill(rect, row.name == player.initials ? GameStyle.gold.withAlphaComponent(0.12) : .clear)
-                func total(_ value: Int?, _ category: HostedCategory) -> String {
-                    value.map(String.init) ?? (hostedCategory == category ? String(row.score) : "-")
-                }
                 rowText("\(row.rank)", x: 96, width: 60, row: rect)
-                rowText(row.name, x: 174, width: 300, row: rect, palette: .green)
-                rowText(total(row.stars, .stars), x: 524, width: 140, row: rect)
-                rowText(total(row.clears, .clears), x: 724, width: 160, row: rect)
-                rowText(total(row.perfect, .perfect), x: 924, width: 120, row: rect)
+                rowText(row.name, x: 174, width: 500, row: rect, palette: .green)
+                rowText(hostedCategory.score(row.score), x: 690, width: 350, row: rect, alignment: .right)
             }
             if board.entries.isEmpty { text(L10n.text("No scores"), 80, 300, 960, alignment: .center) }
             if hostedPage > 0 || board.hasMore {

@@ -12,7 +12,7 @@ stars use the existing rescue goals. A clear earns the first star and keeps
 Each star shows its rescue threshold and whether the run met it. The third star
 uses a verified maximum, a best-known target, or an actual full rescue. Unknown
 targets stay unknown. A failed run earns no stars, even if its rescue count meets
-the threshold. The best previous rating remains visible.
+the threshold. The level record retains the best previous rating.
 
 On Mac, hover over a star or named award to read its condition. The whole star
 is an input target. Click or use keyboard activation to open a fixed detail page.
@@ -31,7 +31,7 @@ the result page, uses six small redraws at most, and adds no gameplay rendering.
 Reduced Motion shows the complete rating immediately. Chimes follow the game's
 sound volume and mute state. Leaving the page cancels the sequence and sounds.
 
-The two result cards separate **This level** from optional **Career** review:
+On Mac, **Details** opens the **This level** and **Career** cards, the level leaderboard and its metric controls. On phone and TV, **Details** opens the level leaderboard and any available record, replay and sharing actions. A new reward can be opened from the result itself.
 
 - The level card names a new level award and shows the personal record.
   Level goals lists the rescue targets and results. Impossible full-rescue goals

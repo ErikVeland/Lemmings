@@ -95,15 +95,24 @@ public enum MobileCareerArt {
 
     /// Leaderboards rank players. The toolbar picks who (World or This device) and what (category).
     /// Rows are the ranking itself. Back is the only footer navigation.
+    public static func resultDetails(footer: [GameFrontEnd.Action], board: (metric: String, lines: [String])?) -> GameFrontEnd.Page {
+        var page = GameFrontEnd.Page(title: L10n.text("Details"), footer: footer)
+        if let board {
+            page.rows = [.init("levelBoardMetric", L10n.text("Level leaderboard: \(board.metric)"))]
+            page.details = board.lines
+        }
+        return page
+    }
+
     public static func leaderboards(world: Bool, category: HostedCategory, rows: [GameFrontEnd.Action],
                                     busy: Bool, status: String, sharing: Bool?, gameCenter: Bool,
                                     worldwide: String = "") -> GameFrontEnd.Page {
         var page = GameFrontEnd.Page(title: L10n.text("Community"),
-            subtitle: [worldwide, category.title].filter { !$0.isEmpty }.joined(separator: "\n"),
+            subtitle: worldwide,
             rows: rows, details: busy ? [L10n.text("Loading...")] : rows.isEmpty ? [status.isEmpty ? L10n.text("No scores") : status] : [],
             footer: [.init("home", L10n.text("Back"), backNavigation: true)])
         if !worldwide.isEmpty {
-            page.subtitleSizingText = SavedLemmingsCounter(local: .max, global: .max).homeCaption + "\n" + category.title
+            page.subtitleSizingText = SavedLemmingsCounter(local: .max, global: .max).homeCaption
         }
         if world, let sharing {
             var share = GameFrontEnd.Action("rankShare", L10n.text("Share my records"), selected: sharing)
@@ -142,8 +151,7 @@ public enum MobileCareerArt {
         var rank = 0, previous: Int?
         return ranked.enumerated().map { index, score in
             if value(score) != previous { rank = index + 1; previous = value(score) }
-            return .init("progress.player.\(score.profileID)", careerRowTitle(rank: rank, name: playerName(records, score.profileID),
-                                                                         stars: score.stars, clears: score.clearedLevels, perfect: score.threeStarLevels),
+            return .init("progress.player.\(score.profileID)", "\(rank).  \(playerName(records, score.profileID))   \(value(score))",
                          selected: score.profileID == activeID, portrait: records.profile(score.profileID)?.portrait)
         }
     }
@@ -191,12 +199,10 @@ public enum MobileCareerArt {
                                     campaign: ClassicAchievementProgress = .init(),
                                     insightsAvailable: Bool = true,
                                     selectablePlayers: [MobileProfile] = []) -> GameFrontEnd.Page {
-        let awards = achievementsPage(records: records, profileID: profileID, profileName: profileName,
-                                      subtitle: "", campaign: campaign).rows
         // Profile owns everything personal: identity, records, awards, statistics and saves.
         var page = GameFrontEnd.Page(title: L10n.text("Profile"), subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: [.init("recordList", L10n.text("Records")),
-                   .init("achievements", L10n.text("Achievements") + "  \(awards.filter(\.selected).count)/\(awards.count)"),
+                   .init("achievements", L10n.text("Achievements")),
                    .init("profileStatistics", L10n.text("Statistics")),
                    .init("players", L10n.text("Players")),
                    .init("cloudSaves", L10n.text("Cloud saves")),
@@ -419,20 +425,43 @@ public enum MobileCareerArt {
         return progress
     }
 
-    public static func achievementsPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String, campaign: ClassicAchievementProgress = .init()) -> GameFrontEnd.Page {
-        let earned = records.careerAchievements(profileID: profileID)
-        let levelRows = ArcadeLevelAchievement.allCases.map {
-            GameFrontEnd.Action("award." + $0.rawValue, $0.title, selected: earned.contains($0))
+    public enum AchievementSection: String, CaseIterable, Sendable {
+        case level, career, campaign
+
+        var title: String {
+            switch self {
+            case .level: L10n.text("Level goals")
+            case .career: L10n.text("Career progress")
+            case .campaign: L10n.text("Progression")
+            }
         }
-        let careerRows = TrolleyAchievement.allCases.filter(\.isOffered).map { award in
-            let progress = award.progress(attempts: records.trolley.attempts, profileID: profileID)
-            return GameFrontEnd.Action("careerAward." + award.rawValue,
-                award.title + (progress.goal > 1 ? "  \(progress.value)/\(progress.goal)" : ""), selected: progress.earned)
-        }
-        return .init(title: L10n.text("Achievements"), subtitle: subtitle.isEmpty ? profileName : subtitle,
-            rows: levelRows + careerRows + ClassicAchievement.catalog.map {
-                .init("campaignAward." + $0.id.rawValue, $0.title, selected: campaign.isUnlocked($0.id))
-            }, footer: [.init("records", L10n.text("Back"))])
     }
 
+    public static func achievementsPage(records: ArcadeRecords, profileID: String, profileName: String, subtitle: String,
+                                        campaign: ClassicAchievementProgress = .init(), section: AchievementSection = .level) -> GameFrontEnd.Page {
+        let rows: [GameFrontEnd.Action]
+        switch section {
+        case .level:
+            let earned = records.careerAchievements(profileID: profileID)
+            rows = ArcadeLevelAchievement.allCases.map {
+                .init("award." + $0.rawValue, $0.title, selected: earned.contains($0))
+            }
+        case .career:
+            rows = TrolleyAchievement.allCases.filter(\.isOffered).map { award in
+                let progress = award.progress(attempts: records.trolley.attempts, profileID: profileID)
+                return .init("careerAward." + award.rawValue,
+                    award.title + (progress.goal > 1 ? "  \(progress.value)/\(progress.goal)" : ""), selected: progress.earned)
+            }
+        case .campaign:
+            rows = ClassicAchievement.catalog.map {
+                .init("campaignAward." + $0.id.rawValue, $0.title, selected: campaign.isUnlocked($0.id))
+            }
+        }
+        var page = GameFrontEnd.Page(title: L10n.text("Achievements"), subtitle: subtitle.isEmpty ? profileName : subtitle,
+            rows: rows, footer: [.init("records", L10n.text("Back"))])
+        page.listTools = AchievementSection.allCases.map {
+            .init("awardsSection." + $0.rawValue, $0.title, selected: $0 == section)
+        }
+        return page
+    }
 }
