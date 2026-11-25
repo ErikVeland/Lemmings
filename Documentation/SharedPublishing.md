@@ -22,6 +22,12 @@ asset policy, signing, service configuration and release channels. The shared
 `Resources/Publishing/editions.json` file indexes the two product manifests.
 It cannot define a common marketing version.
 
+Ultimate Lemmings now ships Mac builds only. App Store updates are published
+for Ultimate Lemmix only. Historical iOS and tvOS build counters in the Lemmings
+manifest remain archival metadata; do not advance them or submit Lemmings builds
+to App Store Connect. Keep the Lemmings Sparkle feed and Mac release tags
+independent from Lemmix store releases.
+
 Ultimate Lemmings retains its 2.4.3 candidate: Mac 107, iOS 46 and tvOS 21.
 Ultimate Lemmix retains its documented 2.4.2 build 108 candidate on all platforms.
 These values describe candidate metadata. They do not claim a new release.

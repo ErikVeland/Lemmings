@@ -6,6 +6,11 @@ Use this order for each release. Ship each platform as soon as its package is
 ready. Later platforms and stores can follow the Mac release with their own
 delivery receipts. Do not wait for every platform before publishing Mac.
 
+Ultimate Lemmings is Mac-only from 2.5 onward. Publish App Store updates for
+Ultimate Lemmix only. Historical Lemmings mobile build counters do not authorize
+new mobile builds or submissions. Keep each product's Mac and store release
+records separate.
+
 | Priority | Release | Scheduling rule |
 | --- | --- | --- |
 | 1 | Mac | Get the release out quickly. Skip tests unless the candidate changes an engine. |
@@ -21,7 +26,8 @@ it becomes actionable. Lower-priority work must not delay an earlier release.
 
 The owner set 2.5 as the target for the UX overhaul on 25 November 2026.
 The overhaul covers the work in [UX redesign](UXRedesign.md). It ships as 2.5
-for Ultimate Lemmings and Ultimate Lemmix. Do not ship it as a 2.4.x patch.
+for both products, with Ultimate Lemmings releases limited to Mac and App Store
+updates limited to Ultimate Lemmix. Do not ship it as a 2.4.x patch.
 
 On 25 November 2026 `main`, including the overhaul, was merged into both
 product branches. Since then the next release from either branch includes
