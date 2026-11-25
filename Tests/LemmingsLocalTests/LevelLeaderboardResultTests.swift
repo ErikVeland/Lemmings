@@ -117,7 +117,7 @@ final class LocalLeaderboardPageTests: XCTestCase {
         XCTAssertEqual(board.listTools.filter(\.selected).map(\.id), ["rankScope.local", "rankCategory.clears"])
         XCTAssertEqual(board.footer.map(\.id), ["home", "rankGameCenter"])
         let progress = MobileCareerArt.progressPage(records: records, profileID: host, profileName: "Host", subtitle: "")
-        XCTAssertEqual(progress.rows.map(\.id), ["recordList", "achievements", "playInsights"])
+        XCTAssertEqual(progress.rows.map(\.id), ["recordList", "achievements", "players", "cloudSaves", "playInsights"])
         XCTAssertEqual(progress.footer.map(\.id), ["home"])
         XCTAssertTrue(progress.listTools.isEmpty)
         let hotSeatProgress = MobileCareerArt.progressPage(records: records, profileID: guest.id,
@@ -172,9 +172,7 @@ final class LocalLeaderboardPageTests: XCTestCase {
         XCTAssertEqual(duo.heading.midX, panes[0].midX, accuracy: 0.01)
 
         let tv = TVMenuPresentation.homeLayout(page, width: 1920, height: 1080)
-        let inner = tv.board.width - 32
-        let leading = floor(inner * 0.30)
-        let tvLogoCenter = tv.board.minX + 16 + leading / 2
-        XCTAssertEqual(tv.heading.midX, tvLogoCenter, accuracy: 0.01)
+        // Home has no game rows on TV, so its single column and logo sit in the centre.
+        XCTAssertEqual(tv.heading.midX, tv.board.midX, accuracy: 0.01)
     }
 }

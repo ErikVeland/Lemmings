@@ -106,6 +106,8 @@ import NxlvKit
     }
     private var countdownWarning = LastSecondsWarning()
     private let dj = AdaptiveDJPlayer()
+    private lazy var resultMusic = ResultMusicFade(module: music, dj: dj)
+    private var needsAttemptMusic = true
     private let manualDJHandoff = LegacyDJCrossfade()
     private var settingsProfileID: String?
     private let runMovie = RunMovie()
@@ -316,6 +318,12 @@ import NxlvKit
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
         keyboard.navigationControlHeight = { [weak self] in self?.canvas.skillGroupFrame.height ?? 44 }
+        canvas.timeline.speedState = { [weak self] in self?.speedControl.state }
+        canvas.timeline.canChooseSpeed = { [weak self] in
+            guard let self else { return false }
+            return self.screen == .playing && self.game?.isComplete == false && !self.canvas.readOnlyReplay && !self.speedControl.bulletTimeActive
+        }
+        canvas.timeline.chooseSpeed = { [weak self] tier in self?.speedControl.select(tier, at: ProcessInfo.processInfo.systemUptime) }
         canvas.timeline.enabled = { [weak self] action in
             guard let self, self.screen == .playing, let game = self.game else { return false }
             switch action {
@@ -699,7 +707,11 @@ import NxlvKit
         try validateMusicRouting(!music.isRunning && !dj.isPlaying, L10n.text("L2 played music before audio configuration"))
         var settings = ClassicSettings()
         settings.music = .adaptiveDJ; settings.musicVolume = 0; settings.soundVolume = 0
+        paused = true
         setAudioSettings(settings, muted: true)
+        try validateMusicRouting(!dj.isPlaying && !music.isRunning, "Ready played the level track")
+        paused = false
+        playTribeMusic()
         try validateMusicRouting(dj.isPlaying && dj.currentURL != nil &&
             dj.currentURL?.lastPathComponent.lowercased().contains("maintune") == false,
             L10n.text("L2 selected menu music during a level handover"))
@@ -830,6 +842,7 @@ import NxlvKit
     }
     @objc private func characterArtworkChanged() { canvas.refreshCharacterArtwork() }
     func stop() {
+        resultMusic.retire()
         manualDJHandoff.cancel()
         gameplayKeyboard?.removeNavigationControl()
         saveCheckpoint(immediately: true)
@@ -892,8 +905,9 @@ import NxlvKit
         }
         sounds.setMuted(muted || settings.sound == .silent || UserDefaults.standard.bool(forKey: progressKey + ".soundsMuted"))
         if musicChanged {
-            if screen == .playing || screen == .briefing || screen == .results { playTribeMusic() }
-            else { playMusic(L10n.text("Maintune")) }
+            needsAttemptMusic = true
+            if screen == .playing { playTribeMusic() }
+            else if screen == .menu { playMusic(L10n.text("Maintune")) }
         }
         if userPausedMusic && paused { updateUserMusicPause() }
     }
@@ -1032,6 +1046,7 @@ import NxlvKit
     }
 
     private func playMusic(_ name: String) {
+        resultMusic.retire()
         manualDJHandoff.cancel()
         music.setVolume(audioSettings.musicVolume)
         dj.setVolume(audioSettings.musicVolume)
@@ -1186,6 +1201,10 @@ import NxlvKit
         }
     }
     private func beginReplay() {
+        resultMusic.retire()
+        manualDJHandoff.cancel()
+        music.stop(); dj.stop()
+        needsAttemptMusic = true
         if restoringRun { return }
         discardRewindOrigin()
         lastFanInput = nil; lastAimInput = nil
@@ -1305,6 +1324,8 @@ import NxlvKit
     }
     func reviewReplay() { if game?.isComplete == true { runMovie.review() } }
     private func playTribeMusic() {
+        guard audioConfigured, !paused, screen == .playing, game?.isComplete == false else { return }
+        needsAttemptMusic = false
         let names = ["classic", "beach", "cavelem", "circus", "egyptian", "highland",
                      "medieval", "outdoor", "polar", "shadow", "space", "sports"]
         playMusic(names[level.style])
@@ -1608,6 +1629,7 @@ import NxlvKit
             if frontTicks.isMultiple(of: 4) { refreshGame() }
             return
         }
+        if needsAttemptMusic { playTribeMusic() }
         let previousTick = game.tick
         // Original fast-forward performs three physics updates per displayed frame.
         accumulator += elapsed * speedControl.multiplier
@@ -1635,17 +1657,12 @@ import NxlvKit
     private func finishIfComplete(_ game: Lemmings2Runtime) {
         if game.isComplete {
             onSequenceResult?(game.didWin)
-            if game.didWin && paused {
-                userPausedMusic = false
-                try? music.resumeOutput(); dj.resumeOutput()
-            }
             if let arcadeLevel {
                 AnonymousTelemetry.shared.finish(arcadeLevel, hotSeat: arcadeHotSeatID != nil,
                                                  attemptID: arcadeRunID, won: game.didWin, saved: game.saved)
             }
             PrecisionZoomController.shared.finish(attemptID: arcadeRunID, didWin: game.didWin)
             syncPrecisionZoom()
-            dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, didWin: game.didWin, isComplete: true))
             if recordsCampaignProgress || sequenceRecovery != nil {
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             }
@@ -1654,6 +1671,8 @@ import NxlvKit
             if practiceLevel == nil && recordsCampaignProgress {
                 _ = campaign.record(game); persist(); onProgressChanged?()
             }
+            manualDJHandoff.cancel()
+            resultMusic.begin(attempt: arcadeRunID)
             show(.results)
             recordArcadeResult(game)
         }
@@ -2449,8 +2468,7 @@ import NxlvKit
     var readOnlyReplay = false
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
-        let width = min(260, bounds.width - 16)
-        timeline.frame = CGRect(x: (bounds.width - width) / 2, y: bounds.height - 34, width: width, height: 30)
+        timeline.layoutSequelFooter(in: bounds)
     }
 
     var navigationFrame: CGRect?
@@ -2471,7 +2489,7 @@ import NxlvKit
     override func accessibilityChildren() -> [Any]? {
         guard !readOnlyReplay else { return [] }
         guard let game else { return [] }
-        let names = game.configuration.skills.map { SkillVocabulary.title($0.name) } + [L10n.text("Pause"), L10n.text("End run"), L10n.text("Fan"), L10n.text("Fast-forward")]
+        let names = game.configuration.skills.map { SkillVocabulary.title($0.name) } + [L10n.text("Pause"), L10n.text("End run"), L10n.text("Fan"), L10n.text("Game speed \(speedLabel)")]
         var children: [Any] = turnBadge.isHidden ? [] : [turnBadge]
         for slot in 0..<12 {
             let x = slot < 8 ? slot * 32 : 256 + (slot % 2) * 32
@@ -2482,7 +2500,7 @@ import NxlvKit
             let label = game.supplies.indices.contains(slot)
                 ? L10n.text("\(names[slot]), \(game.supplies[slot]) remaining\((slot == selectedSkillSlot ? L10n.text(", selected") : ""))")
                 : names[slot]
-            children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: label, frame: frame) { [weak self] in
+            children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: label, frame: slot == 11 && variableSpeedEnabled ? SpeedPanelArt.boxes(in: speedRect)[1] : frame) { [weak self] in
                 let time = ProcessInfo.processInfo.systemUptime
                 self?.onPanel?(slot, 1, time)
                 if slot == 9 { self?.onPanel?(slot, 2, time + 0.01) }
@@ -2490,7 +2508,7 @@ import NxlvKit
         }
         if variableSpeedEnabled {
             for direction in [-1, 1] {
-                children.append(accessibleElements.element(id: "speed-\(direction)", owner: self, label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: speedRect) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
+                children.append(accessibleElements.element(id: "speed-\(direction)", owner: self, label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: SpeedPanelArt.boxes(in: speedRect)[direction < 0 ? 0 : 2]) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
         layoutTimeline()
@@ -3347,7 +3365,8 @@ import NxlvKit
             var noticeY = gameplayRect.minY + 16 + badgeSize.height
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
                 noticeY += RewindTransportCue.draw(origin: CGPoint(x: noticeX, y: noticeY),
-                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom) + 4
+                    currentTick: rewindCurrentTick, originTick: origin,
+                    ticksPerSecond: Lemmings2Runtime.ticksPerSecond, scale: zoom) + 4
             }
             if let focusNotice { GameTypography.annotation(focusNotice,
                 at: CGPoint(x: noticeX, y: noticeY)) }
@@ -3375,7 +3394,7 @@ import NxlvKit
                        from: .zero, operation: .sourceOver, fraction: readOnlyReplay ? 0.45 : 1, respectFlipped: true,
                        hints: [.interpolation: NSImageInterpolation.none.rawValue])
             drawSkillGroup()
-            if variableSpeedEnabled { SpeedPanelControls.draw(in: speedRect, label: speedLabel, active: isFastForward) }
+            SpeedPanelControls.draw(in: speedRect, label: speedLabel, active: isFastForward, arrows: variableSpeedEnabled)
         }
     }
     private func drawSkillGroup() {

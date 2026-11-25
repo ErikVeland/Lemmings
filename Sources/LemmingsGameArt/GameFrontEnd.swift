@@ -54,6 +54,8 @@ public struct GameFrontEnd {
         @GameDisplayText public var title: String
         @GameDisplayText public var subtitle: String
         public var home: Bool
+        /// Play's game list: Home's route and game grid under a plain page title.
+        public var gameLibrary = false
         public var homeInitials: String
         public var homeNextPlayerIndex: Int? = nil
         public var homeNextPlayerName: String? {
@@ -255,6 +257,7 @@ public struct GameFrontEnd {
         if page.pause != nil { return MobilePauseArt.layout(page, width: width, minimumHeight: minimumHeight) }
         if page.achievementItems != nil { return MobileResultAchievementsArt.layout(page, width: width, minimumHeight: minimumHeight) }
         if page.result { return resultLayout(page, width: width, minimumHeight: minimumHeight, fillsPane: fillsResultPane) }
+        if page.gameLibrary { return homeLayout(page, width: width, minimumHeight: minimumHeight) }
         if page.home {
             if bookHomePanes.count == 2 {
                 return MobileBookHomeArt.layout(page, width: width, height: minimumHeight, panes: bookHomePanes)
@@ -658,7 +661,7 @@ public struct GameFrontEnd {
                 context.addLine(to: CGPoint(x: target.frame.minX + 10, y: target.frame.midY + 5))
                 context.closePath(); context.fillPath()
             }
-            if page.home, let game = action.gameLogo, let image = typography.homeLogos.image(game) {
+            if page.home || page.gameLibrary, let game = action.gameLogo, let image = typography.homeLogos.image(game) {
                 context.saveGState()
                 context.setAlpha(action.enabled ? 1 : 0.45)
                 drawImage(image, fittedIn: target.frame.insetBy(dx: 24, dy: 8), context: context)

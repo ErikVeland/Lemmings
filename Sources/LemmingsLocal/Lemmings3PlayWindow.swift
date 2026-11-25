@@ -103,6 +103,8 @@ import NxlvKit
     private let warningSound = SoundEffectPlayer()
     private let music = ModuleMusicPlayer()
     private let dj = AdaptiveDJPlayer()
+    private lazy var resultMusic = ResultMusicFade(module: music, dj: dj)
+    private var needsAttemptMusic = true
     private let manualDJHandoff = LegacyDJCrossfade()
     private var settingsProfileID: String?
     private let failureMood = FailureMoodTransition()
@@ -348,6 +350,12 @@ import NxlvKit
         let keyboard = GameplayKeyboard(window: window)
         gameplayKeyboard = keyboard
         keyboard.navigationControlHeight = { [weak self] in self?.canvas.skillGroupFrame.height ?? 44 }
+        canvas.timeline.speedState = { [weak self] in self?.speedControl.state }
+        canvas.timeline.canChooseSpeed = { [weak self] in
+            guard let self else { return false }
+            return self.canvas.menuRows == nil && self.canvas.directionPoint == nil && !self.game.isComplete && !self.canvas.readOnlyReplay && !self.speedControl.bulletTimeActive
+        }
+        canvas.timeline.chooseSpeed = { [weak self] tier in self?.speedControl.select(tier, at: ProcessInfo.processInfo.systemUptime) }
         canvas.timeline.enabled = { [weak self] action in
             guard let self, self.canvas.menuRows == nil else { return false }
             let game = self.game
@@ -700,7 +708,11 @@ import NxlvKit
         try validateMusicRouting(!music.isRunning && !dj.isPlaying, L10n.text("L3 played music before audio configuration"))
         var settings = ClassicSettings()
         settings.music = .adaptiveDJ; settings.musicVolume = 0; settings.soundVolume = 0
+        paused = true
         setAudioSettings(settings, muted: true)
+        try validateMusicRouting(!dj.isPlaying && !music.isRunning, "Ready played the level track")
+        paused = false
+        playLevelMusic()
         try validateMusicRouting(dj.isPlaying && dj.currentURL != nil, L10n.text("L3 did not select its level music"))
         let track = dj.currentURL
         playLevelMusic()
@@ -915,6 +927,7 @@ import NxlvKit
     }
     func windowWillClose(_ notification: Notification) { stop() }
     func stop() {
+        resultMusic.retire()
         manualDJHandoff.cancel()
         gameplayKeyboard?.removeNavigationControl()
         saveCheckpoint(immediately: true)
@@ -972,7 +985,10 @@ import NxlvKit
         if music.usesModernPreset != (settings.musicStyle == .modern) {
             music.setEnhancements(settings.musicStyle == .modern ? .modern : .faithful)
         }
-        if sourceChanged { playLevelMusic() }
+        if sourceChanged {
+            needsAttemptMusic = true
+            playLevelMusic()
+        }
         if userPausedMusic && paused { updateUserMusicPause() }
         canvas.confinePointer = settings.confinePointer
         canvas.reduceMotion = settings.reduceMotion
@@ -1022,6 +1038,8 @@ import NxlvKit
     }
 
     private func playLevelMusic() {
+        guard audioConfigured, !paused, !game.isComplete, canvas.menuRows == nil else { return }
+        needsAttemptMusic = false
         manualDJHandoff.cancel()
         music.setVolume(audioSettings.musicVolume)
         dj.setVolume(audioSettings.musicVolume)
@@ -1525,6 +1543,7 @@ import NxlvKit
             accumulator = 0; refresh(); return
         }
         guard !paused, !game.isComplete else { return }
+        if needsAttemptMusic { playLevelMusic() }
         accumulator += elapsed * speedControl.multiplier
         let inputDeadline = ProcessInfo.processInfo.systemUptime + 0.012
         while accumulator >= 1 / Lemmings3Runtime.ticksPerSecond && !game.isComplete {
@@ -1549,6 +1568,10 @@ import NxlvKit
         }
     }
     private func beginReplay() {
+        resultMusic.retire()
+        manualDJHandoff.cancel()
+        music.stop(); dj.stop()
+        needsAttemptMusic = true
         discardRewindOrigin()
         recoveryInputs = []; recoveryProgress = campaign.progress
         recoveryInitialHash = L3RunRecovery.stateHash(initial); lastCheckpointTime = 0
@@ -1571,7 +1594,6 @@ import NxlvKit
         }
         runMovie.begin(ticksPerSecond: Lemmings3Runtime.ticksPerSecond, title: "\(Lemmings3Brand.current.displayName) - \(campaign.tribe.title) \(campaign.index + 1)")
         userPausedMusic = false
-        playLevelMusic()
         try? music.resumeOutput(); dj.resumeOutput()
         runMovie.onWillReview = { [weak self] in self?.suspendAudioOutput() }
         runMovie.onDidReview = { [weak self] in try? self?.resumeAudioOutput() }
@@ -1856,18 +1878,16 @@ import NxlvKit
             unreleased: game.reserve, required: 1, total: game.configuration.total,
             isComplete: game.isComplete, didWin: game.saved > 0)
         canvas.deathCountdownText = deathCounter.visible
-        dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1))
+        if !game.isComplete { dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1)) }
         let justCompleted = game.isComplete && !recorded
-        if justCompleted { dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, didWin: game.saved > 0, isComplete: true)) }
+
         if justCompleted {
             onSequenceResult?(game.saved > 0)
-            if game.saved > 0 && paused {
-                userPausedMusic = false
-                try? music.resumeOutput(); dj.resumeOutput()
-            }
             if recordsCampaignProgress || sequenceRecovery != nil {
                 do { try recoveryStore.clear(arcadeRunID) } catch { message = error.localizedDescription }
             }
+            manualDJHandoff.cancel()
+            resultMusic.begin(attempt: arcadeRunID)
             runMovie.finish(); recorded = true
             let wasFinished = campaignFinished
             let wasTribeCompleted = campaign.hasCompletedTribe
@@ -1908,8 +1928,7 @@ import NxlvKit
     var readOnlyReplay = false
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
-        let width = min(260, bounds.width - 16)
-        timeline.frame = CGRect(x: (bounds.width - width) / 2, y: bounds.height - 34, width: width, height: 30)
+        timeline.layoutSequelFooter(in: bounds)
     }
 
     var navigationFrame: CGRect?
@@ -1918,6 +1937,7 @@ import NxlvKit
     func capturePointer(active: Bool) {
         layoutTimeline()
         var frame = CGRect(origin: screenOrigin, size: CGSize(width: 320 * zoom, height: 212 * zoom)).union(timeline.frame)
+        if !timeline.tierFrame.isEmpty { frame = frame.union(timeline.tierFrame) }
         if let navigationFrame { frame = frame.union(navigationFrame) }
         if let point = pointerCapture.update(in: self, rect: frame, active: active && confinePointer && controllerPointer == nil) {
             updateSystemCursor(at: point)
@@ -2064,15 +2084,15 @@ import NxlvKit
         var children: [Any] = []
         if !turnBadge.isHidden { children.append(turnBadge) }
         for slot in [0, 1, 2, 3, 4, 6, 7, 8] {
-            let title = slot == 6 ? (fast ? L10n.text("Return to normal speed") : L10n.text("Start fast-forward")) : slot == 7 ? (paused ? L10n.text("Resume") : L10n.text("Pause")) : Lemmings3Panel.names[slot]
+            let title = slot == 6 ? L10n.text("Game speed \(speedLabel)") : slot == 7 ? (paused ? L10n.text("Resume") : L10n.text("Pause")) : Lemmings3Panel.names[slot]
             children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: title,
-                frame: slot < 5 ? skillFrame(slot) : rect(CGRect(x: Lemmings3Panel.edges[slot], y: 172,
+                frame: slot == 6 && variableSpeedEnabled ? rect(SpeedPanelArt.boxes(in: CGRect(x: 214, y: 172, width: 35, height: 40))[1]) : slot < 5 ? skillFrame(slot) : rect(CGRect(x: Lemmings3Panel.edges[slot], y: 172,
                     width: Lemmings3Panel.edges[slot + 1] - Lemmings3Panel.edges[slot], height: 40))) { [weak self] in self?.onPanel?(slot, slot == 8 ? 2 : 1) })
         }
         if variableSpeedEnabled {
             for direction in [-1, 1] {
                 children.append(accessibleElements.element(id: "speed-\(direction)", owner: self,
-                    label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: rect(CGRect(x: direction < 0 ? 214 : 241, y: 172, width: 8, height: 40))) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
+                    label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: rect(SpeedPanelArt.boxes(in: CGRect(x: 214, y: 172, width: 35, height: 40))[direction < 0 ? 0 : 2])) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
         children.append(accessibleElements.element(id: "menu", owner: self, label: L10n.text("Game menu"), frame: gameMenuFrame) { [weak self] in self?.onMenu?() })
@@ -2271,17 +2291,25 @@ import NxlvKit
     private var screenOrigin: NSPoint { NSPoint(x: (bounds.width - 320 * zoom) / 2, y: (bounds.height - (readOnlyReplay ? 0 : 38) - 212 * zoom) / 2) }
     private var origin: NSPoint { NSPoint(x: screenOrigin.x, y: screenOrigin.y + 12 * zoom) }
     var playfieldRect: CGRect { CGRect(x: origin.x, y: origin.y, width: 320 * zoom, height: 160 * zoom) }
-    private var statusText: String {
-        guard let game else { return "" }
-        let saved = "\(game.saved) \(game.saved * 100 / max(1, game.configuration.total))%"
-        let status = L10n.text("OUT \(game.released) SAVE \(saved) LEFT \(game.reserve) LOST \(game.lost)")
-        return menuRows == nil ? status + " " + deathCountdownText : status
+    private func statusColumns(_ game: Lemmings3Runtime, art: Lemmings3Panel) -> [(text: String, width: CGFloat)] {
+        let font = art.font.bitmap
+        func width(_ text: String) -> CGFloat {
+            let limits = font.horizontalBounds(of: BitmapLatinGlyphs.uppercase(text, locale: L10n.interface.locale))
+            return CGFloat(limits.right - limits.left)
+        }
+        let digit = (0...9).map(String.init).max { width($0) < width($1) } ?? "8"
+        let count = String(repeating: digit, count: String(game.configuration.total).count)
+        let percent = game.saved * 100 / max(1, game.configuration.total)
+        return [(L10n.text("OUT \(game.released)"), L10n.text("OUT \(count)")),
+                (L10n.text("SAVE \(game.saved)") + " \(percent)%", L10n.text("SAVE \(count)") + " " + String(repeating: digit, count: 3) + "%"),
+                (L10n.text("LEFT \(game.reserve)"), L10n.text("LEFT \(count)")),
+                (L10n.text("LOST \(game.lost)"), L10n.text("LOST \(count)")),
+                (menuRows == nil ? deathCountdownText : "", "\(count)/\(count) 💀")]
+            .map { ($0.0, max(width($0.1), width("SAFE")) + 5) }
     }
     var statusReadoutFrame: CGRect {
-        let text = BitmapLatinGlyphs.uppercase(statusText, locale: L10n.interface.locale)
-        let width = panelArt.map { $0.font.bitmap.horizontalBounds(of: text) }.map { CGFloat($0.right - $0.left) } ?? 0
-        return GameplayMenuLayout.readout(CGRect(x: screenOrigin.x + 2 * zoom, y: screenOrigin.y + 3 * zoom,
-            width: width * 0.65 * zoom, height: 8 * 0.65 * zoom), in: self, avoiding: [rewardBadgeRect])
+        GameplayMenuLayout.readout(CGRect(x: screenOrigin.x + 2 * zoom, y: screenOrigin.y + 3 * zoom,
+            width: 274 * zoom, height: 8 * 0.65 * zoom), in: self, avoiding: [rewardBadgeRect])
     }
     var gameMenuFrame: CGRect {
         GameplayMenuLayout.readout(CGRect(x: screenOrigin.x + 280 * zoom, y: screenOrigin.y,
@@ -2483,7 +2511,8 @@ import NxlvKit
             var noticeY = top + (badgeSize.height > 0 ? badgeSize.height + 4 : 0)
             if let origin = rewindOriginTick, origin > rewindCurrentTick {
                 noticeY += RewindTransportCue.draw(origin: CGPoint(x: noticeX, y: noticeY),
-                    currentTick: rewindCurrentTick, originTick: origin, scale: zoom) + 4
+                    currentTick: rewindCurrentTick, originTick: origin,
+                    ticksPerSecond: Lemmings3Runtime.ticksPerSecond, scale: zoom) + 4
             }
             assignmentHighlight.drawNotice(at: CGPoint(x: noticeX, y: noticeY))
         }
@@ -2804,8 +2833,14 @@ import NxlvKit
         }
         local(statusReadoutFrame).insetBy(dx: -1, dy: -1).fill()
         if !readOnlyReplay { local(gameMenuFrame).fill() }
-        art.text(statusText, x: (statusReadoutFrame.minX - screenOrigin.x) / zoom,
-            y: (statusReadoutFrame.minY - screenOrigin.y) / zoom, scale: 0.65)
+        let readout = local(statusReadoutFrame)
+        let columns = statusColumns(game, art: art)
+        let scale = min(0.65, readout.width / max(1, columns.reduce(0) { $0 + $1.width }))
+        var x = readout.minX
+        for column in columns {
+            art.text(column.text, x: x, y: readout.minY, scale: scale)
+            x += column.width * scale
+        }
         if !readOnlyReplay { art.text(L10n.text("MENU"), x: (gameMenuFrame.minX - screenOrigin.x) / zoom + 6,
             y: (gameMenuFrame.minY - screenOrigin.y) / zoom + 3, scale: 0.8) }
         art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
@@ -2822,8 +2857,7 @@ import NxlvKit
                 CGRect(x: Lemmings3Panel.edges[slot], y: 172, width: Lemmings3Panel.edges[slot + 1] - Lemmings3Panel.edges[slot], height: 40).fill()
             }
         }
-        if variableSpeedEnabled { SpeedPanelControls.draw(in: CGRect(x: 214, y: 172, width: 35, height: 40), label: speedLabel, active: fast) }
-        else if fast { art.text(speedLabel.replacingOccurrences(of: "×", with: "X"), x: 218, y: 198, scale: 0.7) }
+        SpeedPanelControls.draw(in: CGRect(x: 214, y: 172, width: 35, height: 40), label: speedLabel, active: fast, arrows: variableSpeedEnabled)
         // Time stays inside its own panel cell, never above a lemming.
         let seconds = max(0, game.remainingSeconds)
         art.text(String(format: "%02d", seconds / 60), x: 187, y: 183, scale: 0.85)

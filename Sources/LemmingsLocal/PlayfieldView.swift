@@ -294,7 +294,9 @@ struct ReticleFeedback {
   var onRecords: (() -> Void)?
   var onLeaderboards: (() -> Void)?
   var onPlaylists: (() -> Void)?
-  var onDonate: (() -> Void)?
+  /// The title screen shows Play: routes and games under a Play heading, with Back to Home.
+  var overlayHomePlay = false
+  var onHomeBack: (() -> Void)?
   var overlayShowsSettingsButton = false
   var onSettings: (() -> Void)?
   var overlayAvailableUpdate: String?
@@ -305,15 +307,15 @@ struct ReticleFeedback {
         case records
         case leaderboards
         case playlists
-        case donate
+        case homeBack
 
         var accessibilityLabel: String {
             switch self {
             case .profiles: return L10n.text("Player profiles")
             case .records: return L10n.text("Records")
             case .leaderboards: return L10n.text("Leaderboards")
-            case .playlists: return L10n.text("Playlists")
-            case .donate: return L10n.text("Donate")
+            case .playlists: return L10n.text("Collections")
+            case .homeBack: return L10n.text("Back")
             }
         }
     }
@@ -324,7 +326,7 @@ struct ReticleFeedback {
         case .records: onRecords?()
         case .leaderboards: onLeaderboards?()
         case .playlists: onPlaylists?()
-        case .donate: onDonate?()
+        case .homeBack: onHomeBack?()
         }
     }
   /// Which overlay line is currently chosen, when the screen offers a choice.
@@ -1149,23 +1151,25 @@ struct ReticleFeedback {
   private func homeOverlay() -> (page: GameFrontEnd.Page, layout: GameFrontEnd.Layout, scale: CGFloat) {
     let rows = overlayLines.enumerated().map { index, title in
       var action = GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
-        primary: index == overlayHighlight, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
+        primary: index == 0, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
       action.titleRuns = index < overlayHomeLeadingCount ? GameSemanticText.resume(title)
         : action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .blue)]
       return action
     }
-    var footer: [GameFrontEnd.Action] = [.init("players", L10n.text("Profiles")), .init("records", L10n.text("Progress")), .init("leaderboards", L10n.text("Leaderboards")), .init("playlists", L10n.text("Collections / Playlists"))]
-    if onDonate != nil { footer.append(GameSupport.menuAction) }
+    // Home's destinations are rows. Play keeps Back and Collections. Settings stays in the header.
+    var footer: [GameFrontEnd.Action] = overlayHomePlay
+      ? [.init("homeBack", L10n.text("Back")), .init("playlists", L10n.text("Collections"))] : []
     if overlayShowsSettingsButton { footer.append(.init("settings", L10n.text("Settings"))) }
     if overlayAvailableUpdate != nil, overlayShowsSettingsButton { footer.append(.init("whatsNew", L10n.text("Update"))) }
     for index in footer.indices {
       footer[index].selected = overlayHighlight == rows.count + index
       footer[index].busy = footer[index].id == "whatsNew" && overlayUpdateIsBusy
     }
-    var page = GameFrontEnd.Page(title: L10n.text("Lemmings"),
-      home: true, rows: rows, footer: footer,
-      footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayProfileInitials ?? "")
-    page.homeNextPlayerIndex = overlayNextPlayerIndex
+    var page = GameFrontEnd.Page(title: overlayHomePlay ? L10n.text("Play") : L10n.text("Lemmings"),
+      home: !overlayHomePlay, rows: rows, footer: footer,
+      footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayHomePlay ? "" : overlayProfileInitials ?? "")
+    page.gameLibrary = overlayHomePlay
+    page.homeNextPlayerIndex = overlayHomePlay ? nil : overlayNextPlayerIndex
     let scale = max(1, min(2, floor(min(bounds.width / 1400, homeViewport.height / 1000))))
     return (page, GameFrontEnd.layout(page, width: min(1100, bounds.width / scale),
       minimumHeight: homeViewport.height / scale), scale)
@@ -1493,12 +1497,11 @@ struct ReticleFeedback {
         width: board.width - 40 * scale, height: max(36, 48 * scale))
       let footerScale = max(1, Int(scale.rounded()))
       let gap: CGFloat = 12 * scale
-      var buttons: [(action: OverlayFooterAction, title: String)] = [
+      let buttons: [(action: OverlayFooterAction, title: String)] = [
           (.profiles, L10n.text("PROFILES")),
           (.records, L10n.text("RECORDS")),
           (.playlists, L10n.text("PLAYLISTS"))
       ]
-      if onDonate != nil { buttons.append((.donate, L10n.text("Donate"))) }
       let count = CGFloat(buttons.count)
       // Let the roster grow while keeping each footer action readable.
       let cell = CGFloat((macInterface?.font(.small)?.cellWidth ?? 8) * footerScale)
@@ -2092,7 +2095,8 @@ struct ReticleFeedback {
     let height = RewindTransportCue.draw(
       origin: CGPoint(x: 12, y: y),
       currentTick: rewindCurrentTick,
-      originTick: rewindOriginTick
+      originTick: rewindOriginTick,
+      ticksPerSecond: Double(session?.ticksPerSecond ?? ClassicDOSRules.ticksPerSecond)
     )
     return y + height + 4
   }

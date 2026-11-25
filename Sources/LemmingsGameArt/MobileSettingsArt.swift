@@ -18,6 +18,11 @@ public enum MobileSettingsArt {
         }
         return min(CGFloat(size.scale), max(1, width / 280))
     }
+    /// About-the-app actions live in Settings rather than on Home.
+    public static var aboutActions: [GameFrontEnd.Action] {
+        [.init("whatsNew", L10n.text("What's New")), GameSupport.menuAction]
+    }
+
     public static func groups(inGame: Bool = false, television: Bool = false,
                               deskClockAvailable: Bool = true) -> GameFrontEnd.Page {
         // The Desk Clock is an iPhone and iPad menu feature, so a level and the TV leave it out.
@@ -120,8 +125,7 @@ public enum MobileSettingsArt {
         case .privacy:
             rows = [toggle("telemetry", L10n.text("Share counts and records"), sharing, enabled: sharingAvailable),
                     .init("familiarNames", L10n.text("Familiar names")),
-                    .init("cloudSaves", L10n.text("Cloud saves")),
-                    .init("playInsights", L10n.text("Play Insights"))]
+                    .init("cloudSaves", L10n.text("Cloud saves"))]
         }
         if inGame { rows.removeAll { $0.id == "cloudSaves" || $0.id == "familiarNames" } }
         var page = GameFrontEnd.Page(title: group.title, rows: rows,

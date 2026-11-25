@@ -125,6 +125,12 @@ import CoreImage.CIFilterBuiltins
     #endif
     private var layerBitmap: CGImage?
     private let overlay = MobilePlayfieldOverlay()
+    private let rewindCueView = MobileRewindCueView()
+    /// Nil hides the cue. The game controller sets it while the player rewinds.
+    var rewindCue: RewindCue? {
+        get { rewindCueView.cue }
+        set { rewindCueView.cue = newValue }
+    }
     private let failureMood = FailureMoodTransition()
     private var failureAmount: CGFloat = 0
     #if os(iOS)
@@ -190,6 +196,7 @@ import CoreImage.CIFilterBuiltins
         decoration.isOpaque = false
         decoration.backgroundColor = .clear
         addSubview(decoration)
+        addSubview(rewindCueView)
         failureMood.onChange = { [weak self] value in
             guard let self else { return }
             self.failureAmount = value
@@ -656,6 +663,14 @@ import CoreImage.CIFilterBuiltins
         super.layoutSubviews()
         decoration.frame = bounds
         overlay.frame = bounds
+        #if os(tvOS)
+        rewindCueView.pixelScale = 2
+        #else
+        rewindCueView.pixelScale = bounds.width >= 900 ? 2 : 1
+        #endif
+        let inset = safeAreaInsets
+        rewindCueView.frame = CGRect(origin: CGPoint(x: inset.left + 12, y: inset.top + 12),
+                                     size: rewindCueView.intrinsicContentSize)
         hdr?.frame = bounds
         guard bounds.width > 1, bounds.height > 1 else { return }
         let size = MobileSize(width: bounds.width, height: bounds.height)

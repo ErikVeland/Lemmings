@@ -1,23 +1,26 @@
 #if os(macOS)
 import AppKit
+import LemmingsMobileCore
 
 /// Draws the small, shared rewind transport cue used by each playfield.
+/// The text names game seconds, not engine ticks, and keeps one width while the value changes.
 @MainActor enum RewindTransportCue {
   @discardableResult static func draw(
     origin: CGPoint,
     currentTick: Int,
     originTick: Int,
+    ticksPerSecond: Double,
+    speed: Int = 1,
     scale: CGFloat = 1
   ) -> CGFloat {
-    guard originTick > currentTick else { return 0 }
+    guard let cue = RewindCue(currentTick: currentTick, originTick: originTick,
+                              ticksPerSecond: ticksPerSecond, speed: speed) else { return 0 }
 
-    let delta = originTick - currentTick
-    GameTypography.annotation("<< REWIND  -\(delta) TICKS", at: origin, palette: .blue)
+    GameTypography.annotation(cue.text, at: origin, palette: .blue)
 
     let railOrigin = CGPoint(x: origin.x, y: origin.y + 11 * scale)
     let railWidth = 112 * scale
     let railHeight = max(1, (scale * 1.5).rounded())
-    let position = CGFloat(max(0, min(currentTick, originTick))) / CGFloat(originTick)
     let markerWidth = max(2, (scale * 2).rounded())
 
     NSColor.systemBlue.withAlphaComponent(0.22).setFill()
@@ -25,7 +28,7 @@ import AppKit
 
     NSColor.systemBlue.withAlphaComponent(0.72).setFill()
     CGRect(
-      x: railOrigin.x + railWidth * position - markerWidth / 2,
+      x: railOrigin.x + railWidth * cue.position - markerWidth / 2,
       y: railOrigin.y - scale,
       width: markerWidth,
       height: railHeight + 2 * scale

@@ -11,9 +11,10 @@ public enum MobileCareerArt {
         return ClassicTitle(rawValue: conditions.gameID) == nil ? "" : L10n.text("Official")
     }
 
-    public static func firstPlayer(initials: String, portrait: Int, counter: String,
+    /// The player's identity comes first. Nothing online appears until they have one.
+    public static func firstPlayer(initials: String, portrait: Int,
                                    status: String, busy: Bool) -> GameFrontEnd.Page {
-        .init(title: L10n.text("Create profile"), subtitle: counter,
+        .init(title: L10n.text("Create profile"), subtitle: L10n.text("Keeps your progress, saves and records"),
               rows: [.init("playerPortrait", L10n.text("Portrait: \(ArcadeProfile.portraitNames[portrait])"), enabled: !busy, portrait: portrait),
                      .init("nameField", L10n.text("Initials: \(initials)_"), enabled: !busy)],
               details: status.isEmpty ? [] : [status],
@@ -53,7 +54,7 @@ public enum MobileCareerArt {
         rows.append(.init("hotSeat", hotSeatTurn.map { L10n.text("Hot Seat: \($0)") } ?? L10n.text("Hot Seat")))
         if hasSavedHotSeats { rows.append(.init("seatSaved", L10n.text("Saved Hot Seats"))) }
         return .init(title: L10n.text("Players"), subtitle: subtitle, rows: rows,
-            footer: [.init("home", L10n.text("Back"))])
+            footer: [.init("profile", L10n.text("Back"))])
     }
 
     public static func savedHotSeats(_ profiles: MobileProfiles, sessions: [MobileHotSeat],
@@ -93,8 +94,10 @@ public enum MobileCareerArt {
     /// Leaderboards rank players. The toolbar picks who (World or This device) and what (category).
     /// Rows are the ranking itself. Back is the only footer navigation.
     public static func leaderboards(world: Bool, category: HostedCategory, rows: [GameFrontEnd.Action],
-                                    busy: Bool, status: String, sharing: Bool?, gameCenter: Bool) -> GameFrontEnd.Page {
-        var page = GameFrontEnd.Page(title: L10n.text("Leaderboards"), subtitle: category.title,
+                                    busy: Bool, status: String, sharing: Bool?, gameCenter: Bool,
+                                    worldwide: String = "") -> GameFrontEnd.Page {
+        var page = GameFrontEnd.Page(title: L10n.text("Community"),
+            subtitle: [worldwide, category.title].filter { !$0.isEmpty }.joined(separator: "\n"),
             rows: rows, details: busy ? [L10n.text("Loading...")] : rows.isEmpty ? [status.isEmpty ? L10n.text("No scores") : status] : [],
             footer: [.init("home", L10n.text("Back"))])
         if world, let sharing {
@@ -164,9 +167,12 @@ public enum MobileCareerArt {
         let career = TrolleyCareerScore(profileID: profileID, attempts: attempts, assisted: false)
         let awards = achievementsPage(records: records, profileID: profileID, profileName: profileName,
                                       subtitle: "", campaign: campaign).rows
-        var page = GameFrontEnd.Page(title: L10n.text("Progress"), subtitle: subtitle.isEmpty ? profileName : subtitle,
+        // Profile owns everything personal: identity, records, awards, statistics and saves.
+        var page = GameFrontEnd.Page(title: L10n.text("Profile"), subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: [.init("recordList", L10n.text("Records")),
                    .init("achievements", L10n.text("Achievements") + "  \(awards.filter(\.selected).count)/\(awards.count)"),
+                   .init("players", L10n.text("Players")),
+                   .init("cloudSaves", L10n.text("Cloud saves")),
                    .init("playInsights", L10n.text("Play Insights"), enabled: insightsAvailable)],
             details: [L10n.text("Career stars: \(career.stars)"), L10n.text("Levels cleared: \(career.clearedLevels)"),
                       L10n.text("Three-star levels: \(career.threeStarLevels)")],

@@ -118,7 +118,7 @@ import LemmingsAppCore
     }
     private func layoutPage(_ page: GameFrontEnd.Page, width: CGFloat, minimumHeight: CGFloat, scale: CGFloat) -> GameFrontEnd.Layout {
         #if os(tvOS)
-        if page.home { return TVMenuPresentation.homeLayout(page, width: width, height: minimumHeight) }
+        if page.home || page.gameLibrary { return TVMenuPresentation.homeLayout(page, width: width, height: minimumHeight) }
         if page.pause != nil {
             return MobilePauseArt.layout(page, width: width, minimumHeight: minimumHeight, television: true)
         }
@@ -285,7 +285,7 @@ import LemmingsAppCore
             return GameSupport.fittedScale(preferred, page: source, width: width, height: height)
         }
         #if os(tvOS)
-        if page.home {
+        if page.home || page.gameLibrary {
             return televisionScale(MobileSettingsArt.interfaceScale(setting, width: width, television: true),
                 page: TVMenuPresentation.homePage(page), width: width, height: height)
         }

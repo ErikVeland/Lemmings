@@ -4,36 +4,36 @@ import LemmingsAppCore
 import NxlvKit
 
 /**
- * Asks before the first network count. The choice can change in Settings.
+ * Asks before the first network count, after the player has a profile.
+ * The choice can change in Settings.
  */
 @MainActor final class TelemetryConsentWindow {
     static let shared = TelemetryConsentWindow()
     private let telemetry: AnonymousTelemetry
     private var page: GameMenuPage?
+    private var answer: ((Bool) -> Void)?
+    var isShowing: Bool { page != nil }
+    /// Answers the open question, as Join or Not now would.
+    func respond(join: Bool) { answer?(join) }
 
     init(telemetry: AnonymousTelemetry = .shared) {
         self.telemetry = telemetry
     }
 
-    func showIfNeeded(in window: NSWindow, completion: @escaping () -> Void) {
+    /// Asked after the first profile exists, so the worldwide total means something to the player.
+    func showIfNeeded(in window: NSWindow, worldwide: String = "", completion: @escaping () -> Void) {
         guard telemetry.endpoint != nil, !telemetry.consentDecided else { completion(); return }
-        let page = GameMenuPage(title: L10n.text("Share counts and records?"), subtitle: L10n.text("Your choice"))
+        let page = GameMenuPage(title: L10n.text("Join the count?"), subtitle: worldwide)
         page.backTitle = L10n.text("Not now")
-        let heading = GameLabel(labelWithString: L10n.text("Help us find levels that need work"))
-        heading.role = .heading
-        heading.frame = CGRect(x: 0, y: 360, width: 992, height: 34)
-        page.body.addSubview(heading)
         let details = [
-            L10n.text("Send opted-in installs, daily use, results and lemmings saved."),
-            L10n.text("Include solo or Hot Seat and all-soundtrack download choices."),
-            L10n.text("Public: initials, scores and action replays."),
-            L10n.text("The shared saved total stays until the service resets it."),
-            L10n.text("The service sees your network address during delivery."),
-            L10n.text("Change this in Settings > Privacy."),
+            L10n.text("Your rescues add to the worldwide total."),
+            L10n.text("Your initials, scores and replays can appear on public leaderboards."),
+            L10n.text("Anonymous play counts show which levels need work. The service sees your network address."),
+            L10n.text("Change this later in Settings > Privacy."),
         ]
         for (index, line) in details.enumerated() {
             let label = GameLabel(labelWithString: line)
-            label.frame = CGRect(x: 0, y: 300 - index * 36, width: 992, height: 32)
+            label.frame = CGRect(x: 0, y: 330 - index * 40, width: 992, height: 32)
             page.body.addSubview(label)
         }
         let choose: (Bool) -> Void = { [weak self, weak page] enabled in
@@ -41,10 +41,12 @@ import NxlvKit
             self.telemetry.setSharing(enabled)
             if let page { GameScreen.shared.dismiss(page) }
             self.page = nil
+            self.answer = nil
             completion()
         }
+        answer = choose
         page.onBack = { choose(false) }
-        page.addPrimaryAction(L10n.text("Share")) { choose(true) }
+        page.addPrimaryAction(L10n.text("Join")) { choose(true) }
         page.preferControllerControl(page.controllerBackButton)
         self.page = page
         GameScreen.shared.present(page, owner: window)
