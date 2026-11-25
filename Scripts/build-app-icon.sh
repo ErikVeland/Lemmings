@@ -18,6 +18,9 @@ done
 
 if ! iconutil -c icns "$iconset_dir" -o "$output_path"; then
   print -u2 "iconutil could not encode the iconset; using ImageIO."
-  swift -module-cache-path "$project_dir/.build/ModuleCache" \
+  sdk_path="$(xcrun --sdk macosx --show-sdk-path)"
+  sdk_version="$(xcrun --sdk macosx --show-sdk-version)"
+  swift -sdk "$sdk_path" -target "$(uname -m)-apple-macosx${sdk_version}" \
+    -module-cache-path "$project_dir/.build/ModuleCache" \
     "$project_dir/Tools/Build/AppIconICNS.swift" "$iconset_dir" "$output_path"
 fi
