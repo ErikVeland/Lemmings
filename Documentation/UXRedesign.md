@@ -4,6 +4,8 @@
 
 This checkpoint builds on shared main at `66fce92f`. The repeatable checks below exercise the implementation in this checkout. Use the boxes here for current progress. Sections A–K below preserve the design brief and the later phase notes describe earlier revisions. For example, the proposal explored a welcome screen and several result themes. The implemented flow starts at profile creation and fades the level track on results.
 
+The overhaul ships as version 2.5 for both products. See [Release schedule](ReleaseSchedule.md#25--ux-overhaul).
+
 ### Verified behaviour
 
 Tick a row when its stated check passes. Keep its ID when updating the requirement. For a regression, reopen the row and record the failing revision and check. Keep hardware observations against the device and revision where someone observed them.
@@ -24,11 +26,13 @@ Tick a row when its stated check passes. Keep its ID when updating the requireme
 
 ### Device acceptance
 
-- [ ] **UX-11 · Mac.** Use keyboard, pointer and VoiceOver through first launch, preview, gameplay, results and return. Check focus restoration and the narrow-window speed pedal.
-- [ ] **UX-12 · iPhone and iPad.** Check touch targets and VoiceOver at narrow and wide sizes. On the 2017 A10X iPad Pro, record input response, frame cadence and audio continuity while changing speed, pausing and rewinding.
-- [ ] **UX-13 · Duo.** The simulator acceptance pass saw Home stay sideways after unfolding until another rotation. A fresh launch while open laid out correctly. Home now drops cached book panes when UIKit confirms the hinge is flat, even when the window stays the same size. Scene geometry and reserved-region changes invalidate the current layout. A debug build records the effective orientation, window and view bounds, active regions, and committed Home frame in both layouts. On 25 November 2026 the Duo simulator reran the repro on the merged source. Home filled the open screen as soon as the hinge opened, and folding again restored the single-column Home, with no extra rotation. Check Home, a level and the speed chooser on hardware for preserved route, focus, pause state and selected skill.
-- [ ] **UX-14 · Apple TV.** Use a Siri Remote through Ready, speed selection, repeated rewind and results. Check viewing-distance legibility, focus return and long labels.
-- [ ] **UX-15 · Audio.** Listen through preview, gameplay, pause, success, failure, rapid retry and background/foreground transitions on speakers and headphones. Record any click, overlap or crackle with the music source and device.
+The owner reported all five device checks green on 25 November 2026. Each row below keeps the scope of that check.
+
+- [x] **UX-11 · Mac.** Use keyboard, pointer and VoiceOver through first launch, preview, gameplay, results and return. Check focus restoration and the narrow-window speed pedal.
+- [x] **UX-12 · iPhone and iPad.** Check touch targets and VoiceOver at narrow and wide sizes. On the 2017 A10X iPad Pro, record input response, frame cadence and audio continuity while changing speed, pausing and rewinding.
+- [x] **UX-13 · Duo.** The simulator acceptance pass saw Home stay sideways after unfolding until another rotation. A fresh launch while open laid out correctly. Home now drops cached book panes when UIKit confirms the hinge is flat, even when the window stays the same size. Scene geometry and reserved-region changes invalidate the current layout. A debug build records the effective orientation, window and view bounds, active regions, and committed Home frame in both layouts. On 25 November 2026 the Duo simulator reran the repro on the merged source. Home filled the open screen as soon as the hinge opened, and folding again restored the single-column Home, with no extra rotation. Check Home, a level and the speed chooser on hardware for preserved route, focus, pause state and selected skill.
+- [x] **UX-14 · Apple TV.** Use a Siri Remote through Ready, speed selection, repeated rewind and results. Check viewing-distance legibility, focus return and long labels.
+- [x] **UX-15 · Audio.** Listen through preview, gameplay, pause, success, failure, rapid retry and background/foreground transitions on speakers and headphones. Record any click, overlap or crackle with the music source and device.
 
 ### Acceptance follow-up
 
@@ -510,14 +514,14 @@ in non-store builds or with the Option key.
 Every phase must keep saved runs, session IDs, rosters, next turns and
 checkpoints readable. No phase may change the engine fingerprint.
 
-## Open decisions for the owner
+## Owner decisions
 
-1. Profile names stay as arcade initials, or gain a separate display name.
-   A display name changes saved profile data and needs a migration.
-2. The speed strip includes 3×, or uses 1×/2×/5×/10× as the brief suggests.
-   The engines support 3× today.
-3. Result music: a dedicated short result loop, or a fade to the menu theme.
-4. Mac back/home: a toolbar row above the playfield, or the bottom row as today.
+The owner confirmed the shipped choices on 25 November 2026:
+
+1. Profile names stay as arcade initials. No separate display name or profile migration.
+2. The speed strip keeps 3×: 1×, 2×, 3×, 5× and 10×, plus 25× when enabled.
+3. Results fade the level track. No dedicated result loop.
+4. Mac Back and Home stay in the bottom row.
 
 ## Validation plan
 

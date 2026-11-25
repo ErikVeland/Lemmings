@@ -17,6 +17,17 @@ External processing or review can overlap later work. A pending Apple review or
 store response must not hold the queue idle. Return to higher-priority work when
 it becomes actionable. Lower-priority work must not delay an earlier release.
 
+## 2.5 — UX overhaul
+
+The owner set 2.5 as the target for the UX overhaul on 25 November 2026.
+The overhaul covers the work in [UX redesign](UXRedesign.md). It ships as 2.5
+for Ultimate Lemmings and Ultimate Lemmix. Do not ship it as a 2.4.x patch.
+
+On 25 November 2026 `main`, including the overhaul, was merged into both
+product branches. Since then the next release from either branch includes
+the overhaul. Version that release as 2.5. To ship a 2.4.x patch without the
+overhaul, cut it from that product's last published release, with owner approval.
+
 ## Mac release path
 
 Compare the candidate with the last shipped Mac source and record whether engine
