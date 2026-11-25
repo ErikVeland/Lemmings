@@ -11,6 +11,8 @@ import UIKit
     var token = ""
     var field: UITextField?
     var task: Task<Void, Never>?
+    /// Revealed by a long press on Play Insights. Players never see shared counts or token entry.
+    var ownerTools = false
 }
 
 extension MobileLibraryViewController {
@@ -24,7 +26,8 @@ extension MobileLibraryViewController {
         counts["installs"] = mobileInsights.summary?.optedInInstalls
         return MobileInformationArt.insights(counts: counts, shared: mobileInsights.summary != nil,
             days: mobileInsights.days, sharingAvailable: AnonymousTelemetry.shared.sharingAvailable,
-            loading: mobileInsights.loading, notice: notice, backID: insightsBackID)
+            loading: mobileInsights.loading, notice: notice, backID: insightsBackID,
+            ownerTools: mobileInsights.ownerTools && AnonymousTelemetry.shared.sharingAvailable)
     }
     func insightsTokenPage() -> GameFrontEnd.Page { MobileInformationArt.insightsToken(length: mobileInsights.token.count) }
     func insightsClearPage() -> GameFrontEnd.Page { MobileInformationArt.insightsClear() }
@@ -35,6 +38,7 @@ extension MobileLibraryViewController {
         case "insightsClear": navigate(.insightsClear)
         case "insightsClearConfirm": AnonymousTelemetry.shared.clearLocalCounts(); mobileInsights.summary = nil; navigate(.playInsights)
         case "insightsShared":
+            guard mobileInsights.ownerTools else { return true }
             mobileInsights.token = ""; navigate(.insightsToken); editInsightsToken()
         case "insightsTokenEdit": editInsightsToken()
         case "insightsLoad":

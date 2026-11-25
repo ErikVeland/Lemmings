@@ -1111,6 +1111,8 @@ import NxlvKit
             catch { message = L10n.text("Could not show the talisman: \(error)"); previousScreen = .map; show(.message); return }
         }
         if screen == .practice { practiceLevel = nil; game = nil; initial = nil }
+        // Results and the talisman keep the muffled track. Later screens bring their own music.
+        if [.menu, .intro, .practice, .map, .briefing, .load, .ending].contains(screen) { resultMusic.retire() }
         nukeGesture.reset()
         if screen != .playing {
             if screen != .results { nukeMood.reset() }

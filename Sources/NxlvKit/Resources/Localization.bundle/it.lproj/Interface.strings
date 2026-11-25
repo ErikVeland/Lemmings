@@ -1015,7 +1015,6 @@
 "Game Center is unavailable. Your records are saved. Retry when connected." = "Game Center non è disponibile. I record sono salvati. Riprova quando sarai connesso.";
 "Game Center sign-in could not open. Try again." = "Impossibile aprire l’accesso a Game Center. Riprova.";
 "Game Data" = "Dati di gioco";
-"Game Library" = "Libreria giochi";
 "Game assets are already downloading." = "Il download dei dati di gioco è già in corso.";
 "Game assets are unavailable. Try again later." = "I dati di gioco non sono disponibili. Riprova più tardi.";
 "Game assets failed verification. Download them again." = "La verifica dei dati di gioco non è riuscita. Scaricali di nuovo.";
@@ -3098,7 +3097,6 @@
 "Third-star target unknown. Your clear still counts." = "Obiettivo per la terza stella sconosciuto. Il completamento viene comunque conteggiato.";
 "This Lemmings 3 level is not available." = "Questo livello di Lemmings 3 non è disponibile.";
 "This Mac" = "Questo Mac";
-"This Mac only. No shared service is configured." = "Solo su questo Mac. Non è configurato alcun servizio condiviso.";
 "This Mac only. Shared counts need the owner access token." = "Solo su questo Mac. I conteggi condivisi richiedono il token di accesso del proprietario.";
 "This app has no embedded game resources. Rebuild the app with its game data." = "Questa app non contiene risorse di gioco incorporate. Ricompila l'app includendo i dati di gioco.";
 "This blocker would overlap another blocker." = "Questo bloccatore si sovrapporrebbe a un altro.";

@@ -154,7 +154,7 @@ import NxlvKit
                   ("whats-new", MobileInformationArt.whatsNew(version: "2.0")),
                   ("telemetry-consent", MobileInformationArt.telemetryConsent()),
                   ("insights-local", MobileInformationArt.insights(counts: insightCounts, shared: false, days: 30, sharingAvailable: false)),
-                  ("insights-shared", MobileInformationArt.insights(counts: insightCounts, shared: true, days: 7, sharingAvailable: true)),
+                  ("insights-shared", MobileInformationArt.insights(counts: insightCounts, shared: true, days: 7, sharingAvailable: true, ownerTools: true)),
                   ("insights-token", MobileInformationArt.insightsToken(length: 12)),
                   ("insights-clear", MobileInformationArt.insightsClear())]
         for index in pages.indices where ["win", "loss"].contains(pages[index].0) { pages[index].1.result = true }
