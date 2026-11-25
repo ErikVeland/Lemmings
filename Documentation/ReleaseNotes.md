@@ -8,15 +8,16 @@ The mobile build numbers record the last Ultimate Lemmings mobile candidates.
 
 ## Latest published Mac release
 
-[Mac 2.5 build 110](https://github.com/ErikVeland/Lemmings/releases/tag/v2.5)
+[Mac 2.6 build 111](https://github.com/ErikVeland/Lemmings/releases/tag/v2.6)
 has full and slim notarised downloads for Intel and Apple silicon.
-See the [2.5 release record](ReleaseReadiness/2.5-build110/README.md).
+See the [2.6 release record](ReleaseReadiness/2.6-build111/README.md).
 
 ## Earlier notes
 
 These links preserve the exact notes in Git history. The working tree keeps
 only the current release notes. Packaged notes remain with their release evidence.
 
+- [2.5 build 110](https://github.com/ErikVeland/Lemmings/releases/tag/v2.5)
 - [2.4.2 build 106](https://github.com/ErikVeland/Lemmings/blob/55f8f52703e04db6b6f9460fd7b962de81aab26f/Documentation/ReleaseNotes-2.4.2-build106.md)
 - [2.4.1 build 105](https://github.com/ErikVeland/Lemmings/blob/554f79fceaa72e02d52584a07df73df51d9eb2aa/Documentation/ReleaseNotes-2.4.1-build105.md)
 - [2.4 build 104](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.4-build104.md)
