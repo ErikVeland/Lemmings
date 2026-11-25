@@ -57,6 +57,7 @@ public struct GameFrontEnd {
         public var home: Bool
         /// Play's game list: Home's route and game grid under a plain page title.
         public var gameLibrary = false
+        public var macTitleMenu = false
         public var homeInitials: String
         public var homeNextPlayerIndex: Int? = nil
         public var homeNextPlayerName: String? {
@@ -126,6 +127,7 @@ public struct GameFrontEnd {
         /// Keep ordered steps or another deliberately linear list in one column.
         public var singleColumnRows = false
         public var rowHeadings: [String: String] = [:]
+        public var rowGroupStarts: Set<String> = []
         public init(title: String, subtitle: String = "", home: Bool = false,
                     rows: [Action] = [], details: [String] = [], footer: [Action] = [], preview: Bool = false,
                     footerColumns: Int? = nil, homeInitials: String = "") {
@@ -157,6 +159,7 @@ public struct GameFrontEnd {
         public var secondaryBoard: CGRect? = nil
         public var libraryHeading: CGRect? = nil
         public var rowHeadings: [(String, CGRect)] = []
+        var compactActionPanel = false
         public func action(at point: CGPoint) -> String? {
             targets.first { $0.action.enabled && $0.frame.contains(point) }?.action.id
         }
@@ -233,6 +236,7 @@ public struct GameFrontEnd {
         result.stars = layout.stars
         result.secondaryBoard = layout.secondaryBoard
         result.libraryHeading = layout.libraryHeading
+        result.compactActionPanel = layout.compactActionPanel
         let regions = obstacles.map { MobileReservedRegion(kind: .occlusion,
             frame: MobileRect(x: $0.minX, y: $0.minY, width: $0.width, height: $0.height)) }
         result.rowHeadings = layout.rowHeadings.map { title, frame in
@@ -268,7 +272,8 @@ public struct GameFrontEnd {
         }
         let width = max(280, width)
         let inset: CGFloat = width < 600 ? 14 : 32
-        let boardWidth = min(1032, width - inset * 2)
+        let settings = page.settingsTabs != nil
+        let boardWidth = min(settings ? 760 : 1032, width - inset * 2)
         let x = (width - boardWidth) / 2
         let requestedColumns = page.footerColumns ?? (boardWidth >= 620 ? 3 : 2)
         let minimumCaptionWidth = page.footer.map { action in
@@ -282,6 +287,8 @@ public struct GameFrontEnd {
         // A short, wide screen puts the preview beside its details so the actions stay in view.
         let compact = page.preview && minimumHeight < 520 && width > minimumHeight * 1.3
         let textOnly = !page.preview && page.rows.isEmpty
+        let compactActions = !page.preview && !page.reading && page.details.isEmpty
+            && page.stars == nil && page.listTools.isEmpty && !(page.rows.isEmpty && page.footer.isEmpty)
         let titleScale = textOnly ? 2 : (boardWidth >= 620 ? 2 : 1)
         let headingHeight = max(compact ? 40 : 52, GameTextLayout.height(page.title, width: boardWidth - 40, face: .large, scale: titleScale))
         let heading = CGRect(x: x + 20, y: compact ? 28 : 32, width: boardWidth - 40, height: headingHeight)
@@ -298,7 +305,11 @@ public struct GameFrontEnd {
         }
         var targets: [Target] = []
         let grid = GameListGrid(actions: page.rows, width: boardWidth - 40,
-            columnsEnabled: !page.singleColumnRows && (page.pairsRows || page.rows.count >= 2), rowHeadings: page.rowHeadings)
+            columnsEnabled: !page.singleColumnRows && (page.pairsRows || page.rows.count >= 2),
+            minimumColumnWidth: page.settingsIndex ? 164 : 260,
+            minimumHeight: page.settingsIndex ? 44 : 52,
+            captionInset: page.settingsIndex ? 24 : 48, rowHeadings: page.rowHeadings,
+            groupStarts: page.rowGroupStarts, alignColumns: page.settingsIndex)
         targets += grid.targets.map { Target(action: $0.action, frame: $0.frame.offsetBy(dx: x + 20, dy: y)) }
         let rowHeadings = grid.headings.map { ($0.0, $0.1.offsetBy(dx: x + 20, dy: y)) }
         if !page.rows.isEmpty { y += grid.height + 8 }
@@ -346,26 +357,34 @@ public struct GameFrontEnd {
         }
         let columns = footerGrid.columns
         let rows = footerGrid.rows
-        let cell = (boardWidth - 40 - CGFloat(columns - 1) * 12) / CGFloat(columns)
+        let loneSettingsBack = settings && page.footer.count == 1 && page.footer[0].isBackNavigation
+        let footerWidth = loneSettingsBack ? min(220, boardWidth - 40) : boardWidth - 40
+        let cell = (footerWidth - CGFloat(columns - 1) * 12) / CGFloat(columns)
         let footerHeight = max(48, page.footer.map { GameTextLayout.height($0.visibleTitle, width: cell - ($0.primary ? 48 : 24)) + 8 }.max() ?? 48)
         let footerPitch = footerHeight + 12
-        let height = max(minimumHeight, y + CGFloat(rows) * footerPitch + 36)
-        y = max(y + 12, height - CGFloat(rows) * footerPitch - 24)
+        let footerSpace = CGFloat(rows) * footerPitch
+        let contentHeight = y + (compactActions && rows == 0 ? 16 : footerSpace + 36)
+        let height = max(minimumHeight, contentHeight)
+        let offset = compactActions ? max(0, floor((height - contentHeight) / 2)) : 0
+        y = compactActions ? y + 12 : max(y + 12, height - footerSpace - 24)
         let textOnlyBottom = details.last?.maxY ?? subtitle.maxY
-        let textOnlyOffset = textOnly
+        let textOnlyOffset = textOnly && !compactActions
             ? max(0, floor((y - 12 + 24 - heading.minY - textOnlyBottom) / 2))
             : 0
         for slot in footerGrid.slots {
-            targets.append(Target(action: slot.action, frame: footerGrid.frame(for: slot, x: x + 20, y: y, width: boardWidth - 40,
+            targets.append(Target(action: slot.action, frame: footerGrid.frame(for: slot, x: x + 20, y: y, width: footerWidth,
                 height: footerHeight, gap: 12, rowGap: 12)))
         }
         var layout = Layout(size: CGSize(width: width, height: height),
-                      board: CGRect(x: x, y: 16, width: boardWidth, height: height - 32),
-                      heading: heading.offsetBy(dx: 0, dy: textOnlyOffset),
-                      subtitle: subtitle.offsetBy(dx: 0, dy: textOnlyOffset), preview: preview,
-                      details: details.map { $0.offsetBy(dx: 0, dy: textOnlyOffset) }, targets: targets)
+                      board: CGRect(x: x, y: 16 + offset, width: boardWidth,
+                                    height: (compactActions ? contentHeight : height) - 32),
+                      heading: heading.offsetBy(dx: 0, dy: textOnlyOffset + offset),
+                      subtitle: subtitle.offsetBy(dx: 0, dy: textOnlyOffset + offset), preview: preview,
+                      details: details.map { $0.offsetBy(dx: 0, dy: textOnlyOffset) },
+                      targets: targets.map { Target(action: $0.action, frame: $0.frame.offsetBy(dx: 0, dy: offset)) })
         layout.stars = stars
-        layout.rowHeadings = rowHeadings
+        layout.compactActionPanel = compactActions
+        layout.rowHeadings = rowHeadings.map { ($0.0, $0.1.offsetBy(dx: 0, dy: offset)) }
         return layout
     }
 
@@ -385,17 +404,18 @@ public struct GameFrontEnd {
         let width = max(280, width)
         let boardWidth = min(1100, width - 24), x = (width - boardWidth) / 2
         let inner = boardWidth - 24
-        let portraitPhone = width < 600 && width < minimumHeight
+        let mac = page.macTitleMenu
+        let portraitPhone = !mac && width < 600 && width < minimumHeight
         let columns = portraitPhone ? 1 : 2
-        let gap: CGFloat = portraitPhone || compact ? 8 : 12
-        let groupGap: CGFloat = compact ? 12 : 24
+        let gap: CGFloat = portraitPhone || compact || mac ? 8 : 12
+        let groupGap: CGFloat = compact || mac ? 12 : 24
         let headerIDs: Set<String> = ["settings", "whatsNew"]
         let footer = page.orderedFooter.filter { !headerIDs.contains($0.id) }
-        let requestedFooterColumns = portraitPhone ? 1 : 3
+        let requestedFooterColumns = portraitPhone ? 1 : mac ? 2 : 3
         let minimumCaptionWidth = footer.map { action in
-            action.icon != nil ? 44 : (action.title.split(whereSeparator: \.isWhitespace).map {
-                GameTextLayout.width(of: String($0))
-            }.max() ?? 0) + (action.primary ? 48 : 24)
+            if action.icon != nil { return 44 }
+            let words = mac ? [action.title] : action.title.split(whereSeparator: \.isWhitespace).map(String.init)
+            return (words.map { GameTextLayout.width(of: $0) }.max() ?? 0) + (action.primary ? 48 : 24)
         }.max() ?? 44
         let fittingFooterColumns = max(1, Int((inner + gap) / (minimumCaptionWidth + gap)))
         let footerGrid = GameFooterGrid(actions: footer, columns: min(requestedFooterColumns, fittingFooterColumns),
@@ -404,38 +424,60 @@ public struct GameFrontEnd {
         // A short status such as Loading... sits in a fixed header slot beside Settings,
         // so it never moves the logo or the actions when it appears.
         let loading = L10n.text("Loading...")
-        let statusSlot = GameTextLayout.width(of: loading) + 8
+        let statusSlot = mac && page.subtitle.isEmpty ? 0 : GameTextLayout.width(of: loading) + 8
         let statusWidth = GameTextLayout.width(of: page.subtitle)
-        let edgeInset: CGFloat = page.footer.contains { headerIDs.contains($0.id) } ? 62 : 12
+        let headerY: CGFloat = mac ? 14 : 22
+        let headerHeight: CGFloat = mac && page.gameLibrary ? 36 : 44
+        let headerBottom = headerY + headerHeight + 4
+        let edgeInset: CGFloat = page.footer.contains { headerIDs.contains($0.id) } ? (mac ? 50 : 62) : 12
         let titleWidth = page.home ? min(180, inner / 2) : GameTextLayout.width(of: page.title, face: .large)
         let canShareHeader = boardWidth >= 2 * (edgeInset + statusSlot) + titleWidth
         let headerStatus = canShareHeader && !page.subtitle.contains("\n") && statusWidth <= statusSlot
         let headerInset = edgeInset + (headerStatus ? statusSlot : 0)
-        let heading = CGRect(x: x + headerInset, y: 22, width: boardWidth - 2 * headerInset, height: 44)
+        let heading = CGRect(x: x + headerInset, y: headerY, width: boardWidth - 2 * headerInset, height: headerHeight)
         let statusHeight = GameTextLayout.height(!canShareHeader && page.subtitle.isEmpty ? loading : page.subtitle, width: inner)
         let subtitle = headerStatus
-            ? CGRect(x: x + boardWidth - edgeInset - statusWidth, y: 22 + floor((44 - statusHeight) / 2),
+            ? CGRect(x: x + boardWidth - edgeInset - statusWidth, y: headerY + floor((headerHeight - statusHeight) / 2),
                      width: statusWidth, height: statusHeight)
-            : CGRect(x: x + 12, y: 70, width: inner, height: statusHeight)
+            : CGRect(x: x + 12, y: headerBottom, width: inner, height: statusHeight)
+        let headerEnd = headerStatus ? headerBottom : subtitle.maxY
         let showsTurnAtTop = page.homeNextPlayerIndex != nil
-        let turnInitials = CGRect(x: x + 12, y: (headerStatus ? 70 : subtitle.maxY) + 4, width: inner,
-            height: showsTurnAtTop ? 22 : 0)
+        let turnInitials = CGRect(x: x + 12, y: headerEnd + (mac ? 2 : 4), width: inner,
+            height: showsTurnAtTop ? (mac ? 20 : 22) : 0)
         let gameStart = page.rows.firstIndex {
             $0.id.hasPrefix("family.") || ["classic", "neolemmix", "l2", "l3"].contains($0.id)
         } ?? page.rows.count
         let library = Array(page.rows.dropFirst(gameStart))
-        let sections = [Array(page.rows.prefix(gameStart)), library.filter { $0.gameLogo == nil },
-                        library.filter { $0.gameLogo != nil }].filter { !$0.isEmpty }
+        let routes = Array(page.rows.prefix(gameStart))
+        let games = [library.filter { $0.gameLogo == nil }, library.filter { $0.gameLogo != nil }]
+        let primary = Array(routes.prefix(1))
+        let otherRoutes = Array(routes.dropFirst())
+        let sections = (mac && page.gameLibrary ? [primary] + games + [otherRoutes]
+            : mac ? [primary, otherRoutes] + games : [routes] + games).filter { !$0.isEmpty }
         var targets: [Target] = []
-        var y = (showsTurnAtTop ? turnInitials.maxY : headerStatus ? 70 : subtitle.maxY) + 16
+        var gamesHeading: CGRect?
+        var y = (showsTurnAtTop ? turnInitials.maxY : headerEnd) + (mac ? 8 : 16)
         for (section, actions) in sections.enumerated() {
-            if section > 0 { y += groupGap }
+            let gameSection = mac && page.gameLibrary && actions[0].id.hasPrefix("family.")
+            if section > 0 { y += gameSection && gamesHeading != nil ? gap : groupGap }
+            if gameSection, gamesHeading == nil {
+                let height = GameTextLayout.height(L10n.text("Games"), width: inner)
+                gamesHeading = CGRect(x: x + 12, y: y, width: inner, height: height)
+                y += height + gap
+            }
             // Game logos pair up side by side even in one-column portrait, so each logo stays large.
-            let sectionColumns = compact && section > 0 && actions.allSatisfy({ $0.gameLogo == nil }) && width >= 800 ? 3 : actions.count == 3 && section == 0 && gameStart > 0 && width >= 600 ? 3
-                : actions.count > 1 && actions.allSatisfy({ $0.gameLogo != nil }) ? 2 : columns
-            let cell = (inner - CGFloat(sectionColumns - 1) * gap) / CGFloat(sectionColumns)
             let logos = actions.allSatisfy { $0.gameLogo != nil }
-            let rowHeight = logos ? CGFloat(compact ? 64 : 112) : max(44, actions.map {
+            let threeColumnWidth = (inner - 2 * gap) / 3
+            let useThreeColumns = (mac && gameSection && !logos && actions.allSatisfy {
+                GameTextLayout.width(of: $0.visibleTitle) <= threeColumnWidth - 24
+            })
+                || (compact && section > 0 && !logos && width >= 800)
+                || (actions.count == 3 && section == 0 && gameStart > 0 && width >= 600)
+            let fullWidthRoutes = mac && page.gameLibrary && !gameSection
+            let sectionColumns = fullWidthRoutes ? 1 : useThreeColumns ? 3 : logos ? 2 : columns
+            let cell = (inner - CGFloat(sectionColumns - 1) * gap) / CGFloat(sectionColumns)
+            let rowHeight = logos ? CGFloat(mac || compact ? 64 : 112)
+                : mac ? (actions.contains(where: \.primary) ? 52 : gameSection ? 36 : 40) : max(44, actions.map {
                 GameTextLayout.height($0.visibleTitle, width: (actions.count == 1 ? inner : cell) - 48) + 8
             }.max() ?? 44)
             for start in stride(from: 0, to: actions.count, by: sectionColumns) {
@@ -450,33 +492,42 @@ public struct GameFrontEnd {
             }
             y -= gap
         }
-        y += groupGap
+        y += mac && page.home ? 8 : groupGap
         let initials = showsTurnAtTop ? turnInitials
             : CGRect(x: x + 12, y: y, width: inner, height: page.homeInitials.isEmpty ? 0 : 22)
-        if !showsTurnAtTop { y = initials.maxY + 8 }
-        let footerHeight = max(44, footer.map { GameTextLayout.height($0.visibleTitle, width: footerCell - 24) + 8 }.max() ?? 44)
+        if !showsTurnAtTop { y = initials.maxY + (mac ? 0 : 8) }
+        let minimumFooterHeight: CGFloat = mac ? 40 : 44
+        let footerHeight = mac ? minimumFooterHeight : max(minimumFooterHeight, footer.map {
+            GameTextLayout.height($0.visibleTitle, width: footerCell - 24) + 8
+        }.max() ?? minimumFooterHeight)
         for slot in footerGrid.slots {
             targets.append(Target(action: slot.action, frame: footerGrid.frame(for: slot, x: x + 12, y: y, width: inner,
                 height: footerHeight, gap: gap, rowGap: gap)))
         }
-        let contentHeight = y + CGFloat(footerGrid.rows) * (footerHeight + gap) + 12
+        let contentHeight = y + CGFloat(footerGrid.rows) * (footerHeight + gap) + (mac ? 10 : 12)
         let height = max(minimumHeight, contentHeight)
+        let toolSize: CGFloat = mac ? 34 : 44
         for action in page.orderedFooter where headerIDs.contains(action.id) {
-            targets.append(Target(action: action, frame: CGRect(x: action.id == "settings" ? x + boardWidth - 56 : x + 12,
-                y: 22, width: 44, height: 44)))
+            targets.append(Target(action: action, frame: CGRect(
+                x: action.id == "settings" ? x + boardWidth - 12 - toolSize : x + 12,
+                y: heading.midY - toolSize / 2, width: toolSize, height: toolSize)))
         }
         let logoGrowth = page.home ? min(height - contentHeight,
             max(0, GameMenuLogo.preferredHeight(width: heading.width) - heading.height)) : 0
         let offset = floor(max(0, (height - contentHeight - logoGrowth) / 2))
+        let boardTop: CGFloat = mac ? 4 : 12
+        let boardBottom: CGFloat = mac ? 0 : 12
         return Layout(size: CGSize(width: width, height: height),
-            board: CGRect(x: x, y: 12 + offset, width: boardWidth, height: contentHeight + logoGrowth - 24),
+            board: CGRect(x: x, y: boardTop + offset, width: boardWidth,
+                height: contentHeight + logoGrowth - boardTop - boardBottom),
             heading: CGRect(x: heading.minX, y: heading.minY + offset,
                 width: heading.width, height: heading.height + logoGrowth),
             subtitle: subtitle.offsetBy(dx: 0, dy: offset + (headerStatus ? 0 : logoGrowth)),
             preview: .zero, details: [], targets: targets.map {
                 Target(action: $0.action, frame: $0.frame.offsetBy(dx: 0,
                     dy: offset + (headerIDs.contains($0.action.id) ? 0 : logoGrowth)))
-            }, initials: initials.offsetBy(dx: 0, dy: offset + logoGrowth))
+            }, initials: initials.offsetBy(dx: 0, dy: offset + logoGrowth),
+            rowHeadings: gamesHeading.map { [(L10n.text("Games"), $0.offsetBy(dx: 0, dy: offset))] } ?? [])
     }
 
     /// Results reserve room for actions first; the snapshot fills the remaining space.
@@ -554,6 +605,7 @@ public struct GameFrontEnd {
         let floating = page.home && layout.secondaryBoard != nil && !fillsCanvas
         for board in boards where drawsBackdrop && !floating {
             if !fillsCanvas { shape.fill(board, in: context) }
+            if layout.compactActionPanel || page.settingsTabs != nil { continue }
             // A drawn frame cannot match a rounded display's hardware corner radius,
             // so the display edge frames full-screen boards and the home menu.
             if shape == .rounded && (fillsCanvas || page.home) { continue }
@@ -639,10 +691,8 @@ public struct GameFrontEnd {
             let action = target.action
             let chosen = action.enabled && (action.primary || action.selected)
             let focused = action.enabled && highlighted == action.id
-            if page.home, rowIDs.contains(action.id) {
-                GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1, shape: shape)
-            } else if page.home, ["settings", "whatsNew"].contains(action.id) {
-                GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1, shape: shape)
+            GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1, shape: shape)
+            if page.home || page.macTitleMenu, !rowIDs.contains(action.id), ["settings", "whatsNew"].contains(action.id) {
                 let glyph: PanelGlyphArt = action.id == "settings" ? .settings : action.busy ? .hourglass : .download
                 let well = GameStoneArt.well(target.frame, pixel: 1)
                 let scale = glyph.scale(fitting: well.size)
@@ -651,8 +701,6 @@ public struct GameFrontEnd {
                 }
                 if focused { drawFocus(target.frame, shape: shape, in: context) }
                 continue
-            } else {
-                GameStoneArt.draw(in: context, frame: target.frame, selected: chosen, pixel: 1, shape: shape)
             }
             if action.selected {
                 context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: action.enabled ? 1 : 0.45))
@@ -678,7 +726,9 @@ public struct GameFrontEnd {
             if page.home || page.gameLibrary, let game = action.gameLogo, let image = typography.homeLogos.image(game) {
                 context.saveGState()
                 context.setAlpha(action.enabled ? 1 : 0.45)
-                drawImage(image, fittedIn: target.frame.insetBy(dx: 24, dy: 8), context: context)
+                if image.shouldInterpolate { context.interpolationQuality = .low }
+                drawImage(image, fittedIn: target.frame.insetBy(dx: 24, dy: 8),
+                    resolutionScale: GameHomeLogoArt.resolutionScale(for: game), context: context)
                 context.restoreGState()
                 continue
             }
@@ -698,7 +748,15 @@ public struct GameFrontEnd {
                 caption.origin.x += 28
                 caption.size.width -= 28
             }
-            if page.home {
+            if page.macTitleMenu {
+                var runs = action.titleRuns
+                if runs.isEmpty || GameTextLayout.width(of: runs.map(\.text).joined(),
+                    font: typography.font(.small)) > caption.width {
+                    runs = [.init(action.title, runs.first?.palette ?? (chosen ? .green : .blue))]
+                }
+                GameSemanticText.draw(runs, in: caption, typography: typography,
+                    alpha: action.enabled ? 1 : 0.45, singleLine: true, context: context)
+            } else if page.home {
                 let runs = action.titleRuns.isEmpty ? [TextRun(action.title, rowIDs.contains(action.id) ? .green : .blue)] : action.titleRuns
                 GameSemanticText.draw(runs, in: caption, typography: typography, alpha: action.enabled ? 1 : 0.45, context: context)
             } else if !action.titleRuns.isEmpty {
@@ -756,10 +814,11 @@ public struct GameFrontEnd {
                        provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
     }
 
-    private static func drawImage(_ image: CGImage, fittedIn box: CGRect, context: CGContext) {
-        let fit = min(box.width / CGFloat(image.width), box.height / CGFloat(image.height))
+    private static func drawImage(_ image: CGImage, fittedIn box: CGRect, resolutionScale: CGFloat = 1, context: CGContext) {
+        let width = CGFloat(image.width) / resolutionScale, height = CGFloat(image.height) / resolutionScale
+        let fit = min(box.width / width, box.height / height)
         let factor = fit >= 1 ? floor(fit) : fit
-        let size = CGSize(width: CGFloat(image.width) * factor, height: CGFloat(image.height) * factor)
+        let size = CGSize(width: width * factor, height: height * factor)
         let frame = CGRect(x: floor(box.midX - size.width / 2), y: floor(box.midY - size.height / 2), width: size.width, height: size.height)
         GameStoneArt.drawImage(image, in: frame, context: context)
     }

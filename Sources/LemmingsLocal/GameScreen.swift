@@ -6,7 +6,13 @@ import LemmingsGameArt
 
 /// A status inside the current screen. Navigation keeps its existing input targets.
 @MainActor final class GameLoadingIndicator: NSView {
+    static let height: CGFloat = 32
+    private static let horizontalPadding: CGFloat = 8
     private let message: String
+    var preferredWidth: CGFloat {
+        let font = GameMenuArtwork.renderer()?.font(.small)
+        return max(192, ceil(GameTextLayout.width(of: message, font: font)) + 2 * Self.horizontalPadding)
+    }
     override var isFlipped: Bool { true }
     init(frame: NSRect, message: String = L10n.text("Loading...")) {
         self.message = message
@@ -19,7 +25,8 @@ import LemmingsGameArt
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
     override func draw(_ dirtyRect: NSRect) {
         GameStyle.fill(bounds, .black)
-        GameControlText.draw(message, in: bounds.insetBy(dx: 8, dy: 2), alignment: .center, role: .heading)
+        GameControlText.draw(message, in: bounds.insetBy(dx: Self.horizontalPadding, dy: 2),
+            alignment: .center, role: .heading)
     }
 }
 
@@ -81,18 +88,28 @@ import LemmingsGameArt
     }
     private var loadingID: UUID?
     private var loadingView: GameLoadingIndicator?
+    private weak var loadingPage: GameMenuPage?
     @discardableResult func beginLoading(owner: NSWindow, message: String = L10n.text("Loading...")) -> UUID {
         clearLoading()
         let id = UUID()
         loadingID = id
         let indicator = GameLoadingIndicator(frame: .zero, message: message)
         if let page = pages.last?.view as? GameMenuPage {
-            page.installLoadingIndicator(indicator)
+            page.setLoadingIndicator(indicator)
+            loadingPage = page
         } else if let root = owner.contentView {
-            indicator.frame = CGRect(x: max(8, (root.bounds.width - 192) / 2),
-                y: root.isFlipped ? 12 : max(0, root.bounds.height - 44), width: 192, height: 32)
-            indicator.autoresizingMask = [.minXMargin, .maxXMargin, root.isFlipped ? .maxYMargin : .minYMargin]
+            indicator.translatesAutoresizingMaskIntoConstraints = false
             root.addSubview(indicator)
+            let preferredWidth = indicator.widthAnchor.constraint(equalToConstant: indicator.preferredWidth)
+            preferredWidth.priority = .defaultHigh
+            NSLayoutConstraint.activate([
+                preferredWidth,
+                indicator.leadingAnchor.constraint(greaterThanOrEqualTo: root.leadingAnchor, constant: 8),
+                indicator.trailingAnchor.constraint(lessThanOrEqualTo: root.trailingAnchor, constant: -8),
+                indicator.centerXAnchor.constraint(equalTo: root.centerXAnchor),
+                indicator.topAnchor.constraint(equalTo: root.topAnchor, constant: 12),
+                indicator.heightAnchor.constraint(equalToConstant: GameLoadingIndicator.height),
+            ])
         }
         loadingView = indicator
         NSAccessibility.post(element: indicator, notification: .valueChanged)
@@ -103,7 +120,9 @@ import LemmingsGameArt
         clearLoading()
     }
     func clearLoading() {
-        loadingView?.removeFromSuperview()
+        if let loadingPage { loadingPage.setLoadingIndicator(nil) }
+        else { loadingView?.removeFromSuperview() }
+        loadingPage = nil
         loadingView = nil
         loadingID = nil
     }
@@ -331,6 +350,7 @@ import LemmingsGameArt
     private let home = GameActionButton(title: L10n.text("Main menu"), primary: false)
     private let back: GameActionButton
     private let page: NSView
+    private var pageHasNavigation: Bool { (page as? SolutionReplayPage)?.hasOwnNavigation == true }
     override var isFlipped: Bool { true }
     init(page: NSView) {
         self.page = page
@@ -362,12 +382,12 @@ import LemmingsGameArt
     override func draw(_ dirtyRect: NSRect) { GameStyle.fill(bounds, .black) }
     override func mouseDown(with event: NSEvent) {}
     override func swipe(with event: NSEvent) {
-        if !back.isHidden, event.deltaX > 0 { GameScreen.shared.goBack(from: page) }
+        if !back.isHidden || pageHasNavigation, event.deltaX > 0 { GameScreen.shared.goBack(from: page) }
         else { super.swipe(with: event) }
     }
     override func layout() {
         super.layout()
-        let visible = GameScreen.shared.onMainMenu != nil && (page as? ArcadeView)?.onFirstPlay == nil
+        let visible = !pageHasNavigation && GameScreen.shared.onMainMenu != nil && (page as? ArcadeView)?.onFirstPlay == nil
         home.isHidden = !visible
         let showsBack = (page as? GameMenuPage)?.controllerBackButton.isHidden != true
         back.title = (page as? GameMenuPage)?.backTitle ?? (page as? SolutionReplayPage)?.navigationBackButton?.title ?? L10n.text("Back")
@@ -446,9 +466,12 @@ import LemmingsGameArt
 
 /// A full game page for settings, help and long lists.
 @MainActor class GameMenuPage: NSView {
-    func installLoadingIndicator(_ indicator: NSView) {
-        indicator.frame = CGRect(x: 864, y: 110, width: 192, height: 32)
-        canvas.addSubview(indicator)
+    private weak var loadingIndicator: GameLoadingIndicator?
+    func setLoadingIndicator(_ indicator: GameLoadingIndicator?) {
+        loadingIndicator?.removeFromSuperview()
+        loadingIndicator = indicator
+        if let indicator { canvas.addSubview(indicator) }
+        needsLayout = true
     }
     var onBack: (() -> Void)?
     var onHorizontalNavigation: ((Int) -> Void)?
@@ -459,6 +482,7 @@ import LemmingsGameArt
     var adaptsToViewport: Bool { !listActions.isEmpty }
     private var listHeadings: [Int: String] = [:]
     private var footerActions: [NSView] = []
+    weak var sidebarTabs: GameTabs?
     private let listScroll = NSScrollView()
     private let listDocument = GameMenuListDocument()
     private let canvas: GameMenuCanvas
@@ -487,22 +511,37 @@ import LemmingsGameArt
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func layout() {
         super.layout()
+        canvas.compactHeading = sidebarTabs != nil
         if adaptsToViewport {
             let scale = max(1, min(GameAccessibility.scale, bounds.width / 320, bounds.height / 400))
             canvas.frame = bounds
             canvas.bounds = CGRect(x: 0, y: 0, width: bounds.width / scale, height: bounds.height / scale)
             canvas.adaptive = true
-            body.frame = CGRect(x: 32, y: canvas.headerBottom, width: max(1, canvas.bounds.width - 64),
-                height: max(0, canvas.bounds.height - canvas.headerBottom - 88))
+            let bodyTop = canvas.headerBottom + (loadingIndicator == nil ? 0 : GameLoadingIndicator.height)
+            body.frame = CGRect(x: 32, y: bodyTop, width: max(1, canvas.bounds.width - 64),
+                height: max(0, canvas.bounds.height - bodyTop - 88))
         } else {
             let scale = GamePageLayout.scale(in: bounds.size)
             canvas.frame = CGRect(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - 720 * scale) / 2,
                                   width: 1120 * scale, height: 720 * scale)
             canvas.bounds = CGRect(x: 0, y: 0, width: 1120, height: 720)
+            if sidebarTabs != nil {
+                body.frame.origin.y = canvas.headerBottom
+                body.frame.size.height = max(0, 676 - canvas.headerBottom)
+            }
         }
-        layoutFooterActions()
+        if let indicator = loadingIndicator {
+            let inset: CGFloat = adaptsToViewport ? 32 : 64
+            let width = min(indicator.preferredWidth, max(0, canvas.bounds.width - 2 * inset))
+            indicator.frame = CGRect(x: canvas.bounds.maxX - inset - width, y: adaptsToViewport ? canvas.headerBottom : 110,
+                width: width, height: GameLoadingIndicator.height)
+        }
+        if sidebarTabs == nil { layoutFooterActions() }
         layoutListActions()
         canvas.layoutSubtreeIfNeeded()
+        if let sidebarTabs {
+            layoutFooterActions(at: sidebarTabs.convert(sidebarTabs.sidebarFooterFrame, to: canvas))
+        }
     }
     override func draw(_ dirtyRect: NSRect) {
         GameStyle.fill(bounds, .black)
@@ -578,22 +617,35 @@ import LemmingsGameArt
         footerActions.insert(home, at: min(1, footerActions.count))
         needsLayout = true
     }
-    private func layoutFooterActions() {
+    private func layoutFooterActions(at sidebar: CGRect? = nil) {
         footerActions.removeAll { $0.superview !== canvas }
         let visible = footerActions.filter { !$0.isHidden }
         guard !visible.isEmpty else { return }
-        let left: CGFloat = adaptsToViewport ? 32 : 64
-        let inner = canvas.bounds.width - left * 2
-        let width = (inner - CGFloat(visible.count - 1) * 12) / CGFloat(visible.count)
-        let height = max(48, visible.compactMap { $0 as? GameActionButton }.map {
-            GameTextLayout.height($0.title, width: width - 24, font: GameMenuArtwork.renderer()?.font(.small)) + 12
+        let left = sidebar?.minX ?? (adaptsToViewport ? 32 : 64)
+        let inner = sidebar?.width ?? (canvas.bounds.width - left * 2)
+        let space = inner - CGFloat(visible.count - 1) * 12
+        let width = space / CGFloat(visible.count)
+        let font = GameMenuArtwork.renderer()?.font(.small)
+        let preferred = visible.map { view in
+            (view as? GameActionButton).map { ceil(GameTextLayout.width(of: $0.title, font: font)) + 24 } ?? width
+        }
+        let extra = (space - preferred.reduce(0, +)) / CGFloat(visible.count)
+        let widths = sidebar != nil && extra >= 0 ? preferred.map { $0 + extra } : visible.map { _ in width }
+        let height = max(48, zip(visible, widths).compactMap { view, width in
+            (view as? GameActionButton).map { GameTextLayout.height($0.title, width: width - 24, font: font) + 12 }
         }.max() ?? 48)
-        let y = canvas.bounds.height - 38 - height
-        for (index, button) in visible.enumerated() {
+        let y = sidebar?.minY ?? (canvas.bounds.height - 38 - height)
+        var x = left
+        for (button, width) in zip(visible, widths) {
             (button as? GameActionButton)?.wrapsTitle = true
-            button.frame = CGRect(x: left + CGFloat(index) * (width + 12), y: y, width: width, height: height)
+            button.frame = CGRect(x: x, y: y, width: width, height: height)
+            x += width + 12
         }
         if adaptsToViewport { body.frame.size.height = max(0, y - body.frame.minY - 12) }
+    }
+    func isSidebarControl(_ view: NSView) -> Bool {
+        guard sidebarTabs != nil else { return false }
+        return view is GameTabButton || footerActions.contains { $0 === view }
     }
     @discardableResult func addListAction(
         _ title: String,
@@ -667,9 +719,11 @@ import LemmingsGameArt
     let title: String
     let subtitle: String
     var adaptive = false
+    var compactHeading = false
     var headerBottom: CGFloat {
         let width = adaptive ? max(1, bounds.width - 64) : 928
         let headingHeight = max(40, GameTextLayout.height(title, width: width, face: .large))
+        if compactHeading { return 48 + headingHeight + 20 }
         let subtitleHeight = subtitle.isEmpty && adaptive ? 0 : max(24, GameTextLayout.height(subtitle, width: width))
         return max(adaptive ? 100 : 152, (adaptive ? 28 : 48) + headingHeight + 12 + subtitleHeight + 12)
     }
@@ -685,9 +739,11 @@ import LemmingsGameArt
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func draw(_ dirtyRect: NSRect) {
-        let panel = adaptive ? bounds.insetBy(dx: 14, dy: 12) : CGRect(x: 44, y: 20, width: 1032, height: 676)
-        GameStyle.fill(panel, NSColor.black.withAlphaComponent(0.94))
-        GameMenuFrame.draw(panel)
+        if !compactHeading {
+            let panel = adaptive ? bounds.insetBy(dx: 14, dy: 12) : CGRect(x: 44, y: 20, width: 1032, height: 676)
+            GameStyle.fill(panel, NSColor.black.withAlphaComponent(0.94))
+            GameMenuFrame.draw(panel)
+        }
         let headingWidth: CGFloat = adaptive ? max(1, bounds.width - 64) : isMessage ? 768 : 928
         let headingHeight = max(40, GameTextLayout.height(title, width: headingWidth, face: .large))
         let heading = CGRect(x: adaptive ? 32 : isMessage ? 176 : 96, y: adaptive ? 28 : isMessage ? 206 : 48, width: headingWidth, height: headingHeight)

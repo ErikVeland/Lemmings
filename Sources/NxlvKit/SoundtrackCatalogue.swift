@@ -80,6 +80,52 @@ public struct SoundtrackCatalogue: Codable, Sendable {
         return sameTrack.isEmpty ? candidates : sameTrack
     }
 
+    public func showcase(trackID: String, index: Int, availablePaths: Set<String>) -> Variant? {
+        guard index >= 0, let assigned = track(id: trackID), assigned.role == "level" else { return nil }
+        let playable = tracks.filter { track in
+            track.role == "level" && track.variants.contains {
+                $0.confidence == "documented" && availablePaths.contains($0.path)
+            }
+        }
+        let games = Dictionary(grouping: playable, by: \.game)
+        let gameOrder = games.keys.filter { $0 != assigned.game }.sorted() + [assigned.game]
+        var rotation: [Track] = []
+        let groups = gameOrder.compactMap { games[$0] }.map { group in
+            group.sorted { lhs, rhs in
+                let lhsHasModule = lhs.variants.contains { $0.quality == "native-module" }
+                let rhsHasModule = rhs.variants.contains { $0.quality == "native-module" }
+                if lhsHasModule != rhsHasModule { return !lhsHasModule }
+                return lhs.id < rhs.id
+            }
+        }
+        // Give each installed game a turn. Within each game, lead with its port-exclusive themes.
+        for offset in 0..<(groups.map(\.count).max() ?? 0) {
+            for group in groups where group.indices.contains(offset) { rotation.append(group[offset]) }
+        }
+        guard rotation.count > 1 else { return nil }
+        let track = rotation[index % rotation.count]
+        let firstCycle = track.variants.contains { $0.quality == "native-module" } ? 1 : 0
+        return select(trackID: track.id, cycle: index / rotation.count + firstCycle, availablePaths: availablePaths)
+    }
+
+    public func shuffledVariants(currentPath: String, scope: ShuffleScope, availablePaths: Set<String>,
+                                 fallbackTrackID: String? = nil, recentTrackIDs: [String] = []) -> [Variant] {
+        let candidates = shuffleCandidates(currentPath: currentPath, scope: scope, availablePaths: availablePaths,
+                                           fallbackTrackID: fallbackTrackID)
+        guard scope == .allTracks else { return candidates.shuffled() }
+        let byPath = Dictionary(uniqueKeysWithValues: candidates.map { ($0.path, $0) })
+        let currentID = entry(path: currentPath)?.track.id ?? fallbackTrackID
+        let groups = tracks.compactMap { track -> (id: String, versions: [Variant])? in
+            let versions = track.variants.compactMap { byPath[$0.path] }
+            return versions.isEmpty ? nil : (track.id, versions)
+        }.shuffled()
+        let recentlyPlayed = Set(recentTrackIDs)
+        let fresh = groups.filter { $0.id != currentID && !recentlyPlayed.contains($0.id) }
+        let recent = groups.filter { $0.id != currentID && recentlyPlayed.contains($0.id) }
+        let current = groups.filter { $0.id == currentID }
+        return (fresh + recent + current).flatMap { $0.versions.shuffled() }
+    }
+
     /// First occurrence uses the original preferred port. Later score cycles visit
     /// other versions of this composition. Retries never advance the cycle.
     public func select(trackID: String, cycle: Int, preferredPort: String = "amiga",

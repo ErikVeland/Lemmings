@@ -18,7 +18,7 @@ import LemmingsMobileCore
 
     GameTypography.annotation(cue.text, at: origin, palette: .blue)
 
-    let railOrigin = CGPoint(x: origin.x, y: origin.y + 11 * scale)
+    let railOrigin = CGPoint(x: origin.x, y: origin.y + 23)
     let railWidth = 112 * scale
     let railHeight = max(1, (scale * 1.5).rounded())
     let markerWidth = max(2, (scale * 2).rounded())
@@ -33,7 +33,7 @@ import LemmingsMobileCore
       width: markerWidth,
       height: railHeight + 2 * scale
     ).fill()
-    return max(18, 12 * scale + railHeight)
+    return 23 + railHeight + scale
   }
 }
 #endif

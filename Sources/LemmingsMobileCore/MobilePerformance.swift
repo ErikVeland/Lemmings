@@ -163,9 +163,19 @@ public struct MobileFramePacing: Sendable {
 }
 
 public struct MobileTickClock: Equatable, Sendable {
+    private static let maximumDelay = 0.25
     public var ticksPerSecond: Double
-    public var speed: Double
+    public var speed: Double {
+        didSet {
+            if speed < oldValue {
+                let duration = 1 / ticksPerSecond
+                accumulator = accumulator.truncatingRemainder(dividingBy: duration)
+                if accumulator >= duration * (1 - 1e-9) { accumulator = 0 }
+            }
+        }
+    }
     public var maximumCatchUpTicks: Int
+    public private(set) var lastAdvanceElapsed = 0.0
     private var lastTime: Double?
     private var accumulator = 0.0
 
@@ -176,6 +186,7 @@ public struct MobileTickClock: Equatable, Sendable {
     }
 
     public mutating func advance(at time: Double) -> Int {
+        lastAdvanceElapsed = 0
         guard time.isFinite else { return 0 }
         guard let previous = lastTime else {
             lastTime = time
@@ -184,21 +195,20 @@ public struct MobileTickClock: Equatable, Sendable {
         // A queued display callback can predate the completed Resume frame.
         guard time >= previous else { return 0 }
         lastTime = time
-        let elapsed = min(0.25, max(0, time - previous))
-        accumulator += elapsed * speed
+        lastAdvanceElapsed = time - previous
+        let elapsed = min(Self.maximumDelay, lastAdvanceElapsed)
+        accumulator = min(accumulator + elapsed * speed, maximumCredit)
         let duration = 1 / ticksPerSecond
         let boundaryTolerance = duration * 1e-9
         let available = Int((accumulator + boundaryTolerance) / duration)
         let ticks = min(maximumCatchUpTicks, available)
         accumulator = max(0, accumulator - Double(ticks) * duration)
-        if available > maximumCatchUpTicks {
-            accumulator = min(accumulator, duration)
-        }
         return ticks
     }
 
     public mutating func suspend() {
         lastTime = nil
+        lastAdvanceElapsed = 0
         accumulator = 0
     }
 
@@ -211,6 +221,8 @@ public struct MobileTickClock: Equatable, Sendable {
     /// Retains ticks admitted by the clock when the current frame exhausts its CPU budget.
     public mutating func deferTicks(_ ticks: Int) {
         guard ticks > 0 else { return }
-        accumulator += Double(ticks) / ticksPerSecond
+        accumulator = min(accumulator + Double(ticks) / ticksPerSecond, maximumCredit)
     }
+
+    private var maximumCredit: Double { Self.maximumDelay * speed + 1 / ticksPerSecond }
 }

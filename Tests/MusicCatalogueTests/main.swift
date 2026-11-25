@@ -54,6 +54,35 @@ for track in catalogue.tracks {
 }
 print("PASS 495 versions, authentic first cycles, deterministic alternates, same-tune fallback, special roles, port-safe cues and source coverage")
 
+let ordinaryIDs = Set(catalogue.tracks.filter {
+    $0.role == "level" && $0.variants.contains { $0.confidence == "documented" }
+}.map(\.id))
+let showcase = (0..<ordinaryIDs.count).compactMap { index in
+    catalogue.showcase(trackID: "classic.cancan", index: index, availablePaths: paths)
+}
+let showcaseEntries = showcase.compactMap { catalogue.entry(path: $0.path) }
+require(showcaseEntries.count == ordinaryIDs.count &&
+    Set(showcaseEntries.map { $0.track.id }) == ordinaryIDs, "Showcase repeated a composition before covering the library")
+let showcaseGames = Set(showcaseEntries.map { $0.track.game })
+require(showcaseGames.count > 1 && Set(showcaseEntries.prefix(showcaseGames.count).map { $0.track.game }) == showcaseGames,
+    "Showcase did not introduce the available games early")
+require(catalogue.showcase(trackID: "classic.cancan", index: 0, availablePaths: paths) == showcase.first,
+    "A reopened level picked different music")
+for protected in ["classic.beasti", "holiday.jb", "classic.intro", "classic.missing"] {
+    require(catalogue.showcase(trackID: protected, index: 0, availablePaths: paths) == nil,
+        "Showcase replaced protected theme: \(protected)")
+}
+require(catalogue.showcase(trackID: "classic.cancan", index: 0, availablePaths: [original.path]) == nil,
+    "Showcase overrode the fallback with only one ordinary composition available")
+let fresh = pick("lemmings2.medieval")!
+let recentlyPlayed = pick("lemmings3.classic1")!
+let shuffleOrder = catalogue.shuffledVariants(currentPath: original.path, scope: .allTracks,
+    availablePaths: [original.path, pick("classic.cancan", 1)!.path, fresh.path, recentlyPlayed.path],
+    recentTrackIDs: ["lemmings3.classic1"])
+require(shuffleOrder.first == fresh && shuffleOrder.dropFirst().first == recentlyPlayed,
+    "Manual All tracks did not favour a fresh composition")
+print("PASS composition-first DJ showcase, game coverage and protected themes")
+
 for (path, identity) in [
     ("Lemmings (MP3)/14 Smile if You Love Lemmings.mp3", "classic.lemming3"),
     ("Archimedes/03 - Smile if You Love Lemmings (Archimedes).mp3", "classic.tim2"),

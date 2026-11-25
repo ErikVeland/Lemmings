@@ -31,6 +31,7 @@ import NxlvKit
         PrecisionZoomLedger.effectiveSpeed(normal: state.multiplier,
             active: bulletTimeActive ? .superzoom : nil)
     }
+    var simulationBudget: TimeInterval { multiplier > 1 ? 0.022 : 0.012 }
     var label: String { bulletTimeActive ? "0.5×" : state.label }
     var target: Double { state.target }
     var panelLabel: String { label }
@@ -52,6 +53,11 @@ import NxlvKit
     func select(_ tier: Double, at now: TimeInterval) {
         state.select(tier, at: now)
         onChange()
+    }
+    func observeThroughput(elapsed: TimeInterval, ticks: Int, ticksPerSecond: Double) {
+        if !bulletTimeActive, state.observeThroughput(elapsed: elapsed, ticks: ticks, ticksPerSecond: ticksPerSecond) {
+            onChange()
+        }
     }
     func handleTierShortcut(_ event: NSEvent) -> Bool {
         guard variableEnabled, !bulletTimeActive, event.type == .keyDown,

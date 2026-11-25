@@ -103,7 +103,10 @@ import NxlvKit
       renderer.draw(text, face: .small, at: CGPoint(x: point.x.rounded(), y: point.y.rounded()), scale: 1, palette: palette)
     } else if !drawInterfaceText(text, in: CGRect(x: point.x, y: point.y,
       width: CGFloat(text.count * 8), height: 18), alignment: .left, maxScale: 1, palette: palette) {
-      GamePixelText.draw(text, in: CGRect(x: point.x, y: point.y, width: CGFloat(text.count * 6), height: 7), maxScale: 1, palette: palette)
+      let width = CGFloat(GamePixelTypography.width(of: text) + 1) * 2
+      let bounds = GamePixelTypography.verticalBounds(of: text)
+      GamePixelText.draw(text, in: CGRect(x: point.x, y: point.y, width: width, height: CGFloat(bounds.bottom - bounds.top) * 2),
+        maxScale: 2, palette: palette, alignment: .left)
     }
   }
 }

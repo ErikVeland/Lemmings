@@ -100,6 +100,7 @@ public enum TVMenuArt {
                 context.restoreGState()
             } else if let game = action.gameLogo, let image = typography?.homeLogos.image(game) {
                 context.saveGState(); context.setAlpha(action.enabled ? 1 : 0.45)
+                if image.shouldInterpolate { context.interpolationQuality = .low }
                 fitted(image, in: target.frame.insetBy(dx: 24, dy: 8), context: context)
                 context.restoreGState()
             } else if let typography, !action.titleRuns.isEmpty {

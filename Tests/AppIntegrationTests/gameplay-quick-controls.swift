@@ -2,6 +2,44 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
   if !value { throw NSError(domain: "GameplayQuickControls", code: 1, userInfo: [NSLocalizedDescriptionKey: message]) }
 }
 
+@MainActor func validateWideSequelPanel(_ canvas: NSView, owner: NSWindow, name: String, endSlot: Int,
+  pressedSlots: () -> [Int]) throws {
+  let originalSize = owner.contentView!.bounds.size
+  defer { owner.setContentSize(originalSize); owner.contentView!.layoutSubtreeIfNeeded() }
+  var previousSkill: CGRect?
+  var previousEndRun: CGRect?
+  for width in [CGFloat(1280), 2558] {
+    owner.setContentSize(CGSize(width: width, height: 760))
+    owner.contentView!.layoutSubtreeIfNeeded()
+    let elements = canvas.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement } ?? []
+    guard let skill = elements.first?.localFrame,
+          let endRun = elements.first(where: { $0.accessibilityLabel() == L10n.text("End run") })?.localFrame else {
+      throw IntegrationFailure(message: name + " is missing its accessible panel controls")
+    }
+    try checkGameplayQuickControl(abs(skill.minX - canvas.bounds.minX) < 0.01
+      && abs(endRun.maxX - canvas.bounds.maxX) < 0.01, name + " panel did not reach both edges")
+    if let previousSkill, let previousEndRun {
+      try checkGameplayQuickControl(skill.width > previousSkill.width && skill.height >= previousSkill.height
+        && abs(endRun.width - previousEndRun.width) < 0.01 && endRun.height == previousEndRun.height,
+        name + " resized its native transport artwork or reduced its skill target")
+    }
+    previousSkill = skill; previousEndRun = endRun
+    let count = pressedSlots().count
+    for point in [CGPoint(x: skill.minX + 1, y: skill.midY), CGPoint(x: endRun.maxX - 1, y: endRun.midY)] {
+      let event = NSEvent.mouseEvent(with: .leftMouseDown, location: canvas.convert(point, to: nil), modifierFlags: [],
+        timestamp: 1, windowNumber: owner.windowNumber, context: nil, eventNumber: 1, clickCount: 1, pressure: 1)!
+      canvas.mouseDown(with: event)
+    }
+    try checkGameplayQuickControl(Array(pressedSlots().dropFirst(count)) == [0, endSlot], name + " panel edge lost its mouse target")
+  }
+  let image = ReplayFrameCapture.image(size: canvas.bounds.size) { canvas.draw(canvas.bounds) }!
+  let folder = URL(fileURLWithPath: ".build/mac-wide-controls")
+  try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+  try NSBitmapImageRep(cgImage: image).representation(using: .png, properties: [:])!
+    .write(to: folder.appendingPathComponent(name + ".png"))
+  print("PASS \(name) full-width native panel, mouse targets and transport artwork size")
+}
+
 @MainActor private final class QuickControlTestWindow: NSWindow {
   var pointer = CGPoint.zero
   override var isKeyWindow: Bool { true }
@@ -365,9 +403,11 @@ extension AppDelegate {
     try check(activeGraphics == choices[1], "Classic graphics cycle did not wrap")
     try check(openNativeL2(selection: .init(tribe: 0, level: 0)), "L2 quick controls fixture did not open")
     try nativeL2Window!.testGameplayQuickControls()
+    try nativeL2Window!.testWideGameplayPanel()
     returnToLibrary()
     try check(openNativeL3(selection: .init(tribe: .classic, level: 0)), "L3 quick controls fixture did not open")
     try nativeL3Window!.testGameplayQuickControls()
+    try nativeL3Window!.testWideGameplayPanel()
     try testGameplayIconHelp()
     try testBrowserReturnJourneys()
   }

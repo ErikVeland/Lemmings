@@ -15,6 +15,7 @@ struct ReplaySkillUse: Equatable {
 
 /// Read-only replay information leaves camera input on the playfield.
 @MainActor final class ReplaySkillPanel: NSView {
+    var fitsContents = false
     private var stocks: [ReplaySkillStock] = []
     private var uses: [ReplaySkillUse] = []
     private var tick = 0
@@ -45,6 +46,7 @@ struct ReplaySkillUse: Equatable {
         max(textWidth("88:88.88"), uses.map { textWidth(ReplayGameTime.clock(tick: $0.tick, rate: rate)) }.max() ?? 0)
     }
     private var columns: Int {
+        if fitsContents, stocks.count < 2 { return 1 }
         let columnWidth = (stocks.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + countWidth + 18
         return stocks.count > 8 && columnWidth * 3 + 16 <= 420 ? 3 : 2
     }
@@ -52,6 +54,11 @@ struct ReplaySkillUse: Equatable {
         let rows = max(1, (stocks.count + columns - 1) / columns)
         let stockWidth = CGFloat(columns) * ((stocks.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + countWidth + 18) + 16
         let historyWidth = (uses.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + timeWidth + 42
+        if fitsContents {
+            let headingWidth = max(textWidth(stockTitle), textWidth(L10n.text("Skills used").uppercased())) + 16
+            return CGSize(width: max(headingWidth, stockWidth, uses.isEmpty ? 0 : historyWidth),
+                height: 22 + CGFloat(rows + (uses.isEmpty ? 1 : uses.count + 2)) * rowHeight)
+        }
         return CGSize(width: max(300, stockWidth, historyWidth), height: 22 + CGFloat(rows + 5) * rowHeight)
     }
     func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, rate: Double, title: String = L10n.text("LEFT")) {
@@ -86,6 +93,7 @@ struct ReplaySkillUse: Equatable {
             GameControlText.draw(SkillVocabulary.title(stock.name), in: CGRect(x: row.minX, y: row.minY, width: row.width - countWidth - 6, height: height), enabled: stock.count != "0")
             GameControlText.draw(stock.count, in: CGRect(x: row.maxX - countWidth, y: row.minY, width: countWidth, height: height), alignment: .right, enabled: stock.count != "0")
         }
+        guard !fitsContents || !uses.isEmpty else { return }
         let historyY = inner.minY + height + 6 + CGFloat(rows) * height
         GameControlText.draw(L10n.text("Skills used").uppercased(), in: CGRect(x: inner.minX, y: historyY, width: inner.width, height: height), role: .heading)
         let timeWidth = timeWidth
