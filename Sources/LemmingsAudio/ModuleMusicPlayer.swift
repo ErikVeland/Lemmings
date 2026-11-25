@@ -12,6 +12,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   private let engine = AVAudioEngine()
   private let nukeEQ = AVAudioUnitEQ(numberOfBands: 2)
   private var nukeFilterAmount: Float = 0
+  private var resultFilterAmount: Float = 0
   private let speedPitch = AVAudioUnitTimePitch()
   private let reverb = AVAudioUnitReverb()
   private let mixEQ = AVAudioUnitEQ(numberOfBands: 1)
@@ -115,7 +116,7 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
     mixEQ.bands[0].bypass = false
     engine.attach(nukeEQ)
     NukeMusicFilter.configure(nukeEQ)
-    NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
+    NukeMusicFilter.apply(max(nukeFilterAmount, resultFilterAmount), to: nukeEQ)
     engine.attach(reverb)
     engine.attach(spatialMixer)
     engine.attach(outputMixer)
@@ -658,7 +659,13 @@ public final class ModuleMusicPlayer: @unchecked Sendable {
   /// Independent of the DJ bass swap and the user's normal music mix.
   public func setNukeAmount(_ value: Float) {
     nukeFilterAmount = value.isFinite ? min(1, max(0, value)) : 0
-    NukeMusicFilter.apply(nukeFilterAmount, to: nukeEQ)
+    NukeMusicFilter.apply(max(nukeFilterAmount, resultFilterAmount), to: nukeEQ)
+  }
+
+  /// Results muffle the track through the nuke filter. The stronger of the two wins.
+  public func setResultFilter(_ value: Float) {
+    resultFilterAmount = value.isFinite ? min(1, max(0, value)) : 0
+    NukeMusicFilter.apply(max(nukeFilterAmount, resultFilterAmount), to: nukeEQ)
   }
 
   public func setMixBass(_ gain: Float) { mixEQ.bands[0].gain = gain }

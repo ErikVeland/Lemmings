@@ -52,6 +52,7 @@ import NxlvKit
   }
   func setEnhancements(_ value: ProTrackerEnhancements) { module?.setEnhancements(value) }
   func setNukeAmount(_ amount: Float) { recording?.setNukeAmount(amount); module?.setNukeAmount(amount) }
+  func setResultFilter(_ amount: Float) { recording?.setResultFilter(amount); module?.setResultFilter(amount) }
   func setMixBass(_ gain: Float) { recording?.setMixBass(gain); module?.setMixBass(gain) }
   @discardableResult
   func play() -> Bool {
@@ -499,6 +500,7 @@ import NxlvKit
     nukeAmount = amount
     allDecks.forEach { $0.setNukeAmount(amount) }
   }
+  var resultFilter: Float = 0 { didSet { allDecks.forEach { $0.setResultFilter(resultFilter) } } }
 
   private func makeDeck(_ url: URL) -> DJDeck? {
     let role = relativePath(url).flatMap { catalogue?.entry(path: $0)?.track.role }
@@ -517,6 +519,7 @@ import NxlvKit
     deck?.playbackRate = playbackRate
     deck?.setSpeedPitch(speedPitch)
     deck?.setNukeAmount(nukeAmount)
+    deck?.setResultFilter(resultFilter)
     return deck
   }
 

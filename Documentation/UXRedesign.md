@@ -2,7 +2,7 @@
 
 ## Checkpoint 2 · 25 November 2026
 
-This checkpoint builds on shared main at `66fce92f`. The repeatable checks below exercise the implementation in this checkout. Use the boxes here for current progress. Sections A–K below preserve the design brief and the later phase notes describe earlier revisions. For example, the proposal explored a welcome screen and several result themes. The implemented flow starts at profile creation and fades the level track on results.
+This checkpoint builds on shared main at `66fce92f`. The repeatable checks below exercise the implementation in this checkout. Use the boxes here for current progress. Sections A–K below preserve the design brief and the later phase notes describe earlier revisions. For example, the proposal explored a welcome screen and several result themes. The implemented flow starts at profile creation and muffles the level track on results.
 
 The overhaul ships as version 2.5 for both products. See [Release schedule](ReleaseSchedule.md#25--ux-overhaul).
 
@@ -14,7 +14,7 @@ Tick a row when its stated check passes. Keep its ID when updating the requireme
 - [x] **UX-02 · Stable counters and input.** The counter rectangles stay fixed across 9, 10, 99 and 100. Mac rate, pause and speed targets stay put. A supported NeoLemmix level with a nonstandard skill count keeps its targets after the simulation advances. Check group `hud`.
 - [x] **UX-03 · Speed and rewind.** Mac direct speed selection survives Shift release. The touch control distinguishes taps and holds. Rewind reports elapsed game seconds and repeated presses increase the cue. The rounded HUD and TV grid checks exercise the visible targets. Check groups `hud` and `renders`.
 - [x] **UX-04 · Saved Hot Seat.** Previously synced rosters have distinct resume targets, the selected session identifies the next player, and the turn and house rule survive a local save and reopen. Check group `hot-seat`.
-- [x] **UX-05 · Result music.** Completing an attempt twice fades and stops the track once. Starting the next track retires the old fade before it can change the replacement track. Check group `music`.
+- [x] **UX-05 · Result music.** Completing an attempt twice moves the track into the muffled result room once and holds it there. Leaving the result stops the track once and restores the bus. Starting the next track retires the old treatment before it can change the replacement track. Check group `music`.
 
 ### Preview, navigation and recovery
 
@@ -32,7 +32,7 @@ The owner reported all five device checks green on 25 November 2026. Each row be
 - [x] **UX-12 · iPhone and iPad.** Check touch targets and VoiceOver at narrow and wide sizes. On the 2017 A10X iPad Pro, record input response, frame cadence and audio continuity while changing speed, pausing and rewinding.
 - [x] **UX-13 · Duo.** The simulator acceptance pass saw Home stay sideways after unfolding until another rotation. A fresh launch while open laid out correctly. Home now drops cached book panes when UIKit confirms the hinge is flat, even when the window stays the same size. Scene geometry and reserved-region changes invalidate the current layout. A debug build records the effective orientation, window and view bounds, active regions, and committed Home frame in both layouts. On 25 November 2026 the Duo simulator reran the repro on the merged source. Home filled the open screen as soon as the hinge opened, and folding again restored the single-column Home, with no extra rotation. Check Home, a level and the speed chooser on hardware for preserved route, focus, pause state and selected skill.
 - [x] **UX-14 · Apple TV.** Use a Siri Remote through Ready, speed selection, repeated rewind and results. Check viewing-distance legibility, focus return and long labels.
-- [x] **UX-15 · Audio.** Listen through preview, gameplay, pause, success, failure, rapid retry and background/foreground transitions on speakers and headphones. Record any click, overlap or crackle with the music source and device.
+- [ ] **UX-15 · Audio.** Reopened on 25 November 2026 for the muffled result room, which replaced the result fade after the owner's device pass. Listen through preview, gameplay, pause, success, failure, rapid retry and background/foreground transitions on speakers and headphones. Record any click, overlap or crackle with the music source and device.
 
 ### Acceptance follow-up
 
@@ -112,7 +112,7 @@ The Apple TV HUD already draws its visible counters through
 | Rewind | The shared cue expresses distance in game seconds. Touch and TV indicate changes in rewind speed. | Check visibility on real playfields and repeated Siri Remote presses. |
 | Skills | Stocked and unlimited skills retain their artwork brightness. Exhausted skills dim on the shared mobile HUD. Native L3 panel artwork uses its own original control states. | Check physical-device contrast, selected outlines and remote focus. |
 | Navigation | Home, Play, Profile, Community, first launch and the saved-route resolver are implemented. | Settings and saved Hot Seat navigation landed in #45. Preview details, remaining terminology and fan catalogue filters need review against their actual routes. |
-| Polish | Results fade the outgoing level track. | First-use teaching for transport and assignments, minimap/tracking grouping, Duo fold transitions, audible playback and older-device input timing remain open. |
+| Polish | Results muffle the outgoing level track. | First-use teaching for transport and assignments, minimap/tracking grouping, Duo fold transitions, audible playback and older-device input timing remain open. |
 
 The muted follow-up ran 25 targeted tests and 209 offscreen HUD and speed-page
 renders. On the wide iPad fixture, changing one stocked skill to unlimited changed
@@ -520,7 +520,7 @@ The owner confirmed the shipped choices on 25 November 2026:
 
 1. Profile names stay as arcade initials. No separate display name or profile migration.
 2. The speed strip keeps 3×: 1×, 2×, 3×, 5× and 10×, plus 25× when enabled.
-3. Results fade the level track. No dedicated result loop.
+3. Results keep the level track playing in the next room: about −9 dB through the nuke low-pass near 1.4 kHz, held until the player leaves the result. No dedicated result loop. The owner changed this from a fade to silence on 25 November 2026.
 4. Mac Back and Home stay in the bottom row.
 
 ## Validation plan
