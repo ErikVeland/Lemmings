@@ -402,13 +402,17 @@ final class TamilBitmapRenderTests: XCTestCase {
         let typography = try typography()
         try GameMenuArtwork.withRenderer(MacInterfaceRenderer(interface: typography.interface)) {
             let panel = ReplaySkillPanel(frame: .zero)
-            panel.update(stocks: [.init(name: "BUILDER", count: "7")], uses: [.init(tick: 7, name: "BUILDER")], tick: 7)
+            panel.update(stocks: [.init(name: "BUILDER", count: "7")], uses: [.init(tick: 7, name: "BUILDER")], tick: 7, rate: 17)
             let latin = panel.logicalSize
-            panel.update(stocks: [.init(name: "கூ கீ க்ஷௌ", count: "7")], uses: [.init(tick: 7, name: "கூ கீ க்ஷௌ")], tick: 7, title: "தமிழ்")
+            panel.update(stocks: [.init(name: "கூ கீ க்ஷௌ", count: "7")], uses: [.init(tick: 7, name: "கூ கீ க்ஷௌ")], tick: 7, rate: 17, title: "தமிழ்")
             let tamil = panel.logicalSize
             let font = try XCTUnwrap(typography.font(.small))
             if font.height(of: "கூ கீ க்ஷௌ") > 18 { XCTAssertGreaterThan(tamil.height, latin.height) }
             XCTAssertGreaterThanOrEqual(tamil.width, CGFloat(font.width(of: "கூ கீ க்ஷௌ") + 42))
+            XCTAssertTrue(panel.accessibilityLabel()?.contains("0:00.41") == true)
+            XCTAssertEqual(ReplayGameTime.clock(tick: 1501, rate: 25), "1:00.04")
+            XCTAssertEqual(ReplayGameTime.clock(tick: 1020, rate: 17), "1:00.00")
+            XCTAssertEqual(ReplayGameTime.clock(tick: 10_799, rate: 180), "0:59.99")
             panel.frame = CGRect(origin: .zero, size: tamil)
             let bitmap = try XCTUnwrap(panel.bitmapImageRepForCachingDisplay(in: panel.bounds))
             panel.displayIgnoringOpacity(panel.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap)))

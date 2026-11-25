@@ -153,7 +153,7 @@
 "Achievements…" = "Prestasjoner…";
 "Across all recorded levels" = "På tvers av alle registrerte brett";
 "Action" = "Handling";
-"Action replay. {0} of {1} saved. Tick {2} of {3}." = "Reprise. {0} av {1} reddet. Tikk {2} av {3}.";
+"Action replay: {0}" = "Reprise av handlinger: {0}";
 "Actions and tools" = "Handlinger og verktøy";
 "Actions include minimum or maximum release rate." = "Handlingene omfatter laveste og høyeste utslippsfart.";
 "Activate selected menu choice" = "Aktiver valgt menyalternativ";
@@ -178,8 +178,6 @@
 "Added effects" = "Ekstra effekter";
 "Added to {0}" = "Lagt til i {0}";
 "Adjust Classic pixel width with Monitor or Television. Flat Panel keeps the saved value." = "Juster pikselbredden i Classic med Skjerm eller TV. Flatt panel beholder den lagrede verdien.";
-"Adjust music volume independently of sound effects." = "Juster musikkvolumet uavhengig av lydeffektene.";
-"Adjust sound-effects volume independently of music." = "Juster volumet for lydeffekter uavhengig av musikken.";
 "Adjust the Classic tube effect. Available with Monitor or Television. Flat Panel keeps the saved value." = "Juster Classic-røreffekten. Tilgjengelig med Skjerm eller TV. Flatt panel beholder den lagrede verdien.";
 "Advance one tick" = "Gå fram ett tikk";
 "Advance one tick." = "Gå fram ett tikk.";
@@ -497,7 +495,6 @@
 "Choose at least two players for Hot Seat." = "Velg minst to spillere for Hot Seat.";
 "Choose at least two players, then try again." = "Velg minst to spillere og prøv igjen.";
 "Choose contacts" = "Velg kontakter";
-"Choose eight different skills" = "Velg åtte ulike ferdigheter";
 "Choose files first." = "Velg filer først.";
 "Choose first names for your lemmings. Names stay on this device. Their stories are fictional." = "Velg fornavn til lemenene dine. Navnene blir på denne enheten. Historiene deres er oppdiktet.";
 "Choose game folder" = "Velg spillmappe";
@@ -2019,7 +2016,6 @@
 "Pause" = "Pause";
 "Pause / play" = "Pause / spill";
 "Pause / resume" = "Pause / fortsett";
-"Pause action replay" = "Sett reprisen på pause";
 "Pause and follow the route from the entrance to the exit. Find the first place a lemming cannot pass safely." = "Sett på pause og følg ruten fra inngangen til utgangen. Finn det første stedet en lemming ikke kan passere trygt.";
 "Pause and open controls" = "Sett på pause og åpne kontrollene";
 "Pause and open the game menu. (Esc)" = "Pause and open the game menu. (Esc)";
@@ -2048,7 +2044,6 @@
 "Play Lemmings 2…" = "Spill Lemmings 2…";
 "Play a death sound when a lemming falls out of the bottom of the level in any of the three games." = "Spill av en dødslyd når en lemming faller ut av bunnen av brettet i et av de tre spillene.";
 "Play a level to set a record." = "Spill et brett for å sette en rekord.";
-"Play action replay" = "Spill av reprisen";
 "Play again" = "Spill igjen";
 "Play as {0}" = "Spill som {0}";
 "Play death sound" = "Spill av dødslyd";
@@ -2281,6 +2276,7 @@
 "Replay movie" = "Spill av film";
 "Replay position" = "Repriseposisjon";
 "Replay recording stopped because the encoder stalled." = "Opptaket av reprisen stoppet fordi koderen sluttet å svare.";
+"Replay resumed" = "Avspillingen fortsetter";
 "Replay section ${0} is not recognised." = "Repriseseksjonen ${0} gjenkjennes ikke.";
 "Replay unavailable" = "Reprise utilgjengelig";
 "Replay unavailable. Retry when connected." = "Reprise er utilgjengelig. Prøv igjen når du er tilkoblet.";
@@ -2583,6 +2579,7 @@
 "Show the number of live lemmings inside the reticule." = "Vis antallet levende lemminger innenfor siktemerket.";
 "Show the selected skill beside the pointer at 1× or 2×, or hide it with None. L3 Use shows carried tool uses." = "Vis valgt ferdighet ved siden av pekeren ved 1× eller 2×, eller skjul den med Ingen. L3 Bruk viser gjenværende verktøybruk.";
 "Show the song title and soundtrack briefly when the music changes." = "Vis sangtittelen og lydsporet en kort stund når musikken endres.";
+"Shows a full winning route." = "Viser en fullstendig vinnende rute.";
 "Shuffle" = "Bland";
 "Shuffle all" = "Bland alle";
 "Shuffle artwork" = "Bland grafikk";
@@ -2648,6 +2645,7 @@
 "Space / P: Pause" = "Mellomrom / P: Pause";
 "Space / Return" = "Mellomrom / Enter";
 "Space Tribe" = "Romstammen";
+"Space or P plays or pauses. Left and right seek one second." = "Mellomrom eller P spiller av eller setter på pause. Piltastene hopper ett sekund tilbake eller fram.";
 "Space pauses. Escape returns to the movie list." = "Mellomrom setter filmen på pause. Escape går tilbake til filmlisten.";
 "Space pauses. Escape skips to {0}." = "Mellomrom setter filmen på pause. Escape hopper til {0}.";
 "Spade" = "Spade";
@@ -3165,7 +3163,6 @@
 "Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind, undo or a bonus skill." = "Three-star levels: {0} to {1}. One Superzoom per 3 distinct levels without rewind, undo or a bonus skill.";
 "Three-star rescue" = "Tre-stjerners redning";
 "Thrower" = "Kaster";
-"Tick {0}. {1}: {2}. Skills used: {3}" = "Tikk {0}. {1}: {2}. Ferdigheter brukt: {3}";
 "Time" = "Tid";
 "Time " = "Tid ";
 "Time and actions" = "Tid og handlinger";
@@ -3231,7 +3228,6 @@
 "UNDO END RUN" = "ANGRE AVSLUTNING";
 "UP AND DOWN TO CHOOSE  *  ENTER TO START" = "OPP OG NED FOR Å VELGE  *  ENTER FOR Å STARTE";
 "UP DOWN ENTER  *  ESC BACK" = "OPP NED ENTER  *  ESC TILBAKE";
-"USED @ TICK" = "BRUKT VED TIKK";
 "Uh oh. That was a feeble effort." = "Oi da. Det var en svak innsats.";
 "Ultimate Lemmings" = "Ultimate Lemmings";
 "Ultimate Lemmings — {0}" = "Ultimate Lemmings — {0}";
@@ -3349,7 +3345,6 @@
 "Wait for this lemming to land." = "Vent til denne lemmingen lander.";
 "Walker" = "Vandrer";
 "Walks home with accompaniment." = "Walks home with accompaniment.";
-"Shows a full winning route." = "Viser en fullstendig vinnende rute.";
 "Was asked to judge a cucumber." = "Was asked to judge a cucumber.";
 "Was authorised to choose a cushion." = "Was authorised to choose a cushion.";
 "Was complimented on an ordinary sandwich." = "Was complimented on an ordinary sandwich.";
@@ -3551,7 +3546,7 @@
 "{0} achievements across all levels. Left and right change pages. Up and down or 1 to 4 change collections, and the collection names at the bottom of the page select them directly. {1}{2}" = "{0} prestasjoner på tvers av alle brett. Venstre og høyre bytter side. Opp og ned eller 1 til 4 bytter samling, og samlingsnavnene nederst på siden velger dem direkte. {1}{2}";
 "{0} artwork unavailable for this level: {1}" = "{0}-grafikk er utilgjengelig for dette brettet: {1}";
 "{0} assigned to lemming {1}." = "{0} tildelt lemming {1}.";
-"{0} at tick {1}" = "{0} ved tikk {1}";
+"{0} at {1}" = "{0} ved {1}";
 "{0} complete" = "{0} fullført";
 "{0} eligible" = "{0} tilgjengelig";
 "{0} eligible lemmings. Skill: {1}." = "{0} tilgjengelige lemminger. Ferdighet: {1}.";
@@ -3576,7 +3571,9 @@
 "{0} needs {1} palette colors; found {2}." = "{0} trenger {1} palettfarger; fant {2}.";
 "{0} new awards >" = "{0} new awards >";
 "{0} of 8 selected" = "{0} av 8 valgt";
+"{0} of {1}" = "{0} av {1}";
 "{0} of {1} achievements earned" = "{0} av {1} prestasjoner oppnådd";
+"{0} of {1} saved" = "{0} av {1} reddet";
 "{0} pixels" = "{0} piksler";
 "{0} reads {1} bytes at {2}, beyond {3} available bytes." = "{0} leser {1} byte ved {2}, forbi de {3} tilgjengelige bytene.";
 "{0} remaining" = "{0} igjen";
@@ -3601,7 +3598,6 @@
 "{0}, {1} remaining{2}" = "{0}, {1} igjen{2}";
 "{0}, {1} tracks, {2}" = "{0}, {1} spor, {2}";
 "{0}, {1}{2}" = "{0}, {1}{2}";
-"{0}. Action replay. Space or P plays or pauses. Left and right seek one second." = "{0}. Reprise av handlinger. Mellomrom eller P spiller av eller setter på pause. Venstre- og høyrepil går ett sekund tilbake eller fram.";
 "{0}. Give {1} {2} at marker {3}, facing {4}." = "{0}. Gi {1} {2} ved markør {3}, vendt mot {4}.";
 "{0}. Rewinds: {1}. W switches the rewind filter. {2} local records. {3} Press 1 to 4 to choose a board. Escape returns." = "{0}. Tilbakespolinger: {1}. W bytter tilbakespolingsfilter. {2} lokale rekorder. {3} Trykk 1 til 4 for å velge en resultatliste. Escape går tilbake.";
 "{0}. Select the play style for an explanation. Escape returns." = "{0}. Velg spillestilen for en forklaring. Escape går tilbake.";
@@ -3616,5 +3612,6 @@
 "{0}: 1 tick ago" = "{0}: 1 tick ago";
 "{0}: replay analysis failed: {1}" = "{0}: repriseanalysering mislyktes: {1}";
 "{0}: {1} ticks ago" = "{0}: {1} ticks ago";
+"{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0}H {1}M";
 "{0}{1} more to rescue for three stars." = "{0}{1} flere å redde for tre stjerner.";
