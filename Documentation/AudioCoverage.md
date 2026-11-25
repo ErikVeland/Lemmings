@@ -6,9 +6,10 @@ the player's action audible and keep the game's humour. Musical settling must
 preserve the joke. Mechanical checks stay muted; listening needs a separate
 explicit request.
 
-The level owns its assigned composition. The Adaptive DJ selects its version
-from the campaign position. Reaching the rescue target permits one lift to a
-documented remix or composer recording of that same tune. At the result screen
+Adaptive DJ plays the assigned themes through the opening score, then rotates
+through installed gameplay compositions as the campaign advances. Reaching the
+rescue target permits one lift to a remix or composer recording of the current
+tune. At the result screen
 the outgoing track moves into the next room over 0.6 seconds on both wins and
 losses. It plays on at about −9 dB through the nuke low-pass and stops when the
 player leaves the result.

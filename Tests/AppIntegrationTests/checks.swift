@@ -1,7 +1,7 @@
 // Appended to main.swift by the runner to exercise private app wiring directly.
 import ImageIO
 import Sparkle
-private struct IntegrationFailure: Error { let message: String }
+struct IntegrationFailure: Error { let message: String }
 private func check(_ value: @autoclosure () throws -> Bool, _ message: String) throws {
   if try value() == false { throw IntegrationFailure(message: message) }
 }
@@ -2097,8 +2097,12 @@ extension AppDelegate {
       try check(reader.startReading(), "Benchmark movie did not start reading")
       var encodedFrames = 0
       while let sample = videoOutput.copyNextSampleBuffer() { encodedFrames += CMSampleBufferGetNumSamples(sample) }
-      try check(reader.status == .completed && encodedFrames == runMovie.capturedFrames,
-        "Benchmark movie lost frames: \(encodedFrames)/\(runMovie.capturedFrames)")
+      let encoding = benchmarkRecorder?.encodingProfile
+      let movieDuration = try await movieAsset.load(.duration).seconds
+      try check(reader.status == .completed && Int64(encodedFrames) == encoding?.videoSamples
+        && encoding?.encodedFrames == Int64(runMovie.capturedFrames)
+        && abs(movieDuration - Double(runMovie.capturedFrames) / 17) <= 1 / 17.0,
+        "Benchmark movie lost video samples or changed its tick duration")
       func distribution(_ values: [Double]) -> [String: Double] {
         let sorted = values.sorted()
         guard !sorted.isEmpty else { return [:] }
@@ -2767,7 +2771,9 @@ extension AppDelegate {
     var cues: [ClassicSoundEffect] = []
     var dispatches = 0
     ghost.onSoundCues = { sounds in dispatches += 1; cues += sounds.map(\.effect) }
-    for _ in 0..<proof.replay.expected!.ticks { ghost.advance() }
+    let replayStart = ProcessInfo.processInfo.systemUptime
+    let step = 1 / Double(ClassicDOSRules.ticksPerSecond)
+    for index in 0...proof.replay.expected!.ticks { ghost.advance(at: replayStart + Double(index) * step) }
     try check(cues.contains(.doorOpen) && cues.contains(.assignSkill) && cues.contains(.exitLevel),
       "Solution replay omitted entrance, assignment or exit sounds")
     try check(ghost.playback.session.simulation.didWin && live.currentTick == 0,
@@ -2777,16 +2783,22 @@ extension AppDelegate {
     defer { fast.stop() }
     var fastCues: [ClassicSoundEffect] = []
     fast.onSoundCues = { fastCues += $0.map(\.effect) }
-    fast.speedControl.tap()
-    for _ in 0..<proof.replay.expected!.ticks where !fast.playback.session.isComplete { fast.advance() }
+    fast.speedControl.ridiculousEnabled = true
+    fast.speedControl.select(25, at: replayStart - 1)
+    for index in 0...proof.replay.expected!.ticks where !fast.playback.session.isComplete {
+      fast.advance(at: replayStart + Double(index) * step)
+    }
     try check(fastCues == cues, "Fast solution replay dropped or duplicated sound events")
     let beforeSeek = dispatches
-    let back = ghost.page.subviews.compactMap { $0 as? NSButton }.first { $0.title == "Back 1s" }!
-    back.performClick(nil)
+    let timeline = ghost.page.subviews.compactMap { $0 as? NSSlider }.first!
+    timeline.doubleValue -= Double(ClassicDOSRules.ticksPerSecond)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
     try check(dispatches == beforeSeek, "Rewind replayed historical sounds")
     ghost.advance()
     try check(dispatches == beforeSeek, "Paused replay emitted sounds")
-    ghost.page.subviews.compactMap { $0 as? NSButton }.first { $0.title == "Step +1" }!.performClick(nil)
+    let stepKey = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0, windowNumber: 0,
+      context: nil, characters: ".", charactersIgnoringModifiers: ".", isARepeat: false, keyCode: 47)!
+    try check(ghost.handleKey(stepKey), "Replay did not handle the single-step shortcut")
     try check(dispatches == beforeSeek + 1, "Single-step omitted its sound cues")
     try check(!bank.isRunning && !ghost.effects!.isRunning && bank.muted,
       "Mechanical audio regression started audible output")
@@ -2879,11 +2891,47 @@ extension AppDelegate {
     replay.seekMove(1)
     let first = replay.playback.session.currentTick
     try check(first == replay.moveNavigation.ticks.first && replay.paused, "Next move did not reach the first successful use while paused")
-    button("Zoom 1×", in: replay.page)!.performClick(nil)
-    button("Goal", in: replay.page)!.performClick(nil)
+    guard let timeline = replay.page.subviews.compactMap({ $0 as? NSSlider }).first else {
+      throw IntegrationFailure(message: "Solution replay has no timeline")
+    }
+    let end = replay.playback.solution.replay.expected!.ticks
+    try check(timeline.intValue == Int32(first) && timeline.maxValue == Double(end),
+      "Timeline position or duration disagrees with the replay")
+    try check((timeline.cell as? GameSliderCell)?.trackMarks == replay.moveNavigation.ticks.map { Double($0) / Double(end) },
+      "Timeline marks disagree with the recorded skill uses")
+    timeline.doubleValue = Double(end)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
+    try check(replay.paused && replay.playback.session.currentTick == end && button("Replay", in: replay.page) != nil,
+      "Seeking to the end did not hold the final frame")
+    button("Replay", in: replay.page)!.performClick(nil)
+    try check(!replay.paused && replay.playback.session.currentTick == 0, "Replay did not restart from the beginning")
+    timeline.doubleValue = Double(first)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
+    for (currentSpeed, chosenSpeed) in [("1×", "3×"), ("3×", "1×")] {
+      let speed = button(currentSpeed, in: replay.page)!
+      speed.performClick(nil)
+      button(chosenSpeed, in: GameScreen.shared.controllerPage(in: window)!)!.performClick(nil)
+      try check(speed.title == chosenSpeed && replay.paused, "Selecting replay speed changed the play state or missed the tier")
+    }
+    guard let options = button("Options", in: replay.page) else {
+      throw IntegrationFailure(message: "Solution replay has no Options control")
+    }
+    func chooseOption(_ title: String) throws {
+      options.performClick(nil)
+      let optionsPage = GameScreen.shared.controllerPage(in: window)!
+      try check(optionsPage !== replay.page, "Options did not open a separate page")
+      guard let option = button(title, in: optionsPage) else {
+        throw IntegrationFailure(message: "Missing replay option \(title)")
+      }
+      option.performClick(nil)
+    }
+    try chooseOption("Zoom 1×")
+    try chooseOption("Goal")
     let camera = replay.field.viewport
     button("Play", in: replay.page)!.performClick(nil)
-    replay.advance()
+    let replayStart = ProcessInfo.processInfo.systemUptime
+    replay.advance(at: replayStart)
+    replay.advance(at: replayStart + 1 / Double(ClassicDOSRules.ticksPerSecond))
     let retainedTick = replay.playback.session.currentTick
     replay.page.cancelOperation(nil)
     try check(isPaused && !GameScreen.shared.isPresented && replay.paused,
@@ -2909,10 +2957,23 @@ extension AppDelegate {
     LevelHintWindow.shared.selectSolutionMode(.solution)
     replay.seekMove(-1)
     try check(replay.playback.session.currentTick == first && replay.paused, "Previous move did not retain a paused solution")
+    try chooseOption("Zoom 2×")
+    try chooseOption("Zoom 4×")
+    try chooseOption("Turn on auto-follow")
     let output = URL(fileURLWithPath: ".build/solution-switch-mac-renders")
     try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    func capture(_ name: String) throws {
+      func invalidate(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(invalidate) }
+      invalidate(replay.page)
+      let bitmap = replay.page.bitmapImageRepForCachingDisplay(in: replay.page.bounds)!
+      replay.page.cacheDisplay(in: replay.page.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent(name + ".png"))
+    }
     for size in [CGSize(width: 640, height: 480), .init(width: 800, height: 600), .init(width: 1120, height: 720), .init(width: 1600, height: 900)] {
       replay.page.frame.size = size; replay.page.needsLayout = true; replay.page.layoutSubtreeIfNeeded()
+      try check(replay.field.frame.height >= size.height * 0.7, "Replay controls crowd out the playfield")
+      try check(replay.page.hitTest(CGPoint(x: timeline.frame.midX, y: timeline.frame.midY)) === timeline,
+        "Timeline has no input target")
       func checkTargets(_ view: NSView) throws {
         for child in view.subviews {
           if child.isHidden { continue }
@@ -2929,11 +2990,30 @@ extension AppDelegate {
         }
       }
       try checkTargets(replay.page)
-      replay.page.needsDisplay = true
-      let bitmap = replay.page.bitmapImageRepForCachingDisplay(in: replay.page.bounds)!
-      replay.page.cacheDisplay(in: replay.page.bounds, to: bitmap)
-      try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("solution-\(Int(size.width)).png"))
+      window.makeFirstResponder(replay.page)
+      let cell = timeline.cell as! GameSliderCell
+      let sliderBitmap = timeline.bitmapImageRepForCachingDisplay(in: timeline.bounds)!
+      timeline.displayIgnoringOpacity(timeline.bounds, in: NSGraphicsContext(bitmapImageRep: sliderBitmap)!)
+      let knob = cell.knobRect(flipped: timeline.isFlipped)
+      let center = Int(knob.midX * CGFloat(sliderBitmap.pixelsWide) / timeline.bounds.width)
+      let markerPixels = (0..<sliderBitmap.pixelsHigh).filter { row in
+        guard let color = sliderBitmap.colorAt(x: center, y: row)?.usingColorSpace(.sRGB) else { return false }
+        return color.redComponent > 0.85 && color.greenComponent > 0.55 && color.blueComponent < 0.5
+      }
+      try check(markerPixels.count >= 7, "The timeline thumb hides the current move marker")
+      try capture("solution-\(Int(size.width))")
     }
+    button("Play", in: replay.page)!.performClick(nil)
+    let captureStart = ProcessInfo.processInfo.systemUptime
+    for tick in 0...ClassicDOSRules.ticksPerSecond {
+      replay.advance(at: captureStart + Double(tick) / Double(ClassicDOSRules.ticksPerSecond))
+    }
+    try capture("solution-playing")
+    timeline.doubleValue = Double(end)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
+    try capture("solution-complete")
+    timeline.doubleValue = Double(first)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
     for width: CGFloat in [320, 640, 900, 1120, 1600] {
       for showsBack in [false, true] {
         let bar = ReplayBar()
@@ -3247,28 +3327,41 @@ extension AppDelegate {
         "Replay did not fill the viewport below fixed navigation")
       try check(ghost.field.frame.width == ghost.page.bounds.width && ghost.field.frame.height > ghost.page.bounds.height * 0.5,
         "Replay retained its small menu canvas")
-      for target in [2.0, 3, 5, 10] {
-        button("Speed +", in: ghost.page)!.performClick(nil)
-        try check(ghost.speedControl.target == target, "Replay skipped a shared speed tier")
+      func choose(_ title: String, from control: String) throws {
+        guard let opener = button(control, in: ghost.page) else {
+          throw IntegrationFailure(message: "Missing replay control \(control)")
+        }
+        opener.performClick(nil)
+        guard let menu = GameScreen.shared.controllerPage(in: window), menu !== ghost.page,
+              let choice = button(title, in: menu) else {
+          throw IntegrationFailure(message: "Missing replay choice \(title)")
+        }
+        choice.performClick(nil)
       }
-      button("10×", in: ghost.page)!.performClick(nil)
-      try check(ghost.speedControl.target == 1, "Replay speed toggle did not return to normal")
+      var currentSpeed = "1×"
+      for target in [2.0, 3, 5, 10] {
+        let label = "\(Int(target))×"
+        try choose(label, from: currentSpeed)
+        try check(ghost.speedControl.target == target, "Replay skipped a shared speed tier")
+        currentSpeed = label
+      }
+      try choose("1×", from: currentSpeed)
+      try check(ghost.speedControl.target == 1, "Replay speed did not return to normal")
       let baseZoom = ghost.field.viewport.zoom
-      button("Zoom 1×", in: ghost.page)!.performClick(nil)
+      try choose("Zoom 1×", from: "Options")
       try check(ghost.field.viewport.zoom == baseZoom * 2, "Replay 2× zoom failed")
       try capture(ghost.page, name: "solution-zoom-\(mode)")
-      button("Zoom 2×", in: ghost.page)!.performClick(nil)
+      try choose("Zoom 2×", from: "Options")
       try check(ghost.field.viewport.zoom == baseZoom * 4, "Replay 4× zoom failed")
-      button("Zoom 4×", in: ghost.page)!.performClick(nil)
-      button("Goal", in: ghost.page)!.performClick(nil)
+      try choose("Zoom 4×", from: "Options")
+      try choose("Goal", from: "Options")
       let freeX = ghost.field.viewport.scrollX
       button("Play", in: ghost.page)!.performClick(nil)
       ghost.advance()
       try check(ghost.field.viewport.scrollX == freeX, "Automatic tracking overrode the free camera")
       button("Pause", in: ghost.page)!.performClick(nil)
-      button("Home", in: ghost.page)!.performClick(nil)
-      button("Next", in: ghost.page)!.performClick(nil)
-      try check(button("Tracking", in: ghost.page) != nil, "Replay did not track an unassigned lemming")
+      try choose("Entrance", from: "Options")
+      try choose("Next lemming", from: "Options")
       func replayTargets(_ view: NSView) throws {
         for child in view.subviews {
           if child.isHidden { continue }
@@ -3299,7 +3392,10 @@ extension AppDelegate {
       try check(ghost.speedControl.target > 1, "Replay F did not use shared speed control")
       ghost.speedControl.reset()
       _ = ghost.handleKey(replayKey("h", code: 4))
-      try check(button("Free view", in: ghost.page) != nil, "Replay H did not cancel tracking")
+      button("Options", in: ghost.page)!.performClick(nil)
+      let options = GameScreen.shared.controllerPage(in: window)!
+      try check(button("Turn on auto-follow", in: options) != nil, "Replay H did not cancel automatic tracking")
+      GameScreen.shared.dismiss(options)
       try check(!ghost.handleKey(replayKey("h", code: 4, flags: .command)), "Replay swallowed an app shortcut")
       let fullFrame = ghost.page.frame
       ghost.page.frame.size = CGSize(width: 800, height: 600)
@@ -3307,7 +3403,7 @@ extension AppDelegate {
       try replayTargets(ghost.page)
       try capture(ghost.page, name: "solution-small-\(mode)")
       ghost.page.frame = fullFrame; ghost.page.needsLayout = true; ghost.page.layoutSubtreeIfNeeded()
-      button("Back 1s", in: ghost.page)!.performClick(nil)
+      try choose("Back 1s", from: "Options")
       try check(ghost.field.session === ghost.playback.session,
         "Seeking solution replay left the canvas on a stale session")
       let stoppedTick = ghost.playback.session.currentTick
@@ -8536,6 +8632,7 @@ Task { @MainActor in
     print("Remaining release integration tests passed.")
     #elseif SOLUTION_SWITCH_TESTS
     try await subject.testRetainedSolutionSwitching()
+    try subject.testSolutionReplaySounds()
     #elseif SOLUTION_AUDIO_TESTS
     try subject.testSolutionReplaySounds()
     #elseif AUDIO_JOY_TESTS

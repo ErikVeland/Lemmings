@@ -1293,7 +1293,7 @@ private func testMacArtworkCropStaysPixelAligned() throws {
   for size in SkillCursorIconSize.allCases {
     let count = SkillCursorBadge.countFrame(count: 12, at: point, scale: 2, size: size, in: bounds)
     let effective: SkillCursorIconSize = size == .none ? .one : size
-    try require(count.width == CGFloat(12 * effective.multiplier) && count.height == CGFloat(7 * effective.multiplier),
+    try require(count.width == CGFloat(24 * effective.multiplier) && count.height == CGFloat(14 * effective.multiplier),
       "Count and icon must share one height, including with the icon hidden")
     let icon = SkillCursorBadge.frame(at: point, scale: 2, size: effective, in: bounds)
     try require(count.maxX < point.x && count.minY == icon.minY,

@@ -36,19 +36,22 @@ import NxlvKit
             let view: NSView
             let frame: CGRect
             let rowY: CGFloat
+            let inSidebar: Bool
         }
         let flipped = root.isFlipped
+        let page = (root as? GameMenuPage) ?? (GameScreen.shared.pageForNavigationRoot(root) as? GameMenuPage)
         let positions: [Target] = result.map { view in
             let frame = view.convert(view.bounds, to: root)
             let rowY: CGFloat = flipped ? frame.midY : -frame.midY
-            return Target(view: view, frame: frame, rowY: rowY)
+            return Target(view: view, frame: frame, rowY: rowY, inSidebar: page?.isSidebarControl(view) == true)
         }
         let ordered = positions.sorted { a, b in
-            a.rowY == b.rowY ? a.frame.minX < b.frame.minX : a.rowY < b.rowY
+            if a.inSidebar != b.inSidebar { return a.inSidebar }
+            return a.rowY == b.rowY ? a.frame.minX < b.frame.minX : a.rowY < b.rowY
         }
         var rows: [[Target]] = []
         for target in ordered {
-            if let first = rows.last?.first, target.rowY - first.rowY <= 8 {
+            if let first = rows.last?.first, target.inSidebar == first.inSidebar, target.rowY - first.rowY <= 8 {
                 rows[rows.count - 1].append(target)
             } else {
                 rows.append([target])

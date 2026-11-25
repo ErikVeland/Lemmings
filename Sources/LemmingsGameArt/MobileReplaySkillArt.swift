@@ -19,19 +19,23 @@ public enum ReplayGameTime {
 
 /// Remaining stock stays in the mobile HUD. The replay panel shows successful uses.
 public enum MobileReplaySkillArt {
-    public static let size = CGSize(width: 240, height: 84)
+    private static let headingHeight: CGFloat = 26
+    private static let rowHeight: CGFloat = 22
+    public static let size = CGSize(width: 240, height: headingHeight + 3 * rowHeight)
     /// Keep the passive panel inside the playfield and clear of every input target.
     public static func frame(in playfield: CGRect, below top: CGFloat, avoiding obstacles: [CGRect]) -> CGRect? {
         let available = playfield.insetBy(dx: 8, dy: 8)
-        guard available.width >= 120, available.height >= 42 else { return nil }
+        let width = min(size.width, floor(available.width))
+        guard width >= 160, available.height >= headingHeight + rowHeight else { return nil }
         let start = max(available.minY, top)
         let rows = ([start] + obstacles.map { max(start, $0.maxY + 8) }).sorted()
         for y in rows {
-            let width = floor(min(size.width, available.width, (available.maxY - y) * size.width / size.height))
-            guard width >= 120 else { continue }
-            for x in [available.maxX - width, available.minX] {
-                let candidate = CGRect(x: x, y: y, width: width, height: width * size.height / size.width)
-                if available.contains(candidate), obstacles.allSatisfy({ !candidate.intersects($0) }) { return candidate }
+            for count in [3, 2, 1] {
+                let height = headingHeight + CGFloat(count) * rowHeight
+                for x in [available.maxX - width, available.minX] {
+                    let candidate = CGRect(x: x, y: y, width: width, height: height)
+                    if available.contains(candidate), obstacles.allSatisfy({ !candidate.intersects($0) }) { return candidate }
+                }
             }
         }
         return nil
@@ -41,18 +45,26 @@ public enum MobileReplaySkillArt {
         guard rect.width > 0, rect.height > 0 else { return }
         context.saveGState()
         defer { context.restoreGState() }
-        context.translateBy(x: rect.minX, y: rect.minY)
-        context.scaleBy(x: rect.width / size.width, y: rect.height / size.height)
-        GameDisplayArt.draw(in: context, frame: CGRect(origin: .zero, size: size))
-        GamePixelTypography.draw(L10n.text("Skills used").uppercased(), in: CGRect(x: 8, y: 6, width: 224, height: 18),
-            context: context, typography: typography, palette: .green)
-        for (index, use) in uses.suffix(3).enumerated() {
+        context.clip(to: rect)
+        GameDisplayArt.draw(in: context, frame: rect)
+        let inner = rect.insetBy(dx: 8, dy: 4)
+        let font = typography?.font(.small)
+        let heading = GameTextLayout.truncated(L10n.text("Skills used"), width: inner.width, font: font)
+        GamePixelTypography.draw(heading, in: CGRect(x: inner.minX, y: inner.minY, width: inner.width, height: rowHeight),
+            context: context, typography: typography, palette: .green, maximumScale: 2)
+        let capacity = max(0, min(3, Int((rect.height - headingHeight) / rowHeight)))
+        let clockWidth = GameTextLayout.width(of: "88:88.88", font: font)
+        let nameX = inner.minX + clockWidth + 6
+        let nameWidth = max(0, inner.maxX - nameX)
+        for (index, use) in uses.suffix(capacity).enumerated() {
             let palette: GamePixelTypography.Palette = use.tick == tick ? .green : .blue
-            let y = CGFloat(26 + index * 18)
-            GamePixelTypography.draw(ReplayGameTime.clock(tick: use.tick, rate: rate), in: CGRect(x: 8, y: y, width: 84, height: 18),
-                context: context, typography: typography, palette: palette, maximumScale: 1)
-            GamePixelTypography.draw(SkillVocabulary.title(use.name), in: CGRect(x: 98, y: y, width: 134, height: 18),
-                context: context, typography: typography, palette: palette)
+            let y = rect.minY + headingHeight + CGFloat(index) * rowHeight
+            GamePixelTypography.draw(ReplayGameTime.clock(tick: use.tick, rate: rate),
+                in: CGRect(x: inner.minX, y: y, width: clockWidth, height: rowHeight),
+                context: context, typography: typography, palette: palette, maximumScale: 2, alignment: .left)
+            let name = GameTextLayout.truncated(SkillVocabulary.title(use.name), width: nameWidth, font: font)
+            GamePixelTypography.draw(name, in: CGRect(x: nameX, y: y, width: nameWidth, height: rowHeight),
+                context: context, typography: typography, palette: palette, maximumScale: 2, alignment: .left)
         }
     }
 }

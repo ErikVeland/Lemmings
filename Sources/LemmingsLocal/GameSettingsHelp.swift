@@ -145,6 +145,8 @@ import NxlvKit
 
 @MainActor final class GameSettingsDocument: NSView {
     override var isFlipped: Bool { true }
+    weak var lastControl: NSView?
+    var contentHeight: CGFloat { (lastControl?.frame.maxY ?? 0) + 8 }
 }
 
 /// Every setting remains reachable when menu size or window size requires scrolling.
@@ -152,8 +154,12 @@ import NxlvKit
     var onScroll: (() -> Void)?
     override func layout() {
         super.layout()
-        guard let documentView else { return }
-        documentView.setFrameSize(NSSize(width: contentSize.width, height: max(contentSize.height, documentView.fittingSize.height)))
+        guard let document = documentView as? GameSettingsDocument, contentSize.width > 0 else { return }
+        if document.frame.width != contentSize.width {
+            document.setFrameSize(NSSize(width: contentSize.width, height: document.frame.height))
+        }
+        document.layoutSubtreeIfNeeded()
+        document.setFrameSize(NSSize(width: contentSize.width, height: max(contentSize.height, document.contentHeight)))
     }
     override func reflectScrolledClipView(_ clipView: NSClipView) {
         super.reflectScrolledClipView(clipView)

@@ -1,9 +1,88 @@
 #if os(macOS)
 import AppKit
+import NxlvKit
 import XCTest
 @testable import LemmingsLocal
 
 final class MacSpeedTierTests: XCTestCase {
+    @MainActor func testFastMovieBatchComposesOnceAndKeepsEachTick() {
+        let movie = RunMovie()
+        movie.begin(ticksPerSecond: 17, title: "Fast-forward fixture")
+        defer { movie.discard() }
+        var draws = 0
+        func frame() -> CGImage? {
+            draws += 1
+            return ReplayFrameCapture.image(size: CGSize(width: 16, height: 16)) {
+                NSColor.black.setFill()
+                CGRect(x: 0, y: 0, width: 16, height: 16).fill()
+            }
+        }
+
+        movie.beginCaptureBatch(reuseFrames: true)
+        for _ in 0..<24 { movie.capture(frame()) }
+        XCTAssertEqual(draws, 1)
+        XCTAssertEqual(movie.captureProfile.frames, 24)
+        XCTAssertGreaterThan(movie.batchCompositionSeconds, 0)
+        movie.capture(frame(), finalTick: true)
+        XCTAssertEqual(draws, 2)
+        movie.endCaptureBatch()
+        XCTAssertEqual(movie.batchCompositionSeconds, 0)
+        movie.capture(frame())
+        XCTAssertEqual(draws, 3)
+        XCTAssertEqual(movie.recorder?.encodingProfile.submittedFrames, 26)
+    }
+
+    @MainActor func testWideDeckFillsTheWindowWithoutReducingControlTargets() throws {
+        let terrain = try ClassicDOSTerrain(width: 320, height: 96, solidMask: Data(repeating: 0, count: 30_720),
+            steelMask: Data(repeating: 0, count: 30_720))
+        let classic = ClassicSession(simulation: try ClassicDOSSimulation(terrain: terrain,
+            configuration: .init(totalLemmings: 10, requiredToSave: 10, timeLimitTicks: nil, initialReleaseRate: 50,
+                entrances: [.init(x: 40, y: 20)], initialSkills: [:], maximumX: 319, maximumY: 95)), width: 320, height: 96)
+        let neo = NeoLemmixSession(simulation: try NeoLemmixSimulation(terrain: NeoLemmixTerrain(width: 320, height: 96),
+            configuration: .init(totalLemmings: 10, requiredToSave: 10, spawnInterval: 50,
+                entrances: [.init(id: 0, position: .init(x: 40, y: 20))],
+                skills: Dictionary(uniqueKeysWithValues: NeoLemmixSkill.allCases.map { ($0, .finite(2)) }))), width: 320, height: 96)
+        let panel = PanelView(frame: .zero)
+        let speed = GameSpeedControl()
+        panel.timeline.speedState = { speed.state }
+        for (name, session) in [("classic", classic as any GameSession), ("neo", neo as any GameSession)] {
+            panel.session = session
+            var previousSkill = CGRect.zero
+            var previousRewind = CGRect.zero
+            for width in [CGFloat(1600), 2558, 3440] {
+                panel.setFrameSize(CGSize(width: width, height: panel.height(for: width, maximumScale: 3)))
+                let targets = panel.accessibleControls(owner: panel).compactMap { $0 as? GameAccessibleElement }
+                let pause = try XCTUnwrap(targets.first { $0.accessibilityLabel() == "Pause" })
+                let rewind = panel.timeline.rect(for: .rewind)
+                let skill = panel.controlBounds
+                XCTAssertEqual(skill.minX, 8, accuracy: 0.01)
+                XCTAssertEqual(pause.localFrame.maxX, width - 8, accuracy: 0.01)
+                XCTAssertEqual(panel.timeline.tierFrame.maxX, width - 8, accuracy: 0.01)
+                XCTAssertFalse(panel.minimapBounds.intersects(panel.timeline.tierFrame))
+                XCTAssertGreaterThanOrEqual(skill.width, previousSkill.width)
+                XCTAssertGreaterThanOrEqual(skill.height, previousSkill.height)
+                XCTAssertGreaterThanOrEqual(rewind.width, previousRewind.width)
+                previousSkill = skill
+                previousRewind = rewind
+
+                var buttons: [PanelButton] = []
+                panel.onButton = { buttons.append($0) }
+                for (frame, x) in [(skill, skill.minX + 1), (pause.localFrame, pause.localFrame.maxX - 1)] {
+                    panel.handlePointerDown(at: CGPoint(x: x, y: frame.midY))
+                    panel.handlePointerUp()
+                }
+                XCTAssertEqual(buttons, [.skill(0), .pause])
+                var rewound = false
+                panel.timeline.enabled = { $0 == .rewind }
+                panel.timeline.perform = { rewound = $0 == .rewind }
+                panel.handlePointerDown(at: CGPoint(x: rewind.maxX - 1, y: rewind.midY))
+                panel.handlePointerUp()
+                XCTAssertTrue(rewound)
+            }
+            try capture(panel, as: "mac-wide-\(name)-controls.png")
+        }
+    }
+
     @MainActor func testShiftNumberSelectsAndSurvivesKeyRelease() throws {
         _ = NSApplication.shared
         let speed = GameSpeedControl()
@@ -143,6 +222,22 @@ final class MacSpeedTierTests: XCTestCase {
         panel.isCRTSource = true
         speed.variableEnabled = true
         XCTAssertTrue(elements().isEmpty)
+        panel.isCRTSource = false
+        speed.select(25, at: 1)
+        speed.update(at: 2, active: true)
+        for _ in 0..<4 {
+            speed.observeThroughput(elapsed: 0.25, ticks: 31, ticksPerSecond: 17)
+        }
+        XCTAssertEqual(speed.target, 5)
+        let cappedTargets = elements()
+        XCTAssertEqual(cappedTargets.count, 4)
+        let fastest = try XCTUnwrap(cappedTargets.last)
+        XCTAssertTrue(fastest.accessibilityLabel()?.contains("5×") == true)
+        try capture(panel, as: "mac-speed-cap.png")
+        speed.reset(at: 3)
+        panel.handlePointerDown(at: CGPoint(x: fastest.localFrame.midX, y: fastest.localFrame.midY))
+        panel.handlePointerUp()
+        XCTAssertEqual(speed.target, 5)
     }
 }
 #endif

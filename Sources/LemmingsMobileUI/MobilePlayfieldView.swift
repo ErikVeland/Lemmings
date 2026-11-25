@@ -665,14 +665,10 @@ import CoreImage.CIFilterBuiltins
         super.layoutSubviews()
         decoration.frame = bounds
         overlay.frame = bounds
-        #if os(tvOS)
-        rewindCueView.pixelScale = 2
-        #else
-        rewindCueView.pixelScale = bounds.width >= 900 ? 2 : 1
-        #endif
         let inset = safeAreaInsets
+        let cueSize = rewindCueView.intrinsicContentSize
         rewindCueView.frame = CGRect(origin: CGPoint(x: inset.left + 12, y: inset.top + 12),
-                                     size: rewindCueView.intrinsicContentSize)
+            size: CGSize(width: min(cueSize.width, max(0, bounds.width - inset.left - inset.right - 24)), height: cueSize.height))
         hdr?.frame = bounds
         guard bounds.width > 1, bounds.height > 1 else { return }
         let size = MobileSize(width: bounds.width, height: bounds.height)
@@ -788,9 +784,10 @@ import CoreImage.CIFilterBuiltins
                 scale: scale, context: context)
         }
         if displaySettings.showReticleCount, let cursorCount {
-            let countWidth = Double(String(cursorCount).count * 6) * scale
-            GamePixelTypography.draw(String(cursorCount), in: CGRect(x: max(0, point.x - gap - countWidth), y: rect.minY, width: countWidth, height: height),
-                context: context, typography: nil, maximumScale: scale, bitmapOnly: true)
+            let text = String(cursorCount)
+            let countWidth = CGFloat(GamePixelTypography.width(of: text)) * 2 * scale
+            GamePixelTypography.draw(text, in: CGRect(x: max(0, point.x - gap - countWidth), y: rect.minY, width: countWidth, height: height),
+                context: context, typography: nil, maximumScale: 2 * scale, bitmapOnly: true)
         }
     }
 

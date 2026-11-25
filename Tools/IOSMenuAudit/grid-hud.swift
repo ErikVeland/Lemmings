@@ -10,6 +10,16 @@ extension MenuAudit {
             guard let value else { throw invalidTargets(line: #line) }
             return value
         }
+        func captionInkHeight(in context: CGContext, skill: CGRect, bandHeight: Int) throws -> Int {
+            let pixels = try requireHUD(context.data?.assumingMemoryBound(to: UInt8.self))
+            let bottom = Int(skill.maxY) - 4
+            return (bottom - bandHeight..<bottom).filter { y in
+                (Int(skill.minX) + 4..<Int(skill.maxX) - 4).contains { x in
+                    let offset = y * context.bytesPerRow + x * 4
+                    return pixels[offset + 2] > 128 && Int(pixels[offset + 2]) - Int(pixels[offset]) > 40
+                }
+            }.count
+        }
         let session = try ClassicMobileLibrary(directory: content).loadLevel(at: 0).session
         var settings = ClassicSettings()
         settings.music = .silent
@@ -76,6 +86,9 @@ extension MenuAudit {
                         GameMinimapArt.draw(in: context, bounds: portrait.minimap, image: nil, visible: .zero,
                             levelSize: .zero, overlay: true, displayBounds: bounds)
                         context.restoreGState()
+                        let caption = try requireHUD(skills.dropFirst().first?.frame)
+                        guard try captionInkHeight(in: context, skill: caption, bandHeight: 14) >= 11
+                        else { throw invalidTargets(line: #line) }
                         // The outline must survive across row boundaries, before applying
                         // a physical screen mask can hide a missing upper arc.
                         let mask = try bitmapContext(size: bounds.size)
@@ -126,6 +139,9 @@ extension MenuAudit {
             MobileHUDRenderer(layout: layout, snapshot: snapshot, selectedSkill: 0, paused: false, speed: 1,
                 endRunArmed: false, panelImage: panel, typography: typography, skillIcons: icons,
                 playerName: "PLA").draw(in: context, bounds: CGRect(origin: .zero, size: size))
+            let caption = try requireHUD(targets.first(where: { $0.action == .skill(1) })?.frame)
+            guard try captionInkHeight(in: context, skill: caption, bandHeight: 24) >= 18
+            else { throw invalidTargets(line: #line) }
             try save(context: context, to: output.appendingPathComponent("tv-\(engine).png"))
         }
         for engine in ["classic", "lemmings2", "lemmings3"] {

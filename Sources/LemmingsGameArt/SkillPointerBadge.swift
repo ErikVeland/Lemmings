@@ -21,8 +21,10 @@ public enum SkillPointerBadge {
         at point: CGPoint, within bounds: CGRect, scale: CGFloat = 1, context: CGContext) -> CGRect {
         let text = icon == nil ? name.uppercased() : ""
         let iconWidth: CGFloat = icon.map { min(40, max(16, 28 * CGFloat($0.width) / CGFloat($0.height))) } ?? 0
-        let width = max(iconWidth + 12, CGFloat(max(text.count, count?.count ?? 0)) * 6 + 12) * scale
-        let height: CGFloat = (icon == nil ? 30 : count == nil ? 36 : 48) * scale
+        let textWidth = CGFloat(max(GamePixelTypography.width(of: text), GamePixelTypography.width(of: count ?? ""))) * 2
+        let width = min(bounds.width, (max(iconWidth, textWidth) + 12) * scale)
+        let bodyHeight: CGFloat = (icon == nil ? 24 : 36) * scale
+        let height = bodyHeight + (count == nil ? 0 : 20 * scale)
         let gap = 24 * scale
         var x = point.x + gap, y = point.y + gap
         if x + width > bounds.maxX { x = point.x - gap - width }
@@ -40,13 +42,14 @@ public enum SkillPointerBadge {
             GameStoneArt.drawImage(icon, in: CGRect(x: floor(box.midX - size.width / 2), y: floor(box.minY + 5 * scale),
                 width: size.width, height: size.height), context: context)
         } else {
-            GamePixelTypography.draw(text, in: box.insetBy(dx: 6 * scale, dy: 4 * scale), context: context,
-                typography: nil, palette: .green, maximumScale: scale, bitmapOnly: true)
+            GamePixelTypography.draw(text, in: CGRect(x: box.minX + 6 * scale, y: box.minY,
+                width: box.width - 12 * scale, height: bodyHeight), context: context,
+                typography: nil, palette: .green, maximumScale: 2 * scale, bitmapOnly: true)
         }
         if let count {
-            GamePixelTypography.draw(count, in: CGRect(x: box.minX + 4 * scale, y: box.maxY - 12 * scale,
-                width: box.width - 8 * scale, height: 8 * scale), context: context, typography: nil,
-                palette: count == "0" ? .warning : .green, maximumScale: scale, bitmapOnly: true)
+            GamePixelTypography.draw(count, in: CGRect(x: box.minX + 4 * scale, y: box.maxY - 20 * scale,
+                width: box.width - 8 * scale, height: 16 * scale), context: context, typography: nil,
+                palette: count == "0" ? .warning : .green, maximumScale: 2 * scale, bitmapOnly: true)
         }
         return box
     }

@@ -139,6 +139,17 @@ let achievementProgressKey = "ClassicAchievementProgress"
       }
     }
 
+    var menuName: String {
+      switch self {
+      case .classic: return L10n.text("Classic")
+      case .ohNo: return L10n.text("Oh No!")
+      case .holiday: return L10n.text("Holiday")
+      case .ohYes: return L10n.text("Oh Yes!")
+      case .fan: return L10n.text("Fan levels")
+      case .neolemmix, .lemmings2, .lemmings3: return displayName
+      }
+    }
+
     var titles: [ClassicTitle] {
       switch self {
       case .classic: return [.lemmings]
@@ -188,6 +199,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private struct HomeMenuItem {
     let title: String
     let action: HomeMenuAction
+    var gameStatus: String? = nil
+
+    var menuTitle: String {
+      switch action {
+      case .fullQuest: return L10n.text("Journey")
+      case .resumeSequence: return L10n.text("Resume route")
+      case .resume: return L10n.text("Resume level")
+      case .hotSeat: return L10n.text("Hot Seat")
+      case let .browse(family): return family.menuName
+      default: return title
+      }
+    }
   }
   private var homeGlobalSaved: Int?
   private var homeSavedRefreshTask: Task<Void, Never>?
@@ -6826,12 +6849,10 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
   }
 
-  /// The home screen's fan content row.
+  /// The fan level count for the Play menu.
   ///
-  /// The total counts only the packs measured so far, because measuring means
-  /// opening every archive. While that is still running the row says so rather
-  /// than showing a total that keeps changing under the player.
-  private func fanHomeRow() -> String {
+  /// Mark the count as provisional until every pack has been measured.
+  private func fanHomeStatus() -> String {
     let packs = fanPacks.isEmpty ? FanLevelLibrary.packs() : fanPacks
     let lessons = homeLearningEntries()
     let wins = Set(lessons.map(\.identity))
@@ -6845,20 +6866,19 @@ let achievementProgressKey = "ClassicAchievementProgress"
       result.passed += homeClassicPassedCount(for: entry, journeyWins: wins)
     }
     guard !packs.isEmpty || imported.total > 0 else {
-      return L10n.text("FAN LEMMINGS  — NO PACKS")
+      return L10n.text("No packs")
     }
     let passed = FanLevelLibrary.Progress.passedCount(for: packs, learningEntries: lessons) + imported.passed
     let total = FanLevelLibrary.Progress.total(for: packs) + imported.total
-    if FanLevelLibrary.Progress.isComplete(for: packs) {
-      return L10n.text("FAN LEMMINGS  \(passed)/\(total)")
-    }
-    return L10n.text("FAN LEMMINGS  \(passed)/\(total)  — COUNTING")
+    let count = "\(passed)/\(total)"
+    if FanLevelLibrary.Progress.isComplete(for: packs) { return count }
+    return count + "  " + L10n.text("Counting levels")
   }
 
-  private func homeContentRow(_ family: HomeContentFamily) -> String? {
-    if family == .fan { return fanHomeRow() }
+  private func homeContentStatus(_ family: HomeContentFamily) -> String? {
+    if family == .fan { return fanHomeStatus() }
     if family == .neolemmix {
-      guard !neoLemmixSources.isEmpty else { return L10n.text("NEOLEMMIX  — NO PACKS") }
+      guard !neoLemmixSources.isEmpty else { return L10n.text("No packs") }
       let passed = Set(ArcadeStore.shared.records.trolley.attempts.compactMap { attempt -> String? in
         guard attempt.run.profileID == ArcadeStore.shared.records.activeProfileID,
               attempt.run.didWin,
@@ -6866,7 +6886,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
               conditions.gameID == "neolemmix" else { return nil }
         return conditions.packID + "\u{0}" + conditions.levelID
       }).count
-      return L10n.text("NEOLEMMIX  \(min(passed, neoCatalogueTotal))/\(neoCatalogueTotal)")
+      return "\(min(passed, neoCatalogueTotal))/\(neoCatalogueTotal)"
     }
     let installed = library.entries.filter {
       family.titles.contains($0.title) && $0.available
@@ -6881,8 +6901,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       return count + homeClassicPassedCount(for: dataSets[index], journeyWins: wins)
     } + starters.reduce(0) { $0 + homeClassicPassedCount(for: $1, journeyWins: wins) }
     let total = installed.reduce(0) { $0 + $1.total } + starters.reduce(0) { $0 + $1.set.campaign.levels.count }
-    let status = family == .lemmings3 ? "  — BETA" : ""
-    return "\(family.displayName.uppercased())  \(passed)/\(total)\(status)"
+    return "\(passed)/\(total)"
   }
 
   private func homeResumePlayers(hotSeatID: String?, profileID: String) -> String {
@@ -6960,8 +6979,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     if let index = items.firstIndex(where: { $0.action == homeContinueAction(journey: journey, sequence: savedSequence, recovery: recovery) }) {
       items.insert(items.remove(at: index), at: 0)
     }
-    items += HomeContentFamily.allCases.map {
-      HomeMenuItem(title: [.lemmings2, .lemmings3].contains($0) ? $0.displayName : (homeContentRow($0) ?? ($0.displayName.uppercased() + "  — NO DATA")), action: .browse($0))
+    items += HomeContentFamily.allCases.map { family in
+      if [.lemmings2, .lemmings3].contains(family) {
+        return HomeMenuItem(title: family.displayName, action: .browse(family))
+      }
+      let status = homeContentStatus(family) ?? L10n.text("NO DATA")
+      return HomeMenuItem(title: "\(family.displayName)  \(status)", action: .browse(family), gameStatus: status)
     }
     return items
   }
@@ -7797,13 +7820,18 @@ let achievementProgressKey = "ClassicAchievementProgress"
       setStatus("")
       phase = .briefing
       playfield.phase = .briefing
-      playfield.overlayShowsLemmings = true
+      playfield.overlayShowsLemmings = !homeShowsPlay
       playfield.overlayTitle = L10n.text("LEMMINGS")
       menuRecovery = try? recoveryStore.latest(profileID: ArcadeStore.shared.playingProfileID, hotSeatID: ArcadeStore.shared.hotSeatID)
       let homeItems = homeMenuItems()
       playfield.overlayHomePlay = homeShowsPlay
       playfield.overlayHomeLeadingCount = homeItems.firstIndex { if case .browse = $0.action { return true }; return false } ?? homeItems.count
       playfield.overlayLines = homeItems.map(\.title)
+      playfield.overlayHomeTitles = homeItems.map(\.menuTitle)
+      playfield.overlayHomeGameCaptions = Dictionary(uniqueKeysWithValues: homeItems.enumerated().compactMap { index, item in
+        guard let status = item.gameStatus else { return nil }
+        return (index, [.init(item.menuTitle, .green), .init("  " + status, .blue)])
+      })
       playfield.overlayHomeLogos = Dictionary(uniqueKeysWithValues: homeItems.enumerated().compactMap { index, item in
         switch item.action {
         case .browse(.lemmings2): return (index, GameFrontEnd.GameLogo.lemmings2)
@@ -8026,7 +8054,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       case .community:
         showCommunity()
       case let .browse(family):
-        if AppDistribution.isStore, !family.titles.isEmpty, homeContentRow(family) == nil {
+        if AppDistribution.isStore, !family.titles.isEmpty, homeContentStatus(family) == nil {
           showOwnedGameImport(promptForDownload: true)
           return
         }
@@ -8098,6 +8126,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func moveMenuChoice(_ direction: String) {
     if flow?.screen == .title, fanScreen == .off, !fanPlaying,
        let index = playfield.homeSelection(from: launchChoice, direction: direction) {
+      playfield.clearPointer()
       launchChoice = index
       renderScreen()
       return
@@ -8239,7 +8268,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
     refreshProgressText()
     refreshHomeBackdrop()
     // Limit catch-up after sleep or a long modal interaction.
-    let elapsed = min(0.25, max(0, lastStepTime.map { now - $0 } ?? displayInterval))
+    let wallElapsed = max(0, lastStepTime.map { now - $0 } ?? displayInterval)
+    let elapsed = min(0.25, wallElapsed)
     lastStepTime = now
     speedControl.update(at: now, active: phase == .playing && !sequelIsActive && !GameScreen.shared.isPresented && session?.isComplete == false)
     panel.isFastForward = isFastForward
@@ -8311,9 +8341,12 @@ let achievementProgressKey = "ClassicAchievementProgress"
     // Each ruleset states its own logic rate. Whole ticks only, so timing does
     // not drift with the display.
     let interval = 1.0 / Double(session.ticksPerSecond)
+    let previousTick = session.currentTick
     accumulator += elapsed * speedControl.multiplier
     var advanced = false
-    let inputDeadline = ProcessInfo.processInfo.systemUptime + 0.012
+    runMovie.beginCaptureBatch(reuseFrames: speedControl.multiplier > 1)
+    defer { runMovie.endCaptureBatch() }
+    let inputDeadline = ProcessInfo.processInfo.systemUptime + speedControl.simulationBudget
     while accumulator >= interval {
       accumulator -= interval
       let before = session.remainingSeconds
@@ -8322,19 +8355,22 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let previousRate = session.rate
       session.tick()
       completeRateFeedback(from: previousRate, session: session)
-      updateFailureMood()
       playfield.updateSpeedTrails()
       countdownWarning.reset(seconds: before)
       if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.timerWarning) }
       flashExplosions(previous: previousExplosions)
-      updateDJTelemetry(session)
       effects.play(session.lastPositionedCues)
       captureReplayFrame()
       advanced = true
       if session.isComplete { break }
-      if ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
+      if ProcessInfo.processInfo.systemUptime >= inputDeadline + runMovie.batchCompositionSeconds { break }
+    }
+    if !session.isComplete {
+      speedControl.observeThroughput(elapsed: wallElapsed, ticks: session.currentTick - previousTick,
+        ticksPerSecond: Double(session.ticksPerSecond))
     }
     guard advanced else { return }
+    updateFailureMood()
     saveRunCheckpoint()
 
     panel.terrainImage = playfield.levelImage
@@ -8367,15 +8403,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let captureStarted = ProcessInfo.processInfo.systemUptime
     defer { replayCaptureSeconds += ProcessInfo.processInfo.systemUptime - captureStarted }
     #endif
-    updateStatus()
     let musicURL = dj.isPlaying ? dj.currentURL : soundtrack.isPlaying ? soundtrack.currentURL : music.isRunning ? music.currentURL : nil
-    runMovie.recorder?.setMusic(url: musicURL, gain: audioMuted || settings.music == .silent ? 0 : Float(settings.musicVolume))
+    runMovie.setMusic(url: musicURL, gain: audioMuted || settings.music == .silent ? 0 : Float(settings.musicVolume))
     let fieldHeight = tubeIsActive ? replaySize.height * 0.8
       : replaySize.height * playfield.bounds.height / max(1, playfield.bounds.height + panel.bounds.height)
     runMovie.capture(ReplayFrameCapture.image(size: replaySize) {
+      updateFailureMood()
+      updateStatus()
       ReplayFrameCapture.draw(playfield, in: CGRect(x: 0, y: 0, width: replaySize.width, height: fieldHeight))
       ReplayFrameCapture.draw(panel, in: CGRect(x: 0, y: fieldHeight, width: replaySize.width, height: replaySize.height - fieldHeight))
-    })
+    }, finalTick: session?.isComplete == true)
   }
 
   @objc private func reviewLastGame() {
@@ -8703,6 +8740,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
     saveRunCheckpoint(immediately: true)
     isPaused.toggle()
+    accumulator = 0
     userPausedMusic = isPaused
     panel.isPaused = isPaused
     panel.needsDisplay = true
@@ -8959,7 +8997,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       ? LearningJourneyLibrary.journey?.lessons.firstIndex(where: {
           $0.entry.identity == sequencePlayingIdentity
         }) : nil
-    let position = journeyPosition ?? max(0, picker.indexOfSelectedItem)
+    let position = journeyPosition ?? (fanPlaying && activeMusic == .adaptiveDJ ? fanQueueIndex : max(0, picker.indexOfSelectedItem))
     let assignedName = LevelMusicSelection.track(index: currentNxlvURL == nil ? position : 0,
       title: currentNxlvURL == nil ? artworkLevel?.title ?? "" : "", holiday: seasonalMusic, ohNo: musicTitle == .ohNoMoreLemmings)
     let game = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
@@ -8980,13 +9018,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
       let folder = seasonalMusic ? "holiday_lemmings_music_mod" : musicTitle == .ohNoMoreLemmings ? "oh_no_more_lemmings_music_mod" : "lemmings_music_mod"
       let module = BundledGameResources.music(folder, in: GameResources.bundle)?.appendingPathComponent(assignedName + ".mod")
       let fallback = module.flatMap { FileManager.default.isReadableFile(atPath: $0.path) ? $0 : nil }
-      let game = seasonalMusic ? "holiday" : musicTitle == .ohNoMoreLemmings ? "ohno" : "classic"
-      let position = currentNxlvURL == nil ? max(0, picker.indexOfSelectedItem) : 0
-      let cycle = currentNxlvURL == nil ? LevelMusicSelection.cycle(index: position,
-        titles: picker.itemTitles, holiday: seasonalMusic, ohNo: musicTitle == .ohNoMoreLemmings) : 0
+      let showcaseIndex = currentNxlvURL == nil ? LevelMusicSelection.showcaseIndex(index: position,
+        titles: fanPlaying ? fanQueue.map(\.label) : picker.itemTitles,
+        holiday: seasonalMusic, ohNo: musicTitle == .ohNoMoreLemmings) : nil
+      let cycle = seasonalMusic ? LevelMusicSelection.cycle(index: position, titles: picker.itemTitles,
+        holiday: true, ohNo: false) : 0
       if dj.startJourney(trackID: game + "." + assignedName.lowercased(), cycle: cycle,
         identity: arcadeRunID.uuidString, fallback: fallback,
-        includeAlternates: settings.djIncludesOtherSoundtracks) {
+        includeAlternates: settings.djIncludesOtherSoundtracks, showcaseIndex: showcaseIndex) {
         music.stop(); soundtrack.stop()
         return
       }
@@ -9586,6 +9625,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     screenFlash.clear(); pointerCapture.reset(); panel.needsDisplay = true
     LevelHintWindow.shared.show(deck, image: hintMap, owner: window,
       solutionSession: session as? ClassicSession, solutionSource: playfield, solutionEffects: effects,
+      allows25x: settings.ridiculousSpeedEnabled,
       runID: arcadeRunID, ownerKey: solutionRetentionKey, pauseForSolution: { [weak self, weak session] in
         guard let self, let session, self.session === session else { return }
         self.pauseLiveForSolution(session)

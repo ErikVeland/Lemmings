@@ -278,7 +278,8 @@ import AVFAudio
         } catch { playing = nil }
     }
 
-    func play(identifier: String, index: Int, title: String, attemptID: UUID, context: MobileMusicContext = .init()) {
+    func play(identifier: String, index: Int, title: String, attemptID: UUID, context: MobileMusicContext = .init(),
+              usesNeoLemmix: Bool = false) {
         guard !startupAuthenticationPending, MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
         applySettings()
         guard isEnabled, settings.classic.musicVolume > 0, !isTestAudioMuted else { return }
@@ -292,9 +293,23 @@ import AVFAudio
         lastPitchCents = nil
         let position = context.scorePosition ?? index
         if (soundtrack == "Lix" || soundtrack == "Traditional Remixes"), playLix(index: position, identity: key) { return }
-        let tune = MobileMusicAssignment.tune(identifier: identifier, index: position, title: title)
+        let adaptive = soundtrack == "Adaptive DJ"
+        let sequel = adaptive ? MobileMusicAssignment.sequel(identifier: identifier, index: index) : nil
+        let tune = sequel?.tune ?? MobileMusicAssignment.tune(identifier: identifier, index: position, title: title)
         compositionID = tune.game + "." + tune.track.lowercased()
-        let cycle = MobileMusicAssignment.cycle(tune: tune, index: position, titles: context.titles, isFan: context.isFan)
+        let seasonal = tune.game == "holiday"
+        let keepsScore = usesNeoLemmix || context.isLearningJourney
+        let cycle = sequel?.cycle ?? (seasonal || keepsScore
+            ? MobileMusicAssignment.cycle(tune: tune, index: position, titles: context.titles, isFan: context.isFan) : 0)
+        let showcaseIndex: Int?
+        if keepsScore {
+            showcaseIndex = nil
+        } else if let sequel {
+            showcaseIndex = sequel.showcaseIndex
+        } else {
+            showcaseIndex = LevelMusicSelection.showcaseIndex(index: position, titles: context.titles,
+                                                             holiday: seasonal, ohNo: tune.game == "ohno")
+        }
         let source = moduleURL(tune)
         if playMacintosh(tune: tune, index: position, title: title) {
             module.stop(); usingDJ = false; dj.stop(); usingRecording = true; playing = key
@@ -312,9 +327,10 @@ import AVFAudio
             dj.load(soundtracks: pools, catalogueRoot: root)
             dj.setCelebrationAlternates(settings.classic.djIncludesOtherSoundtracks)
             let started: Bool
-            if soundtrack == "Adaptive DJ" {
+            if adaptive {
                 started = dj.startJourney(trackID: tune.game + "." + tune.track.lowercased(), cycle: cycle,
-                    identity: attemptID.uuidString, fallback: source, includeAlternates: settings.classic.djIncludesOtherSoundtracks)
+                    identity: attemptID.uuidString, fallback: source, includeAlternates: settings.classic.djIncludesOtherSoundtracks,
+                    showcaseIndex: showcaseIndex)
             } else {
                 let selected = recordingURL(tune: tune) ?? source
                     ?? SoundtrackPlayer.recording(trackID: tune.game + "." + tune.track.lowercased(), root: root)

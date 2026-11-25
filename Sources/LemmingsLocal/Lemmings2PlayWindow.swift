@@ -597,6 +597,15 @@ import NxlvKit
         try checkGameplayQuickControl(try L2RunRecovery.stateHash(game!) == before && selected == selectedBefore && paused,
             "Lemmings 2 quick controls changed the run")
     }
+    func testWideGameplayPanel() throws {
+        timer?.invalidate(); timer = nil
+        startLevel(); paused = true; canvas.startCountdown.cancel(); refreshGame()
+        var pressedSlots: [Int] = []
+        let previous = canvas.onPanel
+        canvas.onPanel = { slot, _, _ in pressedSlots.append(slot) }
+        defer { canvas.onPanel = previous }
+        try validateWideSequelPanel(canvas, owner: window!, name: "lemmings2", endSlot: 9, pressedSlots: { pressedSlots })
+    }
     func testExtraSkillGrant() throws {
         func require(_ value: Bool, _ message: String) throws {
             if !value { throw SequelDataError.invalid(message) }
@@ -1075,11 +1084,14 @@ import NxlvKit
             let musicRoot = GameResources.directory("Music")
                 ?? root.deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Music")
             dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: musicRoot), catalogueRoot: musicRoot)
-            music.stop()
-            dj.startJourney(trackID: "lemmings2." + name.lowercased(), cycle: campaign.level,
+            let showcaseIndex = screen == .playing && practiceLevel == nil && learningResultActions == nil
+                ? LevelMusicSelection.lemmings2ShowcaseIndex(tribe: campaign.tribe, level: campaign.level) : nil
+            if dj.startJourney(trackID: "lemmings2." + name.lowercased(), cycle: campaign.level,
                 identity: arcadeRunID.uuidString + ":" + name.lowercased(), fallback: url,
-                includeAlternates: audioSettings.djIncludesOtherSoundtracks)
-            return
+                includeAlternates: audioSettings.djIncludesOtherSoundtracks, showcaseIndex: showcaseIndex) {
+                music.stop()
+                return
+            }
         }
         dj.stop()
         try? music.start()
@@ -1319,11 +1331,12 @@ import NxlvKit
     }
 
     private func captureReplayFrame() {
-        runMovie.recorder?.setMusic(url: dj.isPlaying ? dj.currentURL : music.currentURL,
+        runMovie.setMusic(url: dj.isPlaying ? dj.currentURL : music.currentURL,
             gain: globallyMuted || audioSettings.music == .silent || music.muted ? 0 : Float(audioSettings.musicVolume))
         runMovie.capture(ReplayFrameCapture.image(size: replaySize) {
+            refreshGame()
             ReplayFrameCapture.draw(canvas, in: CGRect(origin: .zero, size: replaySize))
-        })
+        }, finalTick: game?.isComplete == true)
     }
     func suspendForReplay() -> () -> Void {
         let interruption = gameplayKeyboard?.interruptionCount
@@ -1339,9 +1352,7 @@ import NxlvKit
     private func playTribeMusic() {
         guard audioConfigured, !paused, screen == .playing, game?.isComplete == false else { return }
         needsAttemptMusic = false
-        let names = ["classic", "beach", "cavelem", "circus", "egyptian", "highland",
-                     "medieval", "outdoor", "polar", "shadow", "space", "sports"]
-        playMusic(names[level.style])
+        playMusic(LevelMusicSelection.lemmings2[level.style])
     }
     private func playFromMenu() {
         if let game, !game.isComplete,
@@ -1580,7 +1591,8 @@ import NxlvKit
         let now = ProcessInfo.processInfo.systemUptime
         completionGlow.advance(at: now)
         nukeMood.advanceReturn(at: now)
-        let elapsed = min(0.25, now - lastTime); lastTime = now
+        let wallElapsed = now - lastTime; lastTime = now
+        let elapsed = min(0.25, wallElapsed)
         let playing = screen == .playing && !paused && game?.isComplete == false && !GameScreen.shared.isPresented
         speedControl.update(at: now, active: screen == .playing && game?.isComplete == false && !GameScreen.shared.isPresented)
         canvas.advanceSelectionFade(at: now)
@@ -1650,7 +1662,9 @@ import NxlvKit
         let previousTick = game.tick
         // Original fast-forward performs three physics updates per displayed frame.
         accumulator += elapsed * speedControl.multiplier
-        let inputDeadline = ProcessInfo.processInfo.systemUptime + 0.012
+        runMovie.beginCaptureBatch(reuseFrames: speedControl.multiplier > 1)
+        defer { runMovie.endCaptureBatch() }
+        let inputDeadline = ProcessInfo.processInfo.systemUptime + speedControl.simulationBudget
         while accumulator >= 1 / Lemmings2Runtime.ticksPerSecond && !game.isComplete {
             accumulator -= 1 / Lemmings2Runtime.ticksPerSecond
             countdownWarning.reset(seconds: game.remainingSeconds)
@@ -1658,15 +1672,19 @@ import NxlvKit
             if countdownWarning.update(seconds: game.remainingSeconds) { sounds.play([.init(supplemental: .timerWarning)]) }
             sounds.play(game.drainSoundEvents())
             canvas.flashExplosions(game)
-            self.game = game; refreshGame(); captureReplayFrame()
-            dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, isNuking: game.isNuking))
-            if ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
+            self.game = game; captureReplayFrame()
+            if ProcessInfo.processInfo.systemUptime >= inputDeadline + runMovie.batchCompositionSeconds { break }
+        }
+        if !game.isComplete {
+            speedControl.observeThroughput(elapsed: wallElapsed, ticks: game.tick - previousTick,
+                ticksPerSecond: Lemmings2Runtime.ticksPerSecond)
         }
         guard game.tick != previousTick else {
             if frontTicks.isMultiple(of: 4) { refreshGame() }
             return
         }
         sounds.play(game.drainSoundEvents())
+        dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, isNuking: game.isNuking))
         self.game = game; refreshGame(); saveCheckpoint()
         finishIfComplete(game)
     }
@@ -2602,7 +2620,9 @@ import NxlvKit
     }
     var skillGroupFrame: CGRect {
         let height = GameHUDControlGroup.desktopHeight(forWidth: bounds.width)
-        return CGRect(x: panelX, y: origin.y + 240 * zoom - height, width: 256 * zoom, height: height)
+        let left = readOnlyReplay ? panelX : bounds.minX
+        return CGRect(x: left, y: origin.y + 240 * zoom - height,
+            width: panelX + 256 * zoom - left, height: height)
     }
     private func skillFrame(_ index: Int) -> CGRect {
         let group = skillGroupFrame
@@ -2625,7 +2645,7 @@ import NxlvKit
     private var zoom: CGFloat { CGFloat(viewport.scale) }
     private var visibleWidth: CGFloat { CGFloat(viewport.width) }
     private var origin: NSPoint { NSPoint(x: 0, y: viewport.originY) }
-    private var panelX: CGFloat { CGFloat(viewport.panelX) * zoom }
+    private var panelX: CGFloat { readOnlyReplay ? CGFloat(viewport.panelX) * zoom : bounds.maxX - 320 * zoom }
 
     override func setFrameSize(_ newSize: NSSize) {
         let center = cameraX + visibleWidth / 2
@@ -3426,9 +3446,16 @@ import NxlvKit
         if let panel {
             panelBackground.setFill()
             NSRect(x: bounds.minX, y: origin.y + 192 * zoom, width: bounds.width, height: 48 * zoom).fill()
-            panel.draw(in: NSRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom),
+            let artworkFrame = CGRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom)
+            NSGraphicsContext.saveGraphicsState()
+            if !readOnlyReplay {
+                let transportX = artworkFrame.minX + 256 * zoom
+                CGRect(x: transportX, y: artworkFrame.minY, width: 64 * zoom, height: artworkFrame.height).clip()
+            }
+            panel.draw(in: artworkFrame,
                        from: .zero, operation: .sourceOver, fraction: readOnlyReplay ? 0.45 : 1, respectFlipped: true,
                        hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            NSGraphicsContext.restoreGraphicsState()
             drawSkillGroup()
             drawUndoNuke()
             SpeedPanelControls.draw(in: speedRect, label: speedLabel, active: isFastForward, arrows: variableSpeedEnabled)
@@ -3453,12 +3480,14 @@ import NxlvKit
     private func drawSkillGroup() {
         guard let context = NSGraphicsContext.current?.cgContext, let game else { return }
         NSColor.black.setFill()
-        CGRect(x: panelX, y: origin.y + 202.8 * zoom, width: 256 * zoom, height: 37.2 * zoom).fill()
+        if readOnlyReplay {
+            CGRect(x: panelX, y: origin.y + 202.8 * zoom, width: 256 * zoom, height: 37.2 * zoom).fill()
+        }
         for index in 0..<8 {
             let frame = skillFrame(index)
             GameControlGroupArt.draw(in: context, frame: frame, group: skillGroupFrame,
                 selected: index == selectedSkillSlot, face: .skill(index))
-            let count = CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 12)
+            let count = CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 18)
             GamePixelText.draw(String(game.supplies[index]), in: count, maxScale: 2)
             if let icon = skillIcons[safe: index] ?? nil {
                 let box = CGRect(x: frame.minX + 4, y: count.maxY + 2,
@@ -3601,7 +3630,7 @@ import NxlvKit
             let slot = min(7, Int((p.x - skillGroupFrame.minX) / (skillGroupFrame.width / 8)))
             onPanel?(slot, event.clickCount, event.timestamp)
         }
-        else if let slot = Lemmings2Control.slot(x: Int(floor(x - CGFloat(viewport.panelX))), y: Int(y)), slot >= 8 {
+        else if let slot = Lemmings2Control.slot(x: Int(floor((p.x - panelX) / zoom)), y: Int(y)), slot >= 8 {
             onPanel?(slot, event.clickCount, event.timestamp)
         }
     }

@@ -2,6 +2,7 @@
 import AppKit
 import LemmingsAppCore
 import LemmingsGameArt
+import LemmingsMobileCore
 import NxlvKit
 
 /// Settings stay inside the game. Language choices preview without changing the active game.
@@ -117,13 +118,28 @@ import NxlvKit
     }
     let tabs = GameTabs()
     tabs.onSelectionChanged = { [weak self] in self?.help.dismiss() }
-    tabs.addTabViewItem(tab(L10n.text("Gameplay"), gameplayPane()))
-    tabs.addTabViewItem(tab(L10n.text("Controls"), controllerPane()))
-    tabs.addTabViewItem(tab(L10n.text("Artwork"), graphicsPane()))
-    tabs.addTabViewItem(tab(L10n.text("Display"), videoPane()))
-    tabs.addTabViewItem(tab(L10n.text("Audio"), audioPane()))
-    tabs.addTabViewItem(tab(L10n.text("Accessibility"), accessibilityPane()))
-    tabs.addTabViewItem(tab(L10n.text("Privacy"), privacyPane()))
+    let sections = MobileSettingsGroup.sections.map { $0.filter { $0 != .deskClock } }
+    var sectionEnd = 0
+    tabs.sidebarBreaks = Set(sections.dropLast().map {
+      sectionEnd += $0.count
+      return sectionEnd
+    })
+    for group in sections.flatMap({ $0 }) {
+      let pane: NSView
+      switch group {
+      case .gameplay: pane = gameplayPane()
+      case .controller: pane = controllerPane()
+      case .accessibility: pane = accessibilityPane()
+      case .display: pane = videoPane()
+      case .graphics: pane = graphicsPane()
+      case .audio: pane = audioPane()
+      case .privacy: pane = privacyPane()
+      case .deskClock: continue
+      }
+      let button = tabs.addTabViewItem(tab(group.title, pane))
+      if group == .gameplay { page.preferControllerControl(button) }
+    }
+    page.sidebarTabs = tabs
     tabs.translatesAutoresizingMaskIntoConstraints = false
     page.body.addSubview(tabs)
     NSLayoutConstraint.activate([
@@ -195,7 +211,7 @@ import NxlvKit
       ])
       previous = control
     }
-    previous?.bottomAnchor.constraint(lessThanOrEqualTo: container.bottomAnchor, constant: -8).isActive = true
+    container.lastControl = previous
     return scroll
   }
 

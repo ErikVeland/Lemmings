@@ -50,6 +50,27 @@ import NxlvKit
                 "Legacy handoff changed composition or repeated its source: " + game)
             legacy.stop()
         }
+        for game in ["classic.cancan", "lemmings2.medieval", "lemmings3.classic1"] {
+            let assigned = try unwrap(catalogue.select(trackID: game, cycle: 0, availablePaths: paths))
+            let wider = try unwrap(catalogue.showcase(trackID: game, index: 0, availablePaths: paths))
+            let originalURL = root.appendingPathComponent(assigned.path).resolvingSymlinksInPath()
+            let widerURL = root.appendingPathComponent(wider.path).resolvingSymlinksInPath()
+            try require(player.startJourney(trackID: game, cycle: 0, identity: "opening:" + game),
+                "DJ did not start opening theme")
+            try require(player.currentURL?.resolvingSymlinksInPath() == originalURL, "DJ skipped the opening theme")
+            try require(player.startJourney(trackID: game, cycle: 1, identity: "wider:" + game,
+                includeAlternates: true, showcaseIndex: 0), "DJ did not start the wider rotation")
+            try require(player.currentURL?.resolvingSymlinksInPath() == widerURL, "DJ stayed on the assigned composition")
+            player.stop()
+            try require(player.startJourney(trackID: game, cycle: 1, identity: "retry:" + game,
+                includeAlternates: true, showcaseIndex: 0), "DJ failed to start on retry")
+            try require(player.currentURL?.resolvingSymlinksInPath() == widerURL, "Retry picked different music")
+            player.stop()
+            try require(player.startJourney(trackID: game, cycle: 1, identity: "assigned:" + game,
+                includeAlternates: false, showcaseIndex: 0), "DJ failed to start with variety off")
+            try require(player.currentURL?.resolvingSymlinksInPath() == originalURL, "DJ ignored the variety setting")
+            player.stop()
+        }
         let mainVariants = catalogue.tracks.filter { $0.game != "demo" }.flatMap(\.variants).filter {
             $0.quality == "native-module" && FileManager.default.isReadableFile(atPath: root.appendingPathComponent($0.path).path)
         }
@@ -72,6 +93,7 @@ import NxlvKit
         print("PASS manual same-track/all-track crossfades, current-recording exclusion, mute and suspended-output boundaries")
         print("PASS ordinary-source handoff into manual DJ for Classic, Lemmings 2 and Lemmings 3")
         print("PASS default shuffle changes theme with main-bundle music in Classic, Lemmings 2 and Lemmings 3")
+        print("PASS Adaptive DJ opening, wider rotation, retry and opt-out in Classic, Lemmings 2 and Lemmings 3")
     }
     static func unwrap<T>(_ value: T?) throws -> T {
         guard let value else { throw Failure.invalid("No current recording") }

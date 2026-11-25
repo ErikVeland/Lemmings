@@ -41,6 +41,62 @@ final class LanguagePickerTests: XCTestCase {
         }
     }
 
+    @MainActor func testSettingsSidebarGroupsNavigationBesideTheActivePane() throws {
+        let previous = GameScreen.shared.onMainMenu
+        GameScreen.shared.onMainMenu = {}
+        defer { GameScreen.shared.onMainMenu = previous }
+        try withSettings { host, window in
+            let output = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+                .deletingLastPathComponent().deletingLastPathComponent()
+                .appendingPathComponent(".build/grouped-settings-renders")
+            try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+            let groups = [GameLocalisation.text("Gameplay"), GameLocalisation.text("Controls"),
+                GameLocalisation.text("Accessibility"), GameLocalisation.text("Display"),
+                GameLocalisation.text("Artwork"), GameLocalisation.text("Audio"), GameLocalisation.text("Privacy")]
+            for width: CGFloat in [900, 1280] {
+                window.setContentSize(CGSize(width: width, height: width == 900 ? 620 : 800))
+                host.layoutSubtreeIfNeeded()
+                let page = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
+                let buttons = descendants(page).compactMap { $0 as? GameTabButton }
+                XCTAssertEqual(buttons.map(\.title), groups)
+                let frames = buttons.map { $0.convert($0.bounds, to: page) }
+                XCTAssertEqual(Set(frames.map(\.minX)).count, 1)
+                XCTAssertGreaterThan(frames[3].minY - frames[2].maxY, frames[1].minY - frames[0].maxY)
+                XCTAssertGreaterThan(frames[6].minY - frames[5].maxY, frames[1].minY - frames[0].maxY)
+                let back = page.controllerBackButton.convert(page.controllerBackButton.bounds, to: page)
+                XCTAssertEqual(back.minX, frames[0].minX, accuracy: 0.5)
+                XCTAssertLessThan(back.minY - frames[6].maxY, frames[6].height)
+                let navigation = try XCTUnwrap(GameScreen.shared.controllerNavigationRoot(in: window))
+                let keyboardOrder = GameScreen.shared.keyboardNavigation.controls(in: navigation)
+                XCTAssertEqual(Array(keyboardOrder.prefix(buttons.count)), buttons)
+                for (index, button) in buttons.enumerated() {
+                    try click(button, in: host)
+                    XCTAssertEqual(button.state, .on)
+                    XCTAssertEqual(buttons.filter { $0.state == .on }.count, 1)
+                    if [0, 3, 6].contains(index) {
+                        let bitmap = try XCTUnwrap(host.bitmapImageRepForCachingDisplay(in: host.bounds))
+                        host.displayIgnoringOpacity(host.bounds, in: try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap)))
+                        try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
+                            .write(to: output.appendingPathComponent("mac-\(Int(width))-\(groups[index]).png"))
+                    }
+                    if index == 0 {
+                        let last = try XCTUnwrap(descendants(page).compactMap { $0 as? GamePopUpButton }
+                            .first { $0.accessibilityLabel() == GameLocalisation.text("Level selection") })
+                        let scroll = try XCTUnwrap(last.enclosingScrollView)
+                        last.scrollToVisible(last.bounds)
+                        host.layoutSubtreeIfNeeded()
+                        XCTAssertGreaterThanOrEqual(last.bounds.height, 28)
+                        XCTAssertTrue(scroll.documentVisibleRect.contains(last.frame))
+                        let centre = last.convert(CGPoint(x: last.bounds.midX, y: last.bounds.midY), to: host)
+                        XCTAssertTrue(host.hitTest(centre) === last)
+                        scroll.contentView.scroll(to: .zero)
+                        scroll.reflectScrolledClipView(scroll.contentView)
+                    }
+                }
+            }
+        }
+    }
+
     @MainActor func testSelectionTargetsPreviewApplyAndCancel() throws {
         try withSettings { host, window in
             openPicker(in: host)

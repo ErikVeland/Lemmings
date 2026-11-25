@@ -42,6 +42,9 @@ public struct GameplaySpeed: Sendable {
     public static let transitionDuration = 0.24
     public static let rapidInterval = 0.3
     public var variableEnabled = true
+    private var measuredLimit = Double.infinity
+    private var sampleSeconds = 0.0
+    private var sampleTicks = 0
     public var ridiculousEnabled = false {
         didSet {
             guard !ridiculousEnabled, oldValue else { return }
@@ -56,8 +59,11 @@ public struct GameplaySpeed: Sendable {
             }
         }
     }
-    public var availableSteps: [Double] { ridiculousEnabled ? Self.ridiculousSteps : Self.steps }
-    public var selectableSteps: [Double] { variableEnabled ? availableSteps : [1, legacyMultiplier] }
+    public var availableSteps: [Double] {
+        (ridiculousEnabled ? Self.ridiculousSteps : Self.steps).filter { $0 <= measuredLimit }
+    }
+    private var fixedFastSpeed: Double { min(legacyMultiplier, measuredLimit) }
+    public var selectableSteps: [Double] { variableEnabled ? availableSteps : fixedFastSpeed > 1 ? [1, fixedFastSpeed] : [1] }
     public let legacyMultiplier: Double
     public private(set) var selected: Double = 1
     public private(set) var target: Double = 1
@@ -98,6 +104,30 @@ public struct GameplaySpeed: Sendable {
         multiplier = value(at: now)
     }
 
+    /// Lower the available tiers when the settled game clock cannot sustain its target.
+    @discardableResult public mutating func observeThroughput(elapsed: TimeInterval, ticks: Int, ticksPerSecond: Double) -> Bool {
+        guard target > 1, abs(multiplier - target) < 0.01,
+              elapsed.isFinite, elapsed > 0, elapsed <= 1, ticksPerSecond.isFinite, ticksPerSecond > 0 else {
+            resetThroughputSample()
+            return false
+        }
+        sampleSeconds += elapsed
+        sampleTicks += ticks
+        guard sampleSeconds >= 1 else { return false }
+        let expected = sampleSeconds * ticksPerSecond * target
+        let delivered = Double(sampleTicks)
+        let measured = delivered / (sampleSeconds * ticksPerSecond)
+        resetThroughputSample()
+        guard delivered + 1 < expected * 0.96 else { return false }
+        measuredLimit = availableSteps.last(where: { $0 <= measured }) ?? 1
+        selected = min(selected, measuredLimit)
+        cruise = min(cruise, measuredLimit)
+        changeTarget(measuredLimit, at: 0, immediate: true)
+        return true
+    }
+
+    private mutating func resetThroughputSample() { sampleSeconds = 0; sampleTicks = 0 }
+
     /// A tap toggles immediately. Extra clicks cannot restart a stopped burst.
     public mutating func tap(at now: TimeInterval, clickCount: Int = 1, immediate: Bool = true, absorbRapidClicks: Bool = true) {
         if absorbRapidClicks, variableEnabled, !isFast,
@@ -107,7 +137,7 @@ public struct GameplaySpeed: Sendable {
         }
         if isFast { reset(at: now); return }
         cancelHolds()
-        selected = variableEnabled ? cruise : legacyMultiplier
+        selected = variableEnabled ? cruise : fixedFastSpeed
         changeTarget(selected, at: now, immediate: !variableEnabled)
     }
 
@@ -131,7 +161,7 @@ public struct GameplaySpeed: Sendable {
         if held.isEmpty { holdStartedAt = now }
         held.insert(input)
         if input != .shift && tapEnabled { tapCandidates.insert(input) }
-        if !variableEnabled { changeTarget(legacyMultiplier, at: now, immediate: true) }
+        if !variableEnabled { changeTarget(fixedFastSpeed, at: now, immediate: true) }
     }
 
     public mutating func release(_ input: Hold, at now: TimeInterval, allowTap: Bool = true, retainReachedSpeed: Bool = false) {
@@ -158,14 +188,15 @@ public struct GameplaySpeed: Sendable {
 
     /// Each level begins at normal speed with a conservative first fast tier.
     public mutating func newLevel(at now: TimeInterval) {
+        measuredLimit = .infinity
         reset(at: now); cruise = 2; stoppedAt = nil
     }
 
     public mutating func setFast(_ enabled: Bool, at now: TimeInterval) {
         cancelHolds()
         if !enabled { newLevel(at: now); return }
-        selected = legacyMultiplier
-        if variableEnabled { cruise = legacyMultiplier }
+        selected = fixedFastSpeed
+        if variableEnabled { cruise = fixedFastSpeed }
         changeTarget(selected, at: now, immediate: true)
     }
 
@@ -185,6 +216,7 @@ public struct GameplaySpeed: Sendable {
         return transitionFrom + (target - transitionFrom) * t * t * (3 - 2 * t)
     }
     private mutating func changeTarget(_ value: Double, at now: TimeInterval, immediate: Bool = false) {
+        if value != target { resetThroughputSample() }
         if immediate || value < target {
             target = value; multiplier = value; transitionFrom = value; changedAt = now; return
         }

@@ -221,8 +221,16 @@ struct ReticleFeedback {
       return [accessibleElements.element(id: "status", owner: owner, label: status, frame: transform(bounds))]
     }
     var items: [Any] = []
-    func visibleFrame(_ frame: CGRect) -> CGRect { usesHomeLayout ? frame.intersection(homeViewport) : frame }
-    if let overlayTitle { items.append(accessibleElements.element(id: "title", owner: owner, label: overlayTitle, frame: transform(bounds))) }
+    let home = usesHomeLayout ? homeOverlay() : nil
+    func visibleFrame(_ frame: CGRect) -> CGRect { home == nil ? frame : frame.intersection(homeViewport) }
+    if let overlayTitle {
+      let titleFrame = home.map { homeFrame($0.layout.heading, scale: $0.scale, layout: $0.layout) } ?? bounds
+      let rect = visibleFrame(titleFrame)
+      if !rect.isEmpty {
+        items.append(accessibleElements.element(id: "title", owner: owner,
+          label: overlayHomePlay ? home?.page.title ?? overlayTitle : overlayTitle, frame: transform(rect)))
+      }
+    }
     if let rect = overlaySettingsButtonFrame().map(visibleFrame), !rect.isEmpty {
       items.append(accessibleElements.element(
         id: "settings", owner: owner, label: L10n.text("Settings"), frame: transform(rect)
@@ -232,7 +240,16 @@ struct ReticleFeedback {
       items.append(accessibleElements.element(id: "update", owner: owner,
         label: L10n.text("\(label). Show update and release notes"), frame: transform(rect)) { [weak self] in self?.onUpdate?() })
     }
-    for (index, line) in overlayLines.enumerated() {
+    let rowOrder = home.map { home in
+      home.layout.targets.compactMap { target in home.page.rows.firstIndex { $0.id == target.action.id } }
+    } ?? Array(overlayLines.indices)
+    for index in rowOrder {
+      if index == overlayHomeLeadingCount, let home, let heading = home.layout.rowHeadings.first {
+        let rect = visibleFrame(homeFrame(heading.1, scale: home.scale, layout: home.layout))
+        if !rect.isEmpty {
+          items.append(accessibleElements.element(id: "games-heading", owner: owner, label: heading.0, frame: transform(rect)))
+        }
+      }
       let rect = visibleFrame(overlayLineRects.indices.contains(index) ? overlayLineRects[index] : bounds)
       if rect.isEmpty { continue }
       let actionable = overlayHighlight != nil || overlayRetryLine == index || overlayReplayLine == index
@@ -242,10 +259,9 @@ struct ReticleFeedback {
         else if self.overlayReplayLine == index { self.onReplay?(false) }
         else { self.onSelectOverlayLine?(index) }
       } : nil
-      items.append(accessibleElements.element(id: "line-\(index)", owner: owner, label: line, frame: transform(rect), press: action))
+      items.append(accessibleElements.element(id: "line-\(index)", owner: owner, label: overlayLines[index], frame: transform(rect), press: action))
     }
-    if usesHomeLayout, let initials = overlayProfileInitials {
-      let home = homeOverlay()
+    if let home, let initials = overlayProfileInitials {
       let rect = visibleFrame(homeFrame(home.layout.initials, scale: home.scale, layout: home.layout))
       if !rect.isEmpty {
         items.append(accessibleElements.element(id: "home-players", owner: owner,
@@ -286,6 +302,8 @@ struct ReticleFeedback {
   private var handoverButtons: [CGRect] = []
   var overlayLines: [String] = []
   var overlayHomeLeadingCount = 1
+  var overlayHomeTitles: [String] = []
+  var overlayHomeGameCaptions: [Int: [GameFrontEnd.TextRun]] = [:]
   var overlayHomeLogos: [Int: GameFrontEnd.GameLogo] = [:]
   private var homeScrollOffset: CGFloat = 0
   private var homePreviousSelection: Int?
@@ -299,7 +317,14 @@ struct ReticleFeedback {
   var onLeaderboards: (() -> Void)?
   var onPlaylists: (() -> Void)?
   /// The title screen shows Play: routes and games under a Play heading, with Back to Home.
-  var overlayHomePlay = false
+  var overlayHomePlay = false {
+    didSet {
+      if overlayHomePlay != oldValue {
+        homeScrollOffset = 0
+        homePreviousSelection = nil
+      }
+    }
+  }
   var onHomeBack: (() -> Void)?
   var overlayShowsSettingsButton = false
   var onSettings: (() -> Void)?
@@ -1154,10 +1179,18 @@ struct ReticleFeedback {
   }
   private func homeOverlay() -> (page: GameFrontEnd.Page, layout: GameFrontEnd.Layout, scale: CGFloat) {
     let rows = overlayLines.enumerated().map { index, title in
-      var action = GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index), title,
+      let gameCaption = overlayHomeGameCaptions[index]
+      var action = GameFrontEnd.Action((index < overlayHomeLeadingCount ? "home." : "family.") + String(index),
+        overlayHomeTitles.indices.contains(index) ? overlayHomeTitles[index] : title,
         primary: index == 0, selected: index == overlayHighlight, gameLogo: overlayHomeLogos[index])
-      action.titleRuns = index < overlayHomeLeadingCount ? GameSemanticText.resume(title)
-        : action.gameLogo == nil ? GameSemanticText.title(title) : [.init(title, .blue)]
+      action.titleRuns = gameCaption ?? GameSemanticText.resume(title)
+      if action.primary {
+        if action.titleRuns.count == 1 {
+          action.titleRuns = GameSemanticText.title(title)
+        } else {
+          action.titleRuns[0].palette = .green
+        }
+      }
       return action
     }
     // Home's destinations are rows. Play keeps Back and Collections. Settings stays in the header.
@@ -1171,12 +1204,16 @@ struct ReticleFeedback {
     }
     var page = GameFrontEnd.Page(title: overlayHomePlay ? L10n.text("Play") : L10n.text("Lemmings"),
       home: !overlayHomePlay, rows: rows, footer: footer,
-      footerColumns: bounds.width >= 900 ? 3 : 2, homeInitials: overlayHomePlay ? "" : overlayProfileInitials ?? "")
+      homeInitials: overlayHomePlay ? "" : overlayProfileInitials ?? "")
     page.gameLibrary = overlayHomePlay
+    page.macTitleMenu = true
     page.homeNextPlayerIndex = overlayHomePlay ? nil : overlayNextPlayerIndex
-    let scale = max(1, min(2, floor(min(bounds.width / 1400, homeViewport.height / 1000))))
-    return (page, GameFrontEnd.layout(page, width: min(1100, bounds.width / scale),
-      minimumHeight: homeViewport.height / scale), scale)
+    let viewport = homeViewport
+    if viewport.width >= 880, viewport.height >= 500 {
+      let layout = GameFrontEnd.layout(page, width: min(740, viewport.width / 2), minimumHeight: viewport.height / 2)
+      if overlayHomePlay || layout.size.height <= viewport.height / 2 { return (page, layout, 2) }
+    }
+    return (page, GameFrontEnd.layout(page, width: min(740, viewport.width), minimumHeight: viewport.height), 1)
   }
   private func homeFrame(_ frame: CGRect, scale: CGFloat, layout: GameFrontEnd.Layout) -> CGRect {
     return frame.applying(CGAffineTransform(scaleX: scale, y: scale)).offsetBy(
@@ -1222,7 +1259,8 @@ struct ReticleFeedback {
       if direction == "up" || direction == "down", a.minY != b.minY {
         return abs(a.minY - current.minY) < abs(b.minY - current.minY)
       }
-      return abs(a.midX - current.midX) < abs(b.midX - current.midX)
+      let leftDistance = abs(a.midX - current.midX), rightDistance = abs(b.midX - current.midX)
+      return abs(leftDistance - rightDistance) < 0.5 ? left < right : leftDistance < rightDistance
     } ?? index
   }
   private func drawHomeOverlay() {
