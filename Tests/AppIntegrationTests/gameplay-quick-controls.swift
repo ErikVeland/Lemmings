@@ -89,7 +89,7 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
     try check(root.bounds.maxX - menu.frame.maxX == 12
       && (flipped ? menu.frame.minY - root.bounds.minY : root.bounds.maxY - menu.frame.maxY) == 12,
       "Control row did not anchor to the top-right corner")
-    for (left, right) in zip(sorted, sorted.dropFirst()) {
+    for (left, right) in zip(sorted, sorted.dropFirst()) where left.frame.maxX < right.frame.minX {
       let gap = CGPoint(x: (left.frame.maxX + right.frame.minX) / 2, y: left.frame.midY)
       try check(keyboard.navigationFrame(in: root)!.contains(gap), "Control gap escaped playfield input exclusion")
       try check(root.hitTest(root.convert(gap, to: root.superview)) is GameplayMenuHitArea,
@@ -142,8 +142,9 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
       try check(root.bounds.contains(frame) && !navigation.intersects(frame),
         name + " status text or game-menu target was covered by the icon row")
     }
+    let expectedSide: CGFloat = root.bounds.width >= 960 ? 64 : 32
     for button in sorted {
-      try check(root.bounds.contains(button.frame) && button.frame.width >= 44 && button.frame.height == 44
+      try check(root.bounds.contains(button.frame) && button.frame.width == expectedSide && button.frame.height == expectedSide
         && button.frame.minY == sorted[0].frame.minY
         && (button.glyph != nil || button.title == L10n.text("Hints")),
         name + " quick controls did not form one row of icon tiles")
@@ -153,7 +154,7 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
     }
     for (left, right) in zip(sorted, sorted.dropFirst()) {
       let startsMenuGroup = right.glyph == .settings || (right.glyph == .menu && left.glyph != .settings)
-      try check(right.frame.minX - left.frame.maxX == (startsMenuGroup ? 24 : 8),
+      try check(right.frame.minX - left.frame.maxX == (startsMenuGroup ? GameHUDControlGroup.spacing : 0),
         name + " quick controls lost their action/menu grouping")
     }
   }
@@ -180,7 +181,7 @@ func checkGameplayQuickControl(_ value: Bool, _ message: String) throws {
     try checkRow(buttons, in: root)
     let navigation = keyboard.navigationFrame(in: root)!
     for button in buttons {
-      try check(root.bounds.contains(button.frame) && button.frame.width >= 44 && button.frame.height >= 44,
+      try check(root.bounds.contains(button.frame),
         name + " clipped a quick control")
       let top = root.isFlipped ? button.frame.minY : root.bounds.maxY - button.frame.maxY
       try check(top == 12, name + " quick controls retained the old top offset")
