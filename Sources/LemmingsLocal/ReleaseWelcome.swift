@@ -10,8 +10,8 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.5"
-    static let lemmixNotesVersion = "2.5"
+    static let notesVersion = "2.6"
+    static let lemmixNotesVersion = "2.6"
     static var subtitle: String { GameReleaseCopy.invitation }
     static var sections: [(String, String)] {
         if AppDistribution.isStore && !GameMenuLogo.usesRestoredArtwork {
@@ -22,8 +22,8 @@ import NxlvKit
             ]
         }
         return [
-            (L10n.text("Home and Play"), L10n.text("Home offers one next step. Play holds every game and collection.")),
-            (L10n.text("Speed and rewind"), L10n.text("Choose a speed directly. Rewind counts back in game seconds.")),
+            (L10n.text("Home and Play"), L10n.text("Home gives Start or Resume a larger button. Play groups games, saved routes and collections.")),
+            (L10n.text("Speed and rewind"), L10n.text("Choose a speed directly. In a solution replay, use the timeline to revisit a move.")),
             (L10n.text("Compatibility"), L10n.text("macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta."))
         ]
     }
