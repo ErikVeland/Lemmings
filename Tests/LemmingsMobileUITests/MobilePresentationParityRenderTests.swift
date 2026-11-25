@@ -101,9 +101,10 @@ import Testing
             MobileSequelMenuArt.movies(engine: "lemmings2"), MobileSequelMenuArt.movies(engine: "lemmings3"),
             MobileSequelMenuArt.movie(.tribesEnding, paused: false, finished: false, failure: nil),
             MobileSequelMenuArt.movie(.chronicles(.introduction), paused: true, finished: false, failure: nil),
-            ShortGamesArt.page(available: ["classic", "classic-follow-up", "lemmings2"], selected: "classic-follow-up")]
+            ShortGamesArt.page(available: ["classic", "classic-follow-up", "lemmings2"], selected: "classic-follow-up"),
+            ShortGamesArt.page(available: ["classic", "classic-follow-up", "lemmings2", "easy-puzzles"], selected: "easy-puzzles")]
         let shortGames = try #require(pages.last)
-        #expect(shortGames.rows.filter(\.selected).map(\.id) == ["shortSelect.classic-follow-up"])
+        #expect(shortGames.rows.filter(\.selected).map(\.id) == ["shortSelect.easy-puzzles"])
         #expect(shortGames.footer.last?.enabled == true)
         #expect(ShortGamesArt.page(available: ["classic"], selected: "classic-follow-up").footer.last?.enabled == false)
         let output = Self.root.appendingPathComponent(".build/platform-parity/renders")

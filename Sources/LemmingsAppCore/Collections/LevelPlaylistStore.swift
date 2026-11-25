@@ -294,7 +294,7 @@ import NxlvKit
     /// Save a win before the player leaves the result. Keep the current turn in place.
     public func recordLearningWin(runID: UUID, level: LevelCatalogueIdentity) throws {
         guard let run = document.activeRun, run.id == runID,
-              run.source == .playlist(LearningJourney.playlistID),
+              (run.source == .playlist(LearningJourney.playlistID) || run.source == .easyPuzzles),
               run.currentEntry.identity == level else { throw Failure.invalidDocument }
         guard !learningProgress(hotSeatID: document.activeRunHotSeatID).completed.contains(level) else { return }
         let previous = document
@@ -312,7 +312,8 @@ import NxlvKit
         var progress = learningProgress(hotSeatID: document.activeRunHotSeatID)
         progress.record(run.currentEntry.identity, won: won)
         setLearningProgress(progress, hotSeatID: document.activeRunHotSeatID)
-        let advanced = run.advance()
+        var advanced = run.advance()
+        while advanced && progress.completed.contains(run.currentEntry.identity) { advanced = run.advance() }
         document.activeRun = run
         do { try save() } catch { document = previous; throw error }
         return advanced
@@ -413,7 +414,7 @@ import NxlvKit
         let completed = learningProgress(hotSeatID: hotSeatID).completed
         let entries = document.playlists.flatMap(\.entries)
             + (document.activeRun?.entries ?? []) + savedRuns.flatMap { $0.run.entries }
-            + (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? [])
+            + (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []) + EasyPuzzleCatalogue.puzzles.map(\.entry)
         var seen: Set<LevelCatalogueIdentity> = []
         return entries.filter { completed.contains($0.identity) && seen.insert($0.identity).inserted }
     }

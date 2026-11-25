@@ -1,10 +1,15 @@
 import LemmingsAppCore
 import NxlvKit
 
-/// Shared phone, tablet and TV selection for the five-level routes.
+/// Shared phone, tablet and TV selection for short sessions.
 public enum ShortGamesArt {
     public static func page(available: Set<String>, selected: String = "classic", loading: Bool = false, subtitle: String = "") -> GameFrontEnd.Page {
-        let rows = ShortPlayCatalogue.sequences.map { sequence in
+        var rows: [GameFrontEnd.Action] = []
+        if available.contains("easy-puzzles") {
+            rows.append(.init("shortSelect.easy-puzzles", EasyPuzzleCatalogue.title, enabled: !loading,
+                              selected: selected == "easy-puzzles"))
+        }
+        rows += ShortPlayCatalogue.sequences.map { sequence in
             GameFrontEnd.Action("shortSelect." + sequence.id, sequence.title + "  " + sequence.caption,
                 enabled: !loading && sequence.supportsCarriedSequence && available.contains(sequence.id),
                 selected: sequence.id == selected)

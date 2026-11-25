@@ -525,6 +525,11 @@ public final class RunRecoveryStore: @unchecked Sendable {
     /// Chooses the newest run from cached headers, then fully loads only that run.
     public func latest(profileID: String, hotSeatID: String? = nil,
                        sequence: SequenceRunRecovery? = nil) throws -> RunRecovery? {
+        try latest(profileIDs: [profileID], hotSeatID: hotSeatID, sequence: sequence)
+    }
+
+    public func latest(profileIDs: Set<String>, hotSeatID: String?,
+                       sequence: SequenceRunRecovery?) throws -> RunRecovery? {
         try queue.sync {
             var candidates: [(id: UUID, savedAt: Date)] = []
             var firstError: Error?
@@ -532,7 +537,7 @@ public final class RunRecoveryStore: @unchecked Sendable {
             for (id, read) in headers(ids, stamps: listed) {
                 switch read {
                 case .success(let header):
-                    guard let header, header.profileID == profileID, header.hotSeatID == hotSeatID,
+                    guard let header, profileIDs.contains(header.profileID), header.hotSeatID == hotSeatID,
                       header.sequence == sequence else { continue }
                     candidates.append((id, header.savedAt))
                 case .failure(let error): if firstError == nil { firstError = error }
@@ -546,7 +551,7 @@ public final class RunRecoveryStore: @unchecked Sendable {
                     continue
                 }
                 do {
-                    guard let value = try loadRun(candidate.id), value.profileID == profileID, value.hotSeatID == hotSeatID else { continue }
+                    guard let value = try loadRun(candidate.id), profileIDs.contains(value.profileID), value.hotSeatID == hotSeatID else { continue }
                     if let settled = stamp(candidate.id), settled == current { loadedRun = (candidate.id, settled, value) }
                     if value.sequence == sequence { return value }
                 } catch { if firstError == nil { firstError = error } }

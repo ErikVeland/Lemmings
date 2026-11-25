@@ -33,6 +33,7 @@ cp "$project_dir/Resources/Hints/solutions.json" "$resources_dir/Hints/solutions
 mkdir -p "$resources_dir/Progression"
 cp "$project_dir/Resources/Progression/exclusions.json" "$resources_dir/Progression/exclusions.json"
 cp "$project_dir/Resources/Progression/learning.json" "$resources_dir/Progression/learning.json"
+cp "$project_dir/Resources/Progression/easy-puzzles.json" "$resources_dir/Progression/easy-puzzles.json"
 cp "$project_dir/Resources/Progression/solutions.json" "$resources_dir/Progression/solutions.json"
 cp "$project_dir/Resources/Progression/bundled-playable-exclusions.json" \
   "$resources_dir/Progression/bundled-playable-exclusions.json"

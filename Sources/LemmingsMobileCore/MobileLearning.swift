@@ -39,6 +39,29 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
         preserveCurrentRun()
         run = next
     }
+    public mutating func startEasyPuzzles(_ entries: [LevelPlaylistEntry]) throws {
+        let next = try EasyPuzzleCatalogue.run(entries: entries)
+        refreshJourneySession()
+        preserveCurrentRun()
+        run = next
+    }
+
+    @discardableResult public mutating func resumeEasyPuzzles() -> Bool {
+        if run?.source == .easyPuzzles { return true }
+        guard let saved = savedRuns.first(where: { $0.source == .easyPuzzles }) else { return false }
+        refreshJourneySession()
+        preserveCurrentRun()
+        savedRuns.removeAll { $0.id == saved.id }
+        run = saved
+        return true
+    }
+
+    public mutating func endEasyPuzzles() {
+        guard run?.source == .easyPuzzles else { return }
+        run = nil
+        resumeJourney()
+    }
+
     private mutating func preserveCurrentRun() {
         guard let run else { return }
         savedRuns.removeAll { $0.id == run.id }
@@ -63,11 +86,17 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
 
     public mutating func record(won: Bool) {
         guard let run else { return }
-        if run.pool.id.hasPrefix("learning-") { progress.record(run.currentEntry.identity, won: won) }
+        if run.pool.id.hasPrefix("learning-") || (run.source == .easyPuzzles && won) {
+            progress.record(run.currentEntry.identity, won: won)
+        }
     }
     @discardableResult public mutating func advance() -> Bool {
         guard var current = run else { return false }
-        guard current.advance() else {
+        var advanced = current.advance()
+        if current.source == .playlist(LearningJourney.playlistID) {
+            while advanced && progress.completed.contains(current.currentEntry.identity) { advanced = current.advance() }
+        }
+        guard advanced else {
             if current.source == .playlist(LearningJourney.playlistID) {
                 journeySession = .init(run: nil)
             }
