@@ -100,7 +100,8 @@ public final class GameMenuTypography {
             let glyph = countdown ?? (display ? GameLemmingsDisplayFace.frame(source, sequence: item.sequence,
                 cellWidth: font.cellWidth, cellHeight: font.cellHeight) : GameLemmingsDisplayFace.Glyph(source))
             let pixels = display || countdown != nil ? 1 : scale
-            guard let image = image(for: glyph, key: "\(face.rawValue)-\(display)-\(countdown != nil)-\(item.sequence)", palette: palette) else { continue }
+            guard let image = image(for: glyph, key: "\(face.rawValue)-\(display)-\(countdown != nil)-\(item.sequence)",
+                palette: BitmapLatinGlyphs.flag(inSequence: item.sequence) == nil ? palette : .blue) else { continue }
             let rect = CGRect(x: origin.x + CGFloat(item.x * scale + glyph.x * pixels), y: origin.y + CGFloat(glyph.y * pixels),
                               width: CGFloat(glyph.width * pixels), height: CGFloat(glyph.height * pixels))
             GameStoneArt.drawTextOutline(image, in: rect, context: context)
@@ -153,7 +154,7 @@ public final class GameMenuTypography {
             .replacingOccurrences(of: "‹", with: "<").replacingOccurrences(of: "›", with: ">")
         return BitmapTamilGlyphs.sequences(in: plain).map { sequence in
             if BitmapTamilGlyphs.supports(sequence) { return sequence }
-            return sequence.count == 1 && sequence.allSatisfy { BitmapLatinGlyphs.supports($0) || $0 == "💀" } ? sequence : "?"
+            return sequence.count == 1 && sequence.allSatisfy { BitmapLatinGlyphs.supports($0) || BitmapLatinGlyphs.isPictograph($0) } ? sequence : "?"
         }.joined()
     }
 

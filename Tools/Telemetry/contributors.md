@@ -2,7 +2,7 @@
 
 ## Project
 
-Erik Veland — Ultimate Lemmings
+Erik Veland — Ultimate Lemmings 🏳️‍⚧️🇵🇸
 
 ## Original games
 

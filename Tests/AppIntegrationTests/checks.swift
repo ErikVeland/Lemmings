@@ -6672,8 +6672,11 @@ extension AppDelegate {
     try Data(contentsOf: Bundle.main.resourceURL!.appendingPathComponent("About/VersionHistory.md"))
       .write(to: aboutFolder.appendingPathComponent("VersionHistory.md"))
     let about = AboutWindow(resources: aboutResources, defaults: defaults,
-      loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter" })
+      loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter\n\nFlags 🏳️‍⚧️🇵🇸" })
     let page = about.show(owner: window)
+    let flags = "🏳️‍⚧️🇵🇸"
+    try check(GameMenuTypography.menuText(flags) == flags && GameMenuArtwork.renderer()?.font(.small)?.covers(flags) == true
+      && GameMenuArtwork.renderer()?.font(.large)?.covers(flags) == true, "Contributor flags lost their glyphs")
     try check(window.firstResponder === page.controllerBackButton, "About did not retain safe Back focus")
     for _ in 0..<100 where defaults.string(forKey: "ContributorsMarkdownV1") == nil {
       try await Task.sleep(nanoseconds: 10_000_000)
