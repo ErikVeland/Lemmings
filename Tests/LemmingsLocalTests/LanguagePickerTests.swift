@@ -127,7 +127,7 @@ final class LanguagePickerTests: XCTestCase {
                 GameLocalisation.setLanguage(choice)
                 XCTAssertEqual(ReleaseWelcome.subtitle, GameLocalisation.text("Pull up a chair. We've got a level to finish."))
                 let expectedHeading = AppDistribution.isStore && !GameMenuLogo.usesRestoredArtwork
-                    ? GameLocalisation.text("Ultimate Lemmix") : GameLocalisation.text("Chronicles controls")
+                    ? GameLocalisation.text("Ultimate Lemmix") : GameLocalisation.text("Home and Play")
                 XCTAssertEqual(ReleaseWelcome.sections.first?.0, expectedHeading)
                 if choice != .english {
                     XCTAssertNotEqual(GameLocalisation.text("Continue"), "Continue")
