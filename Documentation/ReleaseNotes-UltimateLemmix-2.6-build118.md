@@ -9,5 +9,3 @@ Home gives Start or Resume the largest button. Play groups games, saved routes a
 Speed controls make it easier to select the pace of play. Replay controls show the elapsed game time and let you revisit recorded moves. The Mac solution replay timeline marks successful skill assignments.
 
 Adaptive DJ follows the active level in fan queues. Campaign routes use soundtrack variants in a set order.
-
-Start with the included puzzles or import compatible levels and assets that you own.
