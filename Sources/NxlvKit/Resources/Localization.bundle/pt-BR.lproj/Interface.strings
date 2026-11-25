@@ -3596,7 +3596,7 @@
 "{0} {1}s" = "{0} {1}s";
 "{0} — {1} {2} — Beta" = "{0} — {1} {2} — Beta";
 "{0}'s attempt" = "Partida de {0}";
-"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. {6}Enter: {7}. R retries. V opens replay. B opens records. C opens career progress. D opens details. Escape returns." = "Tentativa de {0}. {1}. {2}. {3} {4}{5} de 3 estrelas nesta partida. {6}Enter: {7}. R tenta de novo. V abre o replay, B os recordes, C o progresso da carreira e D os detalhes. Escape volta.";
+"{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. {6}" = "Tentativa de {0}. {1}. {2}. {3} {4}{5} de 3 estrelas nesta partida. {6}";
 "{0}'s turn" = "Vez de {0}";
 "{0}, {1} remaining{2}" = "{0}, {1} restantes{2}";
 "{0}, {1} tracks, {2}" = "{0}, {1} faixas, {2}";

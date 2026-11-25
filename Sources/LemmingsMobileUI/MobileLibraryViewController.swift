@@ -53,7 +53,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     #if os(tvOS)
     private var topShelfTask: Task<Void, Never>?
     #endif
-    private var lastBookPanes: (size: CGSize, panes: [MobileRect]) = (.zero, [])
+    private var bookHomePanes = MobileDisplayRegions.BookHomePanes()
     private var usesMenuOverlay: Bool {
         #if os(iOS)
         usesHomeBox
@@ -740,15 +740,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         syncPages()
         let safe = view.safeAreaLayoutGuide.layoutFrame
-        var book = route == .home && canvas.page.home ? MobileDisplayRegions.bookPanes(
+        let regions = MobileSystemRegions.read(in: view)
+        let isHome = route == .home && canvas.page.home
+        let flatHinge = isHome && MobileSystemRegions.flatHingeReported(in: view, regions: regions)
+        let book = isHome ? bookHomePanes.resolve(
             in: MobileRect(x: safe.minX, y: safe.minY, width: safe.width, height: safe.height),
-            avoiding: MobileSystemRegions.read(in: view)) : []
-        // The hinge region can drop out for a moment on periodic layout passes.
-        // Keep the spanned panes until the window size actually changes.
-        if route == .home && canvas.page.home {
-            if book.isEmpty, lastBookPanes.size == view.bounds.size { book = lastBookPanes.panes }
-            else { lastBookPanes = (view.bounds.size, book) }
-        }
+            avoiding: regions, flatHingeReported: flatHinge) : []
+        if !isHome { bookHomePanes = .init() }
         var menuRegion = book.isEmpty ? MobileSystemRegions.menuFrame(in: view) : safe
         if MobileSystemRegions.usesFullDisplay(in: view) { menuRegion = view.bounds }
         canvas.obstructionReferenceView = view
@@ -908,6 +906,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         settingsTabs.layoutIfNeeded()
         listTools.layoutIfNeeded()
         game?.view.frame = view.bounds
+        #if DEBUG && os(iOS)
+        if isHome, game == nil, MobileSystemRegions.isFoldable(in: view) {
+            MobileSystemRegions.recordMenuGeometry(in: view, regions: regions, frame: menuRegion, book: !book.isEmpty, flatHinge: flatHinge)
+        }
+        #endif
     }
     private func rememberHomeBackdrop(_ session: any MobileGameSession, at index: Int) {
         let kind: MobileGameDataKind = session.engineIdentifier == "lemmings2" ? .lemmings2
@@ -2382,6 +2385,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             else { notice = error.localizedDescription; rebuild() }
         }
     }
+    #if os(iOS)
+    override func loadView() {
+        if #available(iOS 27.1, *) { view = MobileRegionTrackingView() }
+        else { super.loadView() }
+    }
+    #endif
 }
 #endif
 
