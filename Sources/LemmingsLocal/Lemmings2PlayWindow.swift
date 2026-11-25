@@ -1560,7 +1560,9 @@ import NxlvKit
             canvas.setPanel(rendered)
         }
         canvas.toolTip = nil
-        let transport = rewindOriginState.map { L10n.text("Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels.") } ?? ""
+        // Game seconds, as on the visible cue. Ticks stay out of player text.
+        let transport = rewindOriginState.flatMap { RewindCue(currentTick: game.tick, originTick: $0.tick, ticksPerSecond: Lemmings2Runtime.ticksPerSecond) }
+            .map { $0.accessibilityLabel + ". " + L10n.text("Hold full stop scrubs forward. Escape cancels.") } ?? ""
         let deathCounterAccessibility = screen == .playing ? deathCounter.accessibility : ""
         canvas.setAccessibilityLabel(L10n.text("Lemmings 2. \(SkillVocabulary.title(game.configuration.skills[selected].name)) selected. \(label). \(paused ? L10n.text("Paused.") : L10n.text("Running.")) \(game.isNuking ? L10n.text("Nuke active.") : "") \(game.released) released, \(game.saved) saved. \(deathCounterAccessibility). \(canvas.precisionStatus.accessibility). \(transport)"))
     }

@@ -141,7 +141,7 @@ import LemmingsGameArt
         previousMoveButton = button(L10n.text("Previous move"), L10n.text("Previous successful skill use. Control-Left.")) { [weak self] in self?.seekMove(-1) }
         nextMoveButton = button(L10n.text("Next move"), L10n.text("Next successful skill use. Control-Right.")) { [weak self] in self?.seekMove(1) }
         _ = button(L10n.text("Back 1s"), L10n.text("Rewind one second.")) { [weak self] in self?.seek(-ClassicDOSRules.ticksPerSecond) }
-        _ = button(L10n.text("Step +1"), L10n.text("Advance one tick.")) { [weak self] in self?.seek(1) }
+        _ = button(L10n.text("Step +1"), L10n.text("Step forward")) { [weak self] in self?.seek(1) }
         transport = button(L10n.text("Pause"), L10n.text("Play or pause. Space or P."), primary: true) { [weak self] in self?.togglePause() }
         _ = button(L10n.text("Speed -"), L10n.text("Slower. Shift+[.")) { [weak self] in self?.speedControl.step(-1, at: ProcessInfo.processInfo.systemUptime) }
         speedButton = button("1×", L10n.text("Toggle fast forward. Hold F to ramp speed. Hold Shift for a temporary boost."), speed: true) { [weak self] in self?.speedControl.tap() }

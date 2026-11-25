@@ -1902,10 +1902,10 @@ extension AppDelegate {
       throw IntegrationFailure(message: "Screen setting lacks its accessible name")
     }
     let tubeControls = descendants(root).compactMap { $0 as? GameSlider }.filter {
-      ["Tube Strength", "Pixel Width"].contains($0.accessibilityLabel() ?? "")
+      ["Tube strength", "Pixel width"].contains($0.accessibilityLabel() ?? "")
     }
     let tubeLabels = descendants(root).compactMap { $0 as? GameLabel }.filter {
-      ["Tube Strength", "Pixel Width"].contains($0.stringValue)
+      ["Tube strength", "Pixel width"].contains($0.stringValue)
     }
     try check(tubeControls.count == 2 && tubeLabels.count == 2, "Tube options are missing")
     let tubeValues = tubeControls.map(\.doubleValue)

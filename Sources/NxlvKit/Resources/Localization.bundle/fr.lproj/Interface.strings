@@ -177,12 +177,10 @@
 "Add to playlist" = "Ajouter à la liste de lecture";
 "Added effects" = "Effets ajoutés";
 "Added to {0}" = "Ajouté à {0}";
-"Adjust Classic pixel width with Monitor or Television. Flat Panel keeps the saved value." = "Règle la largeur des pixels du mode classique avec Moniteur ou Téléviseur. Écran plat conserve la valeur enregistrée.";
+"Adjust Classic pixel width with Monitor or Television." = "Règle la largeur des pixels du mode classique avec Moniteur ou Téléviseur.";
 "Adjust music volume independently of sound effects." = "Règle le volume de la musique indépendamment des effets sonores.";
 "Adjust sound-effects volume independently of music." = "Règle le volume des effets sonores indépendamment de la musique.";
-"Adjust the Classic tube effect. Available with Monitor or Television. Flat Panel keeps the saved value." = "Règle l’effet tube du mode classique. Disponible avec Moniteur ou Téléviseur. Écran plat conserve la valeur enregistrée.";
-"Advance one tick" = "Avancer d’un cycle";
-"Advance one tick." = "Avance d’un cycle.";
+"Adjust the Classic tube effect. Available with Monitor or Television." = "Règle l’effet tube du mode classique. Disponible avec Moniteur ou Téléviseur.";
 "Affection remains unchanged." = "Affection remains unchanged.";
 "After a result: retry / records" = "Après le résultat : réessayer / records";
 "Aggregate benefit, with an evidenced trade-off." = "Avantage collectif, avec un compromis étayé.";
@@ -470,7 +468,7 @@
 "Checking solution..." = "Vérification de la solution…";
 "Choose" = "Choisir";
 "Choose 1× in Game controls to reset speed." = "Choisis 1× dans les commandes du jeu pour rétablir la vitesse.";
-"Choose Flat Panel, Monitor or Television. Classic uses the tube simulation. L2 and L3 keep their bitmap renderers." = "Choisis Écran plat, Moniteur ou Téléviseur. Le mode classique utilise la simulation tube. L2 et L3 conservent leur rendu bitmap.";
+"Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "Choisis Écran plat, Moniteur ou Téléviseur. Le mode classique utilise la simulation tube.";
 "Choose Lemmings 3 tool direction" = "Choisir la direction de l’outil Lemmings 3";
 "Choose Music Folder…" = "Choisir le dossier de musique…";
 "Choose Sound Effects…" = "Choisir les effets sonores…";
@@ -488,7 +486,7 @@
 "Choose a player-owned game folder" = "Choisir le dossier d’un jeu que tu possèdes";
 "Choose a rating" = "Choisir une catégorie";
 "Choose a second player" = "Choisir un deuxième joueur";
-"Choose a soundtrack or Adaptive DJ Mix. Available soundtracks depend on installed music libraries." = "Choisis une bande-son ou le mix du DJ adaptatif. Les bandes-son disponibles dépendent des bibliothèques musicales installées.";
+"Choose a soundtrack or Adaptive DJ Mix." = "Choisis une bande-son ou le mix du DJ adaptatif.";
 "Choose a technique" = "Choisir une technique";
 "Choose an action, then click a lemming. Walker turns or releases a blocker." = "Choisissez une action, puis cliquez sur un lemming. Walker le fait faire demi-tour ou libère un bloqueur.";
 "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera." = "Choisissez une action. Les briques et les pelles demandent une direction. Les flèches déplacent la caméra.";
@@ -514,7 +512,7 @@
 "Choose presentation" = "Choisir la présentation";
 "Choose rank" = "Choisir un rang";
 "Choose speed" = "Choisir la vitesse";
-"Choose the Classic artwork source. Available sources depend on installed game data." = "Choisis la source de graphismes classiques. Les sources disponibles dépendent des données de jeu installées.";
+"Choose the Classic artwork source." = "Choisis la source de graphismes classiques.";
 "Choose the NeoLemmix 'styles' directory." = "Choisissez le dossier « styles » de NeoLemmix.";
 "Choose the colour palette for Classic artwork." = "Choisis la palette de couleurs des graphismes classiques.";
 "Choose the directory holding LEVEL000.DAT and MAIN.DAT." = "Choisissez le dossier qui contient LEVEL000.DAT et MAIN.DAT.";
@@ -522,11 +520,11 @@
 "Choose the gameplay action for each controller button. Menu navigation keeps the standard bindings." = "Choisis l’action de jeu associée à chaque bouton de la manette. La navigation dans les menus conserve les attributions standard.";
 "Choose the matching NeoLemmix 'styles' directory." = "Choisis le dossier 'styles' NeoLemmix correspondant.";
 "Choose the physical controller button to change." = "Choisis le bouton physique de la manette à modifier.";
-"Choose the sound-effects source. Available choices depend on installed game data." = "Choisis la source des effets sonores. Les choix disponibles dépendent des données de jeu installées.";
+"Choose the sound-effects source." = "Choisis la source des effets sonores.";
 "Choose the style of Classic skill counters, including the original Macintosh bitmap digits." = "Choisis le style des compteurs de compétences classiques, y compris les chiffres bitmap d’origine du Macintosh.";
 "Choose tribe" = "Choisir une tribu";
 "Choose tribe on map" = "Choisir une tribu sur la carte";
-"Choose unlocked levels or all levels for direct Classic selection. L2 and L3 keep their campaign selection rules." = "Choisis les niveaux débloqués ou tous les niveaux pour sélectionner directement un niveau classique. L2 et L3 conservent leurs règles de sélection de campagne.";
+"Choose unlocked levels or all levels for direct Classic selection." = "Choisis les niveaux débloqués ou tous les niveaux pour sélectionner directement un niveau classique.";
 "Choose your {0} folder." = "Choisis ton dossier {0}.";
 "Chronicles attribute cell is outside its object." = "La cellule d’attribut des Chronicles se trouve hors de son objet.";
 "Chronicles controls" = "Commandes de Chronicles";
@@ -619,7 +617,6 @@
 "Collections" = "Collections";
 "Collections unavailable" = "Collections indisponibles";
 "Collector" = "Collectionneur";
-"Colour Depth" = "Profondeur de couleur";
 "Colour depth" = "Profondeur des couleurs";
 "Combine: {0}" = "Combiner : {0}";
 "Come back to these" = "À revoir";
@@ -766,7 +763,7 @@
 "Digital Sound Bank (WAV/FLAC)" = "Banque de sons numérique (WAV/FLAC)";
 "Direct runs only. Lost counts use population minus saved from one retained result per level." = "Parties directes uniquement. Les pertes correspondent au total moins les sauvés, d’après un résultat conservé par niveau.";
 "Direction {0}" = "Sens {0}";
-"Disable added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain." = "Désactive les noyaux d’explosion lumineux ajoutés, les flashes HDR et les explosions cinématiques. Les sprites d’origine restent inchangés.";
+"Disable added bright explosion cores, HDR flashes and cinematic explosions." = "Désactive les noyaux d’explosion lumineux ajoutés, les flashes HDR et les explosions cinématiques.";
 "Disable speed trails and cinematic explosions. Keep gameplay speed and controls." = "Désactive les traînées de vitesse et les explosions cinématiques. La vitesse et les commandes restent inchangées.";
 "Disarmer" = "Désamorceur";
 "Discard run" = "Abandonner la partie";
@@ -786,7 +783,7 @@
 "Down-right" = "Bas-droite";
 "Download" = "Télécharger";
 "Download game assets" = "Télécharger les données du jeu";
-"Download or remove optional soundtrack libraries. Installed libraries become available in the music choices." = "Télécharge ou supprime des bibliothèques de bandes-son facultatives. Les bibliothèques installées apparaissent parmi les choix musicaux.";
+"Download or remove optional soundtrack libraries." = "Télécharge ou supprime des bibliothèques de bandes-son facultatives.";
 "Download soundtracks" = "Télécharger des bandes-son";
 "Downloading" = "Téléchargement";
 "Downloading..." = "Téléchargement…";
@@ -966,7 +963,7 @@
 "File" = "Fichier";
 "Filler" = "Remblayeur";
 "Find a better way" = "Trouver une meilleure méthode";
-"Find a command by key, action or category. Your game pauses while this guide is open." = "Recherchez une commande par touche, action ou catégorie. Le jeu est en pause tant que ce guide est ouvert.";
+"Find a command by key, action or category." = "Recherchez une commande par touche, action ou catégorie.";
 "Find a key or command, e.g. rewind, Shift, builder" = "Recherchez une touche ou une commande, par ex. retour arrière, Maj ou constructeur";
 "Find your way back" = "Retrouve ta partie";
 "Finds the view reliable." = "Finds the view reliable.";
@@ -1168,7 +1165,7 @@
 "INSPECT LEMMINGS" = "INSPECT LEMMINGS";
 "INTRO SEQUENCE" = "SÉQUENCE D’INTRODUCTION";
 "Icarus Wings" = "Ailes d’Icare";
-"If another button has that action, the two bindings swap. Modifier combinations follow the new buttons. Menu navigation always uses the standard controls. Sticks can be swapped in Controls." = "Si un autre bouton a déjà cette action, les attributions sont échangées. Les combinaisons avec modificateur suivent les nouveaux boutons. Les menus utilisent toujours les commandes standard. Tu peux inverser les sticks dans Commandes.";
+"If another button has that action, the two bindings swap." = "Si un autre bouton a déjà cette action, les attributions sont échangées.";
 "ImageIO cannot decode the PNG graphic." = "ImageIO ne peut pas décoder l’image PNG.";
 "ImageIO cannot open the PNG graphic." = "ImageIO ne peut pas ouvrir l’image PNG.";
 "Immanuel Kant emphasised moral duty and respect for people. People must never be treated merely as tools." = "Emmanuel Kant mettait l’accent sur le devoir moral et le respect des personnes. Les personnes ne doivent jamais être traitées comme de simples outils.";
@@ -1900,7 +1897,7 @@
 "Oh Yes! More Lemmings!" = "Oh oui ! Encore des lemmings !";
 "Oh dear!" = "Oh là là !";
 "On" = "Activé";
-"On pause, play only isolated percussion. Tracks without a rhythm part stop. Applies to all three games." = "En pause, ne joue que les percussions isolées. Les morceaux sans partie rythmique s’arrêtent. S’applique aux trois jeux.";
+"On pause, play only isolated percussion. Tracks without a rhythm part stop." = "En pause, ne joue que les percussions isolées. Les morceaux sans partie rythmique s’arrêtent.";
 "On your other device, choose Enter code." = "Sur l’autre appareil, choisis Saisir le code.";
 "Once mistook a meeting for lunch." = "Once mistook a meeting for lunch.";
 "Once received unexpected praise." = "Once received unexpected praise.";
@@ -1942,7 +1939,7 @@
 "Original movie" = "Film original";
 "Original movies" = "Films originaux";
 "Original restores the original controls and presentation. Modern enables gameplay aids. Individual changes select Custom." = "Original rétablit les commandes et la présentation d’origine. Moderne active les aides de jeu. Toute modification sélectionne Personnalisé.";
-"Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility. Applies to all three games." = "Original utilise le viseur Amiga. Moderne utilise de fins crochets dans les coins pour indiquer si le lemming peut recevoir une compétence. S’applique aux trois jeux.";
+"Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility." = "Original utilise le viseur Amiga. Moderne utilise de fins crochets dans les coins pour indiquer si le lemming peut recevoir une compétence.";
 "Original+ Progression" = "Progression Original+";
 "Originals included. Fancy a remix?" = "Originals included. Fancy a remix?";
 "Our finest shipwrights have worked" = "Nos meilleurs charpentiers de marine ont œuvré";
@@ -2037,7 +2034,7 @@
 "Personal best" = "Record personnel";
 "Peter Singer argues for reducing suffering and using evidence to find where our resources can do the most good." = "Peter Singer défend la réduction de la souffrance et l’usage de preuves pour déterminer où nos ressources peuvent être les plus utiles.";
 "Phil Snape" = "Phil Snape";
-"Pixel Width" = "Largeur en pixels";
+"Pixel width" = "Largeur en pixels";
 "Plan" = "Plan";
 "Plan?" = "Un plan ?";
 "Planter" = "Planteur";
@@ -2112,7 +2109,7 @@
 "Precision, required techniques and human deduction are unknown." = "La précision, les techniques requises et la déduction humaine sont inconnues.";
 "PrecisionZoom.v1.{0}" = "PrecisionZoom.v1.{0}";
 "Prefer eligible blockers for bomb skills. L2 Exploder supports blockers, but Bomber does not. L3 uses carried bombs." = "Privilégie les bloqueurs aptes pour les compétences de bombe. Dans L2, Exploseur fonctionne sur les bloqueurs, mais Bombardier non. L3 utilise les bombes transportées.";
-"Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply." = "Privilégie les lemmings qui utilisent une compétence jusqu’à leur chute. Les règles propres aux compétences restent applicables.";
+"Prefer lemmings using a skill, and retain their priority until they fall." = "Privilégie les lemmings qui utilisent une compétence jusqu’à leur chute.";
 "Preferences" = "Préférences";
 "Prefers the first." = "Prefers the first.";
 "Prefers the one from Tuesday." = "Prefers the one from Tuesday.";
@@ -2369,7 +2366,7 @@
 "Rewards earned ({0}) >" = "Récompenses obtenues ({0}) >";
 "Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "Récompenses obtenues par {0}. {1} {2}. Page {3} sur {4}. Échap revient au résultat.";
 "Rewind" = "Retour arrière";
-"Rewind active, {0} ticks back. Hold full stop scrubs forward. Escape cancels." = "Retour arrière actif, {0} cycles en arrière. Maintiens le point pour avancer dans la chronologie. Échap annule.";
+"Hold full stop scrubs forward. Escape cancels." = "Maintiens le point pour avancer dans la chronologie. Échap annule.";
 "Rewind and busy scenes" = "Retour arrière et scènes animées";
 "Rewind one second." = "Recule d’une seconde.";
 "Rewind one tick" = "Reculer d’un cycle";
@@ -2566,7 +2563,7 @@
 "Short games" = "Parties courtes";
 "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages." = "Les boutons d’épaule changent d’onglet. Le stick droit fait défiler. Relâchez les boutons pour changer de page.";
 "Show / hide Hot Seat ghosts" = "Show / hide Hot Seat ghosts";
-"Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork." = "Affiche les sacs de grimpeur et de parachutiste sur les lemmings classiques. L2 et L3 conservent leurs propres graphismes de compétence.";
+"Show Climber and Floater backpacks on Classic lemmings." = "Affiche les sacs de grimpeur et de parachutiste sur les lemmings classiques.";
 "Show Hot Seat ghosts" = "Show Hot Seat ghosts";
 "Show Recorded Routes" = "Afficher les parcours enregistrés";
 "Show control tips" = "Afficher les astuces de commande";
@@ -3212,7 +3209,6 @@
 "Try later" = "Réessayer plus tard";
 "Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns." = "Essayez une compétence à vitesse normale. Faites une pause et observez où le travailleur atterrit et tourne.";
 "Try these skills!" = "Essaie ces compétences !";
-"Tube Strength" = "Résistance du tube";
 "Tube strength" = "Intensité de l’effet tube";
 "Turn off" = "Désactiver";
 "Turn: {0}" = "Tour : {0}";

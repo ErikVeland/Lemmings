@@ -174,7 +174,7 @@ public enum MobileHUDAction: Hashable, Sendable {
             descriptors.append((.rewind, nil, L10n.text("Rewind")))
             descriptors.append((.stepBackward, nil, L10n.text("Step backward one tick")))
         }
-        descriptors.append((.step, nil, L10n.text("Advance one tick")))
+        descriptors.append((.step, nil, L10n.text("Step forward")))
         if layout.showsMenuButton { descriptors.append((.menu, nil, L10n.text("Menu"))) }
 
         if layout.portrait != nil {
