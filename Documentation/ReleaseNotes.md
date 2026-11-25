@@ -2,20 +2,15 @@
 
 ## Current source and delivery queue
 
-The current source version is **2.5** (Mac build 110, iOS build 48, tvOS build 23).
-Read the [complete 2.5 notes](ReleaseNotes-2.5-build110.md).
-See the [2.4.1 mobile delivery record](ReleaseReadiness/2.4.1-build105/README.md#ios-and-tvos-delivery--4-november-2026)
-for the previous TestFlight submissions.
+The current source version is **2.6** (Mac build 111, iOS build 48, tvOS build 23).
+Read the [complete 2.6 notes](ReleaseNotes-2.6-build111.md).
+The mobile build numbers record the last Ultimate Lemmings mobile candidates.
 
 ## Latest published Mac release
 
-[Mac 2.4.3 build 109](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.3)
-has full and slim notarised downloads for Intel and Apple silicon. The signed
-feed provides direct updates from builds 106, 105, 104, 102 and 99.
-See the [2.4.3 release record](ReleaseReadiness/2.4.3-build109/README.md).
-
-The [2.4.2 record](ReleaseReadiness/2.4.2-build106/README.md) retains the
-previous release checks.
+[Mac 2.5 build 110](https://github.com/ErikVeland/Lemmings/releases/tag/v2.5)
+has full and slim notarised downloads for Intel and Apple silicon.
+See the [2.5 release record](ReleaseReadiness/2.5-build110/README.md).
 
 ## Earlier notes
 
