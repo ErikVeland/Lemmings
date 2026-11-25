@@ -1924,7 +1924,9 @@ import NxlvKit
             || (availability.indices.contains(campaign.index + 1) && availability[campaign.index + 1] == nil))
         canvas.selectedAction = selected; canvas.manualCarrierID = manualCarrierID; canvas.paused = paused; canvas.fast = fast
         canvas.updateSkillBadge()
-        let transport = rewindOriginState.map { L10n.text("Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels.") } ?? ""
+        // Game seconds, as on the visible cue. Ticks stay out of player text.
+        let transport = rewindOriginState.flatMap { RewindCue(currentTick: game.tick, originTick: $0.tick, ticksPerSecond: Lemmings3Runtime.ticksPerSecond) }
+            .map { $0.accessibilityLabel + ". " + L10n.text("Hold full stop scrubs forward. Escape cancels.") } ?? ""
         canvas.rewindOriginTick = rewindOriginState?.tick
         canvas.rewindCurrentTick = game.tick
         canvas.setAccessibilityLabel(L10n.text("\(Lemmings3Brand.current.displayName). \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(deathCounter.accessibility). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus.accessibility). Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish."))

@@ -230,7 +230,8 @@ import NxlvKit
       let glyph = countdown ?? (display ? GameLemmingsDisplayFace.frame(source, sequence: item.sequence,
         cellWidth: font.cellWidth, cellHeight: font.cellHeight) : GameLemmingsDisplayFace.Glyph(source))
       let pixels = display || countdown != nil ? 1 : scale
-      guard let image = image(for: glyph, key: "\(face.rawValue)-\(display)-\(countdown != nil)-\(item.sequence)", palette: palette) else { continue }
+      guard let image = image(for: glyph, key: "\(face.rawValue)-\(display)-\(countdown != nil)-\(item.sequence)",
+        palette: BitmapLatinGlyphs.flag(inSequence: item.sequence) == nil ? palette : .blue) else { continue }
       let rect = CGRect(
         x: origin.x + CGFloat(item.x * scale + glyph.x * pixels), y: origin.y + CGFloat(glyph.y * pixels),
         width: CGFloat(glyph.width * pixels), height: CGFloat(glyph.height * pixels))
@@ -272,7 +273,8 @@ import NxlvKit
     NSGraphicsContext.current = NSGraphicsContext(cgContext: context, flipped: true)
     for item in layout {
       guard let glyph = item.glyph,
-        let image = image(for: GameLemmingsDisplayFace.Glyph(glyph), key: "\(face.rawValue)-false-\(item.sequence)", palette: palette) else { continue }
+        let image = image(for: GameLemmingsDisplayFace.Glyph(glyph), key: "\(face.rawValue)-false-\(item.sequence)",
+          palette: BitmapLatinGlyphs.flag(inSequence: item.sequence) == nil ? palette : .blue) else { continue }
       image.draw(in: CGRect(x: item.x + glyph.x, y: glyph.y,
         width: glyph.width, height: glyph.height), from: .zero, operation: .sourceOver,
         fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
