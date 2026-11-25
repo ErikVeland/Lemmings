@@ -113,7 +113,7 @@ import NxlvKit
         resultActions(y: resultActionsY)
         let board = drawResultLevelLeaderboard(run)
         let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
-        setAccessibilityLabel(L10n.text("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. \(board)Enter: \(primaryResultTitle). R retries. V opens replay. B opens records. C opens career progress. D opens details. Escape returns."))
+        setAccessibilityLabel(L10n.text("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. \(board)").trimmingCharacters(in: .whitespaces))
     }
     /// One worldwide ranking for this level, with every tied leader named. Returns its spoken summary.
     private func drawResultLevelLeaderboard(_ run: ArcadeRun) -> String {

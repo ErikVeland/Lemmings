@@ -3595,7 +3595,7 @@
   "{0} {1}s": "{0} {1} s",
   "{0} — {1} {2} — Beta": "{0} — {1} {2} — Beta",
   "{0}'s attempt": "{0}s forsøk",
-  "{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. {6}Enter: {7}. R retries. V opens replay. B opens records. C opens career progress. D opens details. Escape returns.": "Forsøket til {0}. {1}. {2}. {3} {4}{5} av 3 stjerner dette forsøket. {6}Enter: {7}. R prøver igjen. V åpner opptaket, B rekordene, C karrierefremdriften og D detaljene. Escape går tilbake.",
+  "{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. {6}": "Forsøket til {0}. {1}. {2}. {3} {4}{5} av 3 stjerner dette forsøket. {6}",
   "{0}'s turn": "{0}s tur",
   "{0}, {1} remaining{2}": "{0}, {1} igjen{2}",
   "{0}, {1} tracks, {2}": "{0}, {1} spor, {2}",
