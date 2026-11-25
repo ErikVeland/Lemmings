@@ -1,8 +1,13 @@
 # Ultimate Lemmix release history
 
-The current source version is **2.4.4** (Mac build 116, iOS build 113, tvOS build 113).
+The current source version is **2.5**. It includes the UX overhaul from
+[UX redesign](UXRedesign.md). Its builds are not cut yet. The last assigned builds
+are Mac 116, iOS 113 and tvOS 113.
 
-[Current candidate: Ultimate Lemmix 2.4.4 build 116](ReleaseNotes-UltimateLemmix-2.4.4-build116.md).
+[Ultimate Lemmix 2.4.4 build 116](ReleaseNotes-UltimateLemmix-2.4.4-build116.md).
+iOS 2.4.4 build 113 is on the App Store, and tvOS 2.4.4 build 113 was submitted.
+Both come from source before the UX overhaul. To ship another 2.4.4 build,
+cut it from commit `3b3c10a6` or `efe02350`, not from this branch.
 
 [Ultimate Lemmix 2.4.3 build 115](ReleaseNotes-UltimateLemmix-2.4.3-build115.md).
 
