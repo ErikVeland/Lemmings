@@ -18,8 +18,7 @@ import UIKit
             setNeedsDisplay()
         }
     }
-    /// Whole bitmap scale: 2 on wide or TV screens, 1 on phones.
-    var pixelScale: CGFloat = 1 { didSet { if pixelScale != oldValue { invalidateIntrinsicContentSize(); setNeedsDisplay() } } }
+    private let pixelScale: CGFloat = 2
 
     override init(frame: CGRect) {
         super.init(frame: frame)

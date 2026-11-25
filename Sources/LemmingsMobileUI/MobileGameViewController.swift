@@ -284,6 +284,7 @@ typealias MobileGameControllerBase = UIViewController
     }
     private var lastRenderedTick = -1
     private var nextScenePresentation = 0.0
+    private var simulationPresentationPending = false
     private var minimapFrame: MobilePixelFrame?
     private var minimapUpdatedAt = -Double.infinity
     private var lastMemoryObservation = -Double.infinity
@@ -772,7 +773,11 @@ typealias MobileGameControllerBase = UIViewController
         guard !isDisplayLinkPaused, !lifecycle.isInterrupted else { return }
         playfieldView.advanceTouchInput(at: link.timestamp)
         updateInputSpeed(at: link.timestamp)
-        guard presentsScene else { return }
+        if !paused, overlay.isHidden, !countdown.isActive, !rewindHeld, !resumeFramePending,
+           !session.isSimulationComplete {
+            advanceSimulation(at: link.timestamp, callbackInterval: link.targetTimestamp - link.timestamp)
+        }
+        guard presentsScene || (simulationPresentationPending && session.isSimulationComplete) else { return }
         nextScenePresentation = link.timestamp + 0.9 / Double(max(1, appliedFrameRate))
         if frameStarted - lastMemoryObservation >= 1 {
             lastMemoryObservation = frameStarted
@@ -806,7 +811,6 @@ typealias MobileGameControllerBase = UIViewController
             if countdown.isActive { return }
         }
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld, attemptID: runID)
-        var snapshot = session.snapshot
         if rewindHeld {
             guard lifecycle.isForeground, !lifecycle.isInterrupted, overlay.isHidden else {
                 cancelSeek(); setRewindHeld(false); return
@@ -818,23 +822,9 @@ typealias MobileGameControllerBase = UIViewController
             endRunArmedUntil = 0
             updateHUD()
         }
-        guard !paused, overlay.isHidden, !snapshot.isComplete else { return }
-        // Present the frozen tick before counting time toward the next simulation step.
-        guard !resumeFramePending else { return }
-        let ticks = clock.advance(at: link.timestamp)
-        guard ticks > 0 else { return }
-        // Reserve simulation time after input and presentation preparation; otherwise
-        // a busy frame can exhaust the budget before its first tick.
-        let deadline = ProcessInfo.processInfo.systemUptime + min(0.020, 0.6 / Double(max(1, appliedFrameRate)))
-        var advanced = 0
-        os_signpost(.begin, log: Self.performanceLog, name: "Simulation batch")
-        for _ in 0..<ticks {
-            session.tick(); advanced += 1
-            if session.isSimulationComplete || ProcessInfo.processInfo.systemUptime >= deadline { break }
-        }
-        os_signpost(.end, log: Self.performanceLog, name: "Simulation batch")
-        snapshot = session.snapshot
-        if !snapshot.isComplete { clock.deferTicks(ticks - advanced) }
+        guard overlay.isHidden, simulationPresentationPending else { return }
+        simulationPresentationPending = false
+        let snapshot = session.snapshot
         // Catch-up ticks accumulate cues; spatial placement and scheduling run once per frame.
         effects.update(session: session, viewport: playfieldView.gameViewport, snapshot: snapshot)
         let candidates = renderCurrentFrame(force: true, snapshot: snapshot)
@@ -844,6 +834,32 @@ typealias MobileGameControllerBase = UIViewController
         } else if snapshot.tick - lastCheckpointTick >= Int(ceil(session.ticksPerSecond * 5)) {
             saveCheckpoint(reason: .periodic)
         }
+    }
+
+    private func advanceSimulation(at timestamp: Double, callbackInterval: Double) {
+        let ticks = clock.advance(at: timestamp)
+        var advanced = 0
+        defer {
+            if !session.isSimulationComplete,
+               inputSpeed.observeThroughput(elapsed: clock.lastAdvanceElapsed, ticks: advanced,
+                                            ticksPerSecond: session.ticksPerSecond) {
+                lastHUDLayout = nil
+                updateInputSpeed(at: timestamp)
+                view.setNeedsLayout()
+            }
+        }
+        guard ticks > 0 else { return }
+        let interval = max(1.0 / 60, callbackInterval)
+        let budget = speed > 1 ? min(0.024, interval) : min(0.020, interval * 0.6)
+        let deadline = ProcessInfo.processInfo.systemUptime + budget
+        os_signpost(.begin, log: Self.performanceLog, name: "Simulation batch")
+        for _ in 0..<ticks {
+            session.tick(); advanced += 1
+            if session.isSimulationComplete || ProcessInfo.processInfo.systemUptime >= deadline { break }
+        }
+        os_signpost(.end, log: Self.performanceLog, name: "Simulation batch")
+        simulationPresentationPending = true
+        if !session.isSimulationComplete { clock.deferTicks(ticks - advanced) }
     }
 
     private func hudLayout(insets: UIEdgeInsets) -> MobileHUDLayout {
@@ -1466,7 +1482,8 @@ typealias MobileGameControllerBase = UIViewController
             }
             MobileMusic.shared.selectProfile(self.settingsProfileID)
             MobileMusic.shared.play(identifier: self.session.levelIdentifier, index: self.session.levelIndex,
-                                    title: self.summary.title, attemptID: self.runID, context: self.musicContext)
+                                    title: self.summary.title, attemptID: self.runID, context: self.musicContext,
+                                    usesNeoLemmix: self.session.engineIdentifier == "neolemmix")
             MobileMusic.shared.resume()
         }
     }
@@ -2216,7 +2233,7 @@ typealias MobileGameControllerBase = UIViewController
             preferred: Float(min(60, view.window?.screen.maximumFramesPerSecond ?? 60))
         )
         let speedCatchUp = Int(ceil(
-            session.ticksPerSecond * speed / Double(max(1, framesPerSecond)) * 2
+            session.ticksPerSecond * (inputSpeed.selectableSteps.max() ?? 1) / Double(max(1, framesPerSecond)) * 2
         ))
         clock.maximumCatchUpTicks = max(budget.maximumCatchUpTicks, speedCatchUp)
     }
@@ -2237,6 +2254,7 @@ typealias MobileGameControllerBase = UIViewController
         gameSettings = settings
         inputSpeed.variableEnabled = settings.classic.variableSpeedEnabled
         inputSpeed.ridiculousEnabled = settings.classic.ridiculousSpeedEnabled
+        updatePerformanceBudget()
         session.applySettings(settings.classic)
         playfieldView.displaySettings = settings.classic
         hudArtworkSource = nil

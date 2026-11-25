@@ -17,7 +17,7 @@ import NxlvKit
             NSGraphicsContext.saveGraphicsState()
             defer { NSGraphicsContext.restoreGraphicsState() }
             NSGraphicsContext.current?.cgContext.setAlpha(enabled ? 1 : 0.45)
-            GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect, maxScale: role == .title ? 3 : 1,
+            GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect, maxScale: role == .title ? 3 : 2,
                                palette: role.palette, alignment: alignment)
         }
     }
@@ -49,7 +49,7 @@ import NxlvKit
     override var intrinsicContentSize: NSSize {
         let plain = MacInterfaceRenderer.menuText(title)
         let width = GameMenuArtwork.renderer()?.width(of: plain, face: .small, scale: 1)
-            ?? ceil(CGFloat(GamePixelTypography.width(of: plain) + 1) * 4 / 3)
+            ?? CGFloat(GamePixelTypography.width(of: plain) + 1) * 2
         let bounds = GamePixelTypography.verticalBounds(of: plain)
         let height = GameMenuArtwork.renderer()?.height(of: title, face: .small, scale: 1) ?? CGFloat(max(18, bounds.bottom - bounds.top + 4))
         return NSSize(width: width + (isCheck ? 32 : 24), height: max(28, height + 4, super.intrinsicContentSize.height))
@@ -217,11 +217,31 @@ import NxlvKit
 }
 
 @MainActor final class GameSliderCell: NSSliderCell {
+    var trackMarks: [Double]?
     override func drawBar(inside rect: NSRect, flipped: Bool) {
         NSGraphicsContext.saveGraphicsState()
         defer { NSGraphicsContext.restoreGraphicsState() }
         if !isEnabled { NSGraphicsContext.current?.cgContext.setAlpha(0.45) }
         GameStoneButton.draw(CGRect(x: rect.minX, y: rect.midY - 3, width: rect.width, height: 6), selected: true, pixel: 1)
+        if let trackMarks, let context = NSGraphicsContext.current?.cgContext, maxValue > minValue {
+            let progress = (doubleValue - minValue) / (maxValue - minValue)
+            context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
+            context.fill(CGRect(x: rect.minX + 1, y: floor(rect.midY) - 1,
+                width: floor(max(0, rect.width - 2) * progress), height: 2))
+            let knob = knobRect(flipped: flipped)
+            let travel = rect.insetBy(dx: knob.width / 2, dy: 0)
+            let direction: CGFloat = flipped ? 1 : -1
+            let tip = floor(flipped ? knob.maxY : knob.minY) + 3 * direction
+            context.setFillColor(CGColor(srgbRed: 1, green: 0.76, blue: 0.28, alpha: 1))
+            for mark in trackMarks {
+                let center = floor(travel.minX + travel.width * mark)
+                for row in 0..<9 {
+                    let halfWidth = 4 - abs(4 - row)
+                    let y = tip + CGFloat(flipped ? row : -row - 1)
+                    context.fill(CGRect(x: center - CGFloat(halfWidth), y: y, width: CGFloat(2 * halfWidth + 1), height: 1))
+                }
+            }
+        }
     }
     override func drawKnob(_ knobRect: NSRect) {
         NSGraphicsContext.saveGraphicsState()
@@ -294,13 +314,27 @@ import NxlvKit
     }
 }
 
-@MainActor final class GameTabButton: GameButton {}
+@MainActor final class GameTabButton: GameButton {
+    var inSidebar = false
+    override func draw(_ dirtyRect: NSRect) {
+        guard inSidebar else { super.draw(dirtyRect); return }
+        GameStoneButton.draw(bounds, selected: state == .on || isHighlighted, pixel: 1)
+        GameControlText.draw(title, in: bounds.insetBy(dx: 12, dy: 4), enabled: isEnabled,
+            role: state == .on ? .heading : .body)
+        if state == .on {
+            GameStyle.fill(CGRect(x: 12, y: bounds.maxY - 7, width: bounds.width - 24, height: 2), GameStyle.accent)
+        }
+        GameControlText.focus(self)
+    }
+}
 
 @MainActor final class GameTabs: NSView, NSTabViewDelegate {
     var onSelectionChanged: (() -> Void)?
     private let tabs = NSTabView()
     private var buttons: [GameButton] = []
     var font: NSFont?
+    var sidebarBreaks: Set<Int>?
+    private(set) var sidebarFooterFrame: CGRect = .zero
     override init(frame: NSRect) {
         super.init(frame: frame)
         setAccessibilityElement(true)
@@ -311,15 +345,17 @@ import NxlvKit
         addSubview(tabs)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
-    func addTabViewItem(_ item: NSTabViewItem) {
+    @discardableResult func addTabViewItem(_ item: NSTabViewItem) -> GameTabButton {
         tabs.addTabViewItem(item)
         let button = GameTabButton(title: item.label, target: self, action: #selector(selectTab))
+        button.inSidebar = sidebarBreaks != nil
         button.tag = buttons.count
         button.setButtonType(.pushOnPushOff)
         button.setAccessibilityLabel(item.label)
         button.setAccessibilityRole(.radioButton)
         addSubview(button); buttons.append(button)
         updateSelection()
+        return button
     }
     @objc private func selectTab(_ sender: NSButton) {
         tabs.selectTabViewItem(at: sender.tag); updateSelection()
@@ -335,8 +371,21 @@ import NxlvKit
     }
     override func layout() {
         super.layout()
-        tabs.frame = CGRect(x: 0, y: 0, width: bounds.width, height: max(0, bounds.height - 42))
         let widths = buttons.map { $0.intrinsicContentSize.width }
+        if let sidebarBreaks {
+            let width = min(floor(bounds.width / 3), max(220, widths.max() ?? 0))
+            let detailsX = width + 24
+            tabs.frame = CGRect(x: detailsX, y: 0, width: max(0, bounds.width - detailsX), height: bounds.height)
+            var y = bounds.height
+            for (index, button) in buttons.enumerated() {
+                if sidebarBreaks.contains(index) { y -= 12 }
+                button.frame = CGRect(x: 0, y: y - 38, width: width, height: 38)
+                y -= 44
+            }
+            sidebarFooterFrame = CGRect(x: 0, y: y - 14, width: width, height: 0)
+            return
+        }
+        tabs.frame = CGRect(x: 0, y: 0, width: bounds.width, height: max(0, bounds.height - 42))
         let extra = max(0, (bounds.width - widths.reduce(0, +)) / CGFloat(max(1, buttons.count)))
         var x: CGFloat = 0
         for (index, button) in buttons.enumerated() {

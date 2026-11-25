@@ -187,4 +187,47 @@ struct ControllerBindingsTests {
         speed.release(.controller, at: 2)
         #expect(speed.target == 2)
     }
+
+    @Test func measuredLimitRemovesTiersAndImmediatelyReplacesTheSelectedSpeed() {
+        for (requested, deliveredPerFrame, supported) in [(25.0, 64, 10.0), (10.0, 31, 5.0)] {
+            var speed = GameplaySpeed()
+            speed.ridiculousEnabled = true
+            speed.select(requested, at: 0)
+            speed.update(at: 1)
+            for _ in 0..<3 {
+                let capped = speed.observeThroughput(elapsed: 0.25, ticks: deliveredPerFrame, ticksPerSecond: 17)
+                #expect(!capped)
+            }
+            let capped = speed.observeThroughput(elapsed: 0.25, ticks: deliveredPerFrame, ticksPerSecond: 17)
+            #expect(capped)
+            #expect(speed.target == supported && speed.multiplier == supported)
+            #expect(speed.selectableSteps.last == supported)
+            speed.select(requested, at: 2)
+            #expect(speed.target == supported)
+            speed.reset(at: 3)
+            #expect(speed.multiplier == 1 && speed.availableSteps.last == supported)
+            speed.newLevel(at: 4)
+            #expect(speed.availableSteps.last == 25)
+        }
+    }
+
+    @Test func measuredSpeedKeepsAHealthyTierAndDiscardsInterruptedSamples() {
+        var speed = GameplaySpeed()
+        speed.ridiculousEnabled = true
+        speed.select(25, at: 0)
+        let cappedDuringTransition = speed.observeThroughput(elapsed: 0.25, ticks: 0, ticksPerSecond: 17)
+        #expect(!cappedDuringTransition)
+        speed.update(at: 1)
+        for _ in 0..<3 {
+            let capped = speed.observeThroughput(elapsed: 0.25, ticks: 0, ticksPerSecond: 17)
+            #expect(!capped)
+        }
+        let cappedAfterStall = speed.observeThroughput(elapsed: 2, ticks: 0, ticksPerSecond: 17)
+        #expect(!cappedAfterStall)
+        for ticks in [106, 106, 106, 107] {
+            let capped = speed.observeThroughput(elapsed: 0.25, ticks: ticks, ticksPerSecond: 17)
+            #expect(!capped)
+        }
+        #expect(speed.target == 25 && speed.availableSteps.last == 25)
+    }
 }

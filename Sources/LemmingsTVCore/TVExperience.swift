@@ -111,7 +111,7 @@ public struct TVGameCapabilities: Equatable, Sendable {
     public private(set) var lastAssignment: (control: Int, actor: Int)?
     public private(set) var assignmentPulse = 0.0
     public var preferences: TVPreferences
-    public var targetingSettings: ClassicSettings { didSet { refreshTarget() } }
+    public var targetingSettings: ClassicSettings { didSet { applySpeedSettings(); refreshTarget() } }
     private var targetLock = TVTargetLock()
     private var lockedActor: Int? {
         get { targetLock.id }
@@ -143,6 +143,7 @@ public struct TVGameCapabilities: Equatable, Sendable {
         viewport.fitGameplay(in: viewport.viewSize, centring: content.session.entrancePoint)
         pointer = viewport.viewPoint(fromLevel: content.session.entrancePoint)
         clock = MobileTickClock(ticksPerSecond: content.session.ticksPerSecond, maximumCatchUpTicks: 32)
+        applySpeedSettings()
         selectedControl = session.snapshot.skills.firstIndex { $0.count > 0 || $0.isUnlimited } ?? 0
         if let checkpoint {
             needsCountdown = false
@@ -202,11 +203,18 @@ public struct TVGameCapabilities: Equatable, Sendable {
         inputSpeed.update(at: time)
         speed = inputSpeed.target; clock.speed = inputSpeed.multiplier
         let ticks = clock.advance(at: time)
-        for _ in 0..<ticks where !session.snapshot.isComplete { session.tick() }
-        if session.snapshot.isComplete { play.complete(); clearSpeed() }
-        assignmentPulse = max(0, assignmentPulse - Double(ticks) / session.ticksPerSecond)
+        var advanced = 0
+        while advanced < ticks, !session.isSimulationComplete {
+            session.tick(); advanced += 1
+        }
+        if session.isSimulationComplete { play.complete(); clearSpeed(); clock.suspend() }
+        else if inputSpeed.observeThroughput(elapsed: clock.lastAdvanceElapsed, ticks: advanced,
+                                             ticksPerSecond: session.ticksPerSecond) {
+            speed = inputSpeed.target; clock.speed = inputSpeed.multiplier
+        }
+        assignmentPulse = max(0, assignmentPulse - Double(advanced) / session.ticksPerSecond)
         refreshTarget()
-        return ticks > 0
+        return advanced > 0
     }
 
     public func selectSkill(_ control: Int) {
@@ -327,6 +335,13 @@ public struct TVGameCapabilities: Equatable, Sendable {
         inputSpeed.step(delta, at: ProcessInfo.processInfo.systemUptime); speed = inputSpeed.target
     }
     public func clearSpeed() { inputSpeed.reset(at: 0); speed = 1 }
+
+    private func applySpeedSettings() {
+        if inputSpeed.variableEnabled != targetingSettings.variableSpeedEnabled { clearSpeed(); clock.suspend() }
+        inputSpeed.variableEnabled = targetingSettings.variableSpeedEnabled
+        inputSpeed.ridiculousEnabled = targetingSettings.ridiculousSpeedEnabled
+        speed = inputSpeed.target
+    }
 
     public func endRun() {
         guard canInteract else { return }

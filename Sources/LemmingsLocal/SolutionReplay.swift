@@ -5,6 +5,7 @@ import LemmingsAppCore
 import LemmingsAudio
 import NxlvKit
 import LemmingsGameArt
+import LemmingsMobileCore
 
 /// Playback owns its simulation and never calls the campaign, saves or result handlers.
 @MainActor final class SolutionPlayback {
@@ -27,10 +28,14 @@ import LemmingsGameArt
         for event in events[0] ?? [] { apply(event.action) }
     }
 
-    /// Moves the read-only replay to a nearby recorded tick.
+    /// Moves the read-only replay to a recorded tick.
     func seek(by delta: Int) {
         let target = max(0, min(solution.replay.expected?.ticks ?? 0, session.currentTick + delta))
         guard target != session.currentTick else { return }
+        if target > session.currentTick {
+            while session.currentTick < target, !session.isComplete { tick() }
+            return
+        }
         var simulation = solution.initial
         for event in solution.replay.events where event.afterTick != true {
             if case let .assign(id, skill) = event.action {
@@ -77,7 +82,7 @@ import LemmingsGameArt
 }
 
 /// A read-only playfield fills the current game window. Controls never reach the live run.
-@MainActor final class SolutionReplayWindow {
+@MainActor final class SolutionReplayWindow: NSObject {
     let page = SolutionReplayPage()
     private(set) var playback: SolutionPlayback
     let field = PlayfieldView(frame: .zero)
@@ -94,7 +99,7 @@ import LemmingsGameArt
     private var monitor: Any?
     private(set) var paused = false
     private var hasPresented = false
-    private var tickCredit = 0.0
+    private var clock = MobileTickClock(ticksPerSecond: Double(ClassicDOSRules.ticksPerSecond), maximumCatchUpTicks: 24)
     private var assignmentUntil = 0.0
     private var followedID: Int?
     private var lastAssignedID: Int?
@@ -102,20 +107,21 @@ import LemmingsGameArt
     private var automaticTracking = true
     private var zoomFactor = 1.0
     private var pressedF = false
-    private var buttons: [GameActionButton] = []
-    private let controlsScroll = NSScrollView()
-    private let controlsDocument = GameMenuListDocument()
-    private weak var transport: NSButton?
-    private weak var speedButton: NSButton?
-    private weak var trackingButton: NSButton?
-    private weak var zoomButton: NSButton?
-    private weak var previousMoveButton: NSButton?
-    private weak var nextMoveButton: NSButton?
+    private let timeline = GameSlider()
+    private let elapsed = GameLabel(labelWithString: "")
+    private let end = GameLabel(labelWithString: "")
+    private let transport = SolutionTransportButton(title: L10n.text("Play"), glyph: .play, primary: true)
+    private let speedButton = GameActionButton(title: "1×", primary: false)
+    private let optionsButton = GameActionButton(title: L10n.text("Options"), primary: false)
+    private let previousMoveButton = SolutionTransportButton(title: L10n.text("Previous move"), glyph: .stepBackward)
+    private let nextMoveButton = SolutionTransportButton(title: L10n.text("Next move"), glyph: .stepForward)
+    private var endTick: Int { playback.solution.replay.expected?.ticks ?? 0 }
 
     init(solution: VerifiedSolution, source: PlayfieldView, width: Int, height: Int, effects: SoundEffectPlayer? = nil) {
         self.effects = effects?.replayPlayer()
         playback = SolutionPlayback(solution, width: width, height: height)
         moveNavigation = .classic(initial: solution.initial, replay: solution.replay)
+        super.init()
         field.classicScene = source.classicScene; field.macScene = source.macScene
         field.macArtwork = source.macArtwork; field.assets = source.assets; field.palette = source.palette
         field.levelImage = source.levelImage; field.imageScale = source.imageScale
@@ -129,48 +135,36 @@ import LemmingsGameArt
         selector.onSelect = { [weak self] mode in if mode == .game { self?.close() } }
         page.addSubview(selector)
         page.onReturnToGame = { [weak self] in self?.close() }
-        func button(_ title: String, _ help: String, primary: Bool = false, speed: Bool = false, action: @escaping () -> Void) -> GameActionButton {
-            let value: GameActionButton = speed
-                ? SolutionSpeedButton(title: title, primary: primary, onPress: action)
-                : GameActionButton(title: title, primary: primary, onPress: action)
-            (value as? SolutionSpeedButton)?.speed = speedControl
-            value.setAccessibilityHelp(help); value.toolTip = help
-            page.addSubview(value); buttons.append(value); return value
+        page.hasOwnNavigation = true
+        skillPanel.fitsContents = true
+        previousMoveButton.toolTip = L10n.text("Previous successful skill use. Control-Left.")
+        nextMoveButton.toolTip = L10n.text("Next successful skill use. Control-Right.")
+        transport.toolTip = L10n.text("Play or pause. Space or P.")
+        speedButton.toolTip = L10n.text("Playback speed. Hold F to ramp speed. Hold Shift for a temporary boost.")
+        optionsButton.toolTip = L10n.text("Camera and replay controls")
+        previousMoveButton.onPress = { [weak self] in self?.seekMove(-1) }
+        nextMoveButton.onPress = { [weak self] in self?.seekMove(1) }
+        transport.onPress = { [weak self] in self?.togglePause() }
+        speedButton.onPress = { [weak self] in self?.showSpeedChoices() }
+        optionsButton.onPress = { [weak self] in self?.showOptions() }
+        for button in [previousMoveButton, transport, nextMoveButton, speedButton, optionsButton] {
+            button.setAccessibilityHelp(button.toolTip)
+            page.addSubview(button)
         }
-        page.navigationBackButton = button(L10n.text("Back to game"), L10n.text("Back to your paused game. Escape.")) { [weak self] in self?.close() }
-        previousMoveButton = button(L10n.text("Previous move"), L10n.text("Previous successful skill use. Control-Left.")) { [weak self] in self?.seekMove(-1) }
-        nextMoveButton = button(L10n.text("Next move"), L10n.text("Next successful skill use. Control-Right.")) { [weak self] in self?.seekMove(1) }
-        _ = button(L10n.text("Back 1s"), L10n.text("Rewind one second.")) { [weak self] in self?.seek(-ClassicDOSRules.ticksPerSecond) }
-        _ = button(L10n.text("Step +1"), L10n.text("Step forward")) { [weak self] in self?.seek(1) }
-        transport = button(L10n.text("Pause"), L10n.text("Play or pause. Space or P."), primary: true) { [weak self] in self?.togglePause() }
-        _ = button(L10n.text("Speed -"), L10n.text("Slower. Shift+[.")) { [weak self] in self?.speedControl.step(-1, at: ProcessInfo.processInfo.systemUptime) }
-        speedButton = button("1×", L10n.text("Toggle fast forward. Hold F to ramp speed. Hold Shift for a temporary boost."), speed: true) { [weak self] in self?.speedControl.tap() }
-        _ = button(L10n.text("Speed +"), L10n.text("Faster. Shift+].")) { [weak self] in self?.speedControl.step(1, at: ProcessInfo.processInfo.systemUptime) }
-        _ = button(L10n.text("Entrance"), L10n.text("Centre entrance. H or Home.")) { [weak self] in self?.centre(entrance: true) }
-        _ = button(L10n.text("Goal"), L10n.text("Centre exit. G or End.")) { [weak self] in self?.centre(entrance: false) }
-        _ = button(L10n.text("Previous lemming"), L10n.text("Track previous unassigned lemming. [.")) { [weak self] in self?.focusUnassigned(-1) }
-        _ = button(L10n.text("Next lemming"), L10n.text("Track next unassigned lemming. ].")) { [weak self] in self?.focusUnassigned(1) }
-        _ = button(L10n.text("Last skill"), L10n.text("Track last assignment. Backslash.")) { [weak self] in
-            guard let self else { return }; self.follow(self.lastAssignedID)
-        }
-        trackingButton = button(L10n.text("Follow: on"), L10n.text("Follow skill assignments automatically. Drag or scroll to use a free camera.")) { [weak self] in
-            guard let self else { return }
-            self.automaticTracking.toggle(); self.followedID = nil; self.refresh()
-        }
-        zoomButton = button(L10n.text("Zoom 1×"), L10n.text("Zoom. Z: 2×. Shift+Z: 4×. Click to cycle.")) { [weak self] in
-            guard let self else { return }; self.setZoom(self.zoomFactor == 1 ? 2 : self.zoomFactor == 2 ? 4 : 1)
-        }
-        controlsScroll.drawsBackground = false
-        controlsScroll.hasVerticalScroller = true
-        controlsScroll.autohidesScrollers = true
-        controlsScroll.scrollerStyle = .overlay
-        controlsScroll.verticalScrollElasticity = .none
-        controlsScroll.documentView = controlsDocument
-        page.addSubview(controlsScroll)
-        for (index, button) in buttons.enumerated() where index != 0 && button !== transport {
-            button.wrapsTitle = true
-            controlsDocument.addSubview(button)
-        }
+        timeline.minValue = 0
+        timeline.maxValue = Double(endTick)
+        timeline.isContinuous = false
+        timeline.target = self
+        timeline.action = #selector(seekTimeline)
+        timeline.setAccessibilityLabel(L10n.text("Replay position"))
+        (timeline.cell as? GameSliderCell)?.trackMarks = moveNavigation.ticks.map { Double($0) / Double(max(1, endTick)) }
+        page.addSubview(timeline)
+        page.addSubview(elapsed)
+        page.addSubview(end)
+        end.alignment = .right
+        elapsed.setAccessibilityElement(false)
+        end.setAccessibilityElement(false)
+        end.stringValue = ReplayGameTime.clock(tick: endTick, rate: Double(ClassicDOSRules.ticksPerSecond))
         speedControl.onChange = { [weak self] in self?.refresh() }
         page.onLayout = { [weak self] in self?.layout() }
         page.onKey = { [weak self] in self?.handleKey($0) ?? false }
@@ -189,48 +183,109 @@ import LemmingsGameArt
     private func layout() {
         let size = page.bounds.size
         let scale = max(1, min(2, size.width / 1120, size.height / 720))
-        let gap = 6.0 * scale, margin = 8.0 * scale
-        let rowHeight = 44.0 * scale
-        let controlsHeight = min(220 * scale, size.height * 0.34)
-        selector.frame = CGRect(x: max(margin, (size.width - 320 * scale) / 2), y: 8 * scale, width: 320 * scale, height: 48 * scale)
-        selector.bounds.size = SolutionSwitchArt.size
-        field.frame = CGRect(x: 0, y: 90 * scale, width: size.width,
-            height: max(1, size.height - 90 * scale - controlsHeight - rowHeight - 4 * gap))
+        let width = size.width / scale
+        let gap: CGFloat = 6
+        let margin: CGFloat = 8
+        let buttonHeight: CGFloat = 44
+        let switchWidth = min(SolutionSwitchArt.size.width, max(1, width - 2 * margin))
+        let narrowHeader = width < 620
+        let headerHeight: CGFloat = narrowHeader ? 88 : 60
+        let compact = width < 560
+        let barHeight: CGFloat = compact ? 116 : 68
+        func place(_ view: NSView, x: CGFloat, y: CGFloat, w: CGFloat, h: CGFloat) {
+            view.frame = CGRect(x: floor(x * scale), y: floor(y * scale), width: w * scale, height: h * scale)
+            view.bounds.size = CGSize(width: w, height: h)
+        }
+
+        place(selector, x: narrowHeader ? (width - switchWidth) / 2 : width - margin - switchWidth,
+            y: margin, w: switchWidth, h: 48)
+        place(status, x: margin, y: narrowHeader ? 58 : 18,
+            w: max(1, width - 2 * margin - (narrowHeader ? 0 : switchWidth + gap)), h: 26)
+        field.frame = CGRect(x: 0, y: headerHeight * scale, width: size.width,
+            height: max(1, size.height - (headerHeight + barHeight) * scale))
         marker.frame = field.frame
         layoutSkillPanel(scale: scale)
-        status.frame = CGRect(x: margin, y: 60 * scale, width: size.width - 2 * margin, height: 26 * scale)
-        status.bounds.size = CGSize(width: status.frame.width / scale, height: 26)
-        controlsScroll.frame = CGRect(x: margin, y: field.frame.maxY + gap, width: size.width - 2 * margin, height: controlsHeight)
-        let tools = buttons.enumerated().filter { $0.element.superview === controlsDocument }
-        let toolsWidth = controlsScroll.contentSize.width / scale
-        let toolsGrid = GameListGrid(actions: tools.map { .init(String($0.offset), $0.element.title) }, width: toolsWidth - 24,
-            maximumColumns: 4, minimumColumnWidth: 180, minimumHeight: 44, captionInset: 24,
-            rowHeadings: ["1": L10n.text("Replay"), "6": L10n.text("Speed"), "9": L10n.text("Camera")],
-            font: GameMenuArtwork.renderer()?.font(.small))
-        let contentHeight = max(controlsHeight / scale, toolsGrid.height + 24)
-        controlsDocument.frame = CGRect(x: 0, y: 0, width: toolsWidth * scale, height: contentHeight * scale)
-        controlsDocument.bounds = CGRect(x: 0, y: 0, width: toolsWidth, height: contentHeight)
-        controlsDocument.headings = toolsGrid.headings.map { ($0.0, $0.1.offsetBy(dx: 12, dy: 12)) }
-        for target in toolsGrid.targets { buttons[Int(target.action.id)!].frame = target.frame.offsetBy(dx: 12, dy: 12) }
-        let actions = buttons.enumerated().filter { $0.element.superview === page }.map {
-            GameFrontEnd.Action(String($0.offset), $0.element.title, primary: $0.element === transport, backNavigation: $0.offset == 0)
-        }
-        let grid = GameFooterGrid(actions: actions, columns: 2)
-        for slot in grid.slots {
-            let button = buttons[Int(slot.action.id)!]
-            button.frame = grid.frame(for: slot, x: margin, y: size.height - rowHeight - gap,
-                width: size.width - 2 * margin, height: rowHeight, gap: gap, rowGap: gap)
-            button.bounds.size = CGSize(width: button.frame.width / scale, height: rowHeight / scale)
-        }
+
+        let barWidth = min(1000, max(1, width - 2 * margin))
+        let left = (width - barWidth) / 2
+        let top = size.height / scale - barHeight
+        let buttonY = top + (compact ? 64 : 12)
+        let toolWidth = min(124, barWidth * 0.28)
+        let speedWidth: CGFloat = 64
+        let moveWidth: CGFloat = 44
+        let playWidth: CGFloat = 54
+        let transportWidth = 2 * moveWidth + playWidth + 2 * gap
+        let toolsWidth = toolWidth + speedWidth + gap
+        let buttonLeft = compact ? max(left, (width - transportWidth - gap - toolsWidth) / 2) : left
+        let right = compact ? buttonLeft + transportWidth + gap + toolsWidth : left + barWidth
+        place(previousMoveButton, x: buttonLeft, y: buttonY, w: moveWidth, h: buttonHeight)
+        place(transport, x: buttonLeft + moveWidth + gap, y: buttonY, w: playWidth, h: buttonHeight)
+        place(nextMoveButton, x: buttonLeft + moveWidth + playWidth + 2 * gap, y: buttonY, w: moveWidth, h: buttonHeight)
+        place(speedButton, x: right - toolsWidth, y: buttonY, w: speedWidth, h: buttonHeight)
+        place(optionsButton, x: right - toolWidth, y: buttonY, w: toolWidth, h: buttonHeight)
+
+        let trackLeft = compact ? left : buttonLeft + transportWidth + 2 * gap
+        let trackRight = compact ? left + barWidth : right - toolsWidth - 2 * gap
+        let trackWidth = max(1, trackRight - trackLeft)
+        place(timeline, x: trackLeft, y: top, w: trackWidth, h: 44)
+        let textWidth = max(1, min(112, trackWidth / 2))
+        place(elapsed, x: trackLeft + 4, y: top + 44, w: textWidth, h: 18)
+        place(end, x: trackRight - textWidth - 4, y: top + 44, w: textWidth, h: 18)
         let center = field.viewport.levelPoint(from: CGPoint(x: field.bounds.midX, y: field.bounds.midY))
         field.viewport.viewSize = field.bounds.size
         field.viewport.zoom = max(1, field.bounds.height / Double(playback.session.levelHeight)) * zoomFactor
         centerCamera(center)
     }
 
+    @objc private func seekTimeline() {
+        seek(Int(timeline.doubleValue.rounded()) - playback.session.currentTick)
+    }
+
+    private func showSpeedChoices() {
+        let menu = GameMenuPage(title: L10n.text("Playback speed"))
+        for (index, value) in speedControl.state.selectableSteps.enumerated() {
+            let choice = menu.addListAction("\(Int(value))×", at: index) { [weak self, weak menu] in
+                guard let self, let menu else { return }
+                self.speedControl.select(value, at: ProcessInfo.processInfo.systemUptime)
+                GameScreen.shared.dismiss(menu)
+            }
+            if value == speedControl.state.selected { menu.preferControllerControl(choice) }
+        }
+        GameScreen.shared.present(menu, owner: page.window)
+    }
+
+    private func showOptions() {
+        let menu = GameMenuPage(title: L10n.text("Options"))
+        let camera = L10n.text("Camera")
+        let options: [(String, String?, (SolutionReplayWindow) -> Void)] = [
+            (L10n.text("Back 1s"), L10n.text("Playback"), { $0.seek(-ClassicDOSRules.ticksPerSecond) }),
+            (L10n.text("Step forward"), nil, { $0.seek(1, audibleStep: true) }),
+            (L10n.text("Zoom \(Int(zoomFactor))×"), camera, { $0.setZoom($0.zoomFactor == 1 ? 2 : $0.zoomFactor == 2 ? 4 : 1) }),
+            (L10n.text("Entrance"), nil, { $0.centre(entrance: true) }),
+            (L10n.text("Goal"), nil, { $0.centre(entrance: false) }),
+            (L10n.text("Previous lemming"), nil, { $0.focusUnassigned(-1) }),
+            (L10n.text("Next lemming"), nil, { $0.focusUnassigned(1) }),
+            (L10n.text("Last skill"), nil, { $0.follow($0.lastAssignedID) }),
+            (automaticTracking ? L10n.text("Turn off auto-follow") : L10n.text("Turn on auto-follow"), nil, {
+                $0.automaticTracking.toggle()
+                $0.followedID = nil
+                $0.updateTracking()
+                $0.refresh()
+            }),
+        ]
+        for (index, option) in options.enumerated() {
+            menu.addListAction(option.0, at: index, section: option.1) { [weak self, weak menu] in
+                guard let self, let menu else { return }
+                GameScreen.shared.dismiss(menu)
+                option.2(self)
+            }
+        }
+        GameScreen.shared.present(menu, owner: page.window)
+    }
+
     func show(owner: NSWindow) {
         suspend()
-        guard GameScreen.shared.present(page, owner: owner, focus: page, onDismiss: { [weak self] in self?.stop() }) else { return }
+        guard GameScreen.shared.present(page, owner: owner, focus: transport, onDismiss: { [weak self] in self?.stop() }) else { return }
         try? effects?.start()
         if !hasPresented { centre(entrance: true); automaticTracking = true; hasPresented = true }
         refresh()
@@ -239,7 +294,7 @@ import LemmingsGameArt
                   GameScreen.shared.controllerPage(in: owner!) === self.page else { return event }
             return self.handleKey(event) ? nil : event
         }
-        timer = Timer.scheduledTimer(withTimeInterval: 1 / Double(ClassicDOSRules.ticksPerSecond), repeats: true) { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.advance() }
         }
     }
@@ -252,7 +307,7 @@ import LemmingsGameArt
         speedControl.cancelInput(); pressedF = false
     }
     func suspend() {
-        paused = true; tickCredit = 0
+        paused = true; clock.suspend()
         speedControl.cancelInput(); pressedF = false
         effects?.silence()
         refresh()
@@ -266,17 +321,18 @@ import LemmingsGameArt
         seek(tick - playback.session.currentTick)
     }
     private func togglePause() {
+        clock.suspend()
         if playback.session.isComplete {
             playback = SolutionPlayback(playback.solution, width: playback.session.levelWidth, height: playback.session.levelHeight)
             assignmentFocus = AssignmentFocus(); lastAssignedID = nil; followedID = nil
-            assignmentUntil = 0; paused = false; tickCredit = 0
+            assignmentUntil = 0; paused = false
             centre(entrance: true); automaticTracking = true
         } else { paused.toggle() }
         if paused { effects?.silence() }
         refresh()
     }
-    private func seek(_ delta: Int) {
-        paused = true; tickCredit = 0
+    private func seek(_ delta: Int, audibleStep: Bool = false) {
+        paused = true; clock.suspend()
         effects?.silence()
         let previousTick = playback.session.currentTick
         playback.seek(by: delta)
@@ -290,7 +346,7 @@ import LemmingsGameArt
         marker.point = nil; assignmentUntil = 0
         if automaticTracking { followedID = lastAssignedID }
         updateTracking(); refresh()
-        if delta == 1, playback.session.currentTick == previousTick + 1 { playTickSounds() }
+        if audibleStep, playback.session.currentTick == previousTick + 1 { playTickSounds() }
     }
     private func playTickSounds() {
         let cues = playback.session.lastPositionedCues
@@ -298,17 +354,29 @@ import LemmingsGameArt
         effects?.play(cues)
         onSoundCues?(cues)
     }
-    func advance() {
+    func advance(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         let visible = !page.isHiddenOrHasHiddenAncestor && (page.window == nil || GameScreen.shared.controllerPage(in: page.window!) === page)
         if page.window?.isKeyWindow == false { speedControl.cancelInput(); pressedF = false }
-        speedControl.update(at: ProcessInfo.processInfo.systemUptime, active: visible)
+        let priorTarget = speedControl.target
+        speedControl.update(at: now, active: visible)
         guard visible, !paused, !playback.session.isComplete else {
+            clock.suspend()
             if !visible { effects?.silence() }
+            if speedControl.target != priorTarget { refresh() }
             return
         }
-        tickCredit += speedControl.multiplier
-        while tickCredit >= 1, !playback.session.isComplete {
-            tickCredit -= 1; playback.tick()
+        clock.speed = speedControl.multiplier
+        let ticks = clock.advance(at: now)
+        guard ticks > 0 else {
+            speedControl.observeThroughput(elapsed: clock.lastAdvanceElapsed, ticks: 0,
+                ticksPerSecond: clock.ticksPerSecond)
+            if speedControl.target != priorTarget { refresh() }
+            return
+        }
+        let deadline = ProcessInfo.processInfo.systemUptime + speedControl.simulationBudget
+        var advanced = 0
+        while advanced < ticks, !playback.session.isComplete {
+            playback.tick(); advanced += 1
             if let assignment = playback.lastAssignment,
                let lemming = playback.session.lemmings.first(where: { $0.id == assignment.id }) {
                 lastAssignedID = lemming.id
@@ -317,7 +385,13 @@ import LemmingsGameArt
                 marker.point = CGPoint(x: lemming.x, y: lemming.y)
                 assignmentUntil = ProcessInfo.processInfo.systemUptime + 1.5
             }
-            updateTracking(); playTickSounds()
+            playTickSounds()
+            if ProcessInfo.processInfo.systemUptime >= deadline { break }
+        }
+        if !playback.session.isComplete {
+            clock.deferTicks(ticks - advanced)
+            speedControl.observeThroughput(elapsed: clock.lastAdvanceElapsed, ticks: advanced,
+                ticksPerSecond: clock.ticksPerSecond)
         }
         updateTracking(); refresh()
     }
@@ -380,9 +454,11 @@ import LemmingsGameArt
             pan(event.keyCode == 123 ? -32 : event.keyCode == 124 ? 32 : 0,
                 event.keyCode == 126 ? -32 : event.keyCode == 125 ? 32 : 0); return true
         }
-        guard !event.isARepeat else { return ["f", "p", " ", "z", "h", "g", "[", "]", "\\"].contains(key) }
+        guard !event.isARepeat else { return ["f", "p", " ", "z", "h", "g", "[", "]", "\\", ",", "."].contains(key) }
         if key == "f" { pressedF = true; speedControl.press(.key, at: event.timestamp); return true }
         if key == "p" || event.keyCode == 49 { togglePause(); return true }
+        if key == "." { seek(1, audibleStep: true); return true }
+        if key == "," { seek(-ClassicDOSRules.ticksPerSecond); return true }
         if key == "z" {
             if event.modifierFlags.contains(.shift) { speedControl.release(.shift, at: event.timestamp, allowTap: false) }
             let factor = event.modifierFlags.contains(.shift) ? 4.0 : 2.0; setZoom(zoomFactor == factor ? 1 : factor); return true }
@@ -411,27 +487,32 @@ import LemmingsGameArt
         layoutSkillPanel(scale: max(1, min(2, page.bounds.width / 1120, page.bounds.height / 720)))
         effects?.setViewport(field.soundViewport)
         field.session = playback.session
-        if playback.session.isComplete {
-            status.stringValue = L10n.text("\(playback.session.simulation.savedCount) rescued"); marker.point = nil
-        } else {
-            let elapsed = ReplayGameTime.clock(tick: playback.session.currentTick, rate: rate)
-            let duration = playback.solution.replay.expected.map { ReplayGameTime.clock(tick: $0.ticks, rate: rate) }
-            status.stringValue = [playback.solution.replay.title, duration.map { "\(elapsed) / \($0)" } ?? elapsed].joined(separator: "   ")
-            if ProcessInfo.processInfo.systemUptime > assignmentUntil { marker.point = nil }
+        let complete = playback.session.isComplete
+        let title = playback.solution.replay.title
+        status.stringValue = complete ? title + "   " + L10n.text("\(playback.session.simulation.savedCount) rescued") : title
+        if complete || ProcessInfo.processInfo.systemUptime > assignmentUntil { marker.point = nil }
+        let time = ReplayGameTime.clock(tick: playback.session.currentTick, rate: rate)
+        elapsed.stringValue = time
+        timeline.doubleValue = Double(playback.session.currentTick)
+        timeline.setAccessibilityValueDescription(L10n.text("\(time) of \(end.stringValue)"))
+        let action = complete ? L10n.text("Replay") : paused ? L10n.text("Play") : L10n.text("Pause")
+        if transport.title != action {
+            transport.title = action
+            transport.toolTip = complete ? L10n.text("Restart replay") : L10n.text("Play or pause. Space or P.")
+            transport.setAccessibilityHelp(transport.toolTip)
         }
-        transport?.title = playback.session.isComplete ? L10n.text("Replay") : paused ? L10n.text("Play") : L10n.text("Pause")
-        previousMoveButton?.isEnabled = moveNavigation.target(from: playback.session.currentTick, direction: -1) != nil
-        nextMoveButton?.isEnabled = moveNavigation.target(from: playback.session.currentTick, direction: 1) != nil
-        speedButton?.title = speedControl.label
-        trackingButton?.title = automaticTracking ? L10n.text("Follow: on") : followedID != nil ? L10n.text("Tracking") : L10n.text("Free view")
-        zoomButton?.title = L10n.text("Zoom \(Int(zoomFactor))×")
-        buttons.forEach { $0.needsDisplay = true }
+        transport.glyph = complete ? .undo : paused ? .play : .pause
+        previousMoveButton.isEnabled = moveNavigation.target(from: playback.session.currentTick, direction: -1) != nil
+        nextMoveButton.isEnabled = moveNavigation.target(from: playback.session.currentTick, direction: 1) != nil
+        speedButton.title = speedControl.label
+        speedButton.setAccessibilityLabel(L10n.text("Speed \(speedControl.label)"))
         field.needsDisplay = true; marker.needsDisplay = true
     }
 }
 
 @MainActor final class SolutionReplayPage: NSView, GameFullWindowPage {
     var navigationBackButton: GameActionButton?
+    var hasOwnNavigation = false
     var onReturnToGame: (() -> Void)?
     var onLayout: (() -> Void)?
     var onKey: ((NSEvent) -> Bool)?
@@ -467,16 +548,33 @@ import LemmingsGameArt
     }
 }
 
-@MainActor private final class SolutionSpeedButton: GameActionButton {
-    weak var speed: GameSpeedControl?
-    override func mouseDown(with event: NSEvent) {
-        window?.makeFirstResponder(self); highlight(true)
-        speed?.pointerDown(at: event.timestamp, clickCount: event.clickCount)
+@MainActor private final class SolutionTransportButton: GameActionButton {
+    var glyph: PanelGlyph { didSet { if glyph != oldValue { needsDisplay = true } } }
+    private let primary: Bool
+
+    init(title: String, glyph: PanelGlyph, primary: Bool = false) {
+        self.glyph = glyph
+        self.primary = primary
+        super.init(title: title, primary: primary)
     }
-    override func mouseDragged(with event: NSEvent) { highlight(bounds.contains(convert(event.locationInWindow, from: nil))) }
-    override func mouseUp(with event: NSEvent) {
-        speed?.release(.mouse, at: event.timestamp, allowTap: bounds.contains(convert(event.locationInWindow, from: nil)))
-        highlight(false)
+    required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
+
+    override func draw(_ dirtyRect: NSRect) {
+        GameStoneButton.draw(bounds, selected: isEnabled && (primary || isHighlighted), pixel: 1)
+        let box = CGSize(width: 28, height: 28)
+        if glyph == .pause {
+            NSColor(srgbRed: 0.76, green: 0.88, blue: 0.62, alpha: 1).setFill()
+            let x = floor(bounds.midX), y = floor(bounds.midY) - 10
+            CGRect(x: x - 8, y: y, width: 5, height: 20).fill()
+            CGRect(x: x + 3, y: y, width: 5, height: 20).fill()
+        } else if let image = glyph.image(fitting: box, transparentRock: true) {
+            let rect = CGRect(x: floor(bounds.midX - image.size.width / 2),
+                y: floor(bounds.midY - image.size.height / 2), width: image.size.width, height: image.size.height)
+            NSGraphicsContext.current?.imageInterpolation = .none
+            image.draw(in: rect, from: .zero, operation: .sourceOver, fraction: isEnabled ? 1 : 0.35,
+                respectFlipped: true, hints: nil)
+        }
+        GameControlText.focus(self)
     }
 }
 #endif

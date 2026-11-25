@@ -29,11 +29,13 @@ require(!warning.update(seconds: 8), "Rewind played a warning")
 require(warning.update(seconds: 7), "Countdown did not resume after rewind")
 require(!warning.update(seconds: nil), "Untimed level played a warning")
 let old = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
-require(!old.djIncludesOtherSoundtracks && old.hdEffectsEnabled && !old.fullScreenHDRFlashes, "Missing settings must use restrained presentation defaults")
+require(old.djIncludesOtherSoundtracks && old.hdEffectsEnabled && !old.fullScreenHDRFlashes, "Missing settings must enable DJ variety")
+let legacyDJ = try JSONDecoder().decode(ClassicSettings.self, from: Data(#"{"djIncludesOtherSoundtracks":false}"#.utf8))
+require(legacyDJ.djIncludesOtherSoundtracks, "The former DJ default prevented the wider rotation")
 let explicit = try JSONDecoder().decode(ClassicSettings.self, from: Data(#"{"djIncludesOtherSoundtracks":true,"fullScreenHDRFlashes":true}"#.utf8))
 require(explicit.djIncludesOtherSoundtracks && explicit.fullScreenHDRFlashes, "Explicit saved music and flash choices must survive migration")
 require(!old.pauseMusicBeatOnly, "An upgrade unexpectedly enabled pause music")
-var changed = old; changed.djIncludesOtherSoundtracks = true; changed.fullScreenHDRFlashes = true; changed.pauseMusicBeatOnly = true
+var changed = old; changed.djIncludesOtherSoundtracks = false; changed.fullScreenHDRFlashes = true; changed.pauseMusicBeatOnly = true
 let restored = try JSONDecoder().decode(ClassicSettings.self, from: JSONEncoder().encode(changed))
 require(restored == changed, "New options did not persist")
 print("PASS rescue-target transitions, one transition per level, countdown beeps and settings migration")
@@ -73,6 +75,17 @@ require(LevelMusicSelection.cycle(index: 50, titles: scoreTitles, holiday: false
     "Repeated special theme did not advance its own cycle")
 require(LevelMusicSelection.cycle(index: 17, titles: scoreTitles, holiday: false, ohNo: false) == 1,
     "Ordinary score cycle did not advance")
+require(LevelMusicSelection.showcaseIndex(index: 16, titles: scoreTitles, holiday: false, ohNo: false) == nil &&
+    LevelMusicSelection.showcaseIndex(index: 17, titles: scoreTitles, holiday: false, ohNo: false) == 0,
+    "Classic showcase did not wait for the full original rotation")
+scoreTitles[3] = "A Beast of a level"
+require(LevelMusicSelection.showcaseIndex(index: 20, titles: scoreTitles, holiday: false, ohNo: false) == nil &&
+    LevelMusicSelection.showcaseIndex(index: 21, titles: scoreTitles, holiday: false, ohNo: false) == nil &&
+    LevelMusicSelection.showcaseIndex(index: 22, titles: scoreTitles, holiday: false, ohNo: false) == 0,
+    "A special level displaced an opening theme")
+require(LevelMusicSelection.showcaseIndex(index: 6, titles: [], holiday: false, ohNo: true) == 0 &&
+    LevelMusicSelection.showcaseIndex(index: 17, titles: [], holiday: true, ohNo: false) == nil,
+    "Oh No or Holiday used the wrong opening policy")
 
 require(LevelMusicSelection.track(index: 13, title: "Professor Mariarti", holiday: false, ohNo: false) == "mariarti", "Missing Archimedes special assignment")
 require(LevelMusicSelection.track(index: 13, title: "Professor Mariarti", holiday: true, ohNo: false) != "mariarti", "Special leaked into seasonal campaign")

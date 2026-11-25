@@ -38,6 +38,29 @@ struct MobileFramePacingTests {
         }
     }
 
+    @Test func lateFramesRetainTheirTicksAcrossBoundedBatches() {
+        for rate in [17.0, 17.5, 23.0] {
+            for speed in [1.0, 3.0, 10.0, 25.0] {
+                var clock = MobileTickClock(ticksPerSecond: rate, speed: speed, maximumCatchUpTicks: 3)
+                clock.resume(at: 10)
+                let time = 10.2
+                var count = 0
+                for _ in 0..<40 { count += clock.advance(at: time) }
+                #expect(count == Int((rate * speed * 0.2 + 1e-8).rounded(.down)))
+            }
+        }
+    }
+
+    @Test func returningToNormalDoesNotSpendDeferredFastTicks() {
+        var clock = MobileTickClock(ticksPerSecond: 20, speed: 10, maximumCatchUpTicks: 4)
+        clock.resume(at: 10)
+        let issued = clock.advance(at: 10.1)
+        clock.deferTicks(issued - 1)
+        clock.speed = 1
+        #expect(clock.advance(at: 10.1) == 0)
+        #expect(clock.advance(at: 10.15) == 1)
+    }
+
     @Test func missedDeadlinesReduceCadenceEvenWithCheapMeasuredWork() {
         var policy = MobileFramePacing()
         for frame in 0..<150 {
@@ -105,7 +128,7 @@ struct MobileFramePacingTests {
     @Test func everyEngineRetainsItsClockAtEveryCadenceAndSpeed() {
         for rate in [17.0, 17.5, 23.0] {
             for cadence in [20, 30, 60] {
-                for speed in [1.0, 2.0, 8.0] {
+                for speed in [1.0, 2.0, 3.0, 5.0, 8.0, 10.0, 25.0] {
                     var clock = MobileTickClock(ticksPerSecond: rate, speed: speed,
                         maximumCatchUpTicks: max(4, Int((rate * speed / Double(cadence) * 2).rounded(.up))))
                     _ = clock.advance(at: 0)

@@ -26,14 +26,16 @@ public enum MobileSettingsArt {
     public static func groups(inGame: Bool = false, television: Bool = false,
                               deskClockAvailable: Bool = true) -> GameFrontEnd.Page {
         // The Desk Clock is an iPhone and iPad menu feature, so a level and the TV leave it out.
-        let groups = MobileSettingsGroup.allCases.filter {
+        let groups = MobileSettingsGroup.sections.flatMap { $0 }.filter {
             $0 != .deskClock || (!television && !inGame && deskClockAvailable)
         }
         var page = GameFrontEnd.Page(title: L10n.text("Settings"), rows: groups.map {
             .init("settingsGroup." + $0.rawValue, $0.title)
         } + (inGame ? [] : [.init("data", L10n.text("Game Data"))]), footer: [.init("home", L10n.text("Back"))])
         page.televisionGrid = television
-        page.pairsRows = true
+        page.rowGroupStarts = Set(MobileSettingsGroup.sections.dropFirst().compactMap {
+            $0.first.map { "settingsGroup." + $0.rawValue }
+        })
         page.settingsTabs = MobileSettingsTabsArt.actions(selected: .gameplay, inGame: inGame, television: television)
         page.settingsIndex = true
         return page

@@ -595,6 +595,33 @@ import NxlvKit
         })
         try checkGameplayQuickControl(L3RunRecovery.stateHash(game) == before && selected == selectedBefore && paused,
             "Lemmings 3 quick controls changed the run")
+        try testStatusReadability()
+    }
+    func testStatusReadability() throws {
+        let readout = canvas.statusReadoutFrame
+        if let bitmap = canvas.bitmapImageRepForCachingDisplay(in: readout) {
+            canvas.cacheDisplay(in: readout, to: bitmap)
+            let inked = (0..<bitmap.pixelsHigh).filter { y in
+                (0..<min(bitmap.pixelsWide, bitmap.pixelsHigh * 4)).contains { x in
+                    guard let color = bitmap.colorAt(x: x, y: y)?.usingColorSpace(.sRGB) else { return false }
+                    return color.greenComponent > 0.55 && color.greenComponent > color.blueComponent
+                }
+            }.count
+            let backingScale = CGFloat(bitmap.pixelsHigh) / readout.height
+            try checkGameplayQuickControl(CGFloat(inked) / backingScale >= 12,
+                "Lemmings 3 status text was less than 12 points high")
+        } else {
+            throw SequelDataError.invalid("Lemmings 3 status text could not be captured")
+        }
+    }
+    func testWideGameplayPanel() throws {
+        timer?.invalidate(); timer = nil; paused = true
+        canvas.startCountdown.cancel(); canvas.menuRows = nil; refresh()
+        var pressedSlots: [Int] = []
+        let previous = canvas.onPanel
+        canvas.onPanel = { slot, _ in pressedSlots.append(slot) }
+        defer { canvas.onPanel = previous }
+        try validateWideSequelPanel(canvas, owner: window!, name: "lemmings3", endSlot: 8, pressedSlots: { pressedSlots })
     }
     func testExtraSkillGrant() throws {
         func require(_ value: Bool, _ message: String) throws {
@@ -1071,17 +1098,20 @@ import NxlvKit
         guard !tracks.isEmpty else { return }
         let url = tracks[campaign.index % tracks.count]
         if audioSettings.music == .adaptiveDJ {
-            let musicRoot = url.deletingLastPathComponent().deletingLastPathComponent()
+            let musicRoot = GameResources.directory("Music") ?? url.deletingLastPathComponent().deletingLastPathComponent()
             dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: musicRoot), catalogueRoot: musicRoot)
-            music.stop()
-            dj.startJourney(trackID: "lemmings3." + url.deletingPathExtension().lastPathComponent.lowercased(),
+            let showcaseIndex = learningResultActions == nil ? LevelMusicSelection.lemmings3ShowcaseIndex(
+                tribe: campaign.tribe, level: campaign.index, openingCount: tracks.count) : nil
+            if dj.startJourney(trackID: "lemmings3." + url.deletingPathExtension().lastPathComponent.lowercased(),
                 cycle: campaign.index / tracks.count, identity: arcadeRunID.uuidString, fallback: url,
-                includeAlternates: audioSettings.djIncludesOtherSoundtracks)
-        } else {
-            dj.stop()
-            try? music.start()
-            _ = music.play(url: url)
+                includeAlternates: audioSettings.djIncludesOtherSoundtracks, showcaseIndex: showcaseIndex) {
+                music.stop()
+                return
+            }
         }
+        dj.stop()
+        try? music.start()
+        _ = music.play(url: url)
     }
     @objc private func toggleArtwork() { SequelArtworkPreference.setEnabled(!SequelArtworkPreference.enabled) }
     @objc private func artworkChanged() {
@@ -1534,7 +1564,8 @@ import NxlvKit
         canvas.navigationFrame = gameplayKeyboard?.navigationFrame(in: canvas)
         let now = ProcessInfo.processInfo.systemUptime
         completionGlow.advance(at: now)
-        let elapsed = min(0.1, now - lastTime); lastTime = now
+        let wallElapsed = now - lastTime; lastTime = now
+        let elapsed = min(0.1, wallElapsed)
         let playing = !paused && !game.isComplete && !GameScreen.shared.isPresented && canvas.menuRows == nil && pendingTool == nil
         speedControl.update(at: now, active: !game.isComplete && !GameScreen.shared.isPresented && canvas.menuRows == nil && pendingTool == nil)
         canvas.advanceSelectionFade(at: now)
@@ -1554,11 +1585,18 @@ import NxlvKit
         }
         guard !paused, !game.isComplete else { return }
         if needsAttemptMusic { playLevelMusic() }
-        accumulator += elapsed * speedControl.multiplier
-        let inputDeadline = ProcessInfo.processInfo.systemUptime + 0.012
+        let previousTick = game.tick
+        accumulator += min(0.25, wallElapsed) * speedControl.multiplier
+        runMovie.beginCaptureBatch(reuseFrames: speedControl.multiplier > 1)
+        defer { runMovie.endCaptureBatch() }
+        let inputDeadline = ProcessInfo.processInfo.systemUptime + speedControl.simulationBudget
         while accumulator >= 1 / Lemmings3Runtime.ticksPerSecond && !game.isComplete {
             accumulator -= 1 / Lemmings3Runtime.ticksPerSecond; advanceTick()
-            if ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
+            if ProcessInfo.processInfo.systemUptime >= inputDeadline + runMovie.batchCompositionSeconds { break }
+        }
+        if !game.isComplete {
+            speedControl.observeThroughput(elapsed: wallElapsed, ticks: game.tick - previousTick,
+                ticksPerSecond: Lemmings3Runtime.ticksPerSecond)
         }
         refresh()
     }
@@ -1865,10 +1903,10 @@ import NxlvKit
         if countdownWarning.update(seconds: game.remainingSeconds) { warningSound.play(.timerWarning) }
         canvas.flashExplosions(game)
         canvas.game = game
-        runMovie.recorder?.setMusic(url: dj.isPlaying ? dj.currentURL : music.currentURL, gain: music.muted ? 0 : musicGain)
+        runMovie.setMusic(url: dj.isPlaying ? dj.currentURL : music.currentURL, gain: music.muted ? 0 : musicGain)
         runMovie.capture(ReplayFrameCapture.image(size: CGSize(width: 1280, height: 640)) {
             ReplayFrameCapture.draw(canvas, in: CGRect(x: 0, y: 0, width: 1280, height: 640))
-        })
+        }, finalTick: game.isComplete)
     }
     var onSequenceResult: ((Bool) -> Void)?
     private var ghostAttemptID: UUID?
@@ -1963,7 +2001,8 @@ import NxlvKit
     private let pointerCapture = GamePointerCapture()
     func capturePointer(active: Bool) {
         layoutTimeline()
-        var frame = CGRect(origin: screenOrigin, size: CGSize(width: 320 * zoom, height: 212 * zoom)).union(timeline.frame)
+        let game = CGRect(origin: screenOrigin, size: CGSize(width: 320 * zoom, height: 212 * zoom))
+        var frame = game.union(panelRect).union(timeline.frame)
         if !timeline.tierFrame.isEmpty { frame = frame.union(timeline.tierFrame) }
         if let navigationFrame { frame = frame.union(navigationFrame) }
         if let point = pointerCapture.update(in: self, rect: frame, active: active && confinePointer && controllerPointer == nil) {
@@ -2095,6 +2134,7 @@ import NxlvKit
     override func accessibilityChildren() -> [Any]? {
         guard !readOnlyReplay else { return [] }
         func rect(_ r: CGRect) -> CGRect { CGRect(x: screenOrigin.x + r.minX * zoom, y: screenOrigin.y + r.minY * zoom, width: r.width * zoom, height: r.height * zoom) }
+        func transport(_ r: CGRect) -> CGRect { rect(r).offsetBy(dx: panelShift, dy: 0) }
         if let rows = menuRows {
             return rows.enumerated().map { index, title in
                 accessibleElements.element(id: "menu-\(index)", owner: self, label: title,
@@ -2113,13 +2153,13 @@ import NxlvKit
         for slot in [0, 1, 2, 3, 4, 6, 7, 8] {
             let title = slot == 6 ? L10n.text("Game speed \(speedLabel)") : slot == 7 ? (paused ? L10n.text("Resume") : L10n.text("Pause")) : Lemmings3Panel.names[slot]
             children.append(accessibleElements.element(id: "panel-\(slot)", owner: self, label: title,
-                frame: slot == 6 && variableSpeedEnabled ? rect(SpeedPanelArt.boxes(in: CGRect(x: 214, y: 172, width: 35, height: 40))[1]) : slot < 5 ? skillFrame(slot) : rect(CGRect(x: Lemmings3Panel.edges[slot], y: 172,
+                frame: slot == 6 && variableSpeedEnabled ? transport(SpeedPanelArt.boxes(in: CGRect(x: 214, y: 172, width: 35, height: 40))[1]) : slot < 5 ? skillFrame(slot) : transport(CGRect(x: Lemmings3Panel.edges[slot], y: 172,
                     width: Lemmings3Panel.edges[slot + 1] - Lemmings3Panel.edges[slot], height: 40))) { [weak self] in self?.onPanel?(slot, slot == 8 ? 2 : 1) })
         }
         if variableSpeedEnabled {
             for direction in [-1, 1] {
                 children.append(accessibleElements.element(id: "speed-\(direction)", owner: self,
-                    label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: rect(SpeedPanelArt.boxes(in: CGRect(x: 214, y: 172, width: 35, height: 40))[direction < 0 ? 0 : 2])) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
+                    label: direction < 0 ? L10n.text("Decrease fast speed") : L10n.text("Increase fast speed"), frame: transport(SpeedPanelArt.boxes(in: CGRect(x: 214, y: 172, width: 35, height: 40))[direction < 0 ? 0 : 2])) { [weak self] in self?.onSpeedStep?(direction, ProcessInfo.processInfo.systemUptime) })
             }
         }
         children.append(accessibleElements.element(id: "menu", owner: self, label: L10n.text("Game menu"), frame: gameMenuFrame) { [weak self] in self?.onMenu?() })
@@ -2334,25 +2374,41 @@ import NxlvKit
                 (menuRows == nil ? deathCountdownText : "", "\(count)/\(count) 💀")]
             .map { ($0.0, max(width($0.1), width("SAFE")) + 5) }
     }
+    private func statusLayout(_ columns: [(text: String, width: CGFloat)])
+        -> (frame: CGRect, rows: [[(text: String, width: CGFloat)]], scale: CGFloat) {
+        let available = max(0, bounds.width - 112)
+        let rows = columns.reduce(4, { $0 + $1.width * 2 }) <= available
+            ? [columns] : [Array(columns.prefix(3)), Array(columns.dropFirst(3))]
+        let longest = rows.map { $0.reduce(0) { $0 + $1.width } }.max() ?? 1
+        let width = min(available, longest * 2 + 4)
+        let scale = min(2, max(0, width - 4) / max(1, longest))
+        let frame = GameplayMenuLayout.readout(CGRect(x: bounds.minX + 8, y: screenOrigin.y + 2,
+            width: width, height: CGFloat(rows.count) * 22), in: self, avoiding: [rewardBadgeRect])
+        return (frame, rows, scale)
+    }
     var statusReadoutFrame: CGRect {
-        GameplayMenuLayout.readout(CGRect(x: screenOrigin.x + 2 * zoom, y: screenOrigin.y + 3 * zoom,
-            width: 274 * zoom, height: 8 * 0.65 * zoom), in: self, avoiding: [rewardBadgeRect])
+        guard let game, let panelArt else { return .zero }
+        return statusLayout(statusColumns(game, art: panelArt)).frame
     }
     var gameMenuFrame: CGRect {
-        GameplayMenuLayout.readout(CGRect(x: screenOrigin.x + 280 * zoom, y: screenOrigin.y,
-            width: 40 * zoom, height: 12 * zoom), in: self, avoiding: [statusReadoutFrame])
+        GameplayMenuLayout.readout(CGRect(x: bounds.maxX - 96, y: screenOrigin.y + 2,
+            width: 88, height: 28), in: self)
     }
     var skillGroupFrame: CGRect {
         let height = GameHUDControlGroup.desktopHeight(forWidth: bounds.width)
-        return CGRect(x: screenOrigin.x, y: screenOrigin.y + 212 * zoom - height,
-            width: 175 * zoom, height: height)
+        return CGRect(x: panelRect.minX, y: panelRect.maxY - height,
+            width: panelRect.width - 145 * zoom, height: height)
     }
     private func skillFrame(_ index: Int) -> CGRect {
         let group = skillGroupFrame
         return CGRect(x: group.minX + CGFloat(index) * group.width / 5, y: group.minY,
             width: group.width / 5, height: group.height)
     }
-    var panelRect: CGRect { CGRect(x: origin.x, y: origin.y + 160 * zoom, width: 320 * zoom, height: 40 * zoom) }
+    private var panelRect: CGRect {
+        CGRect(x: readOnlyReplay ? screenOrigin.x : bounds.minX, y: screenOrigin.y + 172 * zoom,
+            width: readOnlyReplay ? 320 * zoom : bounds.width, height: 40 * zoom)
+    }
+    private var panelShift: CGFloat { panelRect.maxX - (screenOrigin.x + 320 * zoom) }
     private let artworkRenderer = SequelArtworkRenderer()
     private var terrainCategory: SequelMacCategory = .organic
     private var reloadArtwork: (() throws -> Void)?
@@ -2754,7 +2810,8 @@ import NxlvKit
             } else { directionPoint = nil; onCancelDirection?() }
             needsDisplay = true; return
         }
-        if variableSpeedEnabled, let part = SpeedPanelControls.part(at: CGPoint(x: sx, y: sy), in: CGRect(x: 214, y: 172, width: 35, height: 40)) {
+        let transportX = sx - panelShift / zoom
+        if variableSpeedEnabled, let part = SpeedPanelControls.part(at: CGPoint(x: transportX, y: sy), in: CGRect(x: 214, y: 172, width: 35, height: 40)) {
             if part == 0 { onSpeedPress?(event.timestamp, event.clickCount) }
             else { onSpeedStep?(part, event.timestamp) }
             return
@@ -2763,7 +2820,7 @@ import NxlvKit
             let slot = min(4, Int((point.x - skillGroupFrame.minX) / (skillGroupFrame.width / 5)))
             onPanel?(slot, event.clickCount); return
         }
-        if sy >= 172 && sy < 212, let slot = Lemmings3Panel.slot(at: sx), slot >= 6 {
+        if sy >= 172 && sy < 212, let slot = Lemmings3Panel.slot(at: transportX), slot >= 6 {
             onPanel?(slot, event.clickCount); return
         }
         if gameMenuFrame.contains(point) { onMenu?(); return }
@@ -2860,28 +2917,36 @@ import NxlvKit
     }
     private func drawInterface() {
         guard let art = panelArt, let game else { return }
+        let (readout, rows, scale) = statusLayout(statusColumns(game, art: art))
+        NSColor.black.setFill()
+        readout.fill()
+        for (index, row) in rows.enumerated() {
+            var x = readout.minX + 2
+            let y = readout.minY + CGFloat(index) * 22 + 3
+            for column in row {
+                art.text(column.text, x: x, y: y, scale: scale)
+                x += column.width * scale
+            }
+        }
+        if !readOnlyReplay {
+            let menu = gameMenuFrame
+            menu.fill()
+            GameControlText.draw(L10n.text("MENU"), in: menu.insetBy(dx: 4, dy: 0), alignment: .center)
+        }
         NSGraphicsContext.saveGraphicsState()
         let transform = NSAffineTransform(); transform.translateX(by: screenOrigin.x, yBy: screenOrigin.y); transform.scale(by: zoom); transform.concat()
         NSGraphicsContext.current?.imageInterpolation = .none
-        NSColor.black.setFill(); CGRect(x: 0, y: 0, width: 320, height: 12).fill()
         func local(_ frame: CGRect) -> CGRect {
             CGRect(x: (frame.minX - screenOrigin.x) / zoom, y: (frame.minY - screenOrigin.y) / zoom,
                 width: frame.width / zoom, height: frame.height / zoom)
         }
-        local(statusReadoutFrame).insetBy(dx: -1, dy: -1).fill()
-        if !readOnlyReplay { local(gameMenuFrame).fill() }
-        let readout = local(statusReadoutFrame)
-        let columns = statusColumns(game, art: art)
-        let scale = min(0.65, readout.width / max(1, columns.reduce(0) { $0 + $1.width }))
-        var x = readout.minX
-        for column in columns {
-            art.text(column.text, x: x, y: readout.minY, scale: scale)
-            x += column.width * scale
+        NSGraphicsContext.saveGraphicsState()
+        if !readOnlyReplay {
+            NSGraphicsContext.current?.cgContext.translateBy(x: panelShift / zoom, y: 0)
+            CGRect(x: 175, y: 172, width: 145, height: 40).clip()
         }
-        if !readOnlyReplay { art.text(L10n.text("MENU"), x: (gameMenuFrame.minX - screenOrigin.x) / zoom + 6,
-            y: (gameMenuFrame.minY - screenOrigin.y) / zoom + 3, scale: 0.8) }
         art.normal.draw(in: CGRect(x: 0, y: 172, width: 320, height: 40), from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: [.interpolation: NSImageInterpolation.none.rawValue])
-        for slot in readOnlyReplay ? [] : [selectedAction] + (fast ? [6] : []) + (paused ? [7] : []) {
+        for slot in readOnlyReplay ? [] : (fast ? [6] : []) + (paused ? [7] : []) {
             let left = CGFloat(Lemmings3Panel.edges[slot]), width = CGFloat(Lemmings3Panel.edges[slot + 1]) - left
             NSGraphicsContext.saveGraphicsState()
             NSBezierPath(rect: CGRect(x: left, y: 172, width: width, height: 40)).addClip()
@@ -2897,11 +2962,13 @@ import NxlvKit
         SpeedPanelControls.draw(in: CGRect(x: 214, y: 172, width: 35, height: 40), label: speedLabel, active: fast, arrows: variableSpeedEnabled)
         // Time stays inside its own panel cell, never above a lemming.
         let seconds = max(0, game.remainingSeconds)
-        art.text(String(format: "%02d", seconds / 60), x: 187, y: 183, scale: 0.85)
-        art.text(String(format: "%02d", seconds % 60), x: 187, y: 195, scale: 0.85)
+        let clockScale = max(0.85, min(1.9, 2 / zoom))
+        art.text(String(format: "%02d", seconds / 60), x: 195 - 8 * clockScale, y: 177, scale: clockScale)
+        art.text(String(format: "%02d", seconds % 60), x: 195 - 8 * clockScale, y: 177 + 9 * clockScale, scale: clockScale)
+        NSGraphicsContext.restoreGraphicsState()
         if let context = NSGraphicsContext.current?.cgContext,
            let pixels = bitmapCache.pixels(art.normal) {
-            NSColor.black.setFill(); CGRect(x: 0, y: 172, width: 175, height: 40).fill()
+            NSColor.black.setFill(); local(skillGroupFrame).fill()
             for index in 0..<5 {
                 let frame = local(skillFrame(index))
                 context.saveGState()
@@ -2934,11 +3001,11 @@ import NxlvKit
                let tool = lem.tool ?? lem.mobilityTool, let icon = pickupImages[tool.rawValue] {
                 let frame = local(skillFrame(3)).insetBy(dx: 4 / zoom, dy: 4 / zoom)
                 NSColor.black.setFill(); frame.fill()
-                let height = max(1, min(frame.width, frame.height - 10 / zoom))
+                let height = max(1, min(frame.width, frame.height - 18 / zoom))
                 icon.draw(in: CGRect(x: frame.midX - height / 2, y: frame.minY, width: height, height: height),
                     from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
                     hints: [.interpolation: NSImageInterpolation.none.rawValue])
-                art.text(String(lem.quantity), x: frame.minX, y: frame.maxY - 8 / zoom, scale: 0.8 / zoom)
+                art.text(String(lem.quantity), x: frame.minX, y: frame.maxY - 16 / zoom, scale: 2 / zoom)
             }
         }
         if directionPoint != nil {

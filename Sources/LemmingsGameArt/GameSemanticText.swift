@@ -40,10 +40,12 @@ public enum GameSemanticText {
     public static func draw(_ runs: [GameFrontEnd.TextRun], in box: CGRect, typography: GameMenuTypography,
                             face: GameMenuTypography.Face = .small, scale: Int = 1,
                             alignment: GameMenuTypography.Alignment = .center,
-                            alpha: CGFloat = 1, context: CGContext) {
+                            alpha: CGFloat = 1, singleLine: Bool = false, context: CGContext) {
         guard let font = typography.font(face) else { return }
         typealias Letter = (sequence: String, palette: GameMenuTypography.Palette)
-        let text = GameMenuTypography.menuText(runs.map(\.text).joined())
+        let title = runs.map(\.text).joined()
+        let text = GameMenuTypography.menuText(singleLine ? title.replacingOccurrences(of: "\n", with: " ") : title)
+        if singleLine && CGFloat(font.width(of: text, scale: scale)) > box.width { return }
         var boundaries: [(end: Int, palette: GameMenuTypography.Palette)] = [], offset = 0
         var prefix = ""
         for run in runs {
@@ -56,7 +58,7 @@ public enum GameSemanticText {
             offset += sequence.unicodeScalars.count
             return (sequence, palette)
         }
-        let lines = GameTextLayout.wrapped(letters, width: box.width, space: (" ", .blue),
+        let lines = singleLine ? [letters] : GameTextLayout.wrapped(letters, width: box.width, space: (" ", .blue),
             text: { $0.sequence }, measure: { CGFloat(font.width(of: $0, scale: scale)) })
         let bounds = font.verticalBounds(of: text)
         let pitch = CGFloat(font.height(of: text, scale: scale))

@@ -103,7 +103,7 @@ import NxlvKit
 
     func show(_ deck: LevelHintDeck, image: CGImage? = nil, owner: NSWindow,
               solutionSession: ClassicSession? = nil, solutionSource: PlayfieldView? = nil,
-              solutionEffects: SoundEffectPlayer? = nil,
+              solutionEffects: SoundEffectPlayer? = nil, allows25x: Bool = false,
               runID: UUID? = nil, ownerKey: String = "", pauseForSolution: @escaping () -> Void = {},
               onDismiss: @escaping () -> Void = {}) {
         guard page == nil, !deck.stages.isEmpty else { return }
@@ -153,6 +153,7 @@ import NxlvKit
                     GameScreen.shared.dismiss(warning)
                     let replay = SolutionReplayWindow(solution: solution, source: solutionSource,
                         width: solutionSession.levelWidth, height: solutionSession.levelHeight, effects: solutionEffects)
+                    replay.speedControl.ridiculousEnabled = allows25x
                     self.retain(replay, source: solutionSource, owner: owner, runID: runID, ownerKey: ownerKey, pause: pauseForSolution)
                     self.selectSolutionMode(.solution)
                 }

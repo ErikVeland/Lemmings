@@ -314,16 +314,18 @@ final class DeviceMenuLayoutTests: XCTestCase {
         let output = root.appendingPathComponent(".build/device-layout-native")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         let families = ["CLASSIC LEMMINGS  93/120", "OH NO! MORE LEMMINGS  45/100", "HOLIDAY LEMMINGS  17/72",
-            "OH YES! MORE LEMMINGS  20/60", "FAN LEMMINGS  12/15000", "NEOLEMMIX  4/500", "LEMMINGS 2  0/120", "LEMMINGS 3  0/90 - BETA"]
+            "OH YES! MORE LEMMINGS  20/60", "FAN LEMMINGS  12/15000", "NEOLEMMIX  4/500", "LEMMINGS 2", "LEMMINGS 3"]
         let destinations = ["PLAY", "HOT SEAT", "PROFILE", "COMMUNITY"]
-        for size in [CGSize(width: 640, height: 480), .init(width: 900, height: 600), .init(width: 1120, height: 720),
+        for size in [CGSize(width: 640, height: 480), .init(width: 900, height: 600), .init(width: 1000, height: 620), .init(width: 1120, height: 720),
                      .init(width: 1600, height: 900), .init(width: 2560, height: 1600)] {
             for saved in 0...2 {
                 let field = PlayfieldView(frame: CGRect(origin: .zero, size: size))
                 field.interfaceArtwork = art; field.macArtwork = art; field.phase = .briefing
                 field.overlayTitle = "LEMMINGS"; field.overlayShowsLemmings = true
                 let routes = Array(["CONTINUE JOURNEY - ALICE v BOB", "RESUME LEVEL - ALICE"].prefix(saved)) + ["JOURNEY  29/295 SOLVED"]
+                let routeTitles = Array(["Continue journey", "Resume level"].prefix(saved)) + ["Journey"]
                 field.overlayProfileInitials = saved == 0 ? "LEM" : "ALICE v BOB"
+                field.overlayNextPlayerIndex = saved == 0 ? nil : 0
                 field.overlayShowsSettingsButton = true; field.overlayAvailableUpdate = "Version 2.0"
                 var selected: Int?, settings = false, update = false, back = false, collections = false
                 field.onSelectOverlayLine = { selected = $0 }; field.onSettings = { settings = true }
@@ -343,9 +345,22 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 field.overlayHomePlay = false
                 field.overlayHomeLeadingCount = 5
                 field.overlayLines = [routes[0]] + destinations
+                field.overlayHomeTitles = [routeTitles[0]] + destinations
                 field.overlayHighlight = 0
                 var elements = try capture("home")
                 XCTAssertEqual(field.homeActionCount, 7)
+                let primary = try XCTUnwrap(elements.first { $0.accessibilityLabel() == routes[0] })
+                let play = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "PLAY" })
+                let hotSeat = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "HOT SEAT" })
+                XCTAssertLessThan(primary.localFrame.maxY, play.localFrame.minY)
+                XCTAssertEqual(primary.localFrame.minX, play.localFrame.minX, accuracy: 1)
+                XCTAssertEqual(primary.localFrame.maxX, hotSeat.localFrame.maxX, accuracy: 1)
+                XCTAssertEqual(field.homeSelection(from: 0, direction: "down"), 1)
+                XCTAssertEqual(field.homeSelection(from: 1, direction: "right"), 2)
+                if size.width >= 900 {
+                    XCTAssertGreaterThanOrEqual(primary.localFrame.height, 104)
+                    XCTAssertGreaterThanOrEqual(play.localFrame.height, 80)
+                }
                 for label in ["Settings", "Version 2.0. Show update and release notes", field.overlayLines[0]] {
                     let element = try XCTUnwrap(elements.first { $0.accessibilityLabel() == label })
                     XCTAssertTrue(field.bounds.contains(element.localFrame)); click(element)
@@ -361,16 +376,41 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 XCTAssertFalse(elements.contains { $0.accessibilityLabel()?.contains("LEMMINGS SAVED") == true })
                 XCTAssertFalse(community.localFrame.isEmpty)
 
-                // Play: saved routes, then the game grid, with Back and Collections below.
                 field.overlayHomePlay = true
+                field.overlayShowsLemmings = false
                 field.overlayHomeLeadingCount = routes.count
                 field.overlayLines = routes + families
+                let gameTitles = ["Classic", "Oh No!", "Holiday", "Oh Yes!", "Fan levels", "NeoLemmix", "Lemmings 2", "Lemmings 3"]
+                field.overlayHomeTitles = routeTitles + gameTitles
+                let firstGame = routes.count
+                field.overlayHomeGameCaptions = Dictionary(uniqueKeysWithValues:
+                    zip(gameTitles,
+                        ["93/120", "45/100", "17/72", "20/60", "12/15000", "4/500"]).enumerated().map { index, item in
+                            (firstGame + index, [.init(item.0, .green), .init("  " + item.1, .blue)])
+                        })
+                field.overlayHomeLogos = [firstGame + 6: .lemmings2, firstGame + 7: .lemmings3]
                 field.overlayHighlight = 0
                 elements = try capture("play")
-                let firstGame = routes.count
+                let gamesHeading = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "Games" })
+                let firstCategory = try XCTUnwrap(elements.first { $0.accessibilityLabel() == families[0] })
+                XCTAssertLessThan(gamesHeading.localFrame.maxY, firstCategory.localFrame.minY)
+                if size.width >= 1000 {
+                    for title in families.suffix(2) {
+                        let game = try XCTUnwrap(elements.first { $0.accessibilityLabel() == title })
+                        XCTAssertEqual(game.localFrame.height, 128, accuracy: 0.5)
+                    }
+                }
+                click(firstCategory)
+                XCTAssertEqual(selected, firstGame)
                 XCTAssertEqual(field.homeSelection(from: firstGame, direction: "right"), firstGame + 1)
                 XCTAssertEqual(field.homeSelection(from: firstGame + 1, direction: "left"), firstGame)
                 XCTAssertFalse(elements.contains { $0.accessibilityLabel() == "PLAY" })
+                field.overlayHighlight = field.overlayLines.count + 1
+                elements = try capture("play-footer")
+                let collectionsControl = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "Collections" })
+                click(collectionsControl)
+                XCTAssertTrue(collections)
+                collections = false
                 XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count)); XCTAssertTrue(back)
                 XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count + 1)); XCTAssertTrue(collections)
             }

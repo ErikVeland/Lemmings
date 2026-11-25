@@ -37,6 +37,38 @@ public struct AdaptiveDJDirector: Sendable {
 /// Reference: https://lemmings.fandom.com/wiki/Music_in_Lemmings
 public enum LevelMusicSelection {
     public static let classic = ["cancan", "lemming1", "tim2", "lemming2", "tim8", "tim3", "tim5", "doggie", "tim6", "lemming3", "tim7", "tim9", "tim1", "tim10", "tim4", "tenlemmings", "mountain"]
+    public static let lemmings2 = ["classic", "beach", "cavelem", "circus", "egyptian", "highland",
+                                   "medieval", "outdoor", "polar", "shadow", "space", "sports"]
+    private static let ohNoTracks = (1...6).map { "tune\($0)" }
+
+    public static func lemmings2ShowcaseIndex(tribe: Int, level: Int) -> Int? {
+        level > 0 ? tribe * 9 + level - 1 : nil
+    }
+
+    public static func lemmings3ShowcaseIndex(tribe: Lemmings3ClassicCampaign.Tribe, level: Int,
+                                            openingCount: Int) -> Int? {
+        level >= openingCount ? (tribe.rawValue - 1) * 30 + level - openingCount : nil
+    }
+
+    public static func showcaseIndex(index: Int, titles: [String], holiday: Bool, ohNo: Bool) -> Int? {
+        guard !holiday, index >= 0 else { return nil }
+        let originals = Set(ohNo ? ohNoTracks : classic)
+        guard index >= originals.count else { return nil }
+        var unheard = originals
+        var showcaseIndex = 0
+        for position in 0...index {
+            let title = titles.indices.contains(position) ? titles[position] : ""
+            let theme = track(index: position, title: title, holiday: false, ohNo: ohNo)
+            guard originals.contains(theme) else { continue }
+            if unheard.isEmpty {
+                if position == index { return showcaseIndex }
+                showcaseIndex += 1
+            } else {
+                unheard.remove(theme)
+            }
+        }
+        return nil
+    }
     /// Count prior score occurrences, including special-level overrides. Direct
     /// level selection and retries produce the same arrangement as linear play.
     public static func cycle(index: Int, titles: [String], holiday: Bool, ohNo: Bool) -> Int {
@@ -56,7 +88,7 @@ public enum LevelMusicSelection {
             if title.contains("menacing") { return "menace" }
             if title.contains("awesome") { return "awesome" }
         }
-        let names = holiday ? ["jb", "kw", "rudi"] : ohNo ? (1...6).map { "tune\($0)" } : classic
+        let names = holiday ? ["jb", "kw", "rudi"] : ohNo ? ohNoTracks : classic
         return names[max(0, index) % names.count]
     }
 }

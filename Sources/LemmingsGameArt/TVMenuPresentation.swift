@@ -120,7 +120,7 @@ public enum TVMenuPresentation {
 
     /// Pack complete rows into pages. No setting or reset action is discarded.
     public static func settingsPage(_ source: GameFrontEnd.Page, index: Int, width: CGFloat, height: CGFloat) -> GameFrontEnd.Page {
-        let inner = min(1100, width - 16) - 32
+        let inner = settingsWidth(source, width: width) - 32
         var header = source
         header.subtitle = [source.subtitle, "99/99"].filter { !$0.isEmpty }.joined(separator: "  ")
         let top = headerBottom(header, inner: inner)
@@ -128,8 +128,7 @@ public enum TVMenuPresentation {
         let available = height - top - footerHeight - 32
         var pages: [[GameFrontEnd.Action]] = [], current: [GameFrontEnd.Action] = []
         func list(_ actions: [GameFrontEnd.Action]) -> GameListGrid {
-            GameListGrid(actions: actions, width: inner, columnsEnabled: !source.singleColumnRows,
-                gap: 8, minimumHeight: 44, captionInset: 24, rowHeadings: source.rowHeadings)
+            settingsGrid(source, actions: actions, width: inner)
         }
         for row in list(source.rows).rows {
             let actions = Array(source.rows[row.indices])
@@ -157,29 +156,49 @@ public enum TVMenuPresentation {
             + max(24, GameTextLayout.height(page.subtitle, width: inner)) + 12
     }
 
+    private static func settingsWidth(_ page: GameFrontEnd.Page, width: CGFloat) -> CGFloat {
+        min(page.settingsTabs == nil ? 1100 : 820, width - 16)
+    }
+
+    private static func settingsGrid(_ page: GameFrontEnd.Page, actions: [GameFrontEnd.Action], width: CGFloat) -> GameListGrid {
+        GameListGrid(actions: actions, width: width, columnsEnabled: !page.singleColumnRows,
+            minimumColumnWidth: page.settingsIndex ? 164 : 260,
+            gap: 8, minimumHeight: 44, captionInset: 24, rowHeadings: page.rowHeadings,
+            groupStarts: page.rowGroupStarts, alignColumns: page.settingsIndex)
+    }
+
     public static func settingsLayout(_ page: GameFrontEnd.Page, width: CGFloat, height: CGFloat) -> GameFrontEnd.Layout {
-        let boardWidth = min(1100, width - 16), x = (width - boardWidth) / 2, inner = boardWidth - 32
+        let boardWidth = settingsWidth(page, width: width), x = (width - boardWidth) / 2, inner = boardWidth - 32
         let heading = CGRect(x: x + 16, y: 16, width: inner,
             height: max(32, GameTextLayout.height(page.title, width: inner, face: .large)))
         let subtitle = CGRect(x: x + 16, y: heading.maxY, width: inner,
             height: max(24, GameTextLayout.height(page.subtitle, width: inner)))
         var targets: [GameFrontEnd.Target] = []
         var y = subtitle.maxY + 12
-        let grid = GameListGrid(actions: page.rows, width: inner, columnsEnabled: !page.singleColumnRows,
-            gap: 8, minimumHeight: 44, captionInset: 24, rowHeadings: page.rowHeadings)
+        let grid = settingsGrid(page, actions: page.rows, width: inner)
         targets += grid.targets.map { .init(action: $0.action, frame: $0.frame.offsetBy(dx: x + 16, dy: y)) }
         let headings = grid.headings.map { ($0.0, $0.1.offsetBy(dx: x + 16, dy: y)) }
         if !page.rows.isEmpty { y += grid.height + 8 }
         let footer = page.orderedFooter
         let footerColumns = max(1, footer.count)
-        let footerCell = (inner - CGFloat(footerColumns - 1) * 8) / CGFloat(footerColumns)
+        let loneSettingsBack = page.settingsTabs != nil && footer.count == 1 && footer[0].isBackNavigation
+        let footerWidth = loneSettingsBack ? min(220, inner) : inner
+        let footerCell = (footerWidth - CGFloat(footerColumns - 1) * 8) / CGFloat(footerColumns)
         let footerHeight = max(44, footer.map { GameTextLayout.height($0.title, width: footerCell - 24) + 8 }.max() ?? 44)
-        let footerY = max(y + 8, height - footerHeight - 16)
+        let paginated = footer.contains { $0.id == previousID || $0.id == nextID }
+        let footerY = paginated ? max(y + 8, height - footerHeight - 16) : y + 8
         for (column, action) in footer.enumerated() {
             targets.append(.init(action: action, frame: CGRect(x: x + 16 + CGFloat(column) * (footerCell + 8), y: footerY, width: footerCell, height: footerHeight)))
         }
-        let actualHeight = max(height, footerY + footerHeight + 16)
-        return .init(size: CGSize(width: width, height: actualHeight), board: CGRect(x: x, y: 4, width: boardWidth, height: actualHeight - 8),
-            heading: heading, subtitle: subtitle, preview: .zero, details: [], targets: targets, rowHeadings: headings)
+        let contentHeight = footer.isEmpty ? y + 16 : footerY + footerHeight + 16
+        let actualHeight = max(height, contentHeight)
+        let offset = floor((actualHeight - contentHeight) / 2)
+        return .init(size: CGSize(width: width, height: actualHeight),
+            board: CGRect(x: x, y: 4 + offset, width: boardWidth, height: contentHeight - 8),
+            heading: heading.offsetBy(dx: 0, dy: offset), subtitle: subtitle.offsetBy(dx: 0, dy: offset),
+            preview: .zero, details: [],
+            targets: targets.map { .init(action: $0.action, frame: $0.frame.offsetBy(dx: 0, dy: offset)) },
+            rowHeadings: headings.map { ($0.0, $0.1.offsetBy(dx: 0, dy: offset)) },
+            compactActionPanel: !paginated)
     }
 }

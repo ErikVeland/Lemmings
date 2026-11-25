@@ -372,10 +372,8 @@ extension MobileGameViewController {
         if !overlay.isHidden || !lifecycle.isForeground || lifecycle.isInterrupted { inputSpeed.suspend(at: now) }
         inputSpeed.update(at: now)
         if speed <= 1, inputSpeed.multiplier > 1 { showControlTip(.speed) }
-        let changed = speed != inputSpeed.multiplier
         speed = inputSpeed.multiplier; clock.speed = speed
-        if changed { updatePerformanceBudget() }
-        if changed || hud.speed != inputSpeed.target { updateHUD() }
+        if hud.speed != inputSpeed.target { updateHUD() }
     }
     func showInGameSettings(_ group: MobileSettingsGroup? = nil, mappings: Bool = false, soundtrack: Bool = false, insights: Bool = false,
                             language: Bool = false, returningTo caller: (() -> Void)? = nil, preservingPosition: Bool = false) {

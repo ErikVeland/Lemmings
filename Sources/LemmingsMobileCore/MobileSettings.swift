@@ -141,6 +141,13 @@ public struct MobileSettings: Codable, Equatable, Sendable {
 
 public enum MobileSettingsGroup: String, CaseIterable, Codable, Sendable {
     case gameplay, controller, graphics, display, audio, accessibility, deskClock, privacy
+
+    public static let sections: [[Self]] = [
+        [.gameplay, .controller, .accessibility],
+        [.display, .graphics, .audio],
+        [.privacy, .deskClock]
+    ]
+
     public var title: String {
         switch self {
         case .gameplay: L10n.text("Gameplay")

@@ -311,10 +311,8 @@ public enum MobileHUDAction: Hashable, Sendable {
                 drawGlyphButton(item, context: context, pixel: panel.bevel)
             case .speed:
                 drawSpeed(item.frame, bevel: panel.bevel, context: context)
-            case .rewind, .stepBackward, .step:
+            case .rewind, .stepBackward, .step, .menu:
                 drawIconButton(item, context: context)
-            case .menu:
-                drawTextButton(item, context: context)
             case .speedStep, .speedTier, .speedPicker:
                 break
             case let .skill(index):
@@ -345,11 +343,7 @@ public enum MobileHUDAction: Hashable, Sendable {
                  .speed where speed > 1:
                 drawPressedPanelCell(item, panel: panel, context: context)
             case .rewind, .stepBackward, .step, .menu:
-                if item.action == .step || item.action == .stepBackward || item.action == .rewind {
-                    drawIconButton(item, context: context)
-                } else {
-                    drawTextButton(item, context: context)
-                }
+                drawIconButton(item, context: context)
             default:
                 break
             }
@@ -422,27 +416,51 @@ public enum MobileHUDAction: Hashable, Sendable {
 
     private func drawSkillLabels(_ panel: MobilePanelMetrics, context: CGContext) {
         let names = snapshot.skills.map { Self.shortNames[$0.name.lowercased()] ?? SkillVocabulary.title($0.name).uppercased() }
-        let compactWidth = names.map { GamePixelTypography.width(of: $0) }.max() ?? 1
-        let compactBounds = GamePixelTypography.verticalBounds(of: names.joined())
         for item in items {
             guard case let .skill(index) = item.action, let name = names[safe: index] else { continue }
             let box = CGRect(x: item.frame.minX, y: panel.frame.minY + 10 * panel.scale,
-                             width: item.frame.width, height: 5 * panel.scale)
+                             width: item.frame.width, height: 6 * panel.scale)
             context.setFillColor(CGColor(gray: 0, alpha: 1))
             context.fill(box)
-            let fits = typography.map { typography in
-                typography.font(.small).map { font in
-                    (names.map { font.width(of: GameMenuTypography.menuText($0)) }.max() ?? 0) <= Int(box.width)
-                        && font.height(of: names.joined()) <= Int(box.height)
-                } ?? false
-            } ?? false
-            if fits {
-                GamePixelTypography.draw(name, in: box, context: context, typography: typography, maximumScale: 1)
-            } else {
-                let scale = max(1, min(3, floor(min(box.height / CGFloat(compactBounds.bottom - compactBounds.top), box.width / CGFloat(compactWidth)))))
-                GamePixelTypography.draw(name, in: box, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
-            }
+            drawCompactCaption(name, in: box.insetBy(dx: 1, dy: 0), context: context)
         }
+    }
+
+    private func captionHeight(for width: CGFloat) -> CGFloat {
+        if width >= 80 { return layout.television ? 24 : 18 }
+        return width >= 48 ? 14 : 12
+    }
+
+    private func drawCompactCaption(_ name: String, in box: CGRect, context: CGContext) {
+        let height = min(box.height, captionHeight(for: box.width))
+        guard box.width > 0, height > 0 else { return }
+        let interface = typography?.interface ?? GameArtworkResources.menuInterface
+        if let font = interface?.font(.small) {
+            let width = box.width * CGFloat(font.cellHeight) / height
+            let line = GameTextLayout.truncated(name, width: width, font: font)
+            if GameLemmingsTypography.draw(line, in: box, height: height, interface: interface, context: context) { return }
+        }
+        let line = GameTextLayout.truncated(name, width: box.width)
+        GamePixelTypography.draw(line, in: box, context: context, typography: nil, maximumScale: 2, bitmapOnly: true)
+    }
+
+    private func compactSkillCaptionFrame(in frame: CGRect, contour: CGPath?) -> CGRect {
+        let width = frame.width - 4
+        let height = max(14, captionHeight(for: width))
+        let box = CGRect(x: frame.minX + 2, y: frame.maxY - height - 4, width: width, height: height)
+        guard let contour else { return box }
+        func clearBand(at top: CGFloat) -> CGRect {
+            let y = top + height - 1
+            var left = box.minX, right = box.maxX
+            while left < right, !contour.contains(CGPoint(x: left, y: y)) { left += 1 }
+            while right > left, !contour.contains(CGPoint(x: right, y: y)) { right -= 1 }
+            return CGRect(x: left, y: top, width: right - left, height: height)
+        }
+        var caption = clearBand(at: box.minY)
+        while caption.width < min(40, width), caption.minY - 2 >= frame.minY + 36 {
+            caption = clearBand(at: caption.minY - 2)
+        }
+        return caption
     }
 
     private func drawSpeed(_ frame: CGRect, bevel: CGFloat, context: CGContext) {
@@ -477,13 +495,16 @@ public enum MobileHUDAction: Hashable, Sendable {
         let frame = item.frame
         context.saveGState()
         defer { context.restoreGState() }
+        let contour: CGPath?
         if layout.portrait != nil {
             let group = item.action == .menu ? headerSurface ?? controlGroup(containing: frame) : controlGroup(containing: frame)
             let corners = cornerFlags(for: group)
-            context.addPath(GameControlGroupArt.path(in: group, bottomLeft: corners.left, bottomRight: corners.right, screenEdges: duoCorners, topLeft: duoCorners && item.action == .menu, topRight: duoCorners && item.action == .menu, screenRadius: screenRadius, cornerRadii: screenCorners.inset(by: 2)))
-            context.clip()
+            contour = GameControlGroupArt.path(in: group, bottomLeft: corners.left, bottomRight: corners.right, screenEdges: duoCorners, topLeft: duoCorners && item.action == .menu, topRight: duoCorners && item.action == .menu, screenRadius: screenRadius, cornerRadii: screenCorners.inset(by: 2))
         } else if shape == .rounded {
-            context.addPath(shape.path(in: frame, inset: 1))
+            contour = shape.path(in: frame, inset: 1)
+        } else { contour = nil }
+        if let contour {
+            context.addPath(contour)
             context.clip()
         }
         let selected: Bool
@@ -503,15 +524,17 @@ public enum MobileHUDAction: Hashable, Sendable {
             let scale = layout.compactScale
             let visibleFrame = contentFrame(frame)
             let well = GameStoneArt.well(visibleFrame, pixel: 1)
+            let caption = compactSkillCaptionFrame(in: visibleFrame, contour: contour)
+            let artTop = visibleFrame.minY + 22
+            let art = CGRect(x: well.minX, y: artTop, width: well.width, height: max(0, caption.minY - artTop - 1))
             context.saveGState()
-            context.clip(to: well)
+            context.clip(to: well.intersection(art))
             if readOnly || snapshot.skills[safe: index]?.hasSupply == false { context.setAlpha(0.35) }
             let nativePanel = selected && !readOnly ? pressedPanelImage : panelImage
             let nativeGlyph = pressedPanelImage == nil ? nil
                 : nativePanel.flatMap { Lemmings3PanelArt.skillGlyph(in: $0, index: index) }
             if let icon = nativeGlyph ?? (skillIcons[safe: index] ?? nil) {
-                let art = CGRect(x: well.minX, y: visibleFrame.minY + 20, width: well.width, height: max(0, visibleFrame.height - 36))
-                let available = min(art.width / CGFloat(icon.width), max(0, frame.height - 36) / CGFloat(icon.height))
+                let available = min(art.width / CGFloat(icon.width), art.height / CGFloat(icon.height))
                 let fit = layout.isDiorama && available > 0
                     ? (available >= 1 ? floor(available) : 1 / ceil(1 / available)) : available
                 let iconFrame = CGRect(x: floor(art.midX - CGFloat(icon.width) * fit / 2),
@@ -520,24 +543,21 @@ public enum MobileHUDAction: Hashable, Sendable {
                 GameSkillSelectionArt.drawSprite(icon, in: iconFrame, selected: selected && nativeGlyph == nil, context: context)
             } else if layout.panel?.style != .lemmings3, let cell = item.sourceCell,
                let image = panelImage?.cropping(to: CGRect(x: cell * 16, y: 16, width: 16, height: 24)) {
-                let available = CGRect(x: well.minX, y: visibleFrame.minY + 20, width: well.width, height: max(0, visibleFrame.height - 36))
-                let art = CGRect(x: frame.midX - 8 * scale, y: floor(available.midY - 12 * scale), width: 16 * scale, height: 24 * scale)
-                GameStoneArt.drawImage(image, in: art, context: context)
+                let fit = min(scale, art.width / 16, art.height / 24)
+                let iconFrame = CGRect(x: floor(art.midX - 8 * fit), y: floor(art.midY - 12 * fit), width: 16 * fit, height: 24 * fit)
+                GameStoneArt.drawImage(image, in: iconFrame, context: context)
             }
             context.restoreGState()
-            drawCompactCount(item, in: visibleFrame, context: context)
+            drawCompactCount(item, in: visibleFrame, caption: caption, context: context)
         case .pause, .endRun:
             drawGlyphButton(item, context: context, pixel: 1)
         case .speed:
             drawSpeed(frame, bevel: 1, context: context)
-        case .menu:
-            if layout.portrait != nil { drawIconButton(item, context: context) }
-            else { drawTextButton(item, context: context) }
-        case .rewind, .stepBackward, .step:
+        case .menu, .rewind, .stepBackward, .step:
             drawIconButton(item, context: context)
         case .speedPicker:
             GameControlGroupArt.draw(in: context, frame: frame, group: frame, selected: false, face: .speed)
-            drawGameLabel(L10n.text("Speed"), in: frame.insetBy(dx: 4, dy: 6).offsetBy(dx: 0, dy: -3), context: context)
+            drawCompactCaption(L10n.text("Speed"), in: frame.insetBy(dx: 4, dy: 6).offsetBy(dx: 0, dy: -3), context: context)
             context.setFillColor(CGColor(gray: 1, alpha: 1))
             for row in 0..<3 {
                 let half = CGFloat(2 - row)
@@ -557,7 +577,7 @@ public enum MobileHUDAction: Hashable, Sendable {
         }
     }
 
-    private func drawCompactCount(_ item: Item, in frame: CGRect, context: CGContext) {
+    private func drawCompactCount(_ item: Item, in frame: CGRect, caption: CGRect? = nil, context: CGContext) {
         let value: String
         switch item.action {
         case .releaseRate:
@@ -569,14 +589,11 @@ public enum MobileHUDAction: Hashable, Sendable {
         default:
             return
         }
-        let count = CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 14)
+        let count = CGRect(x: frame.minX + 4, y: frame.minY + 3, width: frame.width - 8, height: 18)
         drawGameLabel(value, in: count, context: context)
-        if case let .skill(index) = item.action, let skill = snapshot.skills[safe: index] {
+        if let caption, case let .skill(index) = item.action, let skill = snapshot.skills[safe: index] {
             let name = Self.shortNames[skill.name.lowercased()] ?? SkillVocabulary.title(skill.name).uppercased()
-            let label = CGRect(x: frame.minX + 3, y: frame.maxY - 16, width: frame.width - 6, height: 10)
-            let bounds = GamePixelTypography.verticalBounds(of: name)
-            let scale = max(1, min(2, floor(min(label.height / CGFloat(bounds.bottom - bounds.top), label.width / CGFloat(GamePixelTypography.width(of: name))))))
-            GamePixelTypography.draw(name, in: label, context: context, typography: typography, maximumScale: scale, bitmapOnly: true)
+            drawCompactCaption(name, in: caption, context: context)
         }
     }
 
@@ -753,22 +770,6 @@ public enum MobileHUDAction: Hashable, Sendable {
         }
     }
 
-    private func drawTextButton(_ item: Item, context: CGContext) {
-        let enabled = item.action != .step || paused
-        if item.action == .step {
-            drawStoneSocket(item.frame, selected: false, pixel: 1, face: .stepForward, context: context)
-        } else {
-            if layout.portrait != nil {
-                GameControlGroupArt.draw(in: context, frame: item.frame, group: item.frame, selected: false,
-                    screenEdges: duoCorners, topRight: duoCorners && item.action == .menu)
-            } else {
-                GameStoneArt.draw(in: context, frame: item.frame, selected: false, pixel: 1, shape: shape)
-            }
-        }
-        let title = item.action == .step ? L10n.text("STEP") : L10n.text("MENU")
-        GamePixelTypography.draw(title, in: item.frame.insetBy(dx: 8, dy: 2), context: context, typography: typography, palette: .blue, alpha: enabled ? 1 : 0.45)
-    }
-
     /// Panel text in the game font, falling back to the pixel font when it will not fit.
     private func drawGameLabel(_ text: String, in box: CGRect, context: CGContext) {
         let plain = text.replacingOccurrences(of: "∞", with: "*")
@@ -860,19 +861,19 @@ public enum MobileHUDAction: Hashable, Sendable {
     /// left aligned in that slot. Changing digits, states or speeds never moves another statistic.
     public static func statusFields(in frame: CGRect, snapshot: MobileGameSnapshot, details: StatusDetails?,
                                     engineIdentifier: String, paused: Bool, speed: Double,
-                                    typography: GameMenuTypography?) -> [StatusField] {
+                                    typography: GameMenuTypography?, enlargesText: Bool = false) -> [StatusField] {
         guard frame.width >= 24, frame.height >= 8 else { return [] }
         let compact = frame.width < 440
-        let gap: CGFloat = compact ? 8 : 20
+        let gap: CGFloat = compact || enlargesText ? 8 : 20
         let row = frame.insetBy(dx: 6, dy: 2)
         let percent = snapshot.saved * 100 / max(1, snapshot.total)
         let minutes = max(0, details?.clockLimitSeconds ?? 5999) / 60
         let time = snapshot.remainingSeconds.map { String(format: "%d:%02d", max(0, $0) / 60, max(0, $0) % 60) } ?? "--:--"
         // Narrow bars abbreviate labels, but retain the regular game lettering.
         let bitmap = typography == nil || row.height < 12
-        func width(_ text: String, scale: CGFloat = 1, face: GameMenuTypography.Face = .small) -> CGFloat {
-            if bitmap { return CGFloat(GamePixelTypography.width(of: text)) * scale }
-            return typography?.width(of: GameMenuTypography.menuText(text), face: face, scale: Int(scale)) ?? 0
+        func width(_ text: String, face: GameMenuTypography.Face = .small) -> CGFloat {
+            if bitmap { return CGFloat(GamePixelTypography.width(of: text) + (enlargesText ? 1 : 0)) }
+            return typography?.width(of: GameMenuTypography.menuText(text), face: face, scale: 1) ?? 0
         }
         // Slot templates use the widest digit at the largest digit count a value can reach.
         let digit = bitmap ? Self.pixelDigit : typography?.smallNumericDigit ?? "8"
@@ -881,9 +882,8 @@ public enum MobileHUDAction: Hashable, Sendable {
         let count = wide(population)
         let clockTemplate = "\(wide(max(10, minutes))):\(digit)\(digit)"
         let clock = compact ? time : L10n.text("TIME \(time)")
-        let clockWidth = max(width(compact ? "--:--" : L10n.text("TIME --:--")), width(compact ? clockTemplate : L10n.text("TIME \(clockTemplate)")))
-        let scoreScale: CGFloat = bitmap ? 2 : 1
-        let scoreFace: GameMenuTypography.Face = !bitmap && frame.width >= 1200 ? .large : .small
+        let clockSlot = max(width(compact ? "--:--" : L10n.text("TIME --:--")), width(compact ? clockTemplate : L10n.text("TIME \(clockTemplate)")))
+        let scoreFace: GameMenuTypography.Face = !bitmap && !enlargesText && frame.width >= 1200 ? .large : .small
         func scoreText(_ saved: String, _ percent: String, full: Bool) -> String {
             guard full else { return "\(saved)/\(snapshot.required)" }
             return compact ? "\(saved)/\(snapshot.required) \(percent)%"
@@ -892,20 +892,13 @@ public enum MobileHUDAction: Hashable, Sendable {
         let scoreDigit = scoreFace == .large ? typography?.largeNumericDigit ?? digit : digit
         let scoreCount = String(repeating: scoreDigit, count: count.count)
         let percentBound = String(repeating: scoreDigit, count: 3)
-        let full = width(scoreText(scoreCount, percentBound, full: true), scale: scoreScale, face: scoreFace) + clockWidth + gap <= row.width
-        let score = scoreText("\(snapshot.saved)", "\(percent)", full: full)
-        let scoreSlot = min(row.width, width(scoreText(scoreCount, percentBound, full: full), scale: scoreScale, face: scoreFace))
-        let scoreFrame = CGRect(x: row.maxX - scoreSlot, y: row.minY, width: scoreSlot, height: row.height)
-        var fields = [StatusField(id: "score", text: score, frame: scoreFrame,
-                                  palette: .green, bitmapOnly: bitmap, scale: scoreScale, face: scoreFace)]
-        let available = max(0, scoreFrame.minX - gap - row.minX)
-        guard available >= clockWidth else { return fields }
+        let fullScoreWidth = width(scoreText(scoreCount, percentBound, full: true), face: scoreFace)
         // The state slot is reserved even while empty so a pause never shifts its neighbours.
         let states = [L10n.text("COMPLETE"), L10n.text("FAILED"), L10n.text("NUKING"), L10n.text("PAUSED")]
         let state = snapshot.isComplete ? (snapshot.didWin ? states[0] : states[1])
             : snapshot.isEndingRun ? states[2] : paused ? states[3] : ""
         let speedWidth = width(L10n.text("SPEED \(digit)\(digit).\(digit)X"))
-        var candidates: [(id: String, text: String, slot: CGFloat)] = [("time", clock, clockWidth),
+        var candidates: [(id: String, text: String, slot: CGFloat)] = [("time", clock, clockSlot),
             ("state", state, states.map { width($0) }.max() ?? 0)]
         if let details {
             let allowance = wide(max(0, min(Int.max - 1, population) - snapshot.required + 1))
@@ -925,11 +918,33 @@ public enum MobileHUDAction: Hashable, Sendable {
         }
         let speedText = L10n.text("SPEED \(speedLabel(speed))")
         candidates.append(("speed", speedText, speedWidth))
+        var scale: CGFloat = 1
+        if enlargesText {
+            scale = bitmap ? 2 : 1
+            let largerScale = scale + 1
+            let fullWidth = candidates.reduce(fullScoreWidth) { $0 + $1.slot }
+            let cellHeight = bitmap ? 7 : typography?.height(face: .small, scale: 1) ?? 18
+            if fullWidth * largerScale + gap * CGFloat(candidates.count) <= row.width,
+               cellHeight * largerScale <= row.height {
+                scale = largerScale
+            }
+        }
+        let scoreScale = bitmap ? max(2, scale) : scale
+        let clockWidth = clockSlot * scale
+        let full = fullScoreWidth * scoreScale + clockWidth + gap <= row.width
+        let score = scoreText("\(snapshot.saved)", "\(percent)", full: full)
+        let scoreWidth = full ? fullScoreWidth : width(scoreText(scoreCount, percentBound, full: false), face: scoreFace)
+        let scoreSlot = min(row.width, scoreWidth * scoreScale)
+        let scoreFrame = CGRect(x: row.maxX - scoreSlot, y: row.minY, width: scoreSlot, height: row.height)
+        var fields = [StatusField(id: "score", text: score, frame: scoreFrame,
+                                  palette: .green, bitmapOnly: bitmap, scale: scoreScale, face: scoreFace)]
+        let available = max(0, scoreFrame.minX - gap - row.minX)
+        guard available >= clockWidth else { return fields }
         var selected: [(id: String, text: String, slot: CGFloat)] = []
         var used: CGFloat = 0
-        for candidate in candidates {
-            let needed = candidate.slot + (selected.isEmpty ? 0 : gap)
-            if used + needed <= available { selected.append(candidate); used += needed }
+        for (id, text, slot) in candidates {
+            let needed = slot * scale + (selected.isEmpty ? 0 : gap)
+            if used + needed <= available { selected.append((id, text, slot * scale)); used += needed }
         }
         // Stable groups read left to right, with the clock nearest the rescue score.
         selected = selected.filter { $0.id != "time" } + selected.filter { $0.id == "time" }
@@ -939,7 +954,7 @@ public enum MobileHUDAction: Hashable, Sendable {
             let slot = CGRect(x: floor(x), y: row.minY, width: candidate.slot, height: row.height)
             if !candidate.text.isEmpty {
                 fields.append(StatusField(id: candidate.id, text: candidate.text, frame: slot,
-                    palette: .blue, bitmapOnly: bitmap, scale: 1, face: .small))
+                    palette: .blue, bitmapOnly: bitmap, scale: scale, face: .small))
             }
             x += candidate.slot + spacing
         }
@@ -949,11 +964,17 @@ public enum MobileHUDAction: Hashable, Sendable {
     private func drawStatus(in frame: CGRect, context: CGContext) {
         let fields = Self.statusFields(in: frame, snapshot: snapshot, details: statusDetails,
             engineIdentifier: statusDetails?.engineIdentifier ?? (layout.panel?.style == .lemmings3 ? "lemmings3" : "classic"),
-            paused: paused, speed: speed, typography: typography)
+            paused: paused, speed: speed, typography: typography, enlargesText: layout.television)
         for field in fields {
             if field.bitmapOnly {
                 GamePixelTypography.draw(field.text, in: field.frame, context: context, typography: nil,
                     palette: field.palette, maximumScale: field.scale, alignment: .left, bitmapOnly: true)
+            } else if field.scale > 1, let typography {
+                let scale = Int(field.scale)
+                let height = typography.height(of: field.text, face: field.face, scale: scale)
+                let row = CGRect(x: field.frame.minX, y: floor(field.frame.midY - height / 2), width: field.frame.width, height: height)
+                typography.menuLine(field.text, in: row, context: context, face: field.face, scale: scale,
+                    alignment: .left, palette: field.palette.menu)
             } else { drawStatusLabel(field.text, in: field.frame, palette: field.palette, face: field.face, context: context) }
             if field.id == "score", snapshot.didWin {
                 context.setFillColor(CGColor(srgbRed: 0.45, green: 1, blue: 0.10, alpha: 1))

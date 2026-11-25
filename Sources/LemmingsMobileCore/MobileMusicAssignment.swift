@@ -37,4 +37,28 @@ public enum MobileMusicAssignment {
         if isFan { return max(0, index) / LevelMusicSelection.classic.count }
         return LevelMusicSelection.cycle(index: index, titles: titles, holiday: tune.game == "holiday", ohNo: tune.game == "ohno")
     }
+
+    public static func sequel(identifier: String, index: Int) -> (tune: Tune, cycle: Int, showcaseIndex: Int?)? {
+        guard index >= 0 else { return nil }
+        if identifier.hasPrefix("lemmings2/"), !identifier.hasPrefix("lemmings2/practice/"),
+           LevelMusicSelection.lemmings2.indices.contains(index / 10) {
+            let level = index % 10
+            let tune = Tune(folder: "lemmings_2_music_mod_tsyu",
+                            track: LevelMusicSelection.lemmings2[index / 10], game: "lemmings2")
+            return (tune, level, LevelMusicSelection.lemmings2ShowcaseIndex(tribe: index / 10, level: level))
+        }
+        if identifier.hasPrefix("lemmings3/"), let tribe = Lemmings3ClassicCampaign.Tribe(rawValue: index / 30 + 1) {
+            let (prefix, count) = switch tribe {
+            case .classic: ("classic", 3)
+            case .shadow: ("shadow", 2)
+            case .egyptian: ("egypt", 2)
+            }
+            let level = index % 30
+            let tune = Tune(folder: "lemmings_3_music_mod_tsyu",
+                            track: prefix + String(level % count + 1), game: "lemmings3")
+            return (tune, level / count, LevelMusicSelection.lemmings3ShowcaseIndex(
+                tribe: tribe, level: level, openingCount: count))
+        }
+        return nil
+    }
 }

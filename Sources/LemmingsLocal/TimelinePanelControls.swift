@@ -74,14 +74,15 @@ import NxlvKit
     }
 
     func layoutSequelFooter(in bounds: CGRect) {
+        let inset: CGFloat = 8
         let width = min(260, max(0, bounds.width - 16))
         let tiers = bounds.width >= 700 ? tierWidth : 0
-        let gap: CGFloat = tiers > 0 ? 8 : 0
-        frame = CGRect(x: floor(bounds.midX - (width + gap + tiers) / 2), y: bounds.maxY - 34,
+        let gap = tiers > 0 ? inset : 0
+        frame = CGRect(x: bounds.maxX - inset - width - gap - tiers, y: bounds.maxY - 34,
                        width: width, height: 30)
         tierFrame = tiers > 0 ? CGRect(x: frame.maxX + gap, y: frame.minY, width: tiers, height: frame.height) : .zero
-        let mapWidth = min(220, frame.minX - bounds.minX - 16)
-        mapFrame = mapWidth >= 44 ? CGRect(x: frame.minX - 8 - mapWidth, y: frame.minY,
+        let mapWidth = frame.minX - bounds.minX - inset * 2
+        mapFrame = mapWidth >= 44 ? CGRect(x: bounds.minX + inset, y: frame.minY,
             width: mapWidth, height: frame.height) : .zero
     }
 
