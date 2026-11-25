@@ -1,0 +1,9 @@
+{
+  "verifiedAt": "2026-11-20T00:22:47.414679+00:00",
+  "appID": "6836347807",
+  "buildID": "fa1c4512-8349-4407-91fc-59213681a752",
+  "build": "108",
+  "usesNonExemptEncryption": false,
+  "basis": "Encryption uses Apple operating-system implementations, per the retained source and package audit.",
+  "appleGuidance": "https://developer.apple.com/help/app-store-connect/reference/app-information/export-compliance-documentation-for-encryption/"
+}

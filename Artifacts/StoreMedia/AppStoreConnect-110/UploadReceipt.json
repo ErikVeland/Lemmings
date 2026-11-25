@@ -1,0 +1,604 @@
+{
+  "app": "Ultimate Lemmix",
+  "appStoreID": "6836347807",
+  "bundleIdentifier": "academy.glasscode.ultimatelemmix",
+  "version": "2.4.2",
+  "mediaBuild": 110,
+  "locale": "en-AU",
+  "assetLibrary": "https://appstoreconnect.apple.com/apps/6836347807/distribution/asset-library",
+  "verifiedAt": "2026-11-24T04:17:09+00:00",
+  "platformVersionStates": {
+    "MAC_OS": "WAITING_FOR_REVIEW",
+    "IOS": "READY_FOR_DISTRIBUTION"
+  },
+  "uploadedFiles": 17,
+  "assetsWithListingPlacements": 12,
+  "assetStates": {
+    "WAITING_FOR_REVIEW": 17
+  },
+  "fileTreatment": "15 original files and 2 store-sized exports of the supplied marketing cards.",
+  "placementResponses": {
+    "IOS videos": {
+      "appleError": "ENTITY_ERROR.RELATIONSHIP.INVALID",
+      "message": "The asset must be in the APPROVED state because the parent is already approved.",
+      "versionState": "PENDING_DEVELOPER_RELEASE"
+    },
+    "TV_OS screenshots": {
+      "appleError": "STATE_ERROR.INVALID_STATE",
+      "message": "Creating a placement is not permitted in AppStoreVersion's current state",
+      "versionState": "WAITING_FOR_REVIEW"
+    },
+    "MAC_OS screenshots": {
+      "appleError": "STATE_ERROR.INVALID_STATE",
+      "message": "Creating a placement is not permitted in AppStoreVersion's current state",
+      "versionState": "WAITING_FOR_REVIEW"
+    },
+    "IOS screenshots": {
+      "appleError": "STATE_ERROR.INVALID_STATE",
+      "message": "Creating a placement is not permitted in AppStoreVersion's current state",
+      "versionState": "PENDING_DEVELOPER_RELEASE"
+    }
+  },
+  "assets": [
+    {
+      "localOriginal": "Creative/Product-Page-Header.mp4",
+      "appleFilename": "UL110-Product-Page-Header.mp4",
+      "appleAssetID": "08000019-77a6-839f-8133-963b452cf8ab",
+      "createdAt": "2026-11-20T23:05:34.614519Z",
+      "mediaType": "video",
+      "category": "CREATIVE_ASSETS",
+      "fileSize": 13243244,
+      "sha256": "840b6a5ce51a7cb7f6ddcfad13484e1e460d6db38192b624ae39303c657cda78",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "8aeaae00-2a17-4781-bfc0-44ca02e26ccb",
+      "placements": [
+        {
+          "libraryAssetID": "b5000019-77a6-839f-8124-33818f082a7c",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.3",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "PRODUCT_PAGE_HEADER_ASSET",
+          "deviceGroup": "DEFAULT_PROFILE",
+          "position": 1,
+          "placementID": "53400019-77a6-839f-8f06-edefffa60de8",
+          "placementState": "ACTIVE"
+        },
+        {
+          "libraryAssetID": "b5000019-77a6-839f-8124-33818f082a7c",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.2",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "PRODUCT_PAGE_HEADER_ASSET",
+          "deviceGroup": "DEFAULT_PROFILE",
+          "position": 1,
+          "placementID": "a7c00019-77a6-839f-8f08-da3b5e605dcc",
+          "placementState": "ACTIVE"
+        }
+      ],
+      "posterTimecode": "00:00:00:00"
+    },
+    {
+      "localOriginal": "Creative/Product-Page-Header.png",
+      "appleFilename": "UL110-Product-Page-Header.png",
+      "appleAssetID": "3bc00019-77a6-839f-8037-2a8a4d844f0c",
+      "createdAt": "2026-11-20T23:05:34.648311Z",
+      "mediaType": "image",
+      "category": "CREATIVE_ASSETS",
+      "fileSize": 6658927,
+      "sha256": "401d8d59dbc87041a69897b1e41b758aec4b5c1f0c439dd692f6143c1e3449d3",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "1eb43b80-e0b7-4d96-bd32-47a42a8c5fed",
+      "placements": []
+    },
+    {
+      "localOriginal": "Creative/Search-Results.mp4",
+      "appleFilename": "UL110-Search-Results.mp4",
+      "appleAssetID": "85400019-77a6-839f-8118-fc32f460621a",
+      "createdAt": "2026-11-20T23:05:34.594239Z",
+      "mediaType": "video",
+      "category": "CREATIVE_ASSETS",
+      "fileSize": 10414469,
+      "sha256": "a0d66329ea2560453b9e840777e0d1108abbef0be6ca146c1f197b3c8d2629a0",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "a28b6440-2fe2-58f0-9da3-354cb54cab57",
+      "placements": [
+        {
+          "libraryAssetID": "c4800019-77a6-839f-8139-13570ca37794",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.3",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "APP_STORE_SEARCH_RESULTS_ASSET",
+          "deviceGroup": "DEFAULT_PROFILE",
+          "position": 1,
+          "placementID": "22800019-77a6-839f-8f12-e5aa87aa5658",
+          "placementState": "ACTIVE"
+        },
+        {
+          "libraryAssetID": "c4800019-77a6-839f-8139-13570ca37794",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.2",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "APP_STORE_SEARCH_RESULTS_ASSET",
+          "deviceGroup": "DEFAULT_PROFILE",
+          "position": 1,
+          "placementID": "98c00019-77a6-839f-8f06-f528c91d0b87",
+          "placementState": "ACTIVE"
+        }
+      ],
+      "posterTimecode": "00:00:00:00"
+    },
+    {
+      "localOriginal": "Creative/Search-Results.png",
+      "appleFilename": "UL110-Search-Results.png",
+      "appleAssetID": "39800019-77a6-839f-8020-850f3133e7fd",
+      "createdAt": "2026-11-20T23:05:34.664436Z",
+      "mediaType": "image",
+      "category": "CREATIVE_ASSETS",
+      "fileSize": 3351139,
+      "sha256": "bdd635d7a9a6aaceb24c6b0dfcd33e9360b6f2cf38802918d9df33e328dd1343",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "d2ffa3b7-6c55-5cdf-8512-229d92791333",
+      "placements": []
+    },
+    {
+      "localOriginal": "Creative/Universal.png",
+      "appleFilename": "UL110-Universal.png",
+      "appleAssetID": "21000019-77a6-839f-8038-314d28259e42",
+      "createdAt": "2026-11-20T23:05:41.619509Z",
+      "mediaType": "image",
+      "category": "CREATIVE_ASSETS",
+      "fileSize": 12832021,
+      "sha256": "2a047886b045e8210c678336b100bd9fa65fdc14fc8bdbbcb67b6526bcc125dc",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "c8f4e2b1-7a3d-5c9e-8b6f-2d1a0e9c8b7a",
+      "placements": []
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/Apple TV/01-First-Steps.png",
+      "appleFilename": "UL110-AppleTV-01-First-Steps.png",
+      "appleAssetID": "e3000019-77a6-839f-8033-24aa89a84778",
+      "createdAt": "2026-11-20T23:05:46.663542Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 4295261,
+      "sha256": "d1727fd9d8d8adb0828f74de5e7764dde22618829e6fa46bac257ef37e1320df",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "4db3d359-3e6c-551a-8767-4c4372f72799",
+      "placements": [
+        {
+          "libraryAssetID": "e4000019-77a6-839f-8005-df7b58ca00a0",
+          "usesVerifiedCopy": true,
+          "platform": "TV_OS",
+          "version": "2.4.3",
+          "versionState": "WAITING_FOR_REVIEW",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "TV_PROFILE",
+          "position": 1,
+          "placementID": "d1c00019-77a6-839f-8f33-9a4517bfe3ba",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/Apple TV/02-Hot-Seat.png",
+      "appleFilename": "UL110-AppleTV-02-Hot-Seat.png",
+      "appleAssetID": "f8000019-77a6-839f-8025-7964cabb74b1",
+      "createdAt": "2026-11-20T23:05:49.674433Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 4334436,
+      "sha256": "852ee526bfd9f461627bcf3ba6c1d741c55463cdfd95e1a88efbf051fd902d29",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "4db3d359-3e6c-551a-8767-4c4372f72799",
+      "placements": [
+        {
+          "libraryAssetID": "4b000019-77a6-839f-801f-09c1b7fc9a84",
+          "usesVerifiedCopy": true,
+          "platform": "TV_OS",
+          "version": "2.4.3",
+          "versionState": "WAITING_FOR_REVIEW",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "TV_PROFILE",
+          "position": 2,
+          "placementID": "cec00019-77a6-839f-8f1a-acb00835c045",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/Mac/01-First-Steps.png",
+      "appleFilename": "UL110-Mac-01-First-Steps.png",
+      "appleAssetID": "16400019-77a6-839f-8006-ad90416cfa12",
+      "createdAt": "2026-11-20T23:05:50.284695Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 2553250,
+      "sha256": "45e4f6091cc46b5838206017837d06c187e49d692d7c160a1cf1430aa9bf537e",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "e5e2837e-00f0-5651-9bd5-761be7fe39a8",
+      "placements": [
+        {
+          "libraryAssetID": "6cc00019-77a6-839f-8028-dddc964b9315",
+          "usesVerifiedCopy": true,
+          "platform": "MAC_OS",
+          "version": "2.4.2",
+          "versionState": "WAITING_FOR_REVIEW",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "MAC_PROFILE",
+          "position": 1,
+          "placementID": "f8400019-77a6-839f-8f1b-f4c2aed9c6f1",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/Mac/02-Plan-B.png",
+      "appleFilename": "UL110-Mac-02-Plan-B.png",
+      "appleAssetID": "45800019-77a6-839f-802e-806dcc67efe8",
+      "createdAt": "2026-11-20T23:05:51.843695Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 3287880,
+      "sha256": "98e1390808361302534ffd456fbf555db850501b33088cba44a0a73e60e05074",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "e5e2837e-00f0-5651-9bd5-761be7fe39a8",
+      "placements": [
+        {
+          "libraryAssetID": "e8000019-77a6-839f-8013-b07f38feb81a",
+          "usesVerifiedCopy": true,
+          "platform": "MAC_OS",
+          "version": "2.4.2",
+          "versionState": "WAITING_FOR_REVIEW",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "MAC_PROFILE",
+          "position": 2,
+          "placementID": "c8000019-77a6-839f-8f3c-ea1d3dd54efc",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/iPad/01-Over-the-Rise.png",
+      "appleFilename": "UL110-iPad-01-Over-the-Rise.png",
+      "appleAssetID": "70400019-77a6-839f-800b-5ef8108c607b",
+      "createdAt": "2026-11-20T23:05:53.798016Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 2278434,
+      "sha256": "10952b1ac00fd24242a9f65fe85eeb11b40509b5606d23d7e17fbc042c9b3b19",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "1751a63a-af79-5c7f-a2f2-41140bf28f9e",
+      "placements": [
+        {
+          "libraryAssetID": "66800019-77a6-839f-801e-3712e7c19a9a",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.3",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "IPAD_13_PROFILE",
+          "position": 1,
+          "placementID": "98400019-77a6-839f-8f37-c66db835f75a",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/iPad/02-Choose-a-Route.png",
+      "appleFilename": "UL110-iPad-02-Choose-a-Route.png",
+      "appleAssetID": "8f800019-77a6-839f-802c-a2d75e15a643",
+      "createdAt": "2026-11-20T23:05:55.707942Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 1766664,
+      "sha256": "7f25aed11905e7458ed15b58ddc93de528af7ddaeeea3a11845aab7999d8d6ef",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "1751a63a-af79-5c7f-a2f2-41140bf28f9e",
+      "placements": [
+        {
+          "libraryAssetID": "55800019-77a6-839f-8035-40261cf2edf6",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.3",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "IPAD_13_PROFILE",
+          "position": 2,
+          "placementID": "bc800019-77a6-839f-8f09-ab675453e6cd",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/iPhone Duo/01-Tabletop.png",
+      "appleFilename": "UL110-iPhoneDuo-01-Tabletop.png",
+      "appleAssetID": "d8800019-77a6-839f-8006-3655b58a9ae0",
+      "createdAt": "2026-11-20T23:05:55.862401Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 243645,
+      "sha256": "548cb974628be3500b978312fb2c66c98c9b86bbc54de68b84808b1028ebef2d",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "5d458eef-8339-4a1f-a484-83d53834cfec",
+      "placements": [
+        {
+          "libraryAssetID": "9e000019-77a6-839f-8037-bbc6382ad841",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.3",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "IPHONE_DUO_PROFILE",
+          "position": 1,
+          "placementID": "e6800019-77a6-839f-8f36-b890fb502538",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/iPhone Duo/02-Book.png",
+      "appleFilename": "UL110-iPhoneDuo-02-Book.png",
+      "appleAssetID": "5e800019-77a6-839f-803e-024f94934687",
+      "createdAt": "2026-11-20T23:05:56.602863Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 382757,
+      "sha256": "c3546f54a5ac94be78d6e4f21461a26e91d41b1ac17cd6eddead644863546452",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "b83915b8-5b87-4e63-bba5-ab3a0c439862",
+      "placements": [
+        {
+          "libraryAssetID": "2a400019-77a6-839f-800b-a379a5da3351",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.3",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "IPHONE_DUO_PROFILE",
+          "position": 2,
+          "placementID": "efc00019-77a6-839f-8f17-92de9f342f35",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/iPhone/01-Float-to-Safety.png",
+      "appleFilename": "UL110-iPhone-01-Float-to-Safety.png",
+      "appleAssetID": "c6800019-77a6-839f-8032-b23d794b4ff4",
+      "createdAt": "2026-11-20T23:05:58.647099Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 1104485,
+      "sha256": "1500cd06d346ea848de207142dc549c60fecf6ace28b7d95986d3971a0129830",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "5a7a65df-8822-5e32-bd47-cfbc4ef99663",
+      "placements": [
+        {
+          "libraryAssetID": "48000019-77a6-839f-8034-5e82727262a8",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.3",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "IPHONE_DYNAMIC_ISLAND_MEDIUM_PROFILE",
+          "position": 1,
+          "placementID": "87800019-77a6-839f-8f35-de51edd48e30",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Screenshots/en-AU/iPhone/02-Rescue-Record.png",
+      "appleFilename": "UL110-iPhone-02-Rescue-Record.png",
+      "appleAssetID": "21400019-77a6-839f-801a-519636b1c3ac",
+      "createdAt": "2026-11-20T23:05:59.818537Z",
+      "mediaType": "image",
+      "category": "APP_SCREENSHOTS_AND_PREVIEWS",
+      "fileSize": 1304046,
+      "sha256": "2f65836d8f98d9cecac8fb8c4a10a26cf44908f9532acea3177a49735c4cfcdb",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "5a7a65df-8822-5e32-bd47-cfbc4ef99663",
+      "placements": [
+        {
+          "libraryAssetID": "2c800019-77a6-839f-800e-a74c3f22d495",
+          "usesVerifiedCopy": true,
+          "platform": "IOS",
+          "version": "2.4.3",
+          "versionState": "READY_FOR_DISTRIBUTION",
+          "placement": "APP_SCREENSHOT",
+          "deviceGroup": "IPHONE_DYNAMIC_ISLAND_MEDIUM_PROFILE",
+          "position": 2,
+          "placementID": "9e000019-77a6-839f-8f3c-16e0ea12c425",
+          "placementState": "ACTIVE"
+        }
+      ]
+    },
+    {
+      "localOriginal": "Marketing/Landscape-1200x630.png",
+      "appleFilename": "UL110-Branded-Bridge-Header.png",
+      "appleAssetID": "a3000019-77a6-839f-803b-a6e155cd77ca",
+      "createdAt": "2026-11-20T23:09:56.813171Z",
+      "mediaType": "image",
+      "category": "CREATIVE_ASSETS",
+      "fileSize": 5482968,
+      "sha256": "208bef061e4b30bdc7cd3d95a9293cbffa82b2c347a199459552578918df4510",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "1eb43b80-e0b7-4d96-bd32-47a42a8c5fed",
+      "placements": [],
+      "storeSizedCopy": "Marketing/Branded-Bridge-Header.png",
+      "originalSHA256": "0bd34d8ae8adb239bdda547e93c5a8afe661c0f7de880cbcf32f0c8fa093b6ff",
+      "pixels": [
+        3840,
+        1646
+      ]
+    },
+    {
+      "localOriginal": "Marketing/Square-1080x1080.png",
+      "appleFilename": "UL110-Branded-Floater-Search.png",
+      "appleAssetID": "e2000019-77a6-839f-800e-0d6088b7713b",
+      "createdAt": "2026-11-20T23:09:56.824564Z",
+      "mediaType": "image",
+      "category": "CREATIVE_ASSETS",
+      "fileSize": 3401837,
+      "sha256": "fbfbfabe2dd3c4d782494ffb15fd7120aa9c69f45a1a9b7890f669a7f919aaf1",
+      "assetState": "WAITING_FOR_REVIEW",
+      "appleSpecificationID": "d2ffa3b7-6c55-5cdf-8512-229d92791333",
+      "placements": [],
+      "storeSizedCopy": "Marketing/Branded-Floater-Search.png",
+      "originalSHA256": "85af59a7e49ecd57ed20a7ab57fa7e21c84ef5464204101adea6ecd0ba4e1863",
+      "pixels": [
+        1920,
+        1280
+      ]
+    }
+  ],
+  "standaloneMediaReview": {
+    "id": "e10860fd-a8ec-4a0c-9c1e-b4ac9a5a22da",
+    "platform": "IOS",
+    "state": "WAITING_FOR_REVIEW",
+    "submittedAt": "2026-11-20T23:17:48.659Z",
+    "verifiedAt": "2026-11-24T04:17:09+00:00",
+    "product": "Ultimate Lemmix",
+    "appStoreID": "6836347807",
+    "appVersionItems": 0,
+    "mediaItemCount": 17,
+    "items": [
+      {
+        "file": "UL110-Product-Page-Header.mp4",
+        "assetID": "08000019-77a6-839f-8133-963b452cf8ab",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE2fDA4MDAwMDE5LTc3YTYtODM5Zi04MTMzLTk2M2I0NTJjZjhhYg",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-Product-Page-Header.png",
+        "assetID": "3bc00019-77a6-839f-8037-2a8a4d844f0c",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fDNiYzAwMDE5LTc3YTYtODM5Zi04MDM3LTJhOGE0ZDg0NGYwYw",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-Search-Results.mp4",
+        "assetID": "85400019-77a6-839f-8118-fc32f460621a",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE2fDg1NDAwMDE5LTc3YTYtODM5Zi04MTE4LWZjMzJmNDYwNjIxYQ",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-Search-Results.png",
+        "assetID": "39800019-77a6-839f-8020-850f3133e7fd",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fDM5ODAwMDE5LTc3YTYtODM5Zi04MDIwLTg1MGYzMTMzZTdmZA",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-Universal.png",
+        "assetID": "21000019-77a6-839f-8038-314d28259e42",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fDIxMDAwMDE5LTc3YTYtODM5Zi04MDM4LTMxNGQyODI1OWU0Mg",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-Branded-Bridge-Header.png",
+        "assetID": "a3000019-77a6-839f-803b-a6e155cd77ca",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fGEzMDAwMDE5LTc3YTYtODM5Zi04MDNiLWE2ZTE1NWNkNzdjYQ",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-Branded-Floater-Search.png",
+        "assetID": "e2000019-77a6-839f-800e-0d6088b7713b",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fGUyMDAwMDE5LTc3YTYtODM5Zi04MDBlLTBkNjA4OGI3NzEzYg",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-AppleTV-01-First-Steps.png",
+        "assetID": "e3000019-77a6-839f-8033-24aa89a84778",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fGUzMDAwMDE5LTc3YTYtODM5Zi04MDMzLTI0YWE4OWE4NDc3OA",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-AppleTV-02-Hot-Seat.png",
+        "assetID": "f8000019-77a6-839f-8025-7964cabb74b1",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fGY4MDAwMDE5LTc3YTYtODM5Zi04MDI1LTc5NjRjYWJiNzRiMQ",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-Mac-01-First-Steps.png",
+        "assetID": "16400019-77a6-839f-8006-ad90416cfa12",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fDE2NDAwMDE5LTc3YTYtODM5Zi04MDA2LWFkOTA0MTZjZmExMg",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-Mac-02-Plan-B.png",
+        "assetID": "45800019-77a6-839f-802e-806dcc67efe8",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fDQ1ODAwMDE5LTc3YTYtODM5Zi04MDJlLTgwNmRjYzY3ZWZlOA",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-iPad-01-Over-the-Rise.png",
+        "assetID": "70400019-77a6-839f-800b-5ef8108c607b",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fDcwNDAwMDE5LTc3YTYtODM5Zi04MDBiLTVlZjgxMDhjNjA3Yg",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-iPad-02-Choose-a-Route.png",
+        "assetID": "8f800019-77a6-839f-802c-a2d75e15a643",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fDhmODAwMDE5LTc3YTYtODM5Zi04MDJjLWEyZDc1ZTE1YTY0Mw",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-iPhoneDuo-01-Tabletop.png",
+        "assetID": "d8800019-77a6-839f-8006-3655b58a9ae0",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fGQ4ODAwMDE5LTc3YTYtODM5Zi04MDA2LTM2NTViNThhOWFlMA",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-iPhoneDuo-02-Book.png",
+        "assetID": "5e800019-77a6-839f-803e-024f94934687",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fDVlODAwMDE5LTc3YTYtODM5Zi04MDNlLTAyNGY5NDkzNDY4Nw",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-iPhone-01-Float-to-Safety.png",
+        "assetID": "c6800019-77a6-839f-8032-b23d794b4ff4",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fGM2ODAwMDE5LTc3YTYtODM5Zi04MDMyLWIyM2Q3OTRiNGZmNA",
+        "state": "READY_FOR_REVIEW"
+      },
+      {
+        "file": "UL110-iPhone-02-Rescue-Record.png",
+        "assetID": "21400019-77a6-839f-801a-519636b1c3ac",
+        "reviewItemID": "ZTEwODYwZmQtYThlYy00YTBjLTljMWUtYjRhYzlhNWEyMmRhfDE1fDIxNDAwMDE5LTc3YTYtODM5Zi04MDFhLTUxOTYzNmIxYzNhYw",
+        "state": "READY_FOR_REVIEW"
+      }
+    ],
+    "notEligible": []
+  },
+  "listingVersions": [
+    {
+      "platform": "MAC_OS",
+      "version": "2.4.2",
+      "versionState": "WAITING_FOR_REVIEW",
+      "versionID": "ce8b39f1-caa5-4d02-9776-dc7bb34c83d0"
+    },
+    {
+      "platform": "TV_OS",
+      "version": "2.4.3",
+      "versionState": "WAITING_FOR_REVIEW",
+      "versionID": "3809e541-17ca-4321-8e85-59fd5a0b3b40"
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.3",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88"
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.2",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f"
+    }
+  ],
+  "placementResponsesScope": "Initial placement attempts on version 2.4.2.",
+  "placementVerificationFile": "ListingPlacements.json",
+  "assetsWithOriginalLibraryIDPlaced": 0
+}

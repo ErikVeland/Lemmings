@@ -1,12 +1,17 @@
 # Ultimate Lemmix Store submission handoff
 
+Current account state: all 359 leaderboards and four sets are configured, and
+the Mac encryption declaration is complete. Build 108 is valid and attached on
+all three platforms. Nothing has been submitted for review. China compliance
+remains open. See [20 November verification](AccountConfiguration108.md).
+
 Checked 19 November 2026. Version 2.4.2, build 108 on Mac, iOS and tvOS.
 
 All three refreshed Store packages are signed and passed Apple's local package
 analysis with zero product errors. The final exports completed after the owner
 restored Xcode credential access.
-No build has been uploaded, processed by App Store Connect, submitted for review
-or published. These are preparation artifacts, not a completed submission.
+Apple processed build 108 and it is attached to all three platform drafts.
+No app or Game Center component has been submitted for review or published.
 
 ## Packages
 
@@ -107,13 +112,11 @@ response.
 
 [Mac refresh evidence](MacGameCenterNamespace.md) and
 [mobile refresh evidence](MobileGameCenterRefresh.md) cover the re-signed
-packages. They use independent Lemmix Game Center identifiers. Apple accepted
-the first Lemmix leaderboard and set. The remaining boards, Apple review of
-the components and signed service acceptance are open.
+packages. They use independent Lemmix Game Center identifiers. Apple has all four sets and all 359 localised boards.
+Component review and signed service acceptance remain open.
 
-Upload the Mac package and screenshots first, then prepare iOS and tvOS in
-that order. Verify Apple's processing and select each build. Complete the
-export compliance determination if Apple prompts for it. The owner confirmed
+Package uploads, screenshot uploads and build selections are complete.
+The Mac encryption declaration is complete and matches iOS and tvOS. The owner confirmed
 that mainland China filing records exist. Obtain the records, then complete
 the applicable App Compliance fields. Keep the restoration publication separate.
 

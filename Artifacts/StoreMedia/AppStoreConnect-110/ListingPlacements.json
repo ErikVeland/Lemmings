@@ -1,0 +1,837 @@
+{
+  "app": "Ultimate Lemmix",
+  "appStoreID": "6836347807",
+  "locale": "en-AU",
+  "verifiedAt": "2026-11-24T04:17:09+00:00",
+  "mediaReviewID": "e10860fd-a8ec-4a0c-9c1e-b4ac9a5a22da",
+  "mediaReviewState": "WAITING_FOR_REVIEW",
+  "versions": [
+    {
+      "platform": "MAC_OS",
+      "version": "2.4.2",
+      "versionState": "WAITING_FOR_REVIEW",
+      "versionID": "ce8b39f1-caa5-4d02-9776-dc7bb34c83d0"
+    },
+    {
+      "platform": "TV_OS",
+      "version": "2.4.3",
+      "versionState": "WAITING_FOR_REVIEW",
+      "versionID": "3809e541-17ca-4321-8e85-59fd5a0b3b40"
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.3",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88"
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.2",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f"
+    }
+  ],
+  "placements": [
+    {
+      "platform": "MAC_OS",
+      "version": "2.4.2",
+      "versionID": "ce8b39f1-caa5-4d02-9776-dc7bb34c83d0",
+      "versionState": "WAITING_FOR_REVIEW",
+      "locale": "en-AU",
+      "localizationID": "4981b9e1-f4d8-4b5b-80b3-365d7d45ed1b",
+      "placement": "APP_SCREENSHOT",
+      "deviceGroup": "MAC_PROFILE",
+      "requestedAssetsInOrder": [
+        "16400019-77a6-839f-8006-ad90416cfa12",
+        "45800019-77a6-839f-802e-806dcc67efe8"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "6cc00019-77a6-839f-8028-dddc964b9315",
+          "placementID": "f8400019-77a6-839f-8f1b-f4c2aed9c6f1",
+          "mediaType": "image",
+          "position": 1,
+          "sourceAssetID": "16400019-77a6-839f-8006-ad90416cfa12",
+          "state": "ACTIVE"
+        },
+        {
+          "assetID": "e8000019-77a6-839f-8013-b07f38feb81a",
+          "placementID": "c8000019-77a6-839f-8f3c-ea1d3dd54efc",
+          "mediaType": "image",
+          "position": 2,
+          "sourceAssetID": "45800019-77a6-839f-802e-806dcc67efe8",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": true
+    },
+    {
+      "platform": "TV_OS",
+      "version": "2.4.3",
+      "versionID": "3809e541-17ca-4321-8e85-59fd5a0b3b40",
+      "versionState": "WAITING_FOR_REVIEW",
+      "locale": "en-AU",
+      "localizationID": "caef6dcf-4b00-4526-a273-61f306129fe6",
+      "placement": "APP_SCREENSHOT",
+      "deviceGroup": "TV_PROFILE",
+      "requestedAssetsInOrder": [
+        "e3000019-77a6-839f-8033-24aa89a84778",
+        "f8000019-77a6-839f-8025-7964cabb74b1"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "e4000019-77a6-839f-8005-df7b58ca00a0",
+          "placementID": "d1c00019-77a6-839f-8f33-9a4517bfe3ba",
+          "mediaType": "image",
+          "position": 1,
+          "sourceAssetID": "e3000019-77a6-839f-8033-24aa89a84778",
+          "state": "ACTIVE"
+        },
+        {
+          "assetID": "4b000019-77a6-839f-801f-09c1b7fc9a84",
+          "placementID": "cec00019-77a6-839f-8f1a-acb00835c045",
+          "mediaType": "image",
+          "position": 2,
+          "sourceAssetID": "f8000019-77a6-839f-8025-7964cabb74b1",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.3",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "60df7da3-e9ab-4ca2-9f19-ef6b8480cd0d",
+      "placement": "PRODUCT_PAGE_HEADER_ASSET",
+      "deviceGroup": "DEFAULT_PROFILE",
+      "requestedAssetsInOrder": [
+        "08000019-77a6-839f-8133-963b452cf8ab"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "b5000019-77a6-839f-8124-33818f082a7c",
+          "placementID": "53400019-77a6-839f-8f06-edefffa60de8",
+          "mediaType": "video",
+          "position": 1,
+          "sourceAssetID": "08000019-77a6-839f-8133-963b452cf8ab",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.3",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "60df7da3-e9ab-4ca2-9f19-ef6b8480cd0d",
+      "placement": "APP_STORE_SEARCH_RESULTS_ASSET",
+      "deviceGroup": "DEFAULT_PROFILE",
+      "requestedAssetsInOrder": [
+        "85400019-77a6-839f-8118-fc32f460621a"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "c4800019-77a6-839f-8139-13570ca37794",
+          "placementID": "22800019-77a6-839f-8f12-e5aa87aa5658",
+          "mediaType": "video",
+          "position": 1,
+          "sourceAssetID": "85400019-77a6-839f-8118-fc32f460621a",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.3",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "60df7da3-e9ab-4ca2-9f19-ef6b8480cd0d",
+      "placement": "APP_SCREENSHOT",
+      "deviceGroup": "IPAD_13_PROFILE",
+      "requestedAssetsInOrder": [
+        "70400019-77a6-839f-800b-5ef8108c607b",
+        "8f800019-77a6-839f-802c-a2d75e15a643"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "66800019-77a6-839f-801e-3712e7c19a9a",
+          "placementID": "98400019-77a6-839f-8f37-c66db835f75a",
+          "mediaType": "image",
+          "position": 1,
+          "sourceAssetID": "70400019-77a6-839f-800b-5ef8108c607b",
+          "state": "ACTIVE"
+        },
+        {
+          "assetID": "55800019-77a6-839f-8035-40261cf2edf6",
+          "placementID": "bc800019-77a6-839f-8f09-ab675453e6cd",
+          "mediaType": "image",
+          "position": 2,
+          "sourceAssetID": "8f800019-77a6-839f-802c-a2d75e15a643",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.3",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "60df7da3-e9ab-4ca2-9f19-ef6b8480cd0d",
+      "placement": "APP_SCREENSHOT",
+      "deviceGroup": "IPHONE_DUO_PROFILE",
+      "requestedAssetsInOrder": [
+        "d8800019-77a6-839f-8006-3655b58a9ae0",
+        "5e800019-77a6-839f-803e-024f94934687"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "9e000019-77a6-839f-8037-bbc6382ad841",
+          "placementID": "e6800019-77a6-839f-8f36-b890fb502538",
+          "mediaType": "image",
+          "position": 1,
+          "sourceAssetID": "d8800019-77a6-839f-8006-3655b58a9ae0",
+          "state": "ACTIVE"
+        },
+        {
+          "assetID": "2a400019-77a6-839f-800b-a379a5da3351",
+          "placementID": "efc00019-77a6-839f-8f17-92de9f342f35",
+          "mediaType": "image",
+          "position": 2,
+          "sourceAssetID": "5e800019-77a6-839f-803e-024f94934687",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.3",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "60df7da3-e9ab-4ca2-9f19-ef6b8480cd0d",
+      "placement": "APP_SCREENSHOT",
+      "deviceGroup": "IPHONE_DYNAMIC_ISLAND_MEDIUM_PROFILE",
+      "requestedAssetsInOrder": [
+        "c6800019-77a6-839f-8032-b23d794b4ff4",
+        "21400019-77a6-839f-801a-519636b1c3ac"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "48000019-77a6-839f-8034-5e82727262a8",
+          "placementID": "87800019-77a6-839f-8f35-de51edd48e30",
+          "mediaType": "image",
+          "position": 1,
+          "sourceAssetID": "c6800019-77a6-839f-8032-b23d794b4ff4",
+          "state": "ACTIVE"
+        },
+        {
+          "assetID": "2c800019-77a6-839f-800e-a74c3f22d495",
+          "placementID": "9e000019-77a6-839f-8f3c-16e0ea12c425",
+          "mediaType": "image",
+          "position": 2,
+          "sourceAssetID": "21400019-77a6-839f-801a-519636b1c3ac",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.2",
+      "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "f980a4a7-ab4a-4188-964a-a3255340854e",
+      "placement": "PRODUCT_PAGE_HEADER_ASSET",
+      "deviceGroup": "DEFAULT_PROFILE",
+      "requestedAssetsInOrder": [
+        "08000019-77a6-839f-8133-963b452cf8ab"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "b5000019-77a6-839f-8124-33818f082a7c",
+          "placementID": "a7c00019-77a6-839f-8f08-da3b5e605dcc",
+          "mediaType": "video",
+          "position": 1,
+          "sourceAssetID": "08000019-77a6-839f-8133-963b452cf8ab",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.2",
+      "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "f980a4a7-ab4a-4188-964a-a3255340854e",
+      "placement": "APP_STORE_SEARCH_RESULTS_ASSET",
+      "deviceGroup": "DEFAULT_PROFILE",
+      "requestedAssetsInOrder": [
+        "85400019-77a6-839f-8118-fc32f460621a"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "c4800019-77a6-839f-8139-13570ca37794",
+          "placementID": "98c00019-77a6-839f-8f06-f528c91d0b87",
+          "mediaType": "video",
+          "position": 1,
+          "sourceAssetID": "85400019-77a6-839f-8118-fc32f460621a",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": true
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.2",
+      "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "f980a4a7-ab4a-4188-964a-a3255340854e",
+      "placement": "APP_SCREENSHOT",
+      "deviceGroup": "IPAD_13_PROFILE",
+      "requestedAssetsInOrder": [
+        "70400019-77a6-839f-800b-5ef8108c607b",
+        "8f800019-77a6-839f-802c-a2d75e15a643"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "f5800019-77a6-839f-8020-4306e267ca28",
+          "placementID": "50400019-77a6-839f-8f06-c2b33f60db22",
+          "mediaType": "image",
+          "position": 1,
+          "sourceAssetID": "f5800019-77a6-839f-8020-4306e267ca28",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": false
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.2",
+      "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "f980a4a7-ab4a-4188-964a-a3255340854e",
+      "placement": "APP_SCREENSHOT",
+      "deviceGroup": "IPHONE_DUO_PROFILE",
+      "requestedAssetsInOrder": [
+        "d8800019-77a6-839f-8006-3655b58a9ae0",
+        "5e800019-77a6-839f-803e-024f94934687"
+      ],
+      "currentPlacements": [],
+      "requestedOrderVerified": false
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.2",
+      "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "locale": "en-AU",
+      "localizationID": "f980a4a7-ab4a-4188-964a-a3255340854e",
+      "placement": "APP_SCREENSHOT",
+      "deviceGroup": "IPHONE_DYNAMIC_ISLAND_MEDIUM_PROFILE",
+      "requestedAssetsInOrder": [
+        "c6800019-77a6-839f-8032-b23d794b4ff4",
+        "21400019-77a6-839f-801a-519636b1c3ac"
+      ],
+      "currentPlacements": [
+        {
+          "assetID": "88c00019-77a6-839f-8023-f595b1dab84e",
+          "placementID": "99000019-77a6-839f-8f3b-eeadb40335f8",
+          "mediaType": "image",
+          "position": 1,
+          "sourceAssetID": "88c00019-77a6-839f-8023-f595b1dab84e",
+          "state": "ACTIVE"
+        }
+      ],
+      "requestedOrderVerified": false
+    }
+  ],
+  "matchingLibraryCopies": {
+    "verifiedAt": "2026-11-24T01:59:13+00:00",
+    "assets": [
+      {
+        "sourceAssetID": "08000019-77a6-839f-8133-963b452cf8ab",
+        "copyAssetID": "b5000019-77a6-839f-8124-33818f082a7c",
+        "file": "Creative/Product-Page-Header.mp4",
+        "sourceSHA256": "840b6a5ce51a7cb7f6ddcfad13484e1e460d6db38192b624ae39303c657cda78",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 Product-Page-Header 840b6a5ce5",
+        "sourceSize": 13243244,
+        "specificationID": "8aeaae00-2a17-4781-bfc0-44ca02e26ccb",
+        "mediaType": "video",
+        "verification": "All decoded video frames at the same H.264 rendition",
+        "resolution": [
+          1918,
+          822
+        ],
+        "sourcePosterTime": "00:00:00:00",
+        "copyPosterTime": "00:00:05:01",
+        "sourceDecodedSHA256": "c9e7227d7d7acdfaa965471b1fd6ce468d96b9ab7dbd1e4057979cc99643917d",
+        "copyDecodedSHA256": "c9e7227d7d7acdfaa965471b1fd6ce468d96b9ab7dbd1e4057979cc99643917d",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "85400019-77a6-839f-8118-fc32f460621a",
+        "copyAssetID": "c4800019-77a6-839f-8139-13570ca37794",
+        "file": "Creative/Search-Results.mp4",
+        "sourceSHA256": "a0d66329ea2560453b9e840777e0d1108abbef0be6ca146c1f197b3c8d2629a0",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 Search-Results a0d66329ea",
+        "sourceSize": 10414469,
+        "specificationID": "a28b6440-2fe2-58f0-9da3-354cb54cab57",
+        "mediaType": "video",
+        "verification": "All decoded video frames at the same H.264 rendition",
+        "resolution": [
+          1620,
+          1080
+        ],
+        "sourcePosterTime": "00:00:00:00",
+        "copyPosterTime": "00:00:05:01",
+        "sourceDecodedSHA256": "3535af31d7bc7d8a3b82cac1765c13703250018cd320812b51cf65092c32383e",
+        "copyDecodedSHA256": "3535af31d7bc7d8a3b82cac1765c13703250018cd320812b51cf65092c32383e",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "e3000019-77a6-839f-8033-24aa89a84778",
+        "copyAssetID": "e4000019-77a6-839f-8005-df7b58ca00a0",
+        "file": "Screenshots/en-AU/Apple TV/01-First-Steps.png",
+        "sourceSHA256": "d1727fd9d8d8adb0828f74de5e7764dde22618829e6fa46bac257ef37e1320df",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 AppleTV-01-First-Steps d1727fd9d8",
+        "sourceSize": 4295261,
+        "specificationID": "4db3d359-3e6c-551a-8767-4c4372f72799",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          3840,
+          2160
+        ],
+        "sourceDecodedSHA256": "094469a13eaa4d5182c7c7a50f7b49a233514b71a60b71be8ca332592824a577",
+        "copyDecodedSHA256": "094469a13eaa4d5182c7c7a50f7b49a233514b71a60b71be8ca332592824a577",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "f8000019-77a6-839f-8025-7964cabb74b1",
+        "copyAssetID": "4b000019-77a6-839f-801f-09c1b7fc9a84",
+        "file": "Screenshots/en-AU/Apple TV/02-Hot-Seat.png",
+        "sourceSHA256": "852ee526bfd9f461627bcf3ba6c1d741c55463cdfd95e1a88efbf051fd902d29",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 AppleTV-02-Hot-Seat 852ee526bf",
+        "sourceSize": 4334436,
+        "specificationID": "4db3d359-3e6c-551a-8767-4c4372f72799",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          3840,
+          2160
+        ],
+        "sourceDecodedSHA256": "6b3d14331db235b13a610ca0472d19e7c0f7d76ce604831a49236fa34044bc85",
+        "copyDecodedSHA256": "6b3d14331db235b13a610ca0472d19e7c0f7d76ce604831a49236fa34044bc85",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "70400019-77a6-839f-800b-5ef8108c607b",
+        "copyAssetID": "66800019-77a6-839f-801e-3712e7c19a9a",
+        "file": "Screenshots/en-AU/iPad/01-Over-the-Rise.png",
+        "sourceSHA256": "10952b1ac00fd24242a9f65fe85eeb11b40509b5606d23d7e17fbc042c9b3b19",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 iPad-01-Over-the-Rise 10952b1ac0",
+        "sourceSize": 2278434,
+        "specificationID": "1751a63a-af79-5c7f-a2f2-41140bf28f9e",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          2064,
+          2752
+        ],
+        "sourceDecodedSHA256": "517dfbe5ca05b880b0401c5bf1b6832a478bedd15e2d9576b6543b8ce1f6e8f4",
+        "copyDecodedSHA256": "517dfbe5ca05b880b0401c5bf1b6832a478bedd15e2d9576b6543b8ce1f6e8f4",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "8f800019-77a6-839f-802c-a2d75e15a643",
+        "copyAssetID": "55800019-77a6-839f-8035-40261cf2edf6",
+        "file": "Screenshots/en-AU/iPad/02-Choose-a-Route.png",
+        "sourceSHA256": "7f25aed11905e7458ed15b58ddc93de528af7ddaeeea3a11845aab7999d8d6ef",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 iPad-02-Choose-a-Route 7f25aed119",
+        "sourceSize": 1766664,
+        "specificationID": "1751a63a-af79-5c7f-a2f2-41140bf28f9e",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          2064,
+          2752
+        ],
+        "sourceDecodedSHA256": "c22f1dddb14aaad1f21c8f354a21d3341de18e37c43f0a60b35456d467c8fa3c",
+        "copyDecodedSHA256": "c22f1dddb14aaad1f21c8f354a21d3341de18e37c43f0a60b35456d467c8fa3c",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "d8800019-77a6-839f-8006-3655b58a9ae0",
+        "copyAssetID": "9e000019-77a6-839f-8037-bbc6382ad841",
+        "file": "Screenshots/en-AU/iPhone Duo/01-Tabletop.png",
+        "sourceSHA256": "548cb974628be3500b978312fb2c66c98c9b86bbc54de68b84808b1028ebef2d",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 iPhoneDuo-01-Tabletop 548cb97462",
+        "sourceSize": 243645,
+        "specificationID": "5d458eef-8339-4a1f-a484-83d53834cfec",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          2007,
+          2853
+        ],
+        "sourceDecodedSHA256": "bb79adeb398de5698a9d594112c4f2e578ab42c97d382768cb4480416cea5b09",
+        "copyDecodedSHA256": "bb79adeb398de5698a9d594112c4f2e578ab42c97d382768cb4480416cea5b09",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "5e800019-77a6-839f-803e-024f94934687",
+        "copyAssetID": "2a400019-77a6-839f-800b-a379a5da3351",
+        "file": "Screenshots/en-AU/iPhone Duo/02-Book.png",
+        "sourceSHA256": "c3546f54a5ac94be78d6e4f21461a26e91d41b1ac17cd6eddead644863546452",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 iPhoneDuo-02-Book c3546f54a5",
+        "sourceSize": 382757,
+        "specificationID": "b83915b8-5b87-4e63-bba5-ab3a0c439862",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          2853,
+          2007
+        ],
+        "sourceDecodedSHA256": "e162cf90733f8171f6777ee010e8971bace90b241ef77af06a21f476927e5186",
+        "copyDecodedSHA256": "e162cf90733f8171f6777ee010e8971bace90b241ef77af06a21f476927e5186",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "c6800019-77a6-839f-8032-b23d794b4ff4",
+        "copyAssetID": "48000019-77a6-839f-8034-5e82727262a8",
+        "file": "Screenshots/en-AU/iPhone/01-Float-to-Safety.png",
+        "sourceSHA256": "1500cd06d346ea848de207142dc549c60fecf6ace28b7d95986d3971a0129830",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 iPhone-01-Float-to-Safety 1500cd06d3",
+        "sourceSize": 1104485,
+        "specificationID": "5a7a65df-8822-5e32-bd47-cfbc4ef99663",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          1206,
+          2622
+        ],
+        "sourceDecodedSHA256": "b2b672cda8b0bc1d0af55077f2d8e81c7b249d7cb6e20ce7fbfaa4ec7fe4ef45",
+        "copyDecodedSHA256": "b2b672cda8b0bc1d0af55077f2d8e81c7b249d7cb6e20ce7fbfaa4ec7fe4ef45",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "21400019-77a6-839f-801a-519636b1c3ac",
+        "copyAssetID": "2c800019-77a6-839f-800e-a74c3f22d495",
+        "file": "Screenshots/en-AU/iPhone/02-Rescue-Record.png",
+        "sourceSHA256": "2f65836d8f98d9cecac8fb8c4a10a26cf44908f9532acea3177a49735c4cfcdb",
+        "copyReferenceName": "Ultimate Lemmix 2.4.3 iPhone-02-Rescue-Record 2f65836d8f",
+        "sourceSize": 1304046,
+        "specificationID": "5a7a65df-8822-5e32-bd47-cfbc4ef99663",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          1206,
+          2622
+        ],
+        "sourceDecodedSHA256": "c3617af3f8e6baee9ba13bcd5acb8cd363887c6fb6d3d53038c893a842ec6ad2",
+        "copyDecodedSHA256": "c3617af3f8e6baee9ba13bcd5acb8cd363887c6fb6d3d53038c893a842ec6ad2",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "16400019-77a6-839f-8006-ad90416cfa12",
+        "copyAssetID": "6cc00019-77a6-839f-8028-dddc964b9315",
+        "file": "Screenshots/en-AU/Mac/01-First-Steps.png",
+        "sourceSHA256": "45e4f6091cc46b5838206017837d06c187e49d692d7c160a1cf1430aa9bf537e",
+        "copyReferenceName": "Ultimate Lemmix 2.4.2 Mac-01-First-Steps 45e4f6091c",
+        "sourceSize": 2553250,
+        "specificationID": "e5e2837e-00f0-5651-9bd5-761be7fe39a8",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          2560,
+          1600
+        ],
+        "sourceDecodedSHA256": "8176b89ad3db71ac920a5e6e5fb3e9db1e33924b01a311694bf042f41dba24d0",
+        "copyDecodedSHA256": "8176b89ad3db71ac920a5e6e5fb3e9db1e33924b01a311694bf042f41dba24d0",
+        "identicalDecodedContent": true
+      },
+      {
+        "sourceAssetID": "45800019-77a6-839f-802e-806dcc67efe8",
+        "copyAssetID": "e8000019-77a6-839f-8013-b07f38feb81a",
+        "file": "Screenshots/en-AU/Mac/02-Plan-B.png",
+        "sourceSHA256": "98e1390808361302534ffd456fbf555db850501b33088cba44a0a73e60e05074",
+        "copyReferenceName": "Ultimate Lemmix 2.4.2 Mac-02-Plan-B 98e1390808",
+        "sourceSize": 3287880,
+        "specificationID": "e5e2837e-00f0-5651-9bd5-761be7fe39a8",
+        "mediaType": "image",
+        "verification": "Full-resolution RGB pixel comparison",
+        "resolution": [
+          2560,
+          1600
+        ],
+        "sourceDecodedSHA256": "a5951541cb0590fc0becd635094204c6698590c94a14b85a3084dfd71688b6bc",
+        "copyDecodedSHA256": "a5951541cb0590fc0becd635094204c6698590c94a14b85a3084dfd71688b6bc",
+        "identicalDecodedContent": true
+      }
+    ]
+  },
+  "publicStorefront": {
+    "appStoreID": "6836347807",
+    "checkedAt": "2026-11-24T04:16:37+00:00",
+    "term": "lemmings",
+    "checks": [
+      {
+        "country": "au",
+        "publicVersion": "2.4.3",
+        "storefrontVersion": "2.4.3",
+        "catalogVersion": "2.4.2",
+        "catalogReleaseDate": "2026-11-21T00:34:56Z",
+        "headerPage": "https://apps.apple.com/au/app/ultimate-lemmix/id6836347807?platform=iphone",
+        "headerVideoMatches": true,
+        "searchPageForGameTitle": "https://apps.apple.com/au/iphone/search?term=ultimate%20lemmix",
+        "searchVideoMatches": true,
+        "fullTitleRank": 1,
+        "publicScreenshotGalleries": {
+          "product_media_phone_": [
+            {
+              "width": 1206,
+              "height": 2622,
+              "verifiedSource": "Screenshots/en-AU/iPhone/01-Float-to-Safety.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/da/cf/07/dacf0741-0401-407a-99fd-9eebcb7ff59b/UL243-iPhone-01-Float-to-Safety.png/1206x2622bb.png"
+            },
+            {
+              "width": 1206,
+              "height": 2622,
+              "verifiedSource": "Screenshots/en-AU/iPhone/02-Rescue-Record.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/2e/e1/c1/2ee1c1ea-9643-602d-72fb-bff24c1bd440/UL243-iPhone-02-Rescue-Record.png/1206x2622bb.png"
+            }
+          ],
+          "product_media_pad_": [
+            {
+              "width": 2064,
+              "height": 2752,
+              "verifiedSource": "Screenshots/en-AU/iPad/01-Over-the-Rise.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/69/23/5c/69235c8d-fb6a-9c53-1e30-c3c32c2b8801/UL243-iPad-01-Over-the-Rise.png/2064x2752bb.png"
+            },
+            {
+              "width": 2064,
+              "height": 2752,
+              "verifiedSource": "Screenshots/en-AU/iPad/02-Choose-a-Route.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/66/21/67/662167d8-d655-9510-35fb-b4a5a9fdc5b8/UL243-iPad-02-Choose-a-Route.png/2064x2752bb.png"
+            }
+          ]
+        },
+        "keywordPage": "https://apps.apple.com/au/iphone/search?term=lemmings",
+        "keywordStorefrontInitialCount": 12,
+        "keywordStorefrontRank": null,
+        "keywordCatalogCount": 70,
+        "keywordCatalogRank": null
+      },
+      {
+        "country": "us",
+        "publicVersion": "2.4.3",
+        "storefrontVersion": "2.4.3",
+        "catalogVersion": "2.4.2",
+        "catalogReleaseDate": "2026-11-21T00:34:56Z",
+        "headerPage": "https://apps.apple.com/us/app/ultimate-lemmix/id6836347807?platform=iphone",
+        "headerVideoMatches": true,
+        "searchPageForGameTitle": "https://apps.apple.com/us/iphone/search?term=ultimate%20lemmix",
+        "searchVideoMatches": true,
+        "fullTitleRank": 1,
+        "publicScreenshotGalleries": {
+          "product_media_phone_": [
+            {
+              "width": 1206,
+              "height": 2622,
+              "verifiedSource": "Screenshots/en-AU/iPhone/01-Float-to-Safety.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/da/cf/07/dacf0741-0401-407a-99fd-9eebcb7ff59b/UL243-iPhone-01-Float-to-Safety.png/1206x2622bb.png"
+            },
+            {
+              "width": 1206,
+              "height": 2622,
+              "verifiedSource": "Screenshots/en-AU/iPhone/02-Rescue-Record.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/2e/e1/c1/2ee1c1ea-9643-602d-72fb-bff24c1bd440/UL243-iPhone-02-Rescue-Record.png/1206x2622bb.png"
+            }
+          ],
+          "product_media_pad_": [
+            {
+              "width": 2064,
+              "height": 2752,
+              "verifiedSource": "Screenshots/en-AU/iPad/01-Over-the-Rise.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/69/23/5c/69235c8d-fb6a-9c53-1e30-c3c32c2b8801/UL243-iPad-01-Over-the-Rise.png/2064x2752bb.png"
+            },
+            {
+              "width": 2064,
+              "height": 2752,
+              "verifiedSource": "Screenshots/en-AU/iPad/02-Choose-a-Route.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/66/21/67/662167d8-d655-9510-35fb-b4a5a9fdc5b8/UL243-iPad-02-Choose-a-Route.png/2064x2752bb.png"
+            }
+          ]
+        },
+        "keywordPage": "https://apps.apple.com/us/iphone/search?term=lemmings",
+        "keywordStorefrontInitialCount": 12,
+        "keywordStorefrontRank": null,
+        "keywordCatalogCount": 67,
+        "keywordCatalogRank": null
+      },
+      {
+        "country": "gb",
+        "publicVersion": "2.4.3",
+        "storefrontVersion": "2.4.3",
+        "catalogVersion": "2.4.2",
+        "catalogReleaseDate": "2026-11-21T00:34:56Z",
+        "headerPage": "https://apps.apple.com/gb/app/ultimate-lemmix/id6836347807?platform=iphone",
+        "headerVideoMatches": true,
+        "searchPageForGameTitle": "https://apps.apple.com/gb/iphone/search?term=ultimate%20lemmix",
+        "searchVideoMatches": true,
+        "fullTitleRank": 1,
+        "publicScreenshotGalleries": {
+          "product_media_phone_": [
+            {
+              "width": 1206,
+              "height": 2622,
+              "verifiedSource": "Screenshots/en-AU/iPhone/01-Float-to-Safety.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/da/cf/07/dacf0741-0401-407a-99fd-9eebcb7ff59b/UL243-iPhone-01-Float-to-Safety.png/1206x2622bb.png"
+            },
+            {
+              "width": 1206,
+              "height": 2622,
+              "verifiedSource": "Screenshots/en-AU/iPhone/02-Rescue-Record.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/2e/e1/c1/2ee1c1ea-9643-602d-72fb-bff24c1bd440/UL243-iPhone-02-Rescue-Record.png/1206x2622bb.png"
+            }
+          ],
+          "product_media_pad_": [
+            {
+              "width": 2064,
+              "height": 2752,
+              "verifiedSource": "Screenshots/en-AU/iPad/01-Over-the-Rise.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/69/23/5c/69235c8d-fb6a-9c53-1e30-c3c32c2b8801/UL243-iPad-01-Over-the-Rise.png/2064x2752bb.png"
+            },
+            {
+              "width": 2064,
+              "height": 2752,
+              "verifiedSource": "Screenshots/en-AU/iPad/02-Choose-a-Route.png",
+              "appleImagePath": "/image/thumb/PurpleSource221/v4/66/21/67/662167d8-d655-9510-35fb-b4a5a9fdc5b8/UL243-iPad-02-Choose-a-Route.png/2064x2752bb.png"
+            }
+          ]
+        },
+        "keywordPage": "https://apps.apple.com/gb/iphone/search?term=lemmings",
+        "keywordStorefrontInitialCount": 11,
+        "keywordStorefrontRank": null,
+        "keywordCatalogCount": 63,
+        "keywordCatalogRank": null
+      }
+    ]
+  },
+  "iOSScreenshotTest": {
+    "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f",
+    "locale": "en-AU",
+    "name": "Lemmix 2.4.2 screenshots - build 110",
+    "experimentID": "60762846-a54b-45bc-80de-4efd2e15931e",
+    "treatmentID": "8348366b-7185-4458-840d-f527dc4cd908",
+    "localizationID": "81c5f93c-9733-4d70-b033-a74e8cabb800",
+    "verifiedAt": "2026-11-23T18:45:45+00:00",
+    "experimentState": "PREPARE_FOR_SUBMISSION",
+    "reviewRequired": true,
+    "trafficProportion": 50,
+    "requestedScreenshots": {
+      "IPAD_13_PROFILE": [
+        "70400019-77a6-839f-800b-5ef8108c607b",
+        "8f800019-77a6-839f-802c-a2d75e15a643"
+      ],
+      "IPHONE_DUO_PROFILE": [
+        "d8800019-77a6-839f-8006-3655b58a9ae0",
+        "5e800019-77a6-839f-803e-024f94934687"
+      ],
+      "IPHONE_DYNAMIC_ISLAND_MEDIUM_PROFILE": [
+        "c6800019-77a6-839f-8032-b23d794b4ff4",
+        "21400019-77a6-839f-801a-519636b1c3ac"
+      ]
+    },
+    "treatmentPlacements": {
+      "IPHONE_DUO_PROFILE": [
+        {
+          "placementID": "f0000019-77a6-839f-8f36-be98e5e7ec7f",
+          "kind": "APP_SCREENSHOT",
+          "assetID": "9e000019-77a6-839f-8037-bbc6382ad841"
+        },
+        {
+          "placementID": "7e400019-77a6-839f-8f11-b9eee563e769",
+          "kind": "APP_SCREENSHOT",
+          "assetID": "2a400019-77a6-839f-800b-a379a5da3351"
+        }
+      ],
+      "IPAD_105_PROFILE": [
+        {
+          "placementID": "3b400019-77a6-839f-8f0f-5d725719f04a",
+          "kind": "APP_SCREENSHOT",
+          "assetID": "41400019-77a6-839f-803b-8c2fe3c2e599"
+        }
+      ],
+      "IPAD_13_PROFILE": [
+        {
+          "placementID": "ce000019-77a6-839f-8f2c-293cfc1da04e",
+          "kind": "APP_SCREENSHOT",
+          "assetID": "66800019-77a6-839f-801e-3712e7c19a9a"
+        },
+        {
+          "placementID": "c4400019-77a6-839f-8f37-89d1139e2053",
+          "kind": "APP_SCREENSHOT",
+          "assetID": "55800019-77a6-839f-8035-40261cf2edf6"
+        }
+      ],
+      "IPHONE_DYNAMIC_ISLAND_MEDIUM_PROFILE": [
+        {
+          "placementID": "65c00019-77a6-839f-8f3a-26c097513efc",
+          "kind": "APP_SCREENSHOT",
+          "assetID": "48000019-77a6-839f-8034-5e82727262a8"
+        },
+        {
+          "placementID": "d1400019-77a6-839f-8f18-9075e8ed7ad3",
+          "kind": "APP_SCREENSHOT",
+          "assetID": "2c800019-77a6-839f-800e-a74c3f22d495"
+        }
+      ]
+    },
+    "testReviewID": "c7bc41d3-70a7-4299-a658-b4bf49b7fa67",
+    "reviewEligibility": {
+      "checkedAt": "2026-11-23T19:22:01+00:00",
+      "http": 409,
+      "errors": [
+        {
+          "code": "STATE_ERROR.ENTITY_STATE_INVALID",
+          "detail": "This resource cannot be reviewed, please check associated errors to see why.",
+          "title": "appStoreVersionExperiments with id '60762846-a54b-45bc-80de-4efd2e15931e' is not in valid state.",
+          "meta": {
+            "associatedErrors": {
+              "/v1/appStoreVersionExperiments/60762846-a54b-45bc-80de-4efd2e15931e": [
+                {
+                  "id": "eb0d4ee6-b0c7-488f-8963-cb9d434dbc1b",
+                  "status": "409",
+                  "code": "STATE_ERROR",
+                  "title": "The request cannot be fulfilled because of the state of another resource.",
+                  "detail": "Specified App Version not eligible for this operation"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "testReviewState": "READY_FOR_REVIEW",
+    "lastEligibilityCheck": "2026-11-23T19:21:56+00:00",
+    "supersededAt": "2026-11-23T19:30:03+00:00",
+    "supersededBy": "2.4.3",
+    "latestControlVersionID": "2a0bd791-1294-453f-8b63-f019dd584f88"
+  }
+}

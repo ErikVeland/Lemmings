@@ -1,0 +1,207 @@
+{
+  "app": "Ultimate Lemmix",
+  "appStoreID": "6836347807",
+  "locale": "en-AU",
+  "keyword": "lemmings",
+  "verifiedAt": "2026-11-24T04:17:08+00:00",
+  "versions": [
+    {
+      "platform": "MAC_OS",
+      "version": "2.4.2",
+      "versionID": "ce8b39f1-caa5-4d02-9776-dc7bb34c83d0",
+      "versionState": "WAITING_FOR_REVIEW",
+      "localizationID": "4981b9e1-f4d8-4b5b-80b3-365d7d45ed1b",
+      "locale": "en-AU",
+      "keywords": "puzzle,strategy,pixel,retro,rescue,platform,rewind,logic,local multiplayer,hot seat,lemmings",
+      "result": "confirmed",
+      "verifiedAt": "2026-11-24T04:17:06+00:00",
+      "previousKeywords": "puzzle,strategy,pixel,retro,rescue,platform,rewind,logic,local multiplayer,hot seat"
+    },
+    {
+      "platform": "TV_OS",
+      "version": "2.4.3",
+      "versionID": "3809e541-17ca-4321-8e85-59fd5a0b3b40",
+      "versionState": "WAITING_FOR_REVIEW",
+      "localizationID": "caef6dcf-4b00-4526-a273-61f306129fe6",
+      "locale": "en-AU",
+      "keywords": "puzzle,strategy,pixel,retro,rescue,platform,rewind,logic,local multiplayer,hot seat,lemmings",
+      "result": "confirmed",
+      "verifiedAt": "2026-11-24T04:17:07+00:00",
+      "previousKeywords": "puzzle,strategy,pixel,retro,rescue,platform,rewind,logic,local multiplayer,hot seat"
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.3",
+      "versionID": "2a0bd791-1294-453f-8b63-f019dd584f88",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "localizationID": "60df7da3-e9ab-4ca2-9f19-ef6b8480cd0d",
+      "locale": "en-AU",
+      "keywords": "puzzle,strategy,pixel,retro,rescue,platform,rewind,logic,local multiplayer,hot seat,lemmings",
+      "result": "confirmed",
+      "verifiedAt": "2026-11-24T04:17:07+00:00",
+      "previousKeywords": "puzzle,strategy,pixel,retro,rescue,platform,rewind,logic,local multiplayer,hot seat"
+    },
+    {
+      "platform": "IOS",
+      "version": "2.4.2",
+      "versionID": "b4d1f540-df35-4236-b3cf-133e1d78899f",
+      "versionState": "READY_FOR_DISTRIBUTION",
+      "localizationID": "f980a4a7-ab4a-4188-964a-a3255340854e",
+      "locale": "en-AU",
+      "keywords": "puzzle,strategy,pixel,retro,rescue,platform,rewind,logic,local multiplayer,hot seat",
+      "result": "Apple locked field",
+      "checkedAt": "2026-11-21T01:23:48+00:00",
+      "http": 409,
+      "errors": [
+        {
+          "code": "STATE_ERROR",
+          "detail": "Attribute 'keywords' cannot be edited at this time",
+          "title": "The request cannot be fulfilled because of the state of another resource."
+        }
+      ]
+    }
+  ],
+  "publicSearch": {
+    "checkedAt": "2026-11-24T04:16:37+00:00",
+    "term": "lemmings",
+    "checks": [
+      {
+        "country": "au",
+        "publicVersion": "2.4.3",
+        "fullTitleRank": 1,
+        "keywordPage": "https://apps.apple.com/au/iphone/search?term=lemmings",
+        "keywordStorefrontInitialCount": 12,
+        "keywordStorefrontRank": null,
+        "keywordCatalogCount": 70,
+        "keywordCatalogRank": null
+      },
+      {
+        "country": "us",
+        "publicVersion": "2.4.3",
+        "fullTitleRank": 1,
+        "keywordPage": "https://apps.apple.com/us/iphone/search?term=lemmings",
+        "keywordStorefrontInitialCount": 12,
+        "keywordStorefrontRank": null,
+        "keywordCatalogCount": 67,
+        "keywordCatalogRank": null
+      },
+      {
+        "country": "gb",
+        "publicVersion": "2.4.3",
+        "fullTitleRank": 1,
+        "keywordPage": "https://apps.apple.com/gb/iphone/search?term=lemmings",
+        "keywordStorefrontInitialCount": 11,
+        "keywordStorefrontRank": null,
+        "keywordCatalogCount": 63,
+        "keywordCatalogRank": null
+      }
+    ]
+  },
+  "confirmedCatalogSearch": {
+    "checkedAt": "2026-11-24T04:03:24+00:00",
+    "term": "lemmings",
+    "service": "Apple public software search",
+    "languageParameter": "en_us",
+    "checks": [
+      {
+        "country": "au",
+        "queries": [
+          {
+            "url": "https://itunes.apple.com/search?term=lemmings&country=au&entity=software&limit=100&lang=en_us",
+            "limit": 100,
+            "resultCount": 61,
+            "appleResponseDate": "Tue, 24 Nov 2026 04:03:22 GMT",
+            "match": {
+              "rank": 32,
+              "appID": "6836347807",
+              "name": "Ultimate Lemmix",
+              "bundleID": "academy.glasscode.ultimatelemmix",
+              "version": "2.4.3",
+              "listing": "https://apps.apple.com/au/app/ultimate-lemmix/id6836347807?uo=4"
+            }
+          },
+          {
+            "url": "https://itunes.apple.com/search?term=lemmings&country=au&entity=software&limit=200&lang=en_us&media=software",
+            "limit": 200,
+            "resultCount": 71,
+            "appleResponseDate": "Tue, 24 Nov 2026 04:03:24 GMT",
+            "match": {
+              "rank": 32,
+              "appID": "6836347807",
+              "name": "Ultimate Lemmix",
+              "bundleID": "academy.glasscode.ultimatelemmix",
+              "version": "2.4.3",
+              "listing": "https://apps.apple.com/au/app/ultimate-lemmix/id6836347807?uo=4"
+            }
+          }
+        ]
+      },
+      {
+        "country": "us",
+        "queries": [
+          {
+            "url": "https://itunes.apple.com/search?term=lemmings&country=us&entity=software&limit=100&lang=en_us",
+            "limit": 100,
+            "resultCount": 58,
+            "appleResponseDate": "Tue, 24 Nov 2026 04:03:22 GMT",
+            "match": {
+              "rank": 46,
+              "appID": "6836347807",
+              "name": "Ultimate Lemmix",
+              "bundleID": "academy.glasscode.ultimatelemmix",
+              "version": "2.4.3",
+              "listing": "https://apps.apple.com/us/app/ultimate-lemmix/id6836347807?uo=4"
+            }
+          },
+          {
+            "url": "https://itunes.apple.com/search?term=lemmings&country=us&entity=software&limit=200&lang=en_us&media=software",
+            "limit": 200,
+            "resultCount": 69,
+            "appleResponseDate": "Tue, 24 Nov 2026 04:03:24 GMT",
+            "match": {
+              "rank": 46,
+              "appID": "6836347807",
+              "name": "Ultimate Lemmix",
+              "bundleID": "academy.glasscode.ultimatelemmix",
+              "version": "2.4.3",
+              "listing": "https://apps.apple.com/us/app/ultimate-lemmix/id6836347807?uo=4"
+            }
+          }
+        ]
+      },
+      {
+        "country": "gb",
+        "queries": [
+          {
+            "url": "https://itunes.apple.com/search?term=lemmings&country=gb&entity=software&limit=100&lang=en_us",
+            "limit": 100,
+            "resultCount": 58,
+            "appleResponseDate": "Tue, 24 Nov 2026 04:03:22 GMT",
+            "match": {
+              "rank": 30,
+              "appID": "6836347807",
+              "name": "Ultimate Lemmix",
+              "bundleID": "academy.glasscode.ultimatelemmix",
+              "version": "2.4.3",
+              "listing": "https://apps.apple.com/gb/app/ultimate-lemmix/id6836347807?uo=4"
+            }
+          },
+          {
+            "url": "https://itunes.apple.com/search?term=lemmings&country=gb&entity=software&limit=200&lang=en_us&media=software",
+            "limit": 200,
+            "resultCount": 64,
+            "appleResponseDate": "Tue, 24 Nov 2026 04:03:24 GMT",
+            "match": {
+              "rank": 30,
+              "appID": "6836347807",
+              "name": "Ultimate Lemmix",
+              "bundleID": "academy.glasscode.ultimatelemmix",
+              "version": "2.4.3",
+              "listing": "https://apps.apple.com/gb/app/ultimate-lemmix/id6836347807?uo=4"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

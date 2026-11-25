@@ -1,0 +1,231 @@
+{
+  "product": "Ultimate Lemmix",
+  "version": "2.4.2",
+  "build": 110,
+  "locale": "en-AU",
+  "files": [
+    {
+      "file": "Creative/Product-Page-Header.mp4",
+      "pixels": [
+        3840,
+        1646
+      ],
+      "format": "H.264 High, 8-bit 4:2:0 SDR",
+      "framesPerSecond": 30,
+      "frames": 300,
+      "durationSeconds": 10,
+      "audioTracks": 0,
+      "bytes": 13243244,
+      "sha256": "840b6a5ce51a7cb7f6ddcfad13484e1e460d6db38192b624ae39303c657cda78",
+      "matchingPoster": "Creative/Product-Page-Header.png"
+    },
+    {
+      "file": "Creative/Product-Page-Header.png",
+      "pixels": [
+        3840,
+        1646
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 6658927,
+      "sha256": "401d8d59dbc87041a69897b1e41b758aec4b5c1f0c439dd692f6143c1e3449d3",
+      "placement": "Product page header still"
+    },
+    {
+      "file": "Creative/Search-Results.mp4",
+      "pixels": [
+        1920,
+        1280
+      ],
+      "format": "H.264 High, 8-bit 4:2:0 SDR",
+      "framesPerSecond": 30,
+      "frames": 360,
+      "durationSeconds": 12,
+      "audioTracks": 0,
+      "bytes": 10414469,
+      "sha256": "a0d66329ea2560453b9e840777e0d1108abbef0be6ca146c1f197b3c8d2629a0",
+      "matchingPoster": "Creative/Search-Results.png"
+    },
+    {
+      "file": "Creative/Search-Results.png",
+      "pixels": [
+        1920,
+        1280
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 3351139,
+      "sha256": "bdd635d7a9a6aaceb24c6b0dfcd33e9360b6f2cf38802918d9df33e328dd1343",
+      "placement": "Search results still"
+    },
+    {
+      "file": "Creative/Universal.png",
+      "pixels": [
+        5244,
+        2950
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 12832021,
+      "sha256": "2a047886b045e8210c678336b100bd9fa65fdc14fc8bdbbcb67b6526bcc125dc",
+      "placement": "Universal editorial artwork"
+    },
+    {
+      "file": "Marketing/Landscape-1200x630.png",
+      "pixels": [
+        1200,
+        630
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 950332,
+      "sha256": "0bd34d8ae8adb239bdda547e93c5a8afe661c0f7de880cbcf32f0c8fa093b6ff",
+      "placement": "Landscape marketing card"
+    },
+    {
+      "file": "Marketing/Square-1080x1080.png",
+      "pixels": [
+        1080,
+        1080
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 1381897,
+      "sha256": "85af59a7e49ecd57ed20a7ab57fa7e21c84ef5464204101adea6ecd0ba4e1863",
+      "placement": "Square marketing card"
+    },
+    {
+      "file": "Screenshots/en-AU/Apple TV/01-First-Steps.png",
+      "pixels": [
+        3840,
+        2160
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 4295261,
+      "sha256": "d1727fd9d8d8adb0828f74de5e7764dde22618829e6fa46bac257ef37e1320df",
+      "placement": "Apple TV",
+      "description": "Walkers cross the brick floor above the Apple TV skill panel.",
+      "master": "Captures/Apple TV/01-First-Steps.png"
+    },
+    {
+      "file": "Screenshots/en-AU/Apple TV/02-Hot-Seat.png",
+      "pixels": [
+        3840,
+        2160
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 4334436,
+      "sha256": "852ee526bfd9f461627bcf3ba6c1d741c55463cdfd95e1a88efbf051fd902d29",
+      "placement": "Apple TV",
+      "description": "The local Hot Seat roster has two players and passes the turn after each level.",
+      "master": "Captures/Apple TV/02-Hot-Seat.png"
+    },
+    {
+      "file": "Screenshots/en-AU/Mac/01-First-Steps.png",
+      "pixels": [
+        2560,
+        1600
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 2553250,
+      "sha256": "45e4f6091cc46b5838206017837d06c187e49d692d7c160a1cf1430aa9bf537e",
+      "placement": "Mac",
+      "description": "Six walkers share one exit in the Mac game.",
+      "master": "Captures/Mac/01-First-Steps.png"
+    },
+    {
+      "file": "Screenshots/en-AU/Mac/02-Plan-B.png",
+      "pixels": [
+        2560,
+        1600
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 3287880,
+      "sha256": "98e1390808361302534ffd456fbf555db850501b33088cba44a0a73e60e05074",
+      "placement": "Mac",
+      "description": "The Nuke button sets off five simultaneous detonations.",
+      "master": "Captures/Mac/02-Plan-B.webp"
+    },
+    {
+      "file": "Screenshots/en-AU/iPad/01-Over-the-Rise.png",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 2278434,
+      "sha256": "10952b1ac00fd24242a9f65fe85eeb11b40509b5606d23d7e17fbc042c9b3b19",
+      "placement": "iPad",
+      "description": "Two climbers scale the same brick wall in Over the Rise.",
+      "master": "Captures/iPad/01-Over-the-Rise.png"
+    },
+    {
+      "file": "Screenshots/en-AU/iPad/02-Choose-a-Route.png",
+      "pixels": [
+        2064,
+        2752
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 1766664,
+      "sha256": "7f25aed11905e7458ed15b58ddc93de528af7ddaeeea3a11845aab7999d8d6ef",
+      "placement": "iPad",
+      "description": "The Open Starter level shelf has Float to Safety selected.",
+      "master": "Captures/iPad/02-Choose-a-Route.png"
+    },
+    {
+      "file": "Screenshots/en-AU/iPhone Duo/01-Tabletop.png",
+      "pixels": [
+        2007,
+        2853
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 243645,
+      "sha256": "548cb974628be3500b978312fb2c66c98c9b86bbc54de68b84808b1028ebef2d",
+      "placement": "iPhone Duo",
+      "description": "Four walkers cross the upper display. The controls occupy the lower display.",
+      "master": "Captures/iPhone Duo/01-Tabletop.png"
+    },
+    {
+      "file": "Screenshots/en-AU/iPhone Duo/02-Book.png",
+      "pixels": [
+        2853,
+        2007
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 382757,
+      "sha256": "c3546f54a5ac94be78d6e4f21461a26e91d41b1ac17cd6eddead644863546452",
+      "placement": "iPhone Duo",
+      "description": "The unfolded inner display shows the rescue record beside the achievements.",
+      "master": "Captures/iPhone Duo/02-Book.png"
+    },
+    {
+      "file": "Screenshots/en-AU/iPhone/01-Float-to-Safety.png",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 1104485,
+      "sha256": "1500cd06d346ea848de207142dc549c60fecf6ace28b7d95986d3971a0129830",
+      "placement": "iPhone",
+      "description": "A Lix descends under a yellow umbrella in Float to Safety.",
+      "master": "Captures/iPhone/01-Float-to-Safety.png"
+    },
+    {
+      "file": "Screenshots/en-AU/iPhone/02-Rescue-Record.png",
+      "pixels": [
+        1206,
+        2622
+      ],
+      "format": "8-bit RGB PNG",
+      "bytes": 1304046,
+      "sha256": "2f65836d8f98d9cecac8fb8c4a10a26cf44908f9532acea3177a49735c4cfcdb",
+      "placement": "iPhone",
+      "description": "The rescue record shows all six First Steps walkers saved.",
+      "master": "Captures/iPhone/02-Rescue-Record.png"
+    }
+  ],
+  "sourceArchive": {
+    "file": "Source-Masters.zip",
+    "sha256": "4127742ae69639ecbcbc1e212409d149c766435131ba5ee1f92b9e12f367e3d3"
+  },
+  "appleSpecifications": [
+    "https://developer.apple.com/help/app-store-connect/reference/app-information/creative-assets-specifications",
+    "https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/"
+  ]
+}

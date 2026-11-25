@@ -1,0 +1,36 @@
+{
+  "product": "Ultimate Lemmix",
+  "platform": "MAC_OS",
+  "build": "114",
+  "version": "2.4.2",
+  "source": "692f9f86a1171ceb9b3efdbec85f1a7642e41f9a",
+  "architectures": [
+    "arm64",
+    "x86_64"
+  ],
+  "packageSHA256": "aa3c90285a6964f7dfd8fbb67d3904699a0150f20d382d6b35c3702bd1d41b65",
+  "packageReadyForSubmission": true,
+  "appStoreAnalysisErrors": [],
+  "checkedAt": "2026-11-24T04:51:53.268208+00:00",
+  "installedBundle": "academy.glasscode.ultimatelemmix",
+  "installedExtension": "academy.glasscode.ultimatelemmix.DeskClockWidget",
+  "signedCalendarEntitlementVerified": [
+    "app",
+    "widget"
+  ],
+  "menuItem": "Show next event in Desk Clock widget\u2026",
+  "systemSettingsCalendarAccess": "Full Access",
+  "liveVerification": {
+    "host": "Apple WidgetKit Simulator on the physical Mac",
+    "view": "Timeline",
+    "family": "medium",
+    "data": "Existing timed event from the local Calendar store",
+    "matchedNextEventTitlePrefix": true,
+    "matchedStartTime": true,
+    "countdownAdvancedBetweenEntries": true,
+    "desktopPlacementIndependentlyObserved": false
+  },
+  "skippedChecks": [
+    "Automated test suites and test-running release audits, under the release schedule."
+  ]
+}
