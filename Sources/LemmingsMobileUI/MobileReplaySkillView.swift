@@ -28,7 +28,7 @@ import UIKit
         if historyChanged || highlightChanged { setNeedsDisplay() }
     }
     override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
+        guard let rate, let context = UIGraphicsGetCurrentContext() else { return }
         MobileReplaySkillArt.draw(uses: uses, tick: tick, rate: rate, in: bounds,
             typography: MobileGameArt.typography, context: context)
     }
