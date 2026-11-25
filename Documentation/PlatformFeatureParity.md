@@ -997,6 +997,7 @@ also Classic-only across platforms.
 | --- | --- |
 | Sparkle on Mac; App Store/TestFlight on mobile and TV | Platform distribution model |
 | Mac menu bar; touch pages and keyboard discovery; TV focus/remote controls | Native input and window model. Home/End/F1 are handled by the mobile hardware-keyboard adapter despite their omission from command discovery. |
+| Owner tools in Play Insights: Option or a saved token on Mac; a long press on iPhone, iPad and Apple TV | Mac has a modifier key and saves the owner token. Touch and TV have neither. Players on every platform see only this device's counts. See [UX redesign](UXRedesign.md#mac-menus-and-owner-tools). |
 | iOS share sheets; TV token-protected LAN transfer | TV has no equivalent document/share picker. Capability still needs physical transfer acceptance. |
 | TV omits completion glow, extra cinematic/HDR surfaces and explosion cores | Explicit owner performance instruction. Keep selection and assignment feedback. |
 | Manual familiar-name entry on TV | Native contact-picker difference. Do not silently request broader contact access. |

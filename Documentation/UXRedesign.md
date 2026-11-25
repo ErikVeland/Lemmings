@@ -44,6 +44,32 @@ The owner reported all five device checks green on 25 November 2026. Each row be
 - The Mac result announcement reads the outcome, rescue count, stars and leaderboard. Screen readers reach Replay through its own enabled button when an attempt has a replay.
 - Replay skill history uses elapsed game time across Mac, touch and Apple TV. The Mac solution replay exposes action names and keeps the keyboard shortcuts in accessibility help. Physical VoiceOver and Siri Remote acceptance remain open.
 
+### Mac menus and owner tools
+
+The owner chose destination menus and a hidden owner reveal on 25 November 2026.
+
+| Menu | Items |
+| --- | --- |
+| App | About, Check for Updates, Settings (⌘,), Quit |
+| File | Add Game (⌘O), Add Fan Level Folder, Add NeoLemmix Packs, Open Level File (⇧⌘O), Open Replay Movie |
+| Play | Main menu (⇧⌘L), Resume Saved Run (⇧⌘R), Level Select, Fan Levels (⇧⌘F), Game ▸, Level ▸, Lemmings 2 (⇧⌘2), Lemmings 3 (⇧⌘3), Replay Last Game (⇧⌘V), Hot Seat, Community |
+| Profile | Profile (⇧⌘P), Players, Records (⇧⌘B), Achievements (⇧⌘A), Statistics, Cloud Saves, Play Insights |
+| View | Zoom, Desk Clock calendar event |
+
+- Every earlier shortcut keeps its key, with one exception. Open Replay Movie and Open Level File both used ⇧⌘O, and AppKit sent the chord to the first item. Open Level File keeps ⇧⌘O. Open Replay Movie has no shortcut.
+- ⇧⌘P opens the Profile hub. Players opens player selection.
+- The Mac Profile hub uses the mobile order: Records, Achievements, Statistics, Players, Cloud saves and Play Insights.
+- Home and the Play menu share one Hot Seat entry. With saved sessions and none active, both open the session list.
+- Community has a menu item for the first time. It opens the same page as Home.
+- Show Recorded Routes stays an Option alternate of Replay Last Game. No Debug menu was added.
+
+Play Insights shows players only this device's counts and Clear local counts. Shared counts, the install total, the day range and token entry are owner tools:
+
+- **Mac:** the owner tools appear when this Mac has a saved owner token, or when Option is held while Play Insights opens.
+- **iPhone, iPad and Apple TV:** a long press on Play Insights reveals them. On Apple TV, hold Select on the row. The reveal ends when the owner leaves Play Insights. It has no visible hint and no accessibility hint.
+
+`TEST_SCOPE=menus zsh Scripts/run-app-integration-tests.sh` checks the Ultimate Lemmings menu bar. It checks the four app-menu items, the Play and Profile items, each kept shortcut, unique shortcuts and the ⇧⌘P Profile hub. The Ultimate Lemmix menu check in `PersonalPreviewAppTests` was updated to match, but it was not run, because it needs the Lemmix universal core build. `AnonymousTelemetryTests` covers the player and owner pages on Mac and mobile. A real long press on iPhone, iPad and Apple TV is not yet checked on a device.
+
 ### Repeat the checkpoint
 
 Run `python3 Scripts/check-ux.py` from the repository root on macOS. To repeat one area, append `home`, `hud`, `hot-seat`, `preview`, `catalogue`, `navigation`, `teaching`, `recovery`, `input`, `music`, `renders` or `sdk`. Each run prints its own evidence directory in `.build`. A source edit during the run invalidates the checkpoint. Its summary records the Git revision, working-tree status, each result and whether the run finished. Missing or skipped named regressions fail their group.
@@ -287,7 +313,7 @@ Home
 ├─ Community (leaderboards, worldwide total, community replays)
 └─ Settings  (icon)
     └─ About (What's New, credits, legal, Donate, version)
-Owner tools: Mac Debug menu and a hidden settings gesture only.
+Owner tools: hidden reveal only (see Mac menus and owner tools).
 ```
 
 Home goes from 19 controls to 6: Continue plus five destinations. Game rows

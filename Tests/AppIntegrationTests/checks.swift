@@ -6445,6 +6445,64 @@ extension AppDelegate {
     }
   }
 
+  /// The menu bar mirrors Home: app commands, then File, Play and Profile.
+  /// Every shortcut keeps its key and no two visible items share a chord.
+  fileprivate func testDestinationMenus() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    buildMenu()
+    guard let menu = NSApp.mainMenu else { throw IntegrationFailure(message: "The menu bar is absent") }
+    func allItems(_ menu: NSMenu) -> [NSMenuItem] {
+      menu.items.flatMap { item in [item] + (item.submenu.map(allItems) ?? []) }
+    }
+    func titles(_ menu: NSMenu?) -> [String] { (menu?.items ?? []).filter { !$0.isSeparatorItem }.map(\.title) }
+    let top = menu.items.compactMap { $0.submenu?.title }
+    try check(["File", "Play", "Profile", "Edit", "View", "Audio", "Help"].allSatisfy(top.contains),
+      "The menu bar lacks a destination menu: \(top)")
+    let app = titles(menu.items.first?.submenu)
+    try check(app == [L10n.text("About \(AppDistribution.name)"), L10n.text("Check for Updates…"),
+                      L10n.text("Settings…"), L10n.text("Quit \(AppDistribution.name)")],
+      "The app menu holds more than app commands: \(app)")
+    let play = titles(menu.items.first { $0.submenu?.title == "Play" }?.submenu)
+    let profile = titles(menu.items.first { $0.submenu?.title == "Profile" }?.submenu)
+    try check(["Main menu", "Resume Saved Run…", "Level Select…", "Fan Levels…", "Replay Last Game",
+               "Hot Seat…", "Community"].allSatisfy(play.contains), "Play is incomplete: \(play)")
+    try check(profile == ["Profile…", "Players", "Records…", "Achievements…", "Statistics", "Cloud Saves…",
+                          "Play Insights…"], "Profile is incomplete: \(profile)")
+    let items = allItems(menu)
+    let expected: [(String, String, NSEvent.ModifierFlags)] = [
+      ("Settings…", ",", [.command]), ("Add Game…", "o", [.command]), ("Open Level File…", "O", [.command, .shift]),
+      ("Main menu", "l", [.command, .shift]), ("Resume Saved Run…", "r", [.command, .shift]),
+      ("Fan Levels…", "f", [.command, .shift]), ("Replay Last Game", "v", [.command, .shift]),
+      ("Show Recorded Routes", "v", [.command, .shift, .option]), ("Play Lemmings 2…", "2", [.command, .shift]),
+      ("Profile…", "p", [.command, .shift]), ("Records…", "b", [.command, .shift]),
+      ("Achievements…", "a", [.command, .shift])]
+    for (title, key, modifiers) in expected {
+      guard let item = items.first(where: { $0.title == title }) else { throw IntegrationFailure(message: "Missing menu item \(title)") }
+      try check(item.keyEquivalent == key && item.keyEquivalentModifierMask == modifiers && item.action != nil
+        && responds(to: item.action!), "\(title) lost its shortcut or action")
+    }
+    try check(items.first { $0.title == "Show Recorded Routes" }?.isAlternate == true,
+      "Show Recorded Routes is visible without Option")
+    var chords: [String: String] = [:]
+    for item in items where !item.keyEquivalent.isEmpty && !item.isAlternate {
+      let shifted = item.keyEquivalent != item.keyEquivalent.lowercased()
+      let mask = item.keyEquivalentModifierMask.intersection([.command, .shift, .option, .control])
+        .union(shifted ? .shift : [])
+      let chord = "\(mask.rawValue)-\(item.keyEquivalent.lowercased())"
+      try check(chords[chord] == nil, "\(item.title) shares its shortcut with \(chords[chord] ?? "")")
+      chords[chord] = item.title
+    }
+    // Shift-Command-P opens the Profile hub. Players still opens player selection.
+    try check(menu.performKeyEquivalent(with: NSEvent.keyEvent(with: .keyDown, location: .zero,
+      modifierFlags: [.command, .shift], timestamp: 1, windowNumber: window.windowNumber, context: nil,
+      characters: "P", charactersIgnoringModifiers: "p", isARepeat: false, keyCode: 35)!), "Shift-Command-P was not handled")
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == L10n.text("Profile"),
+      "Shift-Command-P did not open the Profile hub")
+    GameScreen.shared.dismissAll()
+    print("PASS destination menus: app commands only, Play and Profile items, kept shortcuts, unique chords and the Profile hub")
+  }
+
   fileprivate func testSequenceNavigationGuards() throws {
     GameScreen.shared.dismissAll()
     if resumeSavedRunItem == nil { buildMenu() }
@@ -8373,7 +8431,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !PLAYFIELD_TESTS && !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !FIRST_PROFILE_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
+    #if !PLAYFIELD_TESTS && !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !FIRST_PROFILE_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS && !MENU_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -8715,6 +8773,8 @@ Task { @MainActor in
     try subject.testMenuDisplayTransition()
     try await subject.testCRTInput()
     print("Variable speed integration tests passed.")
+    #elseif MENU_TESTS
+    try subject.testDestinationMenus()
     #elseif RELEASE_UI_TESTS
     try subject.testPauseKeyRelease()
     let pauseL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)

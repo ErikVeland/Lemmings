@@ -103,20 +103,28 @@ enum TelemetryLevelTarget: Equatable {
         summary = telemetry.localSummary()
     }
 
-    func show(owner: NSWindow?) {
+    /// Shared counts are an owner tool. Players see this Mac's counts only.
+    /// The owner reveals them with a saved token or by holding Option while opening the page.
+    static func ownerToolsRevealed(telemetry: AnonymousTelemetry,
+                                   modifiers: NSEvent.ModifierFlags = NSEvent.modifierFlags) -> Bool {
+        telemetry.endpoint != nil && (telemetry.savedDashboardToken != nil || modifiers.contains(.option))
+    }
+
+    func show(owner: NSWindow?, ownerTools: Bool? = nil) {
         if let page, GameScreen.shared.contains(page) { GameScreen.shared.present(page, owner: owner); return }
+        let ownerTools = telemetry.endpoint != nil && (ownerTools ?? Self.ownerToolsRevealed(telemetry: telemetry))
         summary = telemetry.localSummary()
         shared = false
         days = 30
-        notice = telemetry.endpoint == nil
-            ? L10n.text("This Mac only. No shared service is configured.")
-            : L10n.text("This Mac only. Shared counts need the owner access token.")
+        notice = ownerTools
+            ? L10n.text("This Mac only. Shared counts need the owner access token.")
+            : L10n.text("This Mac")
         let page = GameMenuPage(title: L10n.text("Play insights"), subtitle: L10n.text("Aggregate counts"))
         page.onBack = { [weak self, weak page] in
             if let page { GameScreen.shared.dismiss(page) }
             self?.page = nil
         }
-        if telemetry.endpoint != nil {
+        if ownerTools {
             page.addPrimaryAction(L10n.text("Load shared")) { [weak self] in self?.askForToken() }
             page.addSecondaryAction(L10n.text("This Mac")) { [weak self] in
                 guard let self else { return }

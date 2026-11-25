@@ -336,7 +336,14 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         view.addSubview(scrollView)
         canvas.onAction = { [weak self] in self?.handle($0) }
         canvas.onHoldAction = { [weak self] id in
-            guard let self, self.route == .players, !self.renamingPlayer, id.hasPrefix("player.") else { return }
+            guard let self else { return }
+            if id == MobileMenuCanvas.ownerToolsHoldID {
+                // A long press on Play Insights reveals the owner's shared counts and token entry.
+                guard AnonymousTelemetry.shared.sharingAvailable else { self.handle(id); return }
+                self.mobileInsights.ownerTools = true
+                self.handle(id); return
+            }
+            guard self.route == .players, !self.renamingPlayer, id.hasPrefix("player.") else { return }
             self.beginRenamingPlayer(String(id.dropFirst(7)))
         }
         browser.isHidden = true
@@ -1293,6 +1300,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
         if next != .playInsights {
             mobileInsights.task?.cancel(); mobileInsights.loading = false
+        }
+        if ![.playInsights, .insightsToken, .insightsClear].contains(next) {
+            // Owner tools stay revealed only while the owner remains on Play Insights.
+            mobileInsights.ownerTools = false; mobileInsights.summary = nil
         }
         learningTask?.cancel(); learningPreparing = false
         if !preserveWelcomeLoad {
