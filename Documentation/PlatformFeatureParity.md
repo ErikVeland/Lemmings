@@ -9,6 +9,7 @@
 | Resume a multiplayer Journey | Manual Apple TV transfer preserves an archived roster, turn, house rule, completions and a compatible mid-level checkpoint. Automatic cloud sync covers Journey progress. | Two isolated roots restored an exact Classic checkpoint. Offline and reconnect used a mock service. Physical transfers and production sync remain open. |
 | Navigate while data arrives | A late preview or community total preserves the selected action. Cancelling a load prevents a delayed result reopening it. | Headless AppKit, shared bitmap geometry and portable load tests. UIKit routes compile against both SDKs. |
 | Keep focus through layout changes | The mobile HUD reuses controls by action. A closed speed chooser returns focus to the visible control after a width change. A temporary fold size preserves Ready and chooser state. | Narrow Mac pointer and accessibility actions, TV binding tests and shared HUD renders. Physical folds, VoiceOver and Siri Remote remain open. |
+| Step or rewind from Apple TV Game controls | The controls retain focus on the activated timeline action and let a pending rewind finish. Further Rewind presses can queue behind the current reconstruction while the level stays paused. Speed restores focus before the menu requests a native focus update. | A tvOS UIKit regression covers a deferred seek, queued rewind, and forward step through the shared controller. Physical Siri Remote delivery remains open. |
 
 The [UX checklist](UXRedesign.md) lists the repeatable checks and the remaining device observations.
 

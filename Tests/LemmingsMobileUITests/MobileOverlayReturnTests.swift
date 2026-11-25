@@ -16,8 +16,56 @@ import LemmingsMobileCore
 }
 #endif
 
+#if os(tvOS)
+private final class DeferredRewindSession: MobileGameSession {
+    let engineIdentifier: String
+    let engineFingerprint = "deferred-rewind"
+    let levelIdentifier = "deferred-rewind"
+    let levelIndex = 0
+    let levelFingerprint = "deferred-rewind"
+    let levelSize = MobileSize(width: 128, height: 64)
+    let ticksPerSecond = 25.0
+    let supportsRewind = true
+    var currentTick = 500
+    var allowCommit = false
+    private(set) var seeks: [Int] = []
+
+    init(engineIdentifier: String) {
+        self.engineIdentifier = engineIdentifier
+    }
+
+    var snapshot: MobileGameSnapshot {
+        .init(tick: currentTick, released: 1, total: 1, saved: 0, required: 1,
+              remainingSeconds: 100, releaseRate: nil, isComplete: false, didWin: false,
+              isEndingRun: false, skills: [])
+    }
+
+    func prepareSeek(to tick: Int, backwardSteps: Int) -> MobileSeekOperation? {
+        seeks.append(tick)
+        return MobileSeekOperation { [weak self] _ in
+            guard let self, allowCommit else { return false }
+            currentTick = tick
+            return true
+        }
+    }
+
+    func tick() { currentTick += 1 }
+    func targetCandidates(for control: Int) -> [MobileTargetCandidate] { [] }
+    func assign(control: Int, to target: Int) -> Bool { false }
+    func adjustReleaseRate(by delta: Int) -> Bool { false }
+    func beginEndRun() -> Bool { false }
+    func undoEndRun() -> Bool { false }
+    func checkpointPayload() throws -> Data { Data() }
+    func restoreCheckpointPayload(_ data: Data) throws {}
+    func render(highlight: MobileTargetSelection?) throws -> MobilePixelFrame {
+        try .init(width: 128, height: 64, rgba: Data(repeating: 0, count: 128 * 64 * 4))
+    }
+}
+#endif
+
 @MainActor struct MobileOverlayReturnTests {
-    private func withGame(_ body: @MainActor (MobileGameViewController) async throws -> Void) async throws {
+    private func withGame(session suppliedSession: (any MobileGameSession)? = nil,
+                          _ body: @MainActor (MobileGameViewController) async throws -> Void) async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let previous = UserDefaults.standard.object(forKey: MobileSettings.activeProfileKey)
         let runtime = try Lemmings3Runtime(configuration: .init(width: 128, height: 64,
@@ -28,7 +76,7 @@ import LemmingsMobileCore
                 try MobilePixelFrame(width: 128, height: 64, rgba: Data(repeating: 0, count: 128 * 64 * 4))
             })
         let game = MobileGameViewController(summary: .init(index: 0, rank: "Tribe", number: 1, title: "Fixture"),
-            session: session, checkpointStore: .init(url: directory.appendingPathComponent("current.json")),
+            session: suppliedSession ?? session, checkpointStore: .init(url: directory.appendingPathComponent("current.json")),
             restoredCheckpoint: nil, settingsProfileID: "overlay-return-test")
         defer {
             game.viewDidDisappear(false)
@@ -157,6 +205,45 @@ import LemmingsMobileCore
     }
 
     #if os(tvOS)
+    @Test(arguments: ["classic-dos", "lemmings2", "lemmings3", "neolemmix"])
+    func gameControlsKeepFocusAndFinishQueuedRewind(engine: String) async throws {
+        let session = DeferredRewindSession(engineIdentifier: engine)
+        try await withGame(session: session) { game in
+            game.gameSettings.classic.reduceMotion = true
+            game.resumePlay()
+            game.showTVControls()
+            let page = game.overlayCanvas.page
+            let rewind = try #require(page.rows.first { $0.title == GameLocalisation.text("REWIND") })
+            let initialTick = session.currentTick
+            game.overlayCanvas.focusAction(rewind.id)
+
+            for _ in 0..<2 {
+                let button = try #require(game.overlayCanvas.preferredFocusEnvironments.first as? UIButton)
+                #expect(button.accessibilityIdentifier == "menu." + rewind.id)
+                #expect(button.accessibilityActivate())
+                #expect(game.overlayCanvas.page == page && !game.overlay.isHidden)
+                #expect(game.overlayCanvas.focusedID == rewind.id && game.paused)
+                #expect(session.currentTick == initialTick)
+            }
+            #expect(session.seeks.count == 1)
+
+            session.allowCommit = true
+            for _ in 0..<200 where session.seeks.count < 2 || session.currentTick != session.seeks.last {
+                try await Task.sleep(for: .milliseconds(5))
+            }
+            let firstTarget = try #require(session.seeks.first)
+            let lastTarget = try #require(session.seeks.last)
+            #expect(lastTarget < firstTarget && firstTarget < initialTick)
+            #expect(session.currentTick == lastTarget)
+
+            let step = try #require(page.rows.first { $0.title == GameLocalisation.text("STEP FORWARD") })
+            game.overlayCanvas.focusAction(step.id)
+            game.overlayCanvas.activateFocused()
+            #expect(session.currentTick == lastTarget + 1)
+            #expect(game.overlayCanvas.focusedID == step.id && game.paused)
+        }
+    }
+
     @Test func speedChoicesReturnRemoteFocusToSpeedAfterSelectionOrBack() async throws {
         try await withGame { game in
             game.resumePlay()
