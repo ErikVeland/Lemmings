@@ -55,7 +55,8 @@ import NxlvKit
     }
 
     func resultActions(y: CGFloat) {
-        let back = ResultAction(title: L10n.text("Back")) { [weak self] in self?.back() }
+        let back = ResultAction(title: resultMenuTitle ?? L10n.text("Back")) { [weak self] in self?.back() }
+        let showBack = !cleared || resultMenuTitle != continueTitle
         let retry = ResultAction(title: nextSessionPlayer == nil ? L10n.text("Retry") : L10n.text("Retry as \(player.initials)")) { [weak self] in self?.onRetry?() }
         let primary = ResultAction(title: primaryResultTitle, primary: true) { [weak self] in self?.performDefaultResultAction() }
         let skip = ResultAction(title: skipTitle, enabled: canSpendSkip) { [weak self] in self?.skipLevel() }
@@ -67,13 +68,16 @@ import NxlvKit
             review.append(ResultAction(title: L10n.text("Rewards earned (\(savedEarnedRewards.count)) >")) { [weak self] in self?.showEarnedRewards() })
         }
         review.append(ResultAction(title: L10n.text("Details")) { [weak self] in self?.page(.resultReview) })
+        let side = cleared ? nil : resultSideAction.map { ResultAction(title: $0.0, action: $0.1) }
         if !cleared, onLater != nil {
             let later = ResultAction(title: L10n.text("Try later")) { [weak self] in self?.onLater?() }
             if nextSessionPlayer != nil { review.append(retry) }
             if offersSkip { review.append(later) }
             resultActionRow(review, y: y - 52, links: true)
             let hints = ResultAction(title: L10n.text("Hints")) { [weak self] in self?.onHints?() }
-            resultActionRow([back, hints, offersSkip ? skip : later, primary], y: y)
+            var actions = [back, hints, offersSkip ? skip : later]
+            if let side { actions.append(side) }
+            resultActionRow(actions + [primary], y: y)
             return
         }
         resultActionRow(review, y: y - 52, links: true)
@@ -84,14 +88,18 @@ import NxlvKit
                 let owner = handsOverAfterClear ?? player
                 let forward = ResultAction(title: "\(continueTitle): \(owner.initials)", primary: true,
                     enabled: handsOverAfterClear == nil || canHandOver) { [weak self] in self?.continueAsNextProfile() }
-                resultActionRow([back, retry, nextRetry, forward], y: y)
+                resultActionRow((showBack ? [back] : []) + [retry, nextRetry, forward], y: y)
             } else {
-                resultActionRow(offersSkip ? [back, retry, skip, nextRetry] : [back, retry, nextRetry], y: y)
+                var actions = [back, retry]
+                if offersSkip { actions.append(skip) }
+                if let side { actions.append(side) }
+                resultActionRow(actions + [nextRetry], y: y)
             }
         } else {
-            var actions = [back]
+            var actions = showBack ? [back] : []
             if cleared { actions.append(retry) }
             if offersSkip { actions.append(skip) }
+            if let side { actions.append(side) }
             actions.append(primary)
             resultActionRow(actions, y: y)
         }

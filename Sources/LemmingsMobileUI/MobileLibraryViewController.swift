@@ -1688,6 +1688,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     func canSelectJourneyLevel(_ index: Int) -> Bool {
         guard library is MobileJourneyLibrary, let run = learning.run else { return true }
+        if run.source == .easyPuzzles { return index == run.currentIndex }
         return index <= run.currentIndex || mobileSettings.classic.unlockAllClassicLevels
     }
     func selectLevel(_ index: Int) {
@@ -2172,7 +2173,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             } : nil
             next.musicContext = MobileMusicContext(scorePosition: fullPosition, titles: journeyMusic ? (fullJourney?.lessons.map { $0.entry.levelNameSnapshot } ?? sourceTitles) : sourceTitles,
                 isFan: content.session.levelIdentifier.hasPrefix("fan/"), isLearningJourney: journeyMusic)
-            next.canDefer = inLearning
+            let isEasy = inLearning && learning.run?.source == .easyPuzzles
+            next.canDefer = inLearning && !isEasy
+            next.offersJourneyBreak = inLearning && !isEasy && !EasyPuzzleCatalogue.puzzles.isEmpty
+            next.isEasyPuzzle = isEasy
+            if isEasy {
+                next.canContinueEasyPuzzles = { [weak self] in
+                    guard let self, let run = learning.run else { return false }
+                    return EasyPuzzleCatalogue.canContinue(run, wins: learning.progress.completed)
+                }
+            }
             next.soloOwnerID = profiles.activeID
             let attemptID = checkpoint?.runID ?? next.recordRunID
             let ownerID = checkpoint?.owner ?? hotSeat?.turn ?? profiles.activeID
@@ -2189,7 +2199,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             }
             var skipRollback: (() throws -> Void)?
             var skippedJourneyAdvance: Bool?
-            if inLearning || (!inRun && library.canSkipLevel(at: index)) {
+            if !isEasy && (inLearning || (!inRun && library.canSkipLevel(at: index))) {
                 next.onSkipBalance = { [weak self] in
                     guard let self, !self.arcadeStore.records.hasSkipped(recordLevel, profileID: ownerID),
                           self.arcadeStore.profilesAreWritable, self.arcadeStore.storageError == nil else { return 0 }
@@ -2339,12 +2349,17 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 guard let self, let next, self.game === next else { return }
                 MobileMusic.shared.retireAttempt(next.runID)
                 switch action {
-                case .library, .menu:
+                case .library, .menu, .easyPuzzles, .doneEasyPuzzles:
                     self.previewTask?.cancel(); self.previewGeneration = UUID()
                     self.loading = false; self.preparingLevel = false
                     self.game?.willMove(toParent: nil); self.game?.view.removeFromSuperview(); self.game?.removeFromParent()
                     self.game = nil
                     if action == .menu { self.navigate(.home) }
+                    if action == .doneEasyPuzzles {
+                        do { try self.finishEasyPuzzles() }
+                        catch { self.notice = error.localizedDescription }
+                    }
+                    if action == .easyPuzzles { self.startEasyPuzzles() }
                     self.loadCheckpoint(); self.rebuild(); self.presentCloudAuthentication()
                     self.syncMenuMusic()
                     self.measureMobileFanPacks()
@@ -2353,7 +2368,20 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     self.setNeedsUpdateOfHomeIndicatorAutoHidden()
                     #endif
                 case .retry: self.startLevel(index, checkpoint: nil)
+                case .anotherPuzzle:
+                    do {
+                        let state = self.learning
+                        guard let run = state.run, run.source == .easyPuzzles, run.currentIndex == index else { return }
+                        try EasyPuzzleCatalogue.rememberSwap(run.currentEntry, profileID: self.profiles.activeID, sessionID: self.hotSeat?.id)
+                        if run.isAtEnd { next.onExit?(.doneEasyPuzzles) }
+                        else if try self.advanceLearningRun() { self.startLevel(index + 1, checkpoint: nil) }
+                    } catch { next.showPreparationError(error.localizedDescription) }
                 case .next:
+                    if isEasy, let run = self.learning.run,
+                       !EasyPuzzleCatalogue.canContinue(run, wins: self.learning.progress.completed) {
+                        next.onExit?(.doneEasyPuzzles)
+                        return
+                    }
                     if inLearning {
                         do {
                             let advanced: Bool
@@ -2365,7 +2393,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                             }
                         } catch { self.game?.showPreparationError(error.localizedDescription); return }
                     }
-                    if library.levels.indices.contains(index + 1) { self.startLevel(index + 1, checkpoint: nil) }
+                    let followingIndex = inLearning ? (self.learning.run?.currentIndex ?? index + 1) : index + 1
+                    if library.levels.indices.contains(followingIndex) { self.startLevel(followingIndex, checkpoint: nil) }
                     else { self.finishRunIfNeeded(afterLast: index); self.handle("home"); self.game?.onExit?(.library) }
                 }
             }

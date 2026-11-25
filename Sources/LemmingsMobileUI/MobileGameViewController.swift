@@ -14,6 +14,9 @@ import os
     case menu
     case retry
     case next
+    case easyPuzzles
+    case anotherPuzzle
+    case doneEasyPuzzles
 }
 
 /// Who is playing a shared Hot Seat attempt, and what each result can lead to.
@@ -51,6 +54,9 @@ typealias MobileGameControllerBase = UIViewController
     var soloOwnerID: String?
     var journeyContext = MobileCheckpointEnvelope.JourneyContext()
     var canDefer = false
+    var offersJourneyBreak = false
+    var isEasyPuzzle = false
+    var canContinueEasyPuzzles: (() -> Bool)?
     var onSkipLevel: (() -> Bool)?
     var onSkipBalance: (() -> Int)?
     var onRefundSkip: (() -> Bool)?
@@ -1604,6 +1610,15 @@ typealias MobileGameControllerBase = UIViewController
             ]
             for index in overlayCanvas.page.footer.indices.suffix(2) { overlayCanvas.page.footer[index].group = .playback }
         }
+        if offersJourneyBreak || isEasyPuzzle {
+            let action = String(overlayActions.count)
+            overlayActions.append { [weak self] in
+                guard let self else { return }
+                if isEasyPuzzle { finish(.anotherPuzzle) }
+                else { leaveToLibrary(destination: .easyPuzzles) }
+            }
+            overlayCanvas.page.footer.append(.init(action, isEasyPuzzle ? L10n.text("Another puzzle") : L10n.text("Take a break")))
+        }
         overlayCanvas.page = MobilePauseArt.organizingActions(overlayCanvas.page)
         layoutOverlay()
     }
@@ -1879,6 +1894,19 @@ typealias MobileGameControllerBase = UIViewController
                 (L10n.text("RETRY"), { [weak self] in self?.finish(.retry) }),
                 (L10n.text("BACK"), { [weak self] in self?.finish(.library) }),
             ]
+        }
+        if isEasyPuzzle {
+            if snapshot.didWin {
+                let following = turn?.choices(true).first(where: { $0.choice.primary })?.choice.player
+                let done: (String, () -> Void) = (L10n.text("Done for tonight"), { [weak self] in self?.finish(.doneEasyPuzzles, handingTo: following) })
+                actions = canContinueEasyPuzzles?() == true
+                    ? [(L10n.text("Next puzzle"), { [weak self] in self?.finish(.next, handingTo: following) }), done]
+                    : [done]
+            } else {
+                actions.append((L10n.text("Another puzzle"), { [weak self] in self?.finish(.anotherPuzzle) }))
+            }
+        } else if !snapshot.didWin, offersJourneyBreak {
+            actions.append((L10n.text("Take a break"), { [weak self] in self?.finish(.easyPuzzles) }))
         }
         if !snapshot.didWin, canDefer {
             actions.append((L10n.text("LATER"), { [weak self] in

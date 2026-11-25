@@ -38,6 +38,27 @@ struct MobileCheckpointOwnershipTests {
         let older = try JSONDecoder().decode(MobileCheckpointEnvelope.self, from: JSONSerialization.data(withJSONObject: legacy))
         #expect(older.journeyContext == nil && older.matchesJourney(runID: queue, position: 3, levelIdentifier: "level"))
     }
+    @Test func aBreakAndTheJourneyKeepIndependentCheckpointsForTheSameSeat() async throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let url = root.appendingPathComponent("current.json")
+        let store = MobileCheckpointStore(url: url)
+        let scope = "hotseat.team", journeyID = UUID(), breakID = UUID()
+        var journey = envelope(owner: "guest", scope: scope, tick: 345)
+        journey.journeyContext = .init(runID: journeyID, position: 6)
+        var easy = envelope(owner: "host", scope: scope, tick: 40, date: journey.savedAt.addingTimeInterval(1))
+        easy.journeyContext = .init(runID: breakID, position: 0)
+        try await store.save(journey)
+        try await store.save(easy)
+        let reopened = MobileCheckpointStore(url: url)
+        #expect(try await reopened.load(owner: "host", scope: scope, sequenceID: journeyID) == journey)
+        #expect(try await reopened.load(owner: "host", scope: scope, sequenceID: breakID) == easy)
+        #expect(try await reopened.load(owner: "host", scope: "hotseat.other", sequenceID: journeyID) == nil)
+        try await reopened.retire(runID: easy.runID)
+        #expect(try await reopened.load(owner: "host", scope: scope, sequenceID: journeyID) == journey)
+        #expect(try await reopened.load(owner: "host", scope: scope, sequenceID: breakID) == nil)
+    }
+
     private func envelope(owner: String?, scope: String? = nil, tick: Int = 10, date: Date = Date(), id: UUID = UUID(), engine: String = "classic-dos") -> MobileCheckpointEnvelope {
         .init(runID: id, engine: engine, engineFingerprint: "engine", levelIdentifier: "level", levelIndex: 0,
               levelFingerprint: "level-hash", tick: tick, selectedControl: 0,

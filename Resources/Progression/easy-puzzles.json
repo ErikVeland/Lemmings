@@ -1,0 +1,735 @@
+[
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "2323B586-914E-CB7F-F865-D9049582E59E",
+      "identity": {
+        "engine": "classic",
+        "levelID": "0:Fun:1:9:1",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "levelNameSnapshot": "Just dig!",
+      "levelNumberSnapshot": 1,
+      "packNameSnapshot": "Lemmings",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+    },
+    "score": 45,
+    "skills": [
+      "digger"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "4BE0B4DA-2611-ADB9-9AE1-DA0207D453C0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Heaven 1.DAT#5",
+        "packID": "fan:lldb-547"
+      },
+      "levelNameSnapshot": "Cellbash",
+      "levelNumberSnapshot": 6,
+      "packNameSnapshot": "Ji Hoons Lemmings Remake Heaven",
+      "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
+    },
+    "score": 49,
+    "skills": [
+      "basher"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "87FE29A1-E222-6471-4237-017DB6C840BE",
+      "identity": {
+        "engine": "classic",
+        "levelID": "2:Fun:3:9:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "levelNameSnapshot": "Tailor-made for blockers",
+      "levelNumberSnapshot": 3,
+      "packNameSnapshot": "Lemmings",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+    },
+    "score": 170,
+    "skills": [
+      "blocker"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "FE30B980-00C2-8802-3604-0AABABF871E7",
+      "identity": {
+        "engine": "classic",
+        "levelID": "4:Fun:5:9:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "levelNameSnapshot": "You need bashers this time",
+      "levelNumberSnapshot": 5,
+      "packNameSnapshot": "Lemmings",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+    },
+    "score": 68,
+    "skills": [
+      "basher"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "4BF6467C-8180-DA95-641A-E654C4BBA609",
+      "identity": {
+        "engine": "classic",
+        "levelID": "5:Fun:6:9:4",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "levelNameSnapshot": "A task for blockers and bombers",
+      "levelNumberSnapshot": 6,
+      "packNameSnapshot": "Lemmings",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+    },
+    "score": 130,
+    "skills": [
+      "blocker",
+      "bomber"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "967E7AD1-100A-EE85-F9AB-B94976394090",
+      "identity": {
+        "engine": "classic",
+        "levelID": "6:Fun:7:9:7",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "levelNameSnapshot": "Builders will help you here",
+      "levelNumberSnapshot": 7,
+      "packNameSnapshot": "Lemmings",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+    },
+    "score": 156,
+    "skills": [
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "529531C3-54DC-D648-CA1C-F93D49B652A0",
+      "identity": {
+        "engine": "classic",
+        "levelID": "3:Tame:4:10:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Downwardly Mobile Lemmings",
+      "levelNumberSnapshot": 4,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 161,
+    "skills": [
+      "basher"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "C81DC0B9-DD73-DC85-908B-7A3B39A7732A",
+      "identity": {
+        "engine": "classic",
+        "levelID": "5:Tame:6:10:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Intsy-Wintsy...Lemming?",
+      "levelNumberSnapshot": 6,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 133,
+    "skills": [
+      "basher"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "1C550605-35A1-6CE1-3EA4-2C805E406518",
+      "identity": {
+        "engine": "classic",
+        "levelID": "9:Tame:10:11:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "New Lemmings On The Block",
+      "levelNumberSnapshot": 10,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 161,
+    "skills": [
+      "basher"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "903D32E3-B1AC-10AB-1346-B7DFE0C0F9D8",
+      "identity": {
+        "engine": "classic",
+        "levelID": "16:Tame:17:12:0",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Honey, I Saved The Lemmings",
+      "levelNumberSnapshot": 17,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 132,
+    "skills": [
+      "miner"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "7B9EB524-6E02-BB33-3FD5-252B89F827D5",
+      "identity": {
+        "engine": "classic",
+        "levelID": "11:Tame:12:11:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Citizen Lemming",
+      "levelNumberSnapshot": 12,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 81,
+    "skills": [
+      "basher"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "918B6CF4-6BB3-0C4D-7E4E-AA58FEB48A0C",
+      "identity": {
+        "engine": "classic",
+        "levelID": "17:Tame:18:12:1",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Lemmings For Presidents!",
+      "levelNumberSnapshot": 18,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 115,
+    "skills": [
+      "basher",
+      "miner"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "BC0C757A-6800-C508-1F04-3F1D64AD1325",
+      "identity": {
+        "engine": "classic",
+        "levelID": "13:Tame:14:11:5",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Get a little extra help",
+      "levelNumberSnapshot": 14,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 120,
+    "skills": [
+      "basher",
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "315D7A20-F920-244A-E71B-25D51906520A",
+      "identity": {
+        "engine": "classic",
+        "levelID": "24:Fun:25:6:0",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "levelNameSnapshot": "Lemmings Lemmings everywhere",
+      "levelNumberSnapshot": 25,
+      "packNameSnapshot": "Lemmings",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+    },
+    "score": 72,
+    "skills": [
+      "basher"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "1833A6B2-C374-A1D5-7F42-709D8F620590",
+      "identity": {
+        "engine": "classic",
+        "levelID": "12:Tame:13:11:4",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Thunder-Lemmings are go!",
+      "levelNumberSnapshot": 13,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 152,
+    "skills": [
+      "basher",
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "4BCC249D-79F2-CC7A-2998-7DCDAF44B422",
+      "identity": {
+        "engine": "classic",
+        "levelID": "18:Tame:19:12:2",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Lemming Productions Present...",
+      "levelNumberSnapshot": 19,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 170,
+    "skills": [
+      "blocker",
+      "miner"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "8BB007B2-665C-FE46-1465-706953C99CEF",
+      "identity": {
+        "engine": "classic",
+        "levelID": "19:Tame:20:12:3",
+        "packID": "ohNoMoreLemmings-DLVEL-100"
+      },
+      "levelNameSnapshot": "Custom built for Lemmings",
+      "levelNumberSnapshot": 20,
+      "packNameSnapshot": "Oh No! More Lemmings",
+      "sourceRevision": "6dad75cd5148ba209afd886fd0c7e6dc4d6d3d92ea17eb05c98fbecc8778ac25"
+    },
+    "score": 167,
+    "skills": [
+      "basher",
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "5F3C9486-0A4D-8471-810E-3621228F2921",
+      "identity": {
+        "engine": "classic",
+        "levelID": "29:Fun:30:8:2",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "levelNameSnapshot": "Lock up your Lemmings",
+      "levelNumberSnapshot": 30,
+      "packNameSnapshot": "Lemmings",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+    },
+    "score": 170,
+    "skills": [
+      "builder",
+      "digger"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "DECBCA8C-A36C-2510-2920-E28844A659E3",
+      "identity": {
+        "engine": "classic",
+        "levelID": "17:Fun:18:4:3",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "levelNameSnapshot": "Let's block and blow",
+      "levelNumberSnapshot": 18,
+      "packNameSnapshot": "Lemmings",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+    },
+    "score": 67,
+    "skills": [
+      "bomber"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "D718DED4-C544-4DD0-C9AB-7CBD89C1B49F",
+      "identity": {
+        "engine": "classic",
+        "levelID": "7:Fun:8:0:6",
+        "packID": "lemmings-LEVEL-120"
+      },
+      "levelNameSnapshot": "Not as complicated as it looks",
+      "levelNumberSnapshot": 8,
+      "packNameSnapshot": "Lemmings",
+      "sourceRevision": "2e3e67e01c0e9d75a45354f53504d6f6c47a54da0e32b340ae0c08ba2bf247d7"
+    },
+    "score": 150,
+    "skills": [
+      "basher",
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "034935E3-DB24-A6D6-E83C-8E09838E59B2",
+      "identity": {
+        "engine": "classic",
+        "levelID": "KillerMaster 1 Tame 1.dat#1",
+        "packID": "fan:lldb-505"
+      },
+      "levelNameSnapshot": "Only Float is Survive",
+      "levelNumberSnapshot": 2,
+      "packNameSnapshot": "KillerMasters Lemmings 1 Tame",
+      "sourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9"
+    },
+    "score": 43,
+    "skills": [
+      "floater"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "85B67FA0-9577-3C48-586E-C7403EABC555",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Holiday cLemmings Frost 1.DAT#0",
+        "packID": "fan:lldb-535"
+      },
+      "levelNameSnapshot": "Floating Down!",
+      "levelNumberSnapshot": 1,
+      "packNameSnapshot": "Holiday cLemmings Frost",
+      "sourceRevision": "e0b4def872bc847330ee71afc5a6e602c97aaefe65f5b0f86d28af0145245339"
+    },
+    "score": 43,
+    "skills": [
+      "floater"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "1ACE16BA-0B6C-8952-9579-285195F9A500",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Mikepak07.dat#6",
+        "packID": "fan:lldb-12"
+      },
+      "levelNameSnapshot": "PRACTICE: FLOATER",
+      "levelNumberSnapshot": 7,
+      "packNameSnapshot": "Mikepak07",
+      "sourceRevision": "a0c42f85672784f435e4bc0b0659ecd877fc994fa1ba24fc5d2af7d98f95c1dc"
+    },
+    "score": 44,
+    "skills": [
+      "floater"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "DAE29799-D3CD-F3C3-121D-BD4F000909AC",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Fun 01.lvl#-1",
+        "packID": "fan:lldb-568"
+      },
+      "levelNameSnapshot": "Fun 01.lvl",
+      "levelNumberSnapshot": 1,
+      "packNameSnapshot": "Amiga Fun",
+      "sourceRevision": "89a2836ecd5e48a91e48af510d27b2551e9434d9ccd39c28932c230a7d077619"
+    },
+    "score": 45,
+    "skills": [
+      "digger"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "0778BA73-5312-E33B-AEEC-14E5E8524A20",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Mikepak07.dat#0",
+        "packID": "fan:lldb-12"
+      },
+      "levelNameSnapshot": "PRACTICE: DIGGER",
+      "levelNumberSnapshot": 1,
+      "packNameSnapshot": "Mikepak07",
+      "sourceRevision": "a0c42f85672784f435e4bc0b0659ecd877fc994fa1ba24fc5d2af7d98f95c1dc"
+    },
+    "score": 46,
+    "skills": [
+      "digger"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "0C59E266-E439-8BAE-B484-82E55CBE0C41",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Ji Hoon Heaven 1.DAT#7",
+        "packID": "fan:lldb-547"
+      },
+      "levelNameSnapshot": "Diggin' to a better world",
+      "levelNumberSnapshot": 8,
+      "packNameSnapshot": "Ji Hoons Lemmings Remake Heaven",
+      "sourceRevision": "8d2daffec1cf660515ad4680e015d48b923b81b70afa10956729a179c81e3971"
+    },
+    "score": 47,
+    "skills": [
+      "digger"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "B645A6FB-5FFB-3059-578F-E526B43ECCA3",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 03 - Mild (Part 3).dat#1",
+        "packID": "fan:lldb-551"
+      },
+      "levelNameSnapshot": "Blow Down!",
+      "levelNumberSnapshot": 22,
+      "packNameSnapshot": "Lemmings Plus DOS Project Mild",
+      "sourceRevision": "587fa1a85d2ce0c3d0c8b50d9fa6c23a5d224c5b100e7c364088fde33e35798e"
+    },
+    "score": 53,
+    "skills": [
+      "bomber"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "886FEBF0-8C01-D29B-1083-CDB105EC8609",
+      "identity": {
+        "engine": "classic",
+        "levelID": "joem7.dat#2",
+        "packID": "fan:lldb-322"
+      },
+      "levelNameSnapshot": "Digging Only",
+      "levelNumberSnapshot": 3,
+      "packNameSnapshot": "joem7",
+      "sourceRevision": "61cfce03b0bae24b31d5c3f3b650446ebe2774a5327c6b27e37e78ef890119c8"
+    },
+    "score": 63,
+    "skills": [
+      "digger"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "C41A721F-1B7D-E875-3E42-76AD7C5D950B",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Deceit Extras 1.DAT#4",
+        "packID": "fan:lldb-546"
+      },
+      "levelNameSnapshot": "Builders can build stairs",
+      "levelNumberSnapshot": 5,
+      "packNameSnapshot": "Deceits Lemmings Extras",
+      "sourceRevision": "164a98b095105dfa73a6bd8df695b6eff20947227f5c0c35d6c6e366f758de6a"
+    },
+    "score": 67,
+    "skills": [
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "01F95C86-621B-F7CD-754C-6C5371B1BC1E",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Fun 18.lvl#-1",
+        "packID": "fan:lldb-568"
+      },
+      "levelNameSnapshot": "Fun 18.lvl",
+      "levelNumberSnapshot": 18,
+      "packNameSnapshot": "Amiga Fun",
+      "sourceRevision": "89a2836ecd5e48a91e48af510d27b2551e9434d9ccd39c28932c230a7d077619"
+    },
+    "score": 67,
+    "skills": [
+      "bomber"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "688ADEDF-082E-956F-7DDC-EB8309EA5910",
+      "identity": {
+        "engine": "classic",
+        "levelID": "KillerMaster 1 Tame 1.dat#4",
+        "packID": "fan:lldb-505"
+      },
+      "levelNameSnapshot": "The Broken Stair",
+      "levelNumberSnapshot": 5,
+      "packNameSnapshot": "KillerMasters Lemmings 1 Tame",
+      "sourceRevision": "cea49c6853a73f4a693cd63586ed044e2c939a7ce2457d6e3317bbc95d8ff4c9"
+    },
+    "score": 69,
+    "skills": [
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "6234C7F6-D279-2FCA-C3D9-E2D4D93BD990",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Mikepak07.dat#3",
+        "packID": "fan:lldb-12"
+      },
+      "levelNameSnapshot": "PRACTICE: BUILDER",
+      "levelNumberSnapshot": 4,
+      "packNameSnapshot": "Mikepak07",
+      "sourceRevision": "a0c42f85672784f435e4bc0b0659ecd877fc994fa1ba24fc5d2af7d98f95c1dc"
+    },
+    "score": 71,
+    "skills": [
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "5D93C1C4-8CA3-9610-FE18-436C2ED1826B",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Fun 25.lvl#-1",
+        "packID": "fan:lldb-568"
+      },
+      "levelNameSnapshot": "Fun 25.lvl",
+      "levelNumberSnapshot": 25,
+      "packNameSnapshot": "Amiga Fun",
+      "sourceRevision": "89a2836ecd5e48a91e48af510d27b2551e9434d9ccd39c28932c230a7d077619"
+    },
+    "score": 72,
+    "skills": [
+      "basher"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "F88F8DC8-1A8F-9D5F-7710-B9C5EBD67EDC",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Taxing 19.lvl#-1",
+        "packID": "fan:lldb-570"
+      },
+      "levelNameSnapshot": "Taxing 19.lvl",
+      "levelNumberSnapshot": 19,
+      "packNameSnapshot": "Amiga Taxing",
+      "sourceRevision": "62d71882dc1aa9bb450d97e01f43c69dac1052548c962b3cd791e138ff337378"
+    },
+    "score": 84,
+    "skills": [
+      "bomber"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "F31EDB93-2FFA-EC6A-572C-F9FF45194F7E",
+      "identity": {
+        "engine": "classic",
+        "levelID": "CRISFN10.dat#9",
+        "packID": "fan:lldb-274"
+      },
+      "levelNameSnapshot": "Pillars apart",
+      "levelNumberSnapshot": 10,
+      "packNameSnapshot": "CRISFN10",
+      "sourceRevision": "d4f4f470e377ee8382db6bf41749ed620aead2c15360e4416fc4873dbe290268"
+    },
+    "score": 85,
+    "skills": [
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "6E906D79-A35D-32D5-7D5B-0FAF23AAC7A5",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Genesis Present.dat#13",
+        "packID": "fan:lldb-492"
+      },
+      "levelNameSnapshot": "Like an overflowing wave",
+      "levelNumberSnapshot": 14,
+      "packNameSnapshot": "Genesis Present",
+      "sourceRevision": "52c417ec72a99555caa15c1fb308a618759532d2059baefca16c67417d0a5c2c"
+    },
+    "score": 122,
+    "skills": [
+      "basher",
+      "builder"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "0537DBE5-D4DF-D79B-9A99-8988C161A746",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Fun 06.lvl#-1",
+        "packID": "fan:lldb-573"
+      },
+      "levelNameSnapshot": "Fun 06.lvl",
+      "levelNumberSnapshot": 6,
+      "packNameSnapshot": "Amiga Fun Budget",
+      "sourceRevision": "7677f392af2992ace26b6e7bfed099c323bf4e57ecd1031576adaca837929574"
+    },
+    "score": 132,
+    "skills": [
+      "blocker",
+      "bomber"
+    ]
+  },
+  {
+    "entry": {
+      "catalogueRevision": "1.2-runtime-v2",
+      "id": "CC80F2AF-2C82-99B4-C10E-B94B39EA7517",
+      "identity": {
+        "engine": "classic",
+        "levelID": "Lemmings Plus DOS Project - 06 - Wimpy (Part 3).dat#7",
+        "packID": "fan:lldb-552"
+      },
+      "levelNameSnapshot": "Get up, up, up!",
+      "levelNumberSnapshot": 28,
+      "packNameSnapshot": "Lemmings Plus DOS Project Wimpy",
+      "sourceRevision": "8187c19df391ea59e594bf9e4779b7ec81fb0034bc4a899ae09aee7396b3c042"
+    },
+    "score": 177,
+    "skills": [
+      "basher",
+      "builder"
+    ]
+  }
+]

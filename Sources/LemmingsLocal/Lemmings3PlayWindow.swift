@@ -1799,6 +1799,7 @@ import NxlvKit
             prepareSkip: learningResultActions?.prepareSkip,
             later: learningResultActions?.later, hints: learningResultActions?.hints,
             status: needsTribeSurvivors ? L10n.text("Need 50 survivors to complete this tribe.") : nil,
+            sideAction: learningResultActions?.takeBreak.map { (L10n.text("Take a break"), $0) },
             menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }
     private func presentPauseMenu() {
@@ -1821,6 +1822,7 @@ import NxlvKit
                 self.updateUserMusicPause(); self.refresh()
             }, retry: { [weak self] in self?.retryLevel() },
             hints: { [weak self] in self?.showLevelHints() }, later: learning?.later, skip: skip,
+            sideAction: learning?.takeBreak.map { (L10n.text("Take a break"), $0) },
             leave: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
         GameScreen.shared.present(page, owner: window)
     }

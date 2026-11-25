@@ -5,6 +5,30 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileLearningTests {
+    @Test func easyPuzzleWinCountsWithoutReplacingTheSavedJourney() throws {
+        func entry(_ name: String) throws -> LevelPlaylistEntry {
+            try .init(identity: .init(engine: .classic, packID: "fixture", levelID: name),
+                catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+                levelNameSnapshot: name, levelNumberSnapshot: 1)
+        }
+        let hard = try entry("Hard"), easy = try entry("Easy"), next = try entry("Next")
+        var state = MobileLearningState()
+        try state.start([hard, easy, next], name: "Journey", poolID: LearningJourney.version)
+        let journey = state.run
+        try state.startEasyPuzzles([easy])
+        state.record(won: false)
+        #expect(state.progress.later.isEmpty)
+        state.record(won: true)
+
+        var reopened = try JSONDecoder().decode(MobileLearningState.self, from: JSONEncoder().encode(state))
+        reopened.endEasyPuzzles()
+        #expect(reopened.run == journey)
+        #expect(reopened.progress.completed == [easy.identity])
+        let advanced = reopened.advance()
+        #expect(advanced)
+        #expect(reopened.run?.currentEntry == next)
+    }
+
     @Test func selectedSyncedJourneyResolvesBeforeAnyLocalLearningFileExists() throws {
         let temporary = try AppStorage.temporary(named: "cloud-only-journey")
         defer { temporary.removeTemporaryFiles() }
@@ -156,6 +180,25 @@ struct MobileLearningTests {
         let restored = try JSONDecoder().decode(MobileLearningState.self, from: JSONEncoder().encode(old))
         #expect(restored.run?.id == old.run?.id && restored.run?.currentEntry == solo)
         #expect(restored.run?.entries.count == 1 && restored.progress == old.progress)
+    }
+
+    @Test(.enabled(if: ProcessInfo.processInfo.environment["LEMMINGS_TEST_EASY_PUZZLE_FAN_ROOT"] != nil))
+    func bundledEasyPuzzlesResolveWithTheirSourceIdentities() throws {
+        let fanRoot = try #require(ProcessInfo.processInfo.environment["LEMMINGS_TEST_EASY_PUZZLE_FAN_ROOT"])
+        let support = try AppStorage.temporary(named: "easy-puzzle-sources")
+        defer { support.removeTemporaryFiles() }
+        let storage = AppStorage(applicationSupport: support.applicationSupport,
+            resources: root.appendingPathComponent("Resources"), defaults: support.defaults)
+        let entries = EasyPuzzleCatalogue.puzzles(storage: storage).map(\.entry)
+        #expect(!entries.isEmpty)
+        let catalogue = MobileCatalogue(portsRoot: ports, fanFolders: [URL(fileURLWithPath: fanRoot)])
+        let library = MobileJourneyLibrary(entries: entries, name: "Easy puzzles", catalogue: catalogue)
+        for index in entries.indices {
+            let entry = entries[index]
+            let origin = try library.origin(of: index)
+            #expect(origin.index + 1 == entry.levelNumberSnapshot, "\(entry.packNameSnapshot) / \(entry.levelNameSnapshot)")
+            #expect(try library.checkpointLevelIdentifier(at: index) != nil)
+        }
     }
 
     @Test func curatedJourneyStartsWithoutScanningFuturePacks() throws {

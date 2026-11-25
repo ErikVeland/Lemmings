@@ -116,7 +116,7 @@ extension MobileLibraryViewController {
         default:
             if id.hasPrefix("shortSelect.") {
                 let selection = String(id.dropFirst("shortSelect.".count))
-                if shortGamesEntries[selection] != nil { shortGamesSelection = selection; rebuild() }
+                if shortGamesEntries[selection] != nil || (selection == "easy-puzzles" && !EasyPuzzleCatalogue.puzzles.isEmpty) { shortGamesSelection = selection; rebuild() }
             }
             else if id.hasPrefix("player."), case let key = String(id.dropFirst(7)), profiles.players.contains(where: { $0.id == key }) { switchPlayer(key) }
             else if id.hasPrefix("list."), let uuid = UUID(uuidString: String(id.dropFirst(5))) { openPlaylist(uuid) }

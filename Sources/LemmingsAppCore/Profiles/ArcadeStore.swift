@@ -296,6 +296,15 @@ import NxlvKit
         let index = players.firstIndex { $0.id == id }
         return players[index.map { ($0 + 1) % players.count } ?? 0]
     }
+    @discardableResult public func restoreSessionTurn(_ id: String) -> Bool {
+        guard hotSeatIsActive, sessionProfileIDs.contains(id), canWrite, storageError == nil else { return false }
+        if playingProfileID != id {
+            sessionTurnID = id
+            persistSession()
+        }
+        return true
+    }
+
     @discardableResult public func passSessionTurn(after id: String) -> Bool {
         guard let next = nextSessionProfile(after: id), canWrite, storageError == nil else { return false }
         sessionTurnID = next.id
