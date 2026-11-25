@@ -115,7 +115,7 @@ def build():
         canonical = ORIGIN + route
         title = page['title'] + ' · Ultimate Lemmix'
         body = (ROOT / 'content' / page['file']).read_text()
-        body = body.replace('{{contact}}', html.escape(CONFIG['contact'])).replace('{{policy_date}}', CONFIG['policy_date'])
+        body = body.replace('{{app_store_url}}', html.escape(CONFIG['app_store_url'], quote=True)).replace('{{contact}}', html.escape(CONFIG['contact'])).replace('{{policy_date}}', CONFIG['policy_date'])
         if home:
             captures = json.loads((ROOT / 'content/screenshots.json').read_text())['captures']
             feature_classes = {'journey': 'puzzle-capture', 'community': 'community-capture',
@@ -135,7 +135,7 @@ def build():
             body = f'<header class="document-title"><p class="trail"><a href="/">Ultimate Lemmix</a> / {html.escape(page["title"])}</p><h1>{html.escape(page["title"])}</h1></header><div class="document-layout">{toc}<article class="prose">{body}</article></div>'
         schema = [{'@context':'https://schema.org','@type':'WebSite','name':CONFIG['name'],'url':ORIGIN+'/', 'inLanguage':'en-AU', 'creator':{'@type':'Person','name':CONFIG['developer']}}]
         if home:
-            schema.append({'@context':'https://schema.org','@type':'SoftwareApplication','name':CONFIG['name'],'url':canonical,'applicationCategory':'GameApplication','operatingSystem':['macOS','iOS','iPadOS','tvOS'],'creativeWorkStatus':'Pre-release','softwareVersion':'2.4.2','description':page['description'],'image':ORIGIN+'/assets/app-icon.png','author':{'@type':'Person','name':CONFIG['developer']}})
+            schema.append({'@context':'https://schema.org','@type':'SoftwareApplication','name':CONFIG['name'],'url':canonical,'applicationCategory':'GameApplication','operatingSystem':['iOS','iPadOS'],'softwareVersion':'2.4.4','installUrl':CONFIG['app_store_url'],'offers':{'@type':'Offer','price':'0','priceCurrency':'USD','url':CONFIG['app_store_url']},'description':page['description'],'image':ORIGIN+'/assets/app-icon.png','author':{'@type':'Person','name':CONFIG['developer']}})
         elif not error:
             schema.append({'@context':'https://schema.org','@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':1,'name':'Ultimate Lemmix','item':ORIGIN+'/'},{'@type':'ListItem','position':2,'name':page['title'],'item':canonical}]})
         document = f'''<!doctype html>
@@ -150,7 +150,7 @@ def build():
   <div class="trailhead-inner">
     <a class="trailhead-brand" href="/" aria-label="Ultimate Lemmix home"><img src="/assets/apple-touch-icon.png" alt="" width="48" height="48"><span>Ultimate Lemmix</span></a>
     <nav class="trail-signs" aria-label="Primary">{links(nav,route,'moss-button moss-button--compact')}</nav>
-    <a class="trailhead-release moss-button" href="/release-notes"{' aria-current="page"' if route == '/release-notes' else ''}>App Store preparations <span aria-hidden="true">↗</span></a>
+    <a class="trailhead-release moss-button" href="{html.escape(CONFIG['app_store_url'], quote=True)}">Get it on the App Store <span aria-hidden="true">↗</span></a>
   </div>
 </header>
 <main id="main" tabindex="-1" class="{'home' if home else 'document'}">{body}</main>
@@ -165,7 +165,7 @@ def build():
       <div>{links(footer[4:8],route)}</div>
       <div>{links(footer[8:],route)}</div>
     </nav>
-    <div class="trail-end-colophon"><p>© 2026 Erik Veland</p><a href="mailto:{CONFIG['contact']}">{CONFIG['contact']}</a><p>Preparing for the App Store.</p></div>
+    <div class="trail-end-colophon"><p>© 2026 Erik Veland</p><a href="mailto:{CONFIG['contact']}">{CONFIG['contact']}</a><p><a href="{html.escape(CONFIG['app_store_url'], quote=True)}">{html.escape(CONFIG['release_state'])}</a></p></div>
   </div>
 </footer></body></html>'''
         target = OUT / ('index.html' if home else route.lstrip('/') + '/index.html')
