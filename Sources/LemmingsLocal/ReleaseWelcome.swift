@@ -10,7 +10,7 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.4.3"
+    static let notesVersion = "2.5"
     static let lemmixNotesVersion = "2.5"
     static var subtitle: String { GameReleaseCopy.invitation }
     static var sections: [(String, String)] {
@@ -22,8 +22,8 @@ import NxlvKit
             ]
         }
         return [
-            (L10n.text("Chronicles controls"), L10n.text("Selecting a skill in Chronicles shows the original pressed artwork.")),
-            (L10n.text("Short games"), L10n.text("Classic follow-up adds five levels from the original DOS game, Fun 6–10.")),
+            (L10n.text("Home and Play"), L10n.text("Home offers one next step. Play holds every game and collection.")),
+            (L10n.text("Speed and rewind"), L10n.text("Choose a speed directly. Rewind counts back in game seconds.")),
             (L10n.text("Compatibility"), L10n.text("macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta."))
         ]
     }

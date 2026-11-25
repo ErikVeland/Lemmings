@@ -4,26 +4,26 @@
   "storeArtwork": false,
   "platforms": {
     "macos": {
-      "build": 109,
+      "build": 110,
       "bundleIdentifier": "academy.glasscode.lemmings",
       "infoPlist": "Resources/Info.plist",
       "buildScript": "Scripts/build-local-app.sh"
     },
     "ios": {
-      "build": 47,
+      "build": 48,
       "bundleIdentifier": "academy.glasscode.lemmings.ios",
       "project": "Apps/UltimateLemmingsIOS/UltimateLemmingsIOS.xcodeproj",
       "scheme": "UltimateLemmingsIOS",
       "appTarget": "UltimateLemmingsIOS"
     },
     "tvos": {
-      "build": 22,
+      "build": 23,
       "bundleIdentifier": "academy.glasscode.lemmings",
       "project": "Apps/UltimateLemmingsTV/UltimateLemmingsTV.xcodeproj",
       "scheme": "UltimateLemmingsTV",
       "appTarget": "UltimateLemmingsTV"
     }
   },
-  "version": "2.4.3",
+  "version": "2.5",
   "releaseBranch": "release/ultimate-lemmings"
 }
