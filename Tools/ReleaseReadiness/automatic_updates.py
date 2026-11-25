@@ -20,6 +20,7 @@ REQUIRED_SCRIPTS = (
     "Scripts/generate-appcast.sh",
     "Scripts/publish-github-release.sh",
     "Scripts/check-release-inputs.sh",
+    "Scripts/verify-developer-id-signature.py",
 )
 
 
