@@ -14,7 +14,7 @@
 | Resume after a fast rewind | On iPhone, iPad and Duo, Play resets to 1× and resumes on the same press. The first Pause press while running fast returns to 1×. The first rewind tip leaves the live rewind cue visible. | The iPhone simulator acceptance pass observed the corrected Play action and tip. The shared UIKit regression covers the Play and running Pause actions with four engine identifiers. Native Mac rewind-tip placement still needs visual acceptance. |
 | Recognise Undo after ending a run | The shared pixel arrow fits inside the existing control on Mac and the shared touch and TV HUD. Native Mac L2 uses the same arrow and accessible action name over its Nuke target while its pre-nuke state can be restored. | The rounded HUD audit renders and checks hit targets during Undo. Check the visual state and input on physical devices. |
 | Open or reposition the Duo | iOS scene geometry and reserved-region updates invalidate the current layout. Home forgets the two cached book panes when the hinge is flat, a different hinge divides the display, or the safe area or cutouts make the cached panes invalid. | The windowless regression covers same-size book-to-flat, missing hinge data, tabletop and new cutouts. The sideways simulator repro remains open for hardware acceptance. |
-| Hear the Mac result and find its actions | The shared result announcement reports the attempt and leaderboard. The rendered, accessible actions expose Replay when available across Classic, L2, L3 and supported fan content. | The offscreen result test checks the summary and Replay availability and activation across the three original games. Live VoiceOver remains open. |
+| Hear the Mac result and find its actions | The result announcement reports the attempt. Details opens and announces the level leaderboard. The rendered, accessible actions expose Replay when available across Classic, L2, L3 and supported fan content. | The offscreen result test checks the summary and Replay availability and activation across the three original games. Live VoiceOver remains open. |
 | Read or hear a replay's recorded moves | Replay skill history uses each engine’s elapsed game time. A single backward step shows hundredths of a second when needed. On Mac the playfield reports the rewind distance. Touch and Apple TV also report their current rewind speed. Mac solution replay buttons expose their current action names separately from keyboard help. Touch and TV update the spoken skill history when it changes. | Checks cover clock conversion, the Mac bitmap panel and the shared UIKit history when seeking. Real VoiceOver and remote acceptance remain open. |
 
 The [UX checklist](UXRedesign.md) lists the repeatable checks and the remaining device observations.
@@ -1016,11 +1016,10 @@ who: World, Game Center (Mac, when available) or This device (This Mac on Mac).
 The second row picks the category: Career stars, Levels cleared or Three-star
 levels. The active player's row is highlighted. On iPhone, iPad, Duo and Apple
 TV, Game Center opens Apple's own leaderboard screen. Share my records is a
-single toggle on World. Per-level lists stay on each result screen and in Mac
-level records. They rank players by Fastest 100% first, then Fastest clear,
+single toggle on World. Per-level lists open from result Details and Mac level records. They rank players by Fastest 100% first, then Fastest clear,
 Least skills and Most saved, from direct runs only.
 
-| Platform | Progress | Leaderboards | Level list on result | Source check |
+| Platform | Progress | Leaderboards | Level list in result Details | Source check |
 | --- | --- | --- | --- | --- |
 | Mac | Records window | World, Game Center, This Mac | Yes, Classic, L2, L3 | `swift build` |
 | iPhone, iPad, Duo | Shared page | World, This device, Apple Game Center | Yes | `LevelLeaderboardResultTests`; iOS SDK compile |
@@ -1028,8 +1027,7 @@ Least skills and Most saved, from direct runs only.
 
 The current server source returns stars, cleared levels and three-star levels
 for each World career entry. Older server responses return only rank, name and
-the selected score. The clients show the other columns when the response has
-them. Live service deployment is not confirmed. Game Center is enabled in the
+the selected score. The clients show the selected score and retain the category controls. Live service deployment is not confirmed. Game Center is enabled in the
 bundled catalogue for every TestFlight and
 development-signed build. Developer ID and ad-hoc Mac builds still switch it
 off, because Apple allows Game Center only with App Store, TestFlight or

@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import Foundation
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -8,6 +9,48 @@ import UIKit
 @testable import LemmingsMobileUI
 
 @MainActor struct MobileDestinationBackTests {
+    private final class MenuLibrary: MobileGameLibrary {
+        let displayName = "Menu fixture"
+        let levels = [MobileLevelSummary(index: 0, rank: "Fun", number: 1, title: "Just dig!")]
+        func loadLevel(at index: Int) throws -> MobileLevelContent { throw MobileSessionError.changedLevel }
+    }
+
+    @Test func libraryRoutesBuildNamedPagesWithDistinctActions() throws {
+        let storage = try AppStorage.temporary(named: "LibraryRouteReview")
+        defer { storage.removeTemporaryFiles() }
+        let controller = MobileLibraryViewController()
+        controller.arcadeStore = ArcadeStore(storage: storage, bundledProofs: nil)
+        controller.loadViewIfNeeded()
+        defer { controller.viewDidDisappear(false) }
+        controller.loading = false
+        controller.library = MenuLibrary()
+        let owner = controller.profiles.activeID
+        let created = controller.playlists.create(name: "Menu fixture")
+        let playlist = try #require(created)
+        let routes: [MobileLibraryViewController.Route] = [
+            .home, .play, .support, .fanGroup([]), .levelCatalogue, .levels, .levelDetails,
+            .settings, .language, .controllerMappings, .playInsights, .soundtrack, .data,
+            .firstPlayer, .whatsNew, .effectsWelcome, .telemetryConsent, .insightsToken,
+            .insightsClear, .familiarNames, .journey, .progression, .techniques, .rankings,
+            .collections, .shortGames, .l2Practice, .playlists, .playlist(playlist), .addToPlaylist,
+            .players, .cloudSaves, .shuffleAll, .hotSeat, .hotSeats, .progress, .profileStatistics,
+            .progressPlayer(owner), .progressLevel("fixture", owner), .records, .achievements,
+            .recordLevel("fixture"), .recordHint("fixture")
+        ] + MobileFamily.allCases.map { .family($0) } + MobileSettingsGroup.allCases.map { .settingsGroup($0) }
+        for route in routes {
+            controller.route = route
+            controller.rebuild()
+            let page = controller.canvas.page
+            let actions = page.rows + page.footer
+            #expect(controller.route == route)
+            #expect(!page.title.isEmpty)
+            let hasAction = actions.contains { $0.enabled }
+            #expect(hasAction)
+            #expect(Set(actions.map(\.id)).count == actions.count)
+            #expect(Set(page.listTools.map(\.id)).count == page.listTools.count)
+        }
+    }
+
     @Test func accessibilityFocusSurvivesAMenuReflowAndRefresh() throws {
         let narrow: CGFloat = 465
         #if os(tvOS)

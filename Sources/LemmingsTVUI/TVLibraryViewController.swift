@@ -151,7 +151,7 @@ import UIKit
         switch destination {
         case .home:
             page.home = true
-            page.subtitle = local.profiles.active.name
+            page.subtitle = local.profiles.players.count > 1 ? local.profiles.active.name : ""
             page.rows = [.init("hotseat", L10n.text("Hot Seat")), .init("players", L10n.text("Players")), .init("settings", L10n.text("Settings"))]
             if let checkpoint {
                 page.rows.append(.init("games", L10n.text("Play")))
@@ -173,7 +173,7 @@ import UIKit
         case .ranks:
             page.title = source?.title ?? L10n.text("Levels")
             page.rows = ranks.enumerated().dropFirst(pageOffset).prefix(4).map { .init("rank.\($0.offset)", $0.element) }
-            page.footer = [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < ranks.count)]
+            page.footer = ranks.count > 4 ? [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < ranks.count)] : [back]
         case .levels:
             page.title = selectedRank
             let browse = levels.filter { $0.rank == selectedRank }
@@ -181,8 +181,8 @@ import UIKit
             page.rows = browse.dropFirst(pageOffset).prefix(4).map {
                 .init("level.\($0.index)", "\($0.number) - \($0.title)", selected: progress.contains($0.index))
             }
-            page.subtitle = "\(pageOffset + 1)-\(min(pageOffset + 4, browse.count)) / \(browse.count)"
-            page.footer = [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < browse.count)]
+            page.subtitle = browse.isEmpty ? L10n.text("No matching levels") : "\(pageOffset + 1)-\(min(pageOffset + 4, browse.count)) / \(browse.count)"
+            page.footer = browse.count > 4 ? [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < browse.count)] : [back]
         case .briefing:
             guard let game = browsingPreview ?? game else { return }
             page.title = game.content.summary.title
@@ -193,7 +193,7 @@ import UIKit
             page.rows = [.init("ready", game.awaitsFirstStart ? (seat == nil ? L10n.text("Play") : L10n.text("Ready")) : L10n.text("Resume"), primary: true, portrait: player(game.owner).portrait)]
             page.footer = [back, .init("levelDetails", L10n.text("Details"))]
         case .deck:
-            page.title = L10n.text("Paused"); page.subtitle = name
+            page.title = L10n.text("Paused"); page.subtitle = seat == nil ? game?.content.summary.title ?? "" : name
             page.rows = [.init("skills", L10n.text("Skills")), .init("targets", L10n.text("Lemmings")), .init("camera", L10n.text("Camera")), .init("transport", L10n.text("Time and actions")), .init("help", L10n.text("Controls"))]
             page.footer = [.init("library", L10n.text("Library")), .init("retryConfirm", L10n.text("Retry")), .init("resume", L10n.text("Resume"), primary: true)]
         case .skills:
@@ -250,7 +250,7 @@ import UIKit
         case .results:
             guard let game else { return }
             page.title = game.session.snapshot.didWin ? L10n.text("Level complete") : L10n.text("Try again")
-            page.subtitle = name
+            page.subtitle = seat == nil ? game.content.summary.title : name
             page.preview = true
             page.details = ["\(game.session.snapshot.saved) / \(game.session.snapshot.total) RESCUED"]
             if let seat {

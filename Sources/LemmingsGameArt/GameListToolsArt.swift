@@ -25,12 +25,32 @@ public enum GameListToolsArt {
             let commandWidth = compact ? inner - searchWidth - gap : inner
             let rows = Dictionary(grouping: commands, by: \.listToolRow).sorted { $0.key < $1.key }
             for (_, rowActions) in rows {
-                let cell = (commandWidth - CGFloat(rowActions.count - 1) * gap) / CGFloat(rowActions.count)
-                let height = max(44 * scale, rowActions.map { GameTextLayout.height($0.title, width: (cell - 24) / scale) * scale + 12 }.max() ?? 0)
-                for (index, action) in rowActions.enumerated() {
-                    targets.append(.init(action: action, frame: CGRect(x: commandX + CGFloat(index) * (cell + gap), y: y, width: cell, height: height)))
+                let widths = rowActions.map { action in
+                    let word = action.title.split(whereSeparator: \.isWhitespace)
+                        .map { GameTextLayout.width(of: String($0)) }.max() ?? 0
+                    return min(commandWidth, max(44 * scale, ceil(word * scale) + 24))
                 }
-                y += height + gap
+                var start = 0
+                while start < rowActions.count {
+                    var end = start + 1
+                    var used = widths[start]
+                    while end < rowActions.count && used + gap + widths[end] <= commandWidth {
+                        used += gap + widths[end]
+                        end += 1
+                    }
+                    let extra = (commandWidth - used) / CGFloat(end - start)
+                    let height = max(44 * scale, (start..<end).map { index in
+                        GameTextLayout.height(rowActions[index].title, width: max(1, (widths[index] + extra - 24) / scale)) * scale + 12
+                    }.max() ?? 0)
+                    var x = commandX
+                    for index in start..<end {
+                        let width = widths[index] + extra
+                        targets.append(.init(action: rowActions[index], frame: CGRect(x: x, y: y, width: width, height: height)))
+                        x += width + gap
+                    }
+                    y += height + gap
+                    start = end
+                }
             }
         }
         if compact, commands.isEmpty { y += 44 * scale + gap }
@@ -90,6 +110,10 @@ public enum GameListToolsArt {
                     GamePixelTypography.draw(target.action.title, in: box, context: context, typography: nil, maximumScale: 1)
                 }
                 context.restoreGState()
+                if target.action.selected {
+                    context.setFillColor(CGColor(srgbRed: 0.48, green: 0.8, blue: 0.24, alpha: 1))
+                    context.fill(CGRect(x: frame.minX + 8, y: frame.maxY - 5, width: frame.width - 16, height: 3))
+                }
                 if target.action.id == highlighted {
                     context.setStrokeColor(CGColor(gray: 1, alpha: 1))
                     context.setLineWidth(2)

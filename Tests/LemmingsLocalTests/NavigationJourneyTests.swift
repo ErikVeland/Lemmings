@@ -6,7 +6,7 @@ import NxlvKit
 @testable import LemmingsLocal
 
 final class NavigationJourneyTests: XCTestCase {
-    @MainActor func testTimelineContainsOnlyTransportAndConsumesDisabledTargetsAndGaps() throws {
+    @MainActor func testTimelineIncludesLevelHintsAndConsumesDisabledTargetsAndGaps() throws {
         let controls = TimelinePanelControls()
         let owner = NSView(frame: CGRect(x: 0, y: 0, width: 260, height: 38))
         controls.frame = CGRect(x: 4, y: 4, width: 252, height: 30)
@@ -14,8 +14,7 @@ final class NavigationJourneyTests: XCTestCase {
         controls.perform = { performed.append($0) }
         controls.enabled = { $0 == .forward }
         let elements = controls.accessibleControls(owner: owner).compactMap { $0 as? GameAccessibleElement }
-        XCTAssertEqual(elements.count, 3)
-        XCTAssertFalse(elements.contains { ($0.accessibilityLabel() ?? "").localizedCaseInsensitiveContains("hint") })
+        XCTAssertEqual(elements.compactMap { $0.accessibilityLabel() }, TimelinePanelControls.Action.allCases.map(\.label))
         for action in TimelinePanelControls.Action.allCases {
             let frame = controls.rect(for: action)
             XCTAssertTrue(controls.frame.contains(frame))

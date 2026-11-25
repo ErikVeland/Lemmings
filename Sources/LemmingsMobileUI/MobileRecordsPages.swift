@@ -65,14 +65,15 @@ extension MobileLibraryViewController {
         let seatPlayers = hotSeat?.players.compactMap { id in profiles.players.first { $0.id == id } } ?? []
         var page = MobileCareerArt.progressPage(records: arcadeStore.records, profileID: profileID,
             profileName: playerName(profileID), subtitle: arcadeStore.storageError ?? subtitle,
-            campaign: mobileCampaignProgress(profileID: profileID), selectablePlayers: seatPlayers)
+            selectablePlayers: seatPlayers)
         if arcadeStore.storageError != nil { page.rows.insert(.init("recordsFix", L10n.text("Fix records")), at: 0) }
         return page
     }
     func recordLevelPage(_ key: String, subtitle: String) -> GameFrontEnd.Page {
         let detail = recordDetail?.key == key ? recordDetail : nil
-        return MobileCareerArt.recordLevelPage(key, records: arcadeStore.records, profileID: profiles.activeID,
-                                        profileName: profiles.active.name, subtitle: subtitle,
+        let owner = progressDisplayProfileID
+        return MobileCareerArt.recordLevelPage(key, records: arcadeStore.records, profileID: owner,
+                                        profileName: playerName(owner), subtitle: subtitle,
                                         replayAvailable: recordReplay(key) != nil, hintAvailable: detail?.deck != nil,
                                         playable: detail?.pack != nil, preview: detail?.preview != nil)
     }
@@ -123,7 +124,7 @@ extension MobileLibraryViewController {
             return recordLevelPage(key, subtitle: "")
         }
         let stage = min(max(0, detail.stage), deck.stages.count - 1)
-        let level = arcadeStore.records.runs.last { recordKey($0) == key }?.level.title ?? deck.title
+        let level = arcadeStore.records.runs.last { $0.profileID == progressDisplayProfileID && recordKey($0) == key }?.level.title ?? deck.title
         return MobileCareerArt.recordHintPage(level: level, deck: deck,
             stage: stage, solution: detail.solution != nil && detail.initial != nil,
             playable: detail.pack != nil, preview: detail.preview != nil)
@@ -138,7 +139,8 @@ extension MobileLibraryViewController {
     /// Loads the level artwork, hint deck and play location while the record card is open.
     private func loadRecordDetail(_ key: String) {
         recordDetail = MobileRecordDetail(key: key)
-        guard let conditions = arcadeStore.records.runs.last(where: { recordKey($0) == key })?.level.conditions,
+        let owner = progressDisplayProfileID
+        guard let conditions = arcadeStore.records.runs.last(where: { $0.profileID == owner && recordKey($0) == key })?.level.conditions,
               let location = try? mobileRankedLocation(conditions), let catalogue else { return }
         recordDetail?.pack = location.pack; recordDetail?.index = location.index
         let ports = catalogue.portsRoot, fan = catalogue.fanFolders, pack = location.pack, index = location.index
@@ -152,7 +154,7 @@ extension MobileLibraryViewController {
             let preview = try? await loader.load(index, settings: settings)
             let teaching = content == nil ? nil : await MobileTeachingLoader.shared.load(initial: initial, title: title, skills: skills,
                 chronicles: content?.session is Lemmings3MobileSession)
-            guard let self, self.recordDetail?.key == key else { return }
+            guard let self, self.recordDetail?.key == key, self.progressDisplayProfileID == owner else { return }
             if let preview, let image = MobileBitmapRenderer.image(preview.frame) {
                 let source = preview.sourceRect
                 self.recordDetail?.preview = image
@@ -170,7 +172,7 @@ extension MobileLibraryViewController {
     }
     private func playRecordSolution() {
         guard let detail = recordDetail, let solution = detail.solution, let initial = detail.initial,
-              let conditions = arcadeStore.records.runs.last(where: { recordKey($0) == detail.key })?.level.conditions else { return }
+              let conditions = arcadeStore.records.runs.last(where: { $0.profileID == progressDisplayProfileID && recordKey($0) == detail.key })?.level.conditions else { return }
         do {
             let content = try loadMobileRankedContent(conditions)
             guard let classic = content.session as? ClassicMobileSession,
@@ -188,7 +190,7 @@ extension MobileLibraryViewController {
         let assisted = key.hasPrefix("assisted|")
         let board = String(key.dropFirst(assisted ? 9 : key.hasPrefix("direct|") ? 7 : 0))
         for run in arcadeStore.records.runs.reversed()
-            where run.profileID == profiles.activeID && run.level.boardID == board && run.assisted == assisted {
+            where run.profileID == progressDisplayProfileID && run.level.boardID == board && run.assisted == assisted {
             if let url = arcadeStore.actionReplayURL(attemptID: run.id) { return (url, run.level.title) }
         }
         return nil
@@ -214,10 +216,17 @@ extension MobileLibraryViewController {
     func achievementsPage(subtitle: String) -> GameFrontEnd.Page {
         let profileID = progressDisplayProfileID
         return MobileCareerArt.achievementsPage(records: arcadeStore.records, profileID: profileID,
-            profileName: playerName(profileID), subtitle: subtitle, campaign: mobileCampaignProgress(profileID: profileID))
+            profileName: playerName(profileID), subtitle: subtitle,
+            campaign: achievementSection == .campaign ? mobileCampaignProgress(profileID: profileID) : .init(), section: achievementSection)
     }
 
     func handleRecords(_ id: String) -> Bool {
+        if id.hasPrefix("awardsSection."), let section = MobileCareerArt.AchievementSection(rawValue: String(id.dropFirst("awardsSection.".count))) {
+            achievementSection = section
+            rebuild()
+            scrollView.setContentOffset(.zero, animated: false)
+            return true
+        }
         if id.hasPrefix("progress.profile.") {
             let profileID = String(id.dropFirst("progress.profile.".count))
             guard hotSeat?.players.contains(profileID) == true,
@@ -344,7 +353,6 @@ extension MobileLibraryViewController {
                 }
             }
         } catch { notice = error.localizedDescription }
-        mobileRankings.community.refreshLevel(conditions: run.level.conditions)
         mobileRankings.completed(run.profileID, history: arcadeStore.records.trolley)
         return (details, nil)
     }

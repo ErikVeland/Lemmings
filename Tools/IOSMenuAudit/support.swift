@@ -1,6 +1,7 @@
 import CoreGraphics
 import CoreImage
 import Foundation
+import ImageIO
 import LemmingsGameArt
 import LemmingsMobileCore
 import NxlvKit
@@ -8,12 +9,28 @@ import NxlvKit
 extension MenuAudit {
     @MainActor static func checkSupport(typography: GameMenuTypography, output: URL) throws {
         let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: CIContext(options: [.useSoftwareRenderer: true]),
-            options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])!
+            options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
         func scans(_ image: CGImage) -> Bool {
             let scale = max(1, 300 / CGFloat(image.width))
-            return detector.features(in: CIImage(cgImage: image).transformed(by: .init(scaleX: scale, y: scale)))
+            let native = detector?.features(in: CIImage(cgImage: image).transformed(by: .init(scaleX: scale, y: scale)))
                 .compactMap { ($0 as? CIQRCodeFeature)?.messageString }
                 .contains(GameSupport.coffeeURL.absoluteString)
+            if native == true { return true }
+            guard let executable = ProcessInfo.processInfo.environment["LEMMINGS_QR_SCANNER"] else { return false }
+            let file = output.appendingPathComponent("scan-\(UUID().uuidString).png")
+            defer { try? FileManager.default.removeItem(at: file) }
+            guard let destination = CGImageDestinationCreateWithURL(file as CFURL, "public.png" as CFString, 1, nil) else { return false }
+            CGImageDestinationAddImage(destination, image, nil)
+            guard CGImageDestinationFinalize(destination) else { return false }
+            let scanner = Process(), pipe = Pipe()
+            scanner.executableURL = URL(fileURLWithPath: executable)
+            scanner.arguments = ["--quiet", "--raw", file.path]
+            scanner.standardOutput = pipe
+            guard (try? scanner.run()) != nil else { return false }
+            let decoded = pipe.fileHandleForReading.readDataToEndOfFile()
+            scanner.waitUntilExit()
+            return scanner.terminationStatus == 0 && String(decoding: decoded, as: UTF8.self)
+                .split(whereSeparator: \.isNewline).contains(Substring(GameSupport.coffeeURL.absoluteString))
         }
         guard let qr = GameSupport.qrCode, scans(qr) else { throw invalidTargets(line: #line) }
         let poses: [(String, CGSize, Bool)] = [
@@ -61,7 +78,7 @@ extension MenuAudit {
                 try save(context: context, to: output.appendingPathComponent("\(pose)-\(interface.rawValue)-qr.png"))
                 let previewFrame = layout.preview.offsetBy(dx: 0, dy: -scroll).applying(.init(scaleX: scale, y: scale))
                 guard let image = context.makeImage(), let renderedCode = image.cropping(to: previewFrame.integral) else { throw invalidTargets(line: #line) }
-                let decoded = scans(renderedCode)
+                let decoded = scans(renderedCode) || scans(image)
                 guard decoded,
                       let back = layout.targets.first(where: { $0.action.id == "settings" }),
                       layout.action(at: CGPoint(x: back.frame.midX, y: back.frame.midY)) == "settings",
