@@ -2315,7 +2315,7 @@ import NxlvKit
                 }
                 text(L10n.plural("count.savedLemmings", count: game.saved, one: "You saved %ld lemming", other: "You saved %ld lemmings"), 160, 8, "MEDALS", centered: true)
                 text(medal == .none ? L10n.text("Oh dear!") : L10n.text("\(medal.name) medal"), 220, 42, "MEDALS", centered: true)
-                front.wrappedText(game.didWin ? L10n.text("Click to continue. Your survivors will go on to the next level.")
+                front.wrappedText(game.didWin ? L10n.text("Click to continue")
                     : L10n.originalL2Text(bank("MEDALS").strings[4]), font: assets.font, palette: palette("MEDALS"), x: 135, y: 70, width: 170)
                 text(L10n.text("V Replay  S Save movie"), 160, 153, "MEDALS", centered: true)
                 text(L10n.text("Retry"), 35, 182, "MEDALS", centered: true)

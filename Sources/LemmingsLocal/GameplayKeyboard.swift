@@ -168,7 +168,10 @@ import NxlvKit
         guard tips.needs(tip) else { return }
         let area = (musicDisplayArea() ?? root.bounds).intersection(root.bounds)
         guard area.width >= 240, area.height >= 100 else { return }
-        let anchor = CGRect(x: area.minX + 12, y: root.isFlipped ? area.minY + 4 : area.maxY - 4,
+        // The rewind cue (and the precision badge above it) sits in the top-left corner.
+        // Start the rewind tip below them so it does not hide the cue it explains.
+        let inset: CGFloat = tip == .rewind ? 64 : 4
+        let anchor = CGRect(x: area.minX + 12, y: root.isFlipped ? area.minY + inset : area.maxY - inset,
                             width: min(350, area.width - 24), height: 0)
         tipHelp.update(.init(id: String(tip.rawValue), title: L10n.text("Controls"),
             text: tip.text(for: .mouse), anchor: anchor), in: root, at: ProcessInfo.processInfo.systemUptime, focused: true)

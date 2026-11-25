@@ -142,7 +142,7 @@ public struct SavedLemmingsCounter: Sendable {
     }
 
     public var homeCaption: String {
-        let device = L10n.text("Lemmings saved here") + " " + Self.grouped(local)
+        let device = L10n.text("Lemmings saved") + " " + Self.grouped(local)
         let worldwide = L10n.text("Worldwide") + " " + (global.map(Self.grouped) ?? "—")
         return device + "\n" + worldwide
     }
