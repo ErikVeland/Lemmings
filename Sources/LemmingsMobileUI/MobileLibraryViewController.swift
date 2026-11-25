@@ -1000,7 +1000,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
         // Game Data downloads, restores and imports belong to the whole app, not to a player.
-        let hidePlayerName = route == .firstPlayer || route == .data || (route == .home && hotSeat == nil) || (route == .players && renamingPlayer)
+        // Solo play names nobody: the caption only tells Hot Seat players whose turn it is.
+        let hidePlayerName = hotSeat == nil || route == .firstPlayer || route == .data || (route == .players && renamingPlayer)
         canvas.playerName = hidePlayerName ? nil : playerName(hotSeat?.turn ?? profiles.activeID)
         unfold.stop()
         let subtitle = loading ? L10n.text("Loading...") : notice
@@ -1204,7 +1205,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private func syncPages() {
         refreshHomeBackdrop()
         updateLibraryDisplayLink()
-        browser.playerName = playerName(hotSeat?.turn ?? profiles.activeID)
+        browser.playerName = hotSeat.map { playerName($0.turn) }
         browser.statusText = loading ? "" : notice
         browser.isLoading = loading
         if route == .levels { browser.setPlayTitle(previewPlayTitle(selectedIndex)) }

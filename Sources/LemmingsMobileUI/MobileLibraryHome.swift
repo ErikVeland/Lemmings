@@ -24,7 +24,9 @@ extension MobileLibraryViewController {
         let sequenceAttempt = savedLevel.flatMap { checkpointResumesLearningRun($0) ? $0.savedAt : nil }
         if let saved = savedLevel, sequenceAttempt == nil, journeyAttempt == nil {
             let owner = saved.owner ?? profiles.activeID
-            resume.append(.init("resume", L10n.text("Resume level - \(playerName(owner))")))
+            // Name the owner only when it is not obvious: Hot Seat, or another profile's save.
+            let showsOwner = hotSeat != nil || owner != profiles.activeID
+            resume.append(.init("resume", showsOwner ? L10n.text("Resume level - \(playerName(owner))") : L10n.text("Resume")))
             candidates.append(.savedLevel(savedAt: saved.savedAt, owner: owner))
         }
         if catalogue != nil, let saved = resumableLearningRun, let run = saved.state.run,

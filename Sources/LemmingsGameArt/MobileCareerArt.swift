@@ -14,7 +14,7 @@ public enum MobileCareerArt {
     /// The player's identity comes first. Nothing online appears until they have one.
     public static func firstPlayer(initials: String, portrait: Int,
                                    status: String, busy: Bool) -> GameFrontEnd.Page {
-        .init(title: L10n.text("Create profile"), subtitle: L10n.text("Keeps your progress, saves and records"),
+        .init(title: L10n.text("Create profile"), subtitle: "",
               rows: [.init("playerPortrait", L10n.text("Portrait: \(ArcadeProfile.portraitNames[portrait])"), enabled: !busy, portrait: portrait),
                      .init("nameField", L10n.text("Initials: \(initials)_"), enabled: !busy)],
               details: status.isEmpty ? [] : [status],

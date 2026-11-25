@@ -869,7 +869,7 @@ import NxlvKit
         let store = ArcadeStore.shared
         let records = store.records
         if onFirstPlay != nil {
-            header(L10n.text("Create profile"), subtitle: L10n.text("Keeps your progress, saves and records"))
+            header(L10n.text("Create profile"), subtitle: "")
             drawProfileEditor()
             button(L10n.text("Play"), CGRect(x: 400, y: 627, width: 320, height: 55), primary: true,
                    enabled: store.profilesAreWritable && !initials.isEmpty) { [weak self] in self?.performProfilePrimaryAction() }

@@ -154,7 +154,7 @@ import LemmingsAppCore
     private lazy var previewButton: UIButton = {
         let button = MobileFocusButton(type: .custom)
         button.accessibilityIdentifier = "menu.preview.play"
-        button.onAccessibilityFocus = { [weak self] in self?.revealAction($0) }
+        button.onAccessibilityFocus = { [weak self] in self?.focusMenuButton($0) }
         #if os(tvOS)
         button.onSelectBegan = { [weak self] in self?.tvActivation.observeSelectBegan() }
         #endif
@@ -261,13 +261,7 @@ import LemmingsAppCore
 
     override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
         super.didUpdateFocus(in: context, with: coordinator)
-        guard let button = context.nextFocusedView as? UIButton,
-              targets.contains(button) || button === previewButton else { return }
-        focusedID = button === previewButton ? displayedPage.previewAction?.id
-            : button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
-        highlighted = focusedID
-        revealAction(button)
-        setNeedsDisplay()
+        if let button = context.nextFocusedView as? UIButton { focusMenuButton(button) }
     }
     #endif
 
@@ -322,7 +316,11 @@ import LemmingsAppCore
                !page.home, page.pause == nil, !page.rows.isEmpty,
                let scroll = superview as? UIScrollView {
                 let visible = convert(CGRect(origin: scroll.contentOffset, size: measuredViewport), from: scroll)
-                if let anchor = targets.first(where: { $0.frame.width > 0 && $0.frame.intersects(visible) }) {
+                let focusedIdentifier = focusedID.map { "menu." + $0 }
+                let focused = targets.first {
+                    $0.accessibilityIdentifier == focusedIdentifier && $0.frame.intersects(visible)
+                }
+                if let anchor = focused ?? targets.first(where: { $0.frame.width > 0 && $0.frame.intersects(visible) }) {
                     pendingReflowAnchor = (anchor.accessibilityIdentifier ?? "", anchor.frame.minY - visible.minY)
                 }
             }
@@ -503,7 +501,7 @@ import LemmingsAppCore
             button.accessibilityValue = action.toggleValue.map { $0 ? L10n.text("On") : L10n.text("Off") }
             button.accessibilityTraits = action.selected ? [.button, .selected] : .button
             button.isEnabled = action.enabled
-            (button as? MobileAccessibleFocusButton)?.onAccessibilityFocus = { [weak self] in self?.revealAction($0) }
+            (button as? MobileAccessibleFocusButton)?.onAccessibilityFocus = { [weak self] in self?.focusMenuButton($0) }
             #if os(tvOS)
             if let focusButton = button as? MobileFocusButton {
                 focusButton.onSelectBegan = { [weak self] in self?.tvActivation.observeSelectBegan() }
@@ -546,6 +544,15 @@ import LemmingsAppCore
         let element = MobileMenuTextElement(accessibilityContainer: self)
         element.onFocus = { [weak self] in self?.revealContent(frame) }
         return element
+    }
+    private func focusMenuButton(_ button: UIButton) {
+        guard !button.isHidden, targets.contains(button) || button === previewButton else { return }
+        revealAction(button)
+        guard button.isEnabled else { return }
+        focusedID = button === previewButton ? displayedPage.previewAction?.id
+            : button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
+        highlighted = focusedID
+        setNeedsDisplay()
     }
     private func revealAction(_ button: UIButton) {
         let id = button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
