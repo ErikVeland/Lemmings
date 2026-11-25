@@ -177,10 +177,8 @@
 "Add to playlist" = "Adicionar à playlist";
 "Added effects" = "Efeitos adicionados";
 "Added to {0}" = "Adicionado a {0}";
-"Adjust Classic pixel width with Monitor or Television. Flat Panel keeps the saved value." = "Ajuste a largura dos pixels do Classic com Monitor ou Televisão. A opção Tela plana mantém o valor salvo.";
-"Adjust the Classic tube effect. Available with Monitor or Television. Flat Panel keeps the saved value." = "Ajuste o efeito de tubo do Classic. Disponível com Monitor ou Televisão. A opção Tela plana mantém o valor salvo.";
-"Advance one tick" = "Avançar um ciclo";
-"Advance one tick." = "Avançar um ciclo.";
+"Adjust Classic pixel width with Monitor or Television." = "Ajuste a largura dos pixels do Classic com Monitor ou Televisão.";
+"Adjust the Classic tube effect. Available with Monitor or Television." = "Ajuste o efeito de tubo do Classic. Disponível com Monitor ou Televisão.";
 "Affection remains unchanged." = "Affection remains unchanged.";
 "After a result: retry / records" = "Após o resultado: tentar de novo / recordes";
 "Aggregate benefit, with an evidenced trade-off." = "Benefício total com uma compensação comprovada.";
@@ -468,7 +466,7 @@
 "Checking solution..." = "A verificar a solução…";
 "Choose" = "Escolher";
 "Choose 1× in Game controls to reset speed." = "Escolha 1× nos controles do jogo para restaurar a velocidade.";
-"Choose Flat Panel, Monitor or Television. Classic uses the tube simulation. L2 and L3 keep their bitmap renderers." = "Escolha Tela plana, Monitor ou Televisão. O Classic usa a simulação de tubo. L2 e L3 mantêm seus renderizadores em bitmap.";
+"Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "Escolha Tela plana, Monitor ou Televisão. O Classic usa a simulação de tubo.";
 "Choose Lemmings 3 tool direction" = "Escolher a direção da ferramenta de Lemmings 3";
 "Choose Music Folder…" = "Escolher pasta de música…";
 "Choose Sound Effects…" = "Escolher efeitos sonoros…";
@@ -486,7 +484,7 @@
 "Choose a player-owned game folder" = "Escolha a pasta de um jogo que você possui";
 "Choose a rating" = "Escolher uma classificação";
 "Choose a second player" = "Escolher um segundo jogador";
-"Choose a soundtrack or Adaptive DJ Mix. Available soundtracks depend on installed music libraries." = "Escolha uma trilha sonora ou o Mix de DJ adaptativo. As trilhas disponíveis dependem das bibliotecas de música instaladas.";
+"Choose a soundtrack or Adaptive DJ Mix." = "Escolha uma trilha sonora ou o Mix de DJ adaptativo.";
 "Choose a technique" = "Escolher uma técnica";
 "Choose an action, then click a lemming. Walker turns or releases a blocker." = "Escolha uma ação e clique num lemming. Walker fá-lo voltar ou liberta um bloqueador.";
 "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera." = "Escolha uma ação. Os tijolos e as pás pedem uma direção. As setas movem a câmara.";
@@ -511,7 +509,7 @@
 "Choose presentation" = "Escolher apresentação";
 "Choose rank" = "Escolher classificação";
 "Choose speed" = "Escolher velocidade";
-"Choose the Classic artwork source. Available sources depend on installed game data." = "Escolha a fonte de arte do Classic. As fontes disponíveis dependem dos dados de jogo instalados.";
+"Choose the Classic artwork source." = "Escolha a fonte de arte do Classic.";
 "Choose the NeoLemmix 'styles' directory." = "Escolha a pasta «styles» do NeoLemmix.";
 "Choose the colour palette for Classic artwork." = "Escolha a paleta de cores da arte do Classic.";
 "Choose the directory holding LEVEL000.DAT and MAIN.DAT." = "Escolha a pasta com LEVEL000.DAT e MAIN.DAT.";
@@ -519,11 +517,11 @@
 "Choose the gameplay action for each controller button. Menu navigation keeps the standard bindings." = "Escolha a ação de jogo para cada botão do controle. A navegação pelos menus mantém os vínculos padrão.";
 "Choose the matching NeoLemmix 'styles' directory." = "Escolha o diretório 'styles' correspondente do NeoLemmix.";
 "Choose the physical controller button to change." = "Escolha o botão físico do controle que será alterado.";
-"Choose the sound-effects source. Available choices depend on installed game data." = "Escolha a fonte dos efeitos sonoros. As opções disponíveis dependem dos dados de jogo instalados.";
+"Choose the sound-effects source." = "Escolha a fonte dos efeitos sonoros.";
 "Choose the style of Classic skill counters, including the original Macintosh bitmap digits." = "Escolha o estilo dos contadores de habilidades do Classic, incluindo os dígitos originais em bitmap do Macintosh.";
 "Choose tribe" = "Escolher tribo";
 "Choose tribe on map" = "Escolher tribo no mapa";
-"Choose unlocked levels or all levels for direct Classic selection. L2 and L3 keep their campaign selection rules." = "Escolha fases desbloqueadas ou todas as fases para selecionar diretamente no Classic. L2 e L3 mantêm as regras de seleção da campanha.";
+"Choose unlocked levels or all levels for direct Classic selection." = "Escolha fases desbloqueadas ou todas as fases para selecionar diretamente no Classic.";
 "Choose your {0} folder." = "Escolha sua pasta de {0}.";
 "Chronicles attribute cell is outside its object." = "Uma célula de atributo de Chronicles está fora do objeto.";
 "Chronicles controls" = "Controles de Chronicles";
@@ -616,7 +614,6 @@
 "Collections" = "Coleções";
 "Collections unavailable" = "Coleções indisponíveis";
 "Collector" = "Colecionador";
-"Colour Depth" = "Profundidade de cor";
 "Colour depth" = "Profundidade de cor";
 "Combine: {0}" = "Combinar: {0}";
 "Come back to these" = "Voltar a estas";
@@ -763,7 +760,7 @@
 "Digital Sound Bank (WAV/FLAC)" = "Banco de som digital (WAV/FLAC)";
 "Direct runs only. Lost counts use population minus saved from one retained result per level." = "Somente partidas diretas. As perdas são o total menos os resgatados em um resultado guardado por fase.";
 "Direction {0}" = "Direção {0}";
-"Disable added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain." = "Desativa os núcleos luminosos adicionais das explosões, os flashes HDR e as explosões cinematográficas. Os sprites originais mantêm-se.";
+"Disable added bright explosion cores, HDR flashes and cinematic explosions." = "Desativa os núcleos luminosos adicionais das explosões, os flashes HDR e as explosões cinematográficas.";
 "Disable speed trails and cinematic explosions. Keep gameplay speed and controls." = "Desativa os rastos de velocidade e as explosões cinematográficas. A velocidade e os controlos mantêm-se.";
 "Disarmer" = "Desarmador";
 "Discard run" = "Descartar partida";
@@ -783,7 +780,7 @@
 "Down-right" = "Baixo à direita";
 "Download" = "Baixar";
 "Download game assets" = "Baixar dados do jogo";
-"Download or remove optional soundtrack libraries. Installed libraries become available in the music choices." = "Baixe ou remova bibliotecas opcionais de trilhas sonoras. As bibliotecas instaladas ficam disponíveis nas opções de música.";
+"Download or remove optional soundtrack libraries." = "Baixe ou remova bibliotecas opcionais de trilhas sonoras.";
 "Download soundtracks" = "Baixar trilhas sonoras";
 "Downloading" = "Baixando";
 "Downloading..." = "Baixando...";
@@ -963,7 +960,7 @@
 "File" = "Arquivo";
 "Filler" = "Preenchedor";
 "Find a better way" = "Encontre um caminho melhor";
-"Find a command by key, action or category. Your game pauses while this guide is open." = "Procure um comando por tecla, ação ou categoria. O jogo fica em pausa enquanto este guia estiver aberto.";
+"Find a command by key, action or category." = "Procure um comando por tecla, ação ou categoria.";
 "Find a key or command, e.g. rewind, Shift, builder" = "Procure uma tecla ou comando, por exemplo, retroceder, Shift ou construtor";
 "Find your way back" = "Retome sua jornada";
 "Finds the view reliable." = "Finds the view reliable.";
@@ -1134,6 +1131,7 @@
 "Highland" = "Terras Altas";
 "Hints" = "Dicas";
 "Hold a lemming, then slide left or right to browse the group." = "Mantenha um lemming pressionado e deslize para a esquerda ou direita para percorrer o grupo.";
+"Hold full stop scrubs forward. Escape cancels." = "Mantenha o ponto final pressionado para avançar. Escape cancela.";
 "Hold to edit player" = "Mantenha pressionado para editar o jogador";
 "Hold: fixed fast-forward" = "Mantenha pressionado: avanço rápido fixo";
 "Hold: ramp up; release: previous speed" = "Mantenha pressionado: acelerar; solte: velocidade anterior";
@@ -1165,7 +1163,7 @@
 "INSPECT LEMMINGS" = "INSPECT LEMMINGS";
 "INTRO SEQUENCE" = "SEQUÊNCIA DE INTRODUÇÃO";
 "Icarus Wings" = "Asas de Ícaro";
-"If another button has that action, the two bindings swap. Modifier combinations follow the new buttons. Menu navigation always uses the standard controls. Sticks can be swapped in Controls." = "Se outro botão já tiver essa ação, os mapeamentos são trocados. As combinações com modificadores seguem os novos botões. Os menus sempre usam os controles padrão. Você pode trocar os analógicos em Controles.";
+"If another button has that action, the two bindings swap." = "Se outro botão já tiver essa ação, os mapeamentos são trocados.";
 "ImageIO cannot decode the PNG graphic." = "O ImageIO não consegue decodificar a imagem PNG.";
 "ImageIO cannot open the PNG graphic." = "O ImageIO não consegue abrir a imagem PNG.";
 "Immanuel Kant emphasised moral duty and respect for people. People must never be treated merely as tools." = "Immanuel Kant enfatizou o dever moral e o respeito pelas pessoas. Ninguém deve ser tratado apenas como um instrumento.";
@@ -1897,7 +1895,7 @@
 "Oh Yes! More Lemmings!" = "Oh Yes! More Lemmings!";
 "Oh dear!" = "Que pena!";
 "On" = "Ativado";
-"On pause, play only isolated percussion. Tracks without a rhythm part stop. Applies to all three games." = "Quando pausado, reproduza apenas a percussão isolada. As faixas sem uma parte rítmica param. Aplica-se aos três jogos.";
+"On pause, play only isolated percussion. Tracks without a rhythm part stop." = "Quando pausado, reproduza apenas a percussão isolada. As faixas sem uma parte rítmica param.";
 "On your other device, choose Enter code." = "No outro dispositivo, escolha Inserir código.";
 "Once mistook a meeting for lunch." = "Once mistook a meeting for lunch.";
 "Once received unexpected praise." = "Once received unexpected praise.";
@@ -1939,7 +1937,7 @@
 "Original movie" = "Vídeo original";
 "Original movies" = "Vídeos originais";
 "Original restores the original controls and presentation. Modern enables gameplay aids. Individual changes select Custom." = "Original restaura os controles e a apresentação originais. Moderno ativa auxílios de jogabilidade. Alterações individuais selecionam Personalizado.";
-"Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility. Applies to all three games." = "Original usa a mira do Amiga. Moderno usa colchetes finos nos cantos para indicar se uma habilidade está disponível. Aplica-se aos três jogos.";
+"Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility." = "Original usa a mira do Amiga. Moderno usa colchetes finos nos cantos para indicar se uma habilidade está disponível.";
 "Original+ Progression" = "Progressão Original+";
 "Originals included. Fancy a remix?" = "Originals included. Fancy a remix?";
 "Our finest shipwrights have worked" = "Nossos melhores construtores navais trabalharam";
@@ -2033,7 +2031,7 @@
 "Personal best" = "Recorde pessoal";
 "Peter Singer argues for reducing suffering and using evidence to find where our resources can do the most good." = "Peter Singer defende reduzir o sofrimento e usar evidências para descobrir onde nossos recursos podem fazer mais diferença.";
 "Phil Snape" = "Phil Snape";
-"Pixel Width" = "Largura em píxeis";
+"Pixel width" = "Largura em píxeis";
 "Plan" = "Plan";
 "Plan?" = "Plano?";
 "Planter" = "Plantador";
@@ -2107,7 +2105,7 @@
 "Precision, required techniques and human deduction are unknown." = "A precisão, as técnicas necessárias e a dedução humana são desconhecidas.";
 "PrecisionZoom.v1.{0}" = "PrecisionZoom.v1.{0}";
 "Prefer eligible blockers for bomb skills. L2 Exploder supports blockers, but Bomber does not. L3 uses carried bombs." = "Prefira Bloqueadores disponíveis para habilidades com bombas. O Explosivo de L2 permite Bloqueadores; o Bombardeiro não. L3 usa bombas carregadas.";
-"Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply." = "Prioriza lemmings que usam uma habilidade até que caiam. As regras de cada habilidade continuam válidas.";
+"Prefer lemmings using a skill, and retain their priority until they fall." = "Prioriza lemmings que usam uma habilidade até que caiam.";
 "Preferences" = "Preferências";
 "Prefers the first." = "Prefers the first.";
 "Prefers the one from Tuesday." = "Prefers the one from Tuesday.";
@@ -2365,7 +2363,6 @@
 "Rewards earned ({0}) >" = "Recompensas obtidas ({0}) >";
 "Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "Recompensas obtidas por {0}. {1} {2}. Página {3} de {4}. Escape volta ao resultado.";
 "Rewind" = "Rebobinar";
-"Rewind active, {0} ticks back. Hold full stop scrubs forward. Escape cancels." = "Retrocesso ativo, {0} ciclos para trás. Mantenha o ponto final pressionado para avançar. Escape cancela.";
 "Rewind and busy scenes" = "Retrocesso e cenas intensas";
 "Rewind one second." = "Retroceder um segundo.";
 "Rewind one tick" = "Retroceder um ciclo";
@@ -2562,7 +2559,7 @@
 "Short games" = "Partidas curtas";
 "Shoulder buttons change tabs. Right stick scrolls. Release buttons when changing pages." = "Os botões superiores mudam de separador. O stick direito desloca a página. Solte os botões ao mudar de página.";
 "Show / hide Hot Seat ghosts" = "Show / hide Hot Seat ghosts";
-"Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork." = "Mostrar mochilas de Escalador e Paraquedista nos lemmings do Classic. L2 e L3 mantêm a arte própria das habilidades.";
+"Show Climber and Floater backpacks on Classic lemmings." = "Mostrar mochilas de Escalador e Paraquedista nos lemmings do Classic.";
 "Show Hot Seat ghosts" = "Show Hot Seat ghosts";
 "Show Recorded Routes" = "Mostrar percursos gravados";
 "Show control tips" = "Mostrar dicas de controle";
@@ -3209,7 +3206,6 @@
 "Try later" = "Tentar mais tarde";
 "Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns." = "Teste uma habilidade na velocidade normal. Pause e observe onde o trabalhador aterra e vira.";
 "Try these skills!" = "Experimente estas habilidades!";
-"Tube Strength" = "Resistência do tubo";
 "Tube strength" = "Intensidade do efeito de tubo";
 "Turn off" = "Desativar";
 "Turn: {0}" = "Vez: {0}";
