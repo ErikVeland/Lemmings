@@ -678,7 +678,9 @@ public struct GameFrontEnd {
             if page.home || page.gameLibrary, let game = action.gameLogo, let image = typography.homeLogos.image(game) {
                 context.saveGState()
                 context.setAlpha(action.enabled ? 1 : 0.45)
-                drawImage(image, fittedIn: target.frame.insetBy(dx: 24, dy: 8), context: context)
+                if image.shouldInterpolate { context.interpolationQuality = .low }
+                drawImage(image, fittedIn: target.frame.insetBy(dx: 24, dy: 8),
+                    resolutionScale: GameHomeLogoArt.resolutionScale(for: game), context: context)
                 context.restoreGState()
                 continue
             }
@@ -756,10 +758,11 @@ public struct GameFrontEnd {
                        provider: provider, decode: nil, shouldInterpolate: false, intent: .defaultIntent)
     }
 
-    private static func drawImage(_ image: CGImage, fittedIn box: CGRect, context: CGContext) {
-        let fit = min(box.width / CGFloat(image.width), box.height / CGFloat(image.height))
+    private static func drawImage(_ image: CGImage, fittedIn box: CGRect, resolutionScale: CGFloat = 1, context: CGContext) {
+        let width = CGFloat(image.width) / resolutionScale, height = CGFloat(image.height) / resolutionScale
+        let fit = min(box.width / width, box.height / height)
         let factor = fit >= 1 ? floor(fit) : fit
-        let size = CGSize(width: CGFloat(image.width) * factor, height: CGFloat(image.height) * factor)
+        let size = CGSize(width: width * factor, height: height * factor)
         let frame = CGRect(x: floor(box.midX - size.width / 2), y: floor(box.midY - size.height / 2), width: size.width, height: size.height)
         GameStoneArt.drawImage(image, in: frame, context: context)
     }
