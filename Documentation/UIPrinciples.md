@@ -57,6 +57,11 @@ normally takes priority over orange. When Build targeting favours a current buil
 keep that builder selected until it finishes. Show its actual eligibility and do
 not queue an early click. Honour the reduced-flash setting.
 
+Undo nuke uses a continuous left-facing arrow from `PanelGlyphArt`. Fit it
+at whole-pixel scale inside 70% of the control’s shorter side, after allowing
+for Duo corner clearance. Keep the full input target and state outline.
+Native Mac Lemmings 2 shows the arrow while its pre-nuke snapshot is available.
+
 ## Typography
 
 Ultimate Lemmix uses its own Ultimate Lemmix logo, based on the existing project

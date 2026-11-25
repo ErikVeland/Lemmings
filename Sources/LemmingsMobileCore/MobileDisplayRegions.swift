@@ -13,6 +13,27 @@ public struct MobileReservedRegion: Equatable, Sendable {
 }
 
 public enum MobileDisplayRegions {
+    /// Preserve Home's panes through a missing region report while their geometry is still valid.
+    public struct BookHomePanes {
+        private var safeArea: MobileRect?
+        private var panes: [MobileRect] = []
+
+        public init() {}
+
+        public mutating func resolve(in safe: MobileRect, avoiding regions: [MobileReservedRegion],
+                                     flatHingeReported: Bool) -> [MobileRect] {
+            if safeArea == safe, !flatHingeReported, !panes.isEmpty,
+               regions.allSatisfy({ region in
+                   region.kind != .division && panes.allSatisfy { !$0.intersects(region.frame) }
+               }) {
+                return panes
+            }
+            safeArea = safe
+            panes = MobileDisplayRegions.bookPanes(in: safe, avoiding: regions)
+            return panes
+        }
+    }
+
     /// Keep a scrolling menu below a top camera and above the home indicator.
     /// Those protected edges are often different heights on portrait phones.
     public static func fullDisplayMenuFrame(in bounds: MobileRect, safeArea: MobileInsets,

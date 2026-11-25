@@ -63,6 +63,7 @@ CHECKS = {
         "DestinationLocalisationTests/testTranslatedDestinationsKeepNamesBackRolesAndTargets",
         "GlobalNavigationTests/testMainMenuStaysOutsideNestedScrollingPagesAndControllerCanReachIt",
         "GlobalNavigationArtTests/fanEntriesNeverContainListToolsAndNavigationFitsEveryViewport",
+        "MobileAdaptiveLayoutTests/bookHomeReleasesCachedPanesWhenTheHingeOpensWithoutResizing",
     ],
     "recovery": [
         "ArchivedJourneyBackupTests/portableBackupReopensArchivedJourneyAndOwnedCheckpoint",

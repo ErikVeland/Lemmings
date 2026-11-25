@@ -3272,5 +3272,12 @@ typealias MobileGameControllerBase = UIViewController
     private static func cgRect(_ rect: MobileRect) -> CGRect {
         CGRect(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
     }
+
+    #if os(iOS)
+    override func loadView() {
+        if #available(iOS 27.1, *) { view = MobileRegionTrackingView() }
+        else { super.loadView() }
+    }
+    #endif
 }
 #endif

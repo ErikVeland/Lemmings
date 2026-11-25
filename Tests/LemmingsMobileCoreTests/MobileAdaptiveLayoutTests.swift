@@ -501,6 +501,27 @@ struct MobileAdaptiveLayoutTests {
             .init(kind: .division, frame: .init(x: 0, y: 405, width: 1194, height: 24))]).isEmpty)
     }
 
+    @Test func bookHomeReleasesCachedPanesWhenTheHingeOpensWithoutResizing() {
+        let safe = MobileRect(x: 20, y: 24, width: 1154, height: 790)
+        let book = MobileReservedRegion(kind: .division, frame: .init(x: 589, y: 0, width: 16, height: 834))
+        let table = MobileReservedRegion(kind: .division, frame: .init(x: 0, y: 405, width: 1194, height: 24))
+        let camera = MobileReservedRegion(kind: .occlusion, frame: .init(x: 1100, y: 40, width: 50, height: 50))
+        var home = MobileDisplayRegions.BookHomePanes()
+
+        let folded = home.resolve(in: safe, avoiding: [book], flatHingeReported: false)
+        #expect(folded.count == 2)
+        #expect(home.resolve(in: safe, avoiding: [], flatHingeReported: false) == folded)
+        #expect(home.resolve(in: safe, avoiding: [], flatHingeReported: true).isEmpty)
+        #expect(home.resolve(in: safe, avoiding: [], flatHingeReported: false).isEmpty)
+        #expect(home.resolve(in: safe, avoiding: [book], flatHingeReported: false) == folded)
+        #expect(home.resolve(in: safe, avoiding: [table], flatHingeReported: false).isEmpty)
+        #expect(home.resolve(in: safe, avoiding: [book], flatHingeReported: false) == folded)
+        #expect(home.resolve(in: safe, avoiding: [camera], flatHingeReported: false).isEmpty)
+        #expect(home.resolve(in: safe, avoiding: [book], flatHingeReported: false) == folded)
+        let shifted = MobileRect(x: 24, y: 24, width: 1154, height: 790)
+        #expect(home.resolve(in: shifted, avoiding: [], flatHingeReported: false).isEmpty)
+    }
+
     @Test func roundedHeaderInsetsMoveMenuAndStatusTogetherAcrossAllEngines() throws {
         for (size, regions) in [
             (MobileSize(width: 650, height: 465), [MobileReservedRegion]()),

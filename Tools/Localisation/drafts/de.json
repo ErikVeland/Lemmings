@@ -3595,7 +3595,7 @@
   "{0} {1}s": "{0} {1} s",
   "{0} — {1} {2} — Beta": "{0} — {1} {2} — Beta",
   "{0}'s attempt": "Versuch von {0}",
-  "{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. {6}Enter: {7}. R retries. V opens replay. B opens records. C opens career progress. D opens details. Escape returns.": "Versuch von {0}. {1}. {2}. {3} {4}{5} von 3 Sternen in diesem Versuch. {6}Eingabetaste: {7}. R wiederholt, V öffnet die Wiederholung, B die Rekorde, C den Karrierefortschritt und D die Details. Escape geht zurück.",
+  "{0}'s attempt. {1}. {2}. {3} {4}{5} of 3 stars this run. {6}": "Versuch von {0}. {1}. {2}. {3} {4}{5} von 3 Sternen in diesem Versuch. {6}",
   "{0}'s turn": "Zug von {0}",
   "{0}, {1} remaining{2}": "{0}, {1} verbleibend{2}",
   "{0}, {1} tracks, {2}": "{0}, {1} Titel, {2}",
