@@ -41,7 +41,7 @@ import UIKit
     override func draw(_ rect: CGRect) {
         guard let cue, let context = UIGraphicsGetCurrentContext() else { return }
         let scale = pixelScale
-        let text = CGRect(x: 4 * scale, y: 1 * scale, width: bounds.width - 8 * scale, height: 9 * scale)
+        let text = CGRect(x: 4 * scale, y: 0, width: bounds.width - 8 * scale, height: 11 * scale)
         GamePixelTypography.draw(cue.text, in: text, context: context, typography: nil,
             palette: .blue, maximumScale: scale, alignment: .left, bitmapOnly: true)
         // The rail places the shown moment between the level start and where rewind began.
