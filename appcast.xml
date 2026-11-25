@@ -1,8 +1,36 @@
-<?xml version='1.0' encoding='utf-8'?>
-<rss xmlns:ns0="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0" xmlns:ns0="http://www.andymatuschak.org/xml-namespaces/sparkle">
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>2.6</title>
+            <pubDate>Thu, 26 Nov 2026 05:02:41 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>111</sparkle:version>
+            <sparkle:shortVersionString>2.6</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}</style></head><body><!-- Release commit: 21a4af32c3e6c143842deddfd67f35a5ccfedd18 -->
+<h3>Home, Play and Settings</h3>
+<p>Start or resume from the large Home button. Play groups the games above other saved routes and Collections. Game names stay on one line. Settings groups related controls and keeps navigation close to the active pane.</p>
+<h3>Journey breaks</h3>
+<p>Take a break from a Journey or open Easy Puzzles from Short Games. Your Journey keeps its place. Wins count towards your progress.</p>
+<h3>Gameplay and replays</h3>
+<p>The gameplay and replay controls keep speed, pause and rewind within reach. Solution replays have a timeline with marks for successful skill assignments. Scrub to a position or jump between moves. Faster playback reuses movie frames to reduce capture overhead.</p>
+<h3>Music</h3>
+<p>Adaptive DJ uses soundtrack variants in a set order for campaign routes and follows the active level in fan queues.</p>
+<h3>Compatibility</h3>
+<p>macOS 12.3 or later on Apple silicon and Intel.</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.6/UltimateLemmings-2.6-build111.zip" length="2075452625" type="application/octet-stream" sparkle:edSignature="UN/0W80VgwyUZ4B0O5XPjficZa5fUn0ncOpihO4AD64uZvg03TJTPUbAVgSZ+diOzQh/XsgFhL1mPJIVXmlFAw=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.6/UltimateLemmings-build111-from110.delta" sparkle:deltaFrom="110" length="41556130" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="qkrJ/kvYxTysQNpz4M2WsIvhlyKvXxJZvy8DDHnaP5CeAm5IbCdiWVAkXOr8L7Ifk5dBL9215VhDN/ygXNaQCw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.6/UltimateLemmings-build111-from109.delta" sparkle:deltaFrom="109" length="42560870" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="CgXfghz6DpzWA2YbkTGJy5rnhlKir4Vm1SxytmYVjNToNgw4uRRdc3KaSQoYTL1saL9lNJt5/1jvzxDJ2vQcBA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.6/UltimateLemmings-build111-from106.delta" sparkle:deltaFrom="106" length="58772278" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="d1FaIuNatY18ZF0VmudbSvdDA4d4KRBHEByeh9w9vDmqTlki8uh217nh8n9J/Hg1IHKdbSLirY/c/33pIpYdCA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.6/UltimateLemmings-build111-from105.delta" sparkle:deltaFrom="105" length="58781318" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="nRcUBu3EdX0INb/Zt610apzUz5gpY+RB96K+h6IdHcAHxXo7s5Hx20qlV8+Ris+TSZlo2PhBFU35JazRtkLTCQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.6/UltimateLemmings-build111-from104.delta" sparkle:deltaFrom="104" length="62310126" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="h9Joz88zJhvzmg2n4664ethRLO/b6We+mUd/Rj8SuFdAbO6H7f2NUGARr2iUhbFBeYTUv8ZxCThis0ZlW2YgCw=="/>
+            </sparkle:deltas>
+        </item>
+    <item>
             <title>2.5</title>
             <pubDate>Wed, 25 Nov 2026 20:10:40 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -30,7 +58,7 @@
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.5/UltimateLemmings-build110-from102.delta" ns0:deltaFrom="102" length="65206002" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="5WwtTdnu47LHTyvgyqrIh5GVCF/Lz5Tdna0t4DdGx9/y0G1EWEnABXhtlc0XG58Ji1M/60KslQL9xuigEXxNCA==" />
             </ns0:deltas>
         </item>
-    <item>
+<item>
             <title>2.4.3</title>
             <pubDate>Sat, 21 Nov 2026 17:21:06 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
