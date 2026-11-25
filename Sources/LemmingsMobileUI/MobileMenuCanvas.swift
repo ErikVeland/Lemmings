@@ -138,6 +138,8 @@ import LemmingsAppCore
     var previewSource: CGRect? { didSet { setNeedsDisplay() } }
     var onAction: ((String) -> Void)?
     var onHoldAction: ((String) -> Void)?
+    /// A long press here reveals owner tools. It stays unannounced, so players never meet it.
+    static let ownerToolsHoldID = "playInsights"
     var actionHelp: [String: String] = [:] {
         didSet {
             for button in targets {
@@ -505,11 +507,11 @@ import LemmingsAppCore
             #if os(tvOS)
             if let focusButton = button as? MobileFocusButton {
                 focusButton.onSelectBegan = { [weak self] in self?.tvActivation.observeSelectBegan() }
-                focusButton.onHold = action.id.hasPrefix("player.") ? { [weak self] in
+                focusButton.onHold = action.id.hasPrefix("player.") || action.id == Self.ownerToolsHoldID ? { [weak self] in
                     guard let self, !self.requiresNeutralActivation || self.tvActivation.consume() else { return }
-                    self.onHoldAction?(action.id)
+                    if let onHoldAction = self.onHoldAction { onHoldAction(action.id) } else { self.dispatch(action.id) }
                 } : nil
-                if focusButton.onHold != nil {
+                if action.id.hasPrefix("player.") {
                     button.accessibilityHint = L10n.text("Hold to edit player")
                     button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: L10n.text("Edit player")) { [weak self] _ in
                         self?.onHoldAction?(action.id); return true
@@ -531,6 +533,12 @@ import LemmingsAppCore
             button.addAction(UIAction { [weak self] _ in
                 self?.highlighted = nil; self?.setNeedsDisplay()
             }, for: [.touchUpInside, .touchCancel, .touchUpOutside])
+            #if os(iOS)
+            if action.id == Self.ownerToolsHoldID {
+                // Recognising the hold cancels the button's touch, so the tap action does not also run.
+                button.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(ownerToolsHeld(_:))))
+            }
+            #endif
             addSubview(button)
             return button
         }
@@ -540,6 +548,14 @@ import LemmingsAppCore
         setNeedsFocusUpdate()
         #endif
     }
+    #if os(iOS)
+    @objc private func ownerToolsHeld(_ recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .began, (recognizer.view as? UIControl)?.isEnabled == true else { return }
+        highlighted = nil; setNeedsDisplay()
+        // A canvas without a hold handler treats the hold as an ordinary activation.
+        if let onHoldAction { onHoldAction(Self.ownerToolsHoldID) } else { dispatch(Self.ownerToolsHoldID) }
+    }
+    #endif
     private func textElement(_ frame: CGRect) -> MobileMenuTextElement {
         let element = MobileMenuTextElement(accessibilityContainer: self)
         element.onFocus = { [weak self] in self?.revealContent(frame) }

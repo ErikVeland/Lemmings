@@ -554,7 +554,7 @@ final class AnonymousTelemetryTests: XCTestCase {
         window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
         GameScreen.shared.gameWindow = window
         defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = nil; window.close() }
-        dashboard.show(owner: window)
+        dashboard.show(owner: window, ownerTools: true)
         let page = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
         func views(in root: NSView) -> [NSView] { [root] + root.subviews.flatMap(views) }
         dashboard.loadShared(token: "test-owner-token")
@@ -609,7 +609,8 @@ final class AnonymousTelemetryTests: XCTestCase {
             ("older-service", true, [:], "N/A"),
         ]
         for (state, shared, counts, value) in states {
-            let page = MobileInformationArt.insights(counts: counts, shared: shared, days: 7, sharingAvailable: true)
+            let page = MobileInformationArt.insights(counts: counts, shared: shared, days: 7, sharingAvailable: true,
+                                                     ownerTools: true)
             XCTAssertEqual(page.rows.first?.title, "Opted-in installs (all-time): " + value)
             XCTAssertFalse(try XCTUnwrap(page.rows.first).enabled)
             for (device, size) in [("phone", CGSize(width: 390, height: 844)),
@@ -637,6 +638,18 @@ final class AnonymousTelemetryTests: XCTestCase {
         }
     }
 
+    @MainActor func testMobilePlayerDashboardHidesOwnerTools() {
+        let page = MobileInformationArt.insights(counts: ["installs": 12345, "starts": 3], shared: false, days: 30,
+                                                 sharingAvailable: true)
+        let ids = (page.rows + page.footer).map(\.id)
+        for owner in ["count.installs", "insightsShared", "insightsDays", "insightsLocal"] {
+            XCTAssertFalse(ids.contains(owner), "The player page shows the owner item \(owner)")
+        }
+        XCTAssertTrue(ids.contains("count.starts"))
+        XCTAssertTrue(ids.contains("insightsClear"))
+        XCTAssertEqual(page.footer.last?.id, "settingsGroup.privacy")
+    }
+
     @MainActor func testConfiguredDashboardShowsSharedControls() throws {
         _ = NSApplication.shared
         let suite = UUID().uuidString
@@ -644,19 +657,38 @@ final class AnonymousTelemetryTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suite) }
         let telemetry = AnonymousTelemetry(defaults: defaults,
             endpoint: URL(string: "https://counts.example.org")!, transport: FakeTelemetryTransport())
-        let dashboard = TelemetryDashboard(telemetry: telemetry)
+        XCTAssertFalse(TelemetryDashboard.ownerToolsRevealed(telemetry: telemetry, modifiers: []))
+        XCTAssertTrue(TelemetryDashboard.ownerToolsRevealed(telemetry: telemetry, modifiers: [.option]))
+        defaults.set(["endpoint": "https://counts.example.org", "token": "saved-owner-token"],
+                     forKey: "AnonymousTelemetryDashboardTokenV1")
+        XCTAssertTrue(TelemetryDashboard.ownerToolsRevealed(telemetry: telemetry, modifiers: []))
+        defaults.removeObject(forKey: "AnonymousTelemetryDashboardTokenV1")
+        let unconfigured = AnonymousTelemetry(defaults: defaults, endpoint: URL(string: "http://invalid.example"),
+                                              transport: FakeTelemetryTransport())
+        XCTAssertFalse(TelemetryDashboard.ownerToolsRevealed(telemetry: unconfigured, modifiers: [.option]))
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1120, height: 720),
                               styleMask: [.titled], backing: .buffered, defer: false)
         window.contentView = NSView(frame: NSRect(x: 0, y: 0, width: 1120, height: 720))
         GameScreen.shared.gameWindow = window
         defer { GameScreen.shared.dismissAll(); GameScreen.shared.gameWindow = nil }
-        dashboard.show(owner: window)
-        let page = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
-        window.contentView?.layoutSubtreeIfNeeded()
-        page.layoutSubtreeIfNeeded()
         func buttons(in view: NSView) -> [NSButton] {
             (view as? NSButton).map { [$0] } ?? view.subviews.flatMap(buttons)
         }
+        // A player opening Play Insights on a configured build sees this Mac's counts only.
+        TelemetryDashboard(telemetry: telemetry).show(owner: window, ownerTools: false)
+        let playerPage = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
+        playerPage.layoutSubtreeIfNeeded()
+        let playerTitles = buttons(in: playerPage).map(\.title)
+        for owner in ["Load shared", "This Mac", "Last 30 days"] {
+            XCTAssertFalse(playerTitles.contains(owner), "The player page shows the owner control \(owner)")
+        }
+        XCTAssertTrue(playerTitles.contains("Back"))
+        GameScreen.shared.dismissAll()
+        let dashboard = TelemetryDashboard(telemetry: telemetry)
+        dashboard.show(owner: window, ownerTools: true)
+        let page = try XCTUnwrap(GameScreen.shared.controllerPage(in: window) as? GameMenuPage)
+        window.contentView?.layoutSubtreeIfNeeded()
+        page.layoutSubtreeIfNeeded()
         let controls = buttons(in: page)
         XCTAssertTrue(controls.contains { $0.title == "Load shared" && $0.isEnabled })
         XCTAssertTrue(controls.contains { $0.title == "This Mac" })
