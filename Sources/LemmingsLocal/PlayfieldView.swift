@@ -2,6 +2,7 @@
 import AppKit
 import LemmingsAppCore
 import LemmingsGameArt
+import LemmingsMobileCore
 import NxlvKit
 
 /// Maps between level pixels and view points for a scrolled, zoomed playfield.
@@ -214,7 +215,10 @@ struct ReticleFeedback {
       let text = L10n.text("Game playfield") + (turnInitials.map { ". " + L10n.text("\($0)'s turn") } ?? "")
         + (precisionStatus.accessibility.isEmpty ? "" : ". " + precisionStatus.accessibility)
         + (deathCountdownAccessibilityText.isEmpty ? "" : ". " + deathCountdownAccessibilityText)
-      return [accessibleElements.element(id: "status", owner: owner, label: text, frame: transform(bounds))]
+      let rewind = rewindCueIsVisible ? RewindCue(currentTick: rewindCurrentTick, originTick: rewindOriginTick,
+        ticksPerSecond: Double(session?.ticksPerSecond ?? ClassicDOSRules.ticksPerSecond)) : nil
+      let status = text + (rewind.map { ". " + $0.accessibilityLabel } ?? "")
+      return [accessibleElements.element(id: "status", owner: owner, label: status, frame: transform(bounds))]
     }
     var items: [Any] = []
     func visibleFrame(_ frame: CGRect) -> CGRect { usesHomeLayout ? frame.intersection(homeViewport) : frame }
@@ -2086,9 +2090,12 @@ struct ReticleFeedback {
     return image
   }
 
+  private var rewindCueIsVisible: Bool {
+    rewindCueStartedAt != nil || ProcessInfo.processInfo.systemUptime < rewindCueUntil
+  }
+
   private func drawRewindCue() -> CGFloat {
-    let now = ProcessInfo.processInfo.systemUptime
-    guard rewindCueStartedAt != nil || now < rewindCueUntil else { return 0 }
+    guard rewindCueIsVisible else { return 0 }
     let badgeScale: CGFloat = bounds.width >= 960 ? 2 : 1
     let badgeOffset = precisionStatus.isEmpty ? 0 : precisionStatus.size(scale: badgeScale).height + 4
     let y = 12 + badgeOffset

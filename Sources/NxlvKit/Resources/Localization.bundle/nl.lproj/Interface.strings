@@ -1131,6 +1131,7 @@
 "Highland" = "Hoogland";
 "Hints" = "Hints";
 "Hold a lemming, then slide left or right to browse the group." = "Houd een lemming vast en veeg naar links of rechts om door de groep te bladeren.";
+"Hold full stop scrubs forward. Escape cancels." = "Houd punt ingedrukt om vooruit te spoelen. Escape annuleert.";
 "Hold to edit player" = "Houd ingedrukt om de speler te bewerken";
 "Hold: fixed fast-forward" = "Vasthouden: vaste doorspoelsnelheid";
 "Hold: ramp up; release: previous speed" = "Vasthouden: geleidelijk versnellen; loslaten: vorige snelheid";
@@ -2362,13 +2363,13 @@
 "Rewards earned ({0}) >" = "Verdiende beloningen ({0}) >";
 "Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "Beloningen verdiend door {0}. {1} {2}. Pagina {3} van {4}. Escape keert terug naar het resultaat.";
 "Rewind" = "Terugspoelen";
-"Hold full stop scrubs forward. Escape cancels." = "Houd punt ingedrukt om vooruit te spoelen. Escape annuleert.";
 "Rewind and busy scenes" = "Terugspoelen en drukke scènes";
 "Rewind one second." = "Eén seconde terugspoelen.";
 "Rewind one tick" = "Eén tick terugspoelen";
 "Rewind the current run" = "Huidige poging terugspoelen";
 "Rewinds" = "Terugspoelingen";
-"Rewound {0} seconds, speed {1} of 3" = "{0} seconden teruggespoeld, snelheid {1} van 3";
+"Rewound {0}" = "{0} teruggespoeld";
+"Rewound {0}, speed {1} of 3" = "{0} teruggespoeld, snelheid {1} van 3";
 "Rhythm on pause" = "Ritme tijdens pauze";
 "Ridiculous speed (25×)" = "Belachelijke snelheid (25×)";
 "Right" = "Rechts";

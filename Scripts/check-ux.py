@@ -28,6 +28,7 @@ CHECKS = {
         "MobilePortraitHUDTests/delayedPauseAndResumeNeverOpenTheMenu",
         "MobilePortraitHUDTests/choosingSpeedCancelsHeldInputAndHonoursTheMode",
         "RewindCueTests/cueUsesGameSecondsForEachEngineRate",
+        "RewindAccessibilityTests/testPlayfieldReportsOneStepAtItsExistingStatusTarget",
         "RewindCueTests/rapidPressesRaiseTheShownSpeed",
         "NeoLemmixMobileDataTests/fanPanelPreservesTargetsAcrossSpeedAndTimeChanges",
     ],
