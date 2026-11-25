@@ -835,7 +835,7 @@ import NxlvKit
         let resume = pauseForHelp()
         let alert = NSAlert()
         alert.messageText = L10n.text("Keyboard commands")
-        alert.informativeText = L10n.text("Find a command by key, action or category. Your game pauses while this guide is open.")
+        alert.informativeText = L10n.text("Find a command by key, action or category.")
         let guide = KeyboardCommandsView(commands: commandRows, modern: modern())
         alert.accessoryView = guide
         alert.addButton(withTitle: L10n.text("Close")).keyEquivalent = "\u{1b}"
