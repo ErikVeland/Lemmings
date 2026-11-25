@@ -41,18 +41,13 @@ import NxlvKit
     }
     var resultIdentityHeight: CGFloat { achievementTextHeight(resultIdentity, width: 960) }
     var resultSummaryOffset: CGFloat { max(0, resultIdentityHeight - 36) }
-    var resultCardsY: CGFloat {
-        247 + resultSummaryOffset + (resultStatus != nil ? 38 : 0)
-    }
     var resultActionsY: CGFloat {
-        resultCardsY + 220
+        360 + resultSummaryOffset + (resultStatus == nil ? 0 : 38)
     }
-    /// The level leaderboard sits below the result actions so the outcome and next step stay first.
-    var resultLeaderboardY: CGFloat { resultActionsY + 66 }
     static let resultLeaderboardHeight: CGFloat = 168
     var pageContentHeight: CGFloat {
         switch mode {
-        case .result: return resultLeaderboardY + Self.resultLeaderboardHeight + 38
+        case .result: return resultActionsY + 100
         case .earnedRewards: return earnedRewardsFooterY + 86
         case .achievement: return achievementFooterY + 86
         default: return 720
@@ -68,7 +63,10 @@ import NxlvKit
         if let onReplay {
             review.append(ResultAction(title: L10n.text("Replay")) { onReplay(false) })
         }
-        review.append(ResultAction(title: L10n.text("Records")) { [weak self] in self?.page(.records) })
+        if !savedEarnedRewards.isEmpty {
+            review.append(ResultAction(title: L10n.text("Rewards earned (\(savedEarnedRewards.count)) >")) { [weak self] in self?.showEarnedRewards() })
+        }
+        review.append(ResultAction(title: L10n.text("Details")) { [weak self] in self?.page(.resultReview) })
         if !cleared, onLater != nil {
             let later = ResultAction(title: L10n.text("Try later")) { [weak self] in self?.onLater?() }
             if nextSessionPlayer != nil { review.append(retry) }
@@ -78,11 +76,7 @@ import NxlvKit
             resultActionRow([back, hints, offersSkip ? skip : later, primary], y: y)
             return
         }
-        resultActionRow(review + [
-            ResultAction(title: L10n.text("Details")) { [weak self] in self?.page(.details) },
-            ResultAction(title: L10n.text("Hot Seat")) { [weak self] in self?.openSession() },
-            ResultAction(title: L10n.text("Worldwide")) { [weak self] in self?.openWorldwideBoard() }
-        ], y: y - 52, links: true)
+        resultActionRow(review, y: y - 52, links: true)
         if let next = nextSessionPlayer {
             let canHandOver = ArcadeStore.shared.profilesAreWritable && ArcadeStore.shared.storageError == nil
             let nextRetry = ResultAction(title: L10n.text("Retry as \(next.initials)"), primary: !cleared, enabled: canHandOver) { [weak self] in self?.retryAsNextProfile() }

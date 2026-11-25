@@ -13,10 +13,12 @@ public enum MobileSequelMenuArt {
                 (order.map { "\($0 + 1)  " } ?? "") + SkillVocabulary.title(skill.name),
                 enabled: order != nil || selected.count < 8, selected: order != nil)
         }
-        return .init(title: L10n.text("Practice"), subtitle: subtitle, rows: maps + skills,
-            details: [L10n.text("\(selected.count) of 8 selected")],
+        var page = GameFrontEnd.Page(title: L10n.text("Practice"), subtitle: subtitle, rows: maps + skills,
             footer: [.init("practiceBack", L10n.text("Back")),
                      .init("practicePlay", L10n.text("Play"), enabled: selected.count == 8, primary: true)])
+        if let first = maps.first { page.rowHeadings[first.id] = L10n.text("Choose level") }
+        if let first = skills.first { page.rowHeadings[first.id] = L10n.text("Skills") + "  \(selected.count)/8" }
+        return page
     }
     public static func movies(engine: String, failure: String? = nil) -> GameFrontEnd.Page {
         .init(title: L10n.text("Original movies"), subtitle: failure ?? "",

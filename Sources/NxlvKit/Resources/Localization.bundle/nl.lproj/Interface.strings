@@ -5,7 +5,6 @@
 "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker." = "\n\nDeze wijzigingen beïnvloeden de afstand in de groep. Timing telt ook. Pauzeer bij elke markering om de werker en richting te controleren.";
 "\nHold F  Ramp to 10×; release to keep\nHold Shift  Temporary boost\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×" = "\nHoud F ingedrukt  Geleidelijk naar 10×; laat los om vast te houden\nHoud Shift ingedrukt  Tijdelijke snelheidsboost\nShift+[ / ]  Snelheid verlagen / verhogen\nShift+\\     Meteen terug naar 1×";
 "\n{0}  {1}/{2}" = "\n{0}  {1}/{2}";
-"   •   Later {0}" = "   •   Later {0}";
 "  Turn {0}" = "  Draai {0}";
 " ({0} cycles matching skills)" = " ({0} cycli met overeenkomende vaardigheden)";
 " - Bonus skill used" = " - Bonus skill used";
@@ -32,7 +31,6 @@
 "12-character code" = "Code van 12 tekens";
 "2× Superzoom at cursor, 0.5× time" = "2× superzoom bij cursor, tijd op 0,5×";
 "2× Zoom at cursor" = "2× zoom bij cursor";
-"3-STAR" = "DRIE STERREN";
 "5 levels" = "5 levels";
 "< Level" = "< Level";
 "< Previous level" = "< Vorig level";
@@ -391,7 +389,6 @@
 "CL" = "CL";
 "CLASSIC" = "CLASSIC";
 "CLASSIC LEMMINGS" = "CLASSIC LEMMINGS";
-"CLEARED" = "VOLTOOID";
 "CLICK OR PRESS ENTER FOR THE GAME LIBRARY" = "KLIK OF DRUK OP ENTER VOOR DE SPELBIBLIOTHEEK";
 "CLICK OR PRESS ENTER TO CONTINUE" = "KLIK OF DRUK OP ENTER OM DOOR TE GAAN";
 "CLIMB" = "KLIMMEN";
@@ -485,6 +482,7 @@
 "Choose a rating" = "Kies een categorie";
 "Choose a second player" = "Kies een tweede speler";
 "Choose a soundtrack or Adaptive DJ Mix." = "Kies een soundtrack of Adaptieve dj-mix.";
+"Choose a speed directly. Rewind counts back in game seconds." = "Kies direct een snelheid. Terugspoelen telt terug in spelseconden.";
 "Choose a technique" = "Kies een techniek";
 "Choose an action, then click a lemming. Walker turns or releases a blocker." = "Kies een actie en klik op een lemming. De loper keert deze om of bevrijdt een blokkeerder.";
 "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera." = "Kies een actie. Voor stenen en schoppen moet je een richting kiezen. Met de pijltjestoetsen beweeg je de camera.";
@@ -866,7 +864,6 @@
 "Even when positions change." = "Even when positions change.";
 "Every 10 distinct levels · Rare" = "Every 10 distinct levels · Rare";
 "Every 3 distinct levels" = "Elke 3 verschillende levels";
-"Every achievement earned. What a rescue!" = "Alle prestasjoner oppnådd. For en redning!";
 "Every level" = "Alle niveaus";
 "Every rating is finished." = "Alle kategorier er fullført.";
 "Everyone fitted underneath." = "Everyone fitted underneath.";
@@ -1138,6 +1135,8 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
+"Home and Play" = "Start en Spelen";
+"Home offers one next step. Play holds every game and collection." = "Start biedt één volgende stap. Spelen bevat alle spellen en collecties.";
 "Home {0}/{1}" = "Thuis {0}/{1}";
 "Hopper" = "Hopper";
 "Host" = "Host";
@@ -2044,7 +2043,6 @@
 "Play as {0}" = "Spelen als {0}";
 "Play death sound" = "Doodsgeluid afspelen";
 "Play insights" = "Spelinzichten";
-"Play levels in order to work towards the next trophy." = "Speel niveaus op volgorde om naar de volgende trofee toe te werken.";
 "Play main theme" = "Hoofdthema afspelen";
 "Play or pause. Space or P." = "Afspelen of pauzeren. Spatie of P.";
 "Play replay >" = "Replay afspelen >";
@@ -2440,7 +2438,6 @@
 "STACEY JAMIESON" = "STACEY JAMIESON";
 "STACK" = "STAPELEN";
 "STACKER" = "STAPELAAR";
-"STARS" = "STERREN";
 "START" = "STARTEN";
 "STEP" = "STAP";
 "STEP BACK" = "STAP TERUG";
@@ -2650,6 +2647,7 @@
 "Speed +" = "Snelheid +";
 "Speed -" = "Snelheid -";
 "Speed 1x" = "Snelheid 1×";
+"Speed and rewind" = "Snelheid en terugspoelen";
 "Speed {0}X" = "Snelheid {0}×";
 "Speed {0}x" = "Snelheid {0}×";
 "Spend one Level Skip in the journey menu to move past a level." = "Spend one Level Skip in the journey menu to move past a level.";
@@ -3609,7 +3607,3 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0}H {1}M";
 "{0}{1} more to rescue for three stars." = "Nog {0}{1} redden voor drie sterren.";
-"Home and Play" = "Start en Spelen";
-"Home offers one next step. Play holds every game and collection." = "Start biedt één volgende stap. Spelen bevat alle spellen en collecties.";
-"Speed and rewind" = "Snelheid en terugspoelen";
-"Choose a speed directly. Rewind counts back in game seconds." = "Kies direct een snelheid. Terugspoelen telt terug in spelseconden.";

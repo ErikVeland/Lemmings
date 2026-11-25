@@ -5,7 +5,6 @@
 "\n\nThese changes affect crowd spacing. Their timing matters too. Pause to check the worker and direction at each marker." = "\n\nஇந்த மாற்றங்கள் கூட்ட இடைவெளியை மாற்றும். மாற்றும் நேரமும் முக்கியம். ஒவ்வொரு குறியிடத்திலும் இடைநிறுத்தி பணியாளரையும் திசையையும் சரிபார்க்கவும்.";
 "\nHold F  Ramp to 10×; release to keep\nHold Shift  Temporary boost\nShift+[ / ]  Decrease / increase speed\nShift+\\     Immediately return to 1×" = "\nF அழுத்திப் பிடி  10× வரை உயர்த்து; விட்டால் வேகம் நீடிக்கும்\nShift அழுத்திப் பிடி  தற்காலிக வேக உயர்வு\nShift+[ / ]  வேகத்தைக் குறை / அதிகரி\nShift+\\     உடனே 1× வேகத்திற்குத் திரும்பு";
 "\n{0}  {1}/{2}" = "\n{0} {1}/{2}";
-"   •   Later {0}" = "   • பின்னர் {0}";
 "  Turn {0}" = "  முறை {0}";
 " ({0} cycles matching skills)" = " (பொருந்தும் திறன்களை {0} மாற்றித் தேர்ந்தெடுக்கும்)";
 " - Bonus skill used" = " - Bonus skill used";
@@ -32,7 +31,6 @@
 "12-character code" = "12 எழுத்துக் குறியீடு";
 "2× Superzoom at cursor, 0.5× time" = "இடச்சுட்டியில் 2× மிகைப் பெரிதாக்கம், 0.5× நேரம்";
 "2× Zoom at cursor" = "இடச்சுட்டியில் 2× பெரிதாக்கம்";
-"3-STAR" = "மூன்று நட்சத்திரங்கள்";
 "5 levels" = "5 levels";
 "< Level" = "< நிலை";
 "< Previous level" = "< முந்தைய நிலை";
@@ -391,7 +389,6 @@
 "CL" = "CL";
 "CLASSIC" = "CLASSIC";
 "CLASSIC LEMMINGS" = "CLASSIC LEMMINGS";
-"CLEARED" = "வெற்றி பெற்றது";
 "CLICK OR PRESS ENTER FOR THE GAME LIBRARY" = "விளையாட்டு நூலகத்திற்குச் செல்லச் சொடுக்கவும் அல்லது ENTER அழுத்தவும்";
 "CLICK OR PRESS ENTER TO CONTINUE" = "தொடரச் சொடுக்கவும் அல்லது ENTER அழுத்தவும்";
 "CLIMB" = "ஏறு";
@@ -485,6 +482,7 @@
 "Choose a rating" = "மதிப்பீட்டைத் தேர்ந்தெடு";
 "Choose a second player" = "இரண்டாவது வீரரைத் தேர்ந்தெடு";
 "Choose a soundtrack or Adaptive DJ Mix." = "ஒரு ஒலிப்பதிவு அல்லது Adaptive DJ Mix ஐத் தேர்ந்தெடுக்கவும்.";
+"Choose a speed directly. Rewind counts back in game seconds." = "வேகத்தை நேரடியாகத் தேர்ந்தெடுக்கவும். பின்னோக்கு விளையாட்டு விநாடிகளில் எண்ணும்.";
 "Choose a technique" = "நுட்பத்தைத் தேர்ந்தெடு";
 "Choose an action, then click a lemming. Walker turns or releases a blocker." = "ஒரு செயலைத் தேர்ந்தெடுத்து லெம்மிங்கைச் சொடுக்கவும். நடப்பவர் செயல் லெம்மிங்கைத் திருப்பும் அல்லது தடுப்பவரை விடுவிக்கும்.";
 "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera." = "ஒரு செயலைத் தேர்ந்தெடுங்கள். செங்கல் மற்றும் கத்திகள் ஒரு திசையைக் கேட்கின்றன. அம்புகள் கேமராவை நகர்த்துகின்றன.";
@@ -866,7 +864,6 @@
 "Even when positions change." = "Even when positions change.";
 "Every 10 distinct levels · Rare" = "Every 10 distinct levels · Rare";
 "Every 3 distinct levels" = "ஒவ்வொரு 3 தனித்தனி நிலைகளுக்கும்";
-"Every achievement earned. What a rescue!" = "ஒவ்வொரு சாதனையும் பெற்றது. என்ன ஒரு மீட்பு!";
 "Every level" = "ஒவ்வொரு நிலையும்";
 "Every rating is finished." = "ஒவ்வொரு மதிப்பீடு முடிந்துவிட்டது.";
 "Everyone fitted underneath." = "Everyone fitted underneath.";
@@ -1138,6 +1135,8 @@
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
+"Home and Play" = "முகப்பு மற்றும் விளையாடு";
+"Home offers one next step. Play holds every game and collection." = "முகப்பு ஒரே அடுத்த படியைக் காட்டும். விளையாடு எல்லா விளையாட்டுகளையும் தொகுப்புகளையும் கொண்டுள்ளது.";
 "Home {0}/{1}" = "வீடு {0}/{1}";
 "Hopper" = "துள்ளுபவர்";
 "Host" = "புரவலன்";
@@ -2044,7 +2043,6 @@
 "Play as {0}" = "{0} என விளையாடு";
 "Play death sound" = "இறப்பு ஒலியை இயக்கு";
 "Play insights" = "விளையாட்டுப் புள்ளிவிவரங்கள்";
-"Play levels in order to work towards the next trophy." = "அடுத்த கோப்பையை நோக்கி வேலை செய்ய, நிலைகளை விளையாடுங்கள்.";
 "Play main theme" = "முதன்மை இசையை இயக்கு";
 "Play or pause. Space or P." = "விளையாட அல்லது இடைநிறுத்த. Space அல்லது P.";
 "Play replay >" = "மறு இயக்கத்தை இயக்கு >";
@@ -2440,7 +2438,6 @@
 "STACEY JAMIESON" = "STACEY JAMIESON";
 "STACK" = "ஸ்டாக்";
 "STACKER" = "அடுக்குபவர்";
-"STARS" = "நட்சத்திரங்கள்";
 "START" = "தொடங்கு";
 "STEP" = "படி";
 "STEP BACK" = "ஒரு படி பின்னோக்கு";
@@ -2650,6 +2647,7 @@
 "Speed +" = "வேகம் +";
 "Speed -" = "வேகம் -";
 "Speed 1x" = "வேகம் 1x";
+"Speed and rewind" = "வேகம் மற்றும் பின்னோக்கு";
 "Speed {0}X" = "வேகம் {0}X";
 "Speed {0}x" = "வேகம் {0}x";
 "Spend one Level Skip in the journey menu to move past a level." = "Spend one Level Skip in the journey menu to move past a level.";
@@ -3609,7 +3607,3 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0}H {1}M";
 "{0}{1} more to rescue for three stars." = "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்.";
-"Home and Play" = "முகப்பு மற்றும் விளையாடு";
-"Home offers one next step. Play holds every game and collection." = "முகப்பு ஒரே அடுத்த படியைக் காட்டும். விளையாடு எல்லா விளையாட்டுகளையும் தொகுப்புகளையும் கொண்டுள்ளது.";
-"Speed and rewind" = "வேகம் மற்றும் பின்னோக்கு";
-"Choose a speed directly. Rewind counts back in game seconds." = "வேகத்தை நேரடியாகத் தேர்ந்தெடுக்கவும். பின்னோக்கு விளையாட்டு விநாடிகளில் எண்ணும்.";

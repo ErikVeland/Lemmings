@@ -68,7 +68,7 @@ typealias MobileGameControllerBase = UIViewController
     /// This level's worldwide leaderboard: the metric title and its leader and top rows.
     var onLevelLeaderboard: (() -> (metric: String, lines: [String])?)?
     var onLevelLeaderboardMetric: (() -> Void)?
-    private var leaderboardLineCount = 0
+    var onOpenResultDetails: (() -> Void)?
     private var celebrationTask: Task<Void, Never>?
     var onRecordCompletion: ((MobileGameSnapshot) -> (details: [String], error: String?))?
     var onHints: (() -> Void)?
@@ -78,7 +78,6 @@ typealias MobileGameControllerBase = UIViewController
     private var completionTitle = ""
     private var completionDetails: [String] = []
     private var recordSaveError: String?
-    private var resultReceiptTitles: [String] { onResultRewards?().filter(\.isConsumable).map(\.title) ?? [] }
     private var achievementTask: Task<Void, Never>?
     private var achievementIndex = 0
     private var resultAchievements: [(title: String, detail: String)] {
@@ -113,21 +112,33 @@ typealias MobileGameControllerBase = UIViewController
         showCustomOverlay(title: award.title, details: [award.detail], reading: true, actions: actions)
     }
 
-    /// Replace the leaderboard lines and metric switch on the result page when the board loads or changes.
     func refreshLevelLeaderboard() {
-        guard !overlay.isHidden, overlayCanvas.page.result else { return }
-        applyLevelLeaderboard(); layoutOverlay()
+        guard !overlay.isHidden, overlayCanvas.page.rows.contains(where: { $0.id == "levelBoardMetric" }),
+              let board = onLevelLeaderboard?() else { return }
+        overlayCanvas.page = MobileCareerArt.resultDetails(footer: overlayCanvas.page.footer, board: board)
+        layoutOverlay()
     }
-    private func applyLevelLeaderboard() {
-        var page = overlayCanvas.page
-        page.details = Array(page.details.dropLast(leaderboardLineCount))
-        page.rows.removeAll { $0.id == "levelBoardMetric" }
-        if let board = onLevelLeaderboard?() {
-            page.details += board.lines; leaderboardLineCount = board.lines.count
-            page.rows.append(.init("levelBoardMetric", L10n.text("Level leaderboard: \(board.metric)")))
-        } else { leaderboardLineCount = 0 }
-        overlayCanvas.page = page
+
+    private func showResultDetails() {
+        var actions: [(String, () -> Void)] = [(L10n.text("Back"), { [weak self] in self?.returnToResult() })]
+        if let record = onResultRecord?() {
+            actions.append((L10n.text("Records"), { [weak self] in
+                self?.showCustomOverlay(title: record.title, details: [record.subtitle] + record.details,
+                    headings: Set(record.detailHeadings.map { $0 + 1 }),
+                    actions: [(L10n.text("Back"), { [weak self] in self?.showResultDetails() })])
+            }))
+        }
+        if let data = try? session.replayDocument() {
+            actions.append((L10n.text("REVIEW"), { [weak self] in self?.showReplay(document: data) }))
+            actions.append((L10n.text("SHARE MOVIE"), { [weak self] in self?.shareReplayMovie(document: data) }))
+        }
+        onOpenResultDetails?()
+        showOverlay(title: L10n.text("Details"), actions: actions)
+        let footer = actions.enumerated().map { GameFrontEnd.Action(String($0.offset), $0.element.0) }
+        overlayCanvas.page = MobileCareerArt.resultDetails(footer: footer, board: onLevelLeaderboard?())
+        layoutOverlay()
     }
+
     private func updateResultAchievements() {
         achievementTask?.cancel(); achievementTask = nil
         guard !showsSplitResult else { return }
@@ -1861,18 +1872,7 @@ typealias MobileGameControllerBase = UIViewController
         if !snapshot.didWin, onSkipLevel != nil {
             actions.append((levelSkipTitle, { [weak self] in self?.performLevelSkip() }))
         }
-        if let page = onResultRecord?() {
-            actions.append((L10n.text("Records"), { [weak self] in
-                guard let self else { return }
-                showCustomOverlay(title: page.title, details: [page.subtitle] + page.details,
-                    headings: Set(page.detailHeadings.map { $0 + 1 }),
-                    actions: [(L10n.text("Back"), { [weak self] in self?.returnToResult() })])
-            }))
-        }
-        if let data = try? session.replayDocument() {
-            actions.append((L10n.text("REVIEW"), { [weak self] in self?.showReplay(document: data) }))
-            actions.append((L10n.text("SHARE MOVIE"), { [weak self] in self?.shareReplayMovie(document: data) }))
-        }
+        actions.append((L10n.text("Details"), { [weak self] in self?.showResultDetails() }))
         let following = turn?.choices(snapshot.didWin).first(where: { $0.choice.primary })?.choice.player
         completionTitle = result
         completionActions = actions
@@ -2959,6 +2959,7 @@ typealias MobileGameControllerBase = UIViewController
         overlayCanvas.resultStars = results ? onResultAwards?().stars : nil
         overlayCanvas.onAction = { [weak self] id in
             if id == "resultAward" { self?.showResultAchievement(); return }
+            if id == "levelBoardMetric" { self?.onLevelLeaderboardMetric?(); return }
             guard let self, let index = Int(id), self.overlayActions.indices.contains(index) else { return }
             self.overlayActions[index]()
         }
@@ -2978,7 +2979,6 @@ typealias MobileGameControllerBase = UIViewController
             let time = "\(Int(elapsed) / 60):\(String(format: "%05.2f", elapsed.truncatingRemainder(dividingBy: 60)))"
             let recordTime = completionDetails.first { $0.hasPrefix(L10n.text("New time record")) }
             details = [L10n.text("Saved \(snapshot.saved)/\(snapshot.total)   Goal \(snapshot.required)"), recordTime ?? L10n.text("Time ") + time]
-                + resultReceiptTitles
                 + completionDetails.filter { !awards.contains($0) && !$0.hasPrefix(L10n.text("New time record")) }
         } else { details = [] }
         let heading = completed ? (snapshot.didWin ? L10n.text("Level complete") : L10n.text("Try again")) : (ready ? (turn?.ownerName ?? title) : title)
@@ -2994,8 +2994,6 @@ typealias MobileGameControllerBase = UIViewController
         if completed {
             overlayCanvas.page.detailHeadings = [0]
             updateResultAchievements()
-            leaderboardLineCount = 0
-            applyLevelLeaderboard()
         }
         let isPause = pauseOverview && !ready && !completed
         if isPause {
@@ -3114,21 +3112,12 @@ typealias MobileGameControllerBase = UIViewController
     private func clearSplitResult() {
         if showsSplitResult, overlayCanvas.page.result {
             overlayCanvas.resultStars = onResultAwards?().stars
-            setResultReceiptsVisible(true)
         }
         achievementScroll.isHidden = true
         showsSplitResult = false
         overlayCanvas.splitResult = false
         hud.isHidden = false
         view.accessibilityElements = nil
-    }
-
-    private func setResultReceiptsVisible(_ visible: Bool) {
-        let receipts = resultReceiptTitles
-        guard overlayCanvas.page.result, !receipts.isEmpty else { return }
-        let titles = Set(receipts)
-        overlayCanvas.page.details.removeAll { titles.contains($0) }
-        if visible { overlayCanvas.page.details.insert(contentsOf: receipts, at: min(3, overlayCanvas.page.details.count)) }
     }
 
     private func layoutSplitResult(navigationBottom: CGFloat) -> CGRect? {
@@ -3147,7 +3136,6 @@ typealias MobileGameControllerBase = UIViewController
         }
         let firstPresentation = !showsSplitResult
         showsSplitResult = true
-        setResultReceiptsVisible(false)
         overlayCanvas.splitResult = true
         overlayCanvas.resultStars = nil
         achievementTask?.cancel(); achievementTask = nil

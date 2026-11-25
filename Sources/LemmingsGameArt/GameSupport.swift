@@ -28,7 +28,7 @@ public enum GameSupport {
         guard let filter = CIFilter(name: "CIQRCodeGenerator", parameters: [
             "inputMessage": Data(coffeeURL.absoluteString.utf8), "inputCorrectionLevel": "M"]),
               let output = filter.outputImage,
-              let image = CIContext(options: [.useSoftwareRenderer: true]).createCGImage(output, from: output.extent),
+              let image = output.cgImage ?? CIContext(options: [.useSoftwareRenderer: true]).createCGImage(output, from: output.extent),
               let context = CGContext(data: nil, width: image.width + 8, height: image.height + 8,
                 bitsPerComponent: 8, bytesPerRow: (image.width + 8) * 4, space: CGColorSpaceCreateDeviceRGB(),
                 bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }

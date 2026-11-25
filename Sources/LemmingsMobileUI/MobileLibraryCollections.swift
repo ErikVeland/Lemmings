@@ -29,7 +29,7 @@ extension MobileLibraryViewController {
         var rows = playlists.playlists.map { list in
             GameFrontEnd.Action("list." + list.id.uuidString, list.name + "  \(list.entries.count)")
         }
-        rows.append(.init("listNew", L10n.text("New playlist")))
+        rows.append(.init("listNew", L10n.text("New playlist"), primary: rows.isEmpty))
         return .init(title: L10n.text("Playlists"), subtitle: subtitle, rows: rows, footer: [.init("collections", L10n.text("Back"))])
     }
 
@@ -40,10 +40,12 @@ extension MobileLibraryViewController {
                          rows: [.init("nameField", L10n.text("Name: \(draft.uppercased())_"), selected: true)],
                          footer: [.init("nameCancel", L10n.text("Cancel")), .init("nameDone", L10n.text("Done"), primary: true)])
         }
-        let shown = MobileListLibrary(entries: list.entries, name: list.name, catalogue: catalogue!)
         // Entries whose pack or level is gone stay listed, so the player can remove them.
         var titles = [Int: String]()
-        for (offset, entryIndex) in shown.entryIndices.enumerated() { titles[entryIndex] = shown.levels[offset].title }
+        if let catalogue {
+            let shown = MobileListLibrary(entries: list.entries, name: list.name, catalogue: catalogue)
+            for (offset, index) in shown.entryIndices.enumerated() { titles[index] = shown.levels[offset].title }
+        }
         let tribes = Lemmings2ShortPlayMobileLibrary.matches(list.entries)
         if tribes, store?.resolvedDataDirectory(for: .lemmings2) != nil {
             for (index, entry) in list.entries.enumerated() { titles[index] = entry.title ?? entry.level }
@@ -52,21 +54,23 @@ extension MobileLibraryViewController {
             let title = titles[index].map { "\(index + 1)  " + $0 } ?? L10n.text("\(index + 1)  Unavailable")
             return .init("entry.\(index)", title, enabled: true, selected: playlistSelection == index)
         }
-        let selected = playlistSelection
-        let hasSelection = selected.map { list.entries.indices.contains($0) } ?? false
-        let playable = tribes ? store?.resolvedDataDirectory(for: .lemmings2) != nil : !shown.levels.isEmpty && shown.levels.count == list.entries.count
-        return .init(
-            title: list.name, subtitle: subtitle.isEmpty ? L10n.plural("count.levels", count: list.entries.count, one: "%ld level", other: "%ld levels") : subtitle, rows: rows,
-            footer: [
-                .init("listPlay", L10n.text("Play"), enabled: playable, primary: true),
-                .init("listShuffle", L10n.text("Shuffle"), enabled: playable && !tribes && list.entries.count > 1),
-                .init("entryUp", "Up", enabled: hasSelection && (selected ?? 0) > 0),
-                .init("entryDown", L10n.text("Down"), enabled: hasSelection && (selected ?? 0) + 1 < list.entries.count),
-                .init("entryRemove", L10n.text("Remove"), enabled: hasSelection),
-                .init("listRename", L10n.text("Rename")),
-                .init("listDelete", confirmingDelete ? L10n.text("Confirm delete") : L10n.text("Delete"), selected: confirmingDelete),
-                .init("playlists", L10n.text("Back")),
-            ])
+        let playable = !list.entries.isEmpty && (tribes ? store?.resolvedDataDirectory(for: .lemmings2) != nil : titles.count == list.entries.count)
+        var footer: [GameFrontEnd.Action] = [.init("listPlay", L10n.text("Play"), enabled: playable, primary: true)]
+        if !tribes && list.entries.count > 1 {
+            footer.append(.init("listShuffle", L10n.text("Shuffle"), enabled: playable))
+        }
+        if let selected = playlistSelection, list.entries.indices.contains(selected) {
+            if list.entries.count > 1 {
+                footer.append(.init("entryUp", L10n.text("Up"), enabled: selected > 0))
+                footer.append(.init("entryDown", L10n.text("Down"), enabled: selected + 1 < list.entries.count))
+            }
+            footer.append(.init("entryRemove", L10n.text("Remove")))
+        }
+        footer += [.init("listRename", L10n.text("Rename")),
+                   .init("listDelete", confirmingDelete ? L10n.text("Confirm delete") : L10n.text("Delete"), selected: confirmingDelete),
+                   .init("playlists", L10n.text("Back"))]
+        return .init(title: list.name, subtitle: subtitle.isEmpty ? L10n.plural("count.levels", count: list.entries.count, one: "%ld level", other: "%ld levels") : subtitle,
+                     rows: rows, footer: footer)
     }
 
     func addToPlaylistPage(subtitle: String) -> GameFrontEnd.Page {
