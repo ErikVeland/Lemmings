@@ -6987,7 +6987,7 @@
 /* Sources/NxlvKit/ArchivalCatalog.swift:68 */
 "Retro 16-color and 4-color paletted modes." = "Retro 16-color and 4-color paletted modes.";
 
-/* Sources/LemmingsGameArt/GameRecoveryArt.swift:15; Sources/LemmingsLocal/AboutWindow.swift:185; Sources/LemmingsLocal/ControllerDevicePresentation.swift:78; Sources/LemmingsLocal/GameplayKeyboard.swift:709; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2324; Sources/LemmingsLocal/MusicLibraryWindow.swift:126; Sources/LemmingsLocal/ResultLayout.swift:64; Sources/LemmingsMobileUI/MobileGameInput.swift:32; Sources/LemmingsTVUI/TVLibraryViewController.swift:198; Sources/LemmingsTVUI/TVLibraryViewController.swift:263; Sources/LemmingsTVUI/TVLibraryViewController.swift:282 */
+/* Sources/LemmingsGameArt/GameRecoveryArt.swift:15; Sources/LemmingsLocal/AboutWindow.swift:193; Sources/LemmingsLocal/ControllerDevicePresentation.swift:78; Sources/LemmingsLocal/GameplayKeyboard.swift:709; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2324; Sources/LemmingsLocal/MusicLibraryWindow.swift:126; Sources/LemmingsLocal/ResultLayout.swift:64; Sources/LemmingsMobileUI/MobileGameInput.swift:32; Sources/LemmingsTVUI/TVLibraryViewController.swift:198; Sources/LemmingsTVUI/TVLibraryViewController.swift:263; Sources/LemmingsTVUI/TVLibraryViewController.swift:282 */
 "Retry" = "Retry";
 
 /* Sources/LemmingsTVUI/TVLibraryViewController.swift:259 */

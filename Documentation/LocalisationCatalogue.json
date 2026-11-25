@@ -15178,7 +15178,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/GameRecoveryArt.swift:15",
-      "Sources/LemmingsLocal/AboutWindow.swift:185",
+      "Sources/LemmingsLocal/AboutWindow.swift:193",
       "Sources/LemmingsLocal/ControllerDevicePresentation.swift:78",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:709",
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2324",
