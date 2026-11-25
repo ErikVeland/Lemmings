@@ -2,6 +2,7 @@ import CoreGraphics
 import Foundation
 import LemmingsGameArt
 import LemmingsMobileCore
+import NxlvKit
 
 extension MenuAudit {
     @MainActor static func checkReplayControls(library: ClassicMobileLibrary, typography: GameMenuTypography, output: URL) throws {
@@ -12,7 +13,10 @@ extension MenuAudit {
             title: "The Crankshaft and a very long level name that must end with an ellipsis")
         let uses: [MobileReplaySkillUse] = [.init(tick: 104, name: "Builder"), .init(tick: 121, name: "Climber"), .init(tick: 146, name: "Floater")]
         var count = 0
-        for engine in ["classic-dos", "lemmings2", "lemmings3"] {
+        for (engine, rate) in [("classic-dos", session.ticksPerSecond),
+                               ("lemmings2", Lemmings2Runtime.ticksPerSecond),
+                               ("lemmings3", Lemmings3Runtime.ticksPerSecond),
+                               ("neolemmix", Double(NeoLemmixRules.ticksPerSecond))] {
             for size in [MobileSize(width: 320, height: 568), .init(width: 390, height: 844),
                          .init(width: 844, height: 390), .init(width: 1194, height: 834), .init(width: 834, height: 1194)] {
                 let layout = MobileHUDLayout.make(container: size, safeArea: .init(top: 20, bottom: 20),
@@ -49,7 +53,7 @@ extension MenuAudit {
                         typography: typography, readOnly: true, replayLevel: level).draw(in: context,
                             bounds: CGRect(x: 0, y: 0, width: size.width, height: size.height))
                     if name != "start" {
-                        MobileReplaySkillArt.draw(uses: uses, tick: 146, in: skills, typography: typography, context: context)
+                        MobileReplaySkillArt.draw(uses: uses, tick: 146, rate: rate, in: skills, typography: typography, context: context)
                     }
                     GameMinimapArt.draw(in: context, bounds: map, image: image, visible: cg(viewport.visibleLevelRect),
                         levelSize: CGSize(width: session.levelSize.width, height: session.levelSize.height), overlay: true)
@@ -59,6 +63,6 @@ extension MenuAudit {
                 }
             }
         }
-        print("PASS: \(count) replay HUD renders, single-line titles, top-right skills, map and 44-point move targets across three engine layouts. Classic scene fixture; physical UIKit gestures remain manual.")
+        print("PASS: \(count) replay HUD renders, single-line titles, skill history, map and 44-point move targets across four engine layouts. Classic scene fixture.")
     }
 }

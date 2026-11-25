@@ -7,6 +7,7 @@ import UIKit
 @MainActor final class MobileReplaySkillView: UIView {
     private var uses: [MobileReplaySkillUse] = []
     private var tick = 0
+    private var rate: Double?
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear; isOpaque = false
@@ -14,16 +15,21 @@ import UIKit
         accessibilityTraits = .staticText; isHidden = true
     }
     required init?(coder: NSCoder) { nil }
-    func update(_ uses: [MobileReplaySkillUse], tick: Int, visible: Bool) {
+    func update(_ uses: [MobileReplaySkillUse], tick: Int, rate: Double, visible: Bool) {
         isHidden = !visible || uses.isEmpty || bounds.isEmpty
-        guard self.uses != uses || self.tick != tick else { return }
-        self.uses = uses; self.tick = tick
-        accessibilityLabel = L10n.text("Skills used: \(uses.map { L10n.text("\(SkillVocabulary.title($0.name)) at tick \($0.tick)") }.joined(separator: ", "))")
-        setNeedsDisplay()
+        let historyChanged = self.uses != uses || self.rate != rate
+        let highlightChanged = self.tick != tick && uses.contains { $0.tick == self.tick || $0.tick == tick }
+        self.tick = tick
+        if historyChanged {
+            self.uses = uses; self.rate = rate
+            let history = uses.suffix(3).map { ReplayGameTime.skillUse($0.name, tick: $0.tick, rate: rate) }
+            accessibilityLabel = history.isEmpty ? nil : L10n.text("Skills used: \(history.joined(separator: ", "))")
+        }
+        if historyChanged || highlightChanged { setNeedsDisplay() }
     }
     override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        MobileReplaySkillArt.draw(uses: uses, tick: tick, in: bounds,
+        guard let rate, let context = UIGraphicsGetCurrentContext() else { return }
+        MobileReplaySkillArt.draw(uses: uses, tick: tick, rate: rate, in: bounds,
             typography: MobileGameArt.typography, context: context)
     }
 }

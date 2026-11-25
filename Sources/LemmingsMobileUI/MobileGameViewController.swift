@@ -796,11 +796,6 @@ typealias MobileGameControllerBase = UIViewController
         }
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld, attemptID: runID)
         var snapshot = session.snapshot
-        if session.isReadOnly {
-            replaySkillInfo.update(session.replaySkillUses, tick: snapshot.tick, visible: overlay.isHidden)
-            replayMoves.update(previous: session.replayMoveNavigation.target(from: snapshot.tick, direction: -1) != nil,
-                next: session.replayMoveNavigation.target(from: snapshot.tick, direction: 1) != nil)
-        }
         if rewindHeld {
             guard lifecycle.isForeground, !lifecycle.isInterrupted, overlay.isHidden else {
                 cancelSeek(); setRewindHeld(false); return
@@ -1786,12 +1781,14 @@ typealias MobileGameControllerBase = UIViewController
         #if os(tvOS)
         renderCurrentFrame(force: true)
         #endif
-        UIAccessibility.post(notification: .announcement, argument: L10n.text("Game resumed"))
+        UIAccessibility.post(notification: .announcement,
+            argument: session.isReadOnly ? L10n.text("Replay resumed") : L10n.text("Game resumed"))
         view.setNeedsLayout()
     }
 
     private func revealGameplayHUD() {
         overlay.isHidden = true
+        view.accessibilityElements = nil
         layoutSolutionSelector()
         overlay.accessibilityViewIsModal = false
         playfieldView.isUserInteractionEnabled = true
@@ -2267,6 +2264,16 @@ typealias MobileGameControllerBase = UIViewController
         os_signpost(.begin, log: Self.performanceLog, name: "HUD and music")
         defer { os_signpost(.end, log: Self.performanceLog, name: "HUD and music") }
         let snapshot = snapshot ?? session.snapshot
+        if session.isReadOnly {
+            let visible = overlay.isHidden
+            replaySkillInfo.update(visible ? session.replaySkillUses : [], tick: snapshot.tick,
+                rate: session.ticksPerSecond, visible: visible)
+            if !replayMoves.isHidden {
+                let moves = session.replayMoveNavigation
+                replayMoves.update(previous: moves.target(from: snapshot.tick, direction: -1) != nil,
+                    next: moves.target(from: snapshot.tick, direction: 1) != nil)
+            }
+        }
         MobileMusic.shared.update(snapshot, attemptID: runID, active: session.activeLemmingCount, nukeRemainingTicks: session.nukeRemainingTicks, allNukePopped: session.allNukeExplosionsPlayed, ticksPerSecond: session.ticksPerSecond)
         MobileMusic.shared.setGameplayState(paused: paused, speed: speed, rewinding: rewindHeld, attemptID: runID)
         let resolved = layout ?? lastHUDLayout ?? hudLayout(insets: view.safeAreaInsets)
@@ -2938,6 +2945,7 @@ typealias MobileGameControllerBase = UIViewController
         hoverInspection = nil
         hoverInspectionTick = nil
         replayMoves.isHidden = true
+        replaySkillInfo.isHidden = true
         cancelPendingL3ToolDirection()
         playfieldView.suspendVisualEffects()
         selectionFade.reset()
