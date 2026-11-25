@@ -6650,7 +6650,8 @@ extension AppDelegate {
     GameScreen.shared.dismissAll()
 
     let markdownFixture = AboutMarkdownView(markdown: "# Release\n\n## Changes\n\n- First item\n  continued\n- Second item\n\nSeparate paragraph.\nNext source line.")
-    markdownFixture.frame = CGRect(x: 0, y: 0, width: 240, height: 400)
+    // Narrow enough that the bullet wraps in the game font and in the compact fallback font.
+    markdownFixture.frame = CGRect(x: 0, y: 0, width: 120, height: 400)
     markdownFixture.layoutSubtreeIfNeeded()
     let fixtureLabels = descendants(markdownFixture).compactMap { $0 as? GameLabel }.map(\.stringValue)
     try check(fixtureLabels.contains("First item continued") && fixtureLabels.contains("Second item")
@@ -6675,8 +6676,12 @@ extension AppDelegate {
       loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter\n\nFlags 🏳️‍⚧️🇵🇸" })
     let page = about.show(owner: window)
     let flags = "🏳️‍⚧️🇵🇸"
-    try check(GameMenuTypography.menuText(flags) == flags && GameMenuArtwork.renderer()?.font(.small)?.covers(flags) == true
-      && GameMenuArtwork.renderer()?.font(.large)?.covers(flags) == true, "Contributor flags lost their glyphs")
+    try check(GameMenuTypography.menuText(flags) == flags, "Contributor flags became question marks")
+    // Without original artwork the page uses the compact font, which shows no flags.
+    if let renderer = GameMenuArtwork.renderer() {
+      try check(renderer.font(.small)?.covers(flags) == true && renderer.font(.large)?.covers(flags) == true,
+        "Contributor flags lost their glyphs")
+    }
     try check(window.firstResponder === page.controllerBackButton, "About did not retain safe Back focus")
     for _ in 0..<100 where defaults.string(forKey: "ContributorsMarkdownV1") == nil {
       try await Task.sleep(nanoseconds: 10_000_000)
@@ -6722,11 +6727,13 @@ extension AppDelegate {
           try check(history.releases.first?.title == "\(installedVersion) · Build \(installedBuild)", "Current release is missing or out of order")
           try check(history.releases.count >= 20, "Published releases are missing from the index")
           let document = history.detail.scroll.documentView!
-          try check(document.bounds.height > history.detail.scroll.contentSize.height, "Current notes cannot scroll")
+          // Short patch notes fit without scrolling. Longer notes must scroll rather than clip.
+          let textBottom = document.subviews.map(\.frame.maxY).max() ?? 0
+          try check(textBottom <= history.detail.scroll.contentSize.height
+            || document.bounds.height > history.detail.scroll.contentSize.height, "Current notes cannot scroll")
           try check(document.subviews.allSatisfy { document.bounds.contains($0.frame) && $0.frame.width <= 680 },
             "History text left its bounded reading column")
-          let previousVersion = history.releases[1].title.components(separatedBy: " · ").first!
-          let older = try button(previousVersion, in: history)
+          let older = try button(history.indexTitle(1), in: history)
           try check(older.bounds.height >= 44, "Release index target is too small")
           try check(older.accessibilityPerformPress() && history.selectedIndex == 1 && older.state == .on,
             "Release selection is unavailable to accessibility")
@@ -6752,7 +6759,7 @@ extension AppDelegate {
           try check(history.selectedIndex == history.releases.count - 1, "Oldest release cannot be selected")
           try capture(page, "\(Int(size.width))-history-oldest")
           history.indexScroll.contentView.scroll(to: CGPoint(x: 0, y: index.bounds.height - history.indexScroll.contentSize.height))
-          let current = try button(installedVersion, in: history)
+          let current = try button(history.indexTitle(0), in: history)
           window.makeFirstResponder(current)
           let space = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
             windowNumber: window.windowNumber, context: nil, characters: " ", charactersIgnoringModifiers: " ",
@@ -6801,7 +6808,8 @@ extension AppDelegate {
       try capture(home, "home-destinations-\(Int(size.width))")
       let labels = home.accessibleControls(owner: home).compactMap { ($0 as? GameAccessibleElement)?.accessibilityLabel() }
       try check(!labels.contains(L10n.text("Donate")), "Home still shows Donate")
-      try check(home.homeActionCount == home.overlayLines.count + 1, "Home lost a destination or Settings")
+      try check(home.homeActionCount == home.overlayLines.count + 1,
+        "Home lost a destination or Settings at \(Int(size.width))x\(Int(size.height)): \(home.homeActionCount) of \(home.overlayLines.count + 1)")
     }
     try check(NSApplication.shared.helpMenu?.items.contains { $0.title == L10n.text("Donate…") } == true,
       "The Help menu has no Donate item")
