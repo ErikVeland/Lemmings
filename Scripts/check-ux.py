@@ -46,6 +46,7 @@ CHECKS = {
         "GameplayControlTipTests/testGameplayTipsDismissWithoutChangingFocusOrSpeedAndStayDismissed",
         "GameplayControlTipTests/testSequelMapRendersAndSeeksWithoutActivatingTransport",
         "MobileControlTipMapTests/testMapCoordinatesMoveBothCameraAxesAndClampAtEveryEdge",
+        "TamilBitmapRenderTests/testTamilReplayRowsReserveTheWholeFontHeight",
     ],
     "preview": [
         "MobileCheckpointIndexTests/previewResumeRequiresTheSameLevelQueueAndPosition",
@@ -86,7 +87,7 @@ CHECKS = {
     ],
 }
 AUDITS = ("first-player", "rounded-hud", "grid-hud", "hot-seat-flow", "preview-fill",
-          "table-result", "cloud-sync", "level-loading", "navigation")
+          "table-result", "cloud-sync", "level-loading", "navigation", "replay-controls")
 
 
 def source_stamp():

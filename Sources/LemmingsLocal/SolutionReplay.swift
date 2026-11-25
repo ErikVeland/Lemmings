@@ -134,7 +134,7 @@ import LemmingsGameArt
                 ? SolutionSpeedButton(title: title, primary: primary, onPress: action)
                 : GameActionButton(title: title, primary: primary, onPress: action)
             (value as? SolutionSpeedButton)?.speed = speedControl
-            value.setAccessibilityLabel(help); value.toolTip = help
+            value.setAccessibilityHelp(help); value.toolTip = help
             page.addSubview(value); buttons.append(value); return value
         }
         page.navigationBackButton = button(L10n.text("Back to game"), L10n.text("Back to your paused game. Escape.")) { [weak self] in self?.close() }
@@ -405,15 +405,18 @@ import LemmingsGameArt
         skillPanel.bounds.size = logical
     }
     private func refresh() {
+        let rate = Double(ClassicDOSRules.ticksPerSecond)
         skillPanel.update(stocks: ReplaySkillPresentation.stocks(.classic(playback.session.simulation)),
-            uses: playback.skillUses, tick: playback.session.currentTick)
+            uses: playback.skillUses, tick: playback.session.currentTick, rate: rate)
         layoutSkillPanel(scale: max(1, min(2, page.bounds.width / 1120, page.bounds.height / 720)))
         effects?.setViewport(field.soundViewport)
         field.session = playback.session
         if playback.session.isComplete {
             status.stringValue = L10n.text("\(playback.session.simulation.savedCount) rescued"); marker.point = nil
         } else {
-            status.stringValue = "\(playback.solution.replay.title)   \(playback.session.currentTick) / \(playback.solution.replay.expected?.ticks ?? 0)"
+            let elapsed = ReplayGameTime.clock(tick: playback.session.currentTick, rate: rate)
+            let duration = playback.solution.replay.expected.map { ReplayGameTime.clock(tick: $0.ticks, rate: rate) }
+            status.stringValue = [playback.solution.replay.title, duration.map { "\(elapsed) / \($0)" } ?? elapsed].joined(separator: "   ")
             if ProcessInfo.processInfo.systemUptime > assignmentUntil { marker.point = nil }
         }
         transport?.title = playback.session.isComplete ? L10n.text("Replay") : paused ? L10n.text("Play") : L10n.text("Pause")

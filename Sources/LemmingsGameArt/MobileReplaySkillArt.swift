@@ -1,7 +1,21 @@
 #if canImport(CoreGraphics)
 import CoreGraphics
+import Foundation
 import NxlvKit
 import LemmingsMobileCore
+
+/// Replay time is elapsed simulation time, independent of the chosen playback speed.
+public enum ReplayGameTime {
+    public static func clock(tick: Int, rate: Double) -> String {
+        let value = rate > 0 && rate.isFinite ? (Double(max(0, tick)) / rate * 100).rounded() : 0
+        let hundredths = Int(exactly: value) ?? 0
+        return String(format: "%ld:%02ld.%02ld", hundredths / 6000, hundredths / 100 % 60, hundredths % 100)
+    }
+
+    public static func skillUse(_ name: String, tick: Int, rate: Double) -> String {
+        L10n.text("\(SkillVocabulary.title(name)) at \(clock(tick: tick, rate: rate))")
+    }
+}
 
 /// Remaining stock stays in the mobile HUD. The replay panel shows successful uses.
 public enum MobileReplaySkillArt {
@@ -22,7 +36,7 @@ public enum MobileReplaySkillArt {
         }
         return nil
     }
-    public static func draw(uses: [MobileReplaySkillUse], tick: Int, in rect: CGRect,
+    public static func draw(uses: [MobileReplaySkillUse], tick: Int, rate: Double, in rect: CGRect,
                             typography: GameMenuTypography?, context: CGContext) {
         guard rect.width > 0, rect.height > 0 else { return }
         context.saveGState()
@@ -30,14 +44,14 @@ public enum MobileReplaySkillArt {
         context.translateBy(x: rect.minX, y: rect.minY)
         context.scaleBy(x: rect.width / size.width, y: rect.height / size.height)
         GameDisplayArt.draw(in: context, frame: CGRect(origin: .zero, size: size))
-        GamePixelTypography.draw(L10n.text("USED @ TICK"), in: CGRect(x: 8, y: 6, width: 224, height: 18),
+        GamePixelTypography.draw(L10n.text("Skills used").uppercased(), in: CGRect(x: 8, y: 6, width: 224, height: 18),
             context: context, typography: typography, palette: .green)
         for (index, use) in uses.suffix(3).enumerated() {
             let palette: GamePixelTypography.Palette = use.tick == tick ? .green : .blue
             let y = CGFloat(26 + index * 18)
-            GamePixelTypography.draw(String(use.tick), in: CGRect(x: 8, y: y, width: 72, height: 18),
-                context: context, typography: typography, palette: palette)
-            GamePixelTypography.draw(SkillVocabulary.title(use.name), in: CGRect(x: 86, y: y, width: 146, height: 18),
+            GamePixelTypography.draw(ReplayGameTime.clock(tick: use.tick, rate: rate), in: CGRect(x: 8, y: y, width: 84, height: 18),
+                context: context, typography: typography, palette: palette, maximumScale: 1)
+            GamePixelTypography.draw(SkillVocabulary.title(use.name), in: CGRect(x: 98, y: y, width: 134, height: 18),
                 context: context, typography: typography, palette: palette)
         }
     }

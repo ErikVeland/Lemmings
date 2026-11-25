@@ -1,4 +1,4 @@
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import Foundation
 import Testing
 import UIKit
@@ -6,6 +6,7 @@ import LemmingsGameArt
 import LemmingsMobileCore
 @testable import LemmingsMobileUI
 
+#if os(iOS)
 private final class ReplayCameraSession: MobileGameSession {
     let engineIdentifier: String
     let engineFingerprint = "replay-camera"
@@ -35,8 +36,27 @@ private final class ReplayCameraSession: MobileGameSession {
         try .init(width: 1600, height: 640, rgba: Data(repeating: 0, count: 1600 * 640 * 4))
     }
 }
+#endif
 
 @MainActor struct MobileReplayInteractionTests {
+    @Test func skillHistoryUsesTheReplayClockAndClearsOnSeek() {
+        let panel = MobileReplaySkillView(frame: CGRect(x: 0, y: 0, width: 240, height: 84))
+        let skills: [MobileReplaySkillUse] = [
+            .init(tick: 17, name: "Climber"), .init(tick: 34, name: "Floater"),
+            .init(tick: 51, name: "Builder"), .init(tick: 68, name: "Digger")
+        ]
+        panel.update(skills, tick: 68, rate: 17, visible: true)
+        #expect(!panel.isHidden)
+        let label = panel.accessibilityLabel
+        #expect(label?.contains("0:04.00") == true)
+        #expect(label?.contains("0:01.00") == false)
+        panel.update(skills, tick: 69, rate: 17, visible: true)
+        #expect(panel.accessibilityLabel == label)
+        panel.update([], tick: 0, rate: 17, visible: true)
+        #expect(panel.isHidden && panel.accessibilityLabel == nil)
+    }
+
+    #if os(iOS)
     @Test(arguments: ["classic-dos", "lemmings2", "lemmings3"])
     func replayDragPansWithoutEditingOrChangingTransport(engine: String) throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
@@ -85,5 +105,6 @@ private final class ReplayCameraSession: MobileGameSession {
         #expect(direction == 1)
         #expect(next.accessibilityLabel == "Next move")
     }
+    #endif
 }
 #endif
