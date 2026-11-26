@@ -30,23 +30,24 @@ public enum BitmapLatinGlyphs {
 
         /// Colour at a pixel of a flag that is `width` by `height`.
         func colour(x: Int, y: Int, width: Int, height: Int) -> (UInt8, UInt8, UInt8) {
+            let rowCentre = 2 * y + 1
             switch self {
             case .transgender:
                 let blue: (UInt8, UInt8, UInt8) = (91, 206, 250), pink: (UInt8, UInt8, UInt8) = (245, 169, 184)
-                return [blue, pink, (255, 255, 255), pink, blue][y * 5 / height]
+                return [blue, pink, (255, 255, 255), pink, blue][rowCentre * 5 / (2 * height)]
             case .palestine:
-                // The red triangle reaches a third of the way in, with its point at the middle row.
-                let middle = Double(height - 1) / 2
-                let reach = Double(width) / 3 * (1 - abs(Double(y) - middle) / (Double(height) / 2))
-                if Double(x) < reach { return (206, 17, 38) }
-                return [(24, 24, 24), (255, 255, 255), (0, 122, 61)][y * 3 / height]
+                // Sample the triangle symmetrically around the middle of the flag.
+                let reach = width * (height - abs(height - rowCentre))
+                if 3 * height * x < reach { return (206, 17, 38) }
+                return [(18, 18, 20), (255, 255, 255), (0, 122, 61)][rowCentre * 3 / (2 * height)]
             }
         }
     }
 
     /// The flag a character shows, with or without emoji variation selectors.
     public static func flag(_ character: Character) -> Flag? {
-        switch String(character).unicodeScalars.map(\.value).filter({ $0 != 0xFE0F }) {
+        guard !character.isASCII else { return nil }
+        return switch character.unicodeScalars.map(\.value).filter({ $0 != 0xFE0F }) {
         case [0x1F3F3, 0x200D, 0x26A7]: .transgender
         case [0x1F1F5, 0x1F1F8]: .palestine
         default: nil
@@ -382,18 +383,28 @@ public enum BitmapLatinGlyphs {
         /// A full-colour flag at capital height across two cells. Palette fonts cannot hold
         /// the colours, so only the Macintosh menu faces get one.
         func flag(_ flag: Flag) -> Frame? {
-            guard style == .macintosh, !compact, let capital = base("H") else { return nil }
+            guard style == .macintosh, let capital = base("H") else { return nil }
             let w = 2 * width - 2 * outline - 2
             let capitalHeight = capital.height - outline - shadow
-            let h = min(capitalHeight, (w * 3 + 4) / 5)
-            guard w >= 10, h >= 5 else { return nil }
-            var bytes = [UInt8](repeating: 255, count: w * h * 4)
-            for y in 0..<h { for x in 0..<w {
-                let (red, green, blue) = flag.colour(x: x, y: y, width: w, height: h)
-                let i = (y * w + x) * 4
-                bytes[i] = red; bytes[i + 1] = green; bytes[i + 2] = blue
-            }}
-            return Frame(x: outline, y: capital.y + (capitalHeight - h) / 2, width: w, height: h, rgba: Data(bytes))
+            let h = min(capitalHeight, max(7, (w * 3 + 4) / 5))
+            guard w >= 10, h >= 7 else { return nil }
+            var bytes: [UInt8] = []
+            bytes.reserveCapacity(w * h * 4)
+            for y in 0..<h {
+                for x in 0..<w {
+                    let horizontalEdge = y == 0 || y == h - 1
+                    let verticalEdge = x == 0 || x == w - 1
+                    if horizontalEdge && verticalEdge {
+                        bytes += [0, 0, 0, 0]
+                    } else if horizontalEdge || verticalEdge {
+                        bytes += (y == 0 || x == 0) ? [129, 137, 155, 255] : [62, 68, 85, 255]
+                    } else {
+                        let (red, green, blue) = flag.colour(x: x - 1, y: y - 1, width: w - 2, height: h - 2)
+                        bytes += [red, green, blue, 255]
+                    }
+                }
+            }
+            return Frame(x: 1, y: capital.y + (capitalHeight - h) / 2, width: w, height: h, rgba: Data(bytes))
         }
         func sharpS(lowercase: Bool) -> Frame? {
             guard let b = base(lowercase ? "b" : "B") else { return nil }
