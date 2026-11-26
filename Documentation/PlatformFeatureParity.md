@@ -8,11 +8,10 @@ can play a random track through the MOD engine after 1.4 seconds. The game
 takes over as soon as it is ready. Reduce Motion and Reduce Flashes hold
 the artwork still.
 
-The player looks in the installation's `LoadingIntros` folder. Public
-builds need separate permission to bundle the original scene tracks.
-The private Mac collection is installed outside the repository. iOS and
-tvOS can read an installed or bundled collection. They have no picker
-for these files.
+The Mac 2.7.1 packages include 11 MOD tracks. The player checks the
+installation's `LoadingIntros` folder first and uses the bundled
+collection if it finds no playable local tracks. iOS and tvOS can read
+an installed or bundled collection. They have no picker for these files.
 
 Mobile cold launch and Apple TV migration use the visual intro while the
 library prepares. Startup audio waits for the normal profile and audio
