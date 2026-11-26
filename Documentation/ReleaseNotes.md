@@ -2,8 +2,8 @@
 
 ## Current source and delivery queue
 
-The current source version is **2.6** (Mac build 111, iOS build 48, tvOS build 23).
-Read the [complete 2.6 notes](ReleaseNotes-2.6-build111.md).
+The current source version is **2.7** (Mac build 112, iOS build 48, tvOS build 23).
+Read the [complete 2.7 notes](ReleaseNotes-2.7-build112.md).
 The mobile build numbers record the last Ultimate Lemmings mobile candidates.
 
 ## Latest published Mac release
