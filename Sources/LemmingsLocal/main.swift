@@ -140,14 +140,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
     }
 
     var menuName: String {
-      switch self {
-      case .classic: return L10n.text("Classic")
-      case .ohNo: return L10n.text("Oh No!")
-      case .holiday: return L10n.text("Holiday")
-      case .ohYes: return L10n.text("Oh Yes!")
-      case .fan: return L10n.text("Fan levels")
-      case .neolemmix, .lemmings2, .lemmings3: return displayName
-      }
+      let name = displayName
+      if self == .ohNo, !name.hasSuffix("!") { return name + "!" }
+      return name
     }
 
     var titles: [ClassicTitle] {
@@ -7137,7 +7132,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
         return HomeMenuItem(title: family.displayName, action: .browse(family))
       }
       let status = homeContentStatus(family) ?? L10n.text("NO DATA")
-      return HomeMenuItem(title: "\(family.displayName)  \(status)", action: .browse(family), gameStatus: status)
+      return HomeMenuItem(title: "\(family.menuName)  \(status)", action: .browse(family), gameStatus: status)
     }
     return items
   }
