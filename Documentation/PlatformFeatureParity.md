@@ -1,5 +1,17 @@
 # Cross-platform feature parity
 
+## Mac Play Game input · 26 November 2026
+
+An open Mac menu keeps its focus and input targets across display updates.
+New pages and pages that move to another window surface still complete
+layout before they appear. This AppKit path serves Classic, Lemmings 2,
+Lemmings 3 and supported NeoLemmix content. iPhone, iPad, Duo and Apple TV
+use the UIKit menu canvas, which reuses input targets between layout changes.
+
+The offscreen Mac check covers a rating choice, Back, Main menu and
+Command-Q routing to AppKit. Full-screen input and iCloud-assisted Quit
+in the installed app still need verification.
+
 ## Settings navigation · 25 November 2026
 
 Classic, supported NeoLemmix levels, Lemmings 2 and Lemmings 3 share

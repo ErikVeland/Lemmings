@@ -1444,7 +1444,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let previousSound = settings.sound
     settings = updated
     GameAccessibility.interfaceSize = settings.interfaceSize
-    GameScreen.shared.reattach()
+    GameScreen.shared.reattach(relayout: true)
     let baseline = UserDefaults.standard.data(forKey: settingsKey).flatMap { try? JSONDecoder().decode(ClassicSettings.self, from: $0) } ?? ClassicSettings()
     let deviceSettings = PlayerControlSettings(baseline).applying(to: updated)
     if let data = try? JSONEncoder().encode(deviceSettings) {
@@ -2331,7 +2331,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   @objc private func artworkSkinChanged() {
     apply(settings, forceArtworkRefresh: true)
     configureFrontEndArtwork()
-    GameScreen.shared.reattach()
+    GameScreen.shared.reattach(relayout: true)
     renderScreen()
     AppDistribution.publishDeskClockArtwork()
   }
@@ -2372,7 +2372,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     fanUpdateTask = nil
     startFanUpdates()
     AppDistribution.publishDeskClockArtwork()
-    GameScreen.shared.reattach()
+    GameScreen.shared.reattach(relayout: true)
     renderScreen()
   }
 
