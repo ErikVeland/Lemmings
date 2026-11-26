@@ -14,7 +14,7 @@ Thank you to the players, testers, level authors and preservation projects that 
 
 ## Playtesters
 
-Uvasree Gnanasekar
+Uvasree Gngana Sekar
 
 ## Supporters
 
