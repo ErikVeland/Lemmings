@@ -351,7 +351,9 @@ import LemmingsAppCore
       context.fillPath(); context.restoreGState()
     }
     let highlightedIndex = highlighted.flatMap { character in layout.firstIndex { $0.sequence.contains(character) } }
+    let glyphOrigin = CGPoint(x: start, y: top)
     for (index, item) in layout.enumerated() {
+      if let context, GamePixelTypography.drawFlag(item, at: glyphOrigin, scale: scale, context: context) { continue }
       if let numberPalette {
         let ink = item.sequence.allSatisfy { $0.isNumber || $0 == "," } ? numberPalette : palette
         (ink == .green ? NSColor(calibratedRed: 0.45, green: 1, blue: 0.1, alpha: 1)

@@ -18,11 +18,10 @@ existing file. Keep the file below 64 KiB. Separate paragraphs and headings with
 blank lines. Use headings and plain names. Links display their labels, without
 navigation or embedded HTML.
 
-The Classic Macintosh menu faces draw the transgender and Palestinian flag
-emoji as two-cell colour glyphs. Other emoji show as `?`. The sequel panel
-fonts and the compact pixel font hold one colour per glyph, so they also show
-flags as `?`. Do not publish flags in the live list until the installed apps
-have these glyphs.
+The transgender and Palestinian flags sit beside Erik Veland's name in the
+About overview and bundled contributor list. The Macintosh menu faces and
+the compact fallback draw both flags as two-cell colour glyphs. Do not publish
+flags in the live list until the installed apps have these glyphs.
 
 The last successful list stays in local preferences. If delivery fails, the
 page retains that list, shows Offline and offers Retry. A bundled list supplies
