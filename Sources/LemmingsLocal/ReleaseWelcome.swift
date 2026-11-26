@@ -10,7 +10,7 @@ import NxlvKit
     static let seenKey = "WhatsNewSeenBuild"
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
-    static let notesVersion = "2.7"
+    static let notesVersion = "2.7.1"
     static let lemmixNotesVersion = "2.6"
     static var subtitle: String { GameReleaseCopy.invitation }
     static var sections: [(String, String)] {
@@ -18,9 +18,8 @@ import NxlvKit
         let changes = GameReleaseCopy.sections
         #else
         let changes = [
-            (L10n.text("Play menu"), L10n.text("See full game titles and aligned progress counts. Return to the menu while progress counts load.")),
-            (L10n.text("Camera controls"), L10n.text("Choose whether the scroll wheel zooms or pans. The Z key still toggles zoom.")),
-            (L10n.text("Menus and statistics"), L10n.text("Menus and statistics use more consistent alignment across window sizes."))
+            (L10n.text("Home background"), L10n.text("The level backdrop sharpens from large pixel blocks before it starts to pan.")),
+            (L10n.text("Level loading"), L10n.text("Longer level loads show a pixel-art intro. The game starts as soon as it is ready."))
         ]
         #endif
         return changes + [
