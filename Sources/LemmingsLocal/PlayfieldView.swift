@@ -1212,7 +1212,7 @@ struct ReticleFeedback {
     let viewport = homeViewport
     let playFont = overlayHomePlay ? macInterface?.font(.small) : nil
     if viewport.width >= 880, viewport.height >= 500 {
-      if overlayHomePlay { page.macPlayMinimumCaptionScale = 0.5 }
+      if overlayHomePlay { page.macPlayCaptionScale = 0.5 }
       let layout = GameFrontEnd.layout(page, width: min(740, viewport.width / 2), minimumHeight: viewport.height / 2,
         macPlayFont: playFont)
       if overlayHomePlay || layout.size.height <= viewport.height / 2 { return (page, layout, 2) }

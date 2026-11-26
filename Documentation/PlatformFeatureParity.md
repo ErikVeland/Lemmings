@@ -1,19 +1,5 @@
 # Cross-platform feature parity
 
-## Starter playlists · 26 November 2026
-
-Mac, iPhone, iPad, Duo and Apple TV show starter collections and tiny journeys
-under Collections → Playlists when all required levels are installed. The
-[starter catalogue](LevelCollections.md#starter-playlists) uses Classic content,
-including the levels bundled with Ultimate Lemmix. Existing personal collections
-retain their Classic, Lemmings 2, Lemmings 3 and supported NeoLemmix routes.
-
-Starter playlists keep a fixed order and use each platform's saved playlist
-flow. Mac also ignores duplicate cloud Journey snapshots that claim a run
-owned by another session. The existing owner, queue position and Lemmings 2
-carry remain available. Physical touch and Siri Remote acceptance still need
-device checks.
-
 ## Menu spacing and scope · 26 November 2026
 
 Home places Hot Seat before Play on Mac and the shared iPhone, iPad, Duo
@@ -25,8 +11,9 @@ Short Mac lists keep their footer near the last row and centre the panel
 in the window. Large displays use 2× when the whole panel fits.
 Long lists scroll within the panel. Language uses the
 same list and footer geometry. Mac Statistics centres its columns and
-right-aligns counts. Play reduces long level captions from 2× to 1×
-when required and keeps the full button target.
+right-aligns counts. Mac Play uses a full-width lead route, large sequel logos
+and compact game buttons with full titles and progress counts. When space is tight,
+each game button puts its count on its own line.
 
 ## Mac wheel zoom and menu returns · 26 November 2026
 

@@ -6,6 +6,8 @@ import LemmingsMobileCore
 
 /// Shared bitmap pages. UIKit supplies input over these exact drawing rectangles.
 public struct GameFrontEnd {
+    private static let macPlayCaptionInset: CGFloat = 6
+
     public enum GameLogo: String, Equatable, Sendable { case lemmings2, lemmings3 }
     public struct TextRun: Equatable, Sendable {
         @GameDisplayText public var text: String
@@ -32,6 +34,13 @@ public struct GameFrontEnd {
         public var icon: Icon?
         public var titleRuns: [TextRun] = []
         fileprivate var captionText: String { titleRuns.isEmpty ? title : titleRuns.map(\.text).joined() }
+        fileprivate func stackingMacPlayProgress() -> Action {
+            guard titleRuns.count == 2 else { return self }
+            var action = self
+            let progress = titleRuns[1].text.trimmingCharacters(in: .whitespaces)
+            action.titleRuns[1].text = "\n" + progress
+            return action
+        }
         var visibleTitle: String { icon == nil ? title : "" }
         public var isBackNavigation: Bool {
             if let backNavigation { return backNavigation }
@@ -59,7 +68,7 @@ public struct GameFrontEnd {
         /// Play's game list: Home's route and game grid under a plain page title.
         public var gameLibrary = false
         public var macTitleMenu = false
-        public var macPlayMinimumCaptionScale: CGFloat = 1
+        public var macPlayCaptionScale: CGFloat = 1
         public var homeInitials: String
         public var homeNextPlayerIndex: Int? = nil
         public var homeNextPlayerName: String? {
@@ -471,28 +480,38 @@ public struct GameFrontEnd {
             }
             // Game logos pair up side by side even in one-column portrait, so each logo stays large.
             let logos = actions.allSatisfy { $0.gameLogo != nil }
+            let compactGames = gameSection && !logos
+            let captionScale = page.macPlayCaptionScale
+            let widestGameCaption = compactGames ? actions.map {
+                GameTextLayout.width(of: $0.captionText, font: macPlayFont) * captionScale
+            }.max() ?? 0 : 0
             let threeColumnWidth = (inner - 2 * gap) / 3
-            let useThreeColumns = (mac && gameSection && !logos && actions.allSatisfy {
-                GameTextLayout.width(of: $0.visibleTitle) <= threeColumnWidth - 24
-            })
+            let useThreeColumns = (compactGames && widestGameCaption <= threeColumnWidth - 2 * macPlayCaptionInset)
                 || (compact && section > 0 && !logos && width >= 800)
                 || (actions.count == 3 && section == 0 && gameStart > 0 && width >= 600)
             let fullWidthRoutes = mac && page.gameLibrary && !gameSection
             let sectionColumns = fullWidthRoutes ? 1 : useThreeColumns ? 3 : logos ? 2 : columns
             let cell = (inner - CGFloat(sectionColumns - 1) * gap) / CGFloat(sectionColumns)
+            let stackProgress = compactGames
+                && widestGameCaption > (actions.count == 1 ? inner : cell) - 2 * macPlayCaptionInset
             let rowHeight = logos ? CGFloat(mac || compact ? 64 : 112)
-                : mac ? (actions.contains(where: \.primary) ? 52 : gameSection ? 36 : 40) : max(44, actions.map {
+                : compactGames ? 44 * captionScale
+                : mac ? (actions.contains(where: \.primary) ? 52 : 40) : max(44, actions.map {
                 GameTextLayout.height($0.visibleTitle, width: (actions.count == 1 ? inner : cell) - 48) + 8
             }.max() ?? 44)
             for start in stride(from: 0, to: actions.count, by: sectionColumns) {
-                let group = actions[start..<min(start + sectionColumns, actions.count)]
+                let group = actions[start..<min(start + sectionColumns, actions.count)].map {
+                    stackProgress ? $0.stackingMacPlayProgress() : $0
+                }
                 let rowCell = (inner - CGFloat(group.count - 1) * gap) / CGFloat(group.count)
                 var height = rowHeight
-                if gameSection, !logos, let macPlayFont {
-                    let scale = page.macPlayMinimumCaptionScale
-                    let width = (rowCell - 24) / scale
-                    for action in group where GameTextLayout.width(of: action.captionText, font: macPlayFont) > width {
-                        height = max(height, ceil(GameTextLayout.height(action.captionText, width: width, font: macPlayFont) * scale) + 4)
+                if compactGames, let macPlayFont {
+                    let width = (rowCell - 2 * macPlayCaptionInset) / captionScale
+                    for action in group {
+                        let caption = GameMenuTypography.menuText(action.captionText)
+                        let lines = GameTextLayout.lines(caption, width: width, font: macPlayFont)
+                        let heightOfText = CGFloat(lines.count * macPlayFont.height(of: caption))
+                        height = max(height, ceil(heightOfText * captionScale) + 4)
                     }
                 }
                 for (column, action) in group.enumerated() {
@@ -748,7 +767,10 @@ public struct GameFrontEnd {
                 portraits?.draw(portrait, in: CGRect(x: target.frame.minX + 12,
                     y: target.frame.minY + 7, width: 30, height: 36), context: context)
             }
-            var caption = target.frame.insetBy(dx: action.primary ? 24 : 12, dy: 2)
+            let compactGame = page.macTitleMenu && page.gameLibrary
+                && action.id.hasPrefix("family.") && action.gameLogo == nil
+            let captionInset = compactGame ? macPlayCaptionInset : action.primary ? 24 : 12
+            var caption = target.frame.insetBy(dx: captionInset, dy: 2)
             if action.portrait != nil { caption.origin.x += 36; caption.size.width -= 36 }
             if let checked = action.toggleValue {
                 let box = CGRect(x: target.frame.minX + 12, y: target.frame.midY - 10, width: 20, height: 20)
@@ -760,14 +782,15 @@ public struct GameFrontEnd {
                 caption.origin.x += 28
                 caption.size.width -= 28
             }
-            if page.macTitleMenu, page.gameLibrary, action.id.hasPrefix("family.") {
-                let runs = action.titleRuns.isEmpty ? [TextRun(action.title, chosen ? .green : .blue)] : action.titleRuns
-                let width = GameTextLayout.width(of: action.captionText, font: typography.font(.small))
-                let scale = width > caption.width ? page.macPlayMinimumCaptionScale : 1
+            if compactGame {
+                let scale = page.macPlayCaptionScale
                 context.scaleBy(x: scale, y: scale)
                 let box = caption.applying(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
+                let runs = action.titleRuns.isEmpty ? [TextRun(action.title, chosen ? .green : .blue)] : action.titleRuns
+                let text = action.captionText
+                let singleLine = !text.contains("\n") && GameTextLayout.width(of: text, font: typography.font(.small)) <= box.width
                 GameSemanticText.draw(runs, in: box, typography: typography, alpha: action.enabled ? 1 : 0.45,
-                    singleLine: width <= box.width, context: context)
+                    singleLine: singleLine, context: context)
             } else if page.macTitleMenu {
                 var runs = action.titleRuns
                 if runs.isEmpty || GameTextLayout.width(of: runs.map(\.text).joined(),
