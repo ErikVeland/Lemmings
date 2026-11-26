@@ -57,8 +57,11 @@ import LemmingsGameArt
         timer = nil
         guard window != nil, !reducesMotion else { return }
         timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 24, repeats: true) { [weak self] timer in
+            guard let self else {
+                timer.invalidate()
+                return
+            }
             MainActor.assumeIsolated {
-                guard let self else { timer.invalidate(); return }
                 if self.window?.isVisible == true { self.needsDisplay = true }
             }
         }
