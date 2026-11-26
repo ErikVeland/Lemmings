@@ -56,10 +56,23 @@ struct PlayerControlSettingsTests {
         let legacy = ClassicSettings(reduceFlashes: true)
         var first = PlayerControlSettings.load(from: defaults, profileID: "first", legacy: legacy)
         first.controllerSwapSticks = true
+        first.scrollWheelZoomEnabled = false
         first.save(to: defaults, profileID: "first")
         let second = PlayerControlSettings.load(from: defaults, profileID: "second", legacy: legacy)
         #expect(second.reduceFlashes && !second.controllerSwapSticks)
+        #expect(second.scrollWheelZoomEnabled)
+        #expect(!first.applying(to: legacy).scrollWheelZoomEnabled)
         #expect(PlayerControlSettings.load(from: defaults, profileID: "first", legacy: .init()) == first)
         #expect(PlayerControlSettings.defaultsKey(profileID: "a.b") != PlayerControlSettings.defaultsKey(profileID: "a"))
+    }
+
+    @Test func oldSettingsKeepScrollWheelZoomEnabled() throws {
+        let old = try JSONDecoder().decode(ClassicSettings.self, from: Data("{}".utf8))
+        #expect(old.scrollWheelZoomEnabled)
+        let data = try JSONEncoder().encode(PlayerControlSettings(old))
+        var fields = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        fields.removeValue(forKey: "scrollWheelZoomEnabled")
+        let controls = try JSONDecoder().decode(PlayerControlSettings.self, from: JSONSerialization.data(withJSONObject: fields))
+        #expect(controls.scrollWheelZoomEnabled)
     }
 }

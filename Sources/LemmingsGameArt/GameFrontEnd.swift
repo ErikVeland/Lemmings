@@ -31,6 +31,7 @@ public struct GameFrontEnd {
         public var gameLogo: GameLogo?
         public var icon: Icon?
         public var titleRuns: [TextRun] = []
+        fileprivate var captionText: String { titleRuns.isEmpty ? title : titleRuns.map(\.text).joined() }
         var visibleTitle: String { icon == nil ? title : "" }
         public var isBackNavigation: Bool {
             if let backNavigation { return backNavigation }
@@ -58,6 +59,7 @@ public struct GameFrontEnd {
         /// Play's game list: Home's route and game grid under a plain page title.
         public var gameLibrary = false
         public var macTitleMenu = false
+        public var macPlayMinimumCaptionScale: CGFloat = 1
         public var homeInitials: String
         public var homeNextPlayerIndex: Int? = nil
         public var homeNextPlayerName: String? {
@@ -257,12 +259,13 @@ public struct GameFrontEnd {
     }
 
     public static func layout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, boxedHome: Bool = false,
-                              bookHomePanes: [CGRect] = [], fillsResultPane: Bool = false) -> Layout {
+                              bookHomePanes: [CGRect] = [], fillsResultPane: Bool = false,
+                              macPlayFont: ClassicMacUserInterface.Font? = nil) -> Layout {
         if page.televisionGrid { return TVMenuPresentation.settingsLayout(page, width: width, height: minimumHeight) }
         if page.pause != nil { return MobilePauseArt.layout(page, width: width, minimumHeight: minimumHeight) }
         if page.achievementItems != nil { return MobileResultAchievementsArt.layout(page, width: width, minimumHeight: minimumHeight) }
         if page.result { return resultLayout(page, width: width, minimumHeight: minimumHeight, fillsPane: fillsResultPane) }
-        if page.gameLibrary { return homeLayout(page, width: width, minimumHeight: minimumHeight) }
+        if page.gameLibrary { return homeLayout(page, width: width, minimumHeight: minimumHeight, macPlayFont: macPlayFont) }
         if page.home {
             if bookHomePanes.count == 2 {
                 return MobileBookHomeArt.layout(page, width: width, height: minimumHeight, panes: bookHomePanes)
@@ -400,7 +403,8 @@ public struct GameFrontEnd {
             initials: move(content.initials))
     }
 
-    private static func homeLayout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, compact: Bool = false) -> Layout {
+    private static func homeLayout(_ page: Page, width: CGFloat, minimumHeight: CGFloat, compact: Bool = false,
+                                   macPlayFont: ClassicMacUserInterface.Font? = nil) -> Layout {
         let width = max(280, width)
         let boardWidth = min(1100, width - 24), x = (width - boardWidth) / 2
         let inner = boardWidth - 24
@@ -483,12 +487,20 @@ public struct GameFrontEnd {
             for start in stride(from: 0, to: actions.count, by: sectionColumns) {
                 let group = actions[start..<min(start + sectionColumns, actions.count)]
                 let rowCell = (inner - CGFloat(group.count - 1) * gap) / CGFloat(group.count)
+                var height = rowHeight
+                if gameSection, !logos, let macPlayFont {
+                    let scale = page.macPlayMinimumCaptionScale
+                    let width = (rowCell - 24) / scale
+                    for action in group where GameTextLayout.width(of: action.captionText, font: macPlayFont) > width {
+                        height = max(height, ceil(GameTextLayout.height(action.captionText, width: width, font: macPlayFont) * scale) + 4)
+                    }
+                }
                 for (column, action) in group.enumerated() {
                     let frame = CGRect(x: x + 12 + CGFloat(column) * (rowCell + gap), y: y,
-                        width: rowCell, height: rowHeight)
+                        width: rowCell, height: height)
                     targets.append(Target(action: action, frame: frame))
                 }
-                y += rowHeight + gap
+                y += height + gap
             }
             y -= gap
         }
@@ -748,7 +760,15 @@ public struct GameFrontEnd {
                 caption.origin.x += 28
                 caption.size.width -= 28
             }
-            if page.macTitleMenu {
+            if page.macTitleMenu, page.gameLibrary, action.id.hasPrefix("family.") {
+                let runs = action.titleRuns.isEmpty ? [TextRun(action.title, chosen ? .green : .blue)] : action.titleRuns
+                let width = GameTextLayout.width(of: action.captionText, font: typography.font(.small))
+                let scale = width > caption.width ? page.macPlayMinimumCaptionScale : 1
+                context.scaleBy(x: scale, y: scale)
+                let box = caption.applying(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
+                GameSemanticText.draw(runs, in: box, typography: typography, alpha: action.enabled ? 1 : 0.45,
+                    singleLine: width <= box.width, context: context)
+            } else if page.macTitleMenu {
                 var runs = action.titleRuns
                 if runs.isEmpty || GameTextLayout.width(of: runs.map(\.text).joined(),
                     font: typography.font(.small)) > caption.width {

@@ -533,6 +533,7 @@ struct ReticleFeedback {
   var viewport = Viewport() { didSet { if oldValue != viewport { needsDisplay = true } } }
   private var precisionLens = AnimatedPrecisionZoomLens()
   private var precisionScroll = PrecisionZoomScrollGesture()
+  var scrollWheelZoomEnabled = true
   private let precisionZoomAnimation = PrecisionZoomAnimation()
   var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
   var rewardBadgeRect: CGRect {
@@ -875,7 +876,7 @@ struct ReticleFeedback {
       return
     }
     if phase == .playing, session?.isComplete == false, let point, bounds.contains(point) {
-      switch precisionScroll.handle(event) {
+      switch precisionScroll.handle(event, zoomEnabled: scrollWheelZoomEnabled) {
       case .zoom(let action): onPrecisionScroll?(action, point); return
       case .consumed: return
       case .pan: break
@@ -1209,11 +1210,15 @@ struct ReticleFeedback {
     page.macTitleMenu = true
     page.homeNextPlayerIndex = overlayHomePlay ? nil : overlayNextPlayerIndex
     let viewport = homeViewport
+    let playFont = overlayHomePlay ? macInterface?.font(.small) : nil
     if viewport.width >= 880, viewport.height >= 500 {
-      let layout = GameFrontEnd.layout(page, width: min(740, viewport.width / 2), minimumHeight: viewport.height / 2)
+      if overlayHomePlay { page.macPlayMinimumCaptionScale = 0.5 }
+      let layout = GameFrontEnd.layout(page, width: min(740, viewport.width / 2), minimumHeight: viewport.height / 2,
+        macPlayFont: playFont)
       if overlayHomePlay || layout.size.height <= viewport.height / 2 { return (page, layout, 2) }
     }
-    return (page, GameFrontEnd.layout(page, width: min(740, viewport.width), minimumHeight: viewport.height), 1)
+    return (page, GameFrontEnd.layout(page, width: min(740, viewport.width), minimumHeight: viewport.height,
+      macPlayFont: playFont), 1)
   }
   private func homeFrame(_ frame: CGRect, scale: CGFloat, layout: GameFrontEnd.Layout) -> CGRect {
     return frame.applying(CGAffineTransform(scaleX: scale, y: scale)).offsetBy(

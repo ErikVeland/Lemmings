@@ -34,7 +34,8 @@ public enum MobileBookHomeArt {
         }.max() ?? 52)
         func rows(_ actions: [GameFrontEnd.Action], in pane: CGRect) -> (targets: [GameFrontEnd.Target], bottom: CGFloat) {
             let inner = pane.width - padding * 2
-            var y = pane == left ? leftStart : libraryHeading.maxY + gap
+            let startsWithLevels = actions.first.map(isLibrary) == true
+            var y = pane == right && startsWithLevels ? max(leftStart, libraryHeading.maxY + gap) : leftStart
             var targets: [GameFrontEnd.Target] = []
             for (index, action) in actions.enumerated() {
                 if index > 0, isLibrary(action) != isLibrary(actions[index - 1])
@@ -95,6 +96,6 @@ public enum MobileBookHomeArt {
             targets: targets,
             initials: initials,
             secondaryBoard: CGRect(x: right.minX, y: 12, width: right.width, height: contentHeight - 24),
-            libraryHeading: libraryHeading)
+            libraryHeading: trailing.targets.first.map { isLibrary($0.action) } == true ? libraryHeading : nil)
     }
 }

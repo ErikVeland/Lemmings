@@ -485,8 +485,9 @@ import LemmingsGameArt
     let body = NSView()
     var listTopInset: CGFloat = 0
     var listMinimumHeight: CGFloat = 56
-    private var listActions: [(index: Int, button: GameActionButton)] = []
-    var adaptsToViewport: Bool { !listActions.isEmpty }
+    var listColumnsEnabled = true
+    private var listActions: [(index: Int, button: NSButton)] = []
+    var adaptsToViewport: Bool { !listActions.isEmpty || !canvas.statisticsRows.isEmpty }
     private var listHeadings: [Int: String] = [:]
     private var footerActions: [NSView] = []
     weak var sidebarTabs: GameTabs?
@@ -520,13 +521,37 @@ import LemmingsGameArt
         super.layout()
         canvas.compactHeading = sidebarTabs != nil
         if adaptsToViewport {
-            let scale = max(1, min(GameAccessibility.scale, bounds.width / 320, bounds.height / 400))
-            canvas.frame = bounds
-            canvas.bounds = CGRect(x: 0, y: 0, width: bounds.width / scale, height: bounds.height / scale)
             canvas.adaptive = true
-            let bodyTop = canvas.headerBottom + (loadingIndicator == nil ? 0 : GameLoadingIndicator.height)
-            body.frame = CGRect(x: 32, y: bodyTop, width: max(1, canvas.bounds.width - 64),
-                height: max(0, canvas.bounds.height - bodyTop - 88))
+            let loadingHeight = loadingIndicator == nil ? 0 : GameLoadingIndicator.height
+            func preferredContentHeight(at width: CGFloat) -> CGFloat {
+                canvas.statisticsRows.isEmpty ? listGrid(width: width - 88).height + 24 + listTopInset
+                    : canvas.statisticsHeight
+            }
+            var scale = max(1, min(GameAccessibility.scale, bounds.width / 320, bounds.height / 400))
+            if scale < 2, bounds.width >= 1760 {
+                let width = min(1120, bounds.width / 2)
+                let footerWidth = max(1, width - 64)
+                let visible = footerActions.filter { !$0.isHidden }
+                let footerHeight = footerMetrics(visible, width: footerWidth).height
+                let height = canvas.headerBottom(at: width) + loadingHeight + preferredContentHeight(at: width) + footerHeight + 50
+                if height * 2 <= bounds.height { scale = 2 }
+            }
+            let width = min(1120, bounds.width / scale)
+            let height = bounds.height / scale
+            canvas.frame = CGRect(x: floor((bounds.width - width * scale) / 2), y: 0,
+                                  width: width * scale, height: bounds.height)
+            canvas.bounds = CGRect(x: 0, y: 0, width: width, height: height)
+            let bodyTop = canvas.headerBottom + loadingHeight
+            body.frame = CGRect(x: 32, y: bodyTop, width: max(1, width - 64), height: max(0, height - bodyTop - 88))
+            layoutFooterActions()
+            let contentHeight = preferredContentHeight(at: width)
+            let excess = max(0, body.frame.height - contentHeight)
+            if excess > 0 {
+                canvas.frame.origin.y = floor(excess * scale / 2)
+                canvas.frame.size.height = (height - excess) * scale
+                canvas.bounds.size.height = height - excess
+                body.frame.size.height = contentHeight
+            }
         } else {
             let scale = GamePageLayout.scale(in: bounds.size)
             canvas.frame = CGRect(x: (bounds.width - 1120 * scale) / 2, y: (bounds.height - 720 * scale) / 2,
@@ -575,6 +600,12 @@ import LemmingsGameArt
     func setDetail(_ detail: String) {
         canvas.detail = detail; canvas.isMessage = true; canvas.needsDisplay = true
         canvas.setAccessibilityLabel(GamePresentationText.display(canvas.title + ". " + detail))
+    }
+    func setStatistics(_ rows: [String]) {
+        canvas.statisticsRows = rows
+        canvas.setAccessibilityLabel(GamePresentationText.display(([canvas.title, canvas.subtitle] + rows).joined(separator: ". ")))
+        canvas.needsDisplay = true
+        needsLayout = true
     }
     var backTitle: String {
         get { back.title }
@@ -630,17 +661,7 @@ import LemmingsGameArt
         guard !visible.isEmpty else { return }
         let left = sidebar?.minX ?? (adaptsToViewport ? 32 : 64)
         let inner = sidebar?.width ?? (canvas.bounds.width - left * 2)
-        let space = inner - CGFloat(visible.count - 1) * 12
-        let width = space / CGFloat(visible.count)
-        let font = GameMenuArtwork.renderer()?.font(.small)
-        let preferred = visible.map { view in
-            (view as? GameActionButton).map { ceil(GameTextLayout.width(of: $0.title, font: font)) + 24 } ?? width
-        }
-        let extra = (space - preferred.reduce(0, +)) / CGFloat(visible.count)
-        let widths = sidebar != nil && extra >= 0 ? preferred.map { $0 + extra } : visible.map { _ in width }
-        let height = max(48, zip(visible, widths).compactMap { view, width in
-            (view as? GameActionButton).map { GameTextLayout.height($0.title, width: width - 24, font: font) + 12 }
-        }.max() ?? 48)
+        let (widths, height) = footerMetrics(visible, width: inner, usesPreferredWidths: sidebar != nil)
         let y = sidebar?.minY ?? (canvas.bounds.height - 38 - height)
         var x = left
         for (button, width) in zip(visible, widths) {
@@ -649,6 +670,22 @@ import LemmingsGameArt
             x += width + 12
         }
         if adaptsToViewport { body.frame.size.height = max(0, y - body.frame.minY - 12) }
+    }
+    private func footerMetrics(_ visible: [NSView], width inner: CGFloat, usesPreferredWidths: Bool = false)
+        -> (widths: [CGFloat], height: CGFloat) {
+        guard !visible.isEmpty else { return ([], 0) }
+        let space = inner - CGFloat(visible.count - 1) * 12
+        let width = space / CGFloat(visible.count)
+        let font = GameMenuArtwork.renderer()?.font(.small)
+        let preferred = visible.map { view in
+            (view as? GameActionButton).map { ceil(GameTextLayout.width(of: $0.title, font: font)) + 24 } ?? width
+        }
+        let extra = (space - preferred.reduce(0, +)) / CGFloat(visible.count)
+        let widths = usesPreferredWidths && extra >= 0 ? preferred.map { $0 + extra } : visible.map { _ in width }
+        let height = max(48, zip(visible, widths).compactMap { view, width in
+            (view as? GameActionButton).map { GameTextLayout.height($0.title, width: width - 24, font: font) + 12 }
+        }.max() ?? 48)
+        return (widths, height)
     }
     func isSidebarControl(_ view: NSView) -> Bool {
         guard sidebarTabs != nil else { return false }
@@ -662,6 +699,10 @@ import LemmingsGameArt
     ) -> NSButton {
         let button = GameActionButton(title: title, primary: false, onPress: action)
         button.wrapsTitle = true
+        addListAction(button, at: index, section: section)
+        return button
+    }
+    func addListAction(_ button: NSButton, at index: Int, section: String? = nil) {
         if listScroll.superview == nil {
             listScroll.drawsBackground = false
             listScroll.scrollerStyle = .overlay
@@ -675,7 +716,15 @@ import LemmingsGameArt
         if let section { listHeadings[index] = section }
         listDocument.addSubview(button)
         needsLayout = true
-        return button
+    }
+    private func listGrid(width: CGFloat) -> GameListGrid {
+        let ordered = listActions.sorted { $0.index < $1.index }
+        return GameListGrid(actions: ordered.enumerated().map { .init(String($0.offset), $0.element.button.title) },
+            width: max(1, width), columnsEnabled: listColumnsEnabled && ordered.count >= 2,
+            minimumHeight: listMinimumHeight, captionInset: 24,
+            rowHeadings: Dictionary(uniqueKeysWithValues: ordered.enumerated().compactMap { item in
+                listHeadings[item.element.index].map { (String(item.offset), $0) }
+            }), font: GameMenuArtwork.renderer()?.font(.small))
     }
     private func layoutListActions() {
         guard listScroll.superview != nil else { return }
@@ -683,12 +732,7 @@ import LemmingsGameArt
         let ordered = listActions.sorted { $0.index < $1.index }
         listScroll.frame = CGRect(x: 0, y: 0, width: body.bounds.width, height: max(0, body.bounds.height - listTopInset))
         let viewport = listScroll.contentSize
-        let grid = GameListGrid(actions: ordered.enumerated().map { .init(String($0.offset), $0.element.button.title) },
-            width: max(1, viewport.width - 24), columnsEnabled: ordered.count >= 2,
-            minimumHeight: listMinimumHeight, captionInset: 24,
-            rowHeadings: Dictionary(uniqueKeysWithValues: ordered.enumerated().compactMap { item in
-                listHeadings[item.element.index].map { (String(item.offset), $0) }
-            }), font: GameMenuArtwork.renderer()?.font(.small))
+        let grid = listGrid(width: viewport.width - 24)
         listDocument.headings = grid.headings.map { ($0.0, $0.1.offsetBy(dx: 12, dy: 12)) }
         let size = CGSize(width: viewport.width, height: max(viewport.height, grid.height + 24))
         listScroll.hasVerticalScroller = size.height > viewport.height + 0.5
@@ -727,14 +771,19 @@ import LemmingsGameArt
     let subtitle: String
     var adaptive = false
     var compactHeading = false
-    var headerBottom: CGFloat {
-        let width = adaptive ? max(1, bounds.width - 64) : 928
+    var headerBottom: CGFloat { headerBottom(at: bounds.width) }
+    func headerBottom(at canvasWidth: CGFloat) -> CGFloat {
+        let width = adaptive ? max(1, canvasWidth - 64) : 928
         let headingHeight = max(40, GameTextLayout.height(title, width: width, face: .large))
         if compactHeading { return 48 + headingHeight + 20 }
         let subtitleHeight = subtitle.isEmpty && adaptive ? 0 : max(24, GameTextLayout.height(subtitle, width: width))
         return max(adaptive ? 100 : 152, (adaptive ? 28 : 48) + headingHeight + 12 + subtitleHeight + 12)
     }
     var detail = ""
+    var statisticsRows: [String] = []
+    var statisticsHeight: CGFloat {
+        statisticsRows.reduce(20) { $0 + GameTextLayout.linePitch($1, font: font?.font(.small)) + 4 }
+    }
     var isMessage = false
     private var font: MacInterfaceRenderer? { GameMenuArtwork.renderer() }
     override var isFlipped: Bool { true }
@@ -754,7 +803,7 @@ import LemmingsGameArt
         let headingWidth: CGFloat = adaptive ? max(1, bounds.width - 64) : isMessage ? 768 : 928
         let headingHeight = max(40, GameTextLayout.height(title, width: headingWidth, face: .large))
         let heading = CGRect(x: adaptive ? 32 : isMessage ? 176 : 96, y: adaptive ? 28 : isMessage ? 206 : 48, width: headingWidth, height: headingHeight)
-        let subheading = CGRect(x: adaptive ? 32 : 96, y: heading.maxY + 12, width: headingWidth, height: max(24, GameTextLayout.height(subtitle, width: headingWidth)))
+        let subheading = CGRect(x: heading.minX, y: heading.maxY + 12, width: headingWidth, height: max(24, GameTextLayout.height(subtitle, width: headingWidth)))
         let explanationY = max(280, heading.maxY + 16)
         let explanation = CGRect(x: 176, y: explanationY, width: 768, height: max(24, 424 - explanationY))
         if let font {
@@ -765,6 +814,35 @@ import LemmingsGameArt
             GamePixelText.draw(title, in: heading)
             GamePixelText.draw(subtitle, in: subheading)
             GamePixelText.draw(detail, in: explanation)
+        }
+        if !statisticsRows.isEmpty { drawStatistics() }
+    }
+    private func drawStatistics() {
+        let bitmapFont = font?.font(.small)
+        let rows = statisticsRows.map { row -> (label: String, value: String) in
+            guard let colon = row.lastIndex(of: ":") else { return (row, "") }
+            let value = row[row.index(after: colon)...].trimmingCharacters(in: .whitespaces)
+            return (String(row[...colon]), value)
+        }
+        let valueWidth = rows.map { GameTextLayout.width(of: $0.value, font: bitmapFont) }.max() ?? 0
+        let available = bounds.width - 64
+        let gap: CGFloat = valueWidth > 0 ? 20 : 0
+        let labelWidth = min(max(1, available - gap - valueWidth),
+            rows.map { GameTextLayout.width(of: $0.label, font: bitmapFont) }.max() ?? 0)
+        let left = floor((bounds.width - labelWidth - gap - valueWidth) / 2)
+        var y = headerBottom + 8
+        for (index, row) in rows.enumerated() {
+            let height = GameTextLayout.linePitch(statisticsRows[index], font: bitmapFont)
+            let label = CGRect(x: left, y: y, width: labelWidth, height: height)
+            let value = CGRect(x: label.maxX + gap, y: y, width: valueWidth, height: height)
+            if let font {
+                font.menuLine(row.label, in: label, alignment: .left)
+                font.menuLine(row.value, in: value, alignment: .right)
+            } else {
+                GamePixelText.draw(row.label, in: label, alignment: .left)
+                GamePixelText.draw(row.value, in: value, alignment: .right)
+            }
+            y += height + 4
         }
     }
 }
@@ -780,6 +858,7 @@ import LemmingsGameArt
         super.init(frame: .zero)
         self.title = title; target = self; action = #selector(invoke)
         setButtonType(.momentaryPushIn)
+        focusRingType = .none
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     override func accessibilityPerformPress() -> Bool {
