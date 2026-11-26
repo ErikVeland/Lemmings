@@ -952,7 +952,7 @@ import NxlvKit
     experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     experiencePopUp?.needsDisplay = true
     GameAccessibility.interfaceSize = settings.interfaceSize
-    GameScreen.shared.reattach()
+    GameScreen.shared.reattach(relayout: true)
     onChange?(settings)
   }
   @objc private func interfaceSizeChanged(_ sender: NSPopUpButton) {

@@ -238,12 +238,17 @@ import LemmingsGameArt
         updateAccessibility()
         return true
     }
-    func reattach() {
+    func reattach(relayout: Bool = false) {
         guard let root = gameWindow?.contentView, let current = pages.last else { return }
         let container = current.container
-        container.isHidden = true
-        current.view.isHidden = false
-        if container.superview !== root {
+        let needsAttachment = container.superview !== root
+        let needsReveal = needsAttachment || container.isHidden || current.view.isHidden
+        guard needsReveal || relayout else { return }
+        if needsReveal {
+            container.isHidden = true
+            current.view.isHidden = false
+        }
+        if needsAttachment {
             container.removeFromSuperview()
             container.frame = root.bounds
             container.autoresizingMask = [.width, .height]
@@ -252,8 +257,10 @@ import LemmingsGameArt
         container.needsLayout = true
         container.layoutSubtreeIfNeeded()
         current.view.layoutSubtreeIfNeeded()
-        container.isHidden = false
-        gameWindow?.makeFirstResponder(current.focus)
+        if needsReveal {
+            container.isHidden = false
+            gameWindow?.makeFirstResponder(current.focus)
+        }
     }
     /**
      * Rebuild one translated page while retaining the modal stack and the paused game beneath it.
