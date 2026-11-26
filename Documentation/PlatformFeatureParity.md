@@ -1,5 +1,33 @@
 # Cross-platform feature parity
 
+## Loading intro
+
+Mac, iPhone, iPad, Duo and Apple TV share the pixel artwork for longer
+level loads. The intro begins after 550 ms. With menu music enabled, it
+can play a random track through the MOD engine after 1.4 seconds. The game
+takes over as soon as it is ready. Reduce Motion and Reduce Flashes hold
+the artwork still.
+
+The player looks in the installation's `LoadingIntros` folder. Public
+builds need separate permission to bundle the original scene tracks.
+The private Mac collection is installed outside the repository. iOS and
+tvOS can read an installed or bundled collection. They have no picker
+for these files.
+
+Mobile cold launch and Apple TV migration use the visual intro while the
+library prepares. Startup audio waits for the normal profile and audio
+session setup. The Mac intro uses existing background launch screens.
+Loads that run synchronously on the main thread have no animated intro.
+
+## Home background reveal
+
+Mac, iPad, Duo and Apple TV reveal a loaded level backdrop through five
+pixel sizes over about half a second. iPhone uses the same effect where
+the boxed Home layout is available. The effect uses the loaded artwork
+from Classic, Lemmings 2, Lemmings 3 or supported NeoLemmix levels.
+Reduce Motion and Static Home Screen use the sharp image immediately.
+The usual camera pan continues after the reveal. Device acceptance remains open.
+
 ## Menu spacing and scope · 26 November 2026
 
 Home places Hot Seat before Play on Mac and the shared iPhone, iPad, Duo

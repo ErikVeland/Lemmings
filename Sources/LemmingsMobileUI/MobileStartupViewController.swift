@@ -15,6 +15,7 @@ import UIKit
     required init?(coder: NSCoder) { nil }
     private let logo = UIImageView(image: UIImage(named: "StartupLogo"))
     private let hourglass = MobileStartupHourglass()
+    private let loadingIntro = MobileLoadingIntro()
     private var content: UIViewController?
     private var startupTask: Task<Void, Never>?
     nonisolated(unsafe) private var firstFrameLink: CADisplayLink?
@@ -68,6 +69,10 @@ import UIKit
 
     private func startLoading() {
         hourglass.accessibilityLabel = L10n.text("Loading...")
+        loadingIntro.start(in: view, configuration: configuration, message: L10n.text("Loading..."),
+                           reduceMotion: UIAccessibility.isReduceMotionEnabled) { [weak self] in
+            self?.startupTask != nil && self?.content == nil
+        }
         startupTask = Task { [weak self] in
             let restored = await Task.detached(priority: .userInitiated) {
                 Result { try MobileResourceAccess.restoredBundleURL() }
@@ -89,6 +94,7 @@ import UIKit
                                                        appropriateFor: nil, create: false)
             let catalogue = await MobileCatalogueLoader().load(resources: GameResources.resourceURL, support: support)
             guard !Task.isCancelled else { return }
+            loadingIntro.stop()
             #if os(tvOS)
             let controller = MobileTVBootstrap(configuration: configuration)
             controller.catalogue = catalogue
@@ -111,6 +117,11 @@ import UIKit
             if pendingDeskClock { openDeskClock() }
             #endif
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        loadingIntro.stop()
     }
 
     #if os(iOS)

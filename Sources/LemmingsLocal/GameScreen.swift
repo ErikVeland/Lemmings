@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import LemmingsAppCore
+import LemmingsAudio
 import NxlvKit
 import LemmingsGameArt
 
@@ -27,6 +28,48 @@ import LemmingsGameArt
         GameStyle.fill(bounds, .black)
         GameControlText.draw(message, in: bounds.insetBy(dx: Self.horizontalPadding, dy: 2),
             alignment: .center, role: .heading)
+    }
+}
+
+@MainActor private final class GameLoadingIntroView: NSView {
+    private let message: String
+    private let reducesMotion: Bool
+    private let startedAt = ProcessInfo.processInfo.systemUptime
+    private var timer: Timer?
+
+    override var isFlipped: Bool { true }
+    override var isOpaque: Bool { true }
+
+    init(frame: CGRect, message: String, reducesMotion: Bool) {
+        self.message = message
+        self.reducesMotion = reducesMotion
+        super.init(frame: frame)
+        autoresizingMask = [.width, .height]
+        setAccessibilityElement(false)
+    }
+
+    required init?(coder: NSCoder) { nil }
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        timer?.invalidate()
+        timer = nil
+        guard window != nil, !reducesMotion else { return }
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0 / 24, repeats: true) { [weak self] timer in
+            MainActor.assumeIsolated {
+                guard let self else { timer.invalidate(); return }
+                if self.window?.isVisible == true { self.needsDisplay = true }
+            }
+        }
+    }
+
+    override func draw(_ dirtyRect: NSRect) {
+        guard let context = NSGraphicsContext.current?.cgContext else { return }
+        let reduced = reducesMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion
+        let elapsed = reduced ? 0 : ProcessInfo.processInfo.systemUptime - startedAt
+        GameLoadingIntroArt.draw(in: bounds, title: AppDistribution.name, message: message,
+            elapsed: elapsed, context: context)
     }
 }
 
@@ -89,7 +132,16 @@ import LemmingsGameArt
     private var loadingID: UUID?
     private var loadingView: GameLoadingIndicator?
     private weak var loadingPage: GameMenuPage?
-    @discardableResult func beginLoading(owner: NSWindow, message: String = L10n.text("Loading...")) -> UUID {
+    private var loadingIntroTask: Task<Void, Never>?
+    private var loadingIntroView: GameLoadingIntroView?
+    private let loadingIntroMusic = GameLoadingIntroMusic()
+    private var isLoadingIntroMusicPlaying = false
+    var loadingIntroReducesMotion: (() -> Bool)?
+    var loadingIntroMusicVolume: (() -> Double)?
+    var loadingIntroMusicChanged: ((Bool) -> Void)?
+
+    @discardableResult func beginLoading(owner: NSWindow, message: String = L10n.text("Loading..."),
+                                        gameLaunch: Bool = false) -> UUID {
         clearLoading()
         let id = UUID()
         loadingID = id
@@ -113,13 +165,42 @@ import LemmingsGameArt
         }
         loadingView = indicator
         NSAccessibility.post(element: indicator, notification: .valueChanged)
+        if gameLaunch {
+            loadingIntroTask = Task { [weak self, weak owner] in
+                try? await Task.sleep(nanoseconds: GameLoadingIntroArt.visualDelay)
+                guard !Task.isCancelled, let self, self.loadingID == id, let owner,
+                      owner.isVisible, owner.attachedSheet == nil, let root = owner.contentView else { return }
+                let intro = GameLoadingIntroView(frame: root.bounds, message: message,
+                    reducesMotion: self.loadingIntroReducesMotion?() == true
+                        || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+                self.loadingIntroView = intro
+                root.addSubview(intro, positioned: .above, relativeTo: nil)
+                try? await Task.sleep(nanoseconds: GameLoadingIntroArt.musicDelay)
+                guard !Task.isCancelled, self.loadingID == id, owner.isKeyWindow, NSApp.isActive,
+                      intro.window === owner,
+                      let volume = self.loadingIntroMusicVolume?(), self.loadingIntroMusic.play(volume: volume) else { return }
+                self.isLoadingIntroMusicPlaying = true
+                self.loadingIntroMusicChanged?(true)
+            }
+        }
         return id
     }
     func endLoading(_ id: UUID) {
         guard loadingID == id else { return }
         clearLoading()
     }
+    func stopLoadingIntroMusic() {
+        guard isLoadingIntroMusicPlaying else { return }
+        loadingIntroMusic.stop()
+        isLoadingIntroMusicPlaying = false
+        loadingIntroMusicChanged?(false)
+    }
     func clearLoading() {
+        loadingIntroTask?.cancel()
+        loadingIntroTask = nil
+        loadingIntroView?.removeFromSuperview()
+        loadingIntroView = nil
+        stopLoadingIntroMusic()
         if let loadingPage { loadingPage.setLoadingIndicator(nil) }
         else { loadingView?.removeFromSuperview() }
         loadingPage = nil

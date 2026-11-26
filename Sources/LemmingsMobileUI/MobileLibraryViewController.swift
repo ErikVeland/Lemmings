@@ -50,6 +50,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private let homeBackdropLoader = MobileHomeBackdropLoader()
     private var homeBackdropTask: Task<Void, Never>?
     private var homeBackdropKey: String?
+    private let loadingIntro = MobileLoadingIntro()
     #if os(tvOS)
     private var topShelfTask: Task<Void, Never>?
     #endif
@@ -643,6 +644,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewIsVisible = false
+        loadingIntro.stop(restoreMenuMusic: false)
         syncPages()
     }
 
@@ -664,6 +666,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     guard let self, let scene, scene === self.viewIfLoaded?.window?.windowScene else { return }
                     self.sceneIsActive = name == UIScene.didActivateNotification
                     if !self.sceneIsActive {
+                        self.loadingIntro.stop(restoreMenuMusic: false)
                         MobileMusic.shared.setMenu(
                             visible: self.game == nil && !self.deskClockShown && self.viewIsVisible,
                             active: false
@@ -688,17 +691,21 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
 
+    private var reducesHomeBackdropMotion: Bool {
+        mobileSettings.classic.staticHomeScreen || mobileSettings.classic.reduceMotion || UIAccessibility.isReduceMotionEnabled
+    }
+
     private func updateLibraryDisplayLink() {
         let active = viewIsVisible && sceneIsActive && game == nil && !deskClockShown
         syncSavedCountRefresh(visible: active && (route == .rankings || route == .telemetryConsent))
         if !active { unfold.stop() }
-        let animatedBackdrop = usesHomeBox && route == .home && homeBackdropView.canAnimate
-            && !mobileSettings.classic.staticHomeScreen && !mobileSettings.classic.reduceMotion
-            && !UIAccessibility.isReduceMotionEnabled
+        let animatedBackdrop = usesHomeBox && !reducesHomeBackdropMotion
+            && ((route == .home && homeBackdropView.canAnimate)
+                || ((route == .home || usesMenuOverlay) && homeBackdropView.isRevealing))
         inputLink?.isPaused = deskClockBlocksInput || !active || (!animatedBackdrop && GCController.controllers().isEmpty)
         if inputLink?.isPaused == true {
             libraryInput.reset()
-            homeBackdropView.advance(at: 0, active: false, reduceMotion: true)
+            homeBackdropView.advance(at: 0, active: false, reduceMotion: reducesHomeBackdropMotion)
         }
     }
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -721,6 +728,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        defer { loadingIntro.bringToFront(in: view) }
         #if os(iOS)
         checkDeskClock()
         #endif
@@ -938,7 +946,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         canvas.backgroundColor = shown ? .clear : .black
         canvas.isOpaque = !shown
         guard shown, viewIsVisible, sceneIsActive else {
-            homeBackdropView.advance(at: 0, active: false, reduceMotion: true)
+            homeBackdropView.advance(at: 0, active: false, reduceMotion: false)
             if homeBackdropTask != nil { homeBackdropTask?.cancel(); homeBackdropTask = nil; homeBackdropKey = nil }
             return
         }
@@ -969,7 +977,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 neoLibrary: { try NeoLemmixMobileLibrary(directory: $0, storage: $1) })
             guard !Task.isCancelled, let self, self.homeBackdropKey == key else { return }
             self.homeBackdropTask = nil
-            self.homeBackdropView.show(scenery)
+            self.homeBackdropView.show(scenery, reduceMotion: self.reducesHomeBackdropMotion)
             self.updateLibraryDisplayLink()
             #if os(tvOS)
             // Top Shelf picks one of the two Macintosh looks for each newly exported level.
@@ -991,10 +999,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     func advanceHomeBackdrop(at now: TimeInterval) {
+        let wasRevealing = homeBackdropView.isRevealing
         homeBackdropView.advance(at: now,
-            active: usesHomeBox && route == .home && game == nil && presentedViewController == nil
+            active: usesHomeBox && (route == .home || (usesMenuOverlay && wasRevealing))
+                && game == nil && presentedViewController == nil
                 && view.window?.windowScene?.activationState == .foregroundActive,
-            reduceMotion: mobileSettings.classic.staticHomeScreen || mobileSettings.classic.reduceMotion || UIAccessibility.isReduceMotionEnabled)
+            reduceMotion: reducesHomeBackdropMotion)
+        if wasRevealing && !homeBackdropView.isRevealing { updateLibraryDisplayLink() }
     }
 
     func rebuild() {
@@ -1243,7 +1254,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if deskClock != nil { MobileMusic.shared.suspend(); return }
         #endif
         MobileMusic.shared.selectProfile(settingsProfileID)
-        MobileMusic.shared.setMenu(visible: game == nil && !deskClockShown && viewIsVisible,
+        MobileMusic.shared.setMenu(visible: game == nil && !deskClockShown && viewIsVisible && !loadingIntro.isPlayingMusic,
                                    active: sceneIsActive && !MobileMusic.shared.startupAuthenticationPending)
     }
 
@@ -1335,6 +1346,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
     func handle(_ id: String) {
+        guard !loadingIntro.isPresented || id == "back" || id == "home" else { return }
         if confirmingGameAssetLicence {
             guard id == "gameAssets.cancel" || id == "gameAssets.agree" else { return }
             confirmingGameAssetLicence = false
@@ -1640,6 +1652,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     private func stopMenuPreviews() {
+        loadingIntro.stop()
         let previous = previewTask
         previous?.cancel(); previewTask = nil
         let covers = browser.stopArtworkLoading()
@@ -2091,7 +2104,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, restoringMatchingCheckpoint: Bool = false) {
         guard !preparingLevel, libraryTask == nil, canSelectJourneyLevel(index), let library, let checkpointStore else { return }
         guard let previewLoader else { return }
-        let settings = MobileSettings.load(from: .standard, profileID: checkpoint?.owner ?? settingsProfileID).classic
+        let playerSettings = MobileSettings.load(from: .standard, profileID: checkpoint?.owner ?? settingsProfileID)
+        let settings = playerSettings.classic
         stopMenuPreviews()
         let cancelledPreviews = previewDrain
         let generation = UUID(); previewGeneration = generation
@@ -2101,6 +2115,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if selectedIndex != index { selectedPreview = nil }
         selectedIndex = index
         notice = ""; preparingLevel = true; loading = true; rebuild()
+        let introMusicEnabled = playerSettings.musicEnabled && settings.menuMusic && settings.music != .silent
+        loadingIntro.start(in: view, configuration: configuration, message: L10n.text("Loading..."),
+                           reduceMotion: settings.reduceMotion || settings.reduceFlashes,
+                           volume: introMusicEnabled ? settings.musicVolume : 0,
+                           musicChanged: { [weak self] in self?.syncMenuMusic() }) { [weak self] in
+            guard let self else { return false }
+            return self.preparingLevel && self.previewGeneration == generation && !self.deskClockBlocksInput
+                && self.viewIsVisible && self.sceneIsActive && self.presentedViewController == nil
+        }
         let menuTasks = [fanCountsTask, shuffleTask, learningTask].compactMap { $0 }
         menuTasks.forEach { $0.cancel() }
         fanCountGeneration = UUID(); fanCountsTask = nil
@@ -2114,6 +2137,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 let prepared = try await previewLoader.prepare(index, settings: settings,
                     checkpoint: checkpoint, allowUnrelatedCheckpoint: restoringMatchingCheckpoint)
                 guard !Task.isCancelled, previewGeneration == generation else { return }
+                loadingIntro.stop(restoreMenuMusic: false)
                 loading = false; preparingLevel = false
                 let matching = restoringMatchingCheckpoint && checkpoint?.levelIdentifier != prepared.content.session.levelIdentifier
                     ? nil : checkpoint
@@ -2126,6 +2150,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                      checkpointStore: checkpointStore, content: prepared.content)
             } catch {
                 guard !Task.isCancelled, previewGeneration == generation else { return }
+                loadingIntro.stop()
                 loading = false; preparingLevel = false
                 if let game { game.showPreparationError(error.localizedDescription) }
                 else { notice = error.localizedDescription; rebuild() }
@@ -2350,6 +2375,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 MobileMusic.shared.retireAttempt(next.runID)
                 switch action {
                 case .library, .menu, .easyPuzzles, .doneEasyPuzzles:
+                    self.loadingIntro.stop()
                     self.previewTask?.cancel(); self.previewGeneration = UUID()
                     self.loading = false; self.preparingLevel = false
                     self.game?.willMove(toParent: nil); self.game?.view.removeFromSuperview(); self.game?.removeFromParent()

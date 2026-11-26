@@ -1118,6 +1118,10 @@ struct ReticleFeedback {
   }
 
   private(set) var homeBackdropImage: CGImage?
+  private var homeBackdropReveal: GameHomeBackdropReveal?
+  var homeBackdropIsRevealing: Bool {
+    usesHomeLayout && !menuMotionReduced && homeBackdropReveal?.frame(at: homeBackdropElapsed) != nil
+  }
   private var homeBackdropStart = CGPoint.zero
   private var homeBackdropGoal: CGPoint?
   private(set) var homeBackdropElapsed: TimeInterval = 0
@@ -1129,6 +1133,7 @@ struct ReticleFeedback {
         bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
         decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return }
     homeBackdropImage = image
+    homeBackdropReveal = menuMotionReduced ? nil : GameHomeBackdropReveal(image: image)
     homeBackdropStart = bitmap.start
     homeBackdropGoal = bitmap.goal
     homeBackdropElapsed = 0
@@ -1137,7 +1142,9 @@ struct ReticleFeedback {
 
   func advanceHomeBackdrop(seconds: TimeInterval) {
     guard usesHomeLayout, !menuMotionReduced else { return }
-    homeBackdropElapsed += max(0, seconds)
+    let elapsed = max(0, seconds)
+    homeBackdropElapsed += homeBackdropReveal == nil ? elapsed : min(0.25, elapsed)
+    if homeBackdropReveal?.frame(at: homeBackdropElapsed) == nil { homeBackdropReveal = nil }
   }
 
   /// Ease from the opening view towards the exit and back, at no more than three level pixels per second.
@@ -1161,11 +1168,13 @@ struct ReticleFeedback {
 
   private func drawHomeBackdrop() {
     guard let image = homeBackdropImage, let source = homeBackdropSource(at: homeBackdropElapsed) else { return }
+    if menuMotionReduced { homeBackdropReveal = nil }
+    let artwork = homeBackdropReveal?.frame(at: homeBackdropElapsed) ?? image
     let scale = bounds.width / source.width
     NSGraphicsContext.saveGraphicsState()
     NSBezierPath(rect: bounds).addClip()
     NSGraphicsContext.current?.imageInterpolation = .none
-    NSImage(cgImage: image, size: .zero).draw(in: CGRect(x: -source.minX * scale, y: -source.minY * scale,
+    NSImage(cgImage: artwork, size: .zero).draw(in: CGRect(x: -source.minX * scale, y: -source.minY * scale,
       width: CGFloat(image.width) * scale, height: CGFloat(image.height) * scale),
       from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
     NSColor.black.withAlphaComponent(0.28).setFill(); bounds.fill()
