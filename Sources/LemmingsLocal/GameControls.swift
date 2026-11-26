@@ -57,16 +57,31 @@ import NxlvKit
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
         let selected = state == .on || state == .mixed || isHighlighted
-        let socket = isCheck ? CGRect(x: 0, y: bounds.midY - 10, width: 20, height: 20) : bounds
+        let socket = isCheck ? CGRect(x: 2, y: floor(bounds.midY) - 8, width: 16, height: 16) : bounds
         let lixCheck = isCheck && GameArtworkSkin.usesLixInterface && NSGraphicsContext.current.map {
             GameLixInterfaceArt.drawCheckbox(checked: state != .off, in: socket, context: $0.cgContext,
                 selected: isHighlighted, enabled: isEnabled)
         } == true
-        if !lixCheck {
-            GameStoneButton.draw(socket, selected: selected, pixel: 1)
-            if isCheck && selected {
-                GamePixelText.draw(state == .mixed ? "-" : "X", in: socket.insetBy(dx: 5, dy: 5))
+        if isCheck, !lixCheck, let context = NSGraphicsContext.current?.cgContext {
+            context.saveGState()
+            context.setAlpha(isEnabled ? 1 : 0.45)
+            context.setFillColor(CGColor(gray: 0.08, alpha: 1))
+            context.fill(socket)
+            context.setStrokeColor(CGColor(gray: isHighlighted ? 0.95 : 0.60, alpha: 1))
+            context.setLineWidth(1)
+            context.stroke(socket.insetBy(dx: 0.5, dy: 0.5))
+            context.setFillColor(CGColor(srgbRed: 0.72, green: 0.86, blue: 0.45, alpha: 1))
+            if state == .mixed {
+                context.fill(CGRect(x: socket.minX + 4, y: socket.midY - 1, width: 8, height: 2))
+            } else if state == .on {
+                for step in 0..<9 {
+                    let y = step < 3 ? 7 + step : 12 - step
+                    context.fill(CGRect(x: socket.minX + 4 + CGFloat(step), y: socket.minY + CGFloat(y), width: 1, height: 2))
+                }
             }
+            context.restoreGState()
+        } else if !isCheck {
+            GameStoneButton.draw(socket, selected: selected, pixel: 1)
         }
         let caption = isCheck ? CGRect(x: 28, y: 0, width: bounds.width - 28, height: bounds.height) : bounds.insetBy(dx: 8, dy: 2)
         GameControlText.draw(title, in: caption, alignment: isCheck ? .left : .center, enabled: isEnabled, role: .body)
@@ -101,6 +116,7 @@ import NxlvKit
         super.init(frame: .zero)
         self.title = title; self.target = target; self.action = action
         setButtonType(.switch)
+        focusRingType = .none
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
 }
@@ -276,8 +292,20 @@ import NxlvKit
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
         GameStoneButton.draw(bounds, selected: false, pixel: 1)
-        GameControlText.draw(titleOfSelectedItem ?? "", in: bounds.insetBy(dx: 12, dy: 2).offsetBy(dx: -4, dy: 0), enabled: isEnabled)
-        GamePixelText.draw(">", in: CGRect(x: bounds.maxX - 18, y: bounds.midY - 6, width: 10, height: 12))
+        GameControlText.draw(titleOfSelectedItem ?? "", in: CGRect(x: 10, y: 2,
+            width: max(1, bounds.width - 36), height: bounds.height - 4), enabled: isEnabled)
+        if let context = NSGraphicsContext.current?.cgContext {
+            context.saveGState()
+            context.setFillColor(CGColor(gray: 0.80, alpha: isEnabled ? 1 : 0.45))
+            let x = floor(bounds.maxX - 13), y = floor(bounds.midY - 3)
+            for step in 0..<5 {
+                let offset = CGFloat(4 - step)
+                let row = y + CGFloat(step)
+                context.fill([CGRect(x: x - offset, y: row, width: 1, height: 2),
+                    CGRect(x: x + offset, y: row, width: 1, height: 2)])
+            }
+            context.restoreGState()
+        }
         GameControlText.focus(self)
     }
     override func mouseDown(with event: NSEvent) { showChoices() }

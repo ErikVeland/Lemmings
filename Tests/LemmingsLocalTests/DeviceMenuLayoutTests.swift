@@ -192,7 +192,7 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 journey: .init("journey", "Journey map 1/227 solved"), families: families, initials: "ALICE v BOB")
             let layout = GameFrontEnd.layout(page, width: width, minimumHeight: 834, bookHomePanes: panes)
             XCTAssertNotNil(layout.secondaryBoard)
-            XCTAssertNotNil(layout.libraryHeading)
+            XCTAssertNil(layout.libraryHeading)
             XCTAssertEqual(Set(layout.targets.map { $0.action.id }), Set((page.rows + page.footer).map(\.id)))
             XCTAssertEqual(layout.targets.filter { $0.action.primary }.count, 1)
             for pane in panes {
@@ -315,7 +315,7 @@ final class DeviceMenuLayoutTests: XCTestCase {
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         let families = ["CLASSIC LEMMINGS  93/120", "OH NO! MORE LEMMINGS  45/100", "HOLIDAY LEMMINGS  17/72",
             "OH YES! MORE LEMMINGS  20/60", "FAN LEMMINGS  12/15000", "NEOLEMMIX  4/500", "LEMMINGS 2", "LEMMINGS 3"]
-        let destinations = ["PLAY", "HOT SEAT", "PROFILE", "COMMUNITY"]
+        let destinations = ["HOT SEAT", "PLAY", "PROFILE", "COMMUNITY"]
         for size in [CGSize(width: 640, height: 480), .init(width: 900, height: 600), .init(width: 1000, height: 620), .init(width: 1120, height: 720),
                      .init(width: 1600, height: 900), .init(width: 2560, height: 1600)] {
             for saved in 0...2 {
@@ -353,8 +353,8 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 let play = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "PLAY" })
                 let hotSeat = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "HOT SEAT" })
                 XCTAssertLessThan(primary.localFrame.maxY, play.localFrame.minY)
-                XCTAssertEqual(primary.localFrame.minX, play.localFrame.minX, accuracy: 1)
-                XCTAssertEqual(primary.localFrame.maxX, hotSeat.localFrame.maxX, accuracy: 1)
+                XCTAssertEqual(primary.localFrame.minX, hotSeat.localFrame.minX, accuracy: 1)
+                XCTAssertEqual(primary.localFrame.maxX, play.localFrame.maxX, accuracy: 1)
                 XCTAssertEqual(field.homeSelection(from: 0, direction: "down"), 1)
                 XCTAssertEqual(field.homeSelection(from: 1, direction: "right"), 2)
                 if size.width >= 900 {
@@ -415,6 +415,40 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count + 1)); XCTAssertTrue(collections)
             }
         }
+    }
+
+    @MainActor func testMacPlayKeepsFullCaptionWhenTheLargeTextWillNotFit() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let typography = try XCTUnwrap(GameMenuTypography(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings")))
+        let font = try XCTUnwrap(typography.font(.small))
+        var level = GameFrontEnd.Action("family.0", "Classic")
+        level.titleRuns = [.init("Classic Lemmings", .green), .init("  99/120 levels", .blue)]
+        var page = GameFrontEnd.Page(title: "Play", rows: [level, .init("family.1", "Holiday")])
+        page.macTitleMenu = true
+        page.gameLibrary = true
+        page.macPlayMinimumCaptionScale = 0.5
+        let layout = GameFrontEnd.layout(page, width: 490, minimumHeight: 300, macPlayFont: font)
+        let target = try XCTUnwrap(layout.targets.first { $0.action.id == level.id })
+        let captionWidth = GameTextLayout.width(of: level.titleRuns.map(\.text).joined(), font: font)
+        XCTAssertGreaterThan(captionWidth, target.frame.width - 24)
+        XCTAssertLessThanOrEqual(captionWidth / 2, target.frame.width - 24)
+
+        func render(_ count: String) throws -> Data {
+            var page = page
+            page.rows[0].titleRuns[1].text = count
+            let layout = GameFrontEnd.layout(page, width: 490, minimumHeight: 300, macPlayFont: font)
+            let size = layout.size
+            let bitmap = try XCTUnwrap(NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: Int(size.width * 2),
+                pixelsHigh: Int(size.height * 2), bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+                colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0))
+            let graphics = try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap))
+            graphics.cgContext.translateBy(x: 0, y: size.height * 2)
+            graphics.cgContext.scaleBy(x: 2, y: -2)
+            GameFrontEnd.draw(page, layout: layout, typography: typography, in: graphics.cgContext)
+            return try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
+        }
+        XCTAssertNotEqual(try render("  99/120 levels"), try render("  88/120 levels"))
     }
 }
 #endif

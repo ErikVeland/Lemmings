@@ -6,6 +6,39 @@ import NxlvKit
 @testable import LemmingsLocal
 
 final class GlobalNavigationTests: XCTestCase {
+    @MainActor func testShortMenuUsesTheLargeDisplayAndKeepsTheFooterClose() throws {
+        _ = NSApplication.shared
+        let screen = GameScreen.shared
+        let previous = screen.onMainMenu
+        screen.onMainMenu = {}
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 2560, height: 1400),
+            styleMask: [.titled], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        defer { screen.dismissAll(); screen.onMainMenu = previous; window.close() }
+        let page = GameMenuPage(title: "Profile", subtitle: "LEM")
+        let records = page.addListAction("Records", at: 0) {}
+        let players = page.addListAction("Players", at: 1, section: "All players") {}
+        XCTAssertTrue(screen.present(page, owner: window, focus: records))
+        let row = players.convert(players.bounds, to: page)
+        let footer = page.controllerBackButton.convert(page.controllerBackButton.bounds, to: page)
+        XCTAssertGreaterThanOrEqual(row.height, 112)
+        XCTAssertGreaterThan(row.width, page.bounds.width * 0.7)
+        XCTAssertGreaterThan(footer.minY - row.maxY, 0)
+        XCTAssertLessThanOrEqual(footer.minY - row.maxY, 52)
+    }
+
+    @MainActor func testScrollWheelCanPanWithoutZoom() throws {
+        let scroll = try XCTUnwrap(CGEvent(scrollWheelEvent2Source: nil, units: .pixel,
+            wheelCount: 1, wheel1: 48, wheel2: 0, wheel3: 0))
+        scroll.flags = []
+        let event = try XCTUnwrap(NSEvent(cgEvent: scroll))
+        var gesture = PrecisionZoomScrollGesture()
+        XCTAssertEqual(gesture.handle(event, zoomEnabled: false), .pan)
+        guard case .zoom = gesture.handle(event, zoomEnabled: true) else {
+            return XCTFail("The default wheel input did not zoom")
+        }
+    }
+
     @MainActor func testPlayGamePageKeepsFocusAndInputTargetsAcrossDisplayUpdates() throws {
         _ = NSApplication.shared
         let screen = GameScreen.shared

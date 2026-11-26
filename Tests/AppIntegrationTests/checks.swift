@@ -1806,7 +1806,7 @@ extension AppDelegate {
       "Modern did not restore backpacks in Settings and the playfield")
     try check(preferences.current.gameplayCursorStyle == .modern && playfield.gameplayCursorStyle == .modern
       && cursorStyle.titleOfSelectedItem == "Modern", "Modern preset did not restore the modern cursor")
-    for title in ["Favor lemmings still approaching", "Favor blockers for bombs", "Favour active skilled lemmings", "Show skill backpacks"] {
+    for title in ["Favour lemmings still approaching", "Favour blockers for bombs", "Favour active skilled lemmings", "Show skill backpacks"] {
       guard let control = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == title }) else {
         try check(false, "Targeting control is missing: \(title)"); return
       }
@@ -6823,8 +6823,12 @@ extension AppDelegate {
     let aboutFolder = aboutResources.appendingPathComponent("About")
     try FileManager.default.createDirectory(at: aboutFolder, withIntermediateDirectories: true)
     try Data(contentsOf: heritageSource).write(to: aboutFolder.appendingPathComponent("Heritage.md"))
-    try Data(contentsOf: Bundle.main.resourceURL!.appendingPathComponent("About/VersionHistory.md"))
-      .write(to: aboutFolder.appendingPathComponent("VersionHistory.md"))
+    let currentNotes = try String(contentsOf: Bundle.main.resourceURL!.appendingPathComponent("About/VersionHistory.md"),
+      encoding: .utf8).components(separatedBy: "\n# ").first!
+    let archive = (0..<19).reversed().map { "# 2.5.\($0) · Build \(80 + $0)\n\nHistorical test entry." }
+      + ["# 1.7.9\n\nOldest test entry."]
+    try ([currentNotes] + archive).joined(separator: "\n\n")
+      .write(to: aboutFolder.appendingPathComponent("VersionHistory.md"), atomically: true, encoding: .utf8)
     let about = AboutWindow(resources: aboutResources, defaults: defaults,
       loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter\n\nFlags 🏳️‍⚧️🇵🇸" })
     let page = about.show(owner: window)
@@ -6942,6 +6946,36 @@ extension AppDelegate {
       "Contributor refresh replaced the local heritage credits")
     offlinePage.controllerBackButton.performClick(nil)
     try check(!GameScreen.shared.contains(offlinePage), "Heritage credits blocked Back")
+    if flow == nil { loadContent() }
+    flow?.acknowledgeGameComplete()
+    phase = .briefing
+    homeShowsPlay = false
+    startedMusicIdentity = "current-home-theme"
+    _ = offline.show(owner: window)
+    let navigation = GameScreen.shared.controllerNavigationRoot(in: window)!
+    let mainMenu = try button("Main menu", in: navigation)
+    mainMenu.performClick(nil)
+    try check(!GameScreen.shared.isPresented && startedMusicIdentity == "current-home-theme",
+      "About restarted the home audio instead of closing its page")
+    showHomePlay(true)
+    let playTheme = startedMusicIdentity
+    _ = offline.show(owner: window)
+    let playNavigation = GameScreen.shared.controllerNavigationRoot(in: window)!
+    try button("Main menu", in: playNavigation).performClick(nil)
+    try check(!GameScreen.shared.isPresented && !homeShowsPlay && startedMusicIdentity == playTheme,
+      "Main menu did not return from About over Play to Home")
+    print("PASS About returns from Home and Play without restarting the menu theme")
+    showProfileHub()
+    let profile = GameScreen.shared.controllerPage(in: window)!
+    let statistics = try button("Statistics", in: profile)
+    let personal = statistics.convert(statistics.bounds, to: profile)
+    let players = try button("Players", in: profile)
+    let shared = players.convert(players.bounds, to: profile)
+    try check(shared.minY - personal.maxY >= 20, "Profile mixed personal and shared actions")
+    try capture(profile, "profile-groups")
+    statistics.performClick(nil)
+    try capture(GameScreen.shared.controllerPage(in: window)!, "statistics-aligned")
+    GameScreen.shared.dismissAll()
     try check(AboutWindow.coffeeURL.absoluteString == "https://coff.ee/generik", "Incorrect coffee destination")
     try check(AboutWindow.coffeeURL == GameSupport.coffeeURL, "Home and About donation destinations differ")
     GameScreen.shared.dismissAll()
@@ -6952,7 +6986,7 @@ extension AppDelegate {
     home.phase = .briefing
     home.overlayTitle = L10n.text("LEMMINGS")
     home.overlayProfileInitials = "PLA"
-    home.overlayLines = ["RESUME JOURNEY (4/120)", "PLAY", "HOT SEAT", "PROFILE", "COMMUNITY"]
+    home.overlayLines = ["RESUME JOURNEY (4/120)", "HOT SEAT", "PLAY", "PROFILE", "COMMUNITY"]
     home.overlayHomeLeadingCount = home.overlayLines.count
     home.overlayShowsSettingsButton = true
     for size in [CGSize(width: 640, height: 420), CGSize(width: 1120, height: 720), CGSize(width: 1600, height: 1000)] {
@@ -6964,7 +6998,8 @@ extension AppDelegate {
       try check(home.homeActionCount == home.overlayLines.count + 1,
         "Home lost a destination or Settings at \(Int(size.width))x\(Int(size.height)): \(home.homeActionCount) of \(home.overlayLines.count + 1)")
     }
-    try check(NSApplication.shared.helpMenu?.items.contains { $0.title == L10n.text("Donate…") } == true,
+    buildMenu()
+    try check(NSApplication.shared.helpMenu?.items.contains { $0.action == #selector(openDonation) } == true,
       "The Help menu has no Donate item")
     print("PASS Home shows Continue, four destinations and Settings at three sizes; Donate is in the Help menu")
     print("PASS About tabs, contributor cache/offline state, pixel renders and input targets; confirmed reset and recovery retain new rescues")
@@ -8278,29 +8313,29 @@ extension AppDelegate {
     }
     for pass in 1...2 {
       if let root = try? BundledGameResources.lemmings2() {
-        measure("L2 saved completion \(pass)") { _ = Lemmings2PlayWindow.savedCompletion(root: root) }
+        measure("L2 saved completion \(pass)") { _ = Lemmings2PlayWindow.savedCompletion(root: root, progressData: Lemmings2PlayWindow.browserProgressData(root: root)) }
         let campaign = try Lemmings2Campaign(root: root)
         let won = LevelCatalogueIdentity(engine: .lemmings2, packID: "tribes-0", levelID: "0:\(campaign.levels[0].fingerprint)")
-        let before = Lemmings2PlayWindow.savedCompletion(root: root)
-        try check(Lemmings2PlayWindow.savedCompletion(root: root, journeyWins: [won]) == before + 1,
+        let before = Lemmings2PlayWindow.savedCompletion(root: root, progressData: Lemmings2PlayWindow.browserProgressData(root: root))
+        try check(Lemmings2PlayWindow.savedCompletion(root: root, progressData: Lemmings2PlayWindow.browserProgressData(root: root), journeyWins: [won]) == before + 1,
           "Cached bundled content hid a new Journey win")
-        try check(Lemmings2PlayWindow.savedCompletion(root: root) == before,
+        try check(Lemmings2PlayWindow.savedCompletion(root: root, progressData: Lemmings2PlayWindow.browserProgressData(root: root)) == before,
           "Cached bundled content retained another session's progress")
         if pass == 1 {
           let imported = FileManager.default.temporaryDirectory.appendingPathComponent("completion-import-\(UUID().uuidString)")
           try FileManager.default.createDirectory(at: imported, withIntermediateDirectories: true)
           defer { try? FileManager.default.removeItem(at: imported) }
           try FileManager.default.copyItem(at: root.appendingPathComponent("LEVELS"), to: imported.appendingPathComponent("LEVELS"))
-          try check(Lemmings2PlayWindow.savedCompletion(root: imported, journeyWins: [won]) == 1,
+          try check(Lemmings2PlayWindow.savedCompletion(root: imported, progressData: Lemmings2PlayWindow.browserProgressData(root: imported), journeyWins: [won]) == 1,
             "Imported completion fixture did not match its content")
           try Data([0]).write(to: imported.appendingPathComponent("LEVELS/LEVEL000.DAT"), options: .atomic)
-          try check(Lemmings2PlayWindow.savedCompletion(root: imported, journeyWins: [won]) == 0,
+          try check(Lemmings2PlayWindow.savedCompletion(root: imported, progressData: Lemmings2PlayWindow.browserProgressData(root: imported), journeyWins: [won]) == 0,
             "Changed imported content reused stale completion data")
         }
         try measure("L2 catalogue \(pass)") { _ = try Lemmings2PlayWindow.browserLevels(root: root, progressData: nil) }
       }
       if let root = try? BundledGameResources.lemmings3() {
-        measure("L3 saved completion \(pass)") { _ = Lemmings3PlayWindow.savedCompletion(root: root) }
+        measure("L3 saved completion \(pass)") { _ = Lemmings3PlayWindow.savedCompletion(root: root, progressData: Lemmings3PlayWindow.browserProgressData(root: root)) }
         try measure("L3 catalogue \(pass)") { _ = try Lemmings3PlayWindow.browserLevels(root: root, progressData: [:]) }
       }
     }
