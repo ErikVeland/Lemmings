@@ -3,6 +3,30 @@
     <channel>
         <title>Ultimate Lemmings</title>
         <item>
+            <title>2.7.1</title>
+            <pubDate>Thu, 26 Nov 2026 19:59:55 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>113</sparkle:version>
+            <sparkle:shortVersionString>2.7.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}</style></head><body><!-- Release commit: 3a7ef75071d6a6f8f56326e8cafa24279d94cfaf -->
+<h3>Home background</h3>
+<p>The level backdrop sharpens from large pixel blocks as Home opens. Reduce Motion and Static Home Screen show the sharp image immediately.</p>
+<h3>Level loading</h3>
+<p>Longer level loads show an Amiga cracktro-style intro. Both Mac downloads include 11 original Amiga cracktro MODs and their credits. With menu music enabled, the MOD engine picks a track at random if loading lasts long enough. The game starts as soon as it is ready. Reduce Motion and Reduce Flashes hold the artwork still.</p>
+<h3>Compatibility</h3>
+<p>macOS 12.3 or later on Apple silicon and Intel.</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-2.7.1-build113.zip" length="2075667492" type="application/octet-stream" sparkle:edSignature="EzfH86x+9X2dYLk2GifWhHvAkgT+6N0emllcVDYVt+UeSnzev0+SIBmVsLYfjaBpo60zIjLgjDlV/aK/Prt7DQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from112.delta" sparkle:deltaFrom="112" length="1266486" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="zFLfD97mvkGPWBQIAlOB9Plnz2RRUxyD1mI7brqbeizSYG5xlBT+1VBbO/WdEYczAG3eWl2awfP3+bwQv9I0Cw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from111.delta" sparkle:deltaFrom="111" length="41642814" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="laeJS8/SmnkUTIBzAov5Kqn36mEQGLC7THT4h50GcZYDKD1t9msUV0VSsOe0QVu8DdJQ5kwDXsGI6qvtKUDOAQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from110.delta" sparkle:deltaFrom="110" length="48330790" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="yzjke59/1fUqQFeRtZ5zruO/8n0pO/4Yb5+RtSqGmt+2Il6qL5gIspqMMQaOsZ31WKS2aOaZ96cn6PHj+tF4AA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from109.delta" sparkle:deltaFrom="109" length="49251550" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="RrYPaap3EeNNgQ7HeHxxonl4EAgOfvSW/LQr7CduNeP3T4LIAjzoi/B/gBUOqZ+YCFMEUpUSkZybEbcgByX8AA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from106.delta" sparkle:deltaFrom="106" length="65415562" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="fHfof0Q1W6NFMUxoVRyd6I0UhwaANTJS3FRDHc5RLFPfqGwXn1SwiiVfiH0cX7d2zybCmccPiYJQ/TNkYxW+Cg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
             <title>2.7</title>
             <pubDate>Thu, 26 Nov 2026 18:36:47 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
