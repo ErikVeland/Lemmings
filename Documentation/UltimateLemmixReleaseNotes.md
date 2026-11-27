@@ -1,8 +1,8 @@
 # Ultimate Lemmix release history
 
-The current source version is **2.6** (Mac build 118, iOS build 115, tvOS build 115).
-Read the [2.6 release notes](ReleaseNotes-UltimateLemmix-2.6-build118.md).
-All three 2.6 builds are waiting for App Review. They will release automatically after Apple approves them.
+The current source version is **2.7.5** (Mac build 119, iOS build 116, tvOS build 116).
+Read the [2.7.5 release notes](ReleaseNotes-UltimateLemmix-2.7.5-build119.md).
+Version 2.7.5 is a release candidate. The iOS 2.6 build is live; Mac and Apple TV 2.6 remain in review until superseded or approved.
 [2.6 submission receipts](ReleaseReadiness/ultimate-lemmix-2.6/StoreSubmissions.json)
 
 [Ultimate Lemmix 2.4.4 build 116](ReleaseNotes-UltimateLemmix-2.4.4-build116.md).
