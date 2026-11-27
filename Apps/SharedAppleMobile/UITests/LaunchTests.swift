@@ -6,6 +6,23 @@ final class LaunchTests: XCTestCase {
         continueAfterFailure = false
     }
 
+    @MainActor func testSettingsShowsOfflineAboutVersionAndCredits() throws {
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
+        app.launch()
+        tap(app.buttons["menu.settings"])
+        let about = app.buttons["menu.about"]
+        for _ in 0..<4 where !about.isHittable { app.swipeUp() }
+        tap(about)
+        let version = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH %@ AND label CONTAINS %@",
+            "Version ", " - Build ")).firstMatch
+        XCTAssertTrue(version.waitForExistence(timeout: 5))
+        let heritage = app.staticTexts.matching(NSPredicate(format: "label CONTAINS %@", "DMA Design")).firstMatch
+        XCTAssertTrue(heritage.exists)
+    }
+
     @MainActor func testReturningPlayerSeesHomeBeforeGameFilesAreReady() {
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"

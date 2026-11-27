@@ -23,6 +23,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     enum Route: Equatable {
         case home, play, support, family(MobileFamily), fanGroup([String]), levelCatalogue, levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case firstPlayer, whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
+        #if os(iOS)
+        case about
+        #endif
         case levelDetails
         case journey, progression, techniques, rankings
         case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, profileStatistics, progressPlayer(String), progressLevel(String, String?), records, achievements, recordLevel(String), recordHint(String)
@@ -786,6 +789,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         globalNavigation.isHidden = game != nil || route == .home || route == .firstPlayer || deskClockShown || confirmingGameAssetLicence
         browser.showsBack = globalNavigation.isHidden
         switch route {
+        #if os(iOS)
+        case .about: globalNavigation.secondaryTitle = nil
+        #endif
         case .settings, .settingsGroup, .language, .controllerMappings, .soundtrack:
             globalNavigation.secondaryTitle = nil
         default: globalNavigation.secondaryTitle = L10n.text("Settings")
@@ -1138,6 +1144,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = insightsTokenPage(); canvas.preview = nil
         case .insightsClear:
             canvas.page = insightsClearPage(); canvas.preview = nil
+        #if os(iOS)
+        case .about:
+            canvas.page = aboutPage(); canvas.preview = nil
+        #endif
         case .settings:
             canvas.page = settingsGroupsPage(); canvas.preview = nil
         case let .settingsGroup(group):
@@ -1421,6 +1431,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             rebuild()
         case "profileStatistics": navigate(.profileStatistics)
         case "settings": navigate(.settings)
+        #if os(iOS)
+        case "about":
+            guard game == nil else { return }
+            if route == .settings { navigate(.about) }
+            else if case .settingsGroup = route { navigate(.about) }
+        case "aboutBack":
+            guard route == .about else { return }
+            navigate(previousRoute ?? .settings)
+        #endif
         case "settingsBack":
             let source = settingsReturn
             settingsReturn = nil

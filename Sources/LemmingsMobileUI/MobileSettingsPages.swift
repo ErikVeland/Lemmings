@@ -37,6 +37,14 @@ extension MobileLibraryViewController {
         return page
     }
 
+    private var externalSettingsActions: [GameFrontEnd.Action] {
+        #if os(iOS)
+        [MobileAboutArt.action] + MobileSettingsArt.aboutActions
+        #else
+        MobileSettingsArt.aboutActions
+        #endif
+    }
+
     func settingsGroupsPage(inGame: Bool = false) -> GameFrontEnd.Page {
         if usesSettingsTabs {
             return settingsPage(inGame && selectedSettingsGroup == .deskClock ? .gameplay : selectedSettingsGroup, inGame: inGame)
@@ -46,7 +54,7 @@ extension MobileLibraryViewController {
         #else
         var page = MobileSettingsArt.groups(inGame: inGame)
         #endif
-        if !inGame { page.footer = [.init("settingsBack", L10n.text("Back"), backNavigation: true)] + MobileSettingsArt.aboutActions }
+        if !inGame { page.footer = [.init("settingsBack", L10n.text("Back"), backNavigation: true)] + externalSettingsActions }
         return page
     }
     func controllerMappingsPage() -> GameFrontEnd.Page {
@@ -94,9 +102,20 @@ extension MobileLibraryViewController {
         if group == .deskClock, !inGame, deskClockAvailable {
             page.rows.insert(.init("deskClock", L10n.text("Open Desk Clock")), at: 0)
         }
-        if usesSettingsTabs && !inGame { page.footer = [.init("settingsBack", L10n.text("Back"), backNavigation: true)] + MobileSettingsArt.aboutActions }
+        if usesSettingsTabs && !inGame { page.footer = [.init("settingsBack", L10n.text("Back"), backNavigation: true)] + externalSettingsActions }
         return page
     }
+    #if os(iOS)
+    func aboutPage() -> GameFrontEnd.Page {
+        let name = configuration == .ultimateLemmix && !GameResources.hasRestoredOriginalAssets
+            ? "Ultimate Lemmix" : "Ultimate Lemmings"
+        return MobileAboutArt.page(productName: name,
+            version: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
+            build: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String,
+            showsLixCredits: configuration == .ultimateLemmix || GameArtworkResources.lixArtwork != nil)
+    }
+    #endif
+
     func soundtrackPage() -> GameFrontEnd.Page {
             let libraries = MobileMusicLibraries.shared
             let packs = libraries.catalogue?.packs ?? []
