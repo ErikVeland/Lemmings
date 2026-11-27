@@ -1392,6 +1392,9 @@
 /* Sources/NxlvKit/GameplayControlTips.swift:15 */
 "Choose 1× in Game controls to reset speed." = "Choose 1× in Game controls to reset speed.";
 
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:10 */
+"Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details." = "Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details.";
+
 /* Sources/LemmingsLocal/SettingsWindow.swift:258 */
 "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation.";
 
@@ -1448,9 +1451,6 @@
 
 /* Sources/LemmingsLocal/SettingsWindow.swift:269 */
 "Choose a soundtrack or Adaptive DJ Mix." = "Choose a soundtrack or Adaptive DJ Mix.";
-
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:9 */
-"Choose a speed directly and use replay controls to revisit moves." = "Choose a speed directly and use replay controls to revisit moves.";
 
 /* Sources/LemmingsLocal/main.swift:4826 */
 "Choose a technique" = "Choose a technique";
@@ -1815,7 +1815,7 @@
 /* Sources/NxlvKit/SkillVocabulary.swift:20; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
 "Club Basher" = "Club Basher";
 
-/* Sources/LemmingsGameArt/MobileHomeArt.swift:101; Sources/LemmingsLocal/PlayfieldView.swift:1208; Sources/LemmingsLocal/PlayfieldView.swift:346; Sources/LemmingsLocal/main.swift:3732; Sources/LemmingsLocal/main.swift:3829; Sources/LemmingsLocal/main.swift:4231; Sources/LemmingsLocal/main.swift:4622; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:33 */
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:9; Sources/LemmingsGameArt/MobileHomeArt.swift:101; Sources/LemmingsLocal/PlayfieldView.swift:1208; Sources/LemmingsLocal/PlayfieldView.swift:346; Sources/LemmingsLocal/main.swift:3732; Sources/LemmingsLocal/main.swift:3829; Sources/LemmingsLocal/main.swift:4231; Sources/LemmingsLocal/main.swift:4622; Sources/LemmingsMobileUI/MobileLibraryCollections.swift:33 */
 "Collections" = "Collections";
 
 /* Sources/LemmingsLocal/main.swift:4242 */
@@ -2667,6 +2667,9 @@
 /* Sources/NxlvKit/SkillVocabulary.swift:25; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/INFO.IFF:1; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1 */
 "Exploder" = "Exploder";
 
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:9 */
+"Explore starter playlists and resume saved routes." = "Explore starter playlists and resume saved routes.";
+
 /* Sources/LemmingsLocal/SettingsWindow.swift:645 */
 "Explosions" = "Explosions";
 
@@ -2873,9 +2876,6 @@
 
 /* Sources/LemmingsLocal/KeyboardCommandsView.swift:27 */
 "Find a key or command, e.g. rewind, Shift, builder" = "Find a key or command, e.g. rewind, Shift, builder";
-
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:8 */
-"Find related controls together and return from a settings page without losing your place." = "Find related controls together and return from a settings page without losing your place.";
 
 /* Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:74 */
 "Finds the view reliable." = "Finds the view reliable.";
@@ -5058,9 +5058,6 @@
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:151; Sources/LemmingsGameArt/MobileSettingsArt.swift:98; Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2358; Sources/LemmingsLocal/SettingsWindow.swift:735; Sources/LemmingsTVUI/TVLibraryViewController.swift:231; Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PREFS.IFF:1; Sources/Ports/Lemm2/INTRODAT/GFXIFFS/INTRO.IFF:1 */
 "Music" = "Music";
 
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:10 */
-"Music and sound" = "Music and sound";
-
 /* Sources/LemmingsGameArt/MobileInformationArt.swift:52 */
 "Music downloaded" = "Music downloaded";
 
@@ -5736,6 +5733,9 @@
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:121 */
 "Open in Stacked pose when idle" = "Open in Stacked pose when idle";
 
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:7 */
+"Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads." = "Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads.";
+
 /* Sources/LemmingsMobileUI/MobileTVFileTransfer.swift:142 */
 "Open this address on another device:" = "Open this address on another device:";
 
@@ -6402,6 +6402,9 @@
 /* Sources/Ports/Lemm2/INTRODAT/GFXIFFS/INTRO.IFF:1 */
 "Programmers" = "Programmers";
 
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:8 */
+"Progress" = "Progress";
+
 /* Sources/LemmingsLocal/main.swift:8188 */
 "Progress is saved." = "Progress is saved.";
 
@@ -7047,6 +7050,9 @@
 /* Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:519 */
 "Return to the library to restore a recovery key." = "Return to the library to restore a recovery key.";
 
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:8 */
+"Return to the main menu after a win without losing your place." = "Return to the main menu after a win without losing your place.";
+
 /* Sources/LemmingsAppCore/Input/GameplayCommands.swift:58 */
 "Return: Repeat assignment" = "Return: Repeat assignment";
 
@@ -7593,7 +7599,7 @@
 /* Sources/LemmingsLocal/ResultCelebrationView.swift:231 */
 "Set a first record, then improve its skill count." = "Set a first record, then improve its skill count.";
 
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:8; Sources/LemmingsGameArt/MobileHomeArt.swift:56; Sources/LemmingsGameArt/MobileSettingsArt.swift:32; Sources/LemmingsLocal/ControllerDevicePresentation.swift:80; Sources/LemmingsLocal/GameplayKeyboard.swift:205; Sources/LemmingsLocal/GameplayKeyboard.swift:207; Sources/LemmingsLocal/GameplayKeyboard.swift:774; Sources/LemmingsLocal/PlayfieldView.swift:1209; Sources/LemmingsLocal/PlayfieldView.swift:236; Sources/LemmingsLocal/SettingsWindow.swift:115; Sources/LemmingsLocal/SettingsWindow.swift:225; Sources/LemmingsMobileUI/MobileGameInput.swift:30; Sources/LemmingsMobileUI/MobileGameInput.swift:387; Sources/LemmingsMobileUI/MobileLemmixOptions.swift:125; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:385; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:798; Sources/LemmingsTVUI/TVLibraryViewController.swift:155; Sources/LemmingsTVUI/TVLibraryViewController.swift:225 */
+/* Sources/LemmingsGameArt/GameReleaseCopy.swift:10; Sources/LemmingsGameArt/MobileHomeArt.swift:56; Sources/LemmingsGameArt/MobileSettingsArt.swift:32; Sources/LemmingsLocal/ControllerDevicePresentation.swift:80; Sources/LemmingsLocal/GameplayKeyboard.swift:205; Sources/LemmingsLocal/GameplayKeyboard.swift:207; Sources/LemmingsLocal/GameplayKeyboard.swift:774; Sources/LemmingsLocal/PlayfieldView.swift:1209; Sources/LemmingsLocal/PlayfieldView.swift:236; Sources/LemmingsLocal/SettingsWindow.swift:115; Sources/LemmingsLocal/SettingsWindow.swift:225; Sources/LemmingsMobileUI/MobileGameInput.swift:30; Sources/LemmingsMobileUI/MobileGameInput.swift:387; Sources/LemmingsMobileUI/MobileLemmixOptions.swift:125; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:385; Sources/LemmingsMobileUI/MobileLibraryViewController.swift:798; Sources/LemmingsTVUI/TVLibraryViewController.swift:155; Sources/LemmingsTVUI/TVLibraryViewController.swift:225 */
 "Settings" = "Settings";
 
 /* Sources/LemmingsLocal/GameControls.swift:370 */
@@ -7890,9 +7896,6 @@
 /* Sources/LemmingsGameArt/MobileSettingsArt.swift:109 */
 "Soundtrack libraries" = "Soundtrack libraries";
 
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:10 */
-"Soundtrack variants follow the route as you play." = "Soundtrack variants follow the route as you play.";
-
 /* Sources/LemmingsGameArt/MobilePauseArt.swift:22 */
 "Soundtrack: {0}" = "Soundtrack: {0}";
 
@@ -7940,9 +7943,6 @@
 
 /* Sources/LemmingsLocal/LeaderboardReplayWindow.swift:51 */
 "Speed 1x" = "Speed 1x";
-
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:9 */
-"Speed and rewind" = "Speed and rewind";
 
 /* Sources/LemmingsLocal/SolutionReplay.swift:508 */
 "Speed {0}" = "Speed {0}";
@@ -7997,9 +7997,6 @@
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:520; Sources/LemmingsLocal/main.swift:10041 */
 "Start nuke" = "Start nuke";
-
-/* Sources/LemmingsGameArt/GameReleaseCopy.swift:7 */
-"Start or resume from Home. Play groups games, saved routes and collections." = "Start or resume from Home. Play groups games, saved routes and collections.";
 
 /* Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2125 */
 "Start practice" = "Start practice";

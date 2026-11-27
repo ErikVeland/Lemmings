@@ -464,6 +464,7 @@
 "Checking solution..." = "Comprovant la solució…";
 "Choose" = "Tria";
 "Choose 1× in Game controls to reset speed." = "Tria 1× als Controls del joc per restablir la velocitat.";
+"Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details." = "Tria català o alemany suís. A l’iPhone i l’iPad, obre Quant a per veure els crèdits i la versió.";
 "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "Tria Panell pla, Monitor o Televisió. El mode clàssic utilitza la simulació de tub.";
 "Choose Lemmings 3 tool direction" = "Tria la direcció de l’eina de Lemmings 3";
 "Choose Music Folder…" = "Tria una carpeta de música…";
@@ -483,7 +484,6 @@
 "Choose a rating" = "Tria una puntuació";
 "Choose a second player" = "Tria un segon jugador";
 "Choose a soundtrack or Adaptive DJ Mix." = "Tria una banda sonora o la mescla adaptativa de DJ.";
-"Choose a speed directly and use replay controls to revisit moves." = "Tria una velocitat directament i fes servir els controls de repetició per repassar els moviments.";
 "Choose a technique" = "Tria una tècnica";
 "Choose an action, then click a lemming. Walker turns or releases a blocker." = "Tria una acció i fes clic en un lemming. Caminador fa girar o allibera un bloquejador.";
 "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera." = "Tria una acció. Els maons i les pales requereixen una direcció. Les fletxes mouen la càmera.";
@@ -889,6 +889,7 @@
 "Expected the FLIC marker 0xAF11, but found {0}." = "S’esperava el marcador FLIC 0xAF11, però s’ha trobat {0}.";
 "Expert" = "Expert";
 "Exploder" = "Explosiu";
+"Explore starter playlists and resume saved routes." = "Explora les llistes de joc inicials i reprèn les rutes desades.";
 "Explosions" = "Explosions";
 "Export file" = "Exporta el fitxer";
 "Extended gamepad" = "Comandament ampliat";
@@ -958,7 +959,6 @@
 "Find a better way" = "Troba un camí millor";
 "Find a command by key, action or category." = "Cerca una ordre per tecla, acció o categoria.";
 "Find a key or command, e.g. rewind, Shift, builder" = "Cerca una tecla o una ordre, com Rebobina, Majúscules o Constructor";
-"Find related controls together and return from a settings page without losing your place." = "Troba junts els controls relacionats i torna d’una pàgina de configuració sense perdre el lloc.";
 "Finds the view reliable." = "La vista no sol fallar.";
 "Finds this knowledge quietly sustaining." = "Saber-ho li dona una tranquil·litat discreta.";
 "Finish a level to see each goal and your progress." = "Acaba un nivell per veure cada objectiu i el teu progrés.";
@@ -1686,7 +1686,6 @@
 "Movie export is unavailable." = "L’exportació de vídeo no està disponible.";
 "Movie writing could not start." = "No s’ha pogut iniciar l’escriptura de vídeo.";
 "Music" = "Música";
-"Music and sound" = "Música i so";
 "Music downloaded" = "Música baixada";
 "Music muted" = "Música silenciada";
 "Music off" = "Música desactivada";
@@ -1912,6 +1911,7 @@
 "Open Replay Movie…" = "Obre un vídeo de repetició…";
 "Open Starter" = "Introducció oberta";
 "Open in Stacked pose when idle" = "Obre en posició apilada quan estigui inactiu";
+"Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads." = "Obre el menú principal abans a l’iPhone i l’iPad i mira una introducció quan un nivell triga més a carregar-se.";
 "Open this address on another device:" = "Obre aquesta adreça en un altre dispositiu:";
 "Open this level with its original game data to watch the action replay." = "Obre aquest nivell amb les dades originals per veure la repetició d’accions.";
 "Open when closed and charging" = "Obre quan estigui tancat i carregant";
@@ -2134,6 +2134,7 @@
 "Profile" = "Perfil";
 "Profile…" = "Perfil…";
 "Programmers" = "Programadors";
+"Progress" = "Progrés";
 "Progress is saved." = "S’ha desat el progrés.";
 "Progression" = "Progrés";
 "Progression not created" = "No s’ha creat la progressió";
@@ -2349,6 +2350,7 @@
 "Return to the library to change players. The current attempt keeps its owner and is saved for later." = "Torna a la biblioteca per canviar de jugadors. L’intent actual conserva el propietari i es desa per a més endavant.";
 "Return to the library to change players. Your saved run keeps its progress and next turn." = "Torna a la biblioteca per canviar de jugadors. La partida desada conserva el progrés i el torn següent.";
 "Return to the library to restore a recovery key." = "Torna a la biblioteca per restaurar una clau de recuperació.";
+"Return to the main menu after a win without losing your place." = "Torna al menú principal després de guanyar sense perdre el lloc.";
 "Return: Repeat assignment" = "Retorn: repeteix l’assignació";
 "Returned with a cake." = "Va tornar amb un pastís.";
 "Reveal full solution?" = "Vols descobrir la solució completa?";
@@ -2630,7 +2632,6 @@
 "Soundtrack download progress" = "Progrés de la baixada de bandes sonores";
 "Soundtrack folder" = "Carpeta de bandes sonores";
 "Soundtrack libraries" = "Biblioteques de bandes sonores";
-"Soundtrack variants follow the route as you play." = "Les variants de banda sonora segueixen la ruta mentre jugues.";
 "Soundtrack: {0}" = "Banda sonora: {0}";
 "Soundtracks" = "Bandes sonores";
 "Source" = "Origen";
@@ -2647,7 +2648,6 @@
 "Spectrum 8-Color / CPC Mode 0 16-Color" = "Spectrum de 8 colors / CPC mode 0 de 16 colors";
 "Speed" = "Velocitat";
 "Speed 1x" = "Velocitat 1×";
-"Speed and rewind" = "Velocitat i rebobinat";
 "Speed {0}" = "Velocitat {0}";
 "Speed {0}X" = "Velocitat {0}×";
 "Speed {0}x" = "Velocitat {0}×";
@@ -2666,7 +2666,6 @@
 "Start new Hot Seat" = "Inicia torns locals nous";
 "Start new records" = "Inicia rècords nous";
 "Start nuke" = "Activa la detonació";
-"Start or resume from Home. Play groups games, saved routes and collections." = "Comença o reprèn des d’Inici. Juga agrupa jocs, rutes desades i col·leccions.";
 "Start practice" = "Comença la pràctica";
 "Start session" = "Inicia la sessió";
 "Start shuffle" = "Comença a l’atzar";
