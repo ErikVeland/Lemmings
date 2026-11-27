@@ -32,6 +32,8 @@ struct MobileSettingsTests {
         settings.classic.graphics = .amiga
         settings.classic.musicVolume = 0.3
         settings.classic.soundVolume = 0.4
+        settings.classic.fullScreenHDRFlashes = false
+        settings.classic.djIncludesOtherSoundtracks = true
         let personal = PlayerControlSettings(settings.classic)
         for modern in [false, true] {
             settings.applyExperiencePreset(modern: modern)
@@ -41,7 +43,7 @@ struct MobileSettingsTests {
             #expect(!settings.classic.pauseOnInterruption && !settings.classic.favorApproachingLemmings)
             #expect(settings.soundtrack == "Adaptive DJ" && settings.classic.music == .adaptiveDJ)
             #expect(settings.classic.graphics == .amiga && settings.classic.musicVolume == 0.3 && settings.classic.soundVolume == 0.4)
-            #expect(!settings.classic.fullScreenHDRFlashes && !settings.classic.djIncludesOtherSoundtracks)
+            #expect(!settings.classic.fullScreenHDRFlashes && settings.classic.djIncludesOtherSoundtracks)
             #expect(settings.classic.gameplayCursorStyle == (modern ? .modern : .original))
             #expect(try JSONDecoder().decode(MobileSettings.self, from: JSONEncoder().encode(settings)) == settings)
         }
@@ -82,14 +84,44 @@ struct MobileSettingsTests {
 
     private func defaults() -> UserDefaults { UserDefaults(suiteName: "MobileSettingsTests.\(UUID())")! }
 
-    @Test func testTutorialCountsTenAutomaticPausesAcrossLaunches() {
-        let store = defaults()
-        var settings = MobileSettings.load(from: store)
+    @Test func pauseToAssignDefaultsOffForNewAndUnconfiguredPlayers() throws {
+        #expect(!MobileSettings().pauseToAssign)
+        #expect(!MobileSettings.load(from: defaults()).pauseToAssign)
+        #expect(!(try JSONDecoder().decode(MobileSettings.self, from: Data("{}".utf8))).pauseToAssign)
+        var untouched = MobileSettings(pauseToAssign: true)
+        untouched.recordSkillSelectionPause(wasRunning: true, isReadOnly: false)
+        let old = defaults()
+        untouched.save(to: old)
+        #expect(!MobileSettings.load(from: old).pauseToAssign)
+        #expect(MobileSettings.load(from: old).skillSelectionPauseCount == 0)
+    }
+
+    @Test func pauseToAssignPreservesExplicitAndLegacyChoices() throws {
+        for enabled in [true, false] {
+            let store = defaults()
+            var saved = MobileSettings()
+            saved.chooseSkillSelectionPause(enabled)
+            saved.save(to: store)
+            #expect(MobileSettings.load(from: store).pauseToAssign == enabled)
+            #expect(MobileSettings.load(from: store).skillSelectionPauseChoiceMade)
+        }
+        let historical = try JSONDecoder().decode(MobileSettings.self, from: Data("{\"pauseToAssign\":true}".utf8))
+        #expect(historical.pauseToAssign)
+        let old = defaults()
+        historical.save(to: old)
+        #expect(MobileSettings.load(from: old).pauseToAssign)
+        #if !os(tvOS)
+        let legacy = defaults()
+        legacy.set(false, forKey: "mobile.continuousSkillSelection")
+        #expect(MobileSettings.load(from: legacy).pauseToAssign)
+        #endif
+    }
+
+    @Test func testTutorialCountsTenAutomaticPauses() {
+        var settings = MobileSettings(pauseToAssign: true)
         #expect(settings.pauseToAssign)
         for use in 1...10 {
             settings.recordSkillSelectionPause(wasRunning: true, isReadOnly: false)
-            settings.save(to: store)
-            settings = MobileSettings.load(from: store)
             #expect(settings.skillSelectionPauseCount == use)
             #expect(settings.shouldOfferSkillSelectionPauseChoice == (use == 10))
         }
@@ -98,7 +130,7 @@ struct MobileSettingsTests {
     }
 
     @Test func testPlanningChangesAndReplaysDoNotSpendTutorialUses() {
-        var settings = MobileSettings()
+        var settings = MobileSettings(pauseToAssign: true)
         for _ in 0..<20 {
             settings.recordSkillSelectionPause(wasRunning: false, isReadOnly: false)
             settings.recordSkillSelectionPause(wasRunning: true, isReadOnly: true)
@@ -134,7 +166,7 @@ struct MobileSettingsTests {
         #expect(!restored.pauseToAssign)
         #expect(restored.skillSelectionPauseChoiceMade)
         let olderDefault = try JSONDecoder().decode(MobileSettings.self, from: Data("{}".utf8))
-        #expect(olderDefault.pauseToAssign && olderDefault.skillSelectionPauseCount == 0)
+        #expect(!olderDefault.pauseToAssign && olderDefault.skillSelectionPauseCount == 0)
     }
 
     @Test func testLegacyKeysMigrate() {
