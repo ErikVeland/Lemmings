@@ -3091,6 +3091,12 @@
       "Sources/NxlvKit/GameplayControlTips.swift:15"
     ]
   },
+  "Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:10"
+    ]
+  },
   "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation.": {
     "kind": "text",
     "references": [
@@ -3205,12 +3211,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/SettingsWindow.swift:269"
-    ]
-  },
-  "Choose a speed directly and use replay controls to revisit moves.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9"
     ]
   },
   "Choose a technique": {
@@ -3980,6 +3980,7 @@
   "Collections": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9",
       "Sources/LemmingsGameArt/MobileHomeArt.swift:101",
       "Sources/LemmingsLocal/PlayfieldView.swift:1208",
       "Sources/LemmingsLocal/PlayfieldView.swift:346",
@@ -5824,6 +5825,12 @@
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/PRACTICE.IFF:1"
     ]
   },
+  "Explore starter playlists and resume saved routes.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9"
+    ]
+  },
   "Explosions": {
     "kind": "text",
     "references": [
@@ -6272,12 +6279,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/KeyboardCommandsView.swift:27"
-    ]
-  },
-  "Find related controls together and return from a settings page without losing your place.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8"
     ]
   },
   "Finds the view reliable.": {
@@ -10973,12 +10974,6 @@
       "Sources/Ports/Lemm2/INTRODAT/GFXIFFS/INTRO.IFF:1"
     ]
   },
-  "Music and sound": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:10"
-    ]
-  },
   "Music downloaded": {
     "kind": "text",
     "references": [
@@ -12441,6 +12436,12 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:121"
+    ]
+  },
+  "Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:7"
     ]
   },
   "Open this address on another device:": {
@@ -13938,6 +13939,12 @@
       "Sources/Ports/Lemm2/INTRODAT/GFXIFFS/INTRO.IFF:1"
     ]
   },
+  "Progress": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8"
+    ]
+  },
   "Progress is saved.": {
     "kind": "text",
     "references": [
@@ -15358,6 +15365,12 @@
       "Sources/LemmingsAppCore/Records/CloudLibrarySync.swift:519"
     ]
   },
+  "Return to the main menu after a win without losing your place.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8"
+    ]
+  },
   "Return: Repeat assignment": {
     "kind": "text",
     "references": [
@@ -16536,7 +16549,7 @@
   "Settings": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:8",
+      "Sources/LemmingsGameArt/GameReleaseCopy.swift:10",
       "Sources/LemmingsGameArt/MobileHomeArt.swift:56",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:32",
       "Sources/LemmingsLocal/ControllerDevicePresentation.swift:80",
@@ -17211,12 +17224,6 @@
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:109"
     ]
   },
-  "Soundtrack variants follow the route as you play.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:10"
-    ]
-  },
   "Soundtrack: {0}": {
     "kind": "text",
     "references": [
@@ -17317,12 +17324,6 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/LeaderboardReplayWindow.swift:51"
-    ]
-  },
-  "Speed and rewind": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:9"
     ]
   },
   "Speed {0}": {
@@ -17441,12 +17442,6 @@
     "references": [
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:520",
       "Sources/LemmingsLocal/main.swift:10041"
-    ]
-  },
-  "Start or resume from Home. Play groups games, saved routes and collections.": {
-    "kind": "text",
-    "references": [
-      "Sources/LemmingsGameArt/GameReleaseCopy.swift:7"
     ]
   },
   "Start practice": {
