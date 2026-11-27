@@ -2335,7 +2335,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 guard let self else { return }
                 if inLearning { return }
                 guard snapshot.didWin else { return }
-                if inRun { self.finishRunIfNeeded(afterLast: index); return }
+                if inRun { return }
                 var pack = self.currentPack?.id, real = index
                 if let list = library as? MobileFavouritesLibrary, let origin = list.origin(of: index) {
                     pack = origin.pack; real = origin.index
@@ -2344,6 +2344,31 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 UserDefaults.standard.set(completed.sorted(),
                                           forKey: self.progressKey(for: pack, fallback: self.library?.displayName ?? "classic"))
                 self.arcadeStore.notifyProgressChanged()
+            }
+            if let runID = next.journeyContext.runID {
+                let profile = profiles.activeID
+                let scope = hotSeat?.scope
+                next.onSaveProgressBeforeExit = { [weak self] action in
+                    let closesPlaylist = !inLearning && index == library.levels.count - 1
+                        && (action == .library || action == .next)
+                    guard action == .menu || closesPlaylist else { return }
+                    guard let self, profiles.activeID == profile, hotSeat?.scope == scope else {
+                        throw MobileSessionError.changedLevel
+                    }
+                    if inLearning {
+                        var saved = learning
+                        guard saved.advanceAfterWonResult(runID: runID, position: index) else { return }
+                        try saveLearningState(saved)
+                    } else {
+                        var saved = playlists
+                        guard saved.advanceAfterWonResult(runID: runID, position: index) else { return }
+                        guard let collectionsBridge else { throw CocoaError(.fileWriteUnknown) }
+                        try collectionsBridge.save(favourites: favourites, recents: recents,
+                            playlists: saved, hotSeatID: hotSeat?.id)
+                        playlists = saved
+                        activeRun = saved.run
+                    }
+                }
             }
             next.onExit = { [weak self, weak next] action in
                 guard let self, let next, self.game === next else { return }

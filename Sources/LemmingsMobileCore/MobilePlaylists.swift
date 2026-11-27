@@ -200,5 +200,12 @@ public struct MobilePlaylistStore: Codable, Equatable, Sendable {
         run = current
     }
 
+    /// Move a won run off the completed level, but only for its exact saved position.
+    @discardableResult public mutating func advanceAfterWonResult(runID: UUID, position: Int) -> Bool {
+        guard let run, run.id == runID, run.position == position, run.entries.indices.contains(position) else { return false }
+        advance(to: position + 1)
+        return true
+    }
+
     public mutating func endRun() { run = nil }
 }

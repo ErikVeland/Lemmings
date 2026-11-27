@@ -12,6 +12,19 @@ public struct MobileCameraState: Codable, Equatable, Sendable {
     }
 }
 
+/// Allows a result exit to retire the checkpoint only after its progress is durable.
+@MainActor public enum MobileResultExitPersistence {
+    public enum Failure: Error {
+        case progressSave(any Error)
+    }
+
+    public static func prepare(saveProgress: () throws -> Void, retireCheckpoint: () async throws -> Void) async throws {
+        do { try saveProgress() }
+        catch { throw Failure.progressSave(error) }
+        try await retireCheckpoint()
+    }
+}
+
 public struct MobileCheckpointEnvelope: Codable, Equatable, Sendable {
     public struct JourneyContext: Codable, Equatable, Sendable {
         public let runID: UUID?

@@ -5,6 +5,76 @@ import Testing
 @testable import LemmingsMobileCore
 
 struct MobileLearningTests {
+    @Test func leavingWonResultPersistsNextJourneyLevelExactlyOnce() throws {
+        func entry(_ name: String) throws -> LevelPlaylistEntry {
+            try .init(identity: .init(engine: .classic, packID: "fixture", levelID: name),
+                catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+                levelNameSnapshot: name, levelNumberSnapshot: 1)
+        }
+        let first = try entry("first"), alreadySolved = try entry("solved"), next = try entry("next")
+        var state = MobileLearningState()
+        state.progress.record(alreadySolved.identity, won: true)
+        try state.start([first, alreadySolved, next], name: "Journey", poolID: LearningJourney.version)
+        let runID = try #require(state.run?.id)
+        state.record(won: true)
+        #expect(state.run?.currentEntry == first)
+        let stale = state.advanceAfterWonResult(runID: UUID(), position: 0)
+        #expect(!stale)
+        let advanced = state.advanceAfterWonResult(runID: runID, position: 0)
+        #expect(advanced)
+        let repeated = state.advanceAfterWonResult(runID: runID, position: 0)
+        #expect(!repeated)
+        state.refreshJourneySession()
+        let reopened = try JSONDecoder().decode(MobileLearningState.self, from: JSONEncoder().encode(state))
+        #expect(reopened.progress.completed.contains(first.identity))
+        #expect(reopened.run?.currentEntry == next)
+        #expect(reopened.journeySession?.run?.currentEntry == next)
+        #expect(reopened.run?.id == runID)
+    }
+
+    @Test func leavingWonPlaylistPersistsNextPositionAndFinishesTheLastLevel() throws {
+        let entries = ["first", "next"].map { MobileFavourites.Entry(pack: "fixture", level: $0) }
+        let current = MobilePlaylistRun(playlist: nil, name: "Fixture", entries: entries,
+            position: 0, shuffled: true, seed: 19)
+        var state = MobilePlaylistStore(playlists: [], run: current)
+        let stale = state.advanceAfterWonResult(runID: UUID(), position: 0)
+        #expect(!stale)
+        let advanced = state.advanceAfterWonResult(runID: current.id, position: 0)
+        #expect(advanced)
+        let repeated = state.advanceAfterWonResult(runID: current.id, position: 0)
+        #expect(!repeated)
+        let persisted = try JSONEncoder().encode(state)
+        var reopened = try JSONDecoder().decode(MobilePlaylistStore.self, from: persisted)
+        #expect(reopened.run?.id == current.id)
+        #expect(reopened.run?.position == 1)
+        let finished = reopened.advanceAfterWonResult(runID: current.id, position: 1)
+        #expect(finished)
+        #expect(reopened.run == nil)
+    }
+
+    @Test @MainActor func failedResultSaveLeavesCheckpointUntilSuccessfulRetry() async throws {
+        var didSave = false
+        var checkpointExists = true
+        do {
+            try await MobileResultExitPersistence.prepare {
+                throw CocoaError(.fileWriteNoPermission)
+            } retireCheckpoint: {
+                checkpointExists = false
+            }
+            Issue.record("Expected the progress save to fail.")
+        } catch MobileResultExitPersistence.Failure.progressSave(let error) {
+            #expect((error as? CocoaError)?.code == .fileWriteNoPermission)
+        }
+        #expect(checkpointExists)
+        try await MobileResultExitPersistence.prepare {
+            didSave = true
+        } retireCheckpoint: {
+            #expect(didSave)
+            checkpointExists = false
+        }
+        #expect(!checkpointExists)
+    }
+
     @Test func easyPuzzleWinCountsWithoutReplacingTheSavedJourney() throws {
         func entry(_ name: String) throws -> LevelPlaylistEntry {
             try .init(identity: .init(engine: .classic, packID: "fixture", levelID: name),

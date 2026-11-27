@@ -90,6 +90,18 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
             progress.record(run.currentEntry.identity, won: won)
         }
     }
+    /// Persist a won result's next position when leaving without pressing Next.
+    /// A retry of the same exit, or an old result from another run, is a no-op.
+    @discardableResult public mutating func advanceAfterWonResult(runID: UUID, position: Int) -> Bool {
+        guard let run, run.id == runID, run.currentIndex == position else { return false }
+        if run.source == .easyPuzzles && !EasyPuzzleCatalogue.canContinue(run, wins: progress.completed) {
+            endEasyPuzzles()
+        } else {
+            advance()
+        }
+        return true
+    }
+
     @discardableResult public mutating func advance() -> Bool {
         guard var current = run else { return false }
         var advanced = current.advance()
