@@ -50,6 +50,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private let homeBackdropLoader = MobileHomeBackdropLoader()
     private var homeBackdropTask: Task<Void, Never>?
     private var homeBackdropKey: String?
+    #if os(iOS)
+    private let loadingIntro = MobileLoadingIntro()
+    #endif
     #if os(tvOS)
     private var topShelfTask: Task<Void, Never>?
     #endif
@@ -643,6 +646,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewIsVisible = false
+        #if os(iOS)
+        loadingIntro.stop()
+        #endif
         syncPages()
     }
 
@@ -664,6 +670,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     guard let self, let scene, scene === self.viewIfLoaded?.window?.windowScene else { return }
                     self.sceneIsActive = name == UIScene.didActivateNotification
                     if !self.sceneIsActive {
+                        #if os(iOS)
+                        self.loadingIntro.stop()
+                        #endif
                         MobileMusic.shared.setMenu(
                             visible: self.game == nil && !self.deskClockShown && self.viewIsVisible,
                             active: false
@@ -722,6 +731,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         #if os(iOS)
+        defer { loadingIntro.bringToFront(in: view) }
         checkDeskClock()
         #endif
         let expanded = previousSize.width > 0 && view.bounds.width > previousSize.width * 1.25
@@ -1335,6 +1345,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
     func handle(_ id: String) {
+        #if os(iOS)
+        if loadingIntro.isPresented {
+            if id == "home" || id == "back" { cancelLevelPreparation(generation: previewGeneration) }
+            return
+        }
+        #endif
         if confirmingGameAssetLicence {
             guard id == "gameAssets.cancel" || id == "gameAssets.agree" else { return }
             confirmingGameAssetLicence = false
@@ -1640,6 +1656,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     private func stopMenuPreviews() {
+        #if os(iOS)
+        loadingIntro.stop()
+        #endif
         let previous = previewTask
         previous?.cancel(); previewTask = nil
         let covers = browser.stopArtworkLoading()
@@ -2101,6 +2120,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if selectedIndex != index { selectedPreview = nil }
         selectedIndex = index
         notice = ""; preparingLevel = true; loading = true; rebuild()
+        #if os(iOS)
+        let title = configuration == .ultimateLemmix && !GameMenuLogo.usesRestoredArtwork
+            ? "Ultimate Lemmix" : "Ultimate Lemmings"
+        loadingIntro.start(in: view, title: title, reduceMotion: settings.reduceMotion, reduceFlashes: settings.reduceFlashes,
+                           isLoading: { [weak self] in
+            guard let self else { return false }
+            return self.preparingLevel && self.previewGeneration == generation && !self.deskClockBlocksInput
+                && self.viewIsVisible && self.sceneIsActive && self.presentedViewController == nil
+        }, cancel: { [weak self] in self?.cancelLevelPreparation(generation: generation) })
+        #endif
         let menuTasks = [fanCountsTask, shuffleTask, learningTask].compactMap { $0 }
         menuTasks.forEach { $0.cancel() }
         fanCountGeneration = UUID(); fanCountsTask = nil
@@ -2114,6 +2143,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 let prepared = try await previewLoader.prepare(index, settings: settings,
                     checkpoint: checkpoint, allowUnrelatedCheckpoint: restoringMatchingCheckpoint)
                 guard !Task.isCancelled, previewGeneration == generation else { return }
+                #if os(iOS)
+                loadingIntro.stop()
+                #endif
                 loading = false; preparingLevel = false
                 let matching = restoringMatchingCheckpoint && checkpoint?.levelIdentifier != prepared.content.session.levelIdentifier
                     ? nil : checkpoint
@@ -2126,12 +2158,28 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                      checkpointStore: checkpointStore, content: prepared.content)
             } catch {
                 guard !Task.isCancelled, previewGeneration == generation else { return }
+                #if os(iOS)
+                loadingIntro.stop()
+                #endif
                 loading = false; preparingLevel = false
                 if let game { game.showPreparationError(error.localizedDescription) }
                 else { notice = error.localizedDescription; rebuild() }
             }
         }
     }
+    #if os(iOS)
+    private func cancelLevelPreparation(generation: UUID) {
+        guard preparingLevel, previewGeneration == generation else { return }
+        stopMenuPreviews()
+        previewGeneration = UUID()
+        loading = false; preparingLevel = false
+        // A result's Next action may already have advanced the saved run. Return to the
+        // library instead of making that result actionable a second time.
+        if let game, let exit = game.onExit { exit(.library) }
+        else { rebuild() }
+    }
+    #endif
+
     private func presentPreparedLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, library: any MobileGameLibrary,
                                       checkpointStore: MobileCheckpointStore, content: MobileLevelContent) {
         do {
@@ -2375,6 +2423,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 MobileMusic.shared.retireAttempt(next.runID)
                 switch action {
                 case .library, .menu, .easyPuzzles, .doneEasyPuzzles:
+                    #if os(iOS)
+                    self.loadingIntro.stop()
+                    #endif
                     self.previewTask?.cancel(); self.previewGeneration = UUID()
                     self.loading = false; self.preparingLevel = false
                     self.game?.willMove(toParent: nil); self.game?.view.removeFromSuperview(); self.game?.removeFromParent()

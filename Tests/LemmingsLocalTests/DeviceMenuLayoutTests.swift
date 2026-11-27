@@ -7,6 +7,23 @@ import XCTest
 @testable import LemmingsLocal
 
 final class DeviceMenuLayoutTests: XCTestCase {
+    @MainActor func testLevelCracktroRendersMotionAndHonoursStaticArtwork() throws {
+        XCTAssertEqual(GameLoadingIntroArt.visualDelay, 550_000_000)
+        func pixels(elapsed: TimeInterval, reduceMotion: Bool = false, reduceFlashes: Bool = false) throws -> Data {
+            let width = 320, height = 200, stride = width * 4
+            let context = try XCTUnwrap(CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+                bytesPerRow: stride, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+            GameLoadingIntroArt.draw(in: CGRect(x: 0, y: 0, width: width, height: height), title: "Ultimate Lemmix",
+                message: "Loading...", elapsed: GameLoadingIntroArt.frameElapsed(elapsed,
+                    reduceMotion: reduceMotion, reduceFlashes: reduceFlashes), context: context)
+            return Data(bytes: try XCTUnwrap(context.data), count: stride * height)
+        }
+        let initial = try pixels(elapsed: 0)
+        XCTAssertNotEqual(initial, try pixels(elapsed: 1.4))
+        XCTAssertEqual(initial, try pixels(elapsed: 1.4, reduceMotion: true))
+        XCTAssertEqual(initial, try pixels(elapsed: 1.4, reduceFlashes: true))
+    }
+
     @MainActor func testStartupHomeDisplaysStatusWithoutActionableTargets() {
         let checking = MobileHomeArt.checkingGameFilesPage()
         XCTAssertTrue(checking.home)
