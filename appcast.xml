@@ -1,6 +1,26 @@
-<?xml version="1.0" standalone="yes"?>
-<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:ns0="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+<?xml version='1.0' encoding='utf-8'?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0" xmlns:ns0="http://www.andymatuschak.org/xml-namespaces/sparkle">
     <channel>
+        <item>
+            <title>2.7.5</title>
+            <pubDate>Fri, 27 Nov 2026 14:42:05 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>114</sparkle:version>
+            <sparkle:shortVersionString>2.7.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description>&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;style&gt;:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;!-- Release commit: 3bc976e9d9cf0ea94ff650330a5cfa1c71a5a1c7 --&gt;
+&lt;p&gt;Next steps, game names and level counts are easier to find in the Play menu. Choose from starter playlists to find a short route through familiar levels.&lt;/p&gt;
+&lt;p&gt;Journey recovery retains a compatible saved route if local copies are damaged or a stale cloud copy identifies the wrong session.&lt;/p&gt;
+&lt;p&gt;Home and level loading keep the pixel-art transitions from 2.7.1. Choose Catalan or Swiss German in Settings.&lt;/p&gt;
+&lt;p&gt;The release runs on macOS 12.3 or later on Apple silicon and Intel.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+</description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.5/UltimateLemmings-2.7.5-build114.zip" length="2075839765" type="application/octet-stream" sparkle:edSignature="IU8NWngRiM7tlMbvC4MRVFixwNMOH0mDMBNtaNXPa6raK0VxX+8w03x+a7fU+Li5quB+xwfHzVO/NmY9HkwJDg==" />
+            <sparkle:deltas><enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.5/UltimateLemmings-build114-from113.delta" sparkle:deltaFrom="113" length="45181334" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="Knlo3gD5ICnRqRJIdQTr4hIp5vxugxiUu9pzdcvNCBhogFyg/XG/Glu7yQxpi7GPaIeLlJJP1/lk7JqCbxqdDQ==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.5/UltimateLemmings-build114-from112.delta" sparkle:deltaFrom="112" length="45494510" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="HCY7CGOwjWaech0DL9rMpDL8YEeeMNPvZXLFlmLcDTNfP1a3t4wWLvTj1+GlfzIOf7jxaTYGWshLOXq09KeiBQ==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.5/UltimateLemmings-build114-from111.delta" sparkle:deltaFrom="111" length="45314418" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="8zxCFUhdrUcFmvAfctiLThnvF88Uo5/ZrFChfejPyMKMEVXcIg9nMmOQUntcsPbTJ+0n9vmyQ5P5sDqKRQe3Cg==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.5/UltimateLemmings-build114-from110.delta" sparkle:deltaFrom="110" length="49702306" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="aVQGxddwbCUSluBjnoGeWHqCXN0qMpms2P3xT6Z23eQ3OFi7XdT8LLv9J+IqwX0P3SFJ+PMRkPlY7iCbnWxABw==" />
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.5/UltimateLemmings-build114-from109.delta" sparkle:deltaFrom="109" length="50564886" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="zCH41sr9EtZvUw7cWIDQaBcEsZtKMcnxErltplQ6z7dibmOUsmaoJNSgxnar2U6SZ+OSjoe+dRet7ztM9+n8Bg==" />
+            </sparkle:deltas></item>
         <title>Ultimate Lemmings</title>
         <item>
             <title>2.7.1</title>
