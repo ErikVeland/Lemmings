@@ -109,13 +109,12 @@ public struct OwnedResourceLibrary: Sendable {
    */
   @discardableResult
   public func refreshBaseIfNeeded() throws -> Installation? {
-    guard let previous = activeInstallation() else {
+    guard let (previous, manifest) = activeInstallationAndManifest() else {
       guard !fileManager.fileExists(atPath: root.appendingPathComponent(Self.activationName).path) else {
         throw BYOIntegrationError.invalidManifest
       }
       return nil
     }
-    let manifest = try readManifest(previous.bundleURL.deletingLastPathComponent())
     try verify(previous.resourcesDirectory, files: manifest.files)
     let base = try trustedBaseFiles()
     guard base.files != manifest.baseFiles else { return previous }
@@ -139,7 +138,7 @@ public struct OwnedResourceLibrary: Sendable {
     for entry in incoming.files { payloads[entry.path] = (entry, .file(source.directory.appendingPathComponent(entry.path))) }
     if source.existingApp && incoming.files.contains(where: { $0.path == "MacArtwork/lemmings/manifest.json" }) {
       for (name, data) in try NativeCursorRecovery.collect(from: selected) {
-        let digest = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        let digest = Self.hex(SHA256.hash(data: data))
         payloads[name] = (Entry(path: name, bytes: Int64(data.count), sha256: digest), .bytes(data))
       }
     }
@@ -286,7 +285,9 @@ public struct OwnedResourceLibrary: Sendable {
     }
   }
 
-  private func activeInstallation() -> Installation? {
+  private func activeInstallation() -> Installation? { activeInstallationAndManifest()?.0 }
+
+  private func activeInstallationAndManifest() -> (Installation, Manifest)? {
     do {
       try requireDirectory(root); try requireDirectory(versions)
       let url = root.appendingPathComponent(Self.activationName)
@@ -299,7 +300,7 @@ public struct OwnedResourceLibrary: Sendable {
         manifest.ownedFiles.allSatisfy({ (try? Self.isAsset($0.path)) == true }) else { return nil }
       let receipt = receipt(directory, id: activation.contentID, manifest: manifest)
       try verifyBundleInfo(receipt.bundleURL)
-      return receipt
+      return (receipt, manifest)
     } catch { return nil }
   }
 
@@ -419,7 +420,7 @@ public struct OwnedResourceLibrary: Sendable {
       guard relative.count == 2, ["original-cross.png", "original-reticule.png"].contains(relative[1]),
         header.starts(with: [137,80,78,71,13,10,26,10]),
         ((try url.resourceValues(forKeys: [.fileSizeKey])).fileSize ?? Int.max) <= 2_000_000,
-        SHA256.hash(data: try Data(contentsOf: url)).map({ String(format: "%02x", $0) }).joined() == pins[relative[1]] else {
+        hex(SHA256.hash(data: try Data(contentsOf: url))) == pins[relative[1]] else {
         throw BYOIntegrationError.unsupportedEntry
       }
     }
@@ -476,6 +477,7 @@ public struct OwnedResourceLibrary: Sendable {
       }
       try checkLimits(manifest.files)
       var seen = Set<String>()
+      var checkedAncestors = Set<String>()
       for entry in manifest.files {
         guard entry.path.split(separator: "/").count <= limits.maximumDepth else {
           throw BYOIntegrationError.exceedsLimits
@@ -484,7 +486,7 @@ public struct OwnedResourceLibrary: Sendable {
           throw BYOIntegrationError.invalidManifest
         }
         let url = bundledResources.appendingPathComponent(entry.path)
-        try requireRegularContainedFile(url, within: bundledResources)
+        try requireRegularContainedFile(url, within: bundledResources, checkedAncestors: &checkedAncestors)
         try Self.checkAssetFile(url, relative: entry.path.split(separator: "/").map(String.init))
         guard try hash(url, expectedBytes: entry.bytes) == entry.sha256 else {
           throw BYOIntegrationError.invalidManifest
@@ -527,6 +529,25 @@ public struct OwnedResourceLibrary: Sendable {
     guard info as? [String: String] == Self.bundleInfo else { throw BYOIntegrationError.invalidManifest }
   }
 
+  // The signed app base is immutable during this pass. Still check every file independently,
+  // and check every ancestor, but do not re-stat the same folders for each contained asset.
+  private func requireRegularContainedFile(_ file: URL, within directory: URL,
+                                           checkedAncestors: inout Set<String>) throws {
+    let file = file.standardizedFileURL
+    guard file.pathComponents.starts(with: directory.pathComponents) else { throw BYOIntegrationError.unsafePath }
+    let tags = try file.resourceValues(forKeys: [.isSymbolicLinkKey, .isRegularFileKey])
+    guard tags.isSymbolicLink != true else { throw BYOIntegrationError.symbolicLink }
+    guard tags.isRegularFile == true else { throw BYOIntegrationError.unsupportedEntry }
+    var parent = file.deletingLastPathComponent()
+    while parent.path != directory.path, !checkedAncestors.contains(parent.path) {
+      let tags = try parent.resourceValues(forKeys: [.isSymbolicLinkKey, .isDirectoryKey])
+      guard tags.isSymbolicLink != true else { throw BYOIntegrationError.symbolicLink }
+      guard tags.isDirectory == true else { throw BYOIntegrationError.notDirectory }
+      checkedAncestors.insert(parent.path)
+      parent.deleteLastPathComponent()
+    }
+  }
+
   private func requireRegularContainedFile(_ file: URL, within directory: URL) throws {
     guard file.standardizedFileURL.pathComponents.starts(with: directory.pathComponents) else {
       throw BYOIntegrationError.unsafePath
@@ -558,19 +579,34 @@ public struct OwnedResourceLibrary: Sendable {
     guard expectedBytes >= 0, expectedBytes <= limits.maximumFileBytes else { throw BYOIntegrationError.exceedsLimits }
     let handle = try FileHandle(forReadingFrom: url); defer { try? handle.close() }
     var value = SHA256(); var count: Int64 = 0
-    while let data = try handle.read(upToCount: 1_024 * 1_024), !data.isEmpty {
+    // Request only the remaining bytes plus an EOF probe, capped at 1 MiB. Most resources are
+    // small; avoid allocating a 1 MiB buffer for each small file and its end-of-file check.
+    while let data = try handle.read(upToCount: Int(min(1_024 * 1_024, expectedBytes - count + 1))), !data.isEmpty {
       count += Int64(data.count)
       guard count <= expectedBytes else { throw BYOIntegrationError.changedFile(url.lastPathComponent) }
       value.update(data: data)
     }
     guard count == expectedBytes else { throw BYOIntegrationError.changedFile(url.lastPathComponent) }
-    return value.finalize().map { String(format: "%02x", $0) }.joined()
+    return Self.hex(value.finalize())
   }
 
   private func contentID(_ manifest: Manifest) throws -> String {
     let identity = Identity(files: manifest.files, baseFiles: manifest.baseFiles, ownedFiles: manifest.ownedFiles)
-    return SHA256.hash(data: try encode(identity)).map { String(format: "%02x", $0) }.joined()
+    return Self.hex(SHA256.hash(data: try encode(identity)))
   }
+  private static let hexDigits = Array("0123456789abcdef".utf8)
+  private static func hex(_ digest: SHA256.Digest) -> String {
+    String(unsafeUninitializedCapacity: SHA256.Digest.byteCount * 2) { output in
+      var index = 0
+      for byte in digest {
+        output.initializeElement(at: index, to: hexDigits[Int(byte >> 4)])
+        output.initializeElement(at: index + 1, to: hexDigits[Int(byte & 0x0f)])
+        index += 2
+      }
+      return index
+    }
+  }
+
   private static func validID(_ id: String) -> Bool { id.count == 64 && id.allSatisfy { "0123456789abcdef".contains($0) } }
   private func encode<T: Encodable>(_ value: T) throws -> Data {
     let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]; return try encoder.encode(value)

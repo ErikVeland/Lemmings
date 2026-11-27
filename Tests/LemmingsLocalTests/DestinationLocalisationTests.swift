@@ -27,7 +27,7 @@ final class DestinationLocalisationTests: XCTestCase {
             let community = MobileCareerArt.leaderboards(world: false, category: .stars, rows: [], busy: false, status: "", sharing: nil, gameCenter: false)
             let seat = MobileCareerArt.hotSeat(profiles, subtitle: "", roster: .init(host: host), policy: .everyLevel, active: false, hasSaved: true)
             let settings = MobileSettingsArt.groups()
-            XCTAssertEqual(home.rows.map(\.title), [journey.title, play.title, seat.title, profile.title, community.title])
+            XCTAssertEqual(home.rows.map(\.title), [journey.title, seat.title, play.title, profile.title, community.title])
             XCTAssertEqual(home.footer.first?.title, settings.title)
             XCTAssertNil(home.backAction)
             let pages = [("home", home), ("play", play), ("profile", profile), ("community", community), ("seat", seat), ("settings", settings)]

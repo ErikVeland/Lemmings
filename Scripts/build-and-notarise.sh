@@ -249,6 +249,8 @@ if [[ "$release_targets" == all ]]; then
 else
   print "Gate 4: update archive and slim download configured"
 fi
+python3 "$project_dir/Tools/Localisation/catalogue.py" --release ||
+  fail "Complete and validate the interface translations before packaging."
 # Stale proofs or hints do not stop a build. The app then hides rescue
 # targets and level hints without a message.
 python3 "$project_dir/Tools/TrolleyVerification/catalogue.py" check ||

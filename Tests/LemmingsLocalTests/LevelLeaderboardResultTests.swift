@@ -133,6 +133,7 @@ final class LocalLeaderboardPageTests: XCTestCase {
         XCTAssertEqual(board.footer.map(\.id), ["home", "rankGameCenter"])
         let progress = MobileCareerArt.progressPage(records: records, profileID: host, profileName: "Host", subtitle: "")
         XCTAssertEqual(progress.rows.map(\.id), ["recordList", "achievements", "profileStatistics", "players", "cloudSaves", "playInsights"])
+        XCTAssertEqual(progress.rowHeadings["players"], GameLocalisation.text("All players"))
         XCTAssertEqual(progress.footer.map(\.id), ["home"])
         XCTAssertTrue(progress.listTools.isEmpty)
         let hotSeatProgress = MobileCareerArt.progressPage(records: records, profileID: guest.id,

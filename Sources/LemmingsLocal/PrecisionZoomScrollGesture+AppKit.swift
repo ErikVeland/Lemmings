@@ -9,7 +9,8 @@ extension PrecisionZoomScrollGesture {
         return (horizontal * direction, vertical * direction)
     }
 
-    mutating func handle(_ event: NSEvent) -> PrecisionZoomScrollDecision {
+    mutating func handle(_ event: NSEvent, zoomEnabled: Bool) -> PrecisionZoomScrollDecision {
+        guard zoomEnabled else { return .pan }
         let phase: PrecisionZoomScrollPhase
         if event.phase.contains(.cancelled) { phase = .cancelled }
         else if event.phase.contains(.began) { phase = .began }

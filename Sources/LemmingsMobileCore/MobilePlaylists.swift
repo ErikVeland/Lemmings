@@ -1,4 +1,5 @@
 import Foundation
+import LemmingsAppCore
 
 /// A player's levels, newest first, capped at fifty distinct levels.
 public struct MobileRecents: Equatable, Sendable {
@@ -101,7 +102,8 @@ public struct MobilePlaylistStore: Codable, Equatable, Sendable {
 
     @discardableResult
     public mutating func create(name: String, entries: [MobileFavourites.Entry] = []) -> UUID? {
-        guard playlists.count < Self.maximumPlaylists else { return nil }
+        let starterIDs = Set(StarterPlaylistCatalogue.routes.map(\.id))
+        guard playlists.filter({ !starterIDs.contains($0.id) }).count < Self.maximumPlaylists else { return nil }
         let playlist = MobilePlaylist(name: Self.clean(name), entries: Array(entries.prefix(Self.maximumEntries)))
         playlists.append(playlist)
         return playlist.id
@@ -183,6 +185,20 @@ public struct MobilePlaylistStore: Codable, Equatable, Sendable {
         return run
     }
 
+    /// Store the curated source once and keep a separate fixed queue for each run.
+    @discardableResult
+    public mutating func startStarterRun(_ playlist: MobilePlaylist) -> MobilePlaylistRun? {
+        guard StarterPlaylistCatalogue.routes.contains(where: {
+            $0.id == playlist.id && $0.identities.count == playlist.entries.count
+        }) else { return nil }
+        if let index = playlists.firstIndex(where: { $0.id == playlist.id }) {
+            playlists[index] = playlist
+        } else {
+            playlists.append(playlist)
+        }
+        return startRun(playlist.id, shuffle: false, seed: 0)
+    }
+
     /// A run through a pool of levels, such as every installed fan level, each once.
     @discardableResult
     public mutating func startShuffleAll(_ pool: [MobileFavourites.Entry], name: String = "Shuffle all",
@@ -198,6 +214,13 @@ public struct MobilePlaylistStore: Codable, Equatable, Sendable {
         guard current.entries.indices.contains(position) else { run = nil; return }
         current.position = position
         run = current
+    }
+
+    /// Move a won run off the completed level, but only for its exact saved position.
+    @discardableResult public mutating func advanceAfterWonResult(runID: UUID, position: Int) -> Bool {
+        guard let run, run.id == runID, run.position == position, run.entries.indices.contains(position) else { return false }
+        advance(to: position + 1)
+        return true
     }
 
     public mutating func endRun() { run = nil }

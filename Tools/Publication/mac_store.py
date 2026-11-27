@@ -507,6 +507,7 @@ def main():
         if args.action == "snapshot":
             save(args.build_dir / "source-inputs.json", inputs())
         elif args.action == "export":
+            subprocess.run([sys.executable, str(ROOT / "Tools/Localisation/catalogue.py"), "--release"], check=True)
             if not args.automatic_export:
                 raise ValueError("Use --automatic-export to retry authenticated Store export.")
             automatic_export(args, args.build_dir / "Ultimate Lemmix.xcarchive",

@@ -43,6 +43,30 @@ public enum GameHomeBackdropArt {
     }
 }
 
+public struct GameHomeBackdropReveal {
+    private static let secondsPerFrame: TimeInterval = 0.11
+    private let frames: [CGImage]
+
+    public init(image: CGImage) {
+        frames = [32, 16, 8, 4, 2].compactMap { blockSize in
+            let width = max(1, (image.width + blockSize - 1) / blockSize)
+            let height = max(1, (image.height + blockSize - 1) / blockSize)
+            guard let context = CGContext(data: nil, width: width, height: height,
+                bitsPerComponent: 8, bytesPerRow: 0, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+            context.interpolationQuality = .medium
+            context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+            return context.makeImage()
+        }
+    }
+
+    public func frame(at elapsed: TimeInterval) -> CGImage? {
+        let position = max(0, elapsed) / Self.secondsPerFrame
+        guard position < Double(frames.count) else { return nil }
+        return frames[Int(position)]
+    }
+}
+
 /// Reduced motion and inactive scenes hold the current view without a catch-up jump.
 public struct GameHomeBackdropClock {
     public private(set) var elapsed: TimeInterval = 0

@@ -1,0 +1,61 @@
+{
+  "ca": {
+    "count.lemmings": {
+      "one": "%ld lemming",
+      "other": "%ld lemmings"
+    }
+  },
+  "de": {
+    "count.levels": {
+      "one": "%ld Level",
+      "other": "%ld Level"
+    }
+  },
+  "es-419": {
+    "count.lemmings": {
+      "one": "%ld lemming",
+      "other": "%ld lemmings"
+    }
+  },
+  "fr": {
+    "count.lemmings": {
+      "one": "%ld lemming",
+      "other": "%ld lemmings"
+    },
+    "count.packs": {
+      "one": "%ld pack",
+      "other": "%ld packs"
+    }
+  },
+  "gsw": {
+    "count.lemmings": {
+      "one": "%ld Lemming"
+    },
+    "count.levels": {
+      "one": "%ld Level",
+      "other": "%ld Level"
+    }
+  },
+  "it": {
+    "count.lemmings": {
+      "one": "%ld lemming",
+      "other": "%ld lemming"
+    }
+  },
+  "nl": {
+    "count.lemmings": {
+      "one": "%ld lemming",
+      "other": "%ld lemmings"
+    },
+    "count.levels": {
+      "one": "%ld level",
+      "other": "%ld levels"
+    }
+  },
+  "pt-BR": {
+    "count.lemmings": {
+      "one": "%ld lemming",
+      "other": "%ld lemmings"
+    }
+  }
+}

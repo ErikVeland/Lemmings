@@ -44,6 +44,7 @@ typealias MobileGameControllerBase = UIViewController
     lazy var inputAdapter = makeInputAdapter()
     override var canBecomeFirstResponder: Bool { true }
     var onExit: ((MobileGameExitAction) -> Void)?
+    var onSaveProgressBeforeExit: ((MobileGameExitAction) throws -> Void)?
     let globalNavigation = MobileNavigationView()
     let settingsTabs = MobileSettingsTabsView()
     #if os(iOS)
@@ -1979,7 +1980,11 @@ typealias MobileGameControllerBase = UIViewController
         Task { [self] in
             do {
                 await checkpointSaveTask?.value
-                try await checkpointStore.retire(runID: runID)
+                try await MobileResultExitPersistence.prepare {
+                    if session.snapshot.didWin { try onSaveProgressBeforeExit?(action) }
+                } retireCheckpoint: {
+                    try await checkpointStore.retire(runID: runID)
+                }
                 if let player, onHandover?(player) == false {
                     if skipPending { recoverLevelSkip(L10n.text("Hot Seat was not saved")); return }
                     resetTransition()
@@ -1987,6 +1992,11 @@ typealias MobileGameControllerBase = UIViewController
                     return
                 }
                 onExit?(action)
+            } catch MobileResultExitPersistence.Failure.progressSave(let error) {
+                resetTransition()
+                showRecoveryOverlay(title: error.localizedDescription) { [weak self] in
+                    self?.finish(action, handingTo: player)
+                }
             } catch {
                 if skipPending { recoverLevelSkip(L10n.text("Run was not closed")); return }
                 resetTransition()

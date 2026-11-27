@@ -7,9 +7,11 @@ import json
 from pathlib import Path
 import re
 import sys
+import unicodedata
 
 ROOT = Path(__file__).resolve().parents[2]
-LANGUAGES = ('es-419', 'de', 'fr', 'pt-BR', 'it', 'nl', 'nb', 'ta')
+LANGUAGES = ('ca', 'es-419', 'de', 'gsw', 'fr', 'pt-BR', 'it', 'nl', 'nb', 'ta')
+PARTIAL_DRAFTS = set()
 PLACEHOLDERS = re.compile(r'\{\d+\}')
 CATEGORIES = {'zero', 'one', 'two', 'few', 'many', 'other'}
 
@@ -29,6 +31,24 @@ def read_json(path):
 
 def count_formats(text):
     return re.findall(r'%(?:%|ld|[^%]?)', text)
+
+
+def is_retained_term(reason):
+    return bool(reason and not re.search(r'fallback|pending|untranslated', reason, re.IGNORECASE))
+
+
+def normalised_text(text):
+    return ''.join(c for c in unicodedata.normalize('NFKC', text).casefold() if c.isalnum())
+
+
+def fallback_errors(source, values, unchanged):
+    return [
+        f'English fallback: {key!r}'
+        for key, value in values.items()
+        if key in source and isinstance(value, str) and any(c.isalpha() for c in key)
+        and normalised_text(key) == normalised_text(value)
+        and not is_retained_term(unchanged.get(key))
+    ]
 
 
 def validate_texts(source, values, unchanged=()):
@@ -91,6 +111,7 @@ def inspect(directory):
         results[language] = dict(text_keys=len(values), total_text_keys=len(texts),
             missing_text=missing, plural_keys=len(forms), total_plural_keys=len(plurals),
             missing_plurals=missing_plurals, errors=errors + plural_errors,
+            english_fallbacks=fallback_errors(texts, values, unchanged.get(language, {})),
             sha256=hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None,
             complete=not (errors or missing or plural_errors or missing_plurals))
     return results
@@ -111,7 +132,13 @@ def main():
               f"{len(result['errors'])} errors; {'PASS' if result['complete'] else 'INCOMPLETE'}")
         for error in result['errors'][:5]:
             print('  ' + error)
-    return 0 if all(r['complete'] for r in results.values()) else 1
+    return 0 if all(
+        result['complete'] or (
+            locale in PARTIAL_DRAFTS and result['text_keys'] > 0
+            and not result['errors'] and not result['missing_plurals']
+        )
+        for locale, result in results.items()
+    ) else 1
 
 
 if __name__ == '__main__':

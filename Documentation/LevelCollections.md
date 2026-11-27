@@ -1,8 +1,27 @@
 # Level collections
 
-Open Collections from the home screen or the Level Select pack browser.
+Open Collections from Play or the Level Select pack browser.
 Favourites contains bookmarked levels. Recently Played contains the latest
 50 distinct levels, newest first. Replaying a level moves it to the front.
+
+## Starter playlists
+
+Open Playlists to find curated routes for the game data you have installed.
+
+| Playlist | Levels |
+| --- | --- |
+| First Shift | Classic Fun 1–3. Dig, float and block. |
+| Permit to Build | Classic Fun 5 and 7, then Oh No! Tame 14. Bash and build. |
+| Below Street Level | Oh No! Tame 4, 6, 10 and 17. Bash and mine. |
+| Open Starter | Three project-authored levels from Ultimate Lemmix. |
+| The Tame Shift | All 20 Tame levels from Oh No! More Lemmings. |
+| Holiday Fun | Four Xmas levels each from 1991 and 1992, 16 Flurry levels from 1993, and 16 Frost levels from 1994. |
+
+Holiday Fun follows release order. Its 40 puzzles cover each game's first
+rank and vary in difficulty. Each preset needs every level in its route.
+Starting a preset creates a resumable run with a fixed level order.
+
+## Personal collections
 
 The Favourite control uses the shared stone button and pixel star. An outlined
 star means unsaved. A filled star means saved. Level Select and results both

@@ -56,6 +56,11 @@ import NxlvKit
         var favourites: [LevelPlaylistEntry]?
         var recentlyPlayed: [LevelPlaylistEntry]?
 
+        var personalPlaylistCount: Int {
+            let starterIDs = Set(StarterPlaylistCatalogue.routes.map(\.id))
+            return playlists.count { !starterIDs.contains($0.id) }
+        }
+
         init(
             playlists: [LevelPlaylist] = [],
             selectedPlaylistID: UUID? = nil,
@@ -70,7 +75,7 @@ import NxlvKit
 
         func validated() throws -> Self {
             guard (1...Self.currentVersion).contains(version) else { throw Failure.unsupportedVersion }
-            guard playlists.count <= Self.maximumPlaylists else {
+            guard personalPlaylistCount <= Self.maximumPlaylists else {
                 throw Failure.tooManyPlaylists
             }
             guard Set(playlists.map(\.id)).count == playlists.count else {
@@ -108,12 +113,15 @@ import NxlvKit
         }
     }
 
+    private typealias JourneyRecovery = (snapshot: JourneySessionSnapshot, learning: LearningJourneyProgress)
+
     private struct VersionHeader: Decodable {
         let version: Int
     }
 
     public let file: URL
     public var backupFile: URL { file.appendingPathExtension("backup") }
+    private var latestBackupFile: URL { file.appendingPathExtension("latest-backup") }
     private var document = Document()
     private var expectedData: Data?
     public private(set) var recovered = false
@@ -164,9 +172,13 @@ import NxlvKit
         guard document.journeySessions != previous.journeySessions else { return }
         do { try save(refreshJourneySnapshots: false) } catch { document = previous; throw error }
     }
-    public func importJourneySession(_ incoming: JourneySessionSnapshot, hotSeatID: String?) throws {
+    @discardableResult public func importJourneySession(_ incoming: JourneySessionSnapshot, hotSeatID: String?) throws -> Bool {
         let scope = hotSeatID ?? "solo"
-        guard incoming.updatedAt > (document.journeySessions?[scope]?.updatedAt ?? .distantPast) else { return }
+        guard incoming.updatedAt > (document.journeySessions?[scope]?.updatedAt ?? .distantPast) else { return false }
+        // A cloud copy can remain under an old Hot Seat ID. Keep the local queue's owner.
+        if let id = incoming.run?.id, let saved = resumableRun(id: id), saved.hotSeatID != hotSeatID {
+            return false
+        }
         let previous = document
         var archived = savedRuns.filter { $0.run.id != incoming.run?.id }
         let replacesActive = document.activeRunHotSeatID == hotSeatID
@@ -189,6 +201,7 @@ import NxlvKit
         if document.journeySessions == nil { document.journeySessions = [:] }
         document.journeySessions?[scope] = incoming
         do { try save(refreshJourneySnapshots: false) } catch { document = previous; throw error }
+        return true
     }
     private func refreshJourneySnapshots() {
         let previous = document.journeySessions ?? [:]
@@ -353,20 +366,37 @@ import NxlvKit
             includingPropertiesForKeys: nil).filter {
                 $0.lastPathComponent.hasPrefix(prefix)
         }
-        for target in [file, file.appendingPathExtension("backup")] + preserved where manager.fileExists(atPath: target.path) {
+        for target in [file, file.appendingPathExtension("backup"), file.appendingPathExtension("latest-backup")] + preserved where manager.fileExists(atPath: target.path) {
             try manager.removeItem(at: target)
         }
     }
 
     /// `won` reports wins outside this file, such as campaign wins. A journey revision skips them.
     public convenience init(profileID: String, storage: AppStorage = .current(),
+                            recoveryHotSeatIDs: [String]? = nil,
                             won: (LevelCatalogueIdentity) -> Bool = { _ in false }) throws {
-        try self.init(file: Self.fileURL(profileID: profileID, storage: storage), won: won)
+        try self.init(file: Self.fileURL(profileID: profileID, storage: storage), won: won) {
+            guard let recoveryHotSeatIDs else { return [:] }
+            var snapshots: [String: JourneyRecovery] = [:]
+            for sessionID in [nil] + recoveryHotSeatIDs.map(Optional.some) {
+                guard let snapshot = GameProgressPreferences.journeySession(
+                    profileID: profileID, sessionID: sessionID, defaults: storage.defaults) else { continue }
+                let learning = GameProgressPreferences.learning(
+                    profileID: profileID, sessionID: sessionID, defaults: storage.defaults)
+                snapshots[sessionID ?? "solo"] = (snapshot, learning)
+            }
+            return snapshots
+        }
     }
 
-    public init(file: URL, won: (LevelCatalogueIdentity) -> Bool = { _ in false }) throws {
+    public convenience init(file: URL, won: (LevelCatalogueIdentity) -> Bool = { _ in false }) throws {
+        try self.init(file: file, won: won, recoverySnapshots: { [:] })
+    }
+
+    private init(file: URL, won: (LevelCatalogueIdentity) -> Bool,
+                 recoverySnapshots: () -> [String: JourneyRecovery]) throws {
         self.file = file
-        try load()
+        try load(recoverySnapshots: recoverySnapshots)
         try recoverLegacyHotSeatLearning()
         try removeExcludedLearningLessons(LearningJourneyLibrary.excludedIdentities)
         if let journey = LearningJourneyLibrary.journey { try migrateLearningJourney(journey, won: won) }
@@ -495,7 +525,8 @@ import NxlvKit
     }
 
     public func add(_ playlist: LevelPlaylist, select: Bool = true) throws {
-        guard document.playlists.count < Document.maximumPlaylists else {
+        guard document.personalPlaylistCount < Document.maximumPlaylists
+                || StarterPlaylistCatalogue.routes.contains(where: { $0.id == playlist.id }) else {
             throw Failure.tooManyPlaylists
         }
         guard !document.playlists.contains(where: { $0.id == playlist.id }) else {
@@ -568,10 +599,14 @@ import NxlvKit
     }
 
     /// Keep the previous sequence and its turn ownership when starting another session.
-    public func startRun(_ run: LevelSequenceRun, hotSeatID: String?, l2Progress: [String: Data]? = nil) throws {
+    public func startRun(_ run: LevelSequenceRun, hotSeatID: String?, l2Progress: [String: Data]? = nil,
+                         registering playlist: LevelPlaylist? = nil) throws {
         guard let run = try run.removingMultiplayerLevels() else { throw LevelPlaylistError.emptyPool }
-        if case let .playlist(id) = run.source, playlist(id: id) == nil { throw Failure.missingPlaylist }
         let previous = document
+        if case let .playlist(id) = run.source, self.playlist(id: id) == nil {
+            guard let playlist, playlist.id == id else { throw Failure.missingPlaylist }
+            document.playlists.append(playlist)
+        }
         var saved = savedRuns.filter { $0.run.id != run.id }
         if let active = document.activeRun, active.id != run.id {
             saved.insert(SavedRun(run: active, hotSeatID: document.activeRunHotSeatID,
@@ -617,22 +652,20 @@ import NxlvKit
         return try loaded.validated()
     }
 
-    private func load() throws {
+    private func load(recoverySnapshots: () -> [String: JourneyRecovery]) throws {
         let manager = FileManager.default
-        guard manager.fileExists(atPath: file.path) else {
-            guard manager.fileExists(atPath: backupFile.path) else { return }
-            try recover(preserving: nil)
-            return
-        }
-        let data = try Data(contentsOf: file)
-        do {
-            document = try decode(data)
-            expectedData = data
-        } catch Failure.unsupportedVersion {
-            throw Failure.unsupportedVersion
-        } catch {
-            guard manager.fileExists(atPath: backupFile.path) else { throw error }
-            try recover(preserving: data)
+        let original = manager.fileExists(atPath: file.path) ? try Data(contentsOf: file) : nil
+        if let original {
+            do {
+                document = try decode(original)
+                expectedData = original
+            } catch Failure.unsupportedVersion {
+                throw Failure.unsupportedVersion
+            } catch {
+                try recover(preserving: original, failure: error, recoverySnapshots: recoverySnapshots)
+            }
+        } else if [latestBackupFile, backupFile].contains(where: { manager.fileExists(atPath: $0.path) }) {
+            try recover(preserving: nil, failure: Failure.invalidDocument, recoverySnapshots: recoverySnapshots)
         }
     }
 
@@ -655,22 +688,68 @@ import NxlvKit
         return try operation()
     }
 
-    private func recover(preserving original: Data?) throws {
+    private func recoveryDocument(from snapshots: [String: JourneyRecovery]) throws -> Document? {
+        var used: Set<UUID> = []
+        var runs: [SavedRun] = []
+        var restored = Document()
+        restored.journeySessions = [:]
+        restored.hotSeatLearningProgress = [:]
+        for scope in snapshots.keys.sorted() {
+            guard !scope.isEmpty, let (snapshot, learning) = snapshots[scope] else { continue }
+            if let run = snapshot.run {
+                guard run.source == .playlist(LearningJourney.playlistID),
+                      let playable = try run.removingMultiplayerLevels() else { continue }
+                guard used.insert(run.id).inserted else { return nil }
+                runs.append(SavedRun(run: playable, hotSeatID: scope == "solo" ? nil : scope,
+                                     l2Progress: snapshot.l2Progress))
+            }
+            restored.journeySessions?[scope] = snapshot
+            if scope == "solo" { restored.learningProgress = learning }
+            else { restored.hotSeatLearningProgress?[scope] = learning }
+        }
+        guard let first = runs.first else { return nil }
+        restored.playlists = [try LevelPlaylist(id: LearningJourney.playlistID,
+            name: LearningJourney.title, entries: first.run.entries)]
+        restored.savedRuns = runs
+        return try restored.validated()
+    }
+
+    private func recover(preserving original: Data?, failure: Error,
+                         recoverySnapshots: () -> [String: JourneyRecovery]) throws {
         try withLock {
-            let current = FileManager.default.fileExists(atPath: file.path)
-                ? try Data(contentsOf: file) : nil
+            let manager = FileManager.default
+            let current = manager.fileExists(atPath: file.path) ? try Data(contentsOf: file) : nil
             guard current == original else { throw Failure.changedOnDisk }
-            let data = try Data(contentsOf: backupFile)
-            let recoveredDocument = try decode(data)
-            if let original {
+            var damaged = original.map { [($0, file)] } ?? []
+            var candidate: (Data, Document)?
+            for backup in [latestBackupFile, backupFile] where manager.fileExists(atPath: backup.path) {
+                let data = try Data(contentsOf: backup)
+                do {
+                    candidate = (data, try decode(data))
+                    break
+                } catch Failure.unsupportedVersion {
+                    throw Failure.unsupportedVersion
+                } catch {
+                    damaged.append((data, backup))
+                }
+            }
+            if candidate == nil, let restored = try recoveryDocument(from: recoverySnapshots()) {
+                candidate = (try JSONEncoder().encode(restored), restored)
+            }
+            guard let (data, restored) = candidate else { throw failure }
+            for (bytes, source) in damaged {
                 let preserved = file.deletingLastPathComponent().appendingPathComponent(
-                    file.lastPathComponent + ".unreadable-" + UUID().uuidString)
-                try original.write(to: preserved, options: .atomic)
+                    file.lastPathComponent + ".unreadable-" + UUID().uuidString + "-" + source.pathExtension)
+                try bytes.write(to: preserved, options: .atomic)
             }
             try data.write(to: file, options: .atomic)
-            document = recoveredDocument
+            document = restored
             expectedData = data
             recovered = true
+            try? data.write(to: latestBackupFile, options: .atomic)
+            if !manager.fileExists(atPath: backupFile.path) || damaged.contains(where: { $0.1 == backupFile }) {
+                try? data.write(to: backupFile, options: .atomic)
+            }
         }
     }
 
@@ -688,6 +767,7 @@ import NxlvKit
             try (current ?? data).write(to: backupFile, options: .atomic)
             try data.write(to: file, options: .atomic)
             expectedData = data
+            try? data.write(to: latestBackupFile, options: .atomic)
         }
         onChange?()
     }

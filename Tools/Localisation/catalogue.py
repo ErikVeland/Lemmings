@@ -7,7 +7,10 @@ from pathlib import Path
 import plistlib
 import re
 import subprocess
-from validate import validate_source_messages, validate_texts, validate_plurals, read_json
+from validate import (
+    LANGUAGES, PARTIAL_DRAFTS, fallback_errors, normalised_text, read_json,
+    validate_plurals, validate_source_messages, validate_texts,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 BUNDLE = ROOT / 'Sources/NxlvKit/Resources/Localization.bundle'
@@ -67,7 +70,7 @@ def validate_translations(english_keys, plural_keys):
         data = json.loads(subprocess.check_output(['plutil', '-convert', 'json', '-o', '-', str(strings)]))
         language = locale.stem
         errors, missing = validate_texts(english_keys, data, english_keys if language == 'en' else reviews.get(language, {}))
-        if errors or missing:
+        if errors or not data or (missing and language not in PARTIAL_DRAFTS):
             raise ValueError(f'{locale.name}: {len(missing)} missing texts; ' + '; '.join(errors[:5]))
         for key, value in data.items():
             if key not in english_keys:
@@ -96,11 +99,72 @@ def validate_translations(english_keys, plural_keys):
                         raise ValueError(f'{locale.name}: unsupported count format for {key!r}')
 
 
+def release_errors(english_keys, english_plurals):
+    from install_drafts_for_testing import DRAFTS, plural_table
+
+    expected = {'en', *LANGUAGES}
+    errors = []
+    manifests = [BUNDLE / 'Info.plist', ROOT / 'Resources/Info.plist',
+                 ROOT / 'Resources/UltimateLemmix/Info.plist']
+    manifests += [ROOT / 'Apps' / app / 'Info.plist' for app in (
+        'UltimateLemmingsIOS', 'UltimateLemmingsTV', 'UltimateLemmixIOS', 'UltimateLemmixTVOS')]
+    for path in manifests:
+        locales = plistlib.loads(path.read_bytes()).get('CFBundleLocalizations', [])
+        if set(locales) != expected or len(locales) != len(expected):
+            errors.append(f'{path.relative_to(ROOT)} has a different locale list.')
+    if {path.stem for path in BUNDLE.glob('*.lproj')} != expected:
+        errors.append('Bundled locale folders differ from the expected locale list.')
+    picker = (ROOT / 'Sources/NxlvKit/InterfaceLocalisation.swift').read_text()
+    cases = re.findall(r'^    case \w+ = "([^"]+)"$', picker, re.MULTILINE)
+    if set(cases) != expected or len(cases) != len(expected):
+        errors.append('The language picker has a different locale list.')
+
+    unchanged = read_json(Path(__file__).with_name('unchanged.json'))
+    retained_plurals = read_json(Path(__file__).with_name('unchanged-plurals.json'))
+    english_plural_values = {
+        key: {normalised_text(entry['count'][category]) for category in ('one', 'other')}
+        for key, entry in english_plurals.items()
+    }
+    for locale in LANGUAGES:
+        directory = BUNDLE / f'{locale}.lproj'
+        paths = [DRAFTS / f'{locale}.json', DRAFTS / f'{locale}.plurals.json',
+                 directory / 'Interface.strings', directory / 'Interface.stringsdict']
+        missing_files = [str(path.relative_to(ROOT)) for path in paths if not path.is_file()]
+        if missing_files:
+            errors.extend(f'Missing translation file: {path}' for path in missing_files)
+            continue
+        texts, plurals = (read_json(path) for path in paths[:2])
+        retained = unchanged.get(locale, {})
+        text_errors, missing_text = validate_texts(english_keys, texts, retained)
+        same_language = fallback_errors(english_keys, texts, retained)
+        plural_errors, missing_plurals = validate_plurals(english_plurals, plurals)
+        for key, forms in plurals.items():
+            if key in english_plural_values and isinstance(forms, dict):
+                for category, value in forms.items():
+                    retained_value = retained_plurals.get(locale, {}).get(key, {}).get(category)
+                    if (isinstance(value, str) and normalised_text(value) in english_plural_values[key]
+                            and value != retained_value):
+                        plural_errors.append(f'English plural fallback: {key}/{category}')
+        if missing_text or missing_plurals or same_language:
+            errors.append(f'{locale}: {len(missing_text)} missing texts, '
+                          f'{len(missing_plurals)} missing plurals, {len(same_language)} English fallbacks.')
+        errors.extend(f'{locale}: {error}' for error in
+                      [*text_errors, *plural_errors, *same_language[:3]])
+        runtime = json.loads(subprocess.check_output(['plutil', '-convert', 'json', '-o', '-', str(paths[2])]))
+        if runtime != texts:
+            errors.append(f'{locale}: bundled text differs from its draft.')
+        if not plural_errors and plistlib.loads(paths[3].read_bytes()) != plistlib.loads(plural_table(plurals)):
+            errors.append(f'{locale}: bundled plurals differ from their draft.')
+    return errors
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true', help='Fail if generated source catalogues are stale.')
+    parser.add_argument('--release', action='store_true', help='Reject stale, incomplete or English fallback translations.')
     parser.add_argument('--audit', action='store_true', help='Report direct UI literals that still need migration.')
     args = parser.parse_args()
+    args.check = args.check or args.release
     data = extract()
     source_errors = validate_source_messages(data['messages'])
     if source_errors:
@@ -119,7 +183,13 @@ def main():
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(content)
-    validate_translations({r['key'] for r in data['messages'] if r['kind'] == 'text'}, {r['key'] for r in data['messages'] if r['kind'] == 'plural'})
+    english_keys = {r['key'] for r in data['messages'] if r['kind'] == 'text'}
+    if args.release:
+        errors = release_errors(english_keys, plistlib.loads(plurals))
+        if errors:
+            raise SystemExit('\n'.join(errors))
+    else:
+        validate_translations(english_keys, set(plistlib.loads(plurals)))
     if args.audit:
         for row in data['uncovered']:
             print(f"{row['file']}:{row['line']}: {row['source']}")

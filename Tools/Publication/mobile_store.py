@@ -252,6 +252,8 @@ def main():
             sub.add_argument("--developer", type=Path, default=Path("/Applications/Xcode.app/Contents/Developer"))
     args = parser.parse_args()
     try:
+        if args.command in {"prepare-archive", "export"}:
+            subprocess.run([sys.executable, str(ROOT / "Tools/Localisation/catalogue.py"), "--release"], check=True)
         {"prepare-archive": prepare_archive, "export": export_archive, "verify": validate_export}[args.command](args)
     except (ValueError, subprocess.CalledProcessError, OSError, KeyError, StopIteration) as error:
         print(f"Mobile Store packaging failed: {error}", file=sys.stderr)

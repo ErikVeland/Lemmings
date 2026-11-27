@@ -12,6 +12,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: Check shared source and release metadata
         run: zsh Scripts/build-publication.sh --check
+      - name: Gate interface translations
+        run: python3 Tools/Localisation/catalogue.py --release
       - name: Check publication and compiler contracts
         run: python3 -m unittest discover -s Tools/Publication -p 'test_*.py'
       - name: Check shared mobile source contracts

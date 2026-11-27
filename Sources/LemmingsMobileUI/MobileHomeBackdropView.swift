@@ -11,6 +11,8 @@ import UIKit
     private var start = CGPoint.zero
     private var goal = CGPoint.zero
     private var clock = GameHomeBackdropClock()
+    private var reveal: GameHomeBackdropReveal?
+    var isRevealing: Bool { reveal?.frame(at: clock.elapsed) != nil }
     var canAnimate: Bool {
         guard let image, start != goal, bounds.width > 0, bounds.height > 0 else { return false }
         let size = CGSize(width: image.width, height: image.height)
@@ -30,17 +32,32 @@ import UIKit
         addSubview(shade)
     }
     required init?(coder: NSCoder) { nil }
-    func show(_ scenery: MobileHomeBackdrop?) {
+    func show(_ scenery: MobileHomeBackdrop?, reduceMotion: Bool = false) {
         image = scenery.flatMap { MobileBitmapRenderer.image($0.frame) }
-        artwork.image = image.map { UIImage(cgImage: $0) }
+        reveal = reduceMotion ? nil : image.map { GameHomeBackdropReveal(image: $0) }
+        updateArtwork(reveal?.frame(at: 0) ?? image)
         start = scenery.map { CGPoint(x: $0.start.x, y: $0.start.y) } ?? .zero
         goal = scenery.map { CGPoint(x: $0.goal.x, y: $0.goal.y) } ?? start
         clock = GameHomeBackdropClock(); setNeedsLayout()
     }
     func advance(at now: TimeInterval, active: Bool, reduceMotion: Bool) {
+        if reduceMotion, reveal != nil {
+            reveal = nil
+            updateArtwork(image)
+        }
         let previous = clock.elapsed
         clock.advance(at: now, active: active && image != nil, reduceMotion: reduceMotion)
-        if clock.elapsed != previous { setNeedsLayout() }
+        guard clock.elapsed != previous else { return }
+        if let reveal {
+            let frame = reveal.frame(at: clock.elapsed)
+            updateArtwork(frame ?? image)
+            if frame == nil { self.reveal = nil }
+        }
+        setNeedsLayout()
+    }
+    private func updateArtwork(_ frame: CGImage?) {
+        guard artwork.image?.cgImage !== frame else { return }
+        artwork.image = frame.map { UIImage(cgImage: $0) }
     }
     override func layoutSubviews() {
         super.layoutSubviews()

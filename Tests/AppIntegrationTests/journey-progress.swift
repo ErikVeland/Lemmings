@@ -82,11 +82,11 @@
     try check(!fanHomeStatus().hasPrefix("0/"), "Home ignored the fan Journey win")
     try check(store.learningProgress.completed.isEmpty, "Home copied Hot Seat wins into Solo")
     if let root = try? BundledGameResources.lemmings2() {
-      try check(Lemmings2PlayWindow.savedCompletion(root: root, journeyWins: [l2]) == 1,
+      try check(Lemmings2PlayWindow.savedCompletion(root: root, progressData: Lemmings2PlayWindow.browserProgressData(root: root), journeyWins: [l2]) == 1,
         "L2 completion omitted its exact Journey win")
     }
     if let root = try? BundledGameResources.lemmings3() {
-      try check(Lemmings3PlayWindow.savedCompletion(root: root, journeyWins: [l3]) == 1,
+      try check(Lemmings3PlayWindow.savedCompletion(root: root, progressData: Lemmings3PlayWindow.browserProgressData(root: root), journeyWins: [l3]) == 1,
         "L3 completion omitted its exact Journey win")
     }
     let captureDirectory = URL(fileURLWithPath: ".build/journey-progress/renders")

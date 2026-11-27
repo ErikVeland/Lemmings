@@ -29,15 +29,28 @@ public enum GamePixelTypography {
 
     private static let glyphs = BitmapLatinGlyphs.monochrome(columns: columns)
     private static let masks = GameAssetCache<Data>(capacity: 768)
-    public static func bitmapGlyph(for character: Character) -> ClassicMacArtwork.Frame? { glyphs[character] }
+    private static let flagImages: [BitmapLatinGlyphs.Flag: CGImage] = Dictionary(uniqueKeysWithValues:
+        BitmapLatinGlyphs.Flag.allCases.compactMap { flag in
+            guard let frame = glyphs[flag.character], let provider = CGDataProvider(data: frame.rgba as CFData),
+                  let image = CGImage(width: frame.width, height: frame.height, bitsPerComponent: 8, bitsPerPixel: 32,
+                    bytesPerRow: frame.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                    bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
+                    decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return nil }
+            return (flag, image)
+        })
+
+    public static func bitmapGlyph(for character: Character) -> ClassicMacArtwork.Frame? {
+        glyphs[character] ?? BitmapLatinGlyphs.flag(character).flatMap { glyphs[$0.character] }
+    }
 
     public static func bitmapGlyph(forSequence sequence: String) -> ClassicMacArtwork.Frame? {
-        if sequence.count == 1, let character = sequence.first, let glyph = glyphs[character] { return glyph }
+        if sequence.count == 1, let character = sequence.first, let glyph = bitmapGlyph(for: character) { return glyph }
         return BitmapTamilGlyphs.frame(for: sequence, cellHeight: 7, baseline: 7)
     }
 
     /// Keep Tamil counters open when a compact destination tints the glyph with one colour.
     public static func monochromeMask(forSequence sequence: String) -> Data? {
+        guard BitmapLatinGlyphs.flag(inSequence: sequence) == nil else { return nil }
         if let cached = masks.value(for: sequence) { return cached }
         guard let glyph = bitmapGlyph(forSequence: sequence) else { return nil }
         let tamil = BitmapTamilGlyphs.supports(sequence)
@@ -57,12 +70,25 @@ public enum GamePixelTypography {
         public let advance: Int
     }
 
+    public static func drawFlag(_ item: PositionedGlyph, at origin: CGPoint, scale: CGFloat, context: CGContext) -> Bool {
+        guard let flag = BitmapLatinGlyphs.flag(inSequence: item.sequence),
+              let image = flagImages[flag], let glyph = item.glyph else { return false }
+        let rect = CGRect(x: origin.x + CGFloat(item.x + glyph.x) * scale, y: origin.y + CGFloat(glyph.y) * scale,
+                          width: CGFloat(glyph.width) * scale, height: CGFloat(glyph.height) * scale)
+        context.saveGState()
+        context.interpolationQuality = .none
+        GameStoneArt.drawImage(image, in: rect, context: context)
+        context.restoreGState()
+        return true
+    }
+
     public static func layout(_ text: String) -> [PositionedGlyph] {
         var pen = 0
         return BitmapTamilGlyphs.sequences(in: GamePresentationText.display(text)).map { sequence in
             let glyph = bitmapGlyph(forSequence: sequence)
             let latin = sequence.count == 1 && sequence.first.map { glyphs[$0] != nil || $0 == " " } == true
-            let advance = latin ? 6 : BitmapTamilGlyphs.advance(for: sequence, cellHeight: 7) ?? 6
+            let defaultAdvance = 6 * BitmapLatinGlyphs.cells(for: sequence)
+            let advance = latin ? defaultAdvance : BitmapTamilGlyphs.advance(for: sequence, cellHeight: 7) ?? defaultAdvance
             defer { pen += advance }
             return PositionedGlyph(sequence: sequence, glyph: glyph, x: pen, advance: advance)
         }
@@ -194,7 +220,9 @@ public enum GamePixelTypography {
         context.restoreGState()
         context.setFillColor(color ?? palette.colour)
         context.setAlpha(alpha)
+        let glyphOrigin = CGPoint(x: start - CGFloat(bearing) * scale, y: top)
         for item in items {
+            if drawFlag(item, at: glyphOrigin, scale: scale, context: context) { continue }
             guard let glyph = item.glyph, let mask = monochromeMask(forSequence: item.sequence) else { continue }
             for x in 0..<glyph.width {
                 for y in 0..<glyph.height where mask[y * glyph.width + x] != 0 {

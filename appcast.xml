@@ -1,7 +1,57 @@
 <?xml version="1.0" standalone="yes"?>
-<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0" xmlns:ns0="http://www.andymatuschak.org/xml-namespaces/sparkle">
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:ns0="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <title>Ultimate Lemmings</title>
+        <item>
+            <title>2.7.1</title>
+            <pubDate>Thu, 26 Nov 2026 19:59:55 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>113</sparkle:version>
+            <sparkle:shortVersionString>2.7.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}</style></head><body><!-- Release commit: 3a7ef75071d6a6f8f56326e8cafa24279d94cfaf -->
+<h3>Home background</h3>
+<p>The level backdrop sharpens from large pixel blocks as Home opens. Reduce Motion and Static Home Screen show the sharp image immediately.</p>
+<h3>Level loading</h3>
+<p>Longer level loads show an Amiga cracktro-style intro. Both Mac downloads include 11 original Amiga cracktro MODs and their credits. With menu music enabled, the MOD engine picks a track at random if loading lasts long enough. The game starts as soon as it is ready. Reduce Motion and Reduce Flashes hold the artwork still.</p>
+<h3>Compatibility</h3>
+<p>macOS 12.3 or later on Apple silicon and Intel.</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-2.7.1-build113.zip" length="2075667492" type="application/octet-stream" sparkle:edSignature="EzfH86x+9X2dYLk2GifWhHvAkgT+6N0emllcVDYVt+UeSnzev0+SIBmVsLYfjaBpo60zIjLgjDlV/aK/Prt7DQ=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from112.delta" sparkle:deltaFrom="112" length="1266486" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="zFLfD97mvkGPWBQIAlOB9Plnz2RRUxyD1mI7brqbeizSYG5xlBT+1VBbO/WdEYczAG3eWl2awfP3+bwQv9I0Cw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from111.delta" sparkle:deltaFrom="111" length="41642814" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="laeJS8/SmnkUTIBzAov5Kqn36mEQGLC7THT4h50GcZYDKD1t9msUV0VSsOe0QVu8DdJQ5kwDXsGI6qvtKUDOAQ=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from110.delta" sparkle:deltaFrom="110" length="48330790" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="yzjke59/1fUqQFeRtZ5zruO/8n0pO/4Yb5+RtSqGmt+2Il6qL5gIspqMMQaOsZ31WKS2aOaZ96cn6PHj+tF4AA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from109.delta" sparkle:deltaFrom="109" length="49251550" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="RrYPaap3EeNNgQ7HeHxxonl4EAgOfvSW/LQr7CduNeP3T4LIAjzoi/B/gBUOqZ+YCFMEUpUSkZybEbcgByX8AA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7.1/UltimateLemmings-build113-from106.delta" sparkle:deltaFrom="106" length="65415562" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="fHfof0Q1W6NFMUxoVRyd6I0UhwaANTJS3FRDHc5RLFPfqGwXn1SwiiVfiH0cX7d2zybCmccPiYJQ/TNkYxW+Cg=="/>
+            </sparkle:deltas>
+        </item>
+        <item>
+            <title>2.7</title>
+            <pubDate>Thu, 26 Nov 2026 18:36:47 +1000</pubDate>
+            <link>https://github.com/ErikVeland/Lemmings/releases</link>
+            <sparkle:version>112</sparkle:version>
+            <sparkle:shortVersionString>2.7</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>12.3</sparkle:minimumSystemVersion>
+            <description><![CDATA[<html><head><meta charset="utf-8"><style>:root{color-scheme:light dark}body{font:13px -apple-system,sans-serif}h3{font-size:14px;margin:14px 0 4px}h4{font-size:13px;margin:10px 0 2px}ul{padding-left:18px;margin:4px 0}</style></head><body><!-- Release commit: 31cf153c0128df1f8ade401ca62393dad319b750 -->
+<h3>Play menu</h3>
+<p>See full game titles and aligned progress counts on compact buttons. Return to the menu while progress counts load.</p>
+<h3>Camera controls</h3>
+<p>Choose whether the scroll wheel zooms or pans in Settings. Press Z to toggle zoom.</p>
+<h3>Menus and statistics</h3>
+<p>Read aligned statistics and section headings across window sizes. The About page shows pixel flags beside credits.</p>
+<h3>Compatibility</h3>
+<p>macOS 12.3 or later on Apple silicon and Intel.</p></body></html>
+]]></description>
+            <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7/UltimateLemmings-2.7-build112.zip" length="2075489912" type="application/octet-stream" sparkle:edSignature="Bfxvid7SNyEti5qM6dylZrO0N/wwgapg003Kl6hJztW4nTC8vea/EOh+Px2B8H0Zr+8uFrgn8xHZgoUh9VsEBA=="/>
+            <sparkle:deltas>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7/UltimateLemmings-build112-from111.delta" sparkle:deltaFrom="111" length="41343966" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="yxUUa9oW9mcNhYNEjhFSCtm4WyeulSPcC1NVQLuJ2mwQnZ6Kbn+7vl6cKhrATzNTUiEvpV0DIggX2qJSrbkACw=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7/UltimateLemmings-build112-from110.delta" sparkle:deltaFrom="110" length="48136266" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="ixlvbtXAHDD6xM2Fo1fveq2SmZTPz3WBy3YNcJg+49H2oKxHKt9Pmm6NoeGEnqQMuRjNB6KqU4XeGxCIhRAmCA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7/UltimateLemmings-build112-from109.delta" sparkle:deltaFrom="109" length="49070370" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="jjnyMvHVvbRwGaHDeR60m5VXTXrFXfevOs+vVXkluZ/v9g5SH9ASh0hO6yrcZQ4GNVywyU/wxvz7K+vvoXNgDg=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7/UltimateLemmings-build112-from106.delta" sparkle:deltaFrom="106" length="65247694" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="m1tR9w+hAU3UbrTmAIj+L2hp6raqB83mpMTgb83olkQ/BSgOgzjXoNzw9R9F7irzWuGDZLVyqyTmcjeGde2UBA=="/>
+                <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.7/UltimateLemmings-build112-from105.delta" sparkle:deltaFrom="105" length="65261250" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="aAaAOY0U73YI0ckU/8CN+FYnlMmBTDoyYMjqQRRaLFeMYm8GU4uEwr7nk8xolzkJVRPEGtdgAYz/GxtvImzYDg=="/>
+            </sparkle:deltas>
+        </item>
         <item>
             <title>2.6</title>
             <pubDate>Thu, 26 Nov 2026 05:02:41 +1000</pubDate>
@@ -30,7 +80,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.6/UltimateLemmings-build111-from104.delta" sparkle:deltaFrom="104" length="62310126" type="application/octet-stream" sparkle:deltaFromSparkleExecutableSize="862496" sparkle:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" sparkle:edSignature="h9Joz88zJhvzmg2n4664ethRLO/b6We+mUd/Rj8SuFdAbO6H7f2NUGARr2iUhbFBeYTUv8ZxCThis0ZlW2YgCw=="/>
             </sparkle:deltas>
         </item>
-    <item>
+        <item>
             <title>2.5</title>
             <pubDate>Wed, 25 Nov 2026 20:10:40 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -58,7 +108,7 @@
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.5/UltimateLemmings-build110-from102.delta" ns0:deltaFrom="102" length="65206002" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="5WwtTdnu47LHTyvgyqrIh5GVCF/Lz5Tdna0t4DdGx9/y0G1EWEnABXhtlc0XG58Ji1M/60KslQL9xuigEXxNCA==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.4.3</title>
             <pubDate>Sat, 21 Nov 2026 17:21:06 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -88,7 +138,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.3/UltimateLemmings-build109-from99.delta" ns0:deltaFrom="99" length="67912230" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="ZEek8IjDnFR72DTG6JYrDw6jStQi7yoHcnJoDVd6se4oTEvKYOqfkrh9Y7ZlteUTn6kr5B48VWttRVqyOJGqCQ==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.4.2</title>
             <pubDate>Thu, 05 Nov 2026 16:56:07 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -111,7 +161,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.2/UltimateLemmings-build106-from98.delta" ns0:deltaFrom="98" length="52088118" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="M+IComQy74WbLVazEmN11PEw9CJhSbO1hRh4ZcyQjUfCG9kiw8spSpVYbMe9NWqjCfnnvzs58RWn6fSql0ZmCg==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.4.1</title>
             <pubDate>Tue, 03 Nov 2026 17:22:48 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -140,7 +190,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4.1/UltimateLemmings-build105-from97.delta" ns0:deltaFrom="97" length="52131218" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="ar,Base,ca,cs,da,de,el" ns0:edSignature="kDA2tNCyKBfF0IrykOmLHwrfB+TcBiggm61NYo4uITu3nyZdptBu6TxassTl8IPUGGcSXyd8ADQBpZzWtiMrAQ==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.4</title>
             <pubDate>Sun, 01 Nov 2026 15:29:57 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -170,7 +220,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.4/UltimateLemmings-build104-from96.delta" ns0:deltaFrom="96" length="48895994" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="ar,Base,ca,cs,da,de,el" ns0:edSignature="uQ5z/LwpPIO+J5mSKPINv/DnkDZ3ygKfJwzuMvwVJe7SjqA7cdWuewwnoxPNJQICROtW0obkTizenLCgrT3ABA==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.3</title>
             <pubDate>Tue, 27 Oct 2026 09:10:13 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -208,7 +258,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.3/UltimateLemmings-build102-from95.delta" ns0:deltaFrom="95" length="43272750" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="h1jmaOf4gAZAwJTYoqTEDTf6AqG6HW3CX7TBVSojzPqYz0IDdrPfj6ZkOgftaDaraC+3nVSvLNHT093FpmoyAA==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.2.2</title>
             <pubDate>Sat, 24 Oct 2026 11:01:18 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -241,7 +291,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.2/UltimateLemmings-build99-from93.delta" ns0:deltaFrom="93" length="44116814" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="wWPF1ICgVBAxBiaPQ7PEoLw52PuVy27ON8gnVq8qkFnSrCFWi/tXmQIjl5uvp4qyJE8SqI2ORVNulbiqkK+CDA==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.2.1</title>
             <pubDate>Fri, 23 Oct 2026 14:35:00 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -267,7 +317,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2.1/UltimateLemmings-build98-from91.delta" ns0:deltaFrom="91" length="48476810" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="kQ6Ck7r+SmgY4kFxDKIsvsikTPcab8M86NQV3o6Dlr76lBpEjTMQxKxu0MFdYec/ZOJWOQtH26wheT1KE3yPAg==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.2</title>
             <pubDate>Fri, 23 Oct 2026 10:29:13 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -295,7 +345,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.2/UltimateLemmings-build97-from90.delta" ns0:deltaFrom="90" length="48495886" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="8Tl1f5Gia7riUtCDnXYyxhYlEjV/+HQDr6CZh+NA/JFXEhqmngcS2UXPx8KPcAbr+YwgOUwRyBR3Js882uEjBg==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.1.2</title>
             <pubDate>Thu, 22 Oct 2026 00:37:51 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -332,7 +382,7 @@
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from90.delta" ns0:deltaFrom="90" length="51024622" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="thG0Jioe7i4VqRYLQ519DD/EaHObo+nmjOw6+N29ZQWCmY+c5VtP2Iz7dJ4CdYaXqN0lMCG3qayssynpWc3hDw==" />
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.2/UltimateLemmings-build96-from87.delta" ns0:deltaFrom="87" length="45422462" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="jvbZvuyGGfK/Fr3XdIgY8+Q15Zv8fyTxobY7kfl6HgZCEpNd3KPKR+hCTpKwbI1XOxKSnX+xzwW4t7y9+ibtCA==" />
             </ns0:deltas></item>
-<item>
+        <item>
             <title>2.1.1</title>
             <pubDate>Wed, 21 Oct 2026 15:21:47 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -364,7 +414,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1.1/UltimateLemmings-build95-from86.delta" ns0:deltaFrom="86" length="44443478" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="M4M/TfLGWq7M+KEA3Ia/8PZPjSk3qTAxIDkRvsch3wMVvQvtjm0ByqJ2MRNWrv1G2Ak1x4TvmqyVZJ1svlNoDQ==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.1</title>
             <pubDate>Tue, 20 Oct 2026 12:12:25 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -400,7 +450,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.1/UltimateLemmings-build93-from85.delta" ns0:deltaFrom="85" length="45343766" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="jcqUA8PIzshStF2r25O4SSrzMLRHnxXVSPuS/Jp0niwwMRmRLdm30SSQqEWh0wZeqMczOhoDnXZupHS5SwxeDQ==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.0.7</title>
             <pubDate>Mon, 19 Oct 2026 19:28:00 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -433,7 +483,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.7/UltimateLemmings-build91-from84.delta" ns0:deltaFrom="84" length="50736462" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="7Okt6QiwfZuUW+D+YGadlsX7IcLIkUW1DDVqUAYhfJsiH/yWY6Ik5UkUqsHHHiVz9ODZruqUFoIBU8BG1YupBA==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.0.6</title>
             <pubDate>Mon, 19 Oct 2026 15:05:46 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -478,7 +528,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.6/UltimateLemmings-build90-from83.delta" ns0:deltaFrom="83" length="50899906" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="dI8/dN+PTXB1aOVv9Y3rTPuyzCmytJDl/YWuhHJW72AFtsoLmFxu2HKEw1cNEqt4sdY+9p7/amDcWuwlAqu9CA==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.0.4</title>
             <pubDate>Sat, 17 Oct 2026 14:46:49 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -510,7 +560,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.4/UltimateLemmings-build87-from82.delta" ns0:deltaFrom="82" length="4872806" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="ANLoe+5xJVip2fppcVGs2cmTu+fF1POSt2r3msLQIFGTBBcPBEXPFL3kgyHEMUvHlWW3Xx2f/kKBlo7lFcdNBg==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.0.3</title>
             <pubDate>Fri, 16 Oct 2026 11:11:38 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -536,7 +586,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.3/UltimateLemmings-build86-from81.delta" ns0:deltaFrom="81" length="7869386" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="/VSa+F6R8AHjd5cEadg/s+AiXyE916VkBNvrN95FT0HKhPbFXnnpf6E0iqF5j6mNPX+sh5BN5CDb5rTwYfltBg==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.0.2</title>
             <pubDate>Fri, 16 Oct 2026 02:19:56 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -567,7 +617,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.2/UltimateLemmings-build85-from79.delta" ns0:deltaFrom="79" length="9493054" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="Base,ar,ca,cs,da,de,el,en,es,fa,fi,fr,he,hr,hu,is,it,ja,ko,nb,nl,nn,pl,pt-BR,pt-PT,ro,ru,sk,sl,sv,th,tr,uk,zh_CN,zh_HK,zh_TW" ns0:edSignature="BvjYQnMNQTV9sOwzhhDVmhAEUYccVOSWRx0CtkP1KFPPpdJZQjcf3YQ046md7s2tz5G0P6bmRik8F+6R2H/KCw==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.0.1</title>
             <pubDate>Fri, 16 Oct 2026 00:40:12 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -590,7 +640,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0.1/UltimateLemmings-build84-from83.delta" ns0:deltaFrom="83" length="2514406" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="7KmBktKDnfnmfFKI8WBp9VdMusDA1ZqUQm5nqV7TKKn0dXEFpw/psWoUjsr4YsjQXYT1b2mC2AluMEBoDxWcBw==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>2.0</title>
             <pubDate>Thu, 15 Oct 2026 15:03:37 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -626,7 +676,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v2.0/UltimateLemmings-build83-from82.delta" ns0:deltaFrom="82" length="3107290" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="JOyoOJVih1t03JnaMpcbqmHH0pibQLOMMScik/geHsjU5UqMByU9rj6yUtG2mtwi0p9ErrJetqIk6wR7vYS7Aw==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>1.9.7</title>
             <pubDate>Thu, 15 Oct 2026 01:00:42 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -659,7 +709,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.7/UltimateLemmings-build82-from81.delta" ns0:deltaFrom="81" length="6681394" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="iVxWho2z/iH0QGKcMSBvbKntz9b2tAYzBBLdP6H7PojcU8OyBajp9EnRJF1vhffXXKqCL1buXXrnNQAyLqICCw==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>1.9.6</title>
             <pubDate>Wed, 14 Oct 2026 01:18:57 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -691,7 +741,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.6/UltimateLemmings-build81-from79.delta" ns0:deltaFrom="79" length="4944134" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="l1F6RZjxDgRnaH81V0inDYUag2aALxbwiEgs5pdMlP91+QUiiL2jitVLcFsS4nFwArgmJh1yMALXD7NvEfT2Bg==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>1.9.4</title>
             <pubDate>Tue, 13 Oct 2026 03:52:48 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -719,7 +769,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.4/UltimateLemmings-build79-from78.delta" ns0:deltaFrom="78" length="1569334" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="D5r0ZcXEEaRyUX4LgjdD1+RL73kCM4n7lM6Z6Y+8c6PAWlvNgAtEQeNOLLca5V0gSKYdHJ5sP83h5mypDVT4AQ==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>1.9.3</title>
             <pubDate>Mon, 12 Oct 2026 19:14:33 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -745,7 +795,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.3/UltimateLemmings-build78-from77.delta" ns0:deltaFrom="77" length="1683234" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="69N4hGgT6iSVt92OfxiUfFkx/5vidxzeJ7DsMul+s1TZ7V4ruuBAoeZ0ilrZu4Hphi5sn37u2ZPBVy580molBQ==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>1.9.2</title>
             <pubDate>Sun, 11 Oct 2026 23:46:45 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -773,7 +823,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.2/UltimateLemmings-build77-from76.delta" ns0:deltaFrom="76" length="2039554" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="PVLTlHAphtxlLYlFDtOT3pzOYQ8M4G58CKGsVu/hf3XQpXQHL11egg0QgKidA2xRPPejvTe+hC8DjCSU5rRRAg==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>1.9.1</title>
             <pubDate>Sat, 10 Oct 2026 17:04:53 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -798,7 +848,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9.1/UltimateLemmings-build76-from75.delta" ns0:deltaFrom="75" length="1250526" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="GoBMIwM8HfR9sYgOsj81jlivniGR3tA569YK9va39kM+chjOV+cX7d3SyxS3Lvhkzb8yyED1WnO+HuatDI8uBA==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>1.9</title>
             <pubDate>Sat, 10 Oct 2026 14:50:17 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -823,7 +873,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.9/UltimateLemmings-1.9-build75.zip" length="2043795519" type="application/octet-stream" ns0:edSignature="EQVuKDiz46Bi4yDjfpPs1bGBA6ezJ6rJs+o0PlbTIOFxxEJIoXbbAlpQFTmPgVvWdbZxU7IYJRBFPo5KhRoxCA==" />
         </item>
-<item>
+        <item>
             <title>1.8.5</title>
             <pubDate>Sat, 10 Oct 2026 01:53:44 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -843,7 +893,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.5/UltimateLemmings-1.8.5-build74.zip" length="1944858923" type="application/octet-stream" ns0:edSignature="DJIC4eyCco3tq5/TAT5r/0VHYT7RjLqeKuVaBarH4efmOhJzYpoe0XzBYyhNLV/K1dMtOy3946iPs5iYy4RABg==" />
         </item>
-<item>
+        <item>
             <title>1.8.4</title>
             <pubDate>Fri, 09 Oct 2026 12:26:24 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -869,7 +919,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.4/UltimateLemmings-1.8.4-build73.zip" length="1944808624" type="application/octet-stream" ns0:edSignature="SRZwmFpSDD9qi1jvTla2m6D0j3E1bnC7pvjlT9E0c+ferFPfKHX4oRjxRRUK7ZYA7gCdj0aI9ySaKlKU7ZoNCQ==" />
         </item>
-<item>
+        <item>
             <title>1.8.3</title>
             <pubDate>Thu, 08 Oct 2026 18:46:43 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -895,7 +945,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.3/UltimateLemmings-1.8.3-build72.zip" length="1944623460" type="application/octet-stream" ns0:edSignature="G89mKt64zpK9v+RZ0R2dsbIYDHf49pO4d07u7dahTg5tLWd6b4tHXCH7iGwe0ZCsWQtrtVbOJ8qgLkNvGernBw==" />
         </item>
-<item>
+        <item>
             <title>1.8.1</title>
             <pubDate>Tue, 06 Oct 2026 14:52:32 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -922,7 +972,7 @@
                 <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8.1/Ultimate%20Lemmings65-39.delta" ns0:deltaFrom="39" length="1519960290" type="application/octet-stream" ns0:deltaFromSparkleExecutableSize="862496" ns0:deltaFromSparkleLocales="de,he,ar,el,ja,fa,en" ns0:edSignature="fPMdTZ4ISfhY+8GosNTa5GoDPFUtciqB8FWdeQHxDVy+9rOaNPGJyxW53aSdduAiMSH/a8iE0ai0He0AreszCw==" />
             </ns0:deltas>
         </item>
-<item>
+        <item>
             <title>1.8</title>
             <pubDate>Mon, 05 Oct 2026 18:24:15 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -942,7 +992,7 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.8/UltimateLemmings-1.8-build64.zip" length="1943417851" type="application/octet-stream" ns0:edSignature="XkdmcLjgvsVge6iwVVlPbHpszlike+ANhP3+63WjMmJPgTxszl06Id+IgmsdJ0SDRLIp2StSklVJSxM77OB4Cg==" />
         </item>
-<item>
+        <item>
             <title>1.7.9</title>
             <pubDate>Sun, 04 Oct 2026 22:47:54 +1000</pubDate>
             <link>https://github.com/ErikVeland/Lemmings/releases</link>
@@ -964,5 +1014,5 @@
 </description>
             <enclosure url="https://github.com/ErikVeland/Lemmings/releases/download/v1.7.9/UltimateLemmings-1.7.9-build63.zip" length="1943413088" type="application/octet-stream" ns0:edSignature="Fj4+Gsx5k+0u5/2SIRGkdrs2Rmh30YLGXmUklg7GvGxPW0tVDLVO8kBE6W777klQ0ww+eDQhmoFzJf7y9r5MDg==" />
         </item>
-</channel>
+    </channel>
 </rss>

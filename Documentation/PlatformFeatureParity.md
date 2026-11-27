@@ -1,5 +1,15 @@
 # Cross-platform feature parity
 
+## iOS level loading · 27 November 2026
+
+iPhone, iPad and Duo show Home as early as possible on a cold launch.
+When preparing a level takes more than 550 ms, a pixel-art intro replaces the
+brief loading view. The level opens as soon as it is ready. Cancel returns to
+browsing without starting a new level. Reduce Motion or
+Reduce Flashes holds the artwork still. This iOS intro adds no music, original
+game assets, or third-party audio. It does not change Apple TV startup.
+
+
 ## Settings navigation · 25 November 2026
 
 Classic, supported NeoLemmix levels, Lemmings 2 and Lemmings 3 share
