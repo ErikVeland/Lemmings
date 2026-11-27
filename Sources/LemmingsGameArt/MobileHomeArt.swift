@@ -57,6 +57,17 @@ public enum MobileHomeArt {
         return page
     }
 
+    /// Shows Home without resolving imports, saved routes or player data before validation.
+    public static func checkingGameFilesPage() -> GameFrontEnd.Page {
+        var home = page(continueAction: nil, initials: "", subtitle: L10n.text("Checking game files"))
+        for i in home.rows.indices {
+            home.rows[i].enabled = false
+            home.rows[i].primary = false
+        }
+        for i in home.footer.indices { home.footer[i].enabled = false }
+        return home
+    }
+
     /// Builds the current Home from route rows, as render audits and tests describe a session.
     /// Continue is `continueID` when present, otherwise the first enabled Journey or resume row.
     /// Game rows belong to Play, so `families` does not appear on Home.

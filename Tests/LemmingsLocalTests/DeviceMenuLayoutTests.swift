@@ -7,6 +7,22 @@ import XCTest
 @testable import LemmingsLocal
 
 final class DeviceMenuLayoutTests: XCTestCase {
+    @MainActor func testStartupHomeDisplaysStatusWithoutActionableTargets() {
+        let checking = MobileHomeArt.checkingGameFilesPage()
+        XCTAssertTrue(checking.home)
+        XCTAssertEqual(checking.subtitle, NxlvKit.L10n.text("Checking game files"))
+        XCTAssertEqual(checking.rows.map(\.id), MobileHomeArt.destinationIDs)
+        XCTAssertFalse((checking.rows + checking.footer).contains { $0.enabled || $0.primary })
+        for size in [CGSize(width: 320, height: 568), CGSize(width: 495, height: 720),
+                     CGSize(width: 720, height: 495), CGSize(width: 810, height: 1080)] {
+            let layout = GameFrontEnd.layout(checking, width: size.width, minimumHeight: size.height)
+            for target in layout.targets {
+                XCTAssertNil(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)))
+            }
+        }
+        XCTAssertTrue(MobileHomeArt.page(continueAction: nil, initials: "").rows.allSatisfy(\.enabled))
+    }
+
     @MainActor func testAmigaVersusWarningFitsBriefingAndLevelSelection() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let art = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))

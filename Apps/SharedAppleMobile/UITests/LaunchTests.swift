@@ -6,6 +6,24 @@ final class LaunchTests: XCTestCase {
         continueAfterFailure = false
     }
 
+    @MainActor func testReturningPlayerSeesHomeBeforeGameFilesAreReady() {
+        let app = XCUIApplication()
+        app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
+        app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
+        app.launchEnvironment["LEMMINGS_TEST_SLOW_STARTUP"] = "1"
+        app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
+        app.launch()
+
+        let checking = app.descendants(matching: .any)["startup.checkingGameFiles"].firstMatch
+        let play = app.buttons["menu.play"]
+        XCTAssertTrue(checking.waitForExistence(timeout: 3))
+        XCTAssertTrue(checking.label.contains("Checking game files"))
+        XCTAssertFalse(play.exists)
+        XCTAssertTrue(play.waitForExistence(timeout: 30))
+        XCTAssertTrue(play.isEnabled)
+        XCTAssertFalse(checking.exists)
+    }
+
     @MainActor func testFirstPlayerStartsLevelAndReturnsHomeOnRelaunch() throws {
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
