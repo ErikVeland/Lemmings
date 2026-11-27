@@ -525,3 +525,12 @@ layout, original ASCII pixels, sequel palettes and unclipped masks. The
 shared controls and native game text. Run these with the same muted, offscreen
 runner. Their presence does not establish a completed test run or complete
 Tamil language and device acceptance.
+
+## Català and Schwizerdütsch
+
+Catalan (`ca`) and Zürich-leaning Swiss German (`gsw`) are separate interface
+choices. Nederlands remains available as `nl`. The two new drafts cover every
+message and all eight plural messages in the extracted catalogue. Exact
+product names, hardware identifiers and required format tokens are recorded in
+the unchanged-term list. The translations still need fluent-speaker review
+and checks on physical devices.

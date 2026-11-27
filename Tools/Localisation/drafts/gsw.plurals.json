@@ -1,0 +1,34 @@
+{
+  "count.commands": {
+    "one": "%ld Befehl • Chürzel gälted im aazeigte Bereich. Esc macht d Aaleitig zue.",
+    "other": "%ld Befähl • Chürzel gälted im aazeigte Bereich. Esc macht d Aaleitig zue."
+  },
+  "count.lemmings": {
+    "one": "%ld Lemming",
+    "other": "%ld Lemminge"
+  },
+  "count.levels": {
+    "one": "%ld Level",
+    "other": "%ld Level"
+  },
+  "count.packs": {
+    "one": "%ld Päckli",
+    "other": "%ld Päckli"
+  },
+  "count.rescueGoal": {
+    "one": "Rett %ld Lemming und schaff s Level.",
+    "other": "Rett %ld Lemminge und schaff s Level."
+  },
+  "count.savedLemmings": {
+    "one": "Du häsch %ld Lemming grettet",
+    "other": "Du häsch %ld Lemminge grettet"
+  },
+  "count.secondStarGoal": {
+    "one": "Rett %ld Lemming und schaff s Level für de zweit Stärn.",
+    "other": "Rett %ld Lemminge und schaff s Level für de zweit Stärn."
+  },
+  "count.thirdStarGoal": {
+    "one": "Rett %ld Lemming und schaff s Level für de dritt Stärn.",
+    "other": "Rett %ld Lemminge und schaff s Level für de dritt Stärn."
+  }
+}

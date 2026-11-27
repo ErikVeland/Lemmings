@@ -9,7 +9,7 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-LANGUAGES = ('es-419', 'de', 'fr', 'pt-BR', 'it', 'nl', 'nb', 'ta')
+LANGUAGES = ('es-419', 'de', 'fr', 'pt-BR', 'it', 'nl', 'nb', 'ta', 'ca', 'gsw')
 PLACEHOLDERS = re.compile(r'\{\d+\}')
 CATEGORIES = {'zero', 'one', 'two', 'few', 'many', 'other'}
 

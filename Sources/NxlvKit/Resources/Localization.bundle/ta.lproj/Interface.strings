@@ -238,6 +238,7 @@
 "Another app is saving playlists. Try again after it finishes." = "மற்றொரு பயன்பாடு பிளேலிஸ்ட்களை சேமிக்கிறது. அது முடிந்ததும் மீண்டும் முயற்சிக்கவும்.";
 "Another app is saving records. Try again after it finishes." = "மற்றொரு பயன்பாடு பதிவுகளை சேமிக்கிறது. அது முடிந்ததும் மீண்டும் முயற்சிக்கவும்.";
 "Another app is saving this run. Try again." = "மற்றொரு பயன்பாடு இந்த ஓட்டத்தை சேமிக்கிறது. மீண்டும் முயற்சிக்கவும்.";
+"Another puzzle" = "இன்னொரு புதிர்";
 "App menus" = "செயலிப் பட்டிகள்";
 "Apply" = "பயன்படுத்து";
 "Apply a machine's artwork, music and sound choices together. Further changes select Custom." = "இயந்திரத்தின் கலைப்படைப்புகள், இசை மற்றும் ஒலி தேர்வுகளை ஒன்றாகப் பயன்படுத்துங்கள். மேலும் மாற்றங்களைத் தேர்ந்தெடுக்கவும் தனிப்பயன்.";
@@ -312,7 +313,6 @@
 "Back to journey" = "பயணத்திற்குத் திரும்பு";
 "Back to library" = "நூலகத்திற்குத் திரும்பு";
 "Back to result" = "முடிவிற்குத் திரும்பு";
-"Back to your paused game. Escape." = "இடைநிறுத்திய விளையாட்டிற்குத் திரும்பு. Escape.";
 "Background graphic '{0}:{1}' is ambiguous." = "பின்னணி வரைபடம் '{0}:{1}' தெளிவற்றது.";
 "Background graphic '{0}:{1}' is missing." = "பின்னணி வரைபடம் '{0}:{1}' காணவில்லை.";
 "Background metadata '{0}:{1}' is ambiguous." = "பின்னணி மெட்டாடேட்டா '{0}:{1}' தெளிவற்றது.";
@@ -405,6 +405,7 @@
 "COUNTDOWN" = "இறங்கு நேரக் கணிப்பு";
 "Calls this shared ambition." = "Calls this shared ambition.";
 "Camera" = "காட்சி";
+"Camera and replay controls" = "கேமரா மற்றும் மறுஇயக்கக் கட்டுப்பாடுகள்";
 "Campaign achievements · {0}" = "தொடர் ஆட்டச் சாதனைகள் · {0}";
 "Can distinguish three kinds of silence." = "Can distinguish three kinds of silence.";
 "Can explain the difference if asked." = "Can explain the difference if asked.";
@@ -437,8 +438,6 @@
 "Career stars: {0}" = "விளையாட்டு வாழ்நாள் நட்சத்திரங்கள்: {0}";
 "Cavelems" = "குகை லெம்மிங்கள்";
 "Centre entrance" = "நுழைவாயிலை மையப்படுத்து";
-"Centre entrance. H or Home." = "நுழைவாயிலை மையப்படுத்து. H அல்லது Home.";
-"Centre exit. G or End." = "வெளியேறும் வாயிலை மையப்படுத்து. G அல்லது End.";
 "Centre goal" = "இலக்கை மையப்படுத்து";
 "Centre on entrance" = "நுழைவாயிலை மையப்படுத்து";
 "Centre on exit" = "வெளியேறும் வாயிலை மையப்படுத்து";
@@ -482,11 +481,12 @@
 "Choose a rating" = "மதிப்பீட்டைத் தேர்ந்தெடு";
 "Choose a second player" = "இரண்டாவது வீரரைத் தேர்ந்தெடு";
 "Choose a soundtrack or Adaptive DJ Mix." = "ஒரு ஒலிப்பதிவு அல்லது Adaptive DJ Mix ஐத் தேர்ந்தெடுக்கவும்.";
-"Choose a speed directly. Rewind counts back in game seconds." = "வேகத்தை நேரடியாகத் தேர்ந்தெடுக்கவும். பின்னோக்கு விளையாட்டு விநாடிகளில் எண்ணும்.";
+"Choose a speed directly and use replay controls to revisit moves." = "வேகத்தை நேரடியாகத் தேர்ந்தெடு. நகர்வுகளை மீண்டும் பார்க்க மறுஇயக்கக் கட்டுப்பாடுகளைப் பயன்படுத்து.";
 "Choose a technique" = "நுட்பத்தைத் தேர்ந்தெடு";
 "Choose an action, then click a lemming. Walker turns or releases a blocker." = "ஒரு செயலைத் தேர்ந்தெடுத்து லெம்மிங்கைச் சொடுக்கவும். நடப்பவர் செயல் லெம்மிங்கைத் திருப்பும் அல்லது தடுப்பவரை விடுவிக்கும்.";
 "Choose an action. Bricks and spades ask for a direction. Arrow keys move the camera." = "ஒரு செயலைத் தேர்ந்தெடுங்கள். செங்கல் மற்றும் கத்திகள் ஒரு திசையைக் கேட்கின்றன. அம்புகள் கேமராவை நகர்த்துகின்றன.";
 "Choose and order levels" = "நிலைகளைத் தேர்ந்தெடுத்து வரிசைப்படுத்து";
+"Choose another game or resume your journey." = "வேறொரு விளையாட்டைத் தேர்ந்தெடு அல்லது உன் பயணத்தைத் தொடர்.";
 "Choose another level or open Playlists to change the order." = "மற்றொரு நிலை தேர்ந்தெடுக்கவும் அல்லது வரிசையை மாற்ற பிளேலிஸ்ட்களைத் திறக்கவும்.";
 "Choose at least two players for Hot Seat." = "மாறிமுறைக்கு குறைந்தது இரண்டு வீரர்களை தேர்வு செய்யுங்கள்.";
 "Choose at least two players, then try again." = "குறைந்தது இரண்டு வீரர்களைத் தேர்ந்தெடுத்து, மீண்டும் முயற்சிக்கவும்.";
@@ -538,11 +538,8 @@
 "Classic C64 SID chiptune music and VIC-II sprite graphics." = "C64 SID சிப்டூன் இசை மற்றும் VIC-II ஸ்ப்ரைட் கிராபிக்ஸ்.";
 "Classic Lemmings" = "Classic Lemmings";
 "Classic Lemmings  {0}/{1}" = "Classic Lemmings  {0}/{1}";
-"Classic and The Tribes" = "Classic and The Tribes";
-"Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only." = "Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta. The mobile Journey is Classic-only.";
 "Classic artwork" = "Classic ஓவியம்";
 "Classic follow-up" = "Classic தொடர்ச்சி";
-"Classic keeps recent rewind states close. Repeated rewind presses on Apple TV move further back, and scenes use less work while you play." = "பின்னோக்கிச் செல்ல Classic அண்மைய ஆட்ட நிலைகளைத் தயாராக வைத்திருக்கும். Apple TV-யில் மீண்டும் அழுத்தினால் மேலும் பின்னால் செல்லலாம். ஆட்டக் காட்சிகளுக்குத் தேவைப்படும் கணக்கீடும் குறைந்துள்ளது.";
 "Classic opening" = "Classic தொடக்கம்";
 "Classic skill counters" = "Classic திறன் எண்ணிகள்";
 "Classic tribe 1–5" = "Classic இனம் 1–5";
@@ -585,7 +582,6 @@
 "Cleared the level using one skill type." = "ஒரே வகைத் திறனைப் பயன்படுத்தி நிலையை வென்றது.";
 "Cleared the level without assigning a skill." = "திறனை ஒதுக்காமல் நிலையை வென்றது.";
 "Cleared without assigning a skill." = "திறனை ஒதுக்காமல் வென்றது.";
-"Clearer controls" = "தெளிவான கட்டுப்பாடுகள்";
 "Clears" = "வெற்றிகள்";
 "Click a lemming to assign the selected skill." = "தேர்ந்த திறனை வழங்க ஒரு லெம்மிங்கைக் கிளிக் செய்.";
 "Click or Return to practise" = "பயிற்சி செய்யச் சொடுக்கவும் அல்லது Return அழுத்தவும்";
@@ -684,6 +680,7 @@
 "Could not show the talisman: {0}" = "தாலிமன் காட்ட முடியவில்லை: {0}";
 "Could not sync journey: {0}" = "பயணத்தை ஒத்திசைக்க முடியவில்லை: {0}";
 "Counters" = "எண்ணிகள்";
+"Counting levels" = "நிலைகளை எண்ணுகிறது";
 "Counting levels..." = "நிலைகள் எண்ணப்படுகின்றன...";
 "Counts" = "எண்ணிக்கைகள்";
 "Create" = "உருவாக்கு";
@@ -770,6 +767,7 @@
 "Donate" = "நன்கொடை வழங்கு";
 "Donate…" = "நன்கொடை வழங்கு…";
 "Done" = "முடிந்தது";
+"Done for tonight" = "இன்றைக்கு முடிப்போம்";
 "Double-tap − / +" = "− / + இருமுறை தட்டு";
 "Down" = "கீழ்";
 "Down-left" = "கீழ் இடது";
@@ -818,6 +816,8 @@
 "Earn the same play style on 5 distinct cleared levels." = "5 வெவ்வேறு க்ளைர் நிலைகளில் அதே விளையாட்டு பாணியை சம்பாதிக்கவும்.";
 "Earned" = "பெறப்பட்டது";
 "Easy" = "எளிது";
+"Easy puzzles" = "எளிய புதிர்கள்";
+"Easy puzzles unavailable" = "எளிய புதிர்கள் கிடைக்கவில்லை";
 "Edit" = "திருத்து";
 "Edit player" = "வீரரைத் திருத்து";
 "Edit: {0}" = "திருத்தம்: {0}";
@@ -899,9 +899,6 @@
 "FAILED — press R" = "தோல்வி — R அழுத்தவும்";
 "FALLER" = "தோல்வி";
 "FAN" = "ரசிகர்";
-"FAN LEMMINGS  {0}/{1}" = "FAN லெம்மிங்கள் {0}/{1}";
-"FAN LEMMINGS  {0}/{1}  — COUNTING" = "FAN லெம்மிங்கள் {0}/{1}  COUNTING";
-"FAN LEMMINGS  — NO PACKS" = "FAN லெம்மிங்கள்  NO PACKS";
 "FAN LEVELS" = "ரசிகர் நிலைகள்";
 "FASTEST 100%" = "வேகமான 100%";
 "FASTEST CLEAR" = "வேகமான வெற்றி";
@@ -933,7 +930,6 @@
 "Fast speed" = "அதிவேகம்";
 "Fast-forward" = "வேகமாக முன்னேற்று";
 "Faster" = "வேகமாக";
-"Faster. Shift+]." = "வேகமாக. Shift+].";
 "Fastest 100%" = "வேகமான 100%";
 "Fastest clear" = "வேகமான வெற்றி";
 "Favor blockers for bombs" = "வெடிகுண்டுகளுக்கான தடுப்பான்கள்";
@@ -957,7 +953,7 @@
 "Find a better way" = "ஒரு சிறந்த வழியைக் கண்டறியவும்";
 "Find a command by key, action or category." = "விசை, செயல் அல்லது வகையை வைத்து கட்டளையைத் தேடவும்.";
 "Find a key or command, e.g. rewind, Shift, builder" = "விசை அல்லது கட்டளையைத் தேடு. எடுத்துக்காட்டு: பின்னோக்கு, Shift, படிக்கட்டு அமைப்பவர்";
-"Find your way back" = "உன் பயணத்திற்குத் திரும்பு";
+"Find related controls together and return from a settings page without losing your place." = "தொடர்புடைய கட்டுப்பாடுகள் ஒன்றாக உள்ளன. அமைப்புப் பக்கத்திலிருந்து திரும்பும்போது உன் இடம் மாறாது.";
 "Finds the view reliable." = "Finds the view reliable.";
 "Finds this knowledge quietly sustaining." = "Finds this knowledge quietly sustaining.";
 "Finish a level to see each goal and your progress." = "ஒவ்வொரு இலட்சியத்தையும் உங்கள் முன்னேற்றத்தையும் பார்க்க ஒரு நிலை முடித்துக்கொள்ளுங்கள்.";
@@ -966,7 +962,6 @@
 "Finished {0} from {1}." = "{0} {1} இலிருந்து முடிந்தது.";
 "First clear of this level. Rescued {0}; target {1}." = "இந்த நிலையில் முதல் வெற்றி. மீட்பு {0}. இலக்கு {1}.";
 "First names, separated by commas" = "முதற்பெயர்களைக் காற்புள்ளிகளால் பிரிக்கவும்";
-"Five-level openings" = "Five-level openings";
 "Fix records" = "பதிவுகளை சரிசெய்யவும்";
 "Flame Thrower" = "தீ வீசுபவர்";
 "Flashes" = "மின்னல்கள்";
@@ -974,8 +969,6 @@
 "Floater" = "மிதப்பவர்";
 "Floaters protect individual lemmings. Giving this skill to one worker does not protect the next arrival." = "Floaters protect individual lemmings. Giving this skill to one worker does not protect the next arrival.";
 "Focus last assignment" = "கடைசி ஒதுக்கீட்டைக் கவனப்படுத்து";
-"Follow skill assignments automatically. Drag or scroll to use a free camera." = "திறன் ஒதுக்கீடுகளைத் தானாகப் பின்தொடர். காட்சியைத் தனியாக நகர்த்த இழுக்கவும் அல்லது உருட்டவும்.";
-"Follow: on" = "பின்தொடர்வு: இயக்கம்";
 "For many generations" = "பல தலைமுறைகளாக";
 "For the plan is" = "திட்டம் தான்";
 "Forget familiar names?" = "பழக்கமான பெயர்களை நீக்கவா?";
@@ -984,7 +977,6 @@
 "Frame {0} at byte {1} declares a size of zero." = "{0} பைட்டில் {1} ஒரு அளவு பூஜ்ஜியத்தை அறிவிக்கிறது.";
 "Frame {0} at byte {1} declares {2} bytes, but only {3} remain." = "பைட் {1} இல் உள்ள {0} படம் {2} பைட்டுகளைக் குறிப்பிடுகிறது. ஆனால் {3} மட்டுமே மீதமுள்ளன.";
 "Frame {0} holds chunk type {1}, which this reader does not handle." = "Frame {0} chunk type {1} ஐ வைத்திருக்கிறது, இந்த வாசகர் அதை கையாள்வதில்லை.";
-"Free view" = "தனிக் காட்சி";
 "Friends remain broadly supportive." = "Friends remain broadly supportive.";
 "From L2 menu: practice / tribe map / introduction" = "L2 மெனுவிலிருந்து: பயிற்சி / பழங்குடி வரைபடம் / அறிமுகம்";
 "Full" = "முழுமை";
@@ -1129,13 +1121,13 @@
 "Hold to edit player" = "வீரரைத் திருத்த அழுத்திப் பிடி";
 "Hold: fixed fast-forward" = "அழுத்திப் பிடி: நிலையான வேக முன்னேற்றம்";
 "Hold: ramp up; release: previous speed" = "அழுத்திப் பிடி: வேகத்தை உயர்த்து. விட்டால்: முந்தைய வேகம்";
+"Holiday" = "Holiday";
 "Holiday 1993" = "Holiday 1993";
 "Holiday 1994" = "Holiday 1994";
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
 "Home and Play" = "முகப்பு மற்றும் விளையாடு";
-"Home offers one next step. Play holds every game and collection." = "முகப்பு ஒரே அடுத்த படியைக் காட்டும். விளையாடு எல்லா விளையாட்டுகளையும் தொகுப்புகளையும் கொண்டுள்ளது.";
 "Home {0}/{1}" = "வீடு {0}/{1}";
 "Hopper" = "துள்ளுபவர்";
 "Host" = "புரவலன்";
@@ -1167,7 +1159,6 @@
 "Import" = "இறக்குமதி செய்";
 "Import Lemmings 2 data" = "Lemmings 2 தரவை இறக்குமதி செய்";
 "Import NeoLemmix data" = "NeoLemmix தரவு இறக்குமதி";
-"Import compatible levels or restore assets from your own collection." = "பொருந்தும் நிலைகளை இறக்குமதி செய் அல்லது உன் சேகரிப்பிலிருந்து வளங்களை மீட்டெடு.";
 "Import files" = "இறக்குமதி கோப்புகள்";
 "Import owned games" = "சொந்த ஆட்டங்களை இறக்குமதி செய்";
 "Import the resource folder again." = "வளக் கோப்புறையை மீண்டும் இறக்குமதி செய்.";
@@ -1313,7 +1304,6 @@
 "John Stuart Mill was a utilitarian. He valued everyone's well-being and distinguished higher and lower pleasures." = "ஜான் ஸ்டூவர்ட் மில் ஒரு பயன்பாட்டாளராக இருந்தார். அவர் அனைவரின் நல்வாழ்வை மதித்தார் மற்றும் உயர்ந்த மற்றும் குறைந்த இன்பங்களை வேறுபடுத்தினார்.";
 "Join" = "இணை";
 "Join the count?" = "கணக்கெடுப்பில் இணையவா?";
-"Joined stone controls bring skills, speed and transport together. A pulsing marker shows a selected lemming's walking direction." = "கல் பொத்தான்கள் திறன்கள், வேகம், இயக்கக் கட்டுப்பாடுகளை ஒருங்கிணைக்கின்றன. துடிக்கும் குறி தேர்ந்த லெம்மிங் நடக்கும் திசையைக் காட்டும்.";
 "Journey" = "பயணம்";
 "Journey explored" = "ஆராய்ந்த பயணம்";
 "Journey is unavailable" = "பயணம் கிடைக்கவில்லை";
@@ -1334,7 +1324,6 @@
 "Keep the pointer inside the game window, including paused screens and menus. Hold Option or switch apps to release it." = "இடைநிறுத்தத் திரைகளிலும் பட்டிகளிலும் உட்பட விளையாட்டுச் சாளரத்திற்குள் சுட்டியை வைத்திரு. சுட்டியை விடுவிக்க Option அழுத்திப் பிடிக்கவும் அல்லது வேறு செயலிக்கு மாறவும்.";
 "Keep the rhythm" = "சீரியஸை பராமரிக்கவும்";
 "Keep trying" = "தொடர்ந்து முயற்சி செய்யுங்கள்";
-"Keep your journeys, Hot Seat games, hints, replays and HD effects." = "உன் பயணங்கள், மாறிமுறை ஆட்டங்கள், குறிப்புகள், மறுஒளிபரப்புகள், HD விளைவுகளைத் தக்கவை.";
 "Keeps a birthday candle ready." = "Keeps a birthday candle ready.";
 "Keeps a shopping list from happier times." = "Keeps a shopping list from happier times.";
 "Keeps a spare chair ready." = "Keeps a spare chair ready.";
@@ -1698,13 +1687,10 @@
 "Music output interrupted. Previous track continues." = "இசை வெளியீடு இடைநிறுத்தப்பட்டது. முந்தைய பாடல் தொடர்கிறது.";
 "Music paused" = "இசை இடைநிறுத்தப்பட்டது";
 "Music style" = "இசைப் பாணி";
-"Music transitions and sound effects have been updated for busy play and moving between screens." = "பரபரப்பான ஆட்டத்திற்கும் திரை மாற்றங்களுக்கும் இசை மாற்றங்களும் ஒலி விளைவுகளும் புதுப்பிக்கப்பட்டுள்ளன.";
 "Music volume" = "இசை ஒலியளவு";
 "Music: beat only" = "இசை: தாளம் மட்டும்";
 "Mute" = "ஒலியடக்கு";
 "N: End run / undo" = "N: இறுதி இயக்கம் / ரத்து செய்தல்";
-"NEOLEMMIX  {0}/{1}" = "NEOLEMMIX {0}/{1}";
-"NEOLEMMIX  — NO PACKS" = "NEOLEMMIX  NO PACKS";
 "NES / Famicom NSF" = "NES / Famicom NSF";
 "NEW - {0}" = "புதிய - {0}";
 "NEW AWARD" = "புதிய விருது";
@@ -1769,6 +1755,7 @@
 "Next new moves to the next new award. " = "அடுத்த புதிய நகர்வுகள் அடுத்த புதிய விருதுக்கு. ";
 "Next new {0}/{1} >" = "அடுத்த புதிய {0}/{1} >";
 "Next page" = "அடுத்த பக்கம்";
+"Next puzzle" = "அடுத்த புதிர்";
 "Next rewards" = "அடுத்த வெகுமதிகள்";
 "Next skill" = "அடுத்த திறன்";
 "Next successful skill use. Control-Right." = "அடுத்த வெற்றிகரமான திறன் பயன்பாடு. Control-Right.";
@@ -1806,6 +1793,8 @@
 "No matching levels" = "பொருந்தும் நிலைகள் இல்லை";
 "No matching packs" = "பொருந்தும் தொகுப்புகள் இல்லை";
 "No names for new levels" = "புதிய நிலைகளுக்குப் பெயர்கள் இல்லை";
+"No new easy puzzles" = "புதிய எளிய புதிர்கள் இல்லை";
+"No packs" = "தொகுப்புகள் இல்லை";
 "No recorded assignments" = "No recorded assignments";
 "No records" = "பதிவுகள் இல்லை";
 "No records yet." = "இன்னும் சாதனைகள் இல்லை.";
@@ -1885,8 +1874,10 @@
 "Oh Dear. You seem to have made this tribe extinct!" = "ஐயோ! இந்தக் குலத்தை முற்றிலும் அழித்துவிட்டீர்கள் போலிருக்கிறது!";
 "Oh My! ALL Lemmings!" = "ஆஹா! அனைத்து லெம்மிங்கள்!";
 "Oh My! All Lemmings!" = "ஓ மை! அனைத்து லெம்மிங்கள்!";
+"Oh No!" = "Oh No!";
 "Oh No! More Lemmings" = "Oh No! More Lemmings";
 "Oh No! No More" = "இல்லை!";
+"Oh Yes!" = "Oh Yes!";
 "Oh Yes! More Lemmings" = "ஆமாம்! மேலும் லெம்மிங்கள்";
 "Oh Yes! More Lemmings!" = "ஆமாம்! இன்னும் லெம்மிங்கள்!";
 "Oh dear!" = "ஆஹா கடவுளே!";
@@ -2050,6 +2041,8 @@
 "Playable" = "விளையாடலாம்";
 "Playback" = "மறுஇயக்கம்";
 "Playback behaviour" = "பின்னூட்டம் நடத்தை";
+"Playback speed" = "இயக்க வேகம்";
+"Playback speed. Hold F to ramp speed. Hold Shift for a temporary boost." = "இயக்க வேகம். வேகத்தைப் படிப்படியாக உயர்த்த F விசையை அழுத்திப் பிடி. தற்காலிகமாக வேகப்படுத்த Shift விசையை அழுத்திப் பிடி.";
 "Played: {0}" = "விளையாடியது: {0}";
 "Player" = "வீரர்";
 "Player Unlocked" = "வீரர் திறக்கப்பட்டது";
@@ -2298,6 +2291,7 @@
 "Respect Mute Setting" = "அமைதி அமைப்பைப் பின்பற்று";
 "Restart" = "மீண்டும் தொடங்கு";
 "Restart level?" = "நிலையை மீண்டும் தொடங்கவா?";
+"Restart replay" = "மறுஇயக்கத்தை மீண்டும் தொடங்கு";
 "Restore" = "மீட்டமை";
 "Restore TV saves?" = "TV சேமிப்புகளை மீட்டமைக்கவா?";
 "Restore assets" = "வளங்களை மீட்டெடு";
@@ -2312,7 +2306,9 @@
 "Resume journey" = "பயணத்தைத் தொடர்";
 "Resume journey ({0}/{1})" = "பயணத்தைத் தொடர் ({0}/{1})";
 "Resume journey - {0}" = "Resume journey - {0}";
+"Resume level" = "நிலையைத் தொடர்";
 "Resume level - {0}" = "நிலையைத் தொடர் - {0}";
+"Resume route" = "பாதையைத் தொடர்";
 "Resume run" = "ஆட்டத்தைத் தொடர்";
 "Resume saved run?" = "சேமித்த ஆட்டத்தைத் தொடரவா?";
 "Resume session" = "அமர்வைத் தொடர்";
@@ -2358,8 +2354,6 @@
 "Rewards earned ({0}) >" = "பெற்ற வெகுமதிகள் ({0}) >";
 "Rewards earned by {0}. {1} {2}. Page {3} of {4}. Escape returns to the result." = "{0} பெற்ற வெகுமதிகள். {1} {2}. {4} இல் பக்கம் {3}. Escape முடிவிற்குத் திரும்பும்.";
 "Rewind" = "பின்னோக்கு";
-"Rewind and busy scenes" = "பின்னோக்கும் பரபரப்பான காட்சிகளும்";
-"Rewind one second." = "ஒரு நொடி பின்னோக்கு.";
 "Rewind one tick" = "ஒரு நேரப்படியைப் பின்னோக்கு";
 "Rewind the current run" = "தற்போதைய ஓட்டத்தை மீண்டும் இயக்கவும்";
 "Rewinds" = "பின்னோக்குகள்";
@@ -2380,6 +2374,7 @@
 "Run details" = "ஆட்ட விவரங்கள்";
 "Run in progress" = "ஆட்டம் நடைபெறுகிறது";
 "Run not discarded" = "ஆட்டம் கைவிடப்படவில்லை";
+"Run not saved" = "முயற்சி சேமிக்கப்படவில்லை";
 "Run not started" = "ஆட்டம் தொடங்கவில்லை";
 "Run paused" = "ஆட்டம் இடைநிறுத்தப்பட்டது";
 "Run recovery save failed: {0}" = "மீட்பு சேமிப்பு தோல்வியுற்றது: {0}";
@@ -2438,7 +2433,6 @@
 "STACK" = "ஸ்டாக்";
 "STACKER" = "அடுக்குபவர்";
 "START" = "தொடங்கு";
-"STEP" = "படி";
 "STEP BACK" = "ஒரு படி பின்னோக்கு";
 "STEP FORWARD" = "ஒரு படி முன்னேறு";
 "STEVE HAMMOND" = "STEVE HAMMOND";
@@ -2605,7 +2599,6 @@
 "Slider" = "வழுக்குபவர்";
 "Slot {0}" = "இடம் {0}";
 "Slower" = "மெதுவாக";
-"Slower. Shift+[." = "மெதுவாக. Shift+[.";
 "Small Budget, Big Heart" = "சிறிய பட்ஜெட், பெரிய இதயம்";
 "Smooth Progression" = "மென்மையான முன்னேற்றம்";
 "Solo starts" = "தனி ஆட்டத் தொடக்கங்கள்";
@@ -2628,6 +2621,7 @@
 "Soundtrack download progress" = "ஒலிப்பதிவு பதிவிறக்க முன்னேற்றம்";
 "Soundtrack folder" = "இசைத்தொகுப்பு கோப்புறை";
 "Soundtrack libraries" = "ஒலிப்பதிவு நூலகங்கள்";
+"Soundtrack variants follow the route as you play." = "நீ விளையாடும்போது பாதைக்கு ஏற்ப பின்னணி இசை மாறும்.";
 "Soundtrack: {0}" = "இசைத்தொகுப்பு: {0}";
 "Soundtracks" = "இசைத்தொகுப்புகள்";
 "Source" = "மூலம்";
@@ -2643,10 +2637,9 @@
 "Spearer" = "ஈட்டி வீசுபவர்";
 "Spectrum 8-Color / CPC Mode 0 16-Color" = "ஸ்பெக்ட்ரம் 8-வண்ணம் / சிபிசி முறை 0 16-வண்ணம்";
 "Speed" = "வேகம்";
-"Speed +" = "வேகம் +";
-"Speed -" = "வேகம் -";
 "Speed 1x" = "வேகம் 1x";
 "Speed and rewind" = "வேகம் மற்றும் பின்னோக்கு";
+"Speed {0}" = "வேகம் {0}";
 "Speed {0}X" = "வேகம் {0}X";
 "Speed {0}x" = "வேகம் {0}x";
 "Spend one Level Skip in the journey menu to move past a level." = "Spend one Level Skip in the journey menu to move past a level.";
@@ -2664,7 +2657,7 @@
 "Start new Hot Seat" = "புதிய மாறிமுறையைத் தொடங்கு";
 "Start new records" = "புதிய பதிவுகளைத் தொடங்கவும்";
 "Start nuke" = "அணுவெடிப்பைத் தொடங்கு";
-"Start or resume your Journey from Home. Earlier saved Hot Seats remain available, and level previews open the selected level." = "முகப்பில் பயணத்தைத் தொடங்கு அல்லது தொடர். முன்பு சேமித்த மாறிமுறை ஆட்டங்கள் கிடைக்கும். முன்னோட்டம் தேர்ந்த நிலையைத் திறக்கும்.";
+"Start or resume from Home. Play groups games, saved routes and collections." = "முகப்பிலிருந்து தொடங்கு அல்லது தொடரு. விளையாடு பகுதியில் விளையாட்டுகள், சேமித்த பாதைகள், தொகுப்புகள் உள்ளன.";
 "Start practice" = "பயிற்சியைத் தொடங்கு";
 "Start session" = "அமர்வைத் தொடங்கு";
 "Start shuffle" = "கலைத்து இயக்கத் தொடங்கு";
@@ -2758,6 +2751,7 @@
 "Tailored compact handheld level maps and chiptune audio." = "தனிப்பயனாக்கப்பட்ட சிறிய கைப்பிடி நிலை வரைபடங்கள் மற்றும் சிப்டூன் ஆடியோ.";
 "Take Most Saved from another local player by rescuing more." = "அதிக சேமிப்பு மற்ற உள்ளூர் வீரர் இருந்து எடுத்து.";
 "Take Most Saved, Least Skills and Clean Rescue from rivals in one clear." = "மிகச் சேமிக்கப்பட்ட, குறைவான திறன்கள் மற்றும் சுத்தமான மீட்புகளை ஒரே இடத்தில் எடுக்கவும்.";
+"Take a break" = "ஓய்வு எடு";
 "Take a breather" = "ஓய்வெடுக்கவும்";
 "Take your time" = "உங்கள் நேரத்தை எடுத்துக் கொள்ளுங்கள்";
 "Takes this seriously." = "Takes this seriously.";
@@ -3145,7 +3139,6 @@
 "This tool has no uses left." = "இந்தக் கருவியை இனி பயன்படுத்த முடியாது.";
 "This worldwide board is not available yet." = "இந்த உலகளாவிய பலகை இன்னும் கிடைக்கவில்லை.";
 "Thomas Hobbes saw peace and security as essential. Shared rules and authority protect people from conflict." = "தாமஸ் ஹாப்ஸ் சமாதானத்தையும் பாதுகாப்பையும் மிக முக்கியமாகக் கருதினார். பகிரப்பட்ட விதிகள் மற்றும் அதிகாரம் மக்களை மோதல்களிலிருந்து பாதுகாக்கின்றன.";
-"Three starter puzzles, pixel lettering and Lix characters." = "மூன்று தொடக்கப் புதிர்கள், பிக்சல் எழுத்துகள், Lix பாத்திரங்கள்.";
 "Three-finger tap on the playfield: change graphics" = "Three-finger tap on the playfield: change graphics";
 "Three-star levels" = "மூன்று நட்சத்திர நிலைகள்";
 "Three-star levels {0} > {1}" = "மூன்று நட்சத்திர நிலைகள் {0} > {1}";
@@ -3162,7 +3155,6 @@
 "Timing probes: {0}. Untested alternatives remain unknown." = "நேரச் சோதனைகள்: {0}. சோதிக்கப்படாத மாற்றுவழிகளின் முடிவுகள் இன்னும் தெரியவில்லை.";
 "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "இந்தக் கோப்புகளைப் பதிவிறக்க, அசல் “Lemmings” விளையாட்டுக்கு ஏதேனும் ஒரு தளத்திலாவது செல்லுபடியாகும் உரிமம் உங்களிடம் இருக்க வேண்டும். “{0}” என்பதைத் தேர்ந்தெடுப்பதன் மூலம் அந்த உரிமம் உங்களிடம் இருப்பதை உறுதிப்படுத்துகிறீர்கள்.";
 "Toggle enhanced artwork" = "மேம்பட்ட ஓவியத்தை இயக்கு / முடக்கு";
-"Toggle fast forward. Hold F to ramp speed. Hold Shift for a temporary boost." = "வேகமான முன்னேற்றத்தை மாற்று. வேகத்தை உயர்த்த F அழுத்திப் பிடிக்கவும். தற்காலிக வேக உயர்வுக்கு Shift அழுத்திப் பிடிக்கவும்.";
 "Toggle fast-forward" = "வேகமான முன்னேற்றத்தை மாற்று";
 "Toggle minimum or maximum release rate" = "குறைந்த அல்லது அதிகபட்ச வெளியீட்டு வீதத்தை மாற்று";
 "Toggle music" = "இசையை இயக்கு / நிறுத்து";
@@ -3176,10 +3168,6 @@
 "Too many linked libraries." = "இணைக்கப்பட்ட நூலகங்கள் அதிகம்.";
 "Took the scenic route home." = "Took the scenic route home.";
 "Trace a path from the entrance to the exit. Check the landing places before changing the terrain." = "நுழைவாயிலிலிருந்து வெளியேறும் வாயில்வரை பாதையைத் தேடவும். நிலத்தை மாற்றும் முன் தரையிறங்கும் இடங்களைச் சரிபார்க்கவும்.";
-"Track last assignment. Backslash." = "கடைசி ஒதுக்கீட்டைப் பின்தொடர். Backslash.";
-"Track next unassigned lemming. ]." = "அடுத்த திறன் ஒதுக்கப்படாத லெம்மிங்கைப் பின்தொடர். ].";
-"Track previous unassigned lemming. [." = "முந்தைய நியமிக்கப்படாத லெம்மிங்கை கண்காணிக்கவும். [.";
-"Tracking" = "பின்தொடர்தல்";
 "Trailing L3 font data." = "பின்வரும் L3 எழுத்துரு தரவு.";
 "Trailing L3 sprite commands." = "பின்வரும் L3 ஸ்ப்ரைட் கட்டளைகள்.";
 "Transfer address QR code" = "பரிமாற்ற முகவரியின் QR குறியீடு";
@@ -3202,6 +3190,8 @@
 "Try these skills!" = "இந்தத் திறன்களை முயலுங்கள்!";
 "Tube strength" = "திரைக்குழாய் விளைவு";
 "Turn off" = "முடக்கு";
+"Turn off auto-follow" = "தானாகப் பின்தொடர்வதை நிறுத்து";
+"Turn on auto-follow" = "தானாகப் பின்தொடர்வதை இயக்கு";
 "Turn: {0}" = "முறை: {0}";
 "Turning while swimming needs two uses of Swimmer." = "நீந்தும்போது திரும்ப, நீந்துபவர் திறனை இரண்டு முறை பயன்படுத்தும் அளவு மீதமிருக்க வேண்டும்.";
 "Turns: {0}" = "முறைகள்: {0}";
@@ -3221,7 +3211,6 @@
 "Uh oh. That was a feeble effort." = "அடடா. பலவீனமான முயற்சி.";
 "Ultimate Lemmings" = "Ultimate Lemmings";
 "Ultimate Lemmings — {0}" = "Ultimate Lemmings — {0}";
-"Ultimate Lemmix" = "Ultimate Lemmix";
 "UltimateLemmings/0.1 (fan-pack updates; sequential requests)" = "UltimateLemmings/0.1 (பன் பேக் புதுப்பிப்புகள்; தொடர்ச்சியான கோரிக்கைகள்)";
 "Umbrella" = "குடை";
 "Unable to continue" = "தொடர முடியவில்லை";
@@ -3408,14 +3397,12 @@
 "Zero avoidable losses" = "தவிர்க்கக்கூடிய இழப்புகள் இல்லை";
 "Zone IDs must be unique." = "மண்டல அடையாள அட்டைகள் தனித்துவமானதாக இருக்க வேண்டும்.";
 "Zoom" = "பெரிதாக்கம்";
-"Zoom 1×" = "பெரிதாக்கம் 1×";
 "Zoom In" = "பெரிதாக்கு";
 "Zoom Out" = "சிறிதாக்கு";
 "Zoom active" = "பெரிதாக்கம் செயலில் உள்ளது";
 "Zoom off" = "பெரிதாக்கம் முடக்கப்பட்டது";
 "Zoom on / off at cursor" = "இடச்சுட்டியில் பெரிதாக்கத்தை இயக்கு / முடக்கு";
 "Zoom {0}×" = "பெரிதாக்கம் {0}×";
-"Zoom. Z: 2×. Shift+Z: 4×. Click to cycle." = "Zoom. Z: 2x. Shift+Z: 4x. சுழற்சி செய்ய கிளிக் செய்யவும்.";
 "[ / ]  Focus unassigned lemmings\n\\      Focus last assignment\nReturn Repeat last skill" = "[ / ]  திறன் ஒதுக்கப்படாத லெம்மிங்களைக் கவனப்படுத்து\n\\      கடைசி ஒதுக்கீட்டைக் கவனப்படுத்து\nReturn கடைசித் திறனை மீண்டும் ஒதுக்கு";
 "[ / ]: Unassigned lemming" = "[ / ]: திறன் ஒதுக்கப்படாத லெம்மிங்";
 "[MobileHUD] mode={0} bounds={1} safeInsets={2} controls={3} reserved={4}" = "[MobileHUD] mode={0} bounds={1} safeInsets={2} controls={3} reserved={4}";
@@ -3457,7 +3444,7 @@
 "literal PackBits run exceeds the section" = "மெய்நிகர் PackBits இயங்கும் பிரிவு மீறுகிறது";
 "little one" = "சிறியவனே";
 "local header of {0}" = "{0} இன் உள்ளகத் தலைப்பு";
-"macOS 12.3 or later, on Apple silicon and Intel. Classic and The Tribes are Complete. Chronicles and NeoLemmix remain Beta." = "Apple silicon மற்றும் Intel கணினிகளில் macOS 12.3 அல்லது அதற்குப் பிந்தைய பதிப்பு. Classic, The Tribes முழுமை பெற்றவை. Chronicles, NeoLemmix இன்னும் பீட்டா நிலையில் உள்ளன.";
+"macOS 12.3 or later on Apple silicon and Intel." = "Apple silicon மற்றும் Intel கணினிகளில் macOS 12.3 அல்லது அதற்குப் பிந்தைய பதிப்பு.";
 "missing completion frame" = "காணாமல் போன முடிக்கப்பட்ட சட்டகம்";
 "missing level ID or version" = "காணாமல் போன நிலை அடையாளங்காட்டி அல்லது பதிப்பு";
 "missing strip end marker" = "காணாமல் போன வரியின் இறுதி குறிகாட்டி";
