@@ -207,6 +207,21 @@ history. An accepted edit or explicit resume starts a new timeline and releases
 held pointer input. Mobile and Apple TV retain their existing rewind behaviour.
 Device layout and physical input acceptance remain open.
 
+## HD effects on iPhone, iPad and Duo — 27 November 2026
+
+Duo and Apple GPU family 7 or newer keep full visual quality with HD effects
+enabled. Low Power Mode, RAM tier, routine heat and frame timings no longer
+remove the enhanced overlay on these devices. A memory warning or critical heat
+can still suspend the extra Metal surface temporarily. Older iOS devices retain
+adaptive effects, and Apple TV retains its existing limits. Audio pressure
+management stays independent of the visual policy.
+
+The shared iOS playfield applies the policy to Classic, supported NeoLemmix,
+Tribes and Chronicles. Cinematic explosions respect the app's Reduce Flashes
+and both the app and system Reduce Motion settings. HDR brightness still requires
+an HDR display; the cinematic explosion can render without HDR headroom.
+Policy tests cover the foldable override, overload and pressure recovery. Folded and unfolded Duo playback still requires a physical check.
+
 ## Lemmix stone controls, icons and effects — 18 November 2026
 
 Shared stone sockets now remain active with Lix characters. Home rows, gameplay
