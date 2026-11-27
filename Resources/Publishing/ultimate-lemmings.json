@@ -4,7 +4,7 @@
   "storeArtwork": false,
   "platforms": {
     "macos": {
-      "build": 113,
+      "build": 114,
       "bundleIdentifier": "academy.glasscode.lemmings",
       "infoPlist": "Resources/Info.plist",
       "buildScript": "Scripts/build-local-app.sh"
@@ -24,6 +24,6 @@
       "appTarget": "UltimateLemmingsTV"
     }
   },
-  "version": "2.7.1",
+  "version": "2.7.5",
   "releaseBranch": "release/ultimate-lemmings"
 }
