@@ -720,6 +720,7 @@
 "DJ shuffle" = "DJ-miks";
 "DJ uses other soundtracks" = "DJ-en bruker andre lydspor";
 "DMA Design / Psygnosis" = "DMA Design / Psygnosis";
+"DMA Design created “Lemmings”. Psygnosis published it." = "DMA Design laget Lemmings. Psygnosis ga det ut.";
 "DOS (VGA)" = "DOS (VGA)";
 "DOS Ad-Lib" = "DOS Ad-Lib";
 "DOS Ad-Lib (OPL2)" = "DOS Ad-Lib (OPL2)";
@@ -728,6 +729,7 @@
 "DROWNING" = "DRUKNER";
 "Dashboard access token" = "Tilgangstoken for oversikten";
 "Data East / Sega" = "Data East / Sega";
+"Dave Jones programmed the original Amiga game. Gary Timmons animated it, Scott Johnston drew the graphics, and Brian Johnston and Tim Wright wrote the music." = "Dave Jones programmerte det opprinnelige Amiga-spillet. Gary Timmons laget animasjonene, Scott Johnston tegnet grafikken, og Brian Johnston og Tim Wright skrev musikken.";
 "Decoded graphics exceed the {0}-pixel aggregate limit." = "Dekodet grafikk overskrider den samlede grensen på {0} piksler.";
 "Decrease / increase speed" = "Senk / øk farten";
 "Decrease fast speed" = "Reduser hurtig hastighet";
@@ -746,6 +748,7 @@
 "Deletes this player's records and saved progress on linked devices." = "Sletter denne spillerens rekorder og lagrede framdrift på tilkoblede enheter.";
 "Desk Clock" = "Bordklokke";
 "Details" = "Detaljer";
+"Developed by Erik Veland." = "Utviklet av Erik Veland.";
 "Device linked" = "Enhet tilkoblet";
 "Difficult" = "Vanskelig";
 "Difficulty" = "Vanskelighetsgrad";
@@ -1717,6 +1720,7 @@
 "Need 50 survivors to complete this tribe." = "Du må ha 50 overlevende for å fullføre denne stammen.";
 "Needed {0}  ({1}%)" = "Trenger {0}  ({1}%)";
 "NeoLemmix" = "NeoLemmix";
+"NeoLemmix Introduction Pack: {0}" = "Introduksjonspakke til NeoLemmix: {0}";
 "NeoLemmix Preview" = "Forhåndsvisning av NeoLemmix";
 "NeoLemmix difficulty analysis is not yet available." = "Vanskelighetsanalyse for NeoLemmix er ikke tilgjengelig ennå.";
 "NeoLemmix error: {0}" = "NeoLemmix-feil: {0}";
@@ -1920,6 +1924,7 @@
 "Original Lemmings 3 movie" = "Opprinnelig Lemmings 3-film";
 "Original Macintosh" = "Opprinnelig Macintosh";
 "Original PC" = "Opprinnelig PC-grafikk";
+"Original game heritage" = "Historien til originalspillet";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Opprinnelig hovedplattform. Inneholder ikoniske digitaliserte stemmeprøver og delt skjerm for 2 spillere.";
 "Original movie" = "Originalfilm";
 "Original movies" = "Originalfilmer";
@@ -2099,6 +2104,7 @@
 "Prefers the one from Tuesday." = "Prefers the one from Tuesday.";
 "Prepares several possible answers." = "Prepares several possible answers.";
 "Presage Software / Psygnosis" = "Presage Software / Psygnosis";
+"Presage, Inc. made the Macintosh port. Tony Williams arranged the DOS music." = "Presage, Inc. laget Macintosh-versjonen. Tony Williams arrangerte DOS-musikken.";
 "Presentation" = "Presentasjon";
 "Presentation preset" = "Forvalg for presentasjon";
 "Preservation well beyond the formal requirement." = "Bevaring langt utover det formelle kravet.";
@@ -2512,6 +2518,7 @@
 "Select player {0}" = "Velg spiller {0}";
 "Select {0}{1}" = "Velg {0}{1}";
 "Selected" = "Valgt";
+"Selected Lix artwork and music use the CC0 dedication." = "Utvalgt grafikk og musikk fra Lix er frigitt under CC0.";
 "Selection" = "Valg";
 "Selection effect" = "Valgeffekt";
 "Sequel artwork" = "Grafikk fra oppfølgerne";
@@ -2790,6 +2797,7 @@
 "Terrain group '{0}' is used before it is defined." = "Terrenggruppen '{0}' brukes før den er definert.";
 "Terrain group '{0}' mixes steel and non-steel pieces." = "Terrenggruppen '{0}' blander ståldeler og deler som ikke er av stål.";
 "Terrain metadata '{0}:{1}' is ambiguous." = "Terrengmetadataene '{0}:{1}' er tvetydige.";
+"Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research." = "Takk til fellesskapet for fanbrett, stiler, repriser, musikkarbeid og forskning på spillbevaring.";
 "That Hot Seat is no longer saved." = "Dette Hot Seat-spillet er ikke lenger lagret.";
 "That is the plan" = "Det er planen";
 "That just wasn't good enough. They're relying on you." = "Det var rett og slett ikke godt nok. De er avhengige av deg.";
@@ -3105,6 +3113,7 @@
 "This device" = "Denne enheten";
 "This game has no mobile renderer." = "Dette spillet har ingen mobilgjengiver.";
 "This has helped considerably." = "This has helped considerably.";
+"This is an unofficial project. Original games, artwork and music remain with their respective rights holders." = "Dette er et uoffisielt prosjekt. De opprinnelige spillene, grafikken og musikken tilhører fortsatt de respektive rettighetshaverne.";
 "This journey level is unavailable on this device. The saved session has been kept." = "This journey level is unavailable on this device. The saved session has been kept.";
 "This lemming already has {0}." = "Denne lemmingen har allerede ferdigheten {0}.";
 "This lemming cannot take this skill now." = "Denne lemmingen kan ikke få denne ferdigheten nå.";

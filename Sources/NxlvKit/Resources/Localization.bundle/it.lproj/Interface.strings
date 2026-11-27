@@ -720,6 +720,7 @@
 "DJ shuffle" = "Mix DJ";
 "DJ uses other soundtracks" = "DJ usa altre colonne sonore";
 "DMA Design / Psygnosis" = "DMA Design / Psygnosis";
+"DMA Design created “Lemmings”. Psygnosis published it." = "DMA Design ha creato Lemmings e Psygnosis lo ha pubblicato.";
 "DOS (VGA)" = "DOS (VGA)";
 "DOS Ad-Lib" = "DOS Ad-Lib";
 "DOS Ad-Lib (OPL2)" = "DOS Ad-Lib (OPL2)";
@@ -728,6 +729,7 @@
 "DROWNING" = "ANNEGAMENTO";
 "Dashboard access token" = "Token di accesso alla dashboard";
 "Data East / Sega" = "Data East / Sega";
+"Dave Jones programmed the original Amiga game. Gary Timmons animated it, Scott Johnston drew the graphics, and Brian Johnston and Tim Wright wrote the music." = "Dave Jones ha programmato il gioco originale per Amiga. Gary Timmons ne ha curato l’animazione, Scott Johnston ha disegnato la grafica e Brian Johnston e Tim Wright hanno composto la musica.";
 "Decoded graphics exceed the {0}-pixel aggregate limit." = "Le grafiche decodificate superano il limite aggregato di {0} pixel.";
 "Decrease / increase speed" = "Riduci / aumenta la velocità";
 "Decrease fast speed" = "Riduci velocità rapida";
@@ -746,6 +748,7 @@
 "Deletes this player's records and saved progress on linked devices." = "Elimina i record e i progressi salvati di questo giocatore sui dispositivi collegati.";
 "Desk Clock" = "Orologio da tavolo";
 "Details" = "Dettagli";
+"Developed by Erik Veland." = "Sviluppato da Erik Veland.";
 "Device linked" = "Dispositivo collegato";
 "Difficult" = "Difficile";
 "Difficulty" = "Difficoltà";
@@ -1717,6 +1720,7 @@
 "Need 50 survivors to complete this tribe." = "Servono 50 sopravvissuti per completare questa tribù.";
 "Needed {0}  ({1}%)" = "Richiesti {0}  ({1}%)";
 "NeoLemmix" = "NeoLemmix";
+"NeoLemmix Introduction Pack: {0}" = "Pacchetto introduttivo a NeoLemmix: {0}";
 "NeoLemmix Preview" = "Anteprima NeoLemmix";
 "NeoLemmix difficulty analysis is not yet available." = "L'analisi della difficoltà NeoLemmix non è ancora disponibile.";
 "NeoLemmix error: {0}" = "Errore NeoLemmix: {0}";
@@ -1920,6 +1924,7 @@
 "Original Lemmings 3 movie" = "Filmato originale di Lemmings 3";
 "Original Macintosh" = "Macintosh originale";
 "Original PC" = "PC originale";
+"Original game heritage" = "Storia del gioco originale";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Piattaforma principale originale. Include gli iconici campioni vocali digitalizzati e lo schermo diviso per 2 giocatori.";
 "Original movie" = "Filmato originale";
 "Original movies" = "Filmati originali";
@@ -2099,6 +2104,7 @@
 "Prefers the one from Tuesday." = "Prefers the one from Tuesday.";
 "Prepares several possible answers." = "Prepares several possible answers.";
 "Presage Software / Psygnosis" = "Presage Software / Psygnosis";
+"Presage, Inc. made the Macintosh port. Tony Williams arranged the DOS music." = "Presage, Inc. ha realizzato la versione per Macintosh. Tony Williams ha arrangiato la musica per DOS.";
 "Presentation" = "Presentazione";
 "Presentation preset" = "Preimpostazione grafica";
 "Preservation well beyond the formal requirement." = "Salvataggio ben oltre il requisito formale.";
@@ -2512,6 +2518,7 @@
 "Select player {0}" = "Seleziona giocatore {0}";
 "Select {0}{1}" = "Seleziona {0}{1}";
 "Selected" = "Selezionato";
+"Selected Lix artwork and music use the CC0 dedication." = "Parte della grafica e della musica di Lix è rilasciata con la dedica CC0.";
 "Selection" = "Selezione";
 "Selection effect" = "Effetto di selezione";
 "Sequel artwork" = "Grafiche dei seguiti";
@@ -2790,6 +2797,7 @@
 "Terrain group '{0}' is used before it is defined." = "Il gruppo di terreno '{0}' è usato prima di essere definito.";
 "Terrain group '{0}' mixes steel and non-steel pieces." = "Il gruppo di terreno '{0}' mescola elementi d'acciaio e non d'acciaio.";
 "Terrain metadata '{0}:{1}' is ambiguous." = "I metadati del terreno '{0}:{1}' sono ambigui.";
+"Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research." = "Grazie alla comunità per i livelli amatoriali, gli stili, i replay, il lavoro sulle colonne sonore e la ricerca per la conservazione.";
 "That Hot Seat is no longer saved." = "Quella partita Hot Seat non è più salvata.";
 "That is the plan" = "Questo è il piano";
 "That just wasn't good enough. They're relying on you." = "Non è stato abbastanza. Contano su di te.";
@@ -3105,6 +3113,7 @@
 "This device" = "Questo dispositivo";
 "This game has no mobile renderer." = "Questo gioco non dispone di un renderer per dispositivi mobili.";
 "This has helped considerably." = "This has helped considerably.";
+"This is an unofficial project. Original games, artwork and music remain with their respective rights holders." = "Questo progetto non è ufficiale. I giochi, la grafica e la musica originali restano dei rispettivi titolari dei diritti.";
 "This journey level is unavailable on this device. The saved session has been kept." = "This journey level is unavailable on this device. The saved session has been kept.";
 "This lemming already has {0}." = "Questo lemming ha già l’abilità {0}.";
 "This lemming cannot take this skill now." = "Questo lemming non può ricevere questa abilità ora.";

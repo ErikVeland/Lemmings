@@ -720,6 +720,7 @@
 "DJ shuffle" = "DJ-Mischig";
 "DJ uses other soundtracks" = "DJ nimmt anderi Musigsammlige dezue";
 "DMA Design / Psygnosis" = "DMA Design / Psygnosis";
+"DMA Design created “Lemmings”. Psygnosis published it." = "DMA Design hät Lemmings gmacht. Psygnosis hät's usebracht.";
 "DOS (VGA)" = "DOS (VGA)";
 "DOS Ad-Lib" = "DOS Ad-Lib";
 "DOS Ad-Lib (OPL2)" = "DOS Ad-Lib (OPL2)";
@@ -728,6 +729,7 @@
 "DROWNING" = "ERTRINKT";
 "Dashboard access token" = "Zuegangsschlüssel für d Übersicht";
 "Data East / Sega" = "Data East / Sega";
+"Dave Jones programmed the original Amiga game. Gary Timmons animated it, Scott Johnston drew the graphics, and Brian Johnston and Tim Wright wrote the music." = "De Dave Jones hät s Originalspiil für Amiga programmiert. De Gary Timmons hät animiert, de Scott Johnston hät d Grafik zeichnet und de Brian Johnston und de Tim Wright händ d Musig gschribe.";
 "Decoded graphics exceed the {0}-pixel aggregate limit." = "D dekodierti Grafik hät zäme meh als {0} Pixel.";
 "Decrease / increase speed" = "Tempo senke / erhöhe";
 "Decrease fast speed" = "Schnälls Tempo senke";
@@ -746,6 +748,7 @@
 "Deletes this player's records and saved progress on linked devices." = "Löscht d Rekord und de gspeichereti Fortschritt vo däm Spiler uf verchnüpfte Grät.";
 "Desk Clock" = "Tischuhr";
 "Details" = "Detail";
+"Developed by Erik Veland." = "Entwicklet vom Erik Veland.";
 "Device linked" = "Grät verchnüpft";
 "Difficult" = "Schwierig";
 "Difficulty" = "Schwierigkeitsgrad";
@@ -1717,6 +1720,7 @@
 "Need 50 survivors to complete this tribe." = "Für d Abschluss vo däm Stamm bruucht s 50 Überläbendi.";
 "Needed {0}  ({1}%)" = "Nötig {0}  ({1}%)";
 "NeoLemmix" = "NeoLemmix";
+"NeoLemmix Introduction Pack: {0}" = "NeoLemmix-Iifüehrigspack: {0}";
 "NeoLemmix Preview" = "NeoLemmix-Vorschau";
 "NeoLemmix difficulty analysis is not yet available." = "D Uuswärtig vom NeoLemmix-Schwierigkeitsgrad isch no nöd verfüegbar.";
 "NeoLemmix error: {0}" = "NeoLemmix-Fehler: {0}";
@@ -1920,6 +1924,7 @@
 "Original Lemmings 3 movie" = "Originalfilm vo Lemmings 3";
 "Original Macintosh" = "Macintosh-Original";
 "Original PC" = "PC-Original";
+"Original game heritage" = "Gschicht vom Originalspiil";
 "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen." = "Ursprünglichi Hauptplattform. Mit de bekannte digitali Stimme und geteiltem Bildschirm für zwei.";
 "Original movie" = "Originalfilm";
 "Original movies" = "Originalfilm";
@@ -2099,6 +2104,7 @@
 "Prefers the one from Tuesday." = "Hät das vom Zischtig lieber.";
 "Prepares several possible answers." = "Bereitet mehreri möglichi Antworte vor.";
 "Presage Software / Psygnosis" = "Presage Software / Psygnosis";
+"Presage, Inc. made the Macintosh port. Tony Williams arranged the DOS music." = "Presage, Inc. hät d Macintosh-Version gmacht. De Tony Williams hät d DOS-Musig arrangiert.";
 "Presentation" = "Darstellig";
 "Presentation preset" = "Darstelligs-Voriischtellig";
 "Preservation well beyond the formal requirement." = "Wiit meh grettet als vorgschribe.";
@@ -2512,6 +2518,7 @@
 "Select player {0}" = "Spieler {0} wähle";
 "Select {0}{1}" = "{0}{1} uuswähle";
 "Selected" = "Uusgwählt";
+"Selected Lix artwork and music use the CC0 dedication." = "Uusgwählti Lix-Grafik und -Musig sind unter CC0 freigäh.";
 "Selection" = "Uuswahl";
 "Selection effect" = "Uuswahl-Effäkt";
 "Sequel artwork" = "Grafik us de Folgespil";
@@ -2790,6 +2797,7 @@
 "Terrain group '{0}' is used before it is defined." = "D Geländegruppe «{0}» wird vor ihrer Definition bruucht.";
 "Terrain group '{0}' mixes steel and non-steel pieces." = "D Geländegruppe «{0}» mischt Stahl mit Stück ohni Stahl.";
 "Terrain metadata '{0}:{1}' is ambiguous." = "D Gelände-Metadate «{0}:{1}» sind nöd eindeutig.";
+"Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research." = "Danke a d Community für Fan-Level, Stiil, Replays, Musig und d Erforschig und Erhaltig vo de Spiil.";
 "That Hot Seat is no longer saved." = "De Hot Seat isch nüme gspeicheret.";
 "That is the plan" = "Das isch de Plan";
 "That just wasn't good enough. They're relying on you." = "Das hät eifach nöd glangt. Si verlahnd sich uf dich.";
@@ -3105,6 +3113,7 @@
 "This device" = "Das Grät";
 "This game has no mobile renderer." = "Das Spil cha uf em Mobilgrät nöd aazeigt werde.";
 "This has helped considerably." = "Das hät beträchtlich gholfe.";
+"This is an unofficial project. Original games, artwork and music remain with their respective rights holders." = "Das isch es inoffiziells Projekt. D Originalspiil, Grafik und Musig ghöred wiiterhin de jeweilige Rächteinhaber.";
 "This journey level is unavailable on this device. The saved session has been kept." = "Die Spilstufe vo de Reis isch uf dem Grät nöd verfüegbar. D gspeichereti Sitzung isch blibe.";
 "This lemming already has {0}." = "De Lemming hät scho {0}.";
 "This lemming cannot take this skill now." = "De Lemming cha die Fähigkeit grad nöd übernäh.";

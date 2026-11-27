@@ -204,7 +204,7 @@
   "< Level": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1088"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1094"
     ]
   },
   "< Previous level": {
@@ -222,7 +222,7 @@
   "< Rank": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1087"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1093"
     ]
   },
   "<Invalid saved game>": {
@@ -820,6 +820,7 @@
   "About": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:7",
       "Sources/LemmingsLocal/AboutWindow.swift:53"
     ]
   },
@@ -832,6 +833,7 @@
   "About {0}": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:39",
       "Sources/LemmingsLocal/main.swift:1066"
     ]
   },
@@ -994,7 +996,7 @@
   "Adaptive triggers": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:91"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:99"
     ]
   },
   "Add": {
@@ -1046,7 +1048,7 @@
       "Sources/LemmingsLocal/GameControls.swift:186",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:121",
       "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:123",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1091"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1097"
     ]
   },
   "Add level": {
@@ -1145,7 +1147,7 @@
   "Aim sensitivity: {0}%": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:89"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:97"
     ]
   },
   "Aim the arrow farther away.": {
@@ -1554,8 +1556,8 @@
   "Art set": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:80",
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:82"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:88",
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:90"
     ]
   },
   "Artists": {
@@ -1960,6 +1962,7 @@
       "Sources/LemmingsGameArt/GameFrontEnd.swift:39",
       "Sources/LemmingsGameArt/GameNavigationArt.swift:7",
       "Sources/LemmingsGameArt/GameSupport.swift:12",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:41",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:113",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:168",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:195",
@@ -2016,10 +2019,10 @@
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:106",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:119",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:124",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1059",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1095",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1206",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:818",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1065",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1101",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1216",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:824",
       "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:25",
       "Sources/LemmingsMobileUI/MobileNavigationView.swift:11",
       "Sources/LemmingsMobileUI/MobileOriginalMediaController.swift:95",
@@ -2031,10 +2034,10 @@
       "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift:17",
       "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift:26",
       "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift:29",
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:113",
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:124",
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:49",
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:97",
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:105",
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:132",
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:143",
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:57",
       "Sources/LemmingsMobileUI/MobileTVFileTransfer.swift:143",
       "Sources/LemmingsMobileUI/TVGameImportViewController.swift:45",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:149"
@@ -2756,8 +2759,8 @@
       "Sources/LemmingsLocal/OwnedGameImportWindow.swift:95",
       "Sources/LemmingsLocal/TelemetryDashboard.swift:167",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:41",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1194",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1204",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1214",
       "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:68",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:282",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:633",
@@ -4038,6 +4041,7 @@
   "Community": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:34",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:110",
       "Sources/LemmingsGameArt/MobileHomeArt.swift:50",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:305",
@@ -4726,6 +4730,12 @@
       "Sources/NxlvKit/ArchivalCatalog.swift:64"
     ]
   },
+  "DMA Design created “Lemmings”. Psygnosis published it.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:19"
+    ]
+  },
   "DOS (VGA)": {
     "kind": "text",
     "references": [
@@ -4773,6 +4783,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ArchivalCatalog.swift:104"
+    ]
+  },
+  "Dave Jones programmed the original Amiga game. Gary Timmons animated it, Scott Johnston drew the graphics, and Brian Johnston and Tim Wright wrote the music.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:20"
     ]
   },
   "Decoded graphics exceed the {0}-pixel aggregate limit.": {
@@ -4902,9 +4918,15 @@
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:143",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1921",
       "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:67",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1090",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1096",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:107",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:194"
+    ]
+  },
+  "Developed by Erik Veland.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:11"
     ]
   },
   "Device linked": {
@@ -5116,7 +5138,7 @@
   "Downloading...": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:103"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:122"
     ]
   },
   "Drag the map to move the view.": {
@@ -6584,7 +6606,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:34",
       "Sources/LemmingsGameArt/MobileSettingsTabsArt.swift:12",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1208"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1218"
     ]
   },
   "Game assets are already downloading.": {
@@ -7544,7 +7566,7 @@
   "Import": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1212",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1222",
       "Sources/LemmingsMobileUI/MobileTVFileTransfer.swift:336"
     ]
   },
@@ -7632,7 +7654,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/MusicLibraryWindow.swift:119",
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:110"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:129"
     ]
   },
   "Including the services of the Paul Alliance of Great Britain": {
@@ -9602,7 +9624,7 @@
   "Level >": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1089"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1095"
     ]
   },
   "Level Select": {
@@ -9920,6 +9942,7 @@
   "Lix artwork": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:24",
       "Sources/LemmingsMobileUI/MobileLemmixOptions.swift:127"
     ]
   },
@@ -10011,7 +10034,7 @@
       "Sources/LemmingsLocal/GameScreen.swift:92",
       "Sources/LemmingsMobileUI/MobileGameHints.swift:30",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:281",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1028",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1034",
       "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:42",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:112",
       "Sources/LemmingsMobileUI/MobileStartupViewController.swift:175",
@@ -11168,6 +11191,12 @@
       "Sources/NxlvKit/LevelCatalogue.swift:13"
     ]
   },
+  "NeoLemmix Introduction Pack: {0}": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:35"
+    ]
+  },
   "NeoLemmix Preview": {
     "kind": "text",
     "references": [
@@ -11729,7 +11758,7 @@
   "No reviewed downloads": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1541"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1560"
     ]
   },
   "No saved run": {
@@ -11781,7 +11810,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:3030",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1079"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1085"
     ]
   },
   "No unassigned lemmings": {
@@ -12368,7 +12397,7 @@
   "Open Desk Clock": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:95"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:103"
     ]
   },
   "Open Game Center": {
@@ -12468,7 +12497,7 @@
     "references": [
       "Sources/LemmingsGameArt/MobileInformationArt.swift:10",
       "Sources/LemmingsLocal/SettingsWindow.swift:534",
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:79",
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:87",
       "Sources/NxlvKit/ClassicSettings.swift:167",
       "Sources/NxlvKit/ClassicSettings.swift:178",
       "Sources/NxlvKit/SoundtrackCatalogue.swift:7"
@@ -12493,6 +12522,12 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:520"
     ]
   },
+  "Original game heritage": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:18"
+    ]
+  },
   "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen.": {
     "kind": "text",
     "references": [
@@ -12512,7 +12547,7 @@
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1504",
       "Sources/LemmingsLocal/Lemmings3PlayWindow.swift:1517",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1599",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1111",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1117",
       "Sources/LemmingsMobileUI/MobileOriginalMediaController.swift:94",
       "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift:24"
     ]
@@ -13193,7 +13228,7 @@
       "Sources/LemmingsLocal/main.swift:4928",
       "Sources/LemmingsLocal/main.swift:5102",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:58",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2077",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2096",
       "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift:18",
       "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift:30",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:157",
@@ -13209,7 +13244,7 @@
       "Sources/LemmingsGameArt/MobileInformationArt.swift:60",
       "Sources/LemmingsGameArt/MobileInformationArt.swift:65",
       "Sources/LemmingsLocal/main.swift:9693",
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:122"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:141"
     ]
   },
   "Play Insights…": {
@@ -13435,7 +13470,7 @@
     "references": [
       "Sources/LemmingsLocal/main.swift:4505",
       "Sources/LemmingsLocal/main.swift:4646",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1092"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1098"
     ]
   },
   "Playlist name": {
@@ -13611,7 +13646,7 @@
       "Sources/LemmingsLocal/Lemmings2PlayWindow.swift:2324",
       "Sources/LemmingsMobileCore/Lemmings2MobileLibrary.swift:166",
       "Sources/LemmingsMobileCore/Lemmings2PracticeMobileLibrary.swift:9",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1093",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1099",
       "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift:16"
     ]
   },
@@ -13691,6 +13726,12 @@
     "kind": "text",
     "references": [
       "Sources/NxlvKit/ArchivalCatalog.swift:74"
+    ]
+  },
+  "Presage, Inc. made the Macintosh port. Tony Williams arranged the DOS music.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:21"
     ]
   },
   "Presentation": {
@@ -14251,7 +14292,7 @@
       "Sources/LemmingsLocal/main.swift:4599",
       "Sources/LemmingsLocal/main.swift:5788",
       "Sources/LemmingsLocal/main.swift:5851",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1094"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1100"
     ]
   },
   "Random 10 {0}": {
@@ -14269,7 +14310,7 @@
   "Rank >": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1087"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1093"
     ]
   },
   "Rank {0}, {1}, {2}.": {
@@ -14440,7 +14481,7 @@
   "Records are not available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2315"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2334"
     ]
   },
   "Records cannot be read": {
@@ -14641,7 +14682,7 @@
       "Sources/LemmingsLocal/GameControls.swift:186",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:121",
       "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:123",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1091"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1097"
     ]
   },
   "Remove level": {
@@ -14693,7 +14734,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:4915",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1212"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1222"
     ]
   },
   "Replace or remove each locked, missing or changed level before starting.": {
@@ -14981,7 +15022,7 @@
   "Restore original assets": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1209"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1219"
     ]
   },
   "Restore original assets…": {
@@ -15022,7 +15063,7 @@
       "Sources/LemmingsMobileCore/MobileLearning.swift:129",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:354",
       "Sources/LemmingsMobileUI/MobileLibraryHome.swift:29",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2077",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2096",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:193",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:198"
     ]
@@ -16220,7 +16261,7 @@
   "Saved: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:123"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:142"
     ]
   },
   "Scale the playfield in whole pixel steps to keep pixel edges crisp.": {
@@ -16398,6 +16439,12 @@
       "Sources/LemmingsLocal/SolutionSwitchView.swift:68"
     ]
   },
+  "Selected Lix artwork and music use the CC0 dedication.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:25"
+    ]
+  },
   "Selection": {
     "kind": "text",
     "references": [
@@ -16484,8 +16531,8 @@
       "Sources/LemmingsMobileUI/MobileGameInput.swift:30",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:387",
       "Sources/LemmingsMobileUI/MobileLemmixOptions.swift:125",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:381",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:791",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:384",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:797",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:155",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:225"
     ]
@@ -17119,11 +17166,12 @@
   "Soundtrack": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:28",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:106",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:152",
       "Sources/LemmingsLocal/SettingsWindow.swift:726",
       "Sources/LemmingsMobileUI/MobileGameInput.swift:415",
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:105"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:124"
     ]
   },
   "Soundtrack download progress": {
@@ -17423,7 +17471,7 @@
   "Started: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:122"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:141"
     ]
   },
   "Starting": {
@@ -17507,7 +17555,7 @@
   "Stick dead zone: {0}%": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:90"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:98"
     ]
   },
   "Sticks": {
@@ -18221,6 +18269,12 @@
       "Sources/NxlvKit/NxlvStyleResolver.swift:1554"
     ]
   },
+  "Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:36"
+    ]
+  },
   "That Hot Seat is no longer saved.": {
     "kind": "text",
     "references": [
@@ -18673,7 +18727,7 @@
   "The attempt was not saved.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2291"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2310"
     ]
   },
   "The cat understands the arrangement.": {
@@ -19276,7 +19330,7 @@
   "The saved NeoLemmix level is no longer available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1837"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1856"
     ]
   },
   "The saved collections could not be read.": {
@@ -20147,6 +20201,12 @@
       "Sources/LemmingsAppCore/Records/LemmingAssessmentCatalogue.swift:33"
     ]
   },
+  "This is an unofficial project. Original games, artwork and music remain with their respective rights holders.": {
+    "kind": "text",
+    "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:37"
+    ]
+  },
   "This journey level is unavailable on this device. The saved session has been kept.": {
     "kind": "text",
     "references": [
@@ -20446,7 +20506,7 @@
       "Sources/LemmingsLocal/main.swift:8093",
       "Sources/LemmingsLocal/main.swift:8755",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:3030",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1079"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1085"
     ]
   },
   "Timing probes: {0}. Untested alternatives remain unknown.": {
@@ -20929,6 +20989,7 @@
   "Unknown": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:10",
       "Sources/LemmingsLocal/AboutWindow.swift:42",
       "Sources/LemmingsLocal/AboutWindow.swift:43",
       "Sources/LemmingsLocal/ArcadeWindow.swift:1016",
@@ -21381,6 +21442,7 @@
   "Version {0} - Build {1}": {
     "kind": "text",
     "references": [
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:40",
       "Sources/LemmingsMobileCore/MobileBuildInfo.swift:27"
     ]
   },
@@ -21724,7 +21786,7 @@
   "WillLem arranged and produced the eight Christmas tracks referenced by the NeoLemmix packs Xmas Lemmings and Holiday Lemmings.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:104"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:123"
     ]
   },
   "Win a direct retry of your failed attempt.": {
@@ -21748,7 +21810,7 @@
   "Won: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:123"
+      "Sources/LemmingsMobileUI/MobileSettingsPages.swift:142"
     ]
   },
   "Wore it buying bread.": {
@@ -22413,7 +22475,7 @@
   "owned resource folder": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1880"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1899"
     ]
   },
   "pattern data needs {0} bytes, file has {1}": {
@@ -22763,7 +22825,7 @@
       "Sources/LemmingsGameArt/MobileCareerArt.swift:353",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:391",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:3029",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1078",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1084",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:91"
     ]
   },
