@@ -533,6 +533,7 @@ struct ReticleFeedback {
   var viewport = Viewport() { didSet { if oldValue != viewport { needsDisplay = true } } }
   private var precisionLens = AnimatedPrecisionZoomLens()
   private var precisionScroll = PrecisionZoomScrollGesture()
+  var scrollWheelZoomEnabled = true
   private let precisionZoomAnimation = PrecisionZoomAnimation()
   var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
   var rewardBadgeRect: CGRect {
@@ -875,7 +876,7 @@ struct ReticleFeedback {
       return
     }
     if phase == .playing, session?.isComplete == false, let point, bounds.contains(point) {
-      switch precisionScroll.handle(event) {
+      switch precisionScroll.handle(event, zoomEnabled: scrollWheelZoomEnabled) {
       case .zoom(let action): onPrecisionScroll?(action, point); return
       case .consumed: return
       case .pan: break
@@ -1117,6 +1118,10 @@ struct ReticleFeedback {
   }
 
   private(set) var homeBackdropImage: CGImage?
+  private var homeBackdropReveal: GameHomeBackdropReveal?
+  var homeBackdropIsRevealing: Bool {
+    usesHomeLayout && !menuMotionReduced && homeBackdropReveal?.frame(at: homeBackdropElapsed) != nil
+  }
   private var homeBackdropStart = CGPoint.zero
   private var homeBackdropGoal: CGPoint?
   private(set) var homeBackdropElapsed: TimeInterval = 0
@@ -1128,6 +1133,7 @@ struct ReticleFeedback {
         bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue), provider: provider,
         decode: nil, shouldInterpolate: false, intent: .defaultIntent) else { return }
     homeBackdropImage = image
+    homeBackdropReveal = menuMotionReduced ? nil : GameHomeBackdropReveal(image: image)
     homeBackdropStart = bitmap.start
     homeBackdropGoal = bitmap.goal
     homeBackdropElapsed = 0
@@ -1136,7 +1142,9 @@ struct ReticleFeedback {
 
   func advanceHomeBackdrop(seconds: TimeInterval) {
     guard usesHomeLayout, !menuMotionReduced else { return }
-    homeBackdropElapsed += max(0, seconds)
+    let elapsed = max(0, seconds)
+    homeBackdropElapsed += homeBackdropReveal == nil ? elapsed : min(0.25, elapsed)
+    if homeBackdropReveal?.frame(at: homeBackdropElapsed) == nil { homeBackdropReveal = nil }
   }
 
   /// Ease from the opening view towards the exit and back, at no more than three level pixels per second.
@@ -1160,11 +1168,13 @@ struct ReticleFeedback {
 
   private func drawHomeBackdrop() {
     guard let image = homeBackdropImage, let source = homeBackdropSource(at: homeBackdropElapsed) else { return }
+    if menuMotionReduced { homeBackdropReveal = nil }
+    let artwork = homeBackdropReveal?.frame(at: homeBackdropElapsed) ?? image
     let scale = bounds.width / source.width
     NSGraphicsContext.saveGraphicsState()
     NSBezierPath(rect: bounds).addClip()
     NSGraphicsContext.current?.imageInterpolation = .none
-    NSImage(cgImage: image, size: .zero).draw(in: CGRect(x: -source.minX * scale, y: -source.minY * scale,
+    NSImage(cgImage: artwork, size: .zero).draw(in: CGRect(x: -source.minX * scale, y: -source.minY * scale,
       width: CGFloat(image.width) * scale, height: CGFloat(image.height) * scale),
       from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true, hints: nil)
     NSColor.black.withAlphaComponent(0.28).setFill(); bounds.fill()
@@ -1209,11 +1219,15 @@ struct ReticleFeedback {
     page.macTitleMenu = true
     page.homeNextPlayerIndex = overlayHomePlay ? nil : overlayNextPlayerIndex
     let viewport = homeViewport
+    let playFont = overlayHomePlay ? macInterface?.font(.small) : nil
     if viewport.width >= 880, viewport.height >= 500 {
-      let layout = GameFrontEnd.layout(page, width: min(740, viewport.width / 2), minimumHeight: viewport.height / 2)
+      if overlayHomePlay { page.macPlayCaptionScale = 0.5 }
+      let layout = GameFrontEnd.layout(page, width: min(740, viewport.width / 2), minimumHeight: viewport.height / 2,
+        macPlayFont: playFont)
       if overlayHomePlay || layout.size.height <= viewport.height / 2 { return (page, layout, 2) }
     }
-    return (page, GameFrontEnd.layout(page, width: min(740, viewport.width), minimumHeight: viewport.height), 1)
+    return (page, GameFrontEnd.layout(page, width: min(740, viewport.width), minimumHeight: viewport.height,
+      macPlayFont: playFont), 1)
   }
   private func homeFrame(_ frame: CGRect, scale: CGFloat, layout: GameFrontEnd.Layout) -> CGRect {
     return frame.applying(CGAffineTransform(scaleX: scale, y: scale)).offsetBy(

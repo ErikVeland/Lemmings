@@ -447,7 +447,10 @@ import NxlvKit
         keyboard.cyclesSharedSkillLetters = false
         keyboard.overlayControls = { [weak self] in self?.canvas.accessibilityChildren() ?? [] }
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
-        keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space / P", retry: true, nuke: false) }
+        keyboard.engineCommands = { [weak self] in
+            GameplayKeyboard.playCommands(pauseKey: "Space / P", retry: true, nuke: false,
+                scrollWheelZoom: self?.audioSettings.scrollWheelZoomEnabled ?? true)
+        }
         keyboard.inspectionAvailable = { [weak self] in
             guard let self else { return false }
             return self.audioSettings.inspectWhilePaused && self.screen == .playing && self.paused && !self.canvas.startCountdown.isActive
@@ -899,6 +902,7 @@ import NxlvKit
         speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
         speedControl.ridiculousEnabled = settings.ridiculousSpeedEnabled
         canvas.reduceMotion = settings.reduceMotion
+        canvas.scrollWheelZoomEnabled = settings.scrollWheelZoomEnabled
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
         canvas.gameplayCursorStyle = settings.gameplayCursorStyle
@@ -933,7 +937,8 @@ import NxlvKit
     }
     nonisolated private static let completionCampaignCache = GameAssetCache<Lemmings2Campaign>(capacity: 2)
 
-    static func savedCompletion(root: URL, journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
+    nonisolated static func savedCompletion(root: URL, progressData: Data?,
+        journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
         let cacheKey = GameAssetCache<Lemmings2Campaign>.bundledKey(root)
         var campaign: Lemmings2Campaign
         if let cacheKey, let cached = completionCampaignCache.value(for: cacheKey) {
@@ -943,9 +948,8 @@ import NxlvKit
             campaign = decoded
             if let cacheKey { completionCampaignCache.insert(decoded, for: cacheKey) }
         }
-        let key = campaignProgressKey(root: root)
-        if let data = UserDefaults.standard.data(forKey: key),
-           let saved = try? JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data) {
+        if let progressData,
+           let saved = try? JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: progressData) {
             try? campaign.restore(saved)
         }
         return campaign.levels.indices.filter { index in
@@ -2580,6 +2584,7 @@ import NxlvKit
     }
     private var precisionLens = AnimatedPrecisionZoomLens()
     private var precisionScroll = PrecisionZoomScrollGesture()
+    var scrollWheelZoomEnabled = true
     private let precisionZoomAnimation = PrecisionZoomAnimation()
     var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
     var rewardBadgeRect: CGRect {
@@ -3803,7 +3808,7 @@ import NxlvKit
     override func scrollWheel(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
         if gameplayRect.contains(point), game?.isComplete == false {
-            switch precisionScroll.handle(event) {
+            switch precisionScroll.handle(event, zoomEnabled: scrollWheelZoomEnabled) {
             case .zoom(let action): onPrecisionScroll?(action, point); return
             case .consumed: return
             case .pan: break

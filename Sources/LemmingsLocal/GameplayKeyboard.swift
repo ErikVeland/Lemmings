@@ -697,7 +697,7 @@ import NxlvKit
         case .boost: break
         }
     }
-    static func playCommands(pauseKey: String, retry: Bool, nuke: Bool) -> [KeyboardCommand] {
+    static func playCommands(pauseKey: String, retry: Bool, nuke: Bool, scrollWheelZoom: Bool) -> [KeyboardCommand] {
         let gameplay = L10n.text("Gameplay"), camera = L10n.text("Camera")
         var rows = [
             KeyboardCommand(keys: L10n.text("Level map"), action: GameplayControlTip.map.text(for: .mouse), group: camera),
@@ -706,7 +706,8 @@ import NxlvKit
             KeyboardCommand(keys: "Hold . / >", action: L10n.text("Scrub forward after rewind"), group: gameplay),
             KeyboardCommand(keys: ", / .", action: L10n.text("Step one tick; hold to scrub; release to pause"), group: gameplay),
             KeyboardCommand(keys: "Z", action: L10n.text("2× Zoom at cursor"), group: camera),
-            KeyboardCommand(keys: L10n.text("Scroll up / down"), action: L10n.text("Zoom on / off at cursor"), group: camera),
+            KeyboardCommand(keys: L10n.text("Scroll up / down"),
+                action: scrollWheelZoom ? L10n.text("Zoom on / off at cursor") : L10n.text("Pan"), group: camera),
             KeyboardCommand(keys: "Shift-Z", action: L10n.text("2× Superzoom at cursor, 0.5× time"), group: camera),
             KeyboardCommand(keys: "Z / Shift-Z", action: L10n.text("Press again to switch off"), group: camera),
             KeyboardCommand(keys: "Shift-Z", action: L10n.text("Each start spends one Superzoom use"), group: camera),

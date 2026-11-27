@@ -80,6 +80,17 @@ final class LanguagePickerTests: XCTestCase {
                             .write(to: output.appendingPathComponent("mac-\(Int(width))-\(groups[index]).png"))
                     }
                     if index == 0 {
+                        let zoom = try XCTUnwrap(descendants(page).compactMap { $0 as? GameCheckButton }
+                            .first { $0.title == GameLocalisation.text("Scroll wheel zoom") })
+                        XCTAssertEqual(zoom.state, .on)
+                        zoom.scrollToVisible(zoom.bounds)
+                        host.layoutSubtreeIfNeeded()
+                        let labelPoint = CGPoint(x: zoom.bounds.width * 0.75, y: zoom.bounds.midY)
+                        XCTAssertTrue(host.hitTest(zoom.convert(labelPoint, to: host)) === zoom)
+                        XCTAssertTrue(zoom.accessibilityPerformPress())
+                        XCTAssertEqual(zoom.state, .off)
+                        XCTAssertTrue(zoom.accessibilityPerformPress())
+                        XCTAssertEqual(zoom.state, .on)
                         let last = try XCTUnwrap(descendants(page).compactMap { $0 as? GamePopUpButton }
                             .first { $0.accessibilityLabel() == GameLocalisation.text("Level selection") })
                         let scroll = try XCTUnwrap(last.enclosingScrollView)
@@ -144,6 +155,8 @@ final class LanguagePickerTests: XCTestCase {
                     let selected = try language(choice, in: host)
                     XCTAssertEqual(selected.state, .on)
                     XCTAssertEqual(selected.accessibilityRole(), .radioButton)
+                    let selectedFrame = selected.convert(selected.bounds, to: host)
+                    XCTAssertEqual(selectedFrame.midX, host.bounds.midX, accuracy: 1)
                     XCTAssertEqual((selected.accessibilityValue() as? NSNumber)?.intValue, 1)
                     XCTAssertTrue(window.firstResponder === selected)
                     let choices = descendants(host).compactMap { $0 as? GameButton }

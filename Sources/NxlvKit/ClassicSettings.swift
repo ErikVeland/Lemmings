@@ -211,6 +211,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var pixelAspect: Double
     public var integerScaling: Bool
     public var modernControlsEnabled: Bool
+    public var scrollWheelZoomEnabled: Bool
     public var variableSpeedEnabled: Bool
     public var ridiculousSpeedEnabled: Bool
     public var inspectWhilePaused: Bool
@@ -279,6 +280,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         pixelAspect: Double = 1.0,
         integerScaling: Bool = true,
         modernControlsEnabled: Bool = true,
+        scrollWheelZoomEnabled: Bool = true,
         variableSpeedEnabled: Bool = true,
         ridiculousSpeedEnabled: Bool = false,
         inspectWhilePaused: Bool = true,
@@ -327,6 +329,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.pixelAspect = pixelAspect
         self.integerScaling = integerScaling
         self.modernControlsEnabled = modernControlsEnabled
+        self.scrollWheelZoomEnabled = scrollWheelZoomEnabled
         self.variableSpeedEnabled = variableSpeedEnabled
         self.ridiculousSpeedEnabled = ridiculousSpeedEnabled
         self.inspectWhilePaused = inspectWhilePaused
@@ -406,6 +409,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         integerScaling = try values.decodeIfPresent(
             Bool.self, forKey: .integerScaling) ?? fallback.integerScaling
         modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
+        scrollWheelZoomEnabled = source(.scrollWheelZoomEnabled, fallback.scrollWheelZoomEnabled)
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
         ridiculousSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .ridiculousSpeedEnabled) ?? false
         inspectWhilePaused = try values.decodeIfPresent(Bool.self, forKey: .inspectWhilePaused) ?? true

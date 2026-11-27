@@ -39,6 +39,7 @@ import NxlvKit
   private var sequelArtworkCheck: NSButton?
   private var pointerCaptureCheck: NSButton?
   private var modernControlsCheck: NSButton?
+  private var scrollWheelZoomCheck: NSButton?
   private var variableSpeedCheck: NSButton?
   private var ridiculousSpeedCheck: NSButton?
   private var interruptionCheck: NSButton?
@@ -332,6 +333,9 @@ import NxlvKit
     selectionStylePopUp = selection
     let modern = GameCheckButton(title: L10n.text("Modern keyboard controls"), target: self, action: #selector(modernControlsChanged))
     modernControlsCheck = modern
+    let scrollWheelZoom = GameCheckButton(title: L10n.text("Scroll wheel zoom"), target: self, action: #selector(scrollWheelZoomChanged))
+    scrollWheelZoom.state = settings.scrollWheelZoomEnabled ? .on : .off
+    scrollWheelZoomCheck = scrollWheelZoom
     let variable = GameCheckButton(title: L10n.text("Variable speed: 2×, 3×, 5×, 10×"), target: self, action: #selector(variableSpeedChanged))
     variableSpeedCheck = variable
     let ridiculous = GameCheckButton(title: L10n.text("Ridiculous speed (25×)"), target: self, action: #selector(ridiculousSpeedChanged))
@@ -344,10 +348,10 @@ import NxlvKit
     let interruption = GameCheckButton(title: L10n.text("Pause on interruption"), target: self, action: #selector(interruptionChanged))
     interruption.state = settings.pauseOnInterruption ? .on : .off
     interruptionCheck = interruption
-    let favorApproaching = GameCheckButton(title: L10n.text("Favor lemmings still approaching"), target: self, action: #selector(favorApproachingChanged))
+    let favorApproaching = GameCheckButton(title: L10n.text("Favour lemmings still approaching"), target: self, action: #selector(favorApproachingChanged))
     favorApproaching.state = settings.favorApproachingLemmings ? .on : .off
     favorApproachingCheck = favorApproaching
-    let bombBlockers = GameCheckButton(title: L10n.text("Favor blockers for bombs"), target: self, action: #selector(favorBombBlockersChanged))
+    let bombBlockers = GameCheckButton(title: L10n.text("Favour blockers for bombs"), target: self, action: #selector(favorBombBlockersChanged))
     bombBlockers.state = settings.favorBombBlockers ? .on : .off
     favorBombBlockersCheck = bombBlockers
     let builders = GameCheckButton(title: L10n.text("Favour active skilled lemmings"), target: self, action: #selector(favorBuildersChanged))
@@ -367,7 +371,11 @@ import NxlvKit
     pointerCaptureCheck = pointer
     return groupedPane([
       (L10n.text("Presentation"), [(L10n.text("Language"), language), (L10n.text("Style"), experience)]),
-      (L10n.text("Controls and assistance"), [(L10n.text("Controls"), modern), (L10n.text("Speed"), GameControlGroup(controls: [variable, ridiculous], label: L10n.text("Speed"))), (L10n.text("Pause"), GameControlGroup(controls: [interruption, inspect], label: L10n.text("Pause"))), (L10n.text("Pointer"), pointer)]),
+      (L10n.text("Controls and assistance"), [(L10n.text("Controls"), modern),
+        (L10n.text("Zoom"), scrollWheelZoom),
+        (L10n.text("Speed"), GameControlGroup(controls: [variable, ridiculous], label: L10n.text("Speed"))),
+        (L10n.text("Pause"), GameControlGroup(controls: [interruption, inspect], label: L10n.text("Pause"))),
+        (L10n.text("Pointer"), pointer)]),
       (L10n.text("Skill targeting"), [("", targeting)]),
       (L10n.text("Pointer and selection"), [(L10n.text("Cursor"), cursor), (L10n.text("Skill icon"), iconSize), (L10n.text("Reticule"), count), (L10n.text("Selection"), selection), (L10n.text("Classic"), backpacks)]),
       (L10n.text("Level access"), [(L10n.text("Level Select"), levelSelection)]),
@@ -403,6 +411,7 @@ import NxlvKit
     changed()
   }
   @objc private func interruptionChanged(_ sender: NSButton) { settings.pauseOnInterruption = sender.state == .on; changed() }
+  @objc private func scrollWheelZoomChanged(_ sender: NSButton) { settings.scrollWheelZoomEnabled = sender.state == .on; changed() }
   @objc private func variableSpeedChanged(_ sender: NSButton) {
     settings.variableSpeedEnabled = sender.state == .on
     ridiculousSpeedCheck?.isEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
@@ -826,6 +835,7 @@ import NxlvKit
     menuMusicCheck?.state = settings.menuMusic ? .on : .off
     pointerCaptureCheck?.state = settings.confinePointer ? .on : .off
     modernControlsCheck?.state = settings.modernControlsEnabled ? .on : .off
+    scrollWheelZoomCheck?.state = settings.scrollWheelZoomEnabled ? .on : .off
     variableSpeedCheck?.state = settings.variableSpeedEnabled ? .on : .off
     ridiculousSpeedCheck?.state = settings.ridiculousSpeedEnabled ? .on : .off
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
@@ -899,26 +909,20 @@ import NxlvKit
     let picker = GameMenuPage(title: L10n.text("Language"))
     picker.onBack = { [weak self] in self?.finishLanguageSelection(apply: false) }
     picker.addPrimaryAction(L10n.text("Apply")) { [weak self] in self?.finishLanguageSelection(apply: true) }
-    let scroll = NSScrollView(frame: picker.body.bounds)
-    scroll.autoresizingMask = [.width, .height]
-    scroll.hasVerticalScroller = true
-    scroll.drawsBackground = false
-    let list = NSView(frame: CGRect(x: 0, y: 0, width: 940, height: max(440, L10n.languageOptions.count * 44)))
+    picker.listColumnsEnabled = false
+    picker.listMinimumHeight = 38
     for (index, option) in L10n.languageOptions.enumerated() {
       let button = GameButton(title: option.title, target: self, action: #selector(previewLanguage))
+      button.focusRingType = .none
       button.tag = index
       button.setButtonType(.momentaryPushIn) // Track the full stone face. Keep radio semantics below.
       let selected = option == L10n.currentLanguagePreference
       button.state = selected ? .on : .off
       button.setAccessibilityRole(.radioButton)
       button.setAccessibilityValue(selected ? 1 : 0)
-      button.frame = CGRect(x: 6, y: list.bounds.height - CGFloat(index + 1) * 44, width: 920, height: 38)
-      list.addSubview(button)
+      picker.addListAction(button, at: index)
       if selected { picker.preferControllerControl(button) }
     }
-    scroll.documentView = list
-    picker.body.addSubview(scroll)
-    scroll.contentView.scroll(to: CGPoint(x: 0, y: max(0, list.bounds.height - scroll.contentSize.height)))
     return picker
   }
 
@@ -952,7 +956,7 @@ import NxlvKit
     experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     experiencePopUp?.needsDisplay = true
     GameAccessibility.interfaceSize = settings.interfaceSize
-    GameScreen.shared.reattach()
+    GameScreen.shared.reattach(relayout: true)
     onChange?(settings)
   }
   @objc private func interfaceSizeChanged(_ sender: NSPopUpButton) {
@@ -977,6 +981,7 @@ import NxlvKit
     applied.shuffleGraphics = settings.shuffleGraphics
     applied.shuffleMusic = settings.shuffleMusic
     applied.modernControlsEnabled = settings.modernControlsEnabled
+    applied.scrollWheelZoomEnabled = settings.scrollWheelZoomEnabled
     applied.counterStyle = settings.counterStyle
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
     applied.ridiculousSpeedEnabled = settings.ridiculousSpeedEnabled

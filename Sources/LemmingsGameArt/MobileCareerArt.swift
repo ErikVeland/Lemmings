@@ -199,7 +199,6 @@ public enum MobileCareerArt {
                                     campaign: ClassicAchievementProgress = .init(),
                                     insightsAvailable: Bool = true,
                                     selectablePlayers: [MobileProfile] = []) -> GameFrontEnd.Page {
-        // Profile owns everything personal: identity, records, awards, statistics and saves.
         var page = GameFrontEnd.Page(title: L10n.text("Profile"), subtitle: subtitle.isEmpty ? profileName : subtitle,
             rows: [.init("recordList", L10n.text("Records")),
                    .init("achievements", L10n.text("Achievements")),
@@ -209,6 +208,7 @@ public enum MobileCareerArt {
                    .init("playInsights", L10n.text("Play Insights"), enabled: insightsAvailable)],
             footer: [.init("home", L10n.text("Back"), backNavigation: true)])
         page.singleColumnRows = true
+        page.rowHeadings["players"] = L10n.text("All players")
         page.listTools = selectablePlayers.map { player in
             .init("progress.profile.\(player.id)", player.name, selected: player.id == profileID, portrait: player.portrait)
         }

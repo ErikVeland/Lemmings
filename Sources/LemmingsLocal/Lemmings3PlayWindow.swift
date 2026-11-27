@@ -483,7 +483,10 @@ import NxlvKit
         }
         keyboard.overlayControls = { [weak self] in self?.canvas.accessibilityChildren() ?? [] }
         keyboard.skillNames = { Array(Lemmings3Panel.canonicalNames.prefix(5)) }
-        keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space", retry: true, nuke: false) }
+        keyboard.engineCommands = { [weak self] in
+            GameplayKeyboard.playCommands(pauseKey: "Space", retry: true, nuke: false,
+                scrollWheelZoom: self?.audioSettings.scrollWheelZoomEnabled ?? true)
+        }
         keyboard.inspectionAvailable = { [weak self] in
             guard let self else { return false }
             return self.audioSettings.inspectWhilePaused && self.paused && !self.canvas.startCountdown.isActive && self.canvas.menuRows == nil
@@ -1028,6 +1031,7 @@ import NxlvKit
         if userPausedMusic && paused { updateUserMusicPause() }
         canvas.confinePointer = settings.confinePointer
         canvas.reduceMotion = settings.reduceMotion
+        canvas.scrollWheelZoomEnabled = settings.scrollWheelZoomEnabled
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
         canvas.fullScreenHDRFlashes = settings.cinematicExplosionsEnabled
@@ -1120,18 +1124,21 @@ import NxlvKit
         refresh()
     }
     @objc private func characterArtworkChanged() { canvas.refreshCharacterArtwork() }
-    static func savedCompletion(root: URL, journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
+    nonisolated static func savedCompletion(root: URL, progressData: [Int: Data],
+        journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
         Lemmings3ClassicCampaign.Tribe.allCases.reduce(0) { count, tribe in
-            guard var campaign = try? Lemmings3ClassicCampaign(root: root, tribe: tribe) else { return count }
-            let key = ArcadeStore.shared.progressKey("nativeL3\(tribe.title)Preview.v1." + storageIdentity(root))
-            if let data = UserDefaults.standard.data(forKey: key),
+            guard !Task.isCancelled,
+                var campaign = try? Lemmings3ClassicCampaign(root: root, tribe: tribe) else { return count }
+            if let data = progressData[tribe.rawValue],
                let saved = try? JSONDecoder().decode(Lemmings3ClassicCampaign.Progress.self, from: data) {
                 try? campaign.restore(saved)
             }
             return count + campaign.levels.indices.filter { index in
+                if campaign.completed[index] != nil { return true }
+                guard !journeyWins.isEmpty else { return false }
                 let fingerprint = SHA256.hash(data: campaign.levels[index].rawData)
                     .map { String(format: "%02x", $0) }.joined()
-                return campaign.completed[index] != nil || journeyWins.contains(.init(engine: .lemmings3,
+                return journeyWins.contains(.init(engine: .lemmings3,
                     packID: "chronicles-\(tribe.rawValue)", levelID: "\(index):\(fingerprint)"))
             }.count
         }
@@ -1951,7 +1958,9 @@ import NxlvKit
             let wasTribeCompleted = campaign.hasCompletedTribe
             if recordsCampaignProgress, campaign.record(game) {
                 save()
-                campaignFinished = Self.hasEarnedEnding(root: dataRoot)
+                if !wasFinished && !wasTribeCompleted && campaign.hasCompletedTribe {
+                    campaignFinished = Self.hasEarnedEnding(root: dataRoot)
+                }
                 playsEndingAfterThisResult = Lemmings3StoryFlow.playsEnding(
                     afterLevel: campaign.index, finalLevel: campaign.levels.count - 1,
                     survivors: game.survivors, wasTribeCompleted: wasTribeCompleted,
@@ -1969,7 +1978,10 @@ import NxlvKit
             .map { $0.accessibilityLabel + ". " + L10n.text("Hold full stop scrubs forward. Escape cancels.") } ?? ""
         canvas.rewindOriginTick = rewindOriginState?.tick
         canvas.rewindCurrentTick = game.tick
-        canvas.setAccessibilityLabel(L10n.text("\(Lemmings3Brand.current.displayName). \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(deathCounter.accessibility). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus.accessibility). Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish."))
+        let accessibility = audioSettings.scrollWheelZoomEnabled
+            ? L10n.text("\(Lemmings3Brand.current.displayName). \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(deathCounter.accessibility). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus.accessibility). Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish.")
+            : L10n.text("\(Lemmings3Brand.current.displayName). \(campaign.tribe.title) level \(campaign.index + 1). \(game.saved) saved, \(game.reserve) in reserve, \(game.remainingSeconds) seconds. \(deathCounter.accessibility). Selected \(Lemmings3Panel.names[selected]). \(message) \(canvas.precisionStatus.accessibility). Space pauses. F changes speed. Z switches Zoom on or off. Shift-Z superzooms. \(transport) Escape returns to the main menu. Double-click End Run to finish.")
+        canvas.setAccessibilityLabel(accessibility)
         let turn = ArcadeStore.shared.hotSeatIsActive ? ArcadeStore.shared.records.profile(arcadeProfileID) : nil
         canvas.turnBadge.show(initials: turn?.initials, portrait: turn.flatMap { ArcadeWindow.shared.arcadeView.portraitImage($0.portrait) })
         canvas.speedMultiplier = speedControl.multiplier
@@ -2332,6 +2344,7 @@ import NxlvKit
 
     private var precisionLens = AnimatedPrecisionZoomLens()
     private var precisionScroll = PrecisionZoomScrollGesture()
+    var scrollWheelZoomEnabled = true
     private let precisionZoomAnimation = PrecisionZoomAnimation()
     var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
     var rewardBadgeRect: CGRect {
@@ -3079,7 +3092,7 @@ import NxlvKit
         guard menuRows == nil, directionPoint == nil else { return }
         let point = convert(event.locationInWindow, from: nil)
         if playfieldRect.contains(point), game?.isComplete == false {
-            switch precisionScroll.handle(event) {
+            switch precisionScroll.handle(event, zoomEnabled: scrollWheelZoomEnabled) {
             case .zoom(let action): onPrecisionScroll?(action, point); return
             case .consumed: return
             case .pan: break
