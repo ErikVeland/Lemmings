@@ -203,6 +203,7 @@
 "All hints revealed" = "Alle hint er vist";
 "All levels" = "Alle brett";
 "All music chosen" = "All musikk valgt";
+"All players" = "Alle spillere";
 "All players · Solo · Hot Seat" = "Alle spillere · Solo · Hot Seat";
 "All soundtracks installed" = "Alle lydspor installert";
 "All that remains is" = "Alt som gjenstår er";
@@ -935,9 +936,9 @@
 "Faster" = "Raskere";
 "Fastest 100%" = "Raskeste 100%";
 "Fastest clear" = "Raskeste fullføring";
-"Favor blockers for bombs" = "Foretrekk blokkere for bomber";
-"Favor lemmings still approaching" = "Prioriter lemminger som fortsatt nærmer seg";
 "Favour active skilled lemmings" = "Foretrekk lemminger som bruker ferdigheter";
+"Favour blockers for bombs" = "Prioriter blokkere for bomber";
+"Favour lemmings still approaching" = "Prioriter lemen som fortsatt nærmer seg";
 "Favourite" = "Favoritt";
 "Favourite not saved" = "Favoritten ble ikke lagret";
 "Favourites" = "Favoritter";
@@ -1124,7 +1125,6 @@
 "Hold to edit player" = "Hold inne for å redigere spilleren";
 "Hold: fixed fast-forward" = "Hold inne: fast hastighet";
 "Hold: ramp up; release: previous speed" = "Hold inne: øk gradvis; slipp: forrige hastighet";
-"Holiday" = "Holiday";
 "Holiday 1993" = "Jul 1993";
 "Holiday 1994" = "Jul 1994";
 "Holiday Lemmings" = "Holiday Lemmings";
@@ -1878,10 +1878,8 @@
 "Oh Dear. You seem to have made this tribe extinct!" = "Å nei. Det ser ut til at du har utryddet denne stammen!";
 "Oh My! ALL Lemmings!" = "Oi! ALLE LEMMINGER!";
 "Oh My! All Lemmings!" = "Oi! Alle lemmingene!";
-"Oh No!" = "Oh No!";
 "Oh No! More Lemmings" = "Oh No! More Lemmings";
 "Oh No! No More" = "Å nei! Ikke flere";
-"Oh Yes!" = "Oh Yes!";
 "Oh Yes! More Lemmings" = "Å ja! Flere lemminger";
 "Oh Yes! More Lemmings!" = "Å ja! Flere lemminger!";
 "Oh dear!" = "Å nei!";
@@ -2499,6 +2497,7 @@
 "Scores shared. Some replays remain local." = "Resultater deles. Noen repriser forblir lokale.";
 "Screen" = "Skjerm";
 "Scroll up / down" = "Rull opp / ned";
+"Scroll wheel zoom" = "Zoom med musehjulet";
 "Scrub backward" = "Spol bakover";
 "Scrub forward after rewind" = "Spol fram etter tilbakespoling";
 "Search" = "Søk";
@@ -3589,6 +3588,7 @@
 "{0}. Select the play style for an explanation. Escape returns." = "{0}. Velg spillestilen for en forklaring. Escape går tilbake.";
 "{0}. Show update and release notes" = "{0}. Vis oppdatering og versjonsnotater";
 "{0}. {1} level {2}. {3} saved, {4} in reserve, {5} seconds. {6}. Selected {7}. {8} {9}. Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. {10} Escape returns to the main menu. Double-click End Run to finish." = "{0}. {1} brett {2}. {3} reddet, {4} i reserve, {5} sekunder. {6}. Valgt {7}. {8} {9}. Mellomrom setter på pause. F endrer farten. Z eller rull opp zoomer inn. Rull ned slår av Zoom. Shift-Z superzoomer. {10} Escape går tilbake til hovedmenyen. Dobbeltklikk Avslutt forsøk for å fullføre.";
+"{0}. {1} level {2}. {3} saved, {4} in reserve, {5} seconds. {6}. Selected {7}. {8} {9}. Space pauses. F changes speed. Z switches Zoom on or off. Shift-Z superzooms. {10} Escape returns to the main menu. Double-click End Run to finish." = "{0}. {1}, brett {2}. {3} reddet, {4} i reserve, {5} sekunder. {6}. Valgt: {7}. {8} {9}. Mellomrom setter spillet på pause. F endrer farten. Z slår zoom av eller på. Shift-Z slår på superzoom. {10} Esc går tilbake til hovedmenyen. Dobbeltklikk på Avslutt forsøk for å avslutte.";
 "{0}. {1}. Rewinds: {2}. W switches the rewind filter. {3} local records. Escape returns. A opens achievements. D opens run details." = "{0}. {1}. Tilbakespolinger: {2}. W bytter tilbakespolingsfilter. {3} lokale rekorder. Escape går tilbake. A åpner prestasjoner. D åpner forsøksdetaljer.";
 "{0}. {1}. {2}. {3} rescued, {4} required. {5}." = "{0}. {1}. {2}. {3} reddet, {4} påkrevd. {5}.";
 "{0}/3 this run   -   {1}/3 personal best" = "{0}/3 i dette forsøket   –   {1}/3 personlig rekord";

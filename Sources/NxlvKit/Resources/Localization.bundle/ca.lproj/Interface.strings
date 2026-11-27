@@ -203,6 +203,7 @@
 "All hints revealed" = "Ja s’han mostrat totes les pistes";
 "All levels" = "Tots els nivells";
 "All music chosen" = "Ja s’ha triat tota la música";
+"All players" = "Tots els jugadors";
 "All players · Solo · Hot Seat" = "Tots els jugadors · En solitari · Torns locals";
 "All soundtracks installed" = "Totes les bandes sonores estan instal·lades";
 "All that remains is" = "Només queda";
@@ -935,9 +936,9 @@
 "Faster" = "Més ràpid";
 "Fastest 100%" = "100% més ràpid";
 "Fastest clear" = "Nivell superat més de pressa";
-"Favor blockers for bombs" = "Prioritza els bloquejadors per a les bombes";
-"Favor lemmings still approaching" = "Prioritza els lemmings que encara s’acosten";
 "Favour active skilled lemmings" = "Prioritza els lemmings hàbils actius";
+"Favour blockers for bombs" = "Prioritza els bloquejadors per posar-hi bombes";
+"Favour lemmings still approaching" = "Prioritza els lemmings que encara s’acosten";
 "Favourite" = "Preferit";
 "Favourite not saved" = "No s’ha desat el preferit";
 "Favourites" = "Preferits";
@@ -1124,7 +1125,6 @@
 "Hold to edit player" = "Mantén premut per editar el jugador";
 "Hold: fixed fast-forward" = "Mantén premut: avanç ràpid fix";
 "Hold: ramp up; release: previous speed" = "Mantén premut: accelera; deixa anar: velocitat anterior";
-"Holiday" = "Holiday";
 "Holiday 1993" = "Festes de 1993";
 "Holiday 1994" = "Festes de 1994";
 "Holiday Lemmings" = "Holiday Lemmings";
@@ -1878,10 +1878,8 @@
 "Oh Dear. You seem to have made this tribe extinct!" = "Ai, las! Sembla que has fet desaparèixer tota la tribu!";
 "Oh My! ALL Lemmings!" = "Oh My! ALL Lemmings!";
 "Oh My! All Lemmings!" = "Oh My! All Lemmings!";
-"Oh No!" = "Oh No!";
 "Oh No! More Lemmings" = "Oh No! More Lemmings";
 "Oh No! No More" = "Oh no! Prou!";
-"Oh Yes!" = "Oh Yes!";
 "Oh Yes! More Lemmings" = "Oh Yes! More Lemmings";
 "Oh Yes! More Lemmings!" = "Oh Yes! More Lemmings!";
 "Oh dear!" = "Ai, mare!";
@@ -2499,6 +2497,7 @@
 "Scores shared. Some replays remain local." = "Puntuacions compartides. Algunes repeticions es mantenen en local.";
 "Screen" = "Pantalla";
 "Scroll up / down" = "Desplaça cap amunt / avall";
+"Scroll wheel zoom" = "Ampliació amb la roda";
 "Scrub backward" = "Mou enrere el cursor de temps";
 "Scrub forward after rewind" = "Mou endavant el cursor de temps després de rebobinar";
 "Search" = "Cerca";
@@ -3589,6 +3588,7 @@
 "{0}. Select the play style for an explanation. Escape returns." = "{0}. Selecciona l’estil de joc per veure’n l’explicació. Esc torna enrere.";
 "{0}. Show update and release notes" = "{0}. Mostra l’actualització i les notes de la versió";
 "{0}. {1} level {2}. {3} saved, {4} in reserve, {5} seconds. {6}. Selected {7}. {8} {9}. Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. {10} Escape returns to the main menu. Double-click End Run to finish." = "{0}. {1} nivell {2}. {3} rescatats, {4} en reserva, {5} segons. {6}. Selecció: {7}. {8} {9}. Espai posa el joc en pausa. F canvia la velocitat. Z o la roda cap amunt amplia la vista. La roda cap avall desactiva l’ampliació. Majúscules+Z activa la superampliació. {10} Esc torna al menú principal. Fes doble clic a Acaba la partida per acabar.";
+"{0}. {1} level {2}. {3} saved, {4} in reserve, {5} seconds. {6}. Selected {7}. {8} {9}. Space pauses. F changes speed. Z switches Zoom on or off. Shift-Z superzooms. {10} Escape returns to the main menu. Double-click End Run to finish." = "{0}. {1} nivell {2}. {3} rescatats, {4} en reserva, {5} segons. {6}. Selecció: {7}. {8} {9}. Espai posa el joc en pausa. F canvia la velocitat. Z activa o desactiva l’ampliació. Majúscules+Z activa la superampliació. {10} Esc torna al menú principal. Fes doble clic a Acaba la partida per acabar.";
 "{0}. {1}. Rewinds: {2}. W switches the rewind filter. {3} local records. Escape returns. A opens achievements. D opens run details." = "{0}. {1}. Rebobinats: {2}. W canvia el filtre de rebobinat. {3} rècords locals. Esc torna enrere. A obre els assoliments. D obre els detalls de la partida.";
 "{0}. {1}. {2}. {3} rescued, {4} required. {5}." = "{0}. {1}. {2}. {3} rescatats, {4} necessaris. {5}.";
 "{0}/3 this run   -   {1}/3 personal best" = "{0}/3 en aquesta partida   -   {1}/3 de rècord personal";

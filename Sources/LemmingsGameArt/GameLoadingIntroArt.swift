@@ -3,6 +3,7 @@ import Foundation
 
 public enum GameLoadingIntroArt {
     public static let visualDelay: UInt64 = 550_000_000
+    public static let musicDelay: UInt64 = 850_000_000
     public static func frameElapsed(_ elapsed: TimeInterval, reduceMotion: Bool, reduceFlashes: Bool) -> TimeInterval {
         reduceMotion || reduceFlashes ? 0 : elapsed
     }

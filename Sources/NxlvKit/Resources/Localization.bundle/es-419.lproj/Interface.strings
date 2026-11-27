@@ -203,6 +203,7 @@
 "All hints revealed" = "Se han mostrado todas las pistas";
 "All levels" = "Todos los niveles";
 "All music chosen" = "Seleccionada toda la música";
+"All players" = "Todos los jugadores";
 "All players · Solo · Hot Seat" = "Todos los jugadores · Individual · Turnos compartidos";
 "All soundtracks installed" = "Todas las bandas sonoras están instaladas";
 "All that remains is" = "Y solo queda";
@@ -935,9 +936,9 @@
 "Faster" = "Más rápido";
 "Fastest 100%" = "100 % más rápido";
 "Fastest clear" = "Victoria más rápida";
-"Favor blockers for bombs" = "Priorizar bloqueadores para las bombas";
-"Favor lemmings still approaching" = "Priorizar a los lemmings que aún se acercan";
 "Favour active skilled lemmings" = "Preferir lemmings que usan habilidades";
+"Favour blockers for bombs" = "Priorizar bloqueadores para bombas";
+"Favour lemmings still approaching" = "Priorizar los lemmings que se acercan";
 "Favourite" = "Favorito";
 "Favourite not saved" = "No se guardó el favorito";
 "Favourites" = "Favoritos";
@@ -1124,7 +1125,6 @@
 "Hold to edit player" = "Mantén pulsado para editar al jugador";
 "Hold: fixed fast-forward" = "Mantener: avance rápido fijo";
 "Hold: ramp up; release: previous speed" = "Mantener: acelerar gradualmente; soltar: volver a la velocidad anterior";
-"Holiday" = "Holiday";
 "Holiday 1993" = "Navidad de 1993";
 "Holiday 1994" = "Navidad de 1994";
 "Holiday Lemmings" = "Holiday Lemmings";
@@ -1878,10 +1878,8 @@
 "Oh Dear. You seem to have made this tribe extinct!" = "¡Vaya! ¡Parece que has extinguido esta tribu!";
 "Oh My! ALL Lemmings!" = "¡Vaya! ¡Todos los lemmings!";
 "Oh My! All Lemmings!" = "¡Vaya! ¡Todos los lemmings!";
-"Oh No!" = "Oh No!";
 "Oh No! More Lemmings" = "Oh No! More Lemmings";
 "Oh No! No More" = "¡Oh no! No hay más";
-"Oh Yes!" = "Oh Yes!";
 "Oh Yes! More Lemmings" = "Oh Yes! More Lemmings";
 "Oh Yes! More Lemmings!" = "Oh Yes! More Lemmings!";
 "Oh dear!" = "¡Vaya!";
@@ -2499,6 +2497,7 @@
 "Scores shared. Some replays remain local." = "Puntuaciones compartidas. Algunas repeticiones permanecen locales.";
 "Screen" = "Pantalla";
 "Scroll up / down" = "Desplazarse arriba / abajo";
+"Scroll wheel zoom" = "Zoom con la rueda del ratón";
 "Scrub backward" = "Retroceder por la línea de tiempo";
 "Scrub forward after rewind" = "Avanzar por la línea de tiempo después de rebobinar";
 "Search" = "Buscar";
@@ -3589,6 +3588,7 @@
 "{0}. Select the play style for an explanation. Escape returns." = "{0}. Selecciona el estilo de juego para ver una explicación. Escape vuelve.";
 "{0}. Show update and release notes" = "{0}. Mostrar actualización y notas de la versión";
 "{0}. {1} level {2}. {3} saved, {4} in reserve, {5} seconds. {6}. Selected {7}. {8} {9}. Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. {10} Escape returns to the main menu. Double-click End Run to finish." = "{0}. Nivel {1}, {2}. {3} rescatados, {4} en reserva, {5} segundos. {6}. Seleccionado: {7}. {8} {9}. Espacio pausa. F cambia la velocidad. Z o desplazar hacia arriba acerca la imagen. Desplazar hacia abajo desactiva Zoom. Shift-Z activa Superzoom. {10} Escape vuelve al menú principal. Haz doble clic en Terminar partida para finalizar.";
+"{0}. {1} level {2}. {3} saved, {4} in reserve, {5} seconds. {6}. Selected {7}. {8} {9}. Space pauses. F changes speed. Z switches Zoom on or off. Shift-Z superzooms. {10} Escape returns to the main menu. Double-click End Run to finish." = "{0}. {1}, nivel {2}. {3} rescatados, {4} en reserva, {5} segundos. {6}. Selección: {7}. {8} {9}. Espacio pausa. F cambia la velocidad. Z activa o desactiva el zoom. Mayús-Z activa el superzoom. {10} Esc vuelve al menú principal. Haz doble clic en Terminar partida para finalizar.";
 "{0}. {1}. Rewinds: {2}. W switches the rewind filter. {3} local records. Escape returns. A opens achievements. D opens run details." = "{0}. {1}. Rebobinados: {2}. W cambia el filtro de rebobinado. {3} récords locales. Escape vuelve. A abre los logros. D abre los detalles de la partida.";
 "{0}. {1}. {2}. {3} rescued, {4} required. {5}." = "{0}. {1}. {2}. {3} rescatados, {4} necesarios. {5}.";
 "{0}/3 this run   -   {1}/3 personal best" = "{0}/3 en esta partida   -   {1}/3 mejor marca personal";

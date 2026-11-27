@@ -203,6 +203,7 @@
 "All hints revealed" = "Alle Hinweise aufgedeckt";
 "All levels" = "Alle Level";
 "All music chosen" = "Gesamte Musik ausgewählt";
+"All players" = "Alle Spieler";
 "All players · Solo · Hot Seat" = "Alle Spieler · Solo · Hot Seat";
 "All soundtracks installed" = "Alle Soundtracks installiert";
 "All that remains is" = "Alles, was bleibt, ist";
@@ -935,9 +936,9 @@
 "Faster" = "Schneller";
 "Fastest 100%" = "Schnellste 100 %";
 "Fastest clear" = "Schnellster Abschluss";
-"Favor blockers for bombs" = "Blocker für Bomben bevorzugen";
-"Favor lemmings still approaching" = "Lemmings bevorzugen, die noch näher kommen";
 "Favour active skilled lemmings" = "Aktive Lemminge mit Fertigkeit bevorzugen";
+"Favour blockers for bombs" = "Blockierer für Bomben bevorzugen";
+"Favour lemmings still approaching" = "Sich nähernde Lemminge bevorzugen";
 "Favourite" = "Favorit";
 "Favourite not saved" = "Favorit nicht gespeichert";
 "Favourites" = "Favoriten";
@@ -1124,7 +1125,6 @@
 "Hold to edit player" = "Zum Bearbeiten des Spielers halten";
 "Hold: fixed fast-forward" = "Halten: festes Vorspulen";
 "Hold: ramp up; release: previous speed" = "Halten: beschleunigen; loslassen: vorheriges Tempo";
-"Holiday" = "Holiday";
 "Holiday 1993" = "Holiday 1993";
 "Holiday 1994" = "Holiday 1994";
 "Holiday Lemmings" = "Holiday Lemmings";
@@ -1878,10 +1878,8 @@
 "Oh Dear. You seem to have made this tribe extinct!" = "Oh je. Du hast diesen Stamm wohl aussterben lassen!";
 "Oh My! ALL Lemmings!" = "Oh nein! ALLE LEMMINGE!";
 "Oh My! All Lemmings!" = "Oh nein! Alle Lemminge!";
-"Oh No!" = "Oh No!";
 "Oh No! More Lemmings" = "Oh No! More Lemmings";
 "Oh No! No More" = "Oh No! No More";
-"Oh Yes!" = "Oh Yes!";
 "Oh Yes! More Lemmings" = "Oh Yes! More Lemmings";
 "Oh Yes! More Lemmings!" = "Oh Yes! More Lemmings!";
 "Oh dear!" = "Ach, schade!";
@@ -2499,6 +2497,7 @@
 "Scores shared. Some replays remain local." = "Punktzahlen geteilt. Einige Wiederholungen bleiben lokal.";
 "Screen" = "Bildschirm";
 "Scroll up / down" = "Nach oben / unten scrollen";
+"Scroll wheel zoom" = "Zoom per Mausrad";
 "Scrub backward" = "Rückwärts blättern";
 "Scrub forward after rewind" = "Nach dem Zurückspulen vorwärts blättern";
 "Search" = "Suchen";
@@ -3589,6 +3588,7 @@
 "{0}. Select the play style for an explanation. Escape returns." = "{0}. Wähle den Spielstil aus, um eine Erklärung zu erhalten. Escape führt zurück.";
 "{0}. Show update and release notes" = "{0}. Update und Versionshinweise anzeigen";
 "{0}. {1} level {2}. {3} saved, {4} in reserve, {5} seconds. {6}. Selected {7}. {8} {9}. Space pauses. F changes speed. Z or scroll up zooms. Scroll down switches Zoom off. Shift-Z superzooms. {10} Escape returns to the main menu. Double-click End Run to finish." = "{0}. {1} Level {2}. {3} gerettet, {4} in Reserve, {5} Sekunden. {6}. Ausgewählt: {7}. {8} {9}. Leertaste pausiert. F ändert das Tempo. Z oder Scrollen nach oben zoomt heran. Scrollen nach unten schaltet Zoom aus. Umschalt-Z aktiviert Superzoom. {10} Escape kehrt zum Hauptmenü zurück. Doppelklicke auf „Lauf beenden“, um abzuschließen.";
+"{0}. {1} level {2}. {3} saved, {4} in reserve, {5} seconds. {6}. Selected {7}. {8} {9}. Space pauses. F changes speed. Z switches Zoom on or off. Shift-Z superzooms. {10} Escape returns to the main menu. Double-click End Run to finish." = "{0}. {1}, Level {2}. {3} gerettet, {4} in Reserve, {5} Sekunden. {6}. Ausgewählt: {7}. {8} {9}. Leertaste pausiert. F ändert das Tempo. Z schaltet den Zoom um. Umschalt-Z aktiviert den Superzoom. {10} Esc führt zum Hauptmenü zurück. Doppelklicke zum Abschluss auf Versuch beenden.";
 "{0}. {1}. Rewinds: {2}. W switches the rewind filter. {3} local records. Escape returns. A opens achievements. D opens run details." = "{0}. {1}. Zurückspulvorgänge: {2}. W wechselt den Zurückspulfilter. {3} lokale Rekorde. Escape geht zurück. A öffnet Erfolge. D öffnet Laufdetails.";
 "{0}. {1}. {2}. {3} rescued, {4} required. {5}." = "{0}. {1}. {2}. {3} gerettet, {4} erforderlich. {5}.";
 "{0}/3 this run   -   {1}/3 personal best" = "{0}/3 in diesem Lauf   –   {1}/3 persönlicher Bestwert";
