@@ -331,6 +331,7 @@
 "Before move {0}: {1}." = "Vor Zug {0}: {1}.";
 "Begin level" = "Level starten";
 "Beginner" = "Anfänger";
+"Below Street Level" = "Unter der Straße";
 "Best known" = "Bester bekannter Wert";
 "Best known is {0}. Can you improve it?" = "Der beste bekannte Wert ist {0}. Kannst du ihn übertreffen?";
 "Best possible" = "Bestmöglich";
@@ -964,6 +965,7 @@
 "Finish one below a verified maximum." = "Beende ein Level mit einem Ergebnis, das eins unter dem nachgewiesenen Maximum liegt.";
 "Finish run" = "Lauf abschließen";
 "Finished {0} from {1}." = "{0} von {1} abgeschlossen.";
+"First Shift" = "Erste Schicht";
 "First clear of this level. Rescued {0}; target {1}." = "Erster Abschluss dieses Levels. Gerettet: {0}; Ziel: {1}.";
 "First names, separated by commas" = "Vornamen, durch Kommas getrennt";
 "Fix records" = "Rekorde reparieren";
@@ -1127,6 +1129,7 @@
 "Hold: ramp up; release: previous speed" = "Halten: beschleunigen; loslassen: vorheriges Tempo";
 "Holiday 1993" = "Holiday 1993";
 "Holiday 1994" = "Holiday 1994";
+"Holiday Fun" = "Feiertagsspaß";
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
@@ -1907,6 +1910,7 @@
 "Open Game Center from the game window to sign in." = "Öffne Game Center im Spielfenster, um dich anzumelden.";
 "Open Level File…" = "Leveldatei öffnen …";
 "Open Replay Movie…" = "Replayfilm öffnen…";
+"Open Starter" = "Starter-Sammlung öffnen";
 "Open in Stacked pose when idle" = "Bei Inaktivität in gestapelter Position öffnen";
 "Open this address on another device:" = "Öffne diese Adresse auf einem anderen Gerät:";
 "Open this level with its original game data to watch the action replay." = "Öffne dieses Level mit seinen Originalspieldaten, um die Aktionswiedergabe anzusehen.";
@@ -2018,6 +2022,7 @@
 "Paused." = "Pausiert.";
 "Paused: {0}" = "Pausiert: {0}";
 "Perfectly adequate" = "Völlig ausreichend";
+"Permit to Build" = "Baugenehmigung";
 "Personal best" = "Persönlicher Bestwert";
 "Peter Singer argues for reducing suffering and using evidence to find where our resources can do the most good." = "Peter Singer plädiert dafür, Leid zu verringern und anhand von Belegen herauszufinden, wo unsere Mittel am meisten bewirken.";
 "Phil Snape" = "Phil Snape";
@@ -2074,7 +2079,6 @@
 "Playlist unavailable" = "Playlist nicht verfügbar";
 "Playlist {0}" = "Wiedergabeliste {0}";
 "Playlists" = "Playlists";
-"Playlists  {0}" = "Playlists  {0}";
 "Playlists changed in another app. Close and reopen this app." = "Playlists wurden in einer anderen App geändert. Schließe diese App und öffne sie erneut.";
 "Playlists need a different app version. Existing files were preserved." = "Playlists benötigen eine andere App-Version. Vorhandene Dateien wurden beibehalten.";
 "Playlists unavailable" = "Playlists nicht verfügbar";
@@ -2479,7 +2483,6 @@
 "Saved attempt identities conflict." = "Kennungen gespeicherter Versuche stehen im Konflikt.";
 "Saved data could not be opened" = "Gespeicherte Daten konnten nicht geöffnet werden";
 "Saved extra-skill uses conflict." = "Saved extra-skill uses conflict.";
-"Saved level sequences" = "Gespeicherte Levelabfolgen";
 "Saved list · Offline" = "Saved list · Offline";
 "Saved on this device" = "Auf diesem Gerät gespeichert";
 "Saved result identities conflict." = "Kennungen gespeicherter Ergebnisse stehen im Konflikt.";
@@ -2671,6 +2674,8 @@
 "Start with these players. Your current Hot Seat will stay saved." = "Mit diesen Spielern starten. Dein aktuelles Hot Seat bleibt gespeichert.";
 "Start {0}" = "{0} starten";
 "Started: {0}" = "Gestartet: {0}";
+"Starter collection" = "Starter-Sammlung";
+"Starter collections" = "Starter-Sammlungen";
 "Starting" = "Wird gestartet";
 "Starting transfer" = "Übertragung wird gestartet";
 "Static home screen" = "Statischer Startbildschirm";
@@ -2851,6 +2856,7 @@
 "The Prophesied PC Games Programmers" = "Die prophezeiten PC-Spieleprogrammierer";
 "The Pyrrhic Victor" = "Der Pyrrhussieger";
 "The Stomper terrain mask is required." = "Die Geländemaske für den Stampfer wird benötigt.";
+"The Tame Shift" = "Die ruhige Schicht";
 "The Tribes" = "The Tribes";
 "The Tribes - {0}" = "The Tribes – {0}";
 "The Tribes opening" = "Einstieg in The Tribes";
@@ -3161,6 +3167,8 @@
 "Time remaining" = "Verbleibende Zeit";
 "Time {0}:{1}" = "Zeit {0}:{1}";
 "Timing probes: {0}. Untested alternatives remain unknown." = "Zeitmessproben: {0}. Ungeprüfte Alternativen bleiben unbekannt.";
+"Tiny journey" = "Kleine Reise";
+"Tiny journeys" = "Kleine Reisen";
 "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "Um diese Spieldaten herunterzuladen, benötigst du eine gültige Lizenz für das Originalspiel „Lemmings“ auf mindestens einer Plattform. Mit „{0}“ bestätigst du, dass du diese Lizenz besitzt.";
 "Toggle enhanced artwork" = "Erweiterte Grafik umschalten";
 "Toggle fast-forward" = "Vorspulen umschalten";
@@ -3396,6 +3404,7 @@
 "Your first rescue starts the story." = "Deine erste Rettung beginnt die Geschichte.";
 "Your game" = "Dein Spiel";
 "Your initials, scores and replays can appear on public leaderboards." = "Deine Initialen, Punkte und Wiederholungen können in öffentlichen Ranglisten erscheinen.";
+"Your playlists" = "Deine Spiellisten";
 "Your rank: #{0} of {1} - {2}" = "Dein Rang: #{0} von {1} – {2}";
 "Your rescue story" = "Deine Rettungsgeschichte";
 "Your rescues add to the worldwide total." = "Deine Rettungen zählen weltweit mit.";

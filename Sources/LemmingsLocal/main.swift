@@ -3315,13 +3315,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
           }
           if source.isVerified {
             let alias = ClassicSourceIdentity.canonicalAlias(for: source.dataSet, directory: source.directory)
+            let canonicalPackID = GameStarterContent.isStarter(directory: source.directory)
+              ? StarterPlaylistCatalogue.authoredPackID : alias?.packID
             return LevelBrowserClassicSource(
               dataSet: source.dataSet,
               directory: source.directory,
-              sourceFingerprint: GameAssetCache<String>.bundledKey(source.directory) == nil && alias == nil ? before : nil,
+              sourceFingerprint: GameAssetCache<String>.bundledKey(source.directory) == nil && canonicalPackID == nil ? before : nil,
               sourceRevision: before,
               isVerified: true,
-              canonicalPackID: alias?.packID)
+              canonicalPackID: canonicalPackID)
           }
           guard
                 let dataSet = try? ClassicDataSet.detect(directory: source.directory),
@@ -4227,11 +4229,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   private func presentLevelCollections() {
     let page = GameMenuPage(title: L10n.text("Collections"), subtitle: ArcadeStore.shared.playingProfile?.initials ?? "")
-    let favourite = page.addListAction(L10n.text("Favourites"), at: 0) { [weak self] in self?.openLevelCollection(recent: false) }
-    page.addListAction(L10n.text("Recently Played"), at: 1) { [weak self] in self?.openLevelCollection(recent: true) }
-    page.addListAction(L10n.text("Playlists"), at: 2) { [weak self] in self?.openLevelBrowser(family: nil, showsPlaylists: true) }
+    let playlists = page.addListAction(L10n.text("Playlists"), at: 0) { [weak self] in self?.openLevelBrowser(family: nil, showsPlaylists: true) }
+    page.addListAction(L10n.text("Favourites"), at: 1) { [weak self] in self?.openLevelCollection(recent: false) }
+    page.addListAction(L10n.text("Recently Played"), at: 2) { [weak self] in self?.openLevelCollection(recent: true) }
     page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
-    GameScreen.shared.present(page, owner: window, focus: favourite)
+    GameScreen.shared.present(page, owner: window, focus: playlists)
   }
 
   private func openLevelCollection(recent: Bool) {
@@ -4367,7 +4369,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
     let store: LevelPlaylistStore
     if let cached = playlistStoreCache, cached.profileID == profileID { store = cached.store }
     else {
-      store = try LevelPlaylistStore(profileID: profileID, won: learningWins(profileID: profileID))
+      let recoverySeats = ArcadeStore.shared.libraryHotSeats.filter { seat in
+        seat.host == profileID && seat.players.count >= 2
+          && Set(seat.players).count == seat.players.count
+          && seat.players.contains(seat.host)
+          && seat.players.allSatisfy { ArcadeStore.shared.records.profile($0) != nil }
+          && (seat.turn.map { seat.players.contains($0) } ?? true)
+      }
+      store = try LevelPlaylistStore(profileID: profileID, recoveryHotSeatIDs: recoverySeats.map(\.id),
+        won: learningWins(profileID: profileID))
       playlistStoreCache = (profileID, store)
     }
     store.onChange = nil
@@ -4377,8 +4387,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       for sessionID in sessions {
         try store.mergeLearningProgress(GameProgressPreferences.learning(profileID: profileID, sessionID: sessionID), hotSeatID: sessionID)
         if let snapshot = GameProgressPreferences.journeySession(profileID: profileID, sessionID: sessionID) {
-          importedJourney = importedJourney || snapshot.updatedAt > (store.journeySessions[sessionID ?? "solo"]?.updatedAt ?? .distantPast)
-          try store.importJourneySession(snapshot, hotSeatID: sessionID)
+          let imported = try store.importJourneySession(snapshot, hotSeatID: sessionID)
+          importedJourney = importedJourney || imported
         }
       }
       if importedJourney, let journey = LearningJourneyLibrary.journey {
@@ -4558,7 +4568,11 @@ let achievementProgressKey = "ClassicAchievementProgress"
     do {
       let store = try playlistStore()
       var playlist: LevelPlaylist
-      if let selected = store.selectedPlaylist() {
+      let starterIDs = Set(StarterPlaylistCatalogue.routes.map(\.id))
+      let selected = store.selectedPlaylist().flatMap { current in
+        starterIDs.contains(current.id) ? store.playlists.last { !starterIDs.contains($0.id) } : current
+      }
+      if let selected {
         playlist = selected
       } else {
         playlist = try LevelPlaylist(name: nextPlaylistName(prefix: L10n.text("Playlist"), store: store))
@@ -4572,6 +4586,14 @@ let achievementProgressKey = "ClassicAchievementProgress"
       GameScreen.shared.message(L10n.text("Already in playlist"), detail: L10n.text("Choose another level or open Playlists to change the order."))
     } catch {
       GameScreen.shared.message(L10n.text("Playlist not saved"), detail: error.localizedDescription)
+    }
+  }
+
+  private func starterPlaylist(_ route: StarterPlaylistRoute) -> LevelPlaylist? {
+    route.playlist { identity in
+      guard let level = levelCatalogue.resolve(identity), level.status == .complete,
+            liveLevelAvailability(level) != .unavailable else { return nil }
+      return try? collectionEntry(for: identity)
     }
   }
 
@@ -4596,7 +4618,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       GameScreen.shared.message(L10n.text("Playlists unavailable"), detail: error.localizedDescription)
       return
     }
-    let page = GameMenuPage(title: L10n.text("Playlists"), subtitle: L10n.text("Saved level sequences"))
+    let page = GameMenuPage(title: L10n.text("Playlists"))
     page.addSecondaryAction(L10n.text("Collections")) { [weak self] in self?.presentLevelCollections() }
     let carousel = LevelCoverFlowView(frame: page.body.bounds)
     carousel.autoresizingMask = [.width, .height]
@@ -4638,6 +4660,16 @@ let achievementProgressKey = "ClassicAchievementProgress"
         detail: L10n.text("Level \(saved.run.currentIndex + 1) of \(saved.run.entries.count)"),
         artworkKey: levelPreviewRequests[saved.run.currentEntry.identity]?.artworkKey)
     }
+    let starters = StarterPlaylistCatalogue.routes
+    for route in starters {
+      guard let playlist = starterPlaylist(route) else { continue }
+      items.append(LevelCoverFlowItem(
+        id: "playlist:starter:" + route.id.uuidString,
+        title: route.title,
+        subtitle: route.kind == .collection ? L10n.text("Starter collection") : L10n.text("Tiny journey"),
+        detail: L10n.plural("count.levels", count: playlist.entries.count, one: "%ld level", other: "%ld levels"),
+        artworkKey: playlist.entries.first.flatMap { levelPreviewRequests[$0.identity]?.artworkKey }))
+    }
     items.append(LevelCoverFlowItem(
       id: "playlist:short-games",
       title: L10n.text("Short games"),
@@ -4665,7 +4697,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
       subtitle: L10n.text("Eligible fan levels"),
       detail: L10n.text("No repeats"),
       isAvailable: !levelBrowserFanPacks.isEmpty))
-    items += store.playlists.map { playlist in
+    let starterIDs = Set(starters.map(\.id))
+    items += store.playlists.filter { !starterIDs.contains($0.id) }.map { playlist in
       LevelCoverFlowItem(
         id: "playlist:saved:\(playlist.id.uuidString)",
         title: playlist.name,
@@ -4719,6 +4752,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
         self?.startActiveSequence()
       }
     default:
+      let starterPrefix = "playlist:starter:"
+      if id.hasPrefix(starterPrefix), let playlistID = UUID(uuidString: String(id.dropFirst(starterPrefix.count))),
+         let route = StarterPlaylistCatalogue.routes.first(where: { $0.id == playlistID }),
+         let playlist = starterPlaylist(route) {
+        presentStarterPlaylist(route, playlist: playlist)
+        return
+      }
       let resumePrefix = "playlist:resume:"
       if id.hasPrefix(resumePrefix), let runID = UUID(uuidString: String(id.dropFirst(resumePrefix.count))),
          let store = try? playlistStore(), let saved = store.savedRuns.first(where: { $0.run.id == runID }) {
@@ -4738,6 +4778,38 @@ let achievementProgressKey = "ClassicAchievementProgress"
       } catch {
         GameScreen.shared.message(L10n.text("Playlist not opened"), detail: error.localizedDescription)
       }
+    }
+  }
+
+  private func presentStarterPlaylist(_ route: StarterPlaylistRoute, playlist: LevelPlaylist) {
+    let page = GameMenuPage(title: playlist.name,
+      subtitle: L10n.plural("count.levels", count: playlist.entries.count, one: "%ld level", other: "%ld levels"))
+    let carousel = LevelCoverFlowView(frame: page.body.bounds)
+    carousel.autoresizingMask = [.width, .height]
+    page.body.addSubview(carousel)
+    let play = page.addPrimaryAction(L10n.text("Play")) { [weak self] in
+      self?.startStarterPlaylist(route)
+    }
+    play.keyEquivalent = "\r"
+    play.keyEquivalentModifierMask = []
+    page.preferControllerControl(play)
+    page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
+    carousel.onStart = { [weak play] _ in play?.performClick(nil) }
+    configureLevelPreviewLoader(carousel)
+    carousel.configure(items: playlist.entries.enumerated().map { index, entry in
+      playlistCoverItem(entry, position: index, total: playlist.entries.count, allowsLocked: true)
+    }, reduceMotion: settings.reduceMotion || NSWorkspace.shared.accessibilityDisplayShouldReduceMotion)
+    GameScreen.shared.present(page, owner: window, focus: carousel)
+  }
+
+  private func startStarterPlaylist(_ route: StarterPlaylistRoute) {
+    do {
+      guard let playlist = starterPlaylist(route) else { throw LevelPlaylistError.emptyPool }
+      let run = try route.run(playlist: playlist)
+      let store = try playlistStore()
+      installActiveSequence(run, in: store, registering: playlist)
+    } catch {
+      GameScreen.shared.message(L10n.text("Playlist not started"), detail: error.localizedDescription)
     }
   }
 
@@ -4853,10 +4925,15 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func playlistCoverItem(
     _ saved: LevelPlaylistEntry,
     position: Int,
-    total: Int
+    total: Int,
+    allowsLocked: Bool = false
   ) -> LevelCoverFlowItem {
     let suffix = "\(position + 1)/\(total)"
-    switch playlistResolution(for: saved) {
+    let resolution = playlistResolution(for: saved)
+    let display: PlaylistEntryResolution
+    if allowsLocked, case let .locked(current) = resolution { display = .available(current) }
+    else { display = resolution }
+    switch display {
     case let .available(current):
       return LevelCoverFlowItem(
         id: saved.id.uuidString,
@@ -5353,6 +5430,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case .locked:
       return ((run.source == .playlist(LearningJourney.playlistID) || run.source == .easyPuzzles) && entry.identity.engine == .classic)
         || ShortPlayCatalogue.permitsLocked(entry, in: run)
+        || StarterPlaylistCatalogue.permitsLocked(entry, in: run)
     default: return false
     }
   }
@@ -5516,7 +5594,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private func installActiveSequence(
     _ run: LevelSequenceRun,
     in store: LevelPlaylistStore,
-    newSession: LevelSequenceRun? = nil
+    newSession: LevelSequenceRun? = nil,
+    registering playlist: LevelPlaylist? = nil
   ) {
     let arcade = ArcadeStore.shared
     let ownerProfileID = arcade.records.activeProfileID
@@ -5582,7 +5661,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
               return
             }
           } else { arcade.endHotSeat() }
-          do { try store.startRun(run, hotSeatID: arcade.hotSeatID, l2Progress: l2Progress) }
+          do { try store.startRun(run, hotSeatID: arcade.hotSeatID, l2Progress: l2Progress, registering: playlist) }
           catch {
             if let originalHotSeatID { _ = arcade.resumeHotSeat(id: originalHotSeatID) }
             else { arcade.endHotSeat() }

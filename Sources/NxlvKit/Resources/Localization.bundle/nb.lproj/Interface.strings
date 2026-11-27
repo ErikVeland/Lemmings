@@ -331,6 +331,7 @@
 "Before move {0}: {1}." = "Før trekk {0}: {1}.";
 "Begin level" = "Start brett";
 "Beginner" = "Nybegynner";
+"Below Street Level" = "Under gatenivå";
 "Best known" = "Beste kjente resultat";
 "Best known is {0}. Can you improve it?" = "Beste kjente resultat er {0}. Klarer du å slå det?";
 "Best possible" = "Best mulig";
@@ -964,6 +965,7 @@
 "Finish one below a verified maximum." = "Fullfør med ett mindre enn et bekreftet maksimum.";
 "Finish run" = "Fullfør forsøket";
 "Finished {0} from {1}." = "Fullførte {0} av {1}.";
+"First Shift" = "Første skift";
 "First clear of this level. Rescued {0}; target {1}." = "Første fullføring av dette brettet. Reddet: {0}; mål: {1}.";
 "First names, separated by commas" = "Fornavn atskilt med komma";
 "Fix records" = "Reparer rekorder";
@@ -1127,6 +1129,7 @@
 "Hold: ramp up; release: previous speed" = "Hold inne: øk gradvis; slipp: forrige hastighet";
 "Holiday 1993" = "Jul 1993";
 "Holiday 1994" = "Jul 1994";
+"Holiday Fun" = "Høytidsmoro";
 "Holiday Lemmings" = "Holiday Lemmings";
 "Holiday Lemmings 1993" = "Holiday Lemmings 1993";
 "Holiday Lemmings 1994" = "Holiday Lemmings 1994";
@@ -1907,6 +1910,7 @@
 "Open Game Center from the game window to sign in." = "Åpne Game Center fra spillvinduet for å logge på.";
 "Open Level File…" = "Åpne brettfil…";
 "Open Replay Movie…" = "Åpne reprisevideo…";
+"Open Starter" = "Åpne startsamlingen";
 "Open in Stacked pose when idle" = "Åpne i stablet stilling ved inaktivitet";
 "Open this address on another device:" = "Åpne denne adressen på en annen enhet:";
 "Open this level with its original game data to watch the action replay." = "Åpne dette brettet med de opprinnelige spilldataene for å se reprisen.";
@@ -2018,6 +2022,7 @@
 "Paused." = "Satt på pause.";
 "Paused: {0}" = "Satt på pause: {0}";
 "Perfectly adequate" = "Helt tilstrekkelig";
+"Permit to Build" = "Byggetillatelse";
 "Personal best" = "Personlig rekord";
 "Peter Singer argues for reducing suffering and using evidence to find where our resources can do the most good." = "Peter Singer argumenterer for å redusere lidelse og bruke dokumentasjon for å finne ut hvor ressursene våre gjør mest nytte.";
 "Phil Snape" = "Phil Snape";
@@ -2074,7 +2079,6 @@
 "Playlist unavailable" = "Spillelisten er utilgjengelig";
 "Playlist {0}" = "Spilleliste {0}";
 "Playlists" = "Spillelister";
-"Playlists  {0}" = "Spillelister  {0}";
 "Playlists changed in another app. Close and reopen this app." = "Spillelistene ble endret i en annen app. Lukk og åpne denne appen på nytt.";
 "Playlists need a different app version. Existing files were preserved." = "Spillelistene krever en annen appversjon. Eksisterende filer ble beholdt.";
 "Playlists unavailable" = "Spillelister utilgjengelige";
@@ -2479,7 +2483,6 @@
 "Saved attempt identities conflict." = "Identitetene til de lagrede forsøkene er i konflikt.";
 "Saved data could not be opened" = "Kunne ikke åpne lagrede data";
 "Saved extra-skill uses conflict." = "Saved extra-skill uses conflict.";
-"Saved level sequences" = "Lagrede brettsekvenser";
 "Saved list · Offline" = "Saved list · Offline";
 "Saved on this device" = "Lagret på denne enheten";
 "Saved result identities conflict." = "Identitetene til de lagrede resultatene er i konflikt.";
@@ -2671,6 +2674,8 @@
 "Start with these players. Your current Hot Seat will stay saved." = "Start med disse spillerne. Det gjeldende Hot Seat-spillet forblir lagret.";
 "Start {0}" = "Start {0}";
 "Started: {0}" = "Startet: {0}";
+"Starter collection" = "Startsamling";
+"Starter collections" = "Startsamlinger";
 "Starting" = "Starter";
 "Starting transfer" = "Starter overføring";
 "Static home screen" = "Statisk startskjerm";
@@ -2851,6 +2856,7 @@
 "The Prophesied PC Games Programmers" = "De profeterte PC-spillprogrammererne";
 "The Pyrrhic Victor" = "Den pyrrhoske seierherren";
 "The Stomper terrain mask is required." = "Terrengmasken for Stamper er påkrevd.";
+"The Tame Shift" = "Det rolige skiftet";
 "The Tribes" = "The Tribes";
 "The Tribes - {0}" = "Stammene – {0}";
 "The Tribes opening" = "Starten av The Tribes";
@@ -3161,6 +3167,8 @@
 "Time remaining" = "Tid igjen";
 "Time {0}:{1}" = "Tid {0}:{1}";
 "Timing probes: {0}. Untested alternatives remain unknown." = "Tidsmålinger: {0}. Utestede alternativer er fortsatt ukjente.";
+"Tiny journey" = "Kort reise";
+"Tiny journeys" = "Korte reiser";
 "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "For å laste ned disse filene må du ha en gyldig lisens for originalspillet «Lemmings» på minst én plattform. Når du velger «{0}», bekrefter du at du har en slik lisens.";
 "Toggle enhanced artwork" = "Slå forbedret grafikk av/på";
 "Toggle fast-forward" = "Slå hurtigspoling av/på";
@@ -3396,6 +3404,7 @@
 "Your first rescue starts the story." = "Din første redning starter historien.";
 "Your game" = "Spillet ditt";
 "Your initials, scores and replays can appear on public leaderboards." = "Initialene, poengsummene og opptakene dine kan vises på offentlige resultatlister.";
+"Your playlists" = "Dine spillelister";
 "Your rank: #{0} of {1} - {2}" = "Rangeringen din: #{0} av {1} – {2}";
 "Your rescue story" = "Redningshistorien din";
 "Your rescues add to the worldwide total." = "De du redder, legges til i verdenstotalen.";

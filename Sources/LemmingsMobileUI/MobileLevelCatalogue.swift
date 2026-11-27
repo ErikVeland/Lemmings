@@ -6,6 +6,9 @@ import UIKit
 
 extension MobileLibraryViewController {
     var previewBrowseLevels: [MobileLevelSummary] {
+        if let run = activeRun, isStarterPlaylistRun(run) {
+            return library?.levels.filter { $0.index == run.position } ?? []
+        }
         if levelsBackRoute == .levelCatalogue, !cataloguePreviewLevels.isEmpty { return cataloguePreviewLevels }
         return library?.levels ?? []
     }

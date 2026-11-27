@@ -214,6 +214,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var confirmingRestart = false
     var shufflePool: (entries: [MobileFavourites.Entry], packs: Int)?
     var shuffleScanning = false
+    var starterPlaylist: MobilePlaylist?
     var playlistSelection: Int?
     var confirmingDelete = false
     /// Non-nil while the keyboard edits a playlist name.
@@ -1725,6 +1726,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if let level = levels.first(where: { $0.rank == ranks[next] }) { selectLevel(level.index) }
     }
     func canSelectJourneyLevel(_ index: Int) -> Bool {
+        if let run = activeRun, isStarterPlaylistRun(run) { return index == run.position }
         guard library is MobileJourneyLibrary, let run = learning.run else { return true }
         if run.source == .easyPuzzles { return index == run.currentIndex }
         return index <= run.currentIndex || mobileSettings.classic.unlockAllClassicLevels
@@ -2126,8 +2128,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
 
-    func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, restoringMatchingCheckpoint: Bool = false) {
-        guard !preparingLevel, libraryTask == nil, canSelectJourneyLevel(index), let library, let checkpointStore else { return }
+    func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, restoringMatchingCheckpoint: Bool = false,
+                    advancingStarterRun: Bool = false) {
+        guard !preparingLevel, libraryTask == nil, let library, let checkpointStore else { return }
+        guard canSelectJourneyLevel(index) || (advancingStarterRun && activeRun.map { index == $0.position + 1 } == true) else { return }
         guard let previewLoader else { return }
         let settings = MobileSettings.load(from: .standard, profileID: checkpoint?.owner ?? settingsProfileID).classic
         stopMenuPreviews()
@@ -2181,6 +2185,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 loadingIntro.stop()
                 #endif
                 loading = false; preparingLevel = false
+                if advancingStarterRun, let position = activeRun?.position { selectedIndex = position }
                 if let game { game.showPreparationError(error.localizedDescription) }
                 else { notice = error.localizedDescription; rebuild() }
             }
@@ -2217,7 +2222,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     }
                 }
             }
-            levelStarted(index)
+            guard levelStarted(index) else {
+                if let game { game.showPreparationError(notice) }
+                else { rebuild() }
+                return
+            }
             // Playlist and shuffle results do not advance campaign or pack progress.
             let inLearning = library is MobileJourneyLibrary
             let inRun = activeRun != nil || inLearning
@@ -2488,8 +2497,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                             }
                         } catch { self.game?.showPreparationError(error.localizedDescription); return }
                     }
-                    let followingIndex = inLearning ? (self.learning.run?.currentIndex ?? index + 1) : index + 1
-                    if library.levels.indices.contains(followingIndex) { self.startLevel(followingIndex, checkpoint: nil) }
+                    let starterRun = self.isStarterPlaylistRun(self.activeRun) ? self.activeRun : nil
+                    let followingIndex = inLearning ? (self.learning.run?.currentIndex ?? index + 1) : (starterRun?.position ?? index) + 1
+                    if library.levels.indices.contains(followingIndex) {
+                        self.startLevel(followingIndex, checkpoint: nil, advancingStarterRun: starterRun != nil)
+                    }
                     else { self.finishRunIfNeeded(afterLast: index); self.handle("home"); self.game?.onExit?(.library) }
                 }
             }

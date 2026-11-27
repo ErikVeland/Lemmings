@@ -1,4 +1,5 @@
 import Foundation
+import LemmingsAppCore
 import NxlvKit
 import Testing
 @testable import LemmingsMobileCore
@@ -22,6 +23,20 @@ struct MobileCatalogueTests {
                 == "release/ohYesMoreLemmings")
         let fan = try #require(catalogue.packs(in: .fan).first)
         #expect(catalogue.pack(forLevelIdentifier: "fan/\(fan.id)/abc/x.dat#1")?.id == fan.id)
+    }
+
+    @Test(.enabled(if: FileManager.default.fileExists(atPath: ports.path), "Requires staged iOS game data"))
+    func starterPlaylistsResolveEveryHolidayRelease() throws {
+        let catalogue = MobileCatalogue(portsRoot: Self.ports)
+        let route = try #require(StarterPlaylistCatalogue.routes.first { $0.key == "holiday-fun" })
+        #expect(MobileStarterPlaylists.hasSources(for: route, in: catalogue))
+        let list = try MobileStarterPlaylists.playlist(for: route, portsRoot: Self.ports)
+        let library = MobileListLibrary(entries: list.entries, name: list.name, catalogue: catalogue, lazy: true)
+        #expect(library.levels.count == 40)
+        for (index, title) in zip([0, 4, 8, 24], [ClassicTitle.xmasLemmings1991, .xmasLemmings1992, .holidayLemmings1993, .holidayLemmings1994]) {
+            let level = try library.loadLevel(at: index)
+            #expect(level.session.levelIdentifier.hasPrefix(title.rawValue))
+        }
     }
 
     @Test func everyOfficialLevelLoadsRendersAndTicks() throws {
