@@ -23,6 +23,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     enum Route: Equatable {
         case home, play, support, family(MobileFamily), fanGroup([String]), levelCatalogue, levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case firstPlayer, whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
+        #if os(iOS)
+        case about
+        #endif
         case levelDetails
         case journey, progression, techniques, rankings
         case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, profileStatistics, progressPlayer(String), progressLevel(String, String?), records, achievements, recordLevel(String), recordHint(String)
@@ -50,7 +53,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     private let homeBackdropLoader = MobileHomeBackdropLoader()
     private var homeBackdropTask: Task<Void, Never>?
     private var homeBackdropKey: String?
+    #if os(iOS)
     private let loadingIntro = MobileLoadingIntro()
+    #endif
     #if os(tvOS)
     private var topShelfTask: Task<Void, Never>?
     #endif
@@ -209,6 +214,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     var confirmingRestart = false
     var shufflePool: (entries: [MobileFavourites.Entry], packs: Int)?
     var shuffleScanning = false
+    var starterPlaylist: MobilePlaylist?
     var playlistSelection: Int?
     var confirmingDelete = false
     /// Non-nil while the keyboard edits a playlist name.
@@ -644,7 +650,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewIsVisible = false
-        loadingIntro.stop(restoreMenuMusic: false)
+        #if os(iOS)
+        loadingIntro.stop()
+        #endif
         syncPages()
     }
 
@@ -666,7 +674,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     guard let self, let scene, scene === self.viewIfLoaded?.window?.windowScene else { return }
                     self.sceneIsActive = name == UIScene.didActivateNotification
                     if !self.sceneIsActive {
-                        self.loadingIntro.stop(restoreMenuMusic: false)
+                        #if os(iOS)
+                        self.loadingIntro.stop()
+                        #endif
                         MobileMusic.shared.setMenu(
                             visible: self.game == nil && !self.deskClockShown && self.viewIsVisible,
                             active: false
@@ -691,21 +701,17 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
 
-    private var reducesHomeBackdropMotion: Bool {
-        mobileSettings.classic.staticHomeScreen || mobileSettings.classic.reduceMotion || UIAccessibility.isReduceMotionEnabled
-    }
-
     private func updateLibraryDisplayLink() {
         let active = viewIsVisible && sceneIsActive && game == nil && !deskClockShown
         syncSavedCountRefresh(visible: active && (route == .rankings || route == .telemetryConsent))
         if !active { unfold.stop() }
-        let animatedBackdrop = usesHomeBox && !reducesHomeBackdropMotion
-            && ((route == .home && homeBackdropView.canAnimate)
-                || ((route == .home || usesMenuOverlay) && homeBackdropView.isRevealing))
+        let animatedBackdrop = usesHomeBox && route == .home && homeBackdropView.canAnimate
+            && !mobileSettings.classic.staticHomeScreen && !mobileSettings.classic.reduceMotion
+            && !UIAccessibility.isReduceMotionEnabled
         inputLink?.isPaused = deskClockBlocksInput || !active || (!animatedBackdrop && GCController.controllers().isEmpty)
         if inputLink?.isPaused == true {
             libraryInput.reset()
-            homeBackdropView.advance(at: 0, active: false, reduceMotion: reducesHomeBackdropMotion)
+            homeBackdropView.advance(at: 0, active: false, reduceMotion: true)
         }
     }
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
@@ -728,8 +734,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        defer { loadingIntro.bringToFront(in: view) }
         #if os(iOS)
+        defer { loadingIntro.bringToFront(in: view) }
         checkDeskClock()
         #endif
         let expanded = previousSize.width > 0 && view.bounds.width > previousSize.width * 1.25
@@ -784,6 +790,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         globalNavigation.isHidden = game != nil || route == .home || route == .firstPlayer || deskClockShown || confirmingGameAssetLicence
         browser.showsBack = globalNavigation.isHidden
         switch route {
+        #if os(iOS)
+        case .about: globalNavigation.secondaryTitle = nil
+        #endif
         case .settings, .settingsGroup, .language, .controllerMappings, .soundtrack:
             globalNavigation.secondaryTitle = nil
         default: globalNavigation.secondaryTitle = L10n.text("Settings")
@@ -946,7 +955,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         canvas.backgroundColor = shown ? .clear : .black
         canvas.isOpaque = !shown
         guard shown, viewIsVisible, sceneIsActive else {
-            homeBackdropView.advance(at: 0, active: false, reduceMotion: false)
+            homeBackdropView.advance(at: 0, active: false, reduceMotion: true)
             if homeBackdropTask != nil { homeBackdropTask?.cancel(); homeBackdropTask = nil; homeBackdropKey = nil }
             return
         }
@@ -977,7 +986,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 neoLibrary: { try NeoLemmixMobileLibrary(directory: $0, storage: $1) })
             guard !Task.isCancelled, let self, self.homeBackdropKey == key else { return }
             self.homeBackdropTask = nil
-            self.homeBackdropView.show(scenery, reduceMotion: self.reducesHomeBackdropMotion)
+            self.homeBackdropView.show(scenery)
             self.updateLibraryDisplayLink()
             #if os(tvOS)
             // Top Shelf picks one of the two Macintosh looks for each newly exported level.
@@ -999,13 +1008,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     func advanceHomeBackdrop(at now: TimeInterval) {
-        let wasRevealing = homeBackdropView.isRevealing
         homeBackdropView.advance(at: now,
-            active: usesHomeBox && (route == .home || (usesMenuOverlay && wasRevealing))
-                && game == nil && presentedViewController == nil
+            active: usesHomeBox && route == .home && game == nil && presentedViewController == nil
                 && view.window?.windowScene?.activationState == .foregroundActive,
-            reduceMotion: reducesHomeBackdropMotion)
-        if wasRevealing && !homeBackdropView.isRevealing { updateLibraryDisplayLink() }
+            reduceMotion: mobileSettings.classic.staticHomeScreen || mobileSettings.classic.reduceMotion || UIAccessibility.isReduceMotionEnabled)
     }
 
     func rebuild() {
@@ -1139,6 +1145,10 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = insightsTokenPage(); canvas.preview = nil
         case .insightsClear:
             canvas.page = insightsClearPage(); canvas.preview = nil
+        #if os(iOS)
+        case .about:
+            canvas.page = aboutPage(); canvas.preview = nil
+        #endif
         case .settings:
             canvas.page = settingsGroupsPage(); canvas.preview = nil
         case let .settingsGroup(group):
@@ -1254,7 +1264,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if deskClock != nil { MobileMusic.shared.suspend(); return }
         #endif
         MobileMusic.shared.selectProfile(settingsProfileID)
-        MobileMusic.shared.setMenu(visible: game == nil && !deskClockShown && viewIsVisible && !loadingIntro.isPlayingMusic,
+        MobileMusic.shared.setMenu(visible: game == nil && !deskClockShown && viewIsVisible,
                                    active: sceneIsActive && !MobileMusic.shared.startupAuthenticationPending)
     }
 
@@ -1346,7 +1356,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
     func handle(_ id: String) {
-        guard !loadingIntro.isPresented || id == "back" || id == "home" else { return }
+        #if os(iOS)
+        if loadingIntro.isPresented {
+            if id == "home" || id == "back" { cancelLevelPreparation(generation: previewGeneration) }
+            return
+        }
+        #endif
         if confirmingGameAssetLicence {
             guard id == "gameAssets.cancel" || id == "gameAssets.agree" else { return }
             confirmingGameAssetLicence = false
@@ -1417,6 +1432,15 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             rebuild()
         case "profileStatistics": navigate(.profileStatistics)
         case "settings": navigate(.settings)
+        #if os(iOS)
+        case "about":
+            guard game == nil else { return }
+            if route == .settings { navigate(.about) }
+            else if case .settingsGroup = route { navigate(.about) }
+        case "aboutBack":
+            guard route == .about else { return }
+            navigate(previousRoute ?? .settings)
+        #endif
         case "settingsBack":
             let source = settingsReturn
             settingsReturn = nil
@@ -1652,7 +1676,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     private func stopMenuPreviews() {
+        #if os(iOS)
         loadingIntro.stop()
+        #endif
         let previous = previewTask
         previous?.cancel(); previewTask = nil
         let covers = browser.stopArtworkLoading()
@@ -1700,6 +1726,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if let level = levels.first(where: { $0.rank == ranks[next] }) { selectLevel(level.index) }
     }
     func canSelectJourneyLevel(_ index: Int) -> Bool {
+        if let run = activeRun, isStarterPlaylistRun(run) { return index == run.position }
         guard library is MobileJourneyLibrary, let run = learning.run else { return true }
         if run.source == .easyPuzzles { return index == run.currentIndex }
         return index <= run.currentIndex || mobileSettings.classic.unlockAllClassicLevels
@@ -2101,11 +2128,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         }
     }
 
-    func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, restoringMatchingCheckpoint: Bool = false) {
-        guard !preparingLevel, libraryTask == nil, canSelectJourneyLevel(index), let library, let checkpointStore else { return }
+    func startLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, restoringMatchingCheckpoint: Bool = false,
+                    advancingStarterRun: Bool = false) {
+        guard !preparingLevel, libraryTask == nil, let library, let checkpointStore else { return }
+        guard canSelectJourneyLevel(index) || (advancingStarterRun && activeRun.map { index == $0.position + 1 } == true) else { return }
         guard let previewLoader else { return }
-        let playerSettings = MobileSettings.load(from: .standard, profileID: checkpoint?.owner ?? settingsProfileID)
-        let settings = playerSettings.classic
+        let settings = MobileSettings.load(from: .standard, profileID: checkpoint?.owner ?? settingsProfileID).classic
         stopMenuPreviews()
         let cancelledPreviews = previewDrain
         let generation = UUID(); previewGeneration = generation
@@ -2115,15 +2143,16 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if selectedIndex != index { selectedPreview = nil }
         selectedIndex = index
         notice = ""; preparingLevel = true; loading = true; rebuild()
-        let introMusicEnabled = playerSettings.musicEnabled && settings.menuMusic && settings.music != .silent
-        loadingIntro.start(in: view, configuration: configuration, message: L10n.text("Loading..."),
-                           reduceMotion: settings.reduceMotion || settings.reduceFlashes,
-                           volume: introMusicEnabled ? settings.musicVolume : 0,
-                           musicChanged: { [weak self] in self?.syncMenuMusic() }) { [weak self] in
+        #if os(iOS)
+        let title = configuration == .ultimateLemmix && !GameMenuLogo.usesRestoredArtwork
+            ? "Ultimate Lemmix" : "Ultimate Lemmings"
+        loadingIntro.start(in: view, title: title, reduceMotion: settings.reduceMotion, reduceFlashes: settings.reduceFlashes,
+                           isLoading: { [weak self] in
             guard let self else { return false }
             return self.preparingLevel && self.previewGeneration == generation && !self.deskClockBlocksInput
                 && self.viewIsVisible && self.sceneIsActive && self.presentedViewController == nil
-        }
+        }, cancel: { [weak self] in self?.cancelLevelPreparation(generation: generation) })
+        #endif
         let menuTasks = [fanCountsTask, shuffleTask, learningTask].compactMap { $0 }
         menuTasks.forEach { $0.cancel() }
         fanCountGeneration = UUID(); fanCountsTask = nil
@@ -2137,7 +2166,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 let prepared = try await previewLoader.prepare(index, settings: settings,
                     checkpoint: checkpoint, allowUnrelatedCheckpoint: restoringMatchingCheckpoint)
                 guard !Task.isCancelled, previewGeneration == generation else { return }
-                loadingIntro.stop(restoreMenuMusic: false)
+                #if os(iOS)
+                loadingIntro.stop()
+                #endif
                 loading = false; preparingLevel = false
                 let matching = restoringMatchingCheckpoint && checkpoint?.levelIdentifier != prepared.content.session.levelIdentifier
                     ? nil : checkpoint
@@ -2150,13 +2181,29 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                      checkpointStore: checkpointStore, content: prepared.content)
             } catch {
                 guard !Task.isCancelled, previewGeneration == generation else { return }
+                #if os(iOS)
                 loadingIntro.stop()
+                #endif
                 loading = false; preparingLevel = false
+                if advancingStarterRun, let position = activeRun?.position { selectedIndex = position }
                 if let game { game.showPreparationError(error.localizedDescription) }
                 else { notice = error.localizedDescription; rebuild() }
             }
         }
     }
+    #if os(iOS)
+    private func cancelLevelPreparation(generation: UUID) {
+        guard preparingLevel, previewGeneration == generation else { return }
+        stopMenuPreviews()
+        previewGeneration = UUID()
+        loading = false; preparingLevel = false
+        // A result's Next action may already have advanced the saved run. Return to the
+        // library instead of making that result actionable a second time.
+        if let game, let exit = game.onExit { exit(.library) }
+        else { rebuild() }
+    }
+    #endif
+
     private func presentPreparedLevel(_ index: Int, checkpoint: MobileCheckpointEnvelope?, library: any MobileGameLibrary,
                                       checkpointStore: MobileCheckpointStore, content: MobileLevelContent) {
         do {
@@ -2175,7 +2222,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                     }
                 }
             }
-            levelStarted(index)
+            guard levelStarted(index) else {
+                if let game { game.showPreparationError(notice) }
+                else { rebuild() }
+                return
+            }
             // Playlist and shuffle results do not advance campaign or pack progress.
             let inLearning = library is MobileJourneyLibrary
             let inRun = activeRun != nil || inLearning
@@ -2360,7 +2411,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 guard let self else { return }
                 if inLearning { return }
                 guard snapshot.didWin else { return }
-                if inRun { self.finishRunIfNeeded(afterLast: index); return }
+                if inRun { return }
                 var pack = self.currentPack?.id, real = index
                 if let list = library as? MobileFavouritesLibrary, let origin = list.origin(of: index) {
                     pack = origin.pack; real = origin.index
@@ -2370,12 +2421,39 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                           forKey: self.progressKey(for: pack, fallback: self.library?.displayName ?? "classic"))
                 self.arcadeStore.notifyProgressChanged()
             }
+            if let runID = next.journeyContext.runID {
+                let profile = profiles.activeID
+                let scope = hotSeat?.scope
+                next.onSaveProgressBeforeExit = { [weak self] action in
+                    let closesPlaylist = !inLearning && index == library.levels.count - 1
+                        && (action == .library || action == .next)
+                    guard action == .menu || closesPlaylist else { return }
+                    guard let self, profiles.activeID == profile, hotSeat?.scope == scope else {
+                        throw MobileSessionError.changedLevel
+                    }
+                    if inLearning {
+                        var saved = learning
+                        guard saved.advanceAfterWonResult(runID: runID, position: index) else { return }
+                        try saveLearningState(saved)
+                    } else {
+                        var saved = playlists
+                        guard saved.advanceAfterWonResult(runID: runID, position: index) else { return }
+                        guard let collectionsBridge else { throw CocoaError(.fileWriteUnknown) }
+                        try collectionsBridge.save(favourites: favourites, recents: recents,
+                            playlists: saved, hotSeatID: hotSeat?.id)
+                        playlists = saved
+                        activeRun = saved.run
+                    }
+                }
+            }
             next.onExit = { [weak self, weak next] action in
                 guard let self, let next, self.game === next else { return }
                 MobileMusic.shared.retireAttempt(next.runID)
                 switch action {
                 case .library, .menu, .easyPuzzles, .doneEasyPuzzles:
+                    #if os(iOS)
                     self.loadingIntro.stop()
+                    #endif
                     self.previewTask?.cancel(); self.previewGeneration = UUID()
                     self.loading = false; self.preparingLevel = false
                     self.game?.willMove(toParent: nil); self.game?.view.removeFromSuperview(); self.game?.removeFromParent()
@@ -2419,8 +2497,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                             }
                         } catch { self.game?.showPreparationError(error.localizedDescription); return }
                     }
-                    let followingIndex = inLearning ? (self.learning.run?.currentIndex ?? index + 1) : index + 1
-                    if library.levels.indices.contains(followingIndex) { self.startLevel(followingIndex, checkpoint: nil) }
+                    let starterRun = self.isStarterPlaylistRun(self.activeRun) ? self.activeRun : nil
+                    let followingIndex = inLearning ? (self.learning.run?.currentIndex ?? index + 1) : (starterRun?.position ?? index) + 1
+                    if library.levels.indices.contains(followingIndex) {
+                        self.startLevel(followingIndex, checkpoint: nil, advancingStarterRun: starterRun != nil)
+                    }
                     else { self.finishRunIfNeeded(afterLast: index); self.handle("home"); self.game?.onExit?(.library) }
                 }
             }

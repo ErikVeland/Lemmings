@@ -11,18 +11,10 @@ import NxlvKit
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
     static let notesVersion = "2.7.5"
-    static let lemmixNotesVersion = "2.6"
+    static let lemmixNotesVersion = "2.7.5"
     static var subtitle: String { GameReleaseCopy.invitation }
     static var sections: [(String, String)] {
-        #if ULTIMATE_LEMMIX_STORE
-        let changes = GameReleaseCopy.sections
-        #else
-        let changes = [
-            (L10n.text("Home background"), L10n.text("The level backdrop sharpens from large pixel blocks before it starts to pan.")),
-            (L10n.text("Level loading"), L10n.text("Longer level loads show a pixel-art intro. The game starts as soon as it is ready."))
-        ]
-        #endif
-        return changes + [
+        GameReleaseCopy.sections + [
             (L10n.text("Compatibility"), L10n.text("macOS 12.3 or later on Apple silicon and Intel."))
         ]
     }

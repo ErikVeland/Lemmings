@@ -90,8 +90,9 @@ private final class FixtureArtwork: ClassicMobileArtworkProvider {
 
 @Suite("Clean mobile content") struct MobileCleanContentTests {
     private func withStarter(_ body: (ClassicMobileLibrary) throws -> Void) throws {
-        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        defer { try? FileManager.default.removeItem(at: root) }
+        let ports = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: ports) }
+        let root = ports.appendingPathComponent("ultimate_lemmix_starter")
         let repo = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
         let process = Process()
@@ -102,6 +103,22 @@ private final class FixtureArtwork: ClassicMobileArtworkProvider {
         #expect(process.terminationStatus == 0)
         #expect(GameStarterContent.isStarter(directory: root))
         try body(ClassicMobileLibrary(directory: root))
+    }
+
+    @Test func starterPlaylistsResolveInAnAuthoredOnlyInstall() throws {
+        try withStarter { starter in
+            let ports = starter.directory.deletingLastPathComponent()
+            let catalogue = MobileCatalogue(portsRoot: ports)
+            let visible = StarterPlaylistCatalogue.routes.filter { MobileStarterPlaylists.hasSources(for: $0, in: catalogue) }
+            #expect(visible.map(\.key) == ["open-starter"])
+            let route = try #require(visible.first)
+            let list = try MobileStarterPlaylists.playlist(for: route, portsRoot: ports)
+            #expect(list.id == route.id)
+            #expect(list.entries.map(\.level) == ["All/1", "All/2", "All/3"])
+            let preview = MobileListLibrary(entries: list.entries, name: list.name, catalogue: catalogue)
+            #expect(preview.levels.map(\.title) == starter.levels.map(\.title))
+            #expect(try preview.loadLevel(at: 0).session.levelIdentifier == GameStarterContent.identifier + "/All/1")
+        }
     }
 
     @Test func starterAvailabilityAndPixels() throws {

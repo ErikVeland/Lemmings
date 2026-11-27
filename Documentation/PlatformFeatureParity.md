@@ -1,72 +1,14 @@
 # Cross-platform feature parity
 
-## Loading intro
+## iOS level loading · 27 November 2026
 
-Mac, iPhone, iPad, Duo and Apple TV share the pixel artwork for longer
-level loads. The intro begins after 550 ms. With menu music enabled, it
-can play a random track through the MOD engine after 1.4 seconds. The game
-takes over as soon as it is ready. Reduce Motion and Reduce Flashes hold
-the artwork still.
+iPhone, iPad and Duo show Home as early as possible on a cold launch.
+When preparing a level takes more than 550 ms, a pixel-art intro replaces the
+brief loading view. The level opens as soon as it is ready. Cancel returns to
+browsing without starting a new level. Reduce Motion or
+Reduce Flashes holds the artwork still. This iOS intro adds no music, original
+game assets, or third-party audio. It does not change Apple TV startup.
 
-The Mac 2.7.1 packages include 11 MOD tracks. The player checks the
-installation's `LoadingIntros` folder first and uses the bundled
-collection if it finds no playable local tracks. iOS and tvOS can read
-an installed or bundled collection. They have no picker for these files.
-
-Mobile cold launch and Apple TV migration use the visual intro while the
-library prepares. Startup audio waits for the normal profile and audio
-session setup. The Mac intro uses existing background launch screens.
-Loads that run synchronously on the main thread have no animated intro.
-
-## Home background reveal
-
-Mac, iPad, Duo and Apple TV reveal a loaded level backdrop through five
-pixel sizes over about half a second. iPhone uses the same effect where
-the boxed Home layout is available. The effect uses the loaded artwork
-from Classic, Lemmings 2, Lemmings 3 or supported NeoLemmix levels.
-Reduce Motion and Static Home Screen use the sharp image immediately.
-The usual camera pan continues after the reveal. Device acceptance remains open.
-
-## Menu spacing and scope · 26 November 2026
-
-Home places Hot Seat before Play on Mac and the shared iPhone, iPad, Duo
-and Apple TV front end. Profile puts Records, Achievements and Statistics
-above the All players group. That group contains Players, Cloud saves and
-Play Insights. The Mac menu bar uses the same split.
-
-Short Mac lists keep their footer near the last row and centre the panel
-in the window. Large displays use 2× when the whole panel fits.
-Long lists scroll within the panel. Language uses the
-same list and footer geometry. Mac Statistics centres its columns and
-right-aligns counts. Mac Play uses a full-width lead route, large sequel logos
-and compact game buttons with full titles and progress counts. When space is tight,
-each game button puts its count on its own line.
-
-## Mac wheel zoom and menu returns · 26 November 2026
-
-Settings → Gameplay → Scroll wheel zoom controls the Mac mouse wheel and
-vertical trackpad scrolling in Classic, Lemmings 2, Lemmings 3 and supported
-NeoLemmix levels. Each player can turn it off to use camera panning. Older
-profiles default to on. Z and Shift-Z still control zoom. iPhone, iPad, Duo
-and Apple TV use their existing touch and controller input.
-
-Main menu closes pages over Home or Play without restarting the game's audio.
-Returning from an attempt still saves its checkpoint. Mac campaign counts
-for Lemmings 2 and Lemmings 3 load in the background and apply to the selected
-profile and Hot Seat session. Full-screen input and live audio need separate
-verification in a packaged app.
-
-## Mac Play Game input · 26 November 2026
-
-An open Mac menu keeps its focus and input targets across display updates.
-New pages and pages that move to another window surface still complete
-layout before they appear. This AppKit path serves Classic, Lemmings 2,
-Lemmings 3 and supported NeoLemmix content. iPhone, iPad, Duo and Apple TV
-use the UIKit menu canvas, which reuses input targets between layout changes.
-
-The offscreen Mac check covers a rating choice, Back, Main menu and
-Command-Q routing to AppKit. Full-screen input and iCloud-assisted Quit
-in the installed app still need verification.
 
 ## Settings navigation · 25 November 2026
 

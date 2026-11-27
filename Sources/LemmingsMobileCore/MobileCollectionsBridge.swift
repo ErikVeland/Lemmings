@@ -47,20 +47,27 @@ import NxlvKit
     public func save(favourites: MobileFavourites, recents: MobileRecents, playlists: MobilePlaylistStore,
                      hotSeatID: String? = nil) throws {
         let lists = try playlists.playlists.map { list in
-            try LevelPlaylist(id: list.id, name: list.name, entries: Self.sharedEntries(list.entries))
+            if let stored = store.playlist(id: list.id), stored.name == list.name,
+               Self.matches(stored.entries, list.entries) { return stored }
+            return try LevelPlaylist(id: list.id, name: list.name, entries: Self.sharedEntries(list.entries))
         }
         let run = try playlists.run.map { value in
-            let old = (store.activeRunHotSeatID == hotSeatID ? store.activeRun : nil)
-                ?? store.savedRuns.first { $0.hotSeatID == hotSeatID }?.run
+            let saved = store.resumableRun(id: value.id)
+            let old = saved?.hotSeatID == hotSeatID ? saved?.run : nil
             let source: LevelSequenceSource = value.playlist.map(LevelSequenceSource.playlist) ?? .shuffleAll
-            let oldEntries = old?.entries.map(Self.mobileEntry)
-            let same = old?.id == value.id && old?.source == source && old?.pool.summary == value.name && oldEntries == value.entries
-                && oldEntries?.map(\.sourceFingerprint) == value.entries.map(\.sourceFingerprint)
+            let existing = old.flatMap { candidate in
+                candidate.id == value.id && candidate.source == source && candidate.pool.summary == value.name
+                    && Self.matches(candidate.entries, value.entries) ? candidate : nil
+            }
+            let starter = StarterPlaylistCatalogue.routes.first { $0.id == value.playlist }
+            let poolID = starter?.poolID
+                ?? (Lemmings2ShortPlayMobileLibrary.matches(value.entries) ? "short-play-v1:lemmings2" : "mobile")
             return try LevelSequenceRun(id: value.id, source: source,
-                pool: LevelPool(id: Lemmings2ShortPlayMobileLibrary.matches(value.entries) ? "short-play-v1:lemmings2" : "mobile", summary: value.name), entries: Self.sharedEntries(value.entries),
+                pool: existing?.pool ?? LevelPool(id: poolID, summary: value.name),
+                entries: existing?.entries ?? Self.sharedEntries(value.entries),
                 currentIndex: value.position, seed: value.shuffled ? value.seed : nil,
                 algorithm: value.shuffled ? .splitMix64FisherYatesV1 : nil,
-                createdAt: same ? old!.createdAt : Date())
+                createdAt: existing?.createdAt ?? Date())
         }
         try store.importMobileCollections(playlists: lists, favourites: Self.sharedEntries(favourites.entries),
                                          recents: Self.sharedEntries(recents.entries), run: run, hotSeatID: hotSeatID)
@@ -68,6 +75,12 @@ import NxlvKit
         try mobile.save(favourites.entries, name: "favourites")
         try mobile.save(recents.entries, name: "recents")
         try mobile.save(playlists, name: "playlists")
+    }
+
+    private static func matches(_ shared: [LevelPlaylistEntry], _ mobile: [MobileFavourites.Entry]) -> Bool {
+        let projected = shared.map(mobileEntry)
+        return projected == mobile && projected.map(\.title) == mobile.map(\.title)
+            && projected.map(\.sourceFingerprint) == mobile.map(\.sourceFingerprint)
     }
 
     public static func sharedEntries(_ values: [MobileFavourites.Entry]) throws -> [LevelPlaylistEntry] {

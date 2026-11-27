@@ -4,6 +4,81 @@ import Testing
 @testable import LemmingsAppCore
 
 @MainActor struct JourneyResumePersistenceTests {
+    @Test func playlistRecoveryRestoresLatestQueueAndPreservesDamage() throws {
+        let storage = try AppStorage.temporary(named: "playlist-latest-recovery")
+        defer { storage.removeTemporaryFiles() }
+        let file = storage.applicationSupport.appendingPathComponent("playlists.json")
+        let store = try LevelPlaylistStore(file: file)
+        let entries = try (1...2).map {
+            try LevelPlaylistEntry(identity: .init(engine: .classic, packID: "fixture", levelID: "\($0)"),
+                catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+                levelNameSnapshot: "Level \($0)", levelNumberSnapshot: $0)
+        }
+        let playlist = try LevelPlaylist(name: "Personal playlist", entries: entries)
+        try store.add(playlist)
+        let run = try LevelSequenceRun.playlist(playlist, pool: .init(id: "fixture", summary: playlist.name))
+        try store.startRun(run, hotSeatID: "saved-seat")
+        #expect(try store.advanceActiveRun())
+        let damage = Data("broken".utf8)
+        try damage.write(to: file, options: .atomic)
+        let recovered = try LevelPlaylistStore(file: file)
+        #expect(recovered.recovered)
+        #expect(recovered.activeRun?.id == run.id)
+        #expect(recovered.activeRun?.currentIndex == 1)
+        #expect(recovered.activeRunHotSeatID == "saved-seat")
+        let evidence = try FileManager.default.contentsOfDirectory(
+            at: file.deletingLastPathComponent(), includingPropertiesForKeys: nil)
+        let preserved = try #require(evidence.first { $0.lastPathComponent.hasPrefix("playlists.json.unreadable-") })
+        #expect(try Data(contentsOf: preserved) == damage)
+    }
+
+    @Test func damagedPlaylistCopiesRecoverFromSyncedJourneyAfterReconnect() throws {
+        let storage = try AppStorage.temporary(named: "playlist-sync-recovery")
+        defer { storage.removeTemporaryFiles() }
+        let profile = "test-profile"
+        let seat = "saved-seat"
+        let file = LevelPlaylistStore.fileURL(profileID: profile, storage: storage)
+        try FileManager.default.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let copies = [file, file.appendingPathExtension("latest-backup"), file.appendingPathExtension("backup")]
+        for (index, copy) in copies.enumerated() { try Data([UInt8(index)]).write(to: copy) }
+        #expect(throws: (any Error).self) {
+            try LevelPlaylistStore(profileID: profile, storage: storage, recoveryHotSeatIDs: [seat])
+        }
+        for (index, copy) in copies.enumerated() { #expect(try Data(contentsOf: copy) == Data([UInt8(index)])) }
+
+        let entries = try (1...2).map {
+            try LevelPlaylistEntry(identity: .init(engine: .lemmings2, packID: "fixture", levelID: "\($0)"),
+                catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+                levelNameSnapshot: "Level \($0)", levelNumberSnapshot: $0)
+        }
+        let run = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
+            pool: .init(id: LearningJourney.version, summary: LearningJourney.title), entries: entries, currentIndex: 1)
+        let snapshot = JourneySessionSnapshot(run: run, l2Progress: ["carry": Data([3])])
+        var learning = LearningJourneyProgress()
+        learning.record(entries[0].identity, won: true)
+        try GameProgressPreferences.saveLearning(learning, profileID: profile, sessionID: seat, defaults: storage.defaults)
+        try GameProgressPreferences.saveJourneySession(snapshot, profileID: profile, sessionID: seat, defaults: storage.defaults)
+        try GameProgressPreferences.saveJourneySession(snapshot, profileID: profile, sessionID: "unknown", defaults: storage.defaults)
+
+        let repaired = try LevelPlaylistStore(profileID: profile, storage: storage, recoveryHotSeatIDs: [seat])
+        #expect(repaired.recovered)
+        #expect(repaired.journeySessions[seat] == snapshot)
+        #expect(repaired.journeySessions["unknown"] == nil)
+        #expect(repaired.learningProgress(hotSeatID: seat).completed == learning.completed)
+        let reopened = try LevelPlaylistStore(file: file)
+        let saved = try #require(reopened.resumableLearningJourney(hotSeatID: seat))
+        #expect(saved.run == run)
+        #expect(saved.l2Progress == snapshot.l2Progress)
+        let evidence = try FileManager.default.contentsOfDirectory(
+            at: file.deletingLastPathComponent(), includingPropertiesForKeys: nil)
+        #expect(evidence.filter { $0.lastPathComponent.contains(".unreadable-") }.count == copies.count)
+        try Data("broken again".utf8).write(to: file, options: .atomic)
+        try Data("broken mirror".utf8).write(to: copies[1], options: .atomic)
+        let offline = try LevelPlaylistStore(file: file)
+        #expect(offline.recovered)
+        #expect(offline.resumableLearningJourney(hotSeatID: seat)?.run == run)
+    }
+
     @Test(arguments: ["learning-30", "learning-31"])
     func importedJourneyResumesAfterTheEarlyTimingPuzzles(version: String) throws {
         let temporary = try AppStorage.temporary(named: "imported-journey-revision")
@@ -28,7 +103,7 @@ import Testing
         let old = try LevelSequenceRun(source: .playlist(LearningJourney.playlistID),
             pool: .init(id: version, summary: LearningJourney.title), entries: oldEntries, currentIndex: 77)
         let snapshot = JourneySessionSnapshot(run: old, l2Progress: ["carry": Data([3])])
-        try store.importJourneySession(snapshot, hotSeatID: "ekv-uva")
+        #expect(try store.importJourneySession(snapshot, hotSeatID: "ekv-uva"))
         try store.migrateLearningJourney(journey)
         let saved = try #require(store.resumableLearningJourney(hotSeatID: "ekv-uva"))
         #expect(saved.run.id == old.id && saved.run.currentIndex == old.currentIndex)
@@ -41,7 +116,7 @@ import Testing
         #expect(store.activeRun == unrelated && store.activeRunHotSeatID == "another-seat")
         let reopened = try LevelPlaylistStore(file: store.file)
         #expect(reopened.resumableLearningJourney(hotSeatID: "ekv-uva")?.run == saved.run)
-        try reopened.importJourneySession(snapshot, hotSeatID: "ekv-uva")
+        #expect(try !reopened.importJourneySession(snapshot, hotSeatID: "ekv-uva"))
         #expect(reopened.resumableLearningJourney(hotSeatID: "ekv-uva")?.run == saved.run)
     }
 
@@ -116,5 +191,41 @@ import Testing
         #expect(destination.journeySessions["shared"]?.run == nil)
         #expect(destination.resumableRun(hotSeatID: "shared") == nil)
         #expect(destination.resumableRun(id: journey.id)?.run == journey)
+    }
+
+    @Test(arguments: [false, true])
+    func staleCloudScopeKeepsTheExistingJourneyOwner(archived: Bool) throws {
+        let storage = try AppStorage.temporary(named: "journey-cloud-scope")
+        defer { storage.removeTemporaryFiles() }
+        let file = storage.applicationSupport.appendingPathComponent("playlists.json")
+        let store = try LevelPlaylistStore(file: file)
+        let entries = try (1...2).map { index in
+            try LevelPlaylistEntry(identity: .init(engine: .lemmings2, packID: "fixture", levelID: "\(index)"),
+                catalogueRevision: "v1", sourceRevision: "v1", packNameSnapshot: "Fixture",
+                levelNameSnapshot: "Level \(index)", levelNumberSnapshot: index)
+        }
+        let playlist = try LevelPlaylist(id: LearningJourney.playlistID, name: LearningJourney.title, entries: entries)
+        try store.add(playlist)
+        let pool = try LevelPool(id: LearningJourney.version, summary: playlist.name)
+        let first = try LevelSequenceRun.playlist(playlist, pool: pool)
+        let owner = "current-seat", alias = "former-seat"
+        let checkpoint = ["carry": Data([3])]
+        try store.startRun(first, hotSeatID: owner, l2Progress: checkpoint)
+        #expect(try store.advanceActiveRun())
+        if archived {
+            try store.startRun(.playlist(playlist, pool: pool), hotSeatID: "another-seat")
+        }
+        let before = try Data(contentsOf: file)
+        let stale = JourneySessionSnapshot(run: first, updatedAt: .distantFuture)
+        #expect(try !store.importJourneySession(stale, hotSeatID: alias))
+        #expect(try Data(contentsOf: file) == before)
+        #expect(store.journeySessions[alias] == nil)
+
+        let reopened = try LevelPlaylistStore(file: file)
+        let saved = try #require(reopened.resumableLearningJourney(hotSeatID: owner))
+        #expect(saved.run.id == first.id)
+        #expect(saved.run.currentIndex == 1)
+        #expect(saved.l2Progress == checkpoint)
+        #expect(reopened.resumableLearningJourney(hotSeatID: alias) == nil)
     }
 }

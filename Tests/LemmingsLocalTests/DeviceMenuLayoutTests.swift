@@ -7,6 +7,69 @@ import XCTest
 @testable import LemmingsLocal
 
 final class DeviceMenuLayoutTests: XCTestCase {
+    @MainActor func testMobileAboutCreditsKeepRolesLicencesAndBackNavigation() throws {
+        let page = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.6", build: "115", showsLixCredits: true)
+        XCTAssertEqual(page.title, "About Ultimate Lemmix")
+        XCTAssertEqual(page.subtitle, "Version 2.6 - Build 115")
+        let credits = page.details.joined(separator: "\n")
+        for name in ["Erik Veland", "DMA Design", "Psygnosis", "Dave Jones", "Gary Timmons", "Scott Johnston",
+                     "Brian Johnston", "Tim Wright", "Presage, Inc.", "Tony Williams", "Simon Naarmann", "IchoTolot"] {
+            XCTAssertTrue(credits.contains(name), name)
+        }
+        XCTAssertTrue(credits.contains("Menu Lix · Mike Spanner (Rubix) · CC0 1.0"))
+        XCTAssertTrue(credits.contains("Meadow Sunrise · Minim and mobius · CC0 1.0"))
+        XCTAssertTrue(credits.contains("Earthen Energy, Winter · Mike Spanner (Rubix) · CC BY 4.0"))
+        XCTAssertFalse(page.detailHeadings.isEmpty)
+        XCTAssertEqual(MobileAboutArt.action.id, "about")
+        XCTAssertTrue(page.rows.isEmpty)
+        for size in [CGSize(width: 320, height: 568), CGSize(width: 495, height: 720),
+                     CGSize(width: 810, height: 1080)] {
+            let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
+            XCTAssertEqual(layout.details.count, page.details.count)
+            let back = try XCTUnwrap(layout.targets.first)
+            XCTAssertEqual(back.action.id, "aboutBack")
+            XCTAssertEqual(layout.action(at: CGPoint(x: back.frame.midX, y: back.frame.midY)), "aboutBack")
+            XCTAssertEqual(layout.targets.count, 1)
+        }
+        let classic = MobileAboutArt.page(productName: "Ultimate Lemmings", version: nil, build: nil, showsLixCredits: false)
+        XCTAssertEqual(classic.subtitle, "Version Unknown - Build Unknown")
+        XCTAssertFalse(classic.details.joined().contains("CC BY 4.0"))
+        XCTAssertTrue(classic.details.joined().contains("IchoTolot"))
+    }
+
+    @MainActor func testLevelCracktroRendersMotionAndHonoursStaticArtwork() throws {
+        XCTAssertEqual(GameLoadingIntroArt.visualDelay, 550_000_000)
+        func pixels(elapsed: TimeInterval, reduceMotion: Bool = false, reduceFlashes: Bool = false) throws -> Data {
+            let width = 320, height = 200, stride = width * 4
+            let context = try XCTUnwrap(CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+                bytesPerRow: stride, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+            GameLoadingIntroArt.draw(in: CGRect(x: 0, y: 0, width: width, height: height), title: "Ultimate Lemmix",
+                message: "Loading...", elapsed: GameLoadingIntroArt.frameElapsed(elapsed,
+                    reduceMotion: reduceMotion, reduceFlashes: reduceFlashes), context: context)
+            return Data(bytes: try XCTUnwrap(context.data), count: stride * height)
+        }
+        let initial = try pixels(elapsed: 0)
+        XCTAssertNotEqual(initial, try pixels(elapsed: 1.4))
+        XCTAssertEqual(initial, try pixels(elapsed: 1.4, reduceMotion: true))
+        XCTAssertEqual(initial, try pixels(elapsed: 1.4, reduceFlashes: true))
+    }
+
+    @MainActor func testStartupHomeDisplaysStatusWithoutActionableTargets() {
+        let checking = MobileHomeArt.checkingGameFilesPage()
+        XCTAssertTrue(checking.home)
+        XCTAssertEqual(checking.subtitle, NxlvKit.L10n.text("Checking game files"))
+        XCTAssertEqual(checking.rows.map(\.id), MobileHomeArt.destinationIDs)
+        XCTAssertFalse((checking.rows + checking.footer).contains { $0.enabled || $0.primary })
+        for size in [CGSize(width: 320, height: 568), CGSize(width: 495, height: 720),
+                     CGSize(width: 720, height: 495), CGSize(width: 810, height: 1080)] {
+            let layout = GameFrontEnd.layout(checking, width: size.width, minimumHeight: size.height)
+            for target in layout.targets {
+                XCTAssertNil(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)))
+            }
+        }
+        XCTAssertTrue(MobileHomeArt.page(continueAction: nil, initials: "").rows.allSatisfy(\.enabled))
+    }
+
     @MainActor func testAmigaVersusWarningFitsBriefingAndLevelSelection() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let art = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))

@@ -4,6 +4,9 @@ import Foundation
 public enum GameLoadingIntroArt {
     public static let visualDelay: UInt64 = 550_000_000
     public static let musicDelay: UInt64 = 850_000_000
+    public static func frameElapsed(_ elapsed: TimeInterval, reduceMotion: Bool, reduceFlashes: Bool) -> TimeInterval {
+        reduceMotion || reduceFlashes ? 0 : elapsed
+    }
 
     private static func colour(_ rgb: UInt32) -> CGColor {
         CGColor(srgbRed: CGFloat((rgb >> 16) & 255) / 255, green: CGFloat((rgb >> 8) & 255) / 255,

@@ -29,6 +29,7 @@ for argument in "$@"; do
   esac
 done
 python3 "$project_dir/Tools/Publication/publication.py" guard ultimate-lemmix
+python3 "$project_dir/Tools/Localisation/catalogue.py" --release
 python3 "$project_dir/Tools/Publication/publication.py" check --metadata-only --edition ultimate-lemmix
 version="$(python3 "$project_dir/Tools/Publication/publication.py" field ultimate-lemmix macos version)"
 build="$(python3 "$project_dir/Tools/Publication/publication.py" field ultimate-lemmix macos build)"

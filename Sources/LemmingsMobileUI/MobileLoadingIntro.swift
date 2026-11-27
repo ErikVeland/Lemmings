@@ -1,111 +1,100 @@
-#if os(iOS) || os(tvOS)
-import LemmingsAudio
+#if os(iOS)
 import LemmingsGameArt
+import NxlvKit
 import UIKit
 
+/// Visual feedback only. The level preparation task never waits for this view or its timer.
 @MainActor final class MobileLoadingIntro {
     private var pending: Task<Void, Never>?
     private var overlay: MobileLoadingIntroView?
-    private var audio: MobileAudioSessionController?
-    private var music: GameLoadingIntroMusic?
-    private var musicChanged: (@MainActor () -> Void)?
     var isPresented: Bool { overlay != nil }
-    var isPlayingMusic: Bool { music != nil }
 
-    func start(in host: UIView, configuration: LemmingsMobileConfiguration, message: String, reduceMotion: Bool,
-               volume: Double = 0, musicChanged: (@MainActor () -> Void)? = nil,
-               isLoading: @escaping @MainActor () -> Bool) {
+    func start(in host: UIView, title: String, reduceMotion: Bool, reduceFlashes: Bool,
+               isLoading: @escaping @MainActor () -> Bool, cancel: @escaping @MainActor () -> Void) {
         stop()
-        self.musicChanged = musicChanged
-        let title = configuration == .ultimateLemmix ? "Ultimate Lemmix" : "Ultimate Lemmings"
         pending = Task { [weak self, weak host] in
-            try? await Task.sleep(nanoseconds: GameLoadingIntroArt.visualDelay)
+            do { try await Task.sleep(nanoseconds: GameLoadingIntroArt.visualDelay) } catch { return }
             guard !Task.isCancelled, let self, let host, isLoading(),
                   host.window?.windowScene?.activationState == .foregroundActive else { return }
-            let overlay = MobileLoadingIntroView(title: title, message: message, reduceMotion: reduceMotion)
+            let overlay = MobileLoadingIntroView(title: title, reduceMotion: reduceMotion,
+                                                reduceFlashes: reduceFlashes, cancel: cancel)
             overlay.frame = host.bounds
             self.overlay = overlay
             host.addSubview(overlay)
-            guard volume > 0, ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] != "muted" else { return }
-            try? await Task.sleep(nanoseconds: GameLoadingIntroArt.musicDelay)
-            guard !Task.isCancelled, isLoading(), !MobileMusic.shared.startupAuthenticationPending,
-                  host.window?.windowScene?.activationState == .foregroundActive,
-                  MobileAudioSessionWorkQueue.shared.playbackAllowed else { return }
-            self.startMusic(volume: volume, overlay: overlay)
         }
     }
 
     func bringToFront(in host: UIView) {
-        guard let overlay, overlay.superview === host else { return }
+        guard let overlay, overlay.superview === host, host.subviews.last !== overlay else { return }
         host.bringSubviewToFront(overlay)
     }
 
-    func stop(restoreMenuMusic: Bool = true) {
+    func stop() {
         pending?.cancel()
         pending = nil
         overlay?.removeFromSuperview()
         overlay = nil
-        stopMusic(restoreMenuMusic: restoreMenuMusic)
-        musicChanged = nil
-    }
-
-    private func startMusic(volume: Double, overlay: MobileLoadingIntroView) {
-        let audio = MobileAudioSessionController()
-        self.audio = audio
-        audio.onEvent = { [weak self] _ in self?.stopMusic(restoreMenuMusic: false) }
-        audio.resume { [weak self, weak overlay] ready in
-            guard let self, let overlay, self.overlay === overlay else { return }
-            guard ready, overlay.window?.windowScene?.activationState == .foregroundActive else {
-                self.stopMusic(restoreMenuMusic: false)
-                return
-            }
-            let music = GameLoadingIntroMusic()
-            guard music.play(volume: volume) else {
-                self.stopMusic(restoreMenuMusic: false)
-                return
-            }
-            self.music = music
-            self.musicChanged?()
-        }
-    }
-
-    private func stopMusic(restoreMenuMusic: Bool) {
-        audio?.suspend()
-        audio = nil
-        let wasPlaying = music != nil
-        music?.stop()
-        music = nil
-        if wasPlaying, restoreMenuMusic { musicChanged?() }
     }
 }
 
 @MainActor private final class MobileLoadingIntroView: UIView {
     private let title: String
-    private let message: String
+    private let message = L10n.text("Loading...")
     private let reduceMotion: Bool
+    private let reduceFlashes: Bool
+    private let cancelHandler: @MainActor () -> Void
+    private let cancelButton = UIButton(type: .system)
+    private let status = UILabel()
     private let start = CACurrentMediaTime()
     nonisolated(unsafe) private var displayLink: CADisplayLink?
 
-    init(title: String, message: String, reduceMotion: Bool) {
+    init(title: String, reduceMotion: Bool, reduceFlashes: Bool, cancel: @escaping @MainActor () -> Void) {
         self.title = title
-        self.message = message
         self.reduceMotion = reduceMotion
+        self.reduceFlashes = reduceFlashes
+        cancelHandler = cancel
         super.init(frame: .zero)
         autoresizingMask = [.flexibleWidth, .flexibleHeight]
         contentMode = .redraw
-        backgroundColor = .black
-        isAccessibilityElement = true
-        accessibilityLabel = message
+        backgroundColor = UIColor(red: 8 / 255, green: 7 / 255, blue: 25 / 255, alpha: 1)
         accessibilityViewIsModal = true
+        status.accessibilityLabel = message
+        status.accessibilityIdentifier = "level.cracktro.status"
+        status.isAccessibilityElement = true
+        status.accessibilityTraits = .staticText
+        status.frame = .zero
+        addSubview(status)
+        var configuration = UIButton.Configuration.borderedTinted()
+        configuration.title = L10n.text("Cancel")
+        configuration.baseForegroundColor = .white
+        cancelButton.configuration = configuration
+        cancelButton.accessibilityIdentifier = "level.cracktro.cancel"
+        cancelButton.addAction(UIAction { [weak self] _ in self?.cancelHandler() }, for: .primaryActionTriggered)
+        addSubview(cancelButton)
+        accessibilityElements = [status, cancelButton]
     }
 
     required init?(coder: NSCoder) { nil }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let safe = safeAreaLayoutGuide.layoutFrame
+        let size = cancelButton.sizeThatFits(CGSize(width: max(44, safe.width), height: 54))
+        let width = min(safe.width, max(104, size.width + 16))
+        status.frame = CGRect(x: safe.midX - 20, y: safe.midY - 20, width: 40, height: 40)
+        cancelButton.frame = CGRect(x: safe.midX - width / 2, y: safe.maxY - 56, width: width, height: 44)
+    }
+
+    override func accessibilityPerformEscape() -> Bool {
+        cancelHandler()
+        return true
+    }
 
     override func didMoveToWindow() {
         super.didMoveToWindow()
         displayLink?.invalidate()
         displayLink = nil
-        guard window != nil, !reduceMotion, !UIAccessibility.isReduceMotionEnabled else { return }
+        guard window != nil, !reduceMotion, !reduceFlashes, !UIAccessibility.isReduceMotionEnabled else { return }
         let target = MobileDisplayLinkTarget { [weak self] _ in self?.setNeedsDisplay() }
         let link = CADisplayLink(target: target, selector: #selector(MobileDisplayLinkTarget.frame(_:)))
         link.preferredFramesPerSecond = 30
@@ -117,8 +106,12 @@ import UIKit
 
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
-        let elapsed = reduceMotion || UIAccessibility.isReduceMotionEnabled ? 0 : CACurrentMediaTime() - start
-        GameLoadingIntroArt.draw(in: bounds, title: title, message: message, elapsed: elapsed, context: context)
+        let elapsed = GameLoadingIntroArt.frameElapsed(CACurrentMediaTime() - start,
+            reduceMotion: reduceMotion || UIAccessibility.isReduceMotionEnabled, reduceFlashes: reduceFlashes)
+        // Reserve space below the artwork for the touch target, even in landscape.
+        let artwork = CGRect(x: bounds.minX, y: bounds.minY, width: bounds.width,
+                             height: max(0, cancelButton.frame.minY - 8 - bounds.minY))
+        GameLoadingIntroArt.draw(in: artwork, title: title, message: message, elapsed: elapsed, context: context)
     }
 }
 #endif

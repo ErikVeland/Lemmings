@@ -11,7 +11,6 @@ import UIKit
     var resourceNotice: String?
     private let canvas = MobileMenuCanvas()
     private let scrollView = UIScrollView()
-    private let loadingIntro = MobileLoadingIntro()
     private var content: UIViewController?
     private var migrating = false
     override var preferredFocusEnvironments: [any UIFocusEnvironment] { content.map { [$0] } ?? [canvas] }
@@ -49,16 +48,8 @@ import UIKit
         guard !migrating else { return }
         migrating = true
         canvas.page = .init(title: L10n.text("Lemmings"), subtitle: L10n.text("Loading..."))
-        loadingIntro.start(in: view, configuration: configuration, message: L10n.text("Loading..."),
-                           reduceMotion: UIAccessibility.isReduceMotionEnabled) { [weak self] in
-            self?.migrating == true
-        }
         Task { [weak self] in
             guard let self else { return }
-            defer {
-                loadingIntro.stop()
-                migrating = false
-            }
             do {
                 let store = try MobileContentStore()
                 try await TVMobileMigration.migrate(defaults: .standard, players: .standard(profile: "_players"),
@@ -73,12 +64,8 @@ import UIKit
                 setNeedsFocusUpdate()
                 updateFocusIfNeeded()
             }
+            migrating = false
         }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        loadingIntro.stop()
     }
 
     private func openLibrary() {

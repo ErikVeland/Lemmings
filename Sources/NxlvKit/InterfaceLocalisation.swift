@@ -6,8 +6,10 @@ import Foundation
 public enum InterfaceLanguage: String, CaseIterable, Hashable, Sendable {
     case system
     case english = "en"
+    case catalan = "ca"
     case spanishLatinAmerica = "es-419"
     case german = "de"
+    case swissGerman = "gsw"
     case french = "fr"
     case portugueseBrazil = "pt-BR"
     case italian = "it"
@@ -19,8 +21,10 @@ public enum InterfaceLanguage: String, CaseIterable, Hashable, Sendable {
         switch self {
         case .system: return L10n.text("System default")
         case .english: return "English"
+        case .catalan: return "Català"
         case .spanishLatinAmerica: return "Español (Latinoamérica)"
         case .german: return "Deutsch"
+        case .swissGerman: return "Schwizerdütsch"
         case .french: return "Français"
         case .portugueseBrazil: return "Português (Brasil)"
         case .italian: return "Italiano"
