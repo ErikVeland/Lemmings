@@ -81,6 +81,12 @@ NEOSOUNDS
     rsync "${copy_options[@]}" --delete --delete-excluded \
       "$project_dir/Sources/Ports/" "$resources_dir/Ports/"
     zsh "$project_dir/Scripts/prepare-holiday-data.sh" "$resources_dir"
+    # Retain the audited loading music from the preceding preservation release.
+    if [[ -n "${LEMMINGS_LOADING_INTRO_SOURCE:-}" ]]; then
+      python3 "$project_dir/Tools/Publication/bundle_loading_intros.py" \
+        "$project_dir/Documentation/ReleaseReadiness/2.7.1-build113/LoadingIntroModules.json" \
+        "$LEMMINGS_LOADING_INTRO_SOURCE" "$resources_dir/LoadingIntros"
+    fi
     python3 "$project_dir/Tools/MacArtwork/prepare.py" "$resources_dir/MacArtwork"
     mac_music_tools="$(zsh "$project_dir/Scripts/ensure-mac-music-tools.sh")"
     python3 "$project_dir/Tools/MacMusic/prepare.py" --output "$resources_dir/MacMusic" --tools "$mac_music_tools"
