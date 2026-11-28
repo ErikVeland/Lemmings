@@ -683,13 +683,15 @@ import NxlvKit
     let reducedFlashes = GameCheckButton(title: L10n.text("Reduce added flashes"), target: self, action: #selector(reduceFlashesChanged))
     reducedFlashes.state = settings.reduceFlashes ? .on : .off
     reduceFlashesCheck = reducedFlashes
+    let haptics = GameCheckButton(title: L10n.text("Haptics"), target: self, action: #selector(gameplayHapticsChanged))
+    haptics.state = GameplayHapticsPreference.enabled ? .on : .off
     let size = popUp(#selector(interfaceSizeChanged))
     size.addItems(withTitles: ClassicInterfaceSize.allCases.map(\.title))
     size.selectItem(at: ClassicInterfaceSize.allCases.firstIndex(of: settings.interfaceSize) ?? 0)
     interfaceSizePopUp = size
     return groupedPane([
       (L10n.text("Interface"), [(L10n.text("UI size"), size), ("", songInfo), ("", fadeMenu), ("", staticHome)]),
-      (L10n.text("Added effects"), [(L10n.text("Motion"), motion), (L10n.text("Flashes"), reducedFlashes)]),
+      (L10n.text("Added effects"), [(L10n.text("Motion"), motion), (L10n.text("Flashes"), reducedFlashes), ("", haptics)]),
     ])
   }
 
@@ -1136,6 +1138,10 @@ import NxlvKit
   @objc private func fadeMenuButtonChanged(_ sender: NSButton) {
     settings.fadeMenuButton = sender.state == .on
     changed()
+  }
+
+  @objc private func gameplayHapticsChanged(_ sender: NSButton) {
+    GameplayHapticsPreference.enabled = sender.state == .on
   }
 
   @objc private func reduceFlashesChanged(_ sender: NSButton) {

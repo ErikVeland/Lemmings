@@ -24,6 +24,16 @@ public enum GameLoadingIntroArt {
 
     public static func draw(in frame: CGRect, title: String, message: String,
                             elapsed: TimeInterval, context: CGContext) {
+        drawScene(in: frame, elapsed: elapsed, caption: (title, message), context: context)
+    }
+
+    /// Edge-to-edge scenery for Home, without the level intro's duplicate title or status.
+    public static func drawBackdrop(in frame: CGRect, elapsed: TimeInterval, context: CGContext) {
+        drawScene(in: frame, elapsed: elapsed, caption: nil, context: context)
+    }
+
+    private static func drawScene(in frame: CGRect, elapsed: TimeInterval,
+                                  caption: (title: String, message: String)?, context: CGContext) {
         guard frame.width > 0, frame.height > 0 else { return }
         context.saveGState()
         defer { context.restoreGState() }
@@ -31,7 +41,8 @@ public enum GameLoadingIntroArt {
         context.setFillColor(colour(0x080719))
         context.fill(frame)
 
-        let scale = min(frame.width / 320, frame.height / 200)
+        let scale = caption == nil ? max(frame.width / 320, frame.height / 200)
+                                  : min(frame.width / 320, frame.height / 200)
         context.translateBy(x: frame.midX - 160 * scale, y: frame.midY - 100 * scale)
         context.scaleBy(x: scale, y: scale)
         context.setShouldAntialias(false)
@@ -76,12 +87,18 @@ public enum GameLoadingIntroArt {
             }
         }
 
+        guard let caption else {
+            // Keep the checking label and stone controls more prominent than the scenery.
+            context.setFillColor(CGColor(gray: 0, alpha: 0.5))
+            context.fill(CGRect(x: 0, y: 0, width: 320, height: 200))
+            return
+        }
         let wordmark = CGRect(x: 20, y: 54 + CGFloat(wave), width: 280, height: 31)
-        GamePixelTypography.draw(title, in: wordmark.offsetBy(dx: 2, dy: 3), context: context,
+        GamePixelTypography.draw(caption.title, in: wordmark.offsetBy(dx: 2, dy: 3), context: context,
             typography: nil, maximumScale: 4, bitmapOnly: true, color: colour(0x2d225d))
-        GamePixelTypography.draw(title, in: wordmark, context: context,
+        GamePixelTypography.draw(caption.title, in: wordmark, context: context,
             typography: nil, maximumScale: 4, bitmapOnly: true, color: colour(0xd8e8ff))
-        GamePixelTypography.draw(message, in: CGRect(x: 20, y: 150, width: 280, height: 28), context: context,
+        GamePixelTypography.draw(caption.message, in: CGRect(x: 20, y: 150, width: 280, height: 28), context: context,
             typography: nil, maximumScale: 2, bitmapOnly: true, color: colour(0xf8daca))
     }
 }

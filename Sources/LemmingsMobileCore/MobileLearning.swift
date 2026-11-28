@@ -177,17 +177,19 @@ public final class MobileJourneyLibrary: MobileGameLibrary {
         guard entries.indices.contains(index) else { return "" }
         return entries[index].identity.packID + "|" + entries[index].identity.levelID
     }
+    public static func sourcePack(for identity: LevelCatalogueIdentity, in catalogue: MobileCatalogue) -> MobileContentPack? {
+        guard identity.engine == .classic else { return nil }
+        if identity.packID.hasPrefix("fan:") {
+            return catalogue.pack(id: String(identity.packID.dropFirst(4)))
+        }
+        let release = identity.packID.split(separator: "-").first.map(String.init) ?? ""
+        return catalogue.pack(id: "release/" + release)
+    }
     public func origin(of index: Int) throws -> (pack: String, index: Int, library: any MobileGameLibrary) {
         guard entries.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let entry = entries[index], identity = entry.identity
         guard identity.engine == .classic else { throw MobileSessionError.journeyEngineUnavailable }
-        let pack: MobileContentPack?
-        if identity.packID.hasPrefix("fan:") { pack = catalogue.pack(id: String(identity.packID.dropFirst(4))) }
-        else {
-            let release = identity.packID.split(separator: "-").first.map(String.init) ?? ""
-            pack = catalogue.pack(id: "release/" + release)
-        }
-        guard let pack else { throw MobileSessionError.changedLevel }
+        guard let pack = Self.sourcePack(for: identity, in: catalogue) else { throw MobileSessionError.changedLevel }
         if opened[pack.id] == nil {
             let current = try catalogue.library(for: pack)
             opened = [pack.id: current]

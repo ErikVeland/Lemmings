@@ -109,6 +109,9 @@ private final class FixtureArtwork: ClassicMobileArtworkProvider {
         try withStarter { starter in
             let ports = starter.directory.deletingLastPathComponent()
             let catalogue = MobileCatalogue(portsRoot: ports)
+            let original = LevelCatalogueIdentity(engine: .classic, packID: "lemmings-LEVEL-120", levelID: "0:Fun:1:9:1")
+            #expect(catalogue.families.contains(.classic))
+            #expect(MobileJourneyLibrary.sourcePack(for: original, in: catalogue) == nil)
             let visible = StarterPlaylistCatalogue.routes.filter { MobileStarterPlaylists.hasSources(for: $0, in: catalogue) }
             #expect(visible.map(\.key) == ["open-starter"])
             let route = try #require(visible.first)

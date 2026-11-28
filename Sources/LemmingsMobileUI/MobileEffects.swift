@@ -11,6 +11,7 @@ import os
 @MainActor final class MobileEffects {
     private var player = SoundEffectPlayer(voiceCount: MobileDevicePerformance.constrained ? 12 : 24,
                                           rescueVoiceLimit: MobileDevicePerformance.constrained ? 3 : 6)
+    private let haptics = GameplayHaptics()
     private let playback = AudioPlaybackQueue(label: "Lemmings.mobile-effects-control")
     private let audioObservers = MobileNotificationObserverBag()
     private let logger = Logger(subsystem: "com.ultimatelemmings.audio", category: "Effects")
@@ -100,14 +101,22 @@ import os
         let engine = (session as? MobileActionReplaySession)?.engineSession ?? session
         let l2Session = engine as? Lemmings2MobileSession
         let l2Requests = l2Session?.drainLemmings2SoundRequests() ?? []
-        guard !isTestAudioMuted, !suspended, prepared else { return }
         let current = snapshot ?? session.snapshot
+        let rect = viewport.visibleLevelRect
+        let soundViewport = GameplaySoundViewport(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
+        if !suspended && !session.isReadOnly {
+            if rewinding { haptics.seek(nuking: current.isEndingRun, tick: current.tick) }
+            else {
+                let fuse = current.isEndingRun ? session.hapticFuseRemainingTicks : nil
+                haptics.update(nuking: current.isEndingRun, tick: current.tick, cues: cues, sequel: l2Requests,
+                    viewport: soundViewport, secondsToBlast: fuse.map { Double($0) / session.ticksPerSecond })
+            }
+        }
+        guard !isTestAudioMuted, !suspended, prepared else { return }
         let needsReadyOutput = session.activeLemmingCount > 0 || current.isEndingRun
         let becameActive = needsReadyOutput && !keepOutputReady
         keepOutputReady = needsReadyOutput
         if becameActive { resumeForCue() }
-        let rect = viewport.visibleLevelRect
-        let soundViewport = GameplaySoundViewport(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
         let ending = current.isEndingRun
         enqueue { player in player.setViewport(soundViewport); player.setNukeActive(ending) }
         if let neoLemmix = engine as? NeoLemmixMobileSession,
@@ -142,6 +151,12 @@ import os
             enqueue { $0.play(cues) }
         }
     }
+    func nukeChanged(_ session: any MobileGameSession) {
+        guard !suspended, !session.isReadOnly else { return }
+        let snapshot = session.snapshot
+        haptics.update(nuking: snapshot.isEndingRun, tick: snapshot.tick, cues: [])
+    }
+
     func ready() { guard !isTestAudioMuted, !suspended else { return }; prepare(); guard prepared else { return }; resumeForCue(); enqueue { $0.play(.ready) } }
     func rejectedAssignment() { guard !isTestAudioMuted, !suspended, prepared else { return }; resumeForCue(); enqueue { $0.play(.actionRejected) } }
     func releaseRate(_ rate: Int) { guard !isTestAudioMuted, !suspended, prepared else { return }; resumeForCue(); enqueue { $0.playReleaseRate(rate) } }
@@ -167,11 +182,11 @@ import os
         }
         return MobileMovieEffects(player: copy)
     }
-    func pause() { idleTask?.cancel(); idleTask = nil; keepOutputReady = false; playback.cancelPending(); enqueue(persistent: true) { $0.suspendOutput() } }
+    func pause() { haptics.pause(); idleTask?.cancel(); idleTask = nil; keepOutputReady = false; playback.cancelPending(); enqueue(persistent: true) { $0.suspendOutput() } }
     func setVoiceLimit(_ count: Int) { enqueue { $0.setVoiceLimit(count) } }
     func suspend() { suspended = true; pause() }
     func resume() { guard !isTestAudioMuted else { return }; suspended = false }
-    func stop() { idleTask?.cancel(); idleTask = nil; keepOutputReady = false; playback.cancelPending(); enqueue(persistent: true) { $0.stop() }; prepared = false }
+    func stop() { haptics.reset(); idleTask?.cancel(); idleTask = nil; keepOutputReady = false; playback.cancelPending(); enqueue(persistent: true) { $0.stop() }; prepared = false }
 
     private func resumeForCue() {
         let logger = logger

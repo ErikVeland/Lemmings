@@ -8,6 +8,7 @@ import NxlvKit
 public struct FXDeviceProfile: Sendable {
     public let desktop: Bool
     public let prefersFullDesktopEffects: Bool
+    public let prefersFixedMobileEffects: Bool
     public let initialQuality: FXQuality
     public let maximumQuality: FXQuality
     public let supportsEnhancedEffects: Bool
@@ -15,14 +16,19 @@ public struct FXDeviceProfile: Sendable {
 
     public init(hasMetal: Bool, modernGPU: Bool, enhancedEffectsSupported: Bool,
                 processorCount: Int, recommendedWorkingSet: UInt64, television: Bool = false,
-                physicalMemory: UInt64 = .max, desktop: Bool = false) {
+                physicalMemory: UInt64 = .max, desktop: Bool = false,
+                mobile: Bool = false, foldable: Bool = false) {
         self.desktop = desktop
         prefersFullDesktopEffects = desktop && hasMetal && modernGPU
+        prefersFixedMobileEffects = mobile && !television && hasMetal && (modernGPU || foldable)
         let resources = DeviceEffectResources(physicalMemory: physicalMemory, processorCount: processorCount)
-        maximumQuality = hasMetal ? FXQuality(rawValue: resources.qualityCeiling)! : .minimal
+        maximumQuality = prefersFixedMobileEffects ? .full
+            : hasMetal ? FXQuality(rawValue: resources.qualityCeiling)! : .minimal
         // TV omits the extra full-screen speed and cinematic explosion surface.
-        supportsEnhancedEffects = hasMetal && enhancedEffectsSupported && resources.enhancedEffectsAllowed && !television
-        let seed: FXQuality = !hasMetal || processorCount <= 2 ? .minimal : (modernGPU && !television ? .full : .balanced)
+        supportsEnhancedEffects = prefersFixedMobileEffects
+            || (hasMetal && enhancedEffectsSupported && resources.enhancedEffectsAllowed && !television)
+        let seed: FXQuality = prefersFixedMobileEffects ? .full
+            : !hasMetal || processorCount <= 2 ? .minimal : (modernGPU && !television ? .full : .balanced)
         initialQuality = FXQuality(rawValue: min(seed.rawValue, maximumQuality.rawValue))!
         // Reserve capacity for simultaneous surfaces, textures and the game itself.
         let pixels: UInt64 = recommendedWorkingSet > 0 ? recommendedWorkingSet / 64
@@ -34,7 +40,8 @@ public struct FXDeviceProfile: Sendable {
         maximumOverlayPixels = min(television ? 720_000 : surfaceLimit, pixelBudget)
     }
 
-    public static func detect(device: MTLDevice?, mobile: Bool, television: Bool = false) -> Self {
+    public static func detect(device: MTLDevice?, mobile: Bool, television: Bool = false, foldable: Bool = false,
+                              allowFixedMobileEffects: Bool = true) -> Self {
         let cores = ProcessInfo.processInfo.processorCount
         #if targetEnvironment(simulator)
         let simulator = true
@@ -46,7 +53,7 @@ public struct FXDeviceProfile: Sendable {
                         processorCount: cores, supportsApple4: device?.supportsFamily(.apple4) == true, simulator: simulator),
                     processorCount: cores, recommendedWorkingSet: device?.recommendedMaxWorkingSetSize ?? 0,
                     television: television, physicalMemory: ProcessInfo.processInfo.physicalMemory,
-                    desktop: !mobile && !television)
+                    desktop: !mobile && !television, mobile: mobile && allowFixedMobileEffects, foldable: foldable)
     }
 
     /// Simulator exposes an Apple 2-like translation layer, not the named phone's GPU.
@@ -99,7 +106,7 @@ public struct FXPresentationBudget: Sendable {
     }
 }
 
-/// M-series Macs retain full effects. Other devices also adapt to measured cost.
+/// M-series Macs and capable iOS devices do not adapt visuals to measured frame cost.
 public struct AdaptiveFXPerformance: Sendable {
     public let profile: FXDeviceProfile
     public private(set) var cpu: AdaptiveFXQuality
@@ -145,13 +152,24 @@ public struct AdaptiveFXPerformance: Sendable {
     public mutating func setPressure(ceiling: FXQuality, framesPerSecond: Double, now: Double,
                                     resources: DeviceEffectResources? = nil) {
         guard now.isFinite, framesPerSecond.isFinite, framesPerSecond > 0 else { return }
+        self.framesPerSecond = min(60, framesPerSecond)
+        if profile.prefersFixedMobileEffects {
+            // Keep the same visual quality on capable iOS devices. Only an
+            // emergency can temporarily suspend the extra Metal surface.
+            let emergency = resources?.requiresVisualEmergencyBudget == true
+            self.ceiling = emergency ? .minimal : .full
+            maximumOverlayPixels = emergency ? min(profile.maximumOverlayPixels, 262_144) : profile.maximumOverlayPixels
+            enhancedEffectsAllowed = profile.supportsEnhancedEffects && !emergency
+            cpu = AdaptiveFXQuality(initial: self.ceiling)
+            gpu = AdaptiveFXQuality(initial: self.ceiling)
+            return
+        }
         self.ceiling = FXQuality(rawValue: min(profile.maximumQuality.rawValue, ceiling.rawValue, resources?.qualityCeiling ?? 2))!
         let resourcePixels = resources?.maximumOverlayPixels ?? profile.maximumOverlayPixels
         // Memory warnings use the small emergency surface on every platform.
         maximumOverlayPixels = profile.prefersFullDesktopEffects && resourcePixels > 262_144
             ? profile.maximumOverlayPixels : min(profile.maximumOverlayPixels, resourcePixels)
         enhancedEffectsAllowed = profile.supportsEnhancedEffects && (resources?.enhancedEffectsAllowed ?? true)
-        self.framesPerSecond = min(60, framesPerSecond)
         if profile.prefersFullDesktopEffects {
             // M-series Macs use full effects unless explicit resource pressure limits them.
             // Restore immediately when that pressure clears, including while paused.
@@ -164,7 +182,7 @@ public struct AdaptiveFXPerformance: Sendable {
 
     public mutating func recordCPU(_ seconds: Double, source: String = "frame", now: Double) {
         guard seconds.isFinite, seconds >= 0, now.isFinite else { return }
-        guard !profile.prefersFullDesktopEffects else { return }
+        guard !profile.prefersFullDesktopEffects, !profile.prefersFixedMobileEffects else { return }
         cpuCosts = cpuCosts.filter { now >= $0.value.at && now - $0.value.at < 0.5 }
         cpuCosts[source] = (seconds, now)
         cpu.observe(cpuSeconds: cpuCosts.values.reduce(0) { $0 + $1.seconds }, gpuSeconds: 0, now: now,
@@ -173,7 +191,7 @@ public struct AdaptiveFXPerformance: Sendable {
 
     public mutating func recordGPU(_ seconds: Double, source: String, now: Double) {
         guard seconds.isFinite, seconds >= 0, now.isFinite else { return }
-        guard !profile.prefersFullDesktopEffects else { return }
+        guard !profile.prefersFullDesktopEffects, !profile.prefersFixedMobileEffects else { return }
         // Completion samples are estimates of active surface cost, not end-to-end latency.
         gpuCosts = gpuCosts.filter { now >= $0.value.at && now - $0.value.at < 0.5 }
         gpuCosts[source] = (seconds, now)

@@ -3609,3 +3609,5 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0} T {1} MIN";
 "{0}{1} more to rescue for three stars." = "{0}{1} flere å redde for tre stjerner.";
+
+"Haptics" = "Vibrasjon";

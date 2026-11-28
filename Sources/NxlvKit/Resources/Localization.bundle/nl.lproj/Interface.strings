@@ -3609,3 +3609,5 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0} UUR EN {1} MIN";
 "{0}{1} more to rescue for three stars." = "Nog {0}{1} redden voor drie sterren.";
+
+"Haptics" = "Trilfeedback";

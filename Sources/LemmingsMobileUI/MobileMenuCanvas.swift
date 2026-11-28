@@ -412,6 +412,9 @@ import LemmingsAppCore
                 scroll.setContentOffset(CGPoint(x: 0, y: min(maximum, max(0, target.frame.minY + frame.minY - anchor.offset))), animated: false)
             }
         }
+        setNeedsDisplay()
+        // A status-only canvas is represented by its own accessibility label.
+        guard !isAccessibilityElement else { return }
         var elements: [Any] = []
         let headingText = showsStaticHeading ? "" : page.title
         for (text, frame) in [(headingText, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
@@ -473,12 +476,20 @@ import LemmingsAppCore
         } else {
             accessibilityElements = elements + (previewButton.isHidden ? [] : [previewButton]) + targets
         }
-        setNeedsDisplay()
     }
     private func rebuild() {
         pageLayout = nil
         tvActivation.reset()
         onPageChanged?()
+        if isAccessibilityElement {
+            // Keep painted controls, but do not create UIKit buttons behind the checking status.
+            targets.forEach { $0.removeFromSuperview() }
+            targets.removeAll()
+            accessibilityElements = nil
+            setNeedsLayout()
+            setNeedsDisplay()
+            return
+        }
         let page = displayedPage
         if page.televisionGrid { televisionPageIndex = page.televisionPageIndex }
         let actions = page.rows + page.orderedFooter

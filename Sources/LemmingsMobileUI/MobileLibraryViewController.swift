@@ -361,7 +361,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         browser.onSelect = { [weak self] index in
             guard let self else { return }
             if self.browserShown, self.selectedIndex != index { self.selectLevel(index) }
-            self.selectedIndex = index
+            guard self.route == .levels, self.selectedIndex == index else { return }
             self.browser.setPlayTitle(self.previewPlayTitle(index))
             self.browser.setFavourite(self.isFavourite(index))
             self.view.setNeedsLayout()
@@ -1100,7 +1100,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                                     + (library is Lemmings2MobileLibrary ? [.init("l2Practice", L10n.text("Practice"))] : [])
                                     + (currentPack != nil && activeRun == nil && library.levels.count > 1 ? [.init("random", L10n.text("Random 10"))] : [])
                                     + [.init("back", L10n.text("Back")),
-                                         .init("play", previewPlayTitle(selectedIndex), enabled: !loading, primary: true)],
+                                         .init("play", previewPlayTitle(selectedIndex), enabled: !loading && selectedPreview != nil, primary: true)],
                                 preview: true, footerColumns: 2)
             if let preview = selectedPreview {
                 canvas.preview = MobileBitmapRenderer.image(preview.frame)
@@ -1239,6 +1239,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         browser.playerName = hotSeat.map { playerName($0.turn) }
         browser.statusText = loading ? "" : notice
         browser.isLoading = loading
+        browser.canPlay = selectedPreview != nil
         if route == .levels { browser.setPlayTitle(previewPlayTitle(selectedIndex)) }
         let available = MobileSystemRegions.usesFullDisplay(in: view) ? view.bounds : MobileSystemRegions.menuFrame(in: view)
         let coverBrowser = available.width >= 600 && available.height >= 300
@@ -1402,7 +1403,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if handleHome(id) || handleLearning(id) || handleRankings(id) { return }
         if handleSettings(id) { return }
         switch id {
-        case "classic": levelsBackRoute = .home; navigate(.levels); selectLevel(selectedIndex)
+        case "classic":
+            guard library?.levels.isEmpty == false else { showMissingGameData(for: id); return }
+            levelsBackRoute = .home; navigate(.levels); selectLevel(selectedIndex)
         case "originalMovies": showOriginalMovies(); return
         case "l2":
             if hasLemmings2Data { openLemmings2() } else { showMissingGameData(for: id) }
@@ -1412,7 +1415,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             if hasNeoLemmixData { openNeoLemmix() } else { showMissingGameData(for: id) }
         case "home": navigateToBrowseRoot()
         case "back": levelsBackRoute == .home ? navigateToBrowseRoot() : navigate(levelsBackRoute)
-        case "dataBack": navigate(dataBackRoute)
+        case "dataBack":
+            navigate(dataBackRoute)
+            if route == .levels { selectLevel(selectedIndex) }
         case "addPlaylistBack": navigate(.levels); selectLevel(selectedIndex)
         case "favourite": toggleFavourite(selectedIndex)
         case "favourites": openFavourites()
@@ -1598,7 +1603,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             updating: fanUpdating, packDetails: details)
     }
 
-    private func showMissingGameData(for action: String) {
+    func showMissingGameData(for action: String) {
         navigate(.data)
         if MobileResourceAccess.isStore {
             gameAssetHomeAction = action
@@ -1651,6 +1656,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     /// Opens content on a worker. Only the current request can change the menu.
     func openLibrary(duringWelcome: Bool = false, _ makeLibrary: @escaping @Sendable () throws -> (any MobileGameLibrary)?,
                              completion: @escaping @MainActor ((any MobileGameLibrary)?) -> Void) {
+        learningTask?.cancel(); learningTask = nil; learningPreparing = false
         libraryTask?.cancel()
         stopMenuPreviews(); previewGeneration = UUID()
         preparingLevel = false
@@ -1732,17 +1738,21 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         return index <= run.currentIndex || mobileSettings.classic.unlockAllClassicLevels
     }
     func selectLevel(_ index: Int) {
-        guard game == nil, !preparingLevel, libraryTask == nil, canSelectJourneyLevel(index) else { return }
-        if selectedIndex != index { selectedPreview = nil }
-        selectedIndex = index
-        guard let previewLoader else { rebuild(); return }
+        guard game == nil, !preparingLevel, libraryTask == nil, let library,
+              library.levels.indices.contains(index), canSelectJourneyLevel(index) else { return }
         let previous = previewTask, draining = previewDrain
-        previous?.cancel()
+        previous?.cancel(); previewTask = nil
         previewDrain = Task {
             await draining?.value
             await previous?.value
         }
         let generation = UUID(); previewGeneration = generation
+        selectedPreview = nil; loading = false
+        if let journey = library as? MobileJourneyLibrary {
+            guard journey.entries.indices.contains(index), requireJourneySource(journey.entries[index]) else { return }
+        }
+        selectedIndex = index
+        guard let previewLoader else { rebuild(); return }
         notice = ""; loading = true; rebuild()
         previewTask = Task {
             do {
@@ -1752,7 +1762,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 rebuild()
             } catch {
                 guard !Task.isCancelled, previewGeneration == generation else { return }
-                loading = false; notice = error.localizedDescription
+                selectedPreview = nil; loading = false; notice = error.localizedDescription
                 rebuild()
             }
         }
@@ -2099,7 +2109,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     }
 
     private func playLevelPreview(_ index: Int) {
-        guard route == .levels, !loading else { return }
+        guard route == .levels, !loading, index == selectedIndex, selectedPreview != nil else { return }
         startLevel(index, checkpoint: previewCheckpoint(index))
     }
 
@@ -2464,6 +2474,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                         catch { self.notice = error.localizedDescription }
                     }
                     if action == .easyPuzzles { self.startEasyPuzzles() }
+                    if action == .library, self.route == .levels { self.selectLevel(self.selectedIndex) }
                     self.loadCheckpoint(); self.rebuild(); self.presentCloudAuthentication()
                     self.syncMenuMusic()
                     self.measureMobileFanPacks()

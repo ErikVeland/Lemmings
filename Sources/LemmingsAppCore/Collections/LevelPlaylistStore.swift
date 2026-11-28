@@ -442,9 +442,11 @@ import NxlvKit
     /// Snapshots supply labels for display counts without changing campaign saves.
     public func completedLearningEntries(hotSeatID: String?) -> [LevelPlaylistEntry] {
         let completed = learningProgress(hotSeatID: hotSeatID).completed
-        let entries = document.playlists.flatMap(\.entries)
-            + (document.activeRun?.entries ?? []) + savedRuns.flatMap { $0.run.entries }
-            + (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []) + EasyPuzzleCatalogue.puzzles.map(\.entry)
+        var entries: [LevelPlaylistEntry] = document.playlists.flatMap(\.entries)
+        entries.append(contentsOf: document.activeRun?.entries ?? [])
+        entries.append(contentsOf: savedRuns.flatMap { $0.run.entries })
+        entries.append(contentsOf: LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? [])
+        entries.append(contentsOf: EasyPuzzleCatalogue.puzzles.map(\.entry))
         var seen: Set<LevelCatalogueIdentity> = []
         return entries.filter { completed.contains($0.identity) && seen.insert($0.identity).inserted }
     }

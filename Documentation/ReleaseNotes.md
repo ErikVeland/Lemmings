@@ -2,26 +2,24 @@
 
 ## Current source and delivery queue
 
-The current source version is **2.4.3** (Mac build 107, iOS build 46, tvOS build 21).
-Read the [complete 2.4.3 notes](ReleaseNotes-2.4.3-build107.md).
-See the [2.4.1 mobile delivery record](ReleaseReadiness/2.4.1-build105/README.md#ios-and-tvos-delivery--4-november-2026)
-for the previous TestFlight submissions.
+The current source version is **2.7.5** (Mac build 114, iOS build 48, tvOS build 23).
+Read the [2.7.5 release notes](ReleaseNotes-2.7.5-build114.md).
+The mobile build numbers record the last Ultimate Lemmings mobile candidates.
 
 ## Latest published Mac release
 
-[Mac 2.4.2 build 106](https://github.com/ErikVeland/Lemmings/releases/tag/v2.4.2)
-has full and slim notarised downloads for Apple silicon and Intel. The signed
-feed includes direct deltas from the five preceding builds.
-See the [2.4.2 release record](ReleaseReadiness/2.4.2-build106/README.md).
-
-The [Mac 2.4.1 record](ReleaseReadiness/2.4.1-build105/README.md) retains the
-previous release checks.
+[Mac 2.7.1 build 113](https://github.com/ErikVeland/Lemmings/releases/tag/v2.7.1)
+has full and slim notarised downloads for Intel and Apple silicon.
+See the [2.7.1 release record](ReleaseReadiness/2.7.1-build113/README.md).
 
 ## Earlier notes
 
 These links preserve the exact notes in Git history. The working tree keeps
 only the current release notes. Packaged notes remain with their release evidence.
 
+- [2.7 build 112](https://github.com/ErikVeland/Lemmings/releases/tag/v2.7)
+- [2.6 build 111](https://github.com/ErikVeland/Lemmings/releases/tag/v2.6)
+- [2.5 build 110](https://github.com/ErikVeland/Lemmings/releases/tag/v2.5)
 - [2.4.2 build 106](https://github.com/ErikVeland/Lemmings/blob/55f8f52703e04db6b6f9460fd7b962de81aab26f/Documentation/ReleaseNotes-2.4.2-build106.md)
 - [2.4.1 build 105](https://github.com/ErikVeland/Lemmings/blob/554f79fceaa72e02d52584a07df73df51d9eb2aa/Documentation/ReleaseNotes-2.4.1-build105.md)
 - [2.4 build 104](https://github.com/ErikVeland/Lemmings/blob/75fc1f34508d379baced019796cee48ff8ec0e27/Documentation/ReleaseNotes-2.4-build104.md)
