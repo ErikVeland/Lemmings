@@ -104,8 +104,8 @@ import UIKit
         #endif
         startupTask = Task { [weak self] in
             #if DEBUG && os(iOS)
-            if ProcessInfo.processInfo.environment["LEMMINGS_TEST_SLOW_STARTUP"] == "1" {
-                do { try await Task.sleep(for: .seconds(5)) } catch { return }
+            if let delay = Int64(ProcessInfo.processInfo.environment["LEMMINGS_TEST_SLOW_STARTUP"] ?? ""), delay > 0 {
+                do { try await Task.sleep(for: .seconds(min(25, max(5, delay)))) } catch { return }
             }
             #endif
             let restored = await Task.detached(priority: .userInitiated) {

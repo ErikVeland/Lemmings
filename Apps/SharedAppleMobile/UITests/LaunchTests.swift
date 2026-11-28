@@ -27,7 +27,8 @@ final class LaunchTests: XCTestCase {
         let app = XCUIApplication()
         app.launchEnvironment["LEMMINGS_TEST_AUDIO"] = "muted"
         app.launchEnvironment["LEMMINGS_TEST_LANGUAGE"] = "en"
-        app.launchEnvironment["LEMMINGS_TEST_SLOW_STARTUP"] = "1"
+        // Simulator launch and XCTest queries can take longer than the default test delay.
+        app.launchEnvironment["LEMMINGS_TEST_SLOW_STARTUP"] = "20"
         app.launchArguments = ["-FirstLaunchProfileCompleteV1", "YES"]
         app.launch()
 
