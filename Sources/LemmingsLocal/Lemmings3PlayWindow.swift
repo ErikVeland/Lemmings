@@ -117,6 +117,7 @@ import NxlvKit
     private var originalMovie: OriginalMoviePlayer?
     private var playsOpeningStory = false
     private var countdownWarning = LastSecondsWarning()
+    private let haptics = GameplayHaptics()
     private var campaignFinished = false
     private var playsEndingAfterThisResult = false
     private let canvas = Lemmings3Canvas()
@@ -126,7 +127,9 @@ import NxlvKit
     private var pendingTool: Int?
     private var selected = 0
     private var manualCarrierID: Int?
-    private var paused = true
+    private var paused = true {
+      didSet { if paused && !oldValue { haptics.pause() } }
+    }
     private var userPausedMusic = false
     private var assignmentFocus = AssignmentFocus()
     private var gameplayKeyboard: GameplayKeyboard?
@@ -966,6 +969,7 @@ import NxlvKit
     }
     func windowWillClose(_ notification: Notification) { stop() }
     func stop() {
+        haptics.reset()
         resultMusic.retire()
         manualDJHandoff.cancel()
         gameplayKeyboard?.removeNavigationControl()
@@ -978,6 +982,7 @@ import NxlvKit
         originalMovie?.close(); originalMovie = nil
     }
     func suspendAudioOutput() {
+        haptics.pause()
         saveCheckpoint(immediately: true)
         music.suspendOutput()
         dj.suspendOutput()
@@ -1908,7 +1913,9 @@ import NxlvKit
         let previousSoundState = Lemmings3SoundCue.Snapshot(game)
         game.step()
         saveCheckpoint()
-        warningSound.play(Lemmings3SoundCue.positionedCues(before: previousSoundState, after: .init(game)))
+        let cues = Lemmings3SoundCue.positionedCues(before: previousSoundState, after: .init(game))
+        if !paused { haptics.update(nuking: false, tick: game.tick, cues: cues) }
+        warningSound.play(cues)
         if countdownWarning.update(seconds: game.remainingSeconds) { warningSound.play(.timerWarning) }
         canvas.flashExplosions(game)
         canvas.game = game

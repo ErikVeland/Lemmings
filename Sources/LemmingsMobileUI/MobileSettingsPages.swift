@@ -267,6 +267,7 @@ extension MobileLibraryViewController {
             case "staticHome": settings.classic.staticHomeScreen.toggle()
             case "motion": settings.classic.reduceMotion.toggle()
             case "flashes": settings.classic.reduceFlashes.toggle()
+            case "gameplayHaptics": GameplayHapticsPreference.enabled.toggle()
             case "telemetry": AnonymousTelemetry.shared.setSharing(!AnonymousTelemetry.shared.sharesCounts)
             case "deskClockStacked": settings.deskClock.openWhenStacked.toggle()
             case "deskClockCharging": settings.deskClock.openWhenCharging.toggle()

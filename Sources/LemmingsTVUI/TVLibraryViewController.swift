@@ -1,6 +1,7 @@
 #if os(tvOS)
 import AVFoundation
 import GameController
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import LemmingsMobileUI
@@ -228,7 +229,8 @@ import UIKit
             page.footer = [back]
         case .audio:
             page.title = L10n.text("Audio")
-            page.rows = [.init("music", L10n.text("Music"), selected: local.preferences.musicEnabled), .init("effects", L10n.text("Sound effects"), selected: local.preferences.effectsEnabled)]
+            page.rows = [.init("music", L10n.text("Music"), selected: local.preferences.musicEnabled), .init("effects", L10n.text("Sound effects"), selected: local.preferences.effectsEnabled),
+                         .init("gameplayHaptics", L10n.text("Haptics"), selected: GameplayHapticsPreference.enabled)]
             page.footer = [back]
         case .players:
             page.title = L10n.text("Players")
@@ -325,6 +327,7 @@ import UIKit
         case "audio": show(.audio)
         case "music": local.preferences.musicEnabled.toggle(); audio.apply(local.preferences); persist(); show(.audio)
         case "effects": local.preferences.effectsEnabled.toggle(); audio.apply(local.preferences); persist(); show(.audio)
+        case "gameplayHaptics": GameplayHapticsPreference.enabled.toggle(); if !GameplayHapticsPreference.enabled { audio.pause() }; show(.audio)
         case "planning": local.preferences.planningOnSkillChange.toggle(); settingsChanged()
         case "sensitivity": local.preferences.aimSensitivity = local.preferences.aimSensitivity >= 2 ? 0.5 : local.preferences.aimSensitivity + 0.5; settingsChanged()
         case "text": local.preferences.textScale = local.preferences.textScale == 1 ? 1.25 : 1; settingsChanged()
@@ -364,9 +367,10 @@ import UIKit
         case "retry": prepare(selectedLevel)
         case "next": prepare(selectedLevel + 1)
         case "endConfirm":
-            if game?.session.snapshot.isEndingRun == true { game?.endRun(); show(.transport) }
+            if let game, game.session.snapshot.isEndingRun { game.endRun(); audio.nukeChanged(game); show(.transport) }
             else { show(.confirmEnd) }
-        case "end": game?.endRun(); if game?.resume() == true { if let game { audio.start(game) }; showPlay() }
+        case "end":
+            if let game { game.endRun(); audio.nukeChanged(game); if game.resume() { audio.start(game); showPlay() } }
         case "library": saveAndLeave()
         default: show(route)
         }
@@ -400,7 +404,7 @@ import UIKit
         case .settings: game.pause(); audio.pause(); show(.settings)
         case .retry: game.pause(); audio.pause(); show(.confirmRetry)
         case .endRun:
-            if game.session.snapshot.isEndingRun { game.endRun() }
+            if game.session.snapshot.isEndingRun { game.endRun(); audio.nukeChanged(game) }
             else { game.pause(); audio.pause(); show(.confirmEnd) }
         }
         if game.play.phase == .completed { completed() }

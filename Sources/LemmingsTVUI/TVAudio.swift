@@ -11,6 +11,8 @@ import NxlvKit
     private let lixMusic = AdaptiveDJPlayer()
     private let effects = SoundEffectPlayer(voiceCount: 24)
     private let muted = ProcessInfo.processInfo.environment["LEMMINGS_TEST_AUDIO"] == "muted"
+    private let haptics = GameplayHaptics()
+    private var hapticRunID: UUID?
     private var runID: UUID?
     private var resourceRevision: String?
     var onInterruption: ((Bool) -> Void)?
@@ -64,10 +66,23 @@ import NxlvKit
         try? music.resumeOutput()
         lixMusic.resumeOutput()
     }
-    func pause() { music.suspendOutput(); lixMusic.suspendOutput(); effects.silence() }
-    func stop() { music.stop(); lixMusic.stop(); effects.stop(); runID = nil }
+    func pause() { haptics.pause(); music.suspendOutput(); lixMusic.suspendOutput(); effects.silence() }
+    func stop() { haptics.reset(); hapticRunID = nil; music.stop(); lixMusic.stop(); effects.stop(); runID = nil }
+    func nukeChanged(_ game: TVGameExperience) {
+        updateTactileState(game, cues: [], requests: [])
+    }
+    private func updateTactileState(_ game: TVGameExperience, cues: [PositionedSoundCue], requests: [Lemmings2SoundRequest]) {
+        guard !game.session.isReadOnly else { return }
+        if hapticRunID != game.runID { haptics.reset(); hapticRunID = game.runID }
+        let snapshot = game.session.snapshot
+        let fuse = snapshot.isEndingRun ? game.session.hapticFuseRemainingTicks : nil
+        haptics.update(nuking: snapshot.isEndingRun, tick: snapshot.tick, cues: cues, sequel: requests,
+            secondsToBlast: fuse.map { Double($0) / game.session.ticksPerSecond })
+    }
     func update(_ game: TVGameExperience) {
         let cues = game.session.drainSoundCues()
+        let requests = game.session.drainLemmings2SoundRequests()
+        updateTactileState(game, cues: cues, requests: requests)
         guard !muted else { return }
         let rect = game.viewport.visibleLevelRect
         effects.setViewport(.init(x: rect.x, y: rect.y, width: rect.width, height: rect.height))
