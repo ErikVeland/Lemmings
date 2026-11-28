@@ -77,7 +77,30 @@ extension MobileLibraryViewController {
             additionalProgress: extra)
     }
     var canStartJourney: Bool {
-        bundledJourney != nil
+        guard let journey = bundledJourney else { return false }
+        let entry = MobileSettings.current(from: .standard).classic.unlockAllClassicLevels
+            ? journey.lessons.first?.entry : learning.progress.unseen(in: journey).first ?? journey.lessons.first?.entry
+        return entry.map(hasJourneySource) ?? false
+    }
+    func hasJourneySource(_ entry: LevelPlaylistEntry) -> Bool {
+        guard let catalogue else { return false }
+        return MobileJourneyLibrary.sourcePack(for: entry.identity, in: catalogue) != nil
+    }
+    func requireJourneySource(_ entry: LevelPlaylistEntry, action: String = "journey") -> Bool {
+        guard entry.identity.engine == .classic else {
+            notice = MobileSessionError.journeyEngineUnavailable.localizedDescription
+            rebuild()
+            return false
+        }
+        if hasJourneySource(entry) { return true }
+        let release = entry.identity.packID.split(separator: "-").first.map(String.init) ?? ""
+        if ClassicTitle(rawValue: release) != nil {
+            showMissingGameData(for: action)
+        } else {
+            notice = MobileSessionError.changedLevel.localizedDescription
+            rebuild()
+        }
+        return false
     }
     var resumableLearningJourney: MobileLearningResume? {
         _ = learning
@@ -126,24 +149,24 @@ extension MobileLibraryViewController {
     func handleLearning(_ id: String) -> Bool {
         switch id {
         case "journey":
-            guard resumableLearningJourney != nil || canStartJourney else { return true }
+            guard resumableLearningJourney != nil || bundledJourney != nil else { return true }
             if resumableLearningJourney != nil { resumeLearningJourney() }
             else { return handleLearning("learningStart") }
         case "learningResume": resumeLearningJourney()
         case "learningBrowse": resumeLearningJourney(browse: true)
         case "learningRunResume": resumeLearningJourney(journeyOnly: false)
         case "learningStart", "learningRevisit":
-            guard resumableLearningJourney != nil || canStartJourney else { return true }
             if id == "learningStart", resumableLearningJourney != nil { resumeLearningJourney(browse: true); return true }
             guard let journey = bundledJourney else { return true }
             var entries = id == "learningStart"
                 ? (MobileSettings.current(from: .standard).classic.unlockAllClassicLevels ? journey.lessons.map(\.entry) : learning.progress.unseen(in: journey))
                 : learning.progress.revisit(in: journey)
             if id == "learningStart", entries.isEmpty { entries = journey.lessons.map(\.entry) }
+            guard let first = entries.first, requireJourneySource(first, action: id) else { return true }
             do {
                 var saved = learning
                 try saved.start(entries, name: LearningJourney.title, poolID: journey.version)
-                try saveLearningState(saved); openLearningRun()
+                openLearningRun(pendingState: saved)
             } catch { notice = error.localizedDescription; rebuild() }
         case "progression":
             if route == .collections { progressionBackID = "collections" } else if route == .journey { progressionBackID = "journey" }
@@ -159,7 +182,8 @@ extension MobileLibraryViewController {
     }
     func resumeLearningJourney(journeyOnly: Bool = true, browse: Bool = false) {
         guard let saved = journeyOnly ? resumableLearningJourney : resumableLearningRun,
-              saved.owner == profiles.activeID, saved.seat?.id == hotSeat?.id else { return }
+              saved.owner == profiles.activeID, saved.seat?.id == hotSeat?.id,
+              let run = saved.state.run, requireJourneySource(run.currentEntry) else { return }
         if let seat = saved.seat {
             guard seat.players.allSatisfy({ id in profiles.players.contains { $0.id == id } }) else {
                 notice = L10n.text("A saved player is unavailable"); rebuild(); return
@@ -180,34 +204,61 @@ extension MobileLibraryViewController {
                 else { checkpoint = nil }
                 guard !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
                 let matching = checkpoint.flatMap { checkpointResumesLearningRun($0, journeyOnly: journeyOnly) ? $0 : nil }
+                var pendingState: MobileLearningState?
                 if browse, matching == nil, MobileSettings.current(from: .standard).classic.unlockAllClassicLevels,
                    let journey = bundledJourney, let current = learning.run,
                    current.pool.id.hasPrefix("learning-"),
                    let position = journey.lessons.firstIndex(where: { $0.entry.identity == current.currentEntry.identity }) {
                     var expanded = learning
-                    expanded.run = try LevelSequenceRun(source: current.source, pool: current.pool,
-                        entries: journey.lessons.map(\.entry), currentIndex: position, createdAt: current.createdAt)
-                    try saveLearningState(expanded)
+                    expanded.run = try LevelSequenceRun(id: current.id, source: current.source, pool: current.pool,
+                        entries: journey.lessons.map(\.entry), currentIndex: position, seed: current.seed,
+                        algorithm: current.algorithm, createdAt: current.createdAt)
+                    pendingState = expanded
                 }
-                openLearningRun(checkpoint: browse ? nil : matching, startImmediately: !browse)
+                openLearningRun(pendingState: pendingState, checkpoint: browse ? nil : matching, startImmediately: !browse)
             } catch { notice = error.localizedDescription; rebuild() }
         }
     }
-    func openLearningRun(checkpoint: MobileCheckpointEnvelope? = nil, startImmediately: Bool = false) {
-        guard let catalogue, let run = learning.run else { return }
+    func openLearningRun(pendingState: MobileLearningState? = nil,
+                         checkpoint: MobileCheckpointEnvelope? = nil, startImmediately: Bool = false) {
+        let previousState = learning
+        guard let catalogue, let run = (pendingState ?? previousState).run,
+              requireJourneySource(run.currentEntry) else { return }
         let ports = catalogue.portsRoot, fan = catalogue.fanFolders, entries = run.entries, name = run.pool.summary
-        library = MobileJourneyLibrary(entries: entries, name: name, catalogue: catalogue)
-        currentPack = nil; activeRun = nil
-        previewLoader = MobileMenuPreviewLoader {
+        let loader = MobileMenuPreviewLoader {
             MobileJourneyLibrary(entries: entries, name: name, catalogue: MobileCatalogue(portsRoot: ports, fanFolders: fan))
         }
-        selectedIndex = run.currentIndex; selectedPreview = nil; browserShown = false
-        levelsBackRoute = run.source == .easyPuzzles ? .shortGames : .journey
-        if checkpoint != nil || startImmediately {
-            navigate(.levels)
-            startLevel(run.currentIndex, checkpoint: checkpoint, restoringMatchingCheckpoint: checkpoint != nil)
+        let owner = profiles.activeID, scope = hotSeat?.scope, settings = mobileSettings.classic
+        learningTask?.cancel()
+        learningPreparing = true; loading = true; notice = ""
+        rebuild()
+        learningTask = Task { [weak self] in
+            do {
+                let preview = try await loader.load(run.currentIndex, settings: settings)
+                guard let self, !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
+                learningTask = nil; learningPreparing = false; loading = false
+                guard learning == previousState else {
+                    notice = L10n.text("The player or saved session changed. Choose the playlist again.")
+                    rebuild()
+                    return
+                }
+                if let pendingState { try saveLearningState(pendingState) }
+                library = MobileJourneyLibrary(entries: entries, name: name, catalogue: catalogue)
+                currentPack = nil; activeRun = nil
+                previewLoader = loader
+                selectedIndex = run.currentIndex; selectedPreview = preview; browserShown = false
+                levelsBackRoute = run.source == .easyPuzzles ? .shortGames : .journey
+                navigate(.levels)
+                if checkpoint != nil || startImmediately {
+                    startLevel(run.currentIndex, checkpoint: checkpoint, restoringMatchingCheckpoint: checkpoint != nil)
+                }
+            } catch {
+                guard let self, !Task.isCancelled, profiles.activeID == owner, hotSeat?.scope == scope else { return }
+                learningTask = nil; learningPreparing = false; loading = false
+                notice = error.localizedDescription
+                rebuild()
+            }
         }
-        else { navigate(.levels); selectLevel(run.currentIndex) }
     }
     func startEasyPuzzles() {
         guard !learningPreparing, let catalogue else { return }
@@ -249,8 +300,7 @@ extension MobileLibraryViewController {
                 var saved = learning
                 guard saved.run?.id == state.run?.id else { rebuild(); return }
                 try saved.startEasyPuzzles(entries)
-                try saveLearningState(saved)
-                openLearningRun(startImmediately: true)
+                openLearningRun(pendingState: saved, startImmediately: true)
             } catch { notice = error.localizedDescription; rebuild() }
         }
     }
@@ -295,7 +345,7 @@ extension MobileLibraryViewController {
                 let result = try result.get()
                 var saved = learning
                 try saved.start(result.entries, name: result.policy.name, poolID: ProgressionModel.version, playlistID: UUID())
-                try saveLearningState(saved); openLearningRun()
+                openLearningRun(pendingState: saved)
             } catch { notice = error.localizedDescription; rebuild() }
         }
     }
