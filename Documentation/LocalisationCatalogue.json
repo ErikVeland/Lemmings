@@ -2775,7 +2775,7 @@
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:63",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1205",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1215",
-      "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:68",
+      "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:119",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:282",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:633",
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/LOAD.IFF:1"
@@ -10054,9 +10054,9 @@
       "Sources/LemmingsMobileUI/MobileGameHints.swift:30",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:281",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1035",
-      "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:42",
+      "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:93",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:112",
-      "Sources/LemmingsMobileUI/MobileStartupViewController.swift:175",
+      "Sources/LemmingsMobileUI/MobileStartupViewController.swift:190",
       "Sources/LemmingsMobileUI/MobileTVBootstrap.swift:50"
     ]
   },
