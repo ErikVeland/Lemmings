@@ -227,6 +227,7 @@
 "An iCloud save could not be read. Existing saves were kept." = "No s’ha pogut llegir un desament de l’iCloud. S’han conservat els desaments existents.";
 "An improbable resolution" = "Una resolució improbable";
 "An object animation has no FRAMES field." = "Una animació d’objecte no té el camp FRAMES.";
+"An optional tip to support development." = "Una propina opcional per donar suport al desenvolupament.";
 "An unfinished argument" = "Un argument inacabat";
 "An unpacked classic LVL file must contain exactly {0} bytes; found {1}." = "Un fitxer LVL clàssic descomprimit ha de contenir exactament {0} bytes; se n’han trobat {1}.";
 "Analysing available levels" = "Analitzant els nivells disponibles";
@@ -277,6 +278,7 @@
 "Audio unavailable: {0}" = "Àudio no disponible: {0}";
 "Availability" = "Disponibilitat";
 "Available" = "Disponible";
+"Awaiting approval" = "Pendent d’aprovació";
 "Award Me!" = "Dona’m el premi!";
 "Award: {0} - {1}  >" = "Premi: {0} - {1}  >";
 "Awards ({0})" = "Premis ({0})";
@@ -368,6 +370,7 @@
 "Bricks cannot build straight down." = "Els maons no permeten construir en vertical cap avall.";
 "Bring {0} more home to match your best." = "Porta’n {0} més a casa per igualar el teu rècord.";
 "Bronze" = "Bronze";
+"Browse credits, contributors and version history on every platform." = "Consulta els crèdits, els col·laboradors i l’historial de versions a totes les plataformes.";
 "Browse levels" = "Explora els nivells";
 "Builder" = "Constructor";
 "Built {0}" = "Compilació {0}";
@@ -464,7 +467,6 @@
 "Checking solution..." = "Comprovant la solució…";
 "Choose" = "Tria";
 "Choose 1× in Game controls to reset speed." = "Tria 1× als Controls del joc per restablir la velocitat.";
-"Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details." = "Tria català o alemany suís. A l’iPhone i l’iPad, obre Quant a per veure els crèdits i la versió.";
 "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "Tria Panell pla, Monitor o Televisió. El mode clàssic utilitza la simulació de tub.";
 "Choose Lemmings 3 tool direction" = "Tria la direcció de l’eina de Lemmings 3";
 "Choose Music Folder…" = "Tria una carpeta de música…";
@@ -779,6 +781,7 @@
 "Down-right" = "Avall a la dreta";
 "Download" = "Baixa";
 "Download game assets" = "Baixa els recursos del joc";
+"Download hasn’t started" = "La baixada encara no ha començat";
 "Download or remove optional soundtrack libraries." = "Baixa o elimina les biblioteques opcionals de bandes sonores.";
 "Download soundtracks" = "Baixa les bandes sonores";
 "Downloading" = "Baixant";
@@ -889,7 +892,6 @@
 "Expected the FLIC marker 0xAF11, but found {0}." = "S’esperava el marcador FLIC 0xAF11, però s’ha trobat {0}.";
 "Expert" = "Expert";
 "Exploder" = "Explosiu";
-"Explore starter playlists and resume saved routes." = "Explora les llistes de joc inicials i reprèn les rutes desades.";
 "Explosions" = "Explosions";
 "Export file" = "Exporta el fitxer";
 "Extended gamepad" = "Comandament ampliat";
@@ -949,6 +951,7 @@
 "Features 5 exclusive Sunsoft Special levels and custom Hiroyuki Masuno SPC soundtrack." = "Inclou 5 nivells exclusius Sunsoft Special i una banda sonora SPC d’Hiroyuki Masuno.";
 "Features 60 exclusive levels (Presenter rating 1–30 + bonus levels) and Matt Furniss FM tracks." = "Inclou 60 nivells exclusius (Presenter 1–30 més nivells addicionals) i temes FM de Matt Furniss.";
 "Features arcade single-player stages, 2-Player Co-Op mode, countdown timers, and high-score screens." = "Inclou fases recreatives en solitari, mode cooperatiu per a dos jugadors, comptes enrere i pantalles de rècords.";
+"Feel nukes, bridge warnings and selected impacts on supported devices and controllers." = "Sent les detonacions, els avisos durant la construcció de ponts i alguns impactes als dispositius i comandaments compatibles.";
 "Feels less temporary." = "Se sent menys provisional.";
 "Feels suitably equipped." = "Es considera prou ben equipat.";
 "Felt briefly famous." = "Per un moment es va sentir famós.";
@@ -1073,6 +1076,7 @@
 "Hadoken" = "Hadoken";
 "Hands off" = "No ho toquis";
 "Hang Glider" = "Ala delta";
+"Haptics" = "Vibració";
 "Hard" = "Difícil";
 "Has a coat for special occasions." = "Té un abric per a les ocasions especials.";
 "Has a drawer for useful things." = "Té un calaix per a les coses útils.";
@@ -1166,6 +1170,7 @@
 "Import Lemmings 2 data" = "Importa les dades de Lemmings 2";
 "Import NeoLemmix data" = "Importa les dades de NeoLemmix";
 "Import files" = "Importa fitxers";
+"Import missing game data before opening a level. Downloads can continue in the background on iPhone and iPad." = "Importa les dades del joc que falten abans d’obrir un nivell. Les baixades poden continuar en segon pla a l’iPhone i l’iPad.";
 "Import owned games" = "Importa els jocs que tens";
 "Import the resource folder again." = "Torna a importar la carpeta de recursos.";
 "Import your own Classic files to use original artwork." = "Importa els teus fitxers clàssics per fer servir els gràfics originals.";
@@ -1454,6 +1459,7 @@
 "Learning" = "Aprenentatge";
 "Least skills" = "Menys habilitats";
 "Leave Hot Seat?" = "Vols sortir dels torns locals?";
+"Leave a tip" = "Deixa una propina";
 "Left" = "Esquerra";
 "Left and right arrows change hints. Up and down arrows scroll the text." = "Les fletxes esquerra i dreta canvien de pista. Les fletxes amunt i avall desplacen el text.";
 "Left stick click" = "Prem la palanca esquerra";
@@ -1656,6 +1662,7 @@
 "Missing or ambiguous Chronicles construction tile." = "Falta la peça de construcció de Chronicles o hi ha més d’una coincidència.";
 "Missing style data: {0}" = "Falten dades d’estil: {0}";
 "Missing {0} dependency '{1}'." = "Falta la dependència de {0} «{1}».";
+"Mobile data is unavailable. Check cellular access for this app or try Wi-Fi." = "Les dades mòbils no estan disponibles. Comprova si aquesta aplicació pot utilitzar dades mòbils o prova el Wi-Fi.";
 "Moderate" = "Moderat";
 "Modern" = "Modernitzat";
 "Modern Sound" = "So actualitzat";
@@ -1787,6 +1794,7 @@
 "No fan level packs are available." = "No hi ha paquets de nivells de la comunitat disponibles.";
 "No favourites yet" = "Encara no hi ha preferits";
 "No hands-off clear this run. This goal may not be possible here." = "No has superat aquesta partida sense intervenir. Pot ser que aquest objectiu no sigui possible aquí.";
+"No internet connection. Reconnect and try again." = "No hi ha connexió a Internet. Torna’t a connectar i torna-ho a provar.";
 "No lemming is selected." = "No hi ha cap lemming seleccionat.";
 "No lemmings released yet" = "Encara no ha sortit cap lemming";
 "No level files were found for {0}." = "No s’han trobat fitxers de nivell per a {0}.";
@@ -1827,6 +1835,7 @@
 "None hides selection effects. Obvious adds a green diamond and halo. Modern adds the diamond, white outline and green glow in all three games." = "Cap amaga els efectes de selecció. Evident afegeix un rombe verd i un halo. Modern afegeix un rombe, una vora blanca i una resplendor verda a tots tres jocs.";
 "Not bad, but not good either." = "No està malament, però tampoc gaire bé.";
 "Not earned" = "No aconseguit";
+"Not enough free storage for game assets. Free up space and try again." = "No hi ha prou espai d’emmagatzematge lliure per als recursos del joc. Allibera espai i torna-ho a provar.";
 "Not met. " = "No assolit. ";
 "Not now" = "Ara no";
 "Not rescued" = "No rescatat";
@@ -1911,7 +1920,6 @@
 "Open Replay Movie…" = "Obre un vídeo de repetició…";
 "Open Starter" = "Introducció oberta";
 "Open in Stacked pose when idle" = "Obre en posició apilada quan estigui inactiu";
-"Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads." = "Obre el menú principal abans a l’iPhone i l’iPad i mira una introducció quan un nivell triga més a carregar-se.";
 "Open this address on another device:" = "Obre aquesta adreça en un altre dispositiu:";
 "Open this level with its original game data to watch the action replay." = "Obre aquest nivell amb les dades originals per veure la repetició d’accions.";
 "Open when closed and charging" = "Obre quan estigui tancat i carregant";
@@ -2134,7 +2142,6 @@
 "Profile" = "Perfil";
 "Profile…" = "Perfil…";
 "Programmers" = "Programadors";
-"Progress" = "Progrés";
 "Progress is saved." = "S’ha desat el progrés.";
 "Progression" = "Progrés";
 "Progression not created" = "No s’ha creat la progressió";
@@ -2142,6 +2149,7 @@
 "Project supervisor" = "Supervisor del projecte";
 "Psygnosis  presents" = "Psygnosis  presenta";
 "Pull up a chair. We've got a level to finish." = "Seu amb nosaltres. Tenim un nivell per acabar.";
+"Purchasing..." = "Comprant...";
 "Q / Escape" = "Q / Esc";
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q UN ALTRE COP PER SORTIR  *  ESC PER QUEDAR-T’HI";
 "Queued" = "A la cua";
@@ -2350,7 +2358,6 @@
 "Return to the library to change players. The current attempt keeps its owner and is saved for later." = "Torna a la biblioteca per canviar de jugadors. L’intent actual conserva el propietari i es desa per a més endavant.";
 "Return to the library to change players. Your saved run keeps its progress and next turn." = "Torna a la biblioteca per canviar de jugadors. La partida desada conserva el progrés i el torn següent.";
 "Return to the library to restore a recovery key." = "Torna a la biblioteca per restaurar una clau de recuperació.";
-"Return to the main menu after a win without losing your place." = "Torna al menú principal després de guanyar sense perdre el lloc.";
 "Return: Repeat assignment" = "Retorn: repeteix l’assignació";
 "Returned with a cake." = "Va tornar amb un pastís.";
 "Reveal full solution?" = "Vols descobrir la solució completa?";
@@ -2800,6 +2807,7 @@
 "Terrain group '{0}' is used before it is defined." = "El grup de terreny «{0}» es fa servir abans de definir-lo.";
 "Terrain group '{0}' mixes steel and non-steel pieces." = "El grup de terreny «{0}» combina peces d’acer i d’altres materials.";
 "Terrain metadata '{0}:{1}' is ambiguous." = "Les metadades de terreny «{0}:{1}» són ambigües.";
+"Thank you for your support!" = "Gràcies pel teu suport!";
 "Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research." = "Gràcies a la comunitat pels nivells de fans, els estils, les repeticions, els arranjaments musicals i la recerca de preservació.";
 "That Hot Seat is no longer saved." = "Aquests torns locals ja no estan desats.";
 "That is the plan" = "Aquest és el pla";
@@ -2877,6 +2885,7 @@
 "The archive has no member named {0}." = "L’arxiu no té cap membre anomenat {0}.";
 "The archive member {0} is too large." = "El membre {0} de l’arxiu és massa gran.";
 "The attempt was not saved." = "No s’ha desat l’intent.";
+"The background download stopped. Try the download again." = "La baixada en segon pla s’ha aturat. Torna a provar la baixada.";
 "The cat understands the arrangement." = "El gat entén com va la cosa.";
 "The cloud player is invalid." = "El jugador del núvol no és vàlid.";
 "The cloud progress format does not match." = "El format del progrés al núvol no coincideix.";
@@ -2884,11 +2893,13 @@
 "The cloud response is too large." = "La resposta del núvol és massa gran.";
 "The cloud save is too large." = "El desament al núvol és massa gran.";
 "The company suits." = "La companyia li va bé.";
+"The connection dropped. Try the download again." = "S’ha perdut la connexió. Torna a provar la baixada.";
 "The danger is the fall after the entrance. Think about protecting the lemmings before they land." = "El perill és la caiguda després de l’entrada. Pensa com protegir els lemmings abans que aterrin.";
 "The decision remains respected." = "Es continua respectant la decisió.";
 "The decompression limit must not be negative." = "El límit de descompressió no pot ser negatiu.";
 "The document contains an unmatched $END." = "El document conté un $END sense secció corresponent.";
 "The download did not finish." = "La baixada no s’ha completat.";
+"The download timed out. Check your connection and try again." = "S’ha esgotat el temps d’espera de la baixada. Comprova la connexió i torna-ho a provar.";
 "The entrance limits cannot release all non-preplaced lemmings." = "Els límits de les entrades no permeten fer sortir tots els lemmings que no estan col·locats prèviament.";
 "The entrance timing cannot be negative." = "Els temps de l’entrada no poden ser negatius.";
 "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path." = "La sortida és sota la plataforma que sosté el grup. Busca un lloc on obrir el terra per sobre del camí inferior.";
@@ -3168,6 +3179,9 @@
 "Timing probes: {0}. Untested alternatives remain unknown." = "Proves de sincronització: {0}. Es desconeixen les alternatives no provades.";
 "Tiny journey" = "Mini viatge";
 "Tiny journeys" = "Mini viatges";
+"Tip again {0}" = "Una altra propina de {0}";
+"Tip {0}" = "Propina de {0}";
+"Tips are unavailable right now." = "Ara mateix les propines no estan disponibles.";
 "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "Per baixar aquests recursos, has de tenir una llicència vàlida del joc original «Lemmings» com a mínim en una plataforma. En seleccionar «{0}», confirmes que tens aquesta llicència.";
 "Toggle enhanced artwork" = "Activa o desactiva els gràfics millorats";
 "Toggle fast-forward" = "Activa o desactiva l’avanç ràpid";
@@ -3200,9 +3214,11 @@
 "Truncated Mac graphics frame." = "Fotograma gràfic de Mac truncat.";
 "Truncated sequel data at byte {0}." = "Dades de la seqüela truncades al byte {0}.";
 "Try again" = "Torna-ho a provar";
+"Try another server" = "Prova un altre servidor";
 "Try later" = "Prova-ho més tard";
 "Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns." = "Prova una habilitat a velocitat normal, fes una pausa i inspecciona el resultat. Observa on aterra i on gira el treballador.";
 "Try these skills!" = "Prova aquestes habilitats!";
+"Trying another download server" = "Provant un altre servidor de baixades";
 "Tube strength" = "Força del tub";
 "Turn off" = "Desactiva";
 "Turn off auto-follow" = "Desactiva el seguiment automàtic";
@@ -3337,6 +3353,7 @@
 "WHEN THE TRIBES SETTLED IN THESE LANDS" = "QUAN LES TRIBUS ES VAN ESTABLIR EN AQUESTES TERRES";
 "WINS / FAILS" = "VICTÒRIES / FALLADES";
 "Wait for this lemming to land." = "Espera que aquest lemming aterri.";
+"Waiting for download to start" = "Esperant que comenci la baixada";
 "Walker" = "Caminador";
 "Walks home with accompaniment." = "Torna a casa a peu amb acompanyament.";
 "Was asked to judge a cucumber." = "Li van demanar que jutgés un cogombre.";
@@ -3347,6 +3364,7 @@
 "Was thanked for noticing a draught." = "Li han agraït que notés un corrent d’aire.";
 "Watch and listen" = "Mira i escolta";
 "Watch solution?" = "Vols veure la solució?";
+"Watch the intro while game files are checked on iPhone and iPad." = "Mira la introducció mentre es comproven els fitxers del joc a l’iPhone i l’iPad.";
 "Watch the worker's direction before assigning a skill." = "Mira en quina direcció va el treballador abans d’assignar-li una habilitat.";
 "We built a Snow Lemming." = "Vam fer un lèmming de neu.";
 "We got snowed in for a day." = "Vam quedar atrapats per la neu tot un dia.";
@@ -3408,6 +3426,8 @@
 "Your rescue story" = "La teva història de rescats";
 "Your rescues add to the worldwide total." = "Els teus rescats se sumen al total mundial.";
 "Your shared campaign stays saved for later." = "La campanya compartida es manté desada per a més endavant.";
+"Your tip could not be completed." = "No s’ha pogut completar la propina.";
+"Your tip could not be confirmed." = "No s’ha pogut confirmar la propina.";
 "Z / Shift+Z: Zoom" = "Z / Majúscules+Z: ampliació";
 "ZOOM" = "APROPA";
 "Zero avoidable losses" = "Cap pèrdua evitable";
@@ -3609,5 +3629,3 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0} H {1} MIN";
 "{0}{1} more to rescue for three stars." = "Rescata’n {0}{1} més per guanyar tres estrelles.";
-
-"Haptics" = "Vibració";

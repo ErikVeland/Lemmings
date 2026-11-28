@@ -227,6 +227,7 @@
 "An iCloud save could not be read. Existing saves were kept." = "Non è stato possibile leggere un salvataggio iCloud. I salvataggi esistenti sono stati conservati.";
 "An improbable resolution" = "Una soluzione improbabile";
 "An object animation has no FRAMES field." = "L’animazione di un oggetto non ha il campo FRAMES.";
+"An optional tip to support development." = "Una mancia facoltativa per sostenere lo sviluppo.";
 "An unfinished argument" = "Un argomento incompleto";
 "An unpacked classic LVL file must contain exactly {0} bytes; found {1}." = "Un file LVL classico non compresso deve contenere esattamente {0} byte; ne sono stati trovati {1}.";
 "Analysing available levels" = "Analisi dei livelli disponibili";
@@ -277,6 +278,7 @@
 "Audio unavailable: {0}" = "Audio non disponibile: {0}";
 "Availability" = "Disponibilità";
 "Available" = "Disponibile";
+"Awaiting approval" = "In attesa di approvazione";
 "Award Me!" = "Assegnami un premio!";
 "Award: {0} - {1}  >" = "Premio: {0} - {1}  >";
 "Awards ({0})" = "Riconoscimenti ({0})";
@@ -368,6 +370,7 @@
 "Bricks cannot build straight down." = "I mattoni non permettono di costruire in verticale verso il basso.";
 "Bring {0} more home to match your best." = "Salva altri {0} lemming per eguagliare il tuo record.";
 "Bronze" = "Bronzo";
+"Browse credits, contributors and version history on every platform." = "Consulta i crediti, i collaboratori e la cronologia delle versioni su ogni piattaforma.";
 "Browse levels" = "Sfoglia i livelli";
 "Builder" = "Costruttore";
 "Built {0}" = "Costruiti {0}";
@@ -464,7 +467,6 @@
 "Checking solution..." = "Verifica della soluzione…";
 "Choose" = "Scegli";
 "Choose 1× in Game controls to reset speed." = "Scegli 1× nei comandi di gioco per ripristinare la velocità.";
-"Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details." = "Scegli il catalano o lo svizzero tedesco. Su iPhone e iPad apri Informazioni per vedere i crediti e la versione.";
 "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "Scegli Schermo piatto, Monitor o Televisore. Classic usa la simulazione a tubo.";
 "Choose Lemmings 3 tool direction" = "Scegli la direzione dell'abilità di Lemmings 3";
 "Choose Music Folder…" = "Scegli cartella musica…";
@@ -779,6 +781,7 @@
 "Down-right" = "In basso a destra";
 "Download" = "Scarica";
 "Download game assets" = "Scarica i dati di gioco";
+"Download hasn’t started" = "Il download non è ancora iniziato";
 "Download or remove optional soundtrack libraries." = "Scarica o rimuovi le librerie facoltative delle colonne sonore.";
 "Download soundtracks" = "Scarica colonne sonore";
 "Downloading" = "Download in corso";
@@ -889,7 +892,6 @@
 "Expected the FLIC marker 0xAF11, but found {0}." = "Era atteso il marcatore FLIC 0xAF11, ma è stato trovato {0}.";
 "Expert" = "Esperto";
 "Exploder" = "Esplosivo";
-"Explore starter playlists and resume saved routes." = "Esplora gli elenchi introduttivi e riprendi i percorsi salvati.";
 "Explosions" = "Esplosioni";
 "Export file" = "Esporta file";
 "Extended gamepad" = "Controller esteso";
@@ -949,6 +951,7 @@
 "Features 5 exclusive Sunsoft Special levels and custom Hiroyuki Masuno SPC soundtrack." = "Include 5 livelli esclusivi Sunsoft Special e una colonna sonora SPC personalizzata di Hiroyuki Masuno.";
 "Features 60 exclusive levels (Presenter rating 1–30 + bonus levels) and Matt Furniss FM tracks." = "Include 60 livelli esclusivi (valutazione del presentatore da 1 a 30 e livelli bonus) e brani FM di Matt Furniss.";
 "Features arcade single-player stages, 2-Player Co-Op mode, countdown timers, and high-score screens." = "Include livelli arcade per un giocatore, modalità cooperativa per 2 giocatori, conto alla rovescia e schermate dei record.";
+"Feel nukes, bridge warnings and selected impacts on supported devices and controllers." = "Avverti le esplosioni, gli avvisi durante la costruzione dei ponti e alcuni impatti sui dispositivi e controller compatibili.";
 "Feels less temporary." = "Sembra meno provvisorio.";
 "Feels suitably equipped." = "Si sente ben equipaggiato.";
 "Felt briefly famous." = "Per un attimo si è sentito famoso.";
@@ -1073,6 +1076,7 @@
 "Hadoken" = "Hadoken";
 "Hands off" = "Senza intervento";
 "Hang Glider" = "Deltaplanista";
+"Haptics" = "Vibrazione";
 "Hard" = "Difficile";
 "Has a coat for special occasions." = "Ha un cappotto per le occasioni speciali.";
 "Has a drawer for useful things." = "Ha un cassetto per le cose utili.";
@@ -1166,6 +1170,7 @@
 "Import Lemmings 2 data" = "Importa dati di Lemmings 2";
 "Import NeoLemmix data" = "Importa dati NeoLemmix";
 "Import files" = "Importa file";
+"Import missing game data before opening a level. Downloads can continue in the background on iPhone and iPad." = "Importa i dati di gioco mancanti prima di aprire un livello. I download possono continuare in background su iPhone e iPad.";
 "Import owned games" = "Importa i tuoi giochi";
 "Import the resource folder again." = "Importa di nuovo la cartella delle risorse.";
 "Import your own Classic files to use original artwork." = "Importa i tuoi file di Classic per usare la grafica originale.";
@@ -1454,6 +1459,7 @@
 "Learning" = "Apprendimento";
 "Least skills" = "Meno abilità";
 "Leave Hot Seat?" = "Uscire da Hot Seat?";
+"Leave a tip" = "Lascia una mancia";
 "Left" = "Sinistra";
 "Left and right arrows change hints. Up and down arrows scroll the text." = "Le frecce sinistra e destra cambiano i suggerimenti. Le frecce su e giù scorrono il testo.";
 "Left stick click" = "Clic stick sinistro";
@@ -1656,6 +1662,7 @@
 "Missing or ambiguous Chronicles construction tile." = "Tessera di costruzione di Chronicles mancante o ambigua.";
 "Missing style data: {0}" = "Dati di stile mancanti: {0}";
 "Missing {0} dependency '{1}'." = "Dipendenza {0} '{1}' mancante.";
+"Mobile data is unavailable. Check cellular access for this app or try Wi-Fi." = "I dati mobili non sono disponibili. Controlla che questa app possa usare i dati mobili oppure prova il Wi-Fi.";
 "Moderate" = "Moderato";
 "Modern" = "Moderno";
 "Modern Sound" = "Audio moderno";
@@ -1787,6 +1794,7 @@
 "No fan level packs are available." = "Nessun pacchetto di livelli fan disponibile.";
 "No favourites yet" = "Non hai ancora preferiti";
 "No hands-off clear this run. This goal may not be possible here." = "Non hai completato il livello senza intervenire in questa partita. Questo obiettivo potrebbe non essere possibile qui.";
+"No internet connection. Reconnect and try again." = "Nessuna connessione a Internet. Riconnettiti e riprova.";
 "No lemming is selected." = "Nessun lemming selezionato.";
 "No lemmings released yet" = "Non è ancora uscito nessun lemming";
 "No level files were found for {0}." = "Nessun file di livello trovato per {0}.";
@@ -1827,6 +1835,7 @@
 "None hides selection effects. Obvious adds a green diamond and halo. Modern adds the diamond, white outline and green glow in all three games." = "Nessuno nasconde gli effetti di selezione. Evidente aggiunge un rombo e un alone verdi. Moderno mostra il rombo, un contorno bianco e un bagliore verde in tutti e tre i giochi.";
 "Not bad, but not good either." = "Non male, ma neanche bene.";
 "Not earned" = "Non ottenuto";
+"Not enough free storage for game assets. Free up space and try again." = "Spazio di archiviazione libero insufficiente per i dati di gioco. Libera spazio e riprova.";
 "Not met. " = "Non raggiunto. ";
 "Not now" = "Non ora";
 "Not rescued" = "Non salvato";
@@ -1911,7 +1920,6 @@
 "Open Replay Movie…" = "Apri filmato replay…";
 "Open Starter" = "Apri la raccolta iniziale";
 "Open in Stacked pose when idle" = "Apri nella posizione impilata durante l’inattività";
-"Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads." = "Apri prima il menu principale su iPhone e iPad. Se un livello impiega più tempo a caricarsi, vedi un’introduzione.";
 "Open this address on another device:" = "Apri questo indirizzo su un altro dispositivo:";
 "Open this level with its original game data to watch the action replay." = "Apri questo livello con i dati di gioco originali per guardare il replay.";
 "Open when closed and charging" = "Apri durante la ricarica a dispositivo chiuso";
@@ -2134,7 +2142,6 @@
 "Profile" = "Profilo";
 "Profile…" = "Profilo…";
 "Programmers" = "Programmatori";
-"Progress" = "Avanzamento";
 "Progress is saved." = "I progressi vengono salvati.";
 "Progression" = "Progressione";
 "Progression not created" = "Progressione non creata";
@@ -2142,6 +2149,7 @@
 "Project supervisor" = "Supervisore del progetto";
 "Psygnosis  presents" = "Psygnosis  presenta";
 "Pull up a chair. We've got a level to finish." = "Prendi una sedia. Abbiamo un livello da finire.";
+"Purchasing..." = "Acquisto in corso...";
 "Q / Escape" = "Q / Esc";
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q DI NUOVO PER USCIRE  *  ESC PER RESTARE";
 "Queued" = "In coda";
@@ -2350,7 +2358,6 @@
 "Return to the library to change players. The current attempt keeps its owner and is saved for later." = "Torna alla raccolta per cambiare giocatore. Il tentativo attuale resta associato al suo giocatore e viene salvato.";
 "Return to the library to change players. Your saved run keeps its progress and next turn." = "Torna alla libreria per cambiare giocatore. La partita salvata mantiene i progressi e il turno successivo.";
 "Return to the library to restore a recovery key." = "Torna alla libreria per ripristinare una chiave di recupero.";
-"Return to the main menu after a win without losing your place." = "Torna al menu principale dopo una vittoria senza perdere il punto in cui eri.";
 "Return: Repeat assignment" = "Invio: ripeti assegnazione";
 "Returned with a cake." = "È tornato con una torta.";
 "Reveal full solution?" = "Mostrare la soluzione completa?";
@@ -2800,6 +2807,7 @@
 "Terrain group '{0}' is used before it is defined." = "Il gruppo di terreno '{0}' è usato prima di essere definito.";
 "Terrain group '{0}' mixes steel and non-steel pieces." = "Il gruppo di terreno '{0}' mescola elementi d'acciaio e non d'acciaio.";
 "Terrain metadata '{0}:{1}' is ambiguous." = "I metadati del terreno '{0}:{1}' sono ambigui.";
+"Thank you for your support!" = "Grazie per il tuo sostegno!";
 "Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research." = "Grazie alla comunità per i livelli amatoriali, gli stili, i replay, il lavoro sulle colonne sonore e la ricerca per la conservazione.";
 "That Hot Seat is no longer saved." = "Quella partita Hot Seat non è più salvata.";
 "That is the plan" = "Questo è il piano";
@@ -2877,6 +2885,7 @@
 "The archive has no member named {0}." = "L'archivio non contiene alcun elemento chiamato {0}.";
 "The archive member {0} is too large." = "L'elemento {0} dell'archivio è troppo grande.";
 "The attempt was not saved." = "Il tentativo non è stato salvato.";
+"The background download stopped. Try the download again." = "Il download in background si è interrotto. Riprova a scaricare.";
 "The cat understands the arrangement." = "Il gatto ha capito come funzionano le cose.";
 "The cloud player is invalid." = "Il giocatore cloud non è valido.";
 "The cloud progress format does not match." = "Il formato dei progressi cloud non corrisponde.";
@@ -2884,11 +2893,13 @@
 "The cloud response is too large." = "La risposta cloud è troppo grande.";
 "The cloud save is too large." = "Il salvataggio cloud è troppo grande.";
 "The company suits." = "La compagnia gli è congeniale.";
+"The connection dropped. Try the download again." = "La connessione si è interrotta. Riprova a scaricare.";
 "The danger is the fall after the entrance. Think about protecting the lemmings before they land." = "Il pericolo è la caduta dopo l'ingresso. Pensa a come proteggere i lemming prima che tocchino terra.";
 "The decision remains respected." = "La decisione continua a essere rispettata.";
 "The decompression limit must not be negative." = "Il limite di decompressione non può essere negativo.";
 "The document contains an unmatched $END." = "Il documento contiene un $END senza corrispondenza.";
 "The download did not finish." = "Il download non è stato completato.";
+"The download timed out. Check your connection and try again." = "Il tempo limite per il download è scaduto. Controlla la connessione e riprova.";
 "The entrance limits cannot release all non-preplaced lemmings." = "I limiti dell'ingresso non possono far uscire tutti i lemming non preposizionati.";
 "The entrance timing cannot be negative." = "L'intervallo di uscita non può essere negativo.";
 "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path." = "L'uscita è sotto la piattaforma su cui camminano i lemming. Cerca un punto in cui aprire il pavimento sopra il sentiero inferiore.";
@@ -3168,6 +3179,9 @@
 "Timing probes: {0}. Untested alternatives remain unknown." = "Verifiche temporali: {0}. Le alternative non testate restano sconosciute.";
 "Tiny journey" = "Piccolo viaggio";
 "Tiny journeys" = "Piccoli viaggi";
+"Tip again {0}" = "Un’altra mancia di {0}";
+"Tip {0}" = "Mancia di {0}";
+"Tips are unavailable right now." = "Le mance non sono disponibili al momento.";
 "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "Per scaricare queste risorse devi avere una licenza valida per il gioco originale «Lemmings» su almeno una piattaforma. Selezionando «{0}», confermi di avere questa licenza.";
 "Toggle enhanced artwork" = "Attiva/disattiva grafica avanzata";
 "Toggle fast-forward" = "Attiva o disattiva l'avanzamento rapido";
@@ -3200,9 +3214,11 @@
 "Truncated Mac graphics frame." = "Fotogramma delle grafiche Mac troncato.";
 "Truncated sequel data at byte {0}." = "Dati del seguito troncati al byte {0}.";
 "Try again" = "Riprova";
+"Try another server" = "Prova un altro server";
 "Try later" = "Riprova più tardi";
 "Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns." = "Prova un’abilità a velocità normale. Metti in pausa e osserva dove atterra e gira il lemming.";
 "Try these skills!" = "Prova queste abilità!";
+"Trying another download server" = "Tentativo con un altro server di download";
 "Tube strength" = "Intensità del tubo";
 "Turn off" = "Disattiva";
 "Turn off auto-follow" = "Disattiva l'inseguimento automatico";
@@ -3337,6 +3353,7 @@
 "WHEN THE TRIBES SETTLED IN THESE LANDS" = "QUANDO LE TRIBÙ SI INSEDIARONO IN QUESTE TERRE";
 "WINS / FAILS" = "VITTORIE / SCONFITTE";
 "Wait for this lemming to land." = "Aspetta che questo lemming atterri.";
+"Waiting for download to start" = "In attesa dell’avvio del download";
 "Walker" = "Camminatore";
 "Walks home with accompaniment." = "Torna a casa in compagnia.";
 "Was asked to judge a cucumber." = "Gli hanno chiesto di giudicare un cetriolo.";
@@ -3347,6 +3364,7 @@
 "Was thanked for noticing a draught." = "Lo hanno ringraziato per aver notato uno spiffero.";
 "Watch and listen" = "Guarda e ascolta";
 "Watch solution?" = "Guardare la soluzione?";
+"Watch the intro while game files are checked on iPhone and iPad." = "Guarda l’introduzione mentre i file di gioco vengono verificati su iPhone e iPad.";
 "Watch the worker's direction before assigning a skill." = "Controlla la direzione del lavoratore prima di assegnargli un'abilità.";
 "We built a Snow Lemming." = "Abbiamo costruito un Lemming delle nevi.";
 "We got snowed in for a day." = "Siamo rimasti bloccati dalla neve per un giorno.";
@@ -3408,6 +3426,8 @@
 "Your rescue story" = "La tua storia di salvataggi";
 "Your rescues add to the worldwide total." = "I tuoi salvataggi si aggiungono al totale mondiale.";
 "Your shared campaign stays saved for later." = "La campagna condivisa resta salvata per dopo.";
+"Your tip could not be completed." = "Non è stato possibile completare la tua mancia.";
+"Your tip could not be confirmed." = "Non è stato possibile confermare la tua mancia.";
 "Z / Shift+Z: Zoom" = "Z / Maiusc+Z: zoom";
 "ZOOM" = "ZOOM";
 "Zero avoidable losses" = "Zero perdite evitabili";
@@ -3609,5 +3629,3 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0}H {1}M";
 "{0}{1} more to rescue for three stars." = "Salva altri {0}{1} per ottenere tre stelle.";
-
-"Haptics" = "Vibrazione";

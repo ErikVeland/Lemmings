@@ -1,5 +1,6 @@
 #if os(macOS)
 import AppKit
+import LemmingsAppCore
 import LemmingsGameArt
 import NxlvKit
 
@@ -7,7 +8,7 @@ import NxlvKit
 @MainActor final class AboutWindow {
     static let shared = AboutWindow()
     static let coffeeURL = GameSupport.coffeeURL
-    static let contributorsURL = URL(string: "https://glasscode.academy/lemmings-api/v1/contributors.md")!
+    static let contributorsURL = AboutContent.contributorsURL
     private let resources: URL
     private let defaults: UserDefaults
     private let loadContributors: () async throws -> String
@@ -19,21 +20,7 @@ import NxlvKit
          loadContributors: (() async throws -> String)? = nil) {
         self.resources = resources
         self.defaults = defaults
-        self.loadContributors = loadContributors ?? {
-            let config = URLSessionConfiguration.ephemeral
-            config.httpShouldSetCookies = false
-            config.urlCache = nil
-            let session = URLSession(configuration: config)
-            defer { session.finishTasksAndInvalidate() }
-            let request = URLRequest(url: Self.contributorsURL, cachePolicy: .reloadIgnoringLocalCacheData,
-                                     timeoutInterval: 8)
-            let (data, response) = try await session.data(for: request)
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200,
-                  response.url?.scheme == "https", data.count <= 65_536,
-                  let markdown = String(data: data, encoding: .utf8), !markdown.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            else { throw URLError(.badServerResponse) }
-            return markdown
-        }
+        self.loadContributors = loadContributors ?? { try await AboutContent.loadContributors() }
     }
 
     @discardableResult func show(owner: NSWindow? = nil) -> GameMenuPage {
@@ -45,11 +32,12 @@ import NxlvKit
         let tabs = GameTabs(frame: page.body.bounds)
         tabs.setAccessibilityLabel(L10n.text("About sections"))
         tabs.autoresizingMask = [.width, .height]
-        let overview = AboutMarkdownView(markdown: bundled("Heritage.md")
+        let content = AboutContent(resources: resources)
+        let overview = AboutMarkdownView(markdown: content.heritage
             ?? "# Ultimate Lemmings\n\n" + L10n.text("A rescue worth another try."))
-        let history = AboutHistoryView(markdown: bundled("VersionHistory.md") ?? L10n.text("Version history unavailable."))
-        let contributors = AboutMarkdownView(markdown: defaults.string(forKey: "ContributorsMarkdownV1")
-            ?? bundled("Contributors.md") ?? L10n.text("No contributors listed yet."))
+        let history = AboutHistoryView(markdown: content.versionHistory ?? L10n.text("Version history unavailable."))
+        let contributors = AboutMarkdownView(markdown: defaults.string(forKey: AboutContent.contributorCacheKey)
+            ?? content.contributors ?? L10n.text("No contributors listed yet."))
         for (name, view) in [(L10n.text("About"), overview), (L10n.text("Version history"), history),
                              (L10n.text("Contributors"), contributors)] {
             let item = NSTabViewItem(identifier: name)
@@ -57,8 +45,14 @@ import NxlvKit
             tabs.addTabViewItem(item)
         }
         page.body.addSubview(tabs)
+        page.addSecondaryAction("Lemmings Forums") { NSWorkspace.shared.open(AboutContent.forumsURL) }
         #if !ULTIMATE_LEMMIX_STORE
         page.addPrimaryAction(L10n.text("Buy me a coffee")) { NSWorkspace.shared.open(Self.coffeeURL) }
+        #else
+        page.addPrimaryAction(DeveloperTipArt.action.title) { [weak page] in
+            guard let page, let window = page.window, GameScreen.shared.controllerPage(in: window) === page else { return }
+            DeveloperTipWindow.shared.show(owner: page.window)
+        }
         #endif
         page.onBack = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         page.preferControllerControl(page.controllerBackButton)
@@ -70,10 +64,6 @@ import NxlvKit
         return page
     }
 
-    private func bundled(_ name: String) -> String? {
-        try? String(contentsOf: resources.appendingPathComponent("About").appendingPathComponent(name), encoding: .utf8)
-    }
-
     private func refresh(_ view: AboutMarkdownView) {
         task?.cancel()
         view.status = L10n.text("Loading...")
@@ -83,7 +73,7 @@ import NxlvKit
             do {
                 let markdown = try await self.loadContributors()
                 guard !Task.isCancelled else { return }
-                self.defaults.set(markdown, forKey: "ContributorsMarkdownV1")
+                self.defaults.set(markdown, forKey: AboutContent.contributorCacheKey)
                 view?.markdown = markdown
                 view?.status = nil
             } catch {
@@ -105,7 +95,7 @@ import NxlvKit
 
 /// A release index keeps older notes reachable without one continuous wall of text.
 @MainActor final class AboutHistoryView: NSView {
-    let releases: [(title: String, markdown: String)]
+    let releases: [AboutContent.Release]
     let detail: AboutMarkdownView
     let indexScroll = NSScrollView()
     private let indexDocument = NSView()
@@ -113,14 +103,7 @@ import NxlvKit
     private(set) var selectedIndex = 0
 
     init(markdown: String) {
-        var entries: [(title: String, markdown: String)] = []
-        for line in markdown.components(separatedBy: "\n") {
-            if line.hasPrefix("# ") {
-                entries.append((String(line.dropFirst(2)), line + "\n"))
-            } else if !entries.isEmpty {
-                entries[entries.count - 1].markdown += line + "\n"
-            }
-        }
+        let entries = AboutContent.releases(markdown: markdown)
         releases = entries
         detail = AboutMarkdownView(markdown: entries.first?.markdown ?? markdown)
         super.init(frame: .zero)
@@ -146,11 +129,7 @@ import NxlvKit
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
     /// The version alone, or with its build when another release shares that version.
     func indexTitle(_ index: Int) -> String {
-        func version(_ title: String) -> String { title.components(separatedBy: " · ").first ?? title }
-        let title = releases[index].title, shared = version(title)
-        guard releases.filter({ version($0.title) == shared }).count > 1,
-              let build = title.components(separatedBy: " · Build ").last, build != title else { return shared }
-        return "\(shared) (\(build))"
+        releases[index].indexTitle
     }
 
     @objc private func selectRelease(_ sender: NSButton) {
@@ -220,45 +199,16 @@ import NxlvKit
     private func rebuild() {
         document.subviews.forEach { $0.removeFromSuperview() }
         rows.removeAll()
-        var paragraph: [String] = []
-        func append(_ text: String, heading: Bool = false, title: Bool = false, bullet: Bool = false) {
-            let plain = text.replacingOccurrences(of: "\\[([^\\]]+)\\]\\([^\\)]+\\)", with: "$1", options: .regularExpression)
-                .replacingOccurrences(of: "**", with: "")
-            let label = GameLabel(labelWithString: plain)
-            label.role = heading ? .heading : .body
+        for paragraph in AboutContent.paragraphs(markdown: markdown) {
+            let label = GameLabel(labelWithString: paragraph.text)
+            label.role = paragraph.heading ? .heading : .body
             label.alignment = .left
             label.cell?.wraps = true
-            let marker = bullet ? GameLabel(labelWithString: "-") : nil
+            let marker = paragraph.bullet ? GameLabel(labelWithString: "-") : nil
             document.addSubview(label)
             if let marker { document.addSubview(marker) }
-            rows.append(Row(label: label, marker: marker, heading: heading, title: title))
+            rows.append(Row(label: label, marker: marker, heading: paragraph.heading, title: paragraph.title))
         }
-        func flush() {
-            guard !paragraph.isEmpty else { return }
-            append(paragraph.joined(separator: " "))
-            paragraph.removeAll()
-        }
-        var continuesList = false
-        for line in markdown.components(separatedBy: "\n") {
-            let text = line.trimmingCharacters(in: .whitespacesAndNewlines)
-            if text.isEmpty { flush(); continuesList = false; continue }
-            if text.hasPrefix("#") {
-                flush()
-                continuesList = false
-                append(text.replacingOccurrences(of: "^#{1,6} +", with: "", options: .regularExpression),
-                       heading: true, title: text.hasPrefix("# "))
-            } else if text.hasPrefix("- ") || text.hasPrefix("* ") {
-                flush()
-                append(String(text.dropFirst(2)), bullet: true)
-                continuesList = true
-            } else if continuesList {
-                // A wrapped Markdown list item continues under its text, not under the marker.
-                rows.last?.label.stringValue += " " + text
-            } else {
-                paragraph.append(text)
-            }
-        }
-        flush()
         resetScroll = true
         needsLayout = true
     }

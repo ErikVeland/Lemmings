@@ -20,11 +20,14 @@ def project_for(root):
 
 def prepare_fixture(directory):
     sys.path.insert(0, str(ROOT / "Tools/AlternativeAssets"))
+    from prepare_lemmix_base import prepare_about
     from prepare_open_starter import resources
 
     files = {"Ports/ultimate_lemmix_starter/" + name: data for name, data in resources().items()}
     bundle = ROOT / "Sources/NxlvKit/Resources/Localization.bundle"
     files.update({str(p.relative_to(bundle.parent)): p.read_bytes() for p in bundle.rglob("*") if p.is_file()})
+    prepare_about(directory)
+    files.update({str(p.relative_to(directory)): p.read_bytes() for p in (directory / "About").glob("*.md")})
     rows = []
     for name, data in sorted(files.items()):
         path = directory / name

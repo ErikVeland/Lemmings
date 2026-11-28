@@ -227,6 +227,7 @@
 "An iCloud save could not be read. Existing saves were kept." = "Een iCloud-opslagbestand kon niet worden gelezen. Bestaande opslagbestanden zijn behouden.";
 "An improbable resolution" = "Een onwaarschijnlijke oplossing";
 "An object animation has no FRAMES field." = "Een objectanimatie heeft geen FRAMES-veld.";
+"An optional tip to support development." = "Een vrijwillige fooi om de ontwikkeling te steunen.";
 "An unfinished argument" = "Een onvoltooide redenering";
 "An unpacked classic LVL file must contain exactly {0} bytes; found {1}." = "Een uitgepakt Classic-LVL-bestand moet precies {0} bytes bevatten; er zijn er {1} gevonden.";
 "Analysing available levels" = "Beschikbare levels analyseren";
@@ -277,6 +278,7 @@
 "Audio unavailable: {0}" = "Audio niet beschikbaar: {0}";
 "Availability" = "Beschikbaarheid";
 "Available" = "Beschikbaar";
+"Awaiting approval" = "Wachten op goedkeuring";
 "Award Me!" = "Geef mij een prijs!";
 "Award: {0} - {1}  >" = "Prijs: {0} - {1}  >";
 "Awards ({0})" = "Onderscheidingen ({0})";
@@ -368,6 +370,7 @@
 "Bricks cannot build straight down." = "Met stenen kun je niet recht naar beneden bouwen.";
 "Bring {0} more home to match your best." = "Red nog {0} lemmings om je beste resultaat te evenaren.";
 "Bronze" = "Brons";
+"Browse credits, contributors and version history on every platform." = "Bekijk de credits, bijdragers en versiegeschiedenis op elk platform.";
 "Browse levels" = "Levels doorzoeken";
 "Builder" = "Bouwer";
 "Built {0}" = "Gebouwd: {0}";
@@ -464,7 +467,6 @@
 "Checking solution..." = "Oplossing controleren…";
 "Choose" = "Kiezen";
 "Choose 1× in Game controls to reset speed." = "Kies 1× bij de spelbediening om de snelheid te herstellen.";
-"Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details." = "Kies Catalaans of Zwitserduits. Open op iPhone en iPad Over voor de makers en versiegegevens.";
 "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "Kies Flatscreen, Monitor of Televisie. Classic gebruikt de buissimulatie.";
 "Choose Lemmings 3 tool direction" = "Kies de richting van het gereedschap in Lemmings 3";
 "Choose Music Folder…" = "Muziekmap kiezen…";
@@ -779,6 +781,7 @@
 "Down-right" = "Rechtsonder";
 "Download" = "Downloaden";
 "Download game assets" = "Spelgegevens downloaden";
+"Download hasn’t started" = "De download is nog niet begonnen";
 "Download or remove optional soundtrack libraries." = "Download of verwijder optionele soundtrackbibliotheken.";
 "Download soundtracks" = "Soundtracks downloaden";
 "Downloading" = "Downloaden";
@@ -889,7 +892,6 @@
 "Expected the FLIC marker 0xAF11, but found {0}." = "De FLIC-markering 0xAF11 verwacht, maar {0} gevonden.";
 "Expert" = "Expert";
 "Exploder" = "Opblazer";
-"Explore starter playlists and resume saved routes." = "Bekijk de starterspeellijsten en ga verder met opgeslagen routes.";
 "Explosions" = "Explosies";
 "Export file" = "Bestand exporteren";
 "Extended gamepad" = "Uitgebreide gamepad";
@@ -949,6 +951,7 @@
 "Features 5 exclusive Sunsoft Special levels and custom Hiroyuki Masuno SPC soundtrack." = "Bevat 5 exclusieve Sunsoft Special-levels en een aangepaste SPC-soundtrack van Hiroyuki Masuno.";
 "Features 60 exclusive levels (Presenter rating 1–30 + bonus levels) and Matt Furniss FM tracks." = "Bevat 60 exclusieve levels (Presenter-rang 1–30 plus bonuslevels) en FM-nummers van Matt Furniss.";
 "Features arcade single-player stages, 2-Player Co-Op mode, countdown timers, and high-score screens." = "Bevat arcadestages voor één speler, een co-opmodus voor twee spelers, afteltimers en topscoreschermen.";
+"Feel nukes, bridge warnings and selected impacts on supported devices and controllers." = "Voel nukes, waarschuwingen bij het bouwen van bruggen en bepaalde botsingen op ondersteunde apparaten en controllers.";
 "Feels less temporary." = "Voelt minder tijdelijk.";
 "Feels suitably equipped." = "Voelt zich passend toegerust.";
 "Felt briefly famous." = "Voelde zich even beroemd.";
@@ -1073,6 +1076,7 @@
 "Hadoken" = "Hadoken";
 "Hands off" = "Handen af";
 "Hang Glider" = "Deltavlieger";
+"Haptics" = "Trilfeedback";
 "Hard" = "Moeilijk";
 "Has a coat for special occasions." = "Heeft een jas voor speciale gelegenheden.";
 "Has a drawer for useful things." = "Heeft een la voor nuttige dingen.";
@@ -1166,6 +1170,7 @@
 "Import Lemmings 2 data" = "Lemmings 2-gegevens importeren";
 "Import NeoLemmix data" = "NeoLemmix-gegevens importeren";
 "Import files" = "Bestanden importeren";
+"Import missing game data before opening a level. Downloads can continue in the background on iPhone and iPad." = "Importeer ontbrekende gamegegevens voordat je een level opent. Downloads kunnen op iPhone en iPad op de achtergrond doorgaan.";
 "Import owned games" = "Eigen spellen importeren";
 "Import the resource folder again." = "Importeer de map met spelbestanden opnieuw.";
 "Import your own Classic files to use original artwork." = "Importeer je eigen Classic-bestanden om de oorspronkelijke afbeeldingen te gebruiken.";
@@ -1454,6 +1459,7 @@
 "Learning" = "Leren";
 "Least skills" = "Minste vaardigheden";
 "Leave Hot Seat?" = "Hot Seat verlaten?";
+"Leave a tip" = "Fooi geven";
 "Left" = "Links";
 "Left and right arrows change hints. Up and down arrows scroll the text." = "Met links- en rechts-pijlen wissel je van hint. Met omhoog- en omlaag-pijlen blader je door de tekst.";
 "Left stick click" = "Klik linker stick";
@@ -1656,6 +1662,7 @@
 "Missing or ambiguous Chronicles construction tile." = "De constructietegel van Chronicles ontbreekt of is niet eenduidig.";
 "Missing style data: {0}" = "Stijlgegevens ontbreken: {0}";
 "Missing {0} dependency '{1}'." = "Afhankelijkheid {0} '{1}' ontbreekt.";
+"Mobile data is unavailable. Check cellular access for this app or try Wi-Fi." = "Mobiele data is niet beschikbaar. Controleer of deze app mobiele data mag gebruiken of probeer wifi.";
 "Moderate" = "Gematigd";
 "Modern" = "Modern";
 "Modern Sound" = "Modern geluid";
@@ -1787,6 +1794,7 @@
 "No fan level packs are available." = "Er zijn geen fanlevelpakketten beschikbaar.";
 "No favourites yet" = "Nog geen favorieten";
 "No hands-off clear this run. This goal may not be possible here." = "Je hebt dit level deze keer niet zonder ingrijpen voltooid. Dit doel is hier misschien niet haalbaar.";
+"No internet connection. Reconnect and try again." = "Geen internetverbinding. Maak opnieuw verbinding en probeer het opnieuw.";
 "No lemming is selected." = "Er is geen lemming geselecteerd.";
 "No lemmings released yet" = "Er zijn nog geen lemmingen verschenen";
 "No level files were found for {0}." = "Geen levelbestanden gevonden voor {0}.";
@@ -1827,6 +1835,7 @@
 "None hides selection effects. Obvious adds a green diamond and halo. Modern adds the diamond, white outline and green glow in all three games." = "Geen verbergt selectie-effecten. Duidelijk toont een groene ruit en een lichtkring. Modern toont in alle drie de spellen de ruit, een witte omtrek en een groene gloed.";
 "Not bad, but not good either." = "Niet slecht, maar ook niet goed.";
 "Not earned" = "Niet behaald";
+"Not enough free storage for game assets. Free up space and try again." = "Onvoldoende vrije opslagruimte voor de spelgegevens. Maak ruimte vrij en probeer het opnieuw.";
 "Not met. " = "Niet behaald. ";
 "Not now" = "Niet nu";
 "Not rescued" = "Niet gered";
@@ -1911,7 +1920,6 @@
 "Open Replay Movie…" = "Replayfilm openen…";
 "Open Starter" = "Open de startcollectie";
 "Open in Stacked pose when idle" = "Bij inactiviteit openen in gestapelde stand";
-"Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads." = "Open het hoofdmenu eerder op iPhone en iPad. Zie een intro wanneer een level langer laadt.";
 "Open this address on another device:" = "Open dit adres op een ander apparaat:";
 "Open this level with its original game data to watch the action replay." = "Open dit level met de oorspronkelijke gamegegevens om de actiereplay te bekijken.";
 "Open when closed and charging" = "Openen tijdens opladen in gesloten stand";
@@ -2134,7 +2142,6 @@
 "Profile" = "Profiel";
 "Profile…" = "Profiel…";
 "Programmers" = "Programmeurs";
-"Progress" = "Voortgang";
 "Progress is saved." = "Voortgang wordt opgeslagen.";
 "Progression" = "Voortgang";
 "Progression not created" = "Voortgang niet aangemaakt";
@@ -2142,6 +2149,7 @@
 "Project supervisor" = "Projectleider";
 "Psygnosis  presents" = "Psygnosis  presenteert";
 "Pull up a chair. We've got a level to finish." = "Schuif aan. We hebben een level af te maken.";
+"Purchasing..." = "Bezig met kopen...";
 "Q / Escape" = "Q / Escape";
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q NOGMAALS OM AF TE SLUITEN  *  ESC OM TE BLIJVEN";
 "Queued" = "In wachtrij";
@@ -2350,7 +2358,6 @@
 "Return to the library to change players. The current attempt keeps its owner and is saved for later." = "Ga terug naar de bibliotheek om van speler te wisselen. Deze poging blijft van de huidige speler en wordt opgeslagen.";
 "Return to the library to change players. Your saved run keeps its progress and next turn." = "Ga terug naar de bibliotheek om van speler te wisselen. Je opgeslagen poging behoudt de voortgang en de volgende beurt.";
 "Return to the library to restore a recovery key." = "Ga terug naar de bibliotheek om een herstelsleutel te herstellen.";
-"Return to the main menu after a win without losing your place." = "Ga na een overwinning terug naar het hoofdmenu zonder je plek te verliezen.";
 "Return: Repeat assignment" = "Return: toewijzing herhalen";
 "Returned with a cake." = "Kwam terug met een taart.";
 "Reveal full solution?" = "Volledige oplossing tonen?";
@@ -2800,6 +2807,7 @@
 "Terrain group '{0}' is used before it is defined." = "Terreingroep '{0}' wordt gebruikt voordat deze is gedefinieerd.";
 "Terrain group '{0}' mixes steel and non-steel pieces." = "Terreingroep '{0}' bevat zowel stalen als niet-stalen onderdelen.";
 "Terrain metadata '{0}:{1}' is ambiguous." = "Terreinmetagegevens '{0}:{1}' zijn niet eenduidig.";
+"Thank you for your support!" = "Bedankt voor je steun!";
 "Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research." = "Dank aan de community voor fanlevels, stijlen, herhalingen, muziek en onderzoek naar het behoud van de spellen.";
 "That Hot Seat is no longer saved." = "Die Hot Seat is niet meer opgeslagen.";
 "That is the plan" = "Dat is het plan";
@@ -2877,6 +2885,7 @@
 "The archive has no member named {0}." = "Het archief bevat geen onderdeel met de naam {0}.";
 "The archive member {0} is too large." = "Archiefonderdeel {0} is te groot.";
 "The attempt was not saved." = "De poging is niet opgeslagen.";
+"The background download stopped. Try the download again." = "De download op de achtergrond is gestopt. Probeer opnieuw te downloaden.";
 "The cat understands the arrangement." = "De kat begrijpt de afspraak.";
 "The cloud player is invalid." = "De cloudspeler is ongeldig.";
 "The cloud progress format does not match." = "De indeling van de cloudvoortgang komt niet overeen.";
@@ -2884,11 +2893,13 @@
 "The cloud response is too large." = "Het cloudantwoord is te groot.";
 "The cloud save is too large." = "Het cloudopslagbestand is te groot.";
 "The company suits." = "Het gezelschap bevalt.";
+"The connection dropped. Try the download again." = "De verbinding is verbroken. Probeer opnieuw te downloaden.";
 "The danger is the fall after the entrance. Think about protecting the lemmings before they land." = "Het gevaar is de val uit de ingang. Bedenk hoe je de lemmingen vóór de landing kunt beschermen.";
 "The decision remains respected." = "De beslissing wordt nog steeds gerespecteerd.";
 "The decompression limit must not be negative." = "De decompressielimiet mag niet negatief zijn.";
 "The document contains an unmatched $END." = "Het document bevat een $END zonder bijbehorend begin.";
 "The download did not finish." = "De download is niet voltooid.";
+"The download timed out. Check your connection and try again." = "De download heeft de tijdslimiet overschreden. Controleer je verbinding en probeer het opnieuw.";
 "The entrance limits cannot release all non-preplaced lemmings." = "Met de ingangslimieten kunnen niet alle niet-vooraf geplaatste lemmings worden vrijgelaten.";
 "The entrance timing cannot be negative." = "De ingangstiming mag niet negatief zijn.";
 "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path." = "De uitgang ligt onder het platform waarop de lemmingen lopen. Zoek een plek waar je de vloer boven het lagere pad kunt openen.";
@@ -3168,6 +3179,9 @@
 "Timing probes: {0}. Untested alternatives remain unknown." = "Timingmetingen: {0}. Niet-geteste alternatieven blijven onbekend.";
 "Tiny journey" = "Kleine reis";
 "Tiny journeys" = "Kleine reizen";
+"Tip again {0}" = "Nog een fooi van {0}";
+"Tip {0}" = "Fooi van {0}";
+"Tips are unavailable right now." = "Fooien zijn momenteel niet beschikbaar.";
 "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "Om deze bestanden te downloaden moet je een geldige licentie hebben voor het oorspronkelijke spel “Lemmings” op ten minste één platform. Door “{0}” te kiezen bevestig je dat je die licentie hebt.";
 "Toggle enhanced artwork" = "Uitgebreide illustraties wisselen";
 "Toggle fast-forward" = "Doorspoelen in-/uitschakelen";
@@ -3200,9 +3214,11 @@
 "Truncated Mac graphics frame." = "Afgekort Mac-afbeeldingenframe.";
 "Truncated sequel data at byte {0}." = "Afgekorte vervolggegevens op byte {0}.";
 "Try again" = "Opnieuw proberen";
+"Try another server" = "Andere server proberen";
 "Try later" = "Probeer het later opnieuw";
 "Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns." = "Probeer één vaardigheid op normale snelheid. Pauzeer en kijk waar de werker landt en draait.";
 "Try these skills!" = "Probeer deze vaardigheden!";
+"Trying another download server" = "Een andere downloadserver proberen";
 "Tube strength" = "Buiseffectsterkte";
 "Turn off" = "Uitschakelen";
 "Turn off auto-follow" = "Automatisch volgen uitzetten";
@@ -3337,6 +3353,7 @@
 "WHEN THE TRIBES SETTLED IN THESE LANDS" = "TOEN DE STAMMEN ZICH IN DEZE LANDEN VESTIGDEN";
 "WINS / FAILS" = "OVERWINNINGEN / MISLUKKINGEN";
 "Wait for this lemming to land." = "Wacht tot deze lemming landt.";
+"Waiting for download to start" = "Wachten tot de download begint";
 "Walker" = "Loper";
 "Walks home with accompaniment." = "Loopt in gezelschap naar huis.";
 "Was asked to judge a cucumber." = "Werd gevraagd een komkommer te beoordelen.";
@@ -3347,6 +3364,7 @@
 "Was thanked for noticing a draught." = "Werd bedankt voor het opmerken van de tocht.";
 "Watch and listen" = "Kijk en luister";
 "Watch solution?" = "Oplossing bekijken?";
+"Watch the intro while game files are checked on iPhone and iPad." = "Bekijk de intro terwijl de gamebestanden op iPhone en iPad worden gecontroleerd.";
 "Watch the worker's direction before assigning a skill." = "Let op de richting van de werker voordat je een vaardigheid toewijst.";
 "We built a Snow Lemming." = "We bouwden een sneeuwlemming.";
 "We got snowed in for a day." = "We zaten een dag ingesneeuwd.";
@@ -3408,6 +3426,8 @@
 "Your rescue story" = "Jouw reddingsverhaal";
 "Your rescues add to the worldwide total." = "Je reddingen tellen mee voor het wereldtotaal.";
 "Your shared campaign stays saved for later." = "Je gedeelde campagne blijft bewaard voor later.";
+"Your tip could not be completed." = "Je fooibetaling kon niet worden voltooid.";
+"Your tip could not be confirmed." = "Je fooibetaling kon niet worden bevestigd.";
 "Z / Shift+Z: Zoom" = "Z / Shift+Z: zoomen";
 "ZOOM" = "ZOOM";
 "Zero avoidable losses" = "Geen vermijdbare verliezen";
@@ -3609,5 +3629,3 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0} UUR EN {1} MIN";
 "{0}{1} more to rescue for three stars." = "Nog {0}{1} redden voor drie sterren.";
-
-"Haptics" = "Trilfeedback";

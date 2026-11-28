@@ -44,4 +44,46 @@ final class BitmapLatinGlyphTests: XCTestCase {
         XCTAssertEqual(BitmapLatinGlyphs.uppercase("A\u{030A}"), "Å")
         XCTAssertEqual(BitmapLatinGlyphs.uppercase("i", locale: Locale(identifier: "tr")), "İ")
     }
+
+    func testCurrencyGlyphsExistInEmergencyAndStyledFacesWithoutExternalArtwork() throws {
+        let currencies: [Character] = ["$", "£", "€", "¥", "₹"]
+        let compact = BitmapLatinGlyphs.monochrome(columns: [
+            "A": [126, 9, 9, 9, 126], "E": [127, 73, 73, 73, 65], "H": [127, 8, 8, 8, 127],
+            "O": [62, 65, 65, 65, 62], "S": [70, 73, 73, 73, 49], "N": [127, 4, 8, 16, 127],
+            "?": [2, 1, 81, 9, 6]
+        ])
+        var silhouettes = Set<Data>()
+        for character in currencies {
+            XCTAssertTrue(BitmapLatinGlyphs.supports(character))
+            let glyph = try XCTUnwrap(compact[character], "Missing emergency currency \(character)")
+            XCTAssertTrue(stride(from: 3, to: glyph.rgba.count, by: 4).contains { glyph.rgba[$0] != 0 })
+            XCTAssertEqual(glyph.rgba.count, glyph.width * glyph.height * 4)
+            XCTAssertLessThanOrEqual(glyph.x + glyph.width, 6)
+            XCTAssertEqual(glyph.y + glyph.height, 7)
+            XCTAssertNotEqual(glyph.rgba, compact["?"]?.rgba)
+            silhouettes.insert(glyph.rgba)
+        }
+        XCTAssertEqual(silhouettes.count, currencies.count)
+
+        for style in [BitmapLatinGlyphs.Style.macintosh, .sequelFrontEnd, .sequelPanel] {
+            for (width, height) in [(8, 8), (12, 18), (16, 20)] {
+                let original = ClassicMacArtwork.Frame(x: 0, y: 0, width: width, height: height,
+                    rgba: Data(repeating: 255, count: width * height * 4))
+                let source: [Character: ClassicMacArtwork.Frame] = [
+                    "A": original, "E": original, "H": original, "O": original,
+                    "S": original, "N": original, "$": original, "?": original
+                ]
+                let extended = BitmapLatinGlyphs.extending(source, cellWidth: width, cellHeight: height, style: style)
+                XCTAssertEqual(extended["$"]?.rgba, original.rgba)
+                for character in currencies {
+                    let glyph = try XCTUnwrap(extended[character], "Missing styled currency \(character)")
+                    XCTAssertEqual(glyph.rgba.count, glyph.width * glyph.height * 4)
+                    XCTAssertTrue(stride(from: 3, to: glyph.rgba.count, by: 4).contains { glyph.rgba[$0] != 0 })
+                    XCTAssertGreaterThanOrEqual(glyph.x, 0)
+                    XCTAssertLessThanOrEqual(glyph.x + glyph.width, width)
+                    XCTAssertLessThanOrEqual(glyph.y + glyph.height, height)
+                }
+            }
+        }
+    }
 }

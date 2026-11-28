@@ -1,18 +1,25 @@
 import Foundation
 
-/// Western Latin additions made from the current font's own pixels and colour ramp.
+/// Western Latin and currency additions made from the current font's own pixels and colour ramp.
 public enum BitmapLatinGlyphs {
     public enum Style: Sendable { case macintosh, sequelFrontEnd, sequelPanel }
     private typealias Frame = ClassicMacArtwork.Frame
     private struct Point: Hashable { let x: Int, y: Int }
     private static let accents: Set<UInt32> = [0x300, 0x301, 0x302, 0x303, 0x304, 0x306, 0x307, 0x308, 0x30A, 0x30B, 0x30C, 0x327, 0x328, 0x326]
     private static let special = Set(Array("ÆæŒœØøÐðÞþŁłĐđĦħŦŧŊŋıĸſßẞĲĳŉ¡¿"))
+    private static let currencyRows: [Character: [String]] = [
+        "$": ["..#..", ".###.", "#.#..", ".###.", "..#.#", ".###.", "..#.."],
+        "£": ["..##.", ".#..#", ".#...", "###..", ".#...", ".#...", "#####"],
+        "€": ["..###", ".#...", "####.", ".#...", "####.", ".#...", "..###"],
+        "¥": ["#...#", ".#.#.", "..#..", "#####", "..#..", "#####", "..#.."],
+        "₹": ["#####", "...#.", "#####", "..#..", "##...", "..#..", "...#."]
+    ]
 
-    /// Latin-1, Latin Extended-A, Romanian comma-below letters and capital sharp S.
+    /// Western Latin letters and currency symbols used by the menu faces and emergency font.
     public static let characters: [Character] = {
-        let scalars = Array(0xC0...0x17F) + Array(0x218...0x21B) + [0x1E9E, 0xA1, 0xBF]
+        let scalars = Array(0xC0...0x17F) + Array(0x218...0x21B) + [0x1E9E, 0xA1, 0xBF, 0x24, 0xA3, 0xA5, 0x20AC, 0x20B9]
         return scalars.compactMap { Unicode.Scalar($0).map { Character(String($0)) } }.filter {
-            special.contains($0) || decomposition($0) != nil
+            special.contains($0) || currencyRows[$0] != nil || decomposition($0) != nil
         }
     }()
     private static let covered = Set(characters)
@@ -294,6 +301,7 @@ public enum BitmapLatinGlyphs {
             return Frame(x: 0, y: top, width: width, height: bottom - top, rgba: Data(bytes))
         }
         func specialGlyph(_ character: Character) -> Frame? {
+            if let rows = BitmapLatinGlyphs.currencyRows[character] { return currencyGlyph(rows) }
             switch character {
             case "Æ": return ligature("A", "E")
             case "æ": return ligature("a", "e")
@@ -357,6 +365,20 @@ public enum BitmapLatinGlyphs {
                 return Frame(x: glyph.x, y: glyph.y, width: glyph.width, height: glyph.height, rgba: Data(bytes))
             default: return nil
             }
+        }
+        func currencyGlyph(_ rows: [String]) -> Frame {
+            let capital = base("H") ?? base("O")
+            let top = compact ? 0 : capital?.y ?? 0
+            let w = compact ? 5 : max(5, width - outline - shadow)
+            let h = compact ? 7 : max(7, (capital?.height ?? height) - outline - shadow)
+            let pattern = rows.map(Array.init)
+            var shape = Set<Point>()
+            for y in 0..<h { for x in 0..<w where pattern[y * 7 / h][x * 5 / w] == "#" {
+                shape.insert(Point(x: x + outline, y: y + top))
+            }}
+            let blank = Frame(x: 0, y: top, width: width, height: h,
+                              rgba: Data(repeating: 0, count: width * h * 4))
+            return render(blank, adding: shape)
         }
         /// The death counter's skull, drawn in the font's own ramp at capital height.
         func skull() -> Frame? {
