@@ -84,6 +84,8 @@ struct GameplayTactileScore {
     }
 }
 
+enum GameplayTactilePlayback: Equatable { case unavailable, queued, accepted }
+
 /// The camera, not the world origin, is the listener. The device is mono;
 /// split controller handles carry direction while both outputs stay active.
 struct GameplayTactileMix: Equatable {
@@ -93,7 +95,10 @@ struct GameplayTactileMix: Equatable {
     static let centered = Self(pan: 0, gain: 1)
     var left: Float { gain * (0.10 + 0.90 * sqrt((1 - pan) / 2)) }
     var right: Float { gain * (0.10 + 0.90 * sqrt((1 + pan) / 2)) }
-    func deviceGain(withController: Bool) -> Float { gain * (withController ? 0.57 : 1) }
+    func deviceGain(controllerPlayback: [GameplayTactilePlayback]) -> Float {
+        // A pending controller startup can still fail or be interrupted.
+        gain * (controllerPlayback.contains(.accepted) ? 0.57 : 1)
+    }
 
     static func at(_ point: GameplaySoundPoint, in camera: GameplaySoundViewport) -> Self {
         guard camera.width > 0, camera.height > 0,
@@ -248,16 +253,15 @@ import GameController
             }
         }
         lastCue = cue
-        var controllerRendered = false
-        for (channel, actuator) in controllerActuators {
+        let controllerPlayback = controllerActuators.map { channel, actuator in
             let gain = switch channel {
             case .left: mix.left
             case .right: mix.right
             case .mono: mix.gain
             }
-            controllerRendered = actuator.play(cue, gain: gain) || controllerRendered
+            return actuator.play(cue, gain: gain)
         }
-        _ = device.play(cue, gain: mix.deviceGain(withController: controllerRendered))
+        device.play(cue, gain: mix.deviceGain(controllerPlayback: controllerPlayback))
     }
 
     @MainActor private final class Actuator {
@@ -290,11 +294,11 @@ import GameController
             active = nil; pending = nil; started = false; starting = false
         }
 
-        @discardableResult func play(_ cue: GameplayTactileCue, gain: Float) -> Bool {
+        @discardableResult func play(_ cue: GameplayTactileCue, gain: Float) -> GameplayTactilePlayback {
             let level = Int((max(0, min(1, gain)) * 16).rounded())
-            guard level > 0 else { cancel(); return false }
+            guard level > 0 else { cancel(); return .unavailable }
             if engine == nil {
-                guard let created = makeEngine() else { return false }
+                guard let created = makeEngine() else { return .unavailable }
                 created.playsHapticsOnly = true
                 created.isAutoShutdownEnabled = true
                 engine = created
@@ -312,11 +316,11 @@ import GameController
                     }
                 }
             }
-            guard let engine else { return false }
+            guard let engine else { return .unavailable }
             let pattern = Pattern(cue: cue, gainLevel: level)
             if started { return play(pattern, on: engine) }
             pending = pattern
-            guard !starting else { return true }
+            guard !starting else { return .queued }
             starting = true
             let id = generation
             engine.start { [weak self] error in
@@ -329,10 +333,10 @@ import GameController
                     if let pending = self.pending { _ = self.play(pending, on: engine) }
                 }
             }
-            return true
+            return .queued
         }
 
-        private func play(_ pattern: Pattern, on engine: CHHapticEngine) -> Bool {
+        private func play(_ pattern: Pattern, on engine: CHHapticEngine) -> GameplayTactilePlayback {
             do {
                 if players[pattern] == nil {
                     let intensityScale = Float(pattern.gainLevel) / 16
@@ -353,10 +357,10 @@ import GameController
                 cancel()
                 try players[pattern]?.start(atTime: CHHapticTimeImmediate)
                 active = pattern
-                return true
+                return .accepted
             } catch {
                 stop()
-                return false
+                return .unavailable
             }
         }
     }

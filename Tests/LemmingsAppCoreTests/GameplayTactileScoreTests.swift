@@ -65,9 +65,9 @@ final class GameplayTactileScoreTests: XCTestCase {
         XCTAssertGreaterThan(right.right, 3 * right.left)
         XCTAssertLessThan(offscreen.gain, right.gain)
         XCTAssertEqual(GameplayTactileMix.centered.left, GameplayTactileMix.centered.right)
-        XCTAssertEqual(left.deviceGain(withController: false), 1)
-        XCTAssertGreaterThan(left.deviceGain(withController: true), 0)
-        XCTAssertLessThan(left.deviceGain(withController: true), left.deviceGain(withController: false))
+        XCTAssertEqual(left.deviceGain(controllerPlayback: []), 1)
+        XCTAssertGreaterThan(left.deviceGain(controllerPlayback: [.accepted]), 0)
+        XCTAssertLessThan(left.deviceGain(controllerPlayback: [.accepted]), left.deviceGain(controllerPlayback: []))
     }
 
     func testPickTheVisibleImpactRatherThanTheFirstOffscreenOne() throws {
@@ -80,6 +80,14 @@ final class GameplayTactileScoreTests: XCTestCase {
         XCTAssertGreaterThan(chosen.right, chosen.left)
         XCTAssertEqual(GameplayTactileMix.select(for: .nukeArm, from: [visible], viewport: camera), .centered)
         XCTAssertNotNil(GameplayTactileMix.select(for: .nukeImpact, from: [.init(.explode, at: distant.point)], viewport: camera))
+    }
+
+    func testPhoneStaysFullStrengthUntilAControllerActuatorAcceptsPlayback() {
+        let mix = GameplayTactileMix.centered
+        for outcomes: [GameplayTactilePlayback] in [[], [.unavailable], [.queued], [.queued, .unavailable]] {
+            XCTAssertEqual(mix.deviceGain(controllerPlayback: outcomes), 1)
+        }
+        XCTAssertLessThan(mix.deviceGain(controllerPlayback: [.queued, .accepted]), 1)
     }
 
 }

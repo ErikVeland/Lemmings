@@ -17,8 +17,9 @@ version at the same distance. Offscreen events soften; very distant landings
 stay silent, and the main nuke impact retains a minimum strength. The nuke
 arm and fuse deliberately stay centred.
 
-On supported iOS hardware, the built-in actuator also plays, at reduced
-strength when the controller is active. Hardware without built-in haptics
+On supported iOS hardware, the built-in actuator also plays. Its strength
+drops only after a controller actuator accepts the cue. A queued startup or
+failed controller leaves the device cue at its normal strength. Hardware without built-in haptics
 can still use a supported controller (DualSense first), including on Mac or TV. The gameplay
 toggle is in Accessibility on Mac and mobile, and Audio on Apple TV. It is
 local to each device and independent of sound volume and HD effects.
