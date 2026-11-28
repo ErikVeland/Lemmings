@@ -118,5 +118,10 @@
     "file": "Sources/LemmingsGameArt/MobileAboutArt.swift",
     "source": "Lemmings Forums",
     "reason": "Proper name of the linked community website; kept unchanged in every language"
+  },
+  {
+    "file": "Sources/LemmingsAppCore/Import/GameAssetBackgroundTransfer.swift",
+    "source": "GameAssetDownloadPath",
+    "reason": "Dispatch queue identifier for background download network-path monitoring; never displayed as interface text"
   }
 ]
