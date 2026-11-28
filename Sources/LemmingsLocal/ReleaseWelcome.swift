@@ -11,7 +11,7 @@ import NxlvKit
     /// The release these notes describe. A test fails when Info.plist moves on
     /// to a new version and these notes stay behind.
     static let notesVersion = "2.7.5"
-    static let lemmixNotesVersion = "2.7.5"
+    static let lemmixNotesVersion = "2.7.6"
     static var subtitle: String { GameReleaseCopy.invitation }
     static var sections: [(String, String)] {
         GameReleaseCopy.sections + [
