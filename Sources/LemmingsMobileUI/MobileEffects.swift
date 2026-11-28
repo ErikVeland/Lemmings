@@ -102,12 +102,14 @@ import os
         let l2Session = engine as? Lemmings2MobileSession
         let l2Requests = l2Session?.drainLemmings2SoundRequests() ?? []
         let current = snapshot ?? session.snapshot
+        let rect = viewport.visibleLevelRect
+        let soundViewport = GameplaySoundViewport(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
         if !suspended && !session.isReadOnly {
             if rewinding { haptics.seek(nuking: current.isEndingRun, tick: current.tick) }
             else {
                 let fuse = current.isEndingRun ? session.hapticFuseRemainingTicks : nil
                 haptics.update(nuking: current.isEndingRun, tick: current.tick, cues: cues, sequel: l2Requests,
-                    secondsToBlast: fuse.map { Double($0) / session.ticksPerSecond })
+                    viewport: soundViewport, secondsToBlast: fuse.map { Double($0) / session.ticksPerSecond })
             }
         }
         guard !isTestAudioMuted, !suspended, prepared else { return }
@@ -115,8 +117,6 @@ import os
         let becameActive = needsReadyOutput && !keepOutputReady
         keepOutputReady = needsReadyOutput
         if becameActive { resumeForCue() }
-        let rect = viewport.visibleLevelRect
-        let soundViewport = GameplaySoundViewport(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
         let ending = current.isEndingRun
         enqueue { player in player.setViewport(soundViewport); player.setNukeActive(ending) }
         if let neoLemmix = engine as? NeoLemmixMobileSession,

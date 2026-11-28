@@ -1683,7 +1683,7 @@ import NxlvKit
             let requests = game.drainSoundEvents()
             let fuse = game.isNuking ? game.lemmings.lazy.compactMap(\.bombTicks).min() : nil
             haptics.update(nuking: game.isNuking, tick: game.tick, cues: [], sequel: requests,
-                secondsToBlast: fuse.map { Double($0) / Lemmings2Runtime.ticksPerSecond })
+                viewport: canvas.soundViewport, secondsToBlast: fuse.map { Double($0) / Lemmings2Runtime.ticksPerSecond })
             sounds.play(requests)
             canvas.flashExplosions(game)
             self.game = game; captureReplayFrame()

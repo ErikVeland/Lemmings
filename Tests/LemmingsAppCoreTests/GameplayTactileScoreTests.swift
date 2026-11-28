@@ -48,4 +48,38 @@ final class GameplayTactileScoreTests: XCTestCase {
                              GameplayTactileCue.bomber.pulses.first!.intensity)
         XCTAssertEqual(GameplayTactileCue.nukeArm.pulses.count, 3)
     }
+    func testHardLandingThudsButAnUnseenLossDoesNot() {
+        var score = GameplayTactileScore()
+        XCTAssertNil(score.update(nuking: false, cues: [.fallOut, .drown], at: 0))
+        XCTAssertEqual(score.update(nuking: false, cues: [.splat], at: 0.1), .fallLanding)
+        XCTAssertNil(score.update(nuking: false, cues: [.splat], at: 0.4))
+        XCTAssertEqual(score.update(nuking: false, cues: [.splat], at: 0.6), .fallLanding)
+    }
+
+    func testPositionalMixSteersBothHandlesAndAttenuatesOffscreen() {
+        let camera = GameplaySoundViewport(x: 100, y: 50, width: 200, height: 100)
+        let left = GameplayTactileMix.at(.init(x: 110, y: 100), in: camera)
+        let right = GameplayTactileMix.at(.init(x: 290, y: 100), in: camera)
+        let offscreen = GameplayTactileMix.at(.init(x: 320, y: 100), in: camera)
+        XCTAssertGreaterThan(left.left, 3 * left.right)
+        XCTAssertGreaterThan(right.right, 3 * right.left)
+        XCTAssertLessThan(offscreen.gain, right.gain)
+        XCTAssertEqual(GameplayTactileMix.centered.left, GameplayTactileMix.centered.right)
+        XCTAssertEqual(left.deviceGain(withController: false), 1)
+        XCTAssertGreaterThan(left.deviceGain(withController: true), 0)
+        XCTAssertLessThan(left.deviceGain(withController: true), left.deviceGain(withController: false))
+    }
+
+    func testPickTheVisibleImpactRatherThanTheFirstOffscreenOne() throws {
+        let camera = GameplaySoundViewport(x: 0, y: 0, width: 100, height: 100)
+        let visible = PositionedSoundCue(.splat, at: .init(x: 80, y: 50))
+        let distant = PositionedSoundCue(.splat, at: .init(x: -180, y: 50))
+        let genericDeath = PositionedSoundCue(.splat, at: .init(x: 20, y: 50), isFatalLanding: false)
+        XCTAssertNil(GameplayTactileMix.select(for: .fallLanding, from: [distant, genericDeath], viewport: camera))
+        let chosen = try XCTUnwrap(GameplayTactileMix.select(for: .fallLanding, from: [distant, genericDeath, visible], viewport: camera))
+        XCTAssertGreaterThan(chosen.right, chosen.left)
+        XCTAssertEqual(GameplayTactileMix.select(for: .nukeArm, from: [visible], viewport: camera), .centered)
+        XCTAssertNotNil(GameplayTactileMix.select(for: .nukeImpact, from: [.init(.explode, at: distant.point)], viewport: camera))
+    }
+
 }

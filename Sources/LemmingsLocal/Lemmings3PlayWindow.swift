@@ -1914,7 +1914,7 @@ import NxlvKit
         game.step()
         saveCheckpoint()
         let cues = Lemmings3SoundCue.positionedCues(before: previousSoundState, after: .init(game))
-        if !paused { haptics.update(nuking: false, tick: game.tick, cues: cues) }
+        if !paused { haptics.update(nuking: false, tick: game.tick, cues: cues, viewport: canvas.soundViewport) }
         warningSound.play(cues)
         if countdownWarning.update(seconds: game.remainingSeconds) { warningSound.play(.timerWarning) }
         canvas.flashExplosions(game)

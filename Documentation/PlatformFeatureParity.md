@@ -9,10 +9,17 @@ nuke; its tool explosions use the smaller bomber cue. The building cue is a
 short double tap at the existing bridge-finishing warning. A steel hit gives
 a single sharp tap. Ordinary brick placement and other routine events are quiet.
 
-One endpoint plays at a time. Prefer the handles of a supported controller
-(DualSense first), otherwise use the built-in actuator on compatible iOS
-hardware. iPad, Duo, Mac and Apple TV do not assume a built-in actuator:
-unsupported hardware without a supported controller stays silent. The gameplay
+A fatal landing gives a short, rounded thud; falling out of the level or
+drowning does not. Positioned cues follow the visible playfield, favouring
+the closest visible impact when several arrive together. A split-handle
+controller steers left and right; single-actuator hardware plays a centred
+version at the same distance. Offscreen events soften; very distant landings
+stay silent, and the main nuke impact retains a minimum strength. The nuke
+arm and fuse deliberately stay centred.
+
+On supported iOS hardware, the built-in actuator also plays, at reduced
+strength when the controller is active. Hardware without built-in haptics
+can still use a supported controller (DualSense first), including on Mac or TV. The gameplay
 toggle is in Accessibility on Mac and mobile, and Audio on Apple TV. It is
 local to each device and independent of sound volume and HD effects.
 

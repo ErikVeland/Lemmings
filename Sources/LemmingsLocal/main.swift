@@ -8624,7 +8624,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
       flashExplosions(previous: previousExplosions)
       let fuse = session.isNuking ? session.lemmings.lazy.compactMap(\.countdown).min() : nil
       haptics.update(nuking: session.isNuking, tick: session.currentTick, cues: session.lastPositionedCues,
-        secondsToBlast: fuse.map { Double($0) / Double(session.ticksPerSecond) })
+        viewport: playfield.soundViewport, secondsToBlast: fuse.map { Double($0) / Double(session.ticksPerSecond) })
       effects.play(session.lastPositionedCues)
       captureReplayFrame()
       advanced = true
@@ -8947,7 +8947,8 @@ let achievementProgressKey = "ClassicAchievementProgress"
         accumulator = 0; lastStepTime = nil
       } else {
         session.nuke()
-        haptics.update(nuking: session.isNuking, tick: session.currentTick, cues: session.lastPositionedCues)
+        haptics.update(nuking: session.isNuking, tick: session.currentTick, cues: session.lastPositionedCues,
+          viewport: playfield.soundViewport)
         effects.play(session.lastPositionedCues)
         playfield.startCountdown.cancel()
         finishSessionIfNeeded()

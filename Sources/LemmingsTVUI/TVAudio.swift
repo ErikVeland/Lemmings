@@ -76,8 +76,10 @@ import NxlvKit
         if hapticRunID != game.runID { haptics.reset(); hapticRunID = game.runID }
         let snapshot = game.session.snapshot
         let fuse = snapshot.isEndingRun ? game.session.hapticFuseRemainingTicks : nil
+        let rect = game.viewport.visibleLevelRect
+        let camera = GameplaySoundViewport(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
         haptics.update(nuking: snapshot.isEndingRun, tick: snapshot.tick, cues: cues, sequel: requests,
-            secondsToBlast: fuse.map { Double($0) / game.session.ticksPerSecond })
+            viewport: camera, secondsToBlast: fuse.map { Double($0) / game.session.ticksPerSecond })
     }
     func update(_ game: TVGameExperience) {
         let cues = game.session.drainSoundCues()
