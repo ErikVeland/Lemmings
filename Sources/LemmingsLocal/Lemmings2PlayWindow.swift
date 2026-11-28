@@ -94,7 +94,9 @@ import NxlvKit
     private var lastTime = ProcessInfo.processInfo.systemUptime
     private var accumulator = 0.0
     private var frontTicks = 0
-    private var paused = false
+    private var paused = false {
+      didSet { if paused && !oldValue { haptics.pause() } }
+    }
     private var userPausedMusic = false
     private var assignmentFocus = AssignmentFocus()
     private var gameplayKeyboard: GameplayKeyboard?
@@ -105,6 +107,7 @@ import NxlvKit
         set { speedControl.setFast(newValue) }
     }
     private var countdownWarning = LastSecondsWarning()
+    private let haptics = GameplayHaptics()
     private let dj = AdaptiveDJPlayer()
     private lazy var resultMusic = ResultMusicFade(module: music, dj: dj)
     private var needsAttemptMusic = true
@@ -866,6 +869,7 @@ import NxlvKit
     @objc private func characterArtworkChanged() { canvas.refreshCharacterArtwork() }
     func stop() {
         resultMusic.retire()
+        haptics.reset()
         manualDJHandoff.cancel()
         gameplayKeyboard?.removeNavigationControl()
         saveCheckpoint(immediately: true)
@@ -877,7 +881,7 @@ import NxlvKit
         runMovie.discard(); music.stop(); dj.stop(); sounds.stop(); persist()
     }
     func setMuted(_ muted: Bool) { setAudioSettings(audioSettings, muted: muted) }
-    func suspendAudioOutput() { saveCheckpoint(immediately: true); music.suspendOutput(); dj.suspendOutput(); sounds.suspendOutput() }
+    func suspendAudioOutput() { haptics.pause(); saveCheckpoint(immediately: true); music.suspendOutput(); dj.suspendOutput(); sounds.suspendOutput() }
     func resumeAudioOutput() throws {
         try sounds.resumeOutput()
         if paused && !canvas.startCountdown.isActive && screen == .playing && game?.isComplete == false {
@@ -1370,6 +1374,7 @@ import NxlvKit
         usedRewind = true; undoCount += 1
         lastFanInput = nil; lastAimInput = nil
         recoveryInputs = Array(recoveryInputs.prefix(beforeNukeInputCount))
+        haptics.seek(nuking: false, tick: beforeNuke.tick)
         game = beforeNuke; assignmentFocus.rewind(to: beforeNuke.tick); canvas.assignmentHighlight.clear(); self.beforeNuke = nil; sounds.silence(); accumulator = 0
     }
     private func activateNuke() {
@@ -1377,6 +1382,7 @@ import NxlvKit
         beforeNuke = game; nukeCount += 1
         canvas.startCountdown.cancel()
         performRecoveryInput(.nuke); paused = false; updateUserMusicPause(); fanSelected = false; accumulator = 0
+        if let game { haptics.update(nuking: game.isNuking, tick: game.tick, cues: []) }
     }
     /// N is a deliberate key press, so it needs no double-click like the panel button.
     private func toggleNukeFromKeyboard() {
@@ -1674,7 +1680,11 @@ import NxlvKit
             countdownWarning.reset(seconds: game.remainingSeconds)
             game.step()
             if countdownWarning.update(seconds: game.remainingSeconds) { sounds.play([.init(supplemental: .timerWarning)]) }
-            sounds.play(game.drainSoundEvents())
+            let requests = game.drainSoundEvents()
+            let fuse = game.isNuking ? game.lemmings.lazy.compactMap(\.bombTicks).min() : nil
+            haptics.update(nuking: game.isNuking, tick: game.tick, cues: [], sequel: requests,
+                viewport: canvas.soundViewport, secondsToBlast: fuse.map { Double($0) / Lemmings2Runtime.ticksPerSecond })
+            sounds.play(requests)
             canvas.flashExplosions(game)
             self.game = game; captureReplayFrame()
             if ProcessInfo.processInfo.systemUptime >= inputDeadline + runMovie.batchCompositionSeconds { break }
@@ -1857,6 +1867,7 @@ import NxlvKit
             if case .nuke = input.action { count += 1 }
         }
         usedRewind = true; paused = true; accumulator = 0; updateUserMusicPause()
+        haptics.seek(nuking: game?.isNuking == true, tick: target)
         assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub(); playRewindMusic()
         refreshGame(); saveCheckpoint(immediately: true)
         gameplayKeyboard?.showControlTip(.rewind)

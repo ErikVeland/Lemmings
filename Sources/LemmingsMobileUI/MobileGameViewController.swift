@@ -948,11 +948,13 @@ typealias MobileGameControllerBase = UIViewController
         case .endRun:
             if session.snapshot.isEndingRun {
                 _ = session.undoEndRun()
+                effects.nukeChanged(session)
                 endRunArmedUntil = 0
             } else {
                 let now = ProcessInfo.processInfo.systemUptime
                 if now <= endRunArmedUntil {
                     _ = session.beginEndRun()
+                    effects.nukeChanged(session)
                     endRunArmedUntil = 0
                 } else {
                     endRunArmedUntil = now + 1.5

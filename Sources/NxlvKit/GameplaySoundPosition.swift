@@ -14,10 +14,13 @@ public struct PositionedSoundCue: Sendable {
     public let sampleName: String?
     /// Missing trap samples can use the Classic effect. Other gadgets stay silent.
     public let allowsFallback: Bool
+    /// Some banks also use the splat sample for losses without a ground impact.
+    public let isFatalLanding: Bool
     public init(_ effect: ClassicSoundEffect, at point: GameplaySoundPoint? = nil,
-                sampleName: String? = nil, allowsFallback: Bool = true) {
+                sampleName: String? = nil, allowsFallback: Bool = true, isFatalLanding: Bool? = nil) {
         self.effect = effect; self.point = point
         self.sampleName = sampleName; self.allowsFallback = allowsFallback
+        self.isFatalLanding = isFatalLanding ?? (effect == .splat)
     }
 }
 

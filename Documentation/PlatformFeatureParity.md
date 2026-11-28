@@ -1,5 +1,34 @@
 # Cross-platform feature parity
 
+## Gameplay haptics
+
+Classic, supported NeoLemmix levels and Lemmings 2 use a rising cue when the
+nuke is committed, a final fuse cue when countdown timing is available, a heavy
+first impact, and lighter, spaced follow-up impacts. Lemmings 3 has no global
+nuke; its tool explosions use the smaller bomber cue. The building cue is a
+short double tap at the existing bridge-finishing warning. A steel hit gives
+a single sharp tap. Ordinary brick placement and other routine events are quiet.
+
+A fatal landing gives a short, rounded thud; falling out of the level or
+drowning does not. Positioned cues follow the visible playfield, favouring
+the closest visible impact when several arrive together. A split-handle
+controller steers left and right; single-actuator hardware plays a centred
+version at the same distance. Offscreen events soften; very distant landings
+stay silent, and the main nuke impact retains a minimum strength. The nuke
+arm and fuse deliberately stay centred.
+
+On supported iOS hardware, the built-in actuator also plays. Its strength
+drops only after a controller actuator accepts the cue. A queued startup or
+failed controller leaves the device cue at its normal strength. Hardware without built-in haptics
+can still use a supported controller (DualSense first), including on Mac or TV. The gameplay
+toggle is in Accessibility on Mac and mobile, and Audio on Apple TV. It is
+local to each device and independent of sound volume and HD effects.
+
+The cues are local presentation only. Game rules, saved inputs and replay
+exports are unchanged. Rewind, pause, interruption and undo cancel an active
+effect. Playback is muted during automated tests. Physical actuator feel and
+controller hand-off need a device check; simulator builds do not establish feel.
+
 ## Lemmix without imported game data · 28 November 2026
 
 On iPhone, iPad, Duo and Apple TV, bundled Journey names do not establish that
