@@ -36,6 +36,8 @@ final class LaunchTests: XCTestCase {
         XCTAssertTrue(checking.waitForExistence(timeout: 3))
         XCTAssertTrue(checking.label.contains("Checking game files"))
         XCTAssertFalse(play.exists)
+        XCTAssertFalse(app.buttons["level.cracktro.cancel"].exists)
+        capture(app, name: "Startup file check with cracktro backdrop")
         XCTAssertTrue(play.waitForExistence(timeout: 30))
         XCTAssertTrue(play.isEnabled)
         XCTAssertFalse(checking.exists)

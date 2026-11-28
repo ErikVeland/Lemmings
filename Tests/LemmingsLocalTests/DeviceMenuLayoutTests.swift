@@ -54,6 +54,27 @@ final class DeviceMenuLayoutTests: XCTestCase {
         XCTAssertEqual(initial, try pixels(elapsed: 1.4, reduceFlashes: true))
     }
 
+    @MainActor func testStartupCracktroBackdropFillsPortraitAndLandscapeAndHonoursReducedEffects() throws {
+        for (width, height) in [(320, 568), (720, 495), (810, 1080)] {
+            let stride = width * 4
+            func frame(elapsed: TimeInterval, reduceMotion: Bool = false, reduceFlashes: Bool = false) throws -> Data {
+                let context = try XCTUnwrap(CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+                    bytesPerRow: stride, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+                GameLoadingIntroArt.drawBackdrop(in: CGRect(x: 0, y: 0, width: width, height: height),
+                    elapsed: GameLoadingIntroArt.frameElapsed(elapsed, reduceMotion: reduceMotion,
+                        reduceFlashes: reduceFlashes), context: context)
+                return Data(bytes: try XCTUnwrap(context.data), count: stride * height)
+            }
+            let still = try frame(elapsed: 0)
+            // Both edges contain scenery, not the solid letterbox used for the level intro.
+            let x = width / 2 * 4
+            XCTAssertNotEqual(still[x..<x + 3], still[(height - 1) * stride + x..<(height - 1) * stride + x + 3])
+            XCTAssertNotEqual(still, try frame(elapsed: 1.4))
+            XCTAssertEqual(still, try frame(elapsed: 1.4, reduceMotion: true))
+            XCTAssertEqual(still, try frame(elapsed: 1.4, reduceFlashes: true))
+        }
+    }
+
     @MainActor func testStartupHomeDisplaysStatusWithoutActionableTargets() {
         let checking = MobileHomeArt.checkingGameFilesPage()
         XCTAssertTrue(checking.home)

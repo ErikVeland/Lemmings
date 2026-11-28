@@ -37,6 +37,57 @@ import UIKit
     }
 }
 
+/// Decorative checking scenery. It never owns input, VoiceOver or the startup task.
+@MainActor final class MobileStartupCracktroView: UIView {
+    private var start: CFTimeInterval = 0
+    nonisolated(unsafe) private var displayLink: CADisplayLink?
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        contentMode = .redraw
+        contentScaleFactor = 1
+        isUserInteractionEnabled = false
+        accessibilityElementsHidden = true
+        isHidden = true
+    }
+
+    required init?(coder: NSCoder) { nil }
+
+    func begin(reduceMotion: Bool, reduceFlashes: Bool) {
+        start = CACurrentMediaTime()
+        isHidden = false
+        setNeedsDisplay()
+        guard !reduceMotion, !reduceFlashes, !UIAccessibility.isReduceMotionEnabled else { return }
+        let target = MobileDisplayLinkTarget { [weak self] _ in
+            guard let self, window?.windowScene?.activationState == .foregroundActive else { return }
+            setNeedsDisplay()
+        }
+        let link = CADisplayLink(target: target, selector: #selector(MobileDisplayLinkTarget.frame(_:)))
+        link.preferredFramesPerSecond = 15
+        link.add(to: .main, forMode: .common)
+        displayLink = link
+    }
+
+    func stopAnimating() {
+        displayLink?.invalidate()
+        displayLink = nil
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window == nil { stopAnimating() }
+    }
+
+    deinit { displayLink?.invalidate() }
+
+    override func draw(_ rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        let elapsed = displayLink == nil || UIAccessibility.isReduceMotionEnabled ? 0 : CACurrentMediaTime() - start
+        GameLoadingIntroArt.drawBackdrop(in: bounds, elapsed: elapsed, context: context)
+    }
+}
+
 @MainActor private final class MobileLoadingIntroView: UIView {
     private let title: String
     private let message = L10n.text("Loading...")
