@@ -15,6 +15,7 @@ import UIKit
     required init?(coder: NSCoder) { nil }
     #if os(iOS)
     private let checkingHome = MobileMenuCanvas()
+    private let checkingCracktro = MobileStartupCracktroView()
     #else
     private let logo = UIImageView(image: UIImage(named: "StartupLogo"))
     private let hourglass = MobileStartupHourglass()
@@ -36,10 +37,15 @@ import UIKit
         super.viewDidLoad()
         view.backgroundColor = .black
         #if os(iOS)
-        checkingHome.page = MobileHomeArt.checkingGameFilesPage()
+        checkingCracktro.frame = view.bounds
+        view.addSubview(checkingCracktro)
+        checkingHome.backgroundColor = .clear
+        checkingHome.isOpaque = false
+        checkingHome.usesMenuBackdrop = true
         checkingHome.isUserInteractionEnabled = false
         // Expose one status, not duplicate disabled live menu buttons.
         checkingHome.isAccessibilityElement = true
+        checkingHome.page = MobileHomeArt.checkingGameFilesPage()
         checkingHome.accessibilityLabel = checkingHome.page.title + ". " + checkingHome.page.subtitle
         checkingHome.accessibilityIdentifier = "startup.checkingGameFiles"
         checkingHome.accessibilityTraits = .staticText
@@ -91,10 +97,15 @@ import UIKit
     }
 
     private func startLoading() {
+        #if os(iOS)
+        let settings = MobileSettings.current(from: .standard).classic
+        checkingCracktro.begin(reduceMotion: settings.reduceMotion || settings.staticHomeScreen,
+                              reduceFlashes: settings.reduceFlashes)
+        #endif
         startupTask = Task { [weak self] in
             #if DEBUG && os(iOS)
-            if ProcessInfo.processInfo.environment["LEMMINGS_TEST_SLOW_STARTUP"] == "1" {
-                do { try await Task.sleep(for: .seconds(5)) } catch { return }
+            if let delay = Int64(ProcessInfo.processInfo.environment["LEMMINGS_TEST_SLOW_STARTUP"] ?? ""), delay > 0 {
+                do { try await Task.sleep(for: .seconds(min(25, max(5, delay)))) } catch { return }
             }
             #endif
             let restored = await Task.detached(priority: .userInitiated) {
@@ -119,6 +130,9 @@ import UIKit
                                                        appropriateFor: nil, create: false)
             let catalogue = await MobileCatalogueLoader().load(resources: GameResources.resourceURL, support: support)
             guard !Task.isCancelled else { return }
+            #if os(iOS)
+            checkingCracktro.stopAnimating()
+            #endif
             #if os(tvOS)
             let controller = MobileTVBootstrap(configuration: configuration)
             controller.catalogue = catalogue
@@ -135,6 +149,7 @@ import UIKit
             controller.didMove(toParent: self)
             #if os(iOS)
             checkingHome.removeFromSuperview()
+            checkingCracktro.removeFromSuperview()
             #else
             logo.removeFromSuperview()
             hourglass.removeFromSuperview()

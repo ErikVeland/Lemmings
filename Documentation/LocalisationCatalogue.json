@@ -964,14 +964,14 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/PlayfieldView.swift:269",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:433"
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:436"
     ]
   },
   "Active players: {0}. Next: {1}": {
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/PlayfieldView.swift:268",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:432"
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:435"
     ]
   },
   "Ad-Lib FM": {
@@ -2542,7 +2542,7 @@
       "Sources/LemmingsMobileUI/MobileGameHints.swift:75",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:1761",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:2046",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:487",
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:498",
       "Sources/LemmingsMobileUI/MobileReplayExport.swift:17",
       "Sources/LemmingsMobileUI/MobileTVGameControls.swift:119"
     ]
@@ -2775,7 +2775,7 @@
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:63",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1205",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1215",
-      "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:68",
+      "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:119",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:282",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:633",
       "Sources/Ports/Lemm2/FRONTEND/GFXIFFS/LOAD.IFF:1"
@@ -5384,7 +5384,7 @@
       "Sources/LemmingsLocal/AchievementsWindow.swift:108",
       "Sources/LemmingsLocal/ArcadeWindow.swift:992",
       "Sources/LemmingsLocal/TrolleyResultView.swift:124",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:423",
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:426",
       "Sources/NxlvKit/TrolleyAchievementCollection.swift:12",
       "Sources/NxlvKit/TrolleyCelebration.swift:49"
     ]
@@ -5418,7 +5418,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileCareerArt.swift:37",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:516"
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:527"
     ]
   },
   "Edit: {0}": {
@@ -7338,7 +7338,7 @@
   "Hold to edit player": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:515"
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:526"
     ]
   },
   "Hold: fixed fast-forward": {
@@ -9910,8 +9910,8 @@
       "Sources/LemmingsLocal/main.swift:3718",
       "Sources/LemmingsLocal/main.swift:5966",
       "Sources/LemmingsMobileUI/MobileLevelCatalogue.swift:30",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:447",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:673",
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:450",
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:684",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:174"
     ]
   },
@@ -10054,9 +10054,9 @@
       "Sources/LemmingsMobileUI/MobileGameHints.swift:30",
       "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:281",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1035",
-      "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:42",
+      "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:93",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:112",
-      "Sources/LemmingsMobileUI/MobileStartupViewController.swift:175",
+      "Sources/LemmingsMobileUI/MobileStartupViewController.swift:190",
       "Sources/LemmingsMobileUI/MobileTVBootstrap.swift:50"
     ]
   },
@@ -11904,7 +11904,7 @@
   "Not earned": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:423"
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:426"
     ]
   },
   "Not met. ": {
@@ -12199,7 +12199,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:73",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:503",
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:514",
       "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:86"
     ]
   },
@@ -12283,7 +12283,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/MobileSolutionSelectorArt.swift:73",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:503",
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:514",
       "Sources/LemmingsMobileUI/MobileSolutionSwitchView.swift:86"
     ]
   },
@@ -21038,7 +21038,7 @@
       "Sources/LemmingsLocal/AboutWindow.swift:43",
       "Sources/LemmingsLocal/ArcadeWindow.swift:1016",
       "Sources/LemmingsLocal/TrolleyResultView.swift:230",
-      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:423"
+      "Sources/LemmingsMobileUI/MobileMenuCanvas.swift:426"
     ]
   },
   "Unknown Chronicles frame encoding {0}.": {

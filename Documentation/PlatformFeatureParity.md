@@ -3,6 +3,9 @@
 ## iOS level loading · 27 November 2026
 
 iPhone, iPad and Duo show Home as early as possible on a cold launch.
+While files and the catalogue are checked, the cracktro scenery plays behind
+the checking Home screen. It never delays the handoff to interactive Home.
+Reduce Motion, Reduce Flashes or Static Home Screen keeps this backdrop still.
 When preparing a level takes more than 550 ms, a pixel-art intro replaces the
 brief loading view. The level opens as soon as it is ready. Cancel returns to
 browsing without starting a new level. Reduce Motion or
