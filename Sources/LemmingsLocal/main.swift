@@ -88,7 +88,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var forwardKeyHeld = false
   private var accumulator = 0.0
   private var lastStepTime: TimeInterval?
-  private var isPaused = false
+  private var isPaused = false {
+    didSet { if isPaused && !oldValue { haptics.pause() } }
+  }
   private var userPausedMusic = false
   private let speedControl = GameSpeedControl()
   private var isFastForward: Bool {
@@ -264,6 +266,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   private var legacyMusicHandoffReversing = false
   private var legacyMusicRetryRunID: UUID?
   private let effects = SoundEffectPlayer()
+  private let haptics = GameplayHaptics()
 
   /// Which fan level screen is showing, if any.
   ///
@@ -849,6 +852,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    if AppDistribution.isStore { _ = DeveloperTipService.shared }
     preparingLaunch = true
     migrateStandaloneSaves()
     let needsFirstProfile = Self.needsFirstProfile(in: .current())
@@ -1662,6 +1666,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     dj.stop()
     startedMusicIdentity = nil
     effects.stop()
+    haptics.reset()
     accumulator = 0
   }
 
@@ -2305,6 +2310,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     GameScreen.shared.stopLoadingIntroMusic()
     saveRunCheckpoint(immediately: true)
     audioIsSleeping = true
+    haptics.pause()
     music.suspendOutput()
     soundtrack.suspendOutput()
     dj.suspendOutput()
@@ -8617,6 +8623,9 @@ let achievementProgressKey = "ClassicAchievementProgress"
       countdownWarning.reset(seconds: before)
       if countdownWarning.update(seconds: session.remainingSeconds) { effects.play(.timerWarning) }
       flashExplosions(previous: previousExplosions)
+      let fuse = session.isNuking ? session.lemmings.lazy.compactMap(\.countdown).min() : nil
+      haptics.update(nuking: session.isNuking, tick: session.currentTick, cues: session.lastPositionedCues,
+        viewport: playfield.soundViewport, secondsToBlast: fuse.map { Double($0) / Double(session.ticksPerSecond) })
       effects.play(session.lastPositionedCues)
       captureReplayFrame()
       advanced = true
@@ -8934,10 +8943,13 @@ let achievementProgressKey = "ClassicAchievementProgress"
     case .nuke:
       if session.canUndoNuke {
         session.undoNuke()
+        haptics.seek(nuking: session.isNuking, tick: session.currentTick)
         screenFlash.clear()
         accumulator = 0; lastStepTime = nil
       } else {
         session.nuke()
+        haptics.update(nuking: session.isNuking, tick: session.currentTick, cues: session.lastPositionedCues,
+          viewport: playfield.soundViewport)
         effects.play(session.lastPositionedCues)
         playfield.startCountdown.cancel()
         finishSessionIfNeeded()
@@ -8979,6 +8991,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
     isPaused = true; panel.isPaused = true; accumulator = 0; lastStepTime = nil
     userPausedMusic = false; music.suspendOutput(); soundtrack.suspendOutput(); dj.suspendOutput()
     pointerCapture.reset(); panel.handlePointerUp(); playfield.clearPointer()
+    haptics.pause()
     screenFlash.clear(); effects.silence(); panel.needsDisplay = true; updateStatus()
   }
 
@@ -10531,6 +10544,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
 
   /// Redraws after moving through history, without playing sounds again.
   private func refreshAfterSeek() {
+    if let session { haptics.seek(nuking: session.isNuking, tick: session.currentTick) }
     applyUserMusicPause()
     updateFailureMood()
     if let session { assignmentFocus.rewind(to: session.currentTick) }

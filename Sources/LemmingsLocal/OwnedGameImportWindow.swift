@@ -90,7 +90,7 @@ import UniformTypeIdentifiers
           do {
             let installed = try await GameAssetPack.shared.downloadAndInstall(progress: { phase in
               status.stringValue = phase.title
-              if case .downloading = phase {
+              if phase.canCancel {
                 canCancelDownload = true
                 next.backTitle = L10n.text("Cancel")
               } else {

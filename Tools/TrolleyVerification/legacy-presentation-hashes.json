@@ -2,7 +2,9 @@
   "BitmapLatinGlyphs.swift": "e071ca2364c1772a612675da9f042a855d706b9945003cff60d060087f6b22c9",
   "BitmapTamilGlyphs.swift": "bd9f455bf4fb7d83226424d5afe8450f1315c2388d4c99eb657ceb205e0441bd",
   "ClassicMacUserInterface.swift": "55dd3b1341e33e8cf983252e11b3a9c44ac71a830765d8d1e5442aaa8c7e3175",
+  "GameplaySoundPosition.swift": "0b3be2732cde7df8b5cb1e972508710431cbed8530130b59d6d85fce08ac663d",
   "InterfaceLocalisation.swift": "383cdb437ed45105efca4de2987fd2a6013151d4afc53aeda7044b88e01ab9c5",
+  "Lemmings3SoundBank.swift": "030687c40cd57e65663a12ce01a6cae7ba1fea4d0cd68204e4fb94a70b2d4e66",
   "LevelCatalogue.swift": "160a041dd69300440872883616f4d6795e1ea21fa9c05682fcf2a2b942dedd3d",
   "LixInterfaceArtwork.swift": "d875b4e9e079b98f45b94ea95fd14312d3cb7a2ef7d38b07e3de01cd3ca53c54",
   "PlayerControlSettings.swift": "7f841e938272e55aef255487e9d26d6fd2574988558f3a23b19b72a2c7d6a692"

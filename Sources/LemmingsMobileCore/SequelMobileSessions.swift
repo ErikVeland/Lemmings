@@ -115,6 +115,9 @@ public final class Lemmings2MobileSession: MobileGameSession {
         return .init(x: Double(point.x + point.width / 2), y: Double(point.y + point.height / 2))
     }
 
+    public var hapticFuseRemainingTicks: Int? {
+        runtime.lemmings.lazy.filter(\.active).compactMap(\.bombTicks).filter { $0 > 0 }.min()
+    }
     public var lostLemmingCount: Int { runtime.lost }
     public let engineIdentifier = "lemmings2"
     public let engineFingerprint: String
@@ -1294,6 +1297,9 @@ public final class NeoLemmixMobileSession: MobileGameSession {
             guard lemming.action != .removed else { return nil }
             return .init(x: Double(lemming.position.x), y: Double(lemming.position.y))
         }
+    }
+    public var hapticFuseRemainingTicks: Int? {
+        simulation.lemmings.lazy.filter(\.isActive).compactMap(\.bomberCountdown).filter { $0 > 0 }.min()
     }
     public var lostLemmingCount: Int { simulation.lostCount }
     public let engineIdentifier = "neolemmix"

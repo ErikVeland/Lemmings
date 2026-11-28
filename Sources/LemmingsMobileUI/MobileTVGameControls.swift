@@ -122,6 +122,7 @@ extension MobileGameViewController {
                 _ = self.session.beginEndRun()
                 self.renderCurrentFrame(force: true)
                 self.pausePlay(showControls: true)
+                self.effects.nukeChanged(self.session)
             }),
         ])
     }

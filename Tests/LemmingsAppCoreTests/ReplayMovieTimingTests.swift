@@ -1,4 +1,4 @@
-import AVFoundation
+@preconcurrency import AVFoundation
 import CoreGraphics
 import Testing
 import LemmingsAppCore
@@ -20,14 +20,19 @@ struct ReplayMovieTimingTests {
         let url = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<URL, Error>) in
             recorder.finish { continuation.resume(with: $0.mapError { $0 as Error }) }
         }
-        let movie = AVURLAsset(url: url)
-        let duration = try await movie.load(.duration).seconds
-        let tracks = try await movie.loadTracks(withMediaType: .audio)
-        let audio = try #require(tracks.first)
-        let audioDuration = try await audio.load(.timeRange).duration.seconds
+        let (duration, audioDuration) = try await Self.movieDurations(at: url)
         #expect(abs(duration - 3) < 0.02)
         #expect(abs(audioDuration - 3) < 0.07)
         #expect(recorder.encodingProfile.encodedFrames == 69)
         #expect(recorder.encodingProfile.videoSamples == 4)
+    }
+
+    // Keep AVFoundation's non-Sendable tracks off the main actor on older SDKs.
+    private static func movieDurations(at url: URL) async throws -> (Double, Double) {
+        let movie = AVURLAsset(url: url)
+        let duration = try await movie.load(.duration).seconds
+        let tracks = try await movie.loadTracks(withMediaType: .audio)
+        let audio = try #require(tracks.first)
+        return (duration, try await audio.load(.timeRange).duration.seconds)
     }
 }

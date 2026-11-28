@@ -1,8 +1,62 @@
 # Cross-platform feature parity
 
+## Gameplay haptics
+
+Classic, supported NeoLemmix levels and Lemmings 2 use a rising cue when the
+nuke is committed, a final fuse cue when countdown timing is available, a heavy
+first impact, and lighter, spaced follow-up impacts. Lemmings 3 has no global
+nuke; its tool explosions use the smaller bomber cue. The building cue is a
+short double tap at the existing bridge-finishing warning. A steel hit gives
+a single sharp tap. Ordinary brick placement and other routine events are quiet.
+
+A fatal landing gives a short, rounded thud; falling out of the level or
+drowning does not. Positioned cues follow the visible playfield, favouring
+the closest visible impact when several arrive together. A split-handle
+controller steers left and right; single-actuator hardware plays a centred
+version at the same distance. Offscreen events soften; very distant landings
+stay silent, and the main nuke impact retains a minimum strength. The nuke
+arm and fuse deliberately stay centred.
+
+On supported iOS hardware, the built-in actuator also plays. Its strength
+drops only after a controller actuator accepts the cue. A queued startup or
+failed controller leaves the device cue at its normal strength. Hardware without built-in haptics
+can still use a supported controller (DualSense first), including on Mac or TV. The gameplay
+toggle is in Accessibility on Mac and mobile, and Audio on Apple TV. It is
+local to each device and independent of sound volume and HD effects.
+
+The cues are local presentation only. Game rules, saved inputs and replay
+exports are unchanged. Rewind, pause, interruption and undo cancel an active
+effect. Playback is muted during automated tests. Physical actuator feel and
+controller hand-off need a device check; simulator builds do not establish feel.
+
+## Lemmix without imported game data · 28 November 2026
+
+On iPhone, iPad, Duo and Apple TV, bundled Journey names do not establish that
+their original levels are installed. Home checks the current lesson's source
+before offering it as Continue. Play keeps the Journey reachable with a No data
+state; missing original sources open the existing Game Data import flow.
+The authored Open Starter remains playable without original game data.
+
+Starting or opening a Journey prepares and renders only its current entry on
+the existing background worker before changing the library or preview page.
+A new Journey is saved after that succeeds. Missing or damaged content leaves
+the previous library and saved queue in place. Compact and wide level pages
+require a successful preview before enabling Play, including cover activation.
+Changing selection clears the previous preview before checking the next source.
+Mac already rejects unavailable Journey entries before starting their sessions.
+
+Fixture-free regressions cover absent and incomplete Classic sources, preserved
+Journey and Hot Seat state, unsupported engines, and the authored-only starter.
+Source review and whitespace checks pass. Native Swift tests, iOS/tvOS builds,
+rendered unavailable states and physical-device acceptance require the Apple
+build environment; they have not been run in this Linux workspace.
+
 ## iOS level loading · 27 November 2026
 
 iPhone, iPad and Duo show Home as early as possible on a cold launch.
+While files and the catalogue are checked, the cracktro scenery plays behind
+the checking Home screen. It never delays the handoff to interactive Home.
+Reduce Motion, Reduce Flashes or Static Home Screen keeps this backdrop still.
 When preparing a level takes more than 550 ms, a pixel-art intro replaces the
 brief loading view. The level opens as soon as it is ready. Cancel returns to
 browsing without starting a new level. Reduce Motion or
@@ -206,6 +260,21 @@ In the Mac Tribes game, a rejected input keeps the original forward-scrub
 history. An accepted edit or explicit resume starts a new timeline and releases
 held pointer input. Mobile and Apple TV retain their existing rewind behaviour.
 Device layout and physical input acceptance remain open.
+
+## HD effects on iPhone, iPad and Duo — 27 November 2026
+
+Duo and Apple GPU family 7 or newer keep full visual quality with HD effects
+enabled. Low Power Mode, RAM tier, routine heat and frame timings no longer
+remove the enhanced overlay on these devices. A memory warning or critical heat
+can still suspend the extra Metal surface temporarily. Older iOS devices retain
+adaptive effects, and Apple TV retains its existing limits. Audio pressure
+management stays independent of the visual policy.
+
+The shared iOS playfield applies the policy to Classic, supported NeoLemmix,
+Tribes and Chronicles. Cinematic explosions respect the app's Reduce Flashes
+and both the app and system Reduce Motion settings. HDR brightness still requires
+an HDR display; the cinematic explosion can render without HDR headroom.
+Policy tests cover the foldable override, overload and pressure recovery. Folded and unfolded Duo playback still requires a physical check.
 
 ## Lemmix stone controls, icons and effects — 18 November 2026
 

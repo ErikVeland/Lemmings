@@ -316,11 +316,11 @@ import CoreImage.CIFilterBuiltins
     #endif
     func captureSpriteTrails(session: any MobileGameSession) {
         let enabled = displaySettings.hdEffectsEnabled && !motionReduced && !displaySettings.reduceFlashes
-            && !MobileDevicePerformance.constrained
+            && !MobileDevicePerformance.visualEffectsConstrained
         guard enabled else { spriteTrails.reset(); return }
         let visible = gameViewport.visibleLevelRect
         var current: [Int: MobileSpriteHighlight] = [:]
-        let limit = MobileDevicePerformance.constrained ? 24 : 48
+        let limit = MobileDevicePerformance.visualEffectsConstrained ? 24 : 48
         for actor in session.spriteActorIDs {
             guard let sprite = session.spriteHighlight(for: actor),
                   sprite.rect.x + sprite.rect.width >= visible.x, sprite.rect.x <= visible.x + visible.width,
@@ -369,12 +369,12 @@ import CoreImage.CIFilterBuiltins
         }
         guard enhancedEffects else { releaseHDR(); return }
         let content = gameViewport.contentFrame
-        let glints = displaySettings.hdEffectsEnabled && !MobileDevicePerformance.constrained ? arrowGlints : nil
+        let glints = displaySettings.hdEffectsEnabled && !MobileDevicePerformance.visualEffectsConstrained ? arrowGlints : nil
         if glints != nil { prepareHDR() }
         let glintPlacement = glints.flatMap(arrowGlintRect)
         hdr?.setArrowGlints(glintPlacement == nil ? nil : glints, in: glintPlacement ?? .null,
             clip: CGRect(x: content.x, y: content.y, width: content.width, height: content.height))
-        hdr?.advance(at: now, multiplier: speedMultiplier, enabled: speedEffectsActive && !motionReduced && !MobileDevicePerformance.constrained,
+        hdr?.advance(at: now, multiplier: speedMultiplier, enabled: speedEffectsActive && !motionReduced && !MobileDevicePerformance.visualEffectsConstrained,
             field: CGRect(x: content.x, y: content.y, width: content.width, height: content.height), project: { [weak self] centre in
                 guard let self else { return .zero }
                 let point = self.gameViewport.viewPoint(fromLevel: .init(x: Double(centre.x), y: Double(centre.y)))
@@ -388,14 +388,19 @@ import CoreImage.CIFilterBuiltins
     }
     func setSpeedEffects(multiplier: Double, active: Bool) {
         speedMultiplier = multiplier; speedEffectsActive = active
-        if active && multiplier > 1.01 && !motionReduced && enhancedEffects && !MobileDevicePerformance.constrained { prepareHDR() }
+        if active && multiplier > 1.01 && !motionReduced && enhancedEffects && !MobileDevicePerformance.visualEffectsConstrained { prepareHDR() }
     }
     private func prepareHDR() {
         guard hdr == nil, !attemptedHDR, enhancedEffects else { return }
         attemptedHDR = true
         hdrPreparation.request({ MobileHDRView.preparePipelines() }) { [weak self] pipelines in
             guard let self else { return }
-            guard self.enhancedEffects, let pipelines else { self.pendingHDRBursts.removeAll(); return }
+            guard let pipelines else { self.pendingHDRBursts.removeAll(); return }
+            guard self.enhancedEffects else {
+                self.pendingHDRBursts.removeAll()
+                self.attemptedHDR = false
+                return
+            }
             let view = MobileHDRView(pipelines: pipelines)
             view.frame = self.bounds
             self.insertSubview(view, belowSubview: self.bombCountdownView)
@@ -486,7 +491,7 @@ import CoreImage.CIFilterBuiltins
             }
             if !fresh.isEmpty, enhancedEffects {
                 prepareHDR()
-                let cinematic = displaySettings.cinematicExplosionsEnabled
+                let cinematic = displaySettings.cinematicExplosionsEnabled && !motionReduced
                 if let hdr { hdr.trigger(rects: fresh, cinematic: cinematic, at: now) }
                 else if attemptedHDR {
                     pendingHDRBursts.append(.init(rects: fresh, cinematic: cinematic, time: now))
@@ -663,6 +668,7 @@ import CoreImage.CIFilterBuiltins
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        MobileDevicePerformance.configureVisuals(in: self)
         decoration.frame = bounds
         overlay.frame = bounds
         let inset = safeAreaInsets

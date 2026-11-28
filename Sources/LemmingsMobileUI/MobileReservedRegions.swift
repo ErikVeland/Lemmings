@@ -42,6 +42,7 @@ import UIKit
         guard let window = (view as? UIWindow) ?? view.window, !hingedWindows.contains(window) else { return }
         hingedWindows.add(window)
         if let key = deviceHingeKey { UserDefaults.standard.set(true, forKey: key) }
+        MobileDevicePerformance.configureVisuals(in: window)
         window.rootViewController?.view.setNeedsLayout()
     }
 

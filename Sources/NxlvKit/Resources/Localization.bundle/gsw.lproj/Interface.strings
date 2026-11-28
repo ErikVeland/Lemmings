@@ -227,6 +227,7 @@
 "An iCloud save could not be read. Existing saves were kept." = "En iCloud-Spilstand hät sich nöd läse lah. Die vorhandene Spilständ sind blibe.";
 "An improbable resolution" = "E unwahrschiinlichi Lösig";
 "An object animation has no FRAMES field." = "Enere Objektanimation fählt s FRAMES-Fäld.";
+"An optional tip to support development." = "Es freiwilligs Trinkgeld zur Unterstützig vo de Entwicklig.";
 "An unfinished argument" = "Es nöd fertig gfüerts Argument";
 "An unpacked classic LVL file must contain exactly {0} bytes; found {1}." = "E entpackti klassischi LVL-Datei muess genau {0} Byte ha. Gfunde: {1}.";
 "Analysing available levels" = "Verfüegbari Spilstufe werde untersucht";
@@ -277,6 +278,7 @@
 "Audio unavailable: {0}" = "Ton nöd verfüegbar: {0}";
 "Availability" = "Verfüegbarkeit";
 "Available" = "Verfüegbar";
+"Awaiting approval" = "Wartet uf d Genehmigung";
 "Award Me!" = "Gib mer e Uuszeichnig!";
 "Award: {0} - {1}  >" = "Uuszeichnig: {0} - {1}  >";
 "Awards ({0})" = "Uuszeichnige ({0})";
@@ -368,6 +370,7 @@
 "Bricks cannot build straight down." = "Mit Ziegel chasch nöd grad abe baue.";
 "Bring {0} more home to match your best." = "Bring no {0} hei, zum dis beschte Resultat z erreiche.";
 "Bronze" = "Bronzemedaille";
+"Browse credits, contributors and version history on every platform." = "Lueg d Credits, d Mitwirkende und d Versionsgschicht uf allne Plattforme aa.";
 "Browse levels" = "Spilstufe dürblättere";
 "Builder" = "Bruggebauer";
 "Built {0}" = "{0} baut";
@@ -464,7 +467,6 @@
 "Checking solution..." = "Prüeft d Lösig …";
 "Choose" = "Uswähle";
 "Choose 1× in Game controls to reset speed." = "Wähl 1× i de Spilstüürig, zum s Tempo zruggzsetze.";
-"Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details." = "Wähl Katalanisch oder Schwizerdütsch. Uf em iPhone und iPad findsch unter Über d Credits und d Versionsdate.";
 "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "Wähl Flachbildschirm, Monitor oder Fernseh. S klassisch Spil simuliert e Bildröhre.";
 "Choose Lemmings 3 tool direction" = "Richtig fürs Wärkzüüg vo Lemmings 3 uuswähle";
 "Choose Music Folder…" = "Musigordner uuswähle …";
@@ -779,6 +781,7 @@
 "Down-right" = "Abe rächts";
 "Download" = "Abelade";
 "Download game assets" = "Spildate abelade";
+"Download hasn’t started" = "De Download hät no nöd agfange";
 "Download or remove optional soundtrack libraries." = "Lad freiwilligi Musigsammlige abe oder entferne si.";
 "Download soundtracks" = "Musigsammlige abelade";
 "Downloading" = "Ladt abe";
@@ -889,7 +892,6 @@
 "Expected the FLIC marker 0xAF11, but found {0}." = "De FLIC-Marker 0xAF11 isch erwartet worde; gfunde: {0}.";
 "Expert" = "Experte";
 "Exploder" = "Spränger";
-"Explore starter playlists and resume saved routes." = "Entdeck Iistiigs-Spiillischte und mach bi gspiicherete Route wiiter.";
 "Explosions" = "Explosiune";
 "Export file" = "Datei exportiere";
 "Extended gamepad" = "Erwiiterte Spilcontroller";
@@ -949,6 +951,7 @@
 "Features 5 exclusive Sunsoft Special levels and custom Hiroyuki Masuno SPC soundtrack." = "Mit 5 exklusive Sunsoft-Special-Spilstufe und eigeter SPC-Musig vo Hiroyuki Masuno.";
 "Features 60 exclusive levels (Presenter rating 1–30 + bonus levels) and Matt Furniss FM tracks." = "Mit 60 exklusive Spilstufe (Presenter 1–30 und Bonusstufe) und FM-Musig vo Matt Furniss.";
 "Features arcade single-player stages, 2-Player Co-Op mode, countdown timers, and high-score screens." = "Mit Spilhallene-Stufe für eini Person, Koop für zwei, Abzähler und Ranglischtene.";
+"Feel nukes, bridge warnings and selected impacts on supported devices and controllers." = "Spür Sprängige, Warnige bim Bruggebau und gwüssi Uufpräll uf unterstützte Grät und Controller.";
 "Feels less temporary." = "Füelt sich weniger vergänglich aa.";
 "Feels suitably equipped." = "Füelt sich passend uusgrüschtet.";
 "Felt briefly famous." = "Hät sich churz berüemt gfüelt.";
@@ -1073,6 +1076,7 @@
 "Hadoken" = "Hadoken";
 "Hands off" = "Ohni Iigriff";
 "Hang Glider" = "Hängegliiter";
+"Haptics" = "Vibratione";
 "Hard" = "Schwierig";
 "Has a coat for special occasions." = "Hät en Mantel für bsunderi Aalaass.";
 "Has a drawer for useful things." = "Hät e Schublade für nützligi Sache.";
@@ -1166,6 +1170,7 @@
 "Import Lemmings 2 data" = "Lemmings-2-Date importiere";
 "Import NeoLemmix data" = "NeoLemmix-Date importiere";
 "Import files" = "Dateie importiere";
+"Import missing game data before opening a level. Downloads can continue in the background on iPhone and iPad." = "Importier fählendi Spildate, bevor du en Level uufmachsch. Downloads chönd uf em iPhone und iPad im Hintergrund wiiterlaufe.";
 "Import owned games" = "Eigeti Spil importiere";
 "Import the resource folder again." = "Importier de Ordner mit de Spildate nomal.";
 "Import your own Classic files to use original artwork." = "Importier dini eigete klassischi Spildate, zum d Originalgrafik z bruuche.";
@@ -1454,6 +1459,7 @@
 "Learning" = "Lerne";
 "Least skills" = "Am wenigschte Fähigkeite";
 "Leave Hot Seat?" = "Hot Seat verlaa?";
+"Leave a tip" = "Es Trinkgeld gäh";
 "Left" = "Links";
 "Left and right arrows change hints. Up and down arrows scroll the text." = "D linki und rächte Pfiiltaschte wächsled de Hiwiis. Mit ufe und abe scrollsch im Text.";
 "Left stick click" = "Linke Stüürchnüppel drucke";
@@ -1656,6 +1662,7 @@
 "Missing or ambiguous Chronicles construction tile." = "Chronicles-Baukachle fehlt oder isch nöd eindeutig.";
 "Missing style data: {0}" = "Schtil-Date fähled: {0}";
 "Missing {0} dependency '{1}'." = "D Abhängigkeit «{1}» vom Typ {0} fählt.";
+"Mobile data is unavailable. Check cellular access for this app or try Wi-Fi." = "Mobili Date sind nöd verfüegbar. Prüef, ob die App mobili Date bruuche darf, oder probier WLAN.";
 "Moderate" = "Mässig";
 "Modern" = "Modärn";
 "Modern Sound" = "Modärne Ton";
@@ -1787,6 +1794,7 @@
 "No fan level packs are available." = "Kei Fan-Sammlige verfüegbar.";
 "No favourites yet" = "No kei Favoriite";
 "No hands-off clear this run. This goal may not be possible here." = "I däm Versuech kei Abschluss ohni Iigriff. Das Ziel isch da villicht nöd möglich.";
+"No internet connection. Reconnect and try again." = "Kei Internetverbindig. Verbind di nomal und probier s nomal.";
 "No lemming is selected." = "Kein Lemming isch uusgwählt.";
 "No lemmings released yet" = "Es isch no kei Lemming cho";
 "No level files were found for {0}." = "Für {0} sind kei Spilstufedateie gfunde worde.";
@@ -1827,6 +1835,7 @@
 "None hides selection effects. Obvious adds a green diamond and halo. Modern adds the diamond, white outline and green glow in all three games." = "«Kei» blendet Uuswahleffäkt uus. «Offesichtlich» zeigt e grüeni Raute mit em Liechtchreis. «Modärn» zeigt i allne drüü Spil d Raute, en wiisse Rand und grüens Lüchte.";
 "Not bad, but not good either." = "Nöd schlächt, aber au nöd guet.";
 "Not earned" = "Nöd verdient";
+"Not enough free storage for game assets. Free up space and try again." = "Nöd gnueg freie Speicherplatz für d Spildate. Mach Speicherplatz frei und probier s nomal.";
 "Not met. " = "Nöd erfüllt. ";
 "Not now" = "Nöd jetzt";
 "Not rescued" = "Nöd grettet";
@@ -1911,7 +1920,6 @@
 "Open Replay Movie…" = "Widerholigsfilm uufmache …";
 "Open Starter" = "Iistigssammlig ufmache";
 "Open in Stacked pose when idle" = "Im Stapelmodus uufmache, wänn s Grät nöd bruucht wird";
-"Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads." = "Uf em iPhone und iPad isch s Hauptmenü früehner da. Wenn en Level länger ladet, gsehsch es Intro.";
 "Open this address on another device:" = "Mach die Adrässä uf emene andere Grät uuf:";
 "Open this level with its original game data to watch the action replay." = "Mach die Spilstufe mit de Original-Spildate uuf, zum d Widerholig aluege.";
 "Open when closed and charging" = "Uufmache, wänn s Grät zue isch und ladt";
@@ -2134,7 +2142,6 @@
 "Profile" = "Profil";
 "Profile…" = "Profiil …";
 "Programmers" = "Programmierer";
-"Progress" = "Fortschritt";
 "Progress is saved." = "De Fortschritt isch gspeicheret.";
 "Progression" = "Fortschritt";
 "Progression not created" = "De Fortschrittsplan isch nöd erstellt worde";
@@ -2142,6 +2149,7 @@
 "Project supervisor" = "Projektleiter";
 "Psygnosis  presents" = "Psygnosis präsentiert";
 "Pull up a chair. We've got a level to finish." = "Nimm en Stuel. Mir müend no e Spilstufe fertig spile.";
+"Purchasing..." = "Chauf lauft...";
 "Q / Escape" = "Q / Esc";
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "NOMAL Q ZUM BEÄNDE  *  ESC ZUM BLIIBE";
 "Queued" = "I de Warteschlange";
@@ -2350,7 +2358,6 @@
 "Return to the library to change players. The current attempt keeps its owner and is saved for later." = "Gang für en Spilerwächsel zrugg zur Bibliothek. De aktuelli Versuech bliibt bim gliiche Spiler und wird für spööter gspeicheret.";
 "Return to the library to change players. Your saved run keeps its progress and next turn." = "Gang für en Spilerwächsel zrugg zur Bibliothek. D gspeichereti Rundi bhaltet de Fortschritt und de nächscht Zug.";
 "Return to the library to restore a recovery key." = "Gang zrugg zur Bibliothek, zum en Widerherschtelligsschlüssel widerhärezschtelle.";
-"Return to the main menu after a win without losing your place." = "Gang nach eme Gwünn is Hauptmenü, ohni din Platz z verliere.";
 "Return: Repeat assignment" = "Return: Zuewiisig widerhole";
 "Returned with a cake." = "Isch mit emene Chueche zruggcho.";
 "Reveal full solution?" = "Ganzi Lösig uufdecke?";
@@ -2800,6 +2807,7 @@
 "Terrain group '{0}' is used before it is defined." = "D Geländegruppe «{0}» wird vor ihrer Definition bruucht.";
 "Terrain group '{0}' mixes steel and non-steel pieces." = "D Geländegruppe «{0}» mischt Stahl mit Stück ohni Stahl.";
 "Terrain metadata '{0}:{1}' is ambiguous." = "D Gelände-Metadate «{0}:{1}» sind nöd eindeutig.";
+"Thank you for your support!" = "Danke für dini Unterstützig!";
 "Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research." = "Danke a d Community für Fan-Level, Stiil, Replays, Musig und d Erforschig und Erhaltig vo de Spiil.";
 "That Hot Seat is no longer saved." = "De Hot Seat isch nüme gspeicheret.";
 "That is the plan" = "Das isch de Plan";
@@ -2877,6 +2885,7 @@
 "The archive has no member named {0}." = "S Archiv enthält kei Iitrag namens {0}.";
 "The archive member {0} is too large." = "De Archiviitrag {0} isch z gross.";
 "The attempt was not saved." = "De Versuech isch nöd gspeicheret worde.";
+"The background download stopped. Try the download again." = "De Download im Hintergrund isch gstoppt worde. Probier de Download nomal.";
 "The cat understands the arrangement." = "D Chatz verschtat d Abmachig.";
 "The cloud player is invalid." = "De Cloud-Spieler isch uugültig.";
 "The cloud progress format does not match." = "S Format vom Cloud-Fortschritt passt nöd.";
@@ -2884,11 +2893,13 @@
 "The cloud response is too large." = "D Cloud-Antwort isch z gross.";
 "The cloud save is too large." = "De Cloud-Spilstand isch z gross.";
 "The company suits." = "D Gsellschaft passt.";
+"The connection dropped. Try the download again." = "D Verbindig isch abbroche. Probier de Download nomal.";
 "The danger is the fall after the entrance. Think about protecting the lemmings before they land." = "De Fall nach em Iigang isch gfährlich. Überleg, wie du d Lemming schützisch, bevor si landed.";
 "The decision remains respected." = "De Entscheid wird wiiter respektiert.";
 "The decompression limit must not be negative." = "D Dekomprimierlimite dörf nöd negativ sii.";
 "The document contains an unmatched $END." = "Im Dokument staht es $END ohni passende Abschnitt.";
 "The download did not finish." = "De Download isch nöd fertig worde.";
+"The download timed out. Check your connection and try again." = "S Ziitlimit für de Download isch abgloffe. Prüef dini Verbindig und probier s nomal.";
 "The entrance limits cannot release all non-preplaced lemmings." = "Mit dene Eingangslimite chönd nöd alli Lemming usecho, wo nöd vorplatziert sind.";
 "The entrance timing cannot be negative." = "D Ziit am Eingang dörf nöd negativ sii.";
 "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path." = "De Uusgang isch under de Plattform mit de Lemming. Suech e Stell, wo du de Bode über em undere Wäg uufmache chasch.";
@@ -3168,6 +3179,9 @@
 "Timing probes: {0}. Untested alternatives remain unknown." = "Prüefige zum Timing: {0}. Unprüefti Alternative bliibed unbekannt.";
 "Tiny journey" = "Chliini Reis";
 "Tiny journeys" = "Chliini Reise";
+"Tip again {0}" = "Nomal {0} Trinkgeld";
+"Tip {0}" = "Trinkgeld: {0}";
+"Tips are unavailable right now." = "Trinkgelder sind im Momänt nöd verfügbar.";
 "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "Zum die Spildate abelade, bruuchsch e gültigi «Lemmings»-Lizänz uf mindeschtens einere Plattform. Wänn du «{0}» wählsch, bestätigsch dini Lizänz.";
 "Toggle enhanced artwork" = "Verbesserti Grafik ii- oder uusschalte";
 "Toggle fast-forward" = "Vorspuule ii- oder uusschalte";
@@ -3200,9 +3214,11 @@
 "Truncated Mac graphics frame." = "Abgschnittes Mac-Grafikbild.";
 "Truncated sequel data at byte {0}." = "Abgschnitteni Date vom Nachfolgespil bi Byte {0}.";
 "Try again" = "Nomal probiere";
+"Try another server" = "En andere Server probiere";
 "Try later" = "Spööter probiere";
 "Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns." = "Probier ei Fähigkeit bi Normaltempo, paussier und lueg s Resultat aa. Achte druf, wo de Arbeiter landet und wändet.";
 "Try these skills!" = "Probier die Fähigkeite uus!";
+"Trying another download server" = "Probiert en andere Download-Server";
 "Tube strength" = "Röhre-Stärchi";
 "Turn off" = "Uusschalte";
 "Turn off auto-follow" = "Automatischs Folge usschalte";
@@ -3337,6 +3353,7 @@
 "WHEN THE TRIBES SETTLED IN THESE LANDS" = "WO SICH D STÄMM I DÄM LAND NIDERGLAH HÄND";
 "WINS / FAILS" = "SIEG / NIEDERLAGE";
 "Wait for this lemming to land." = "Wart, bis de Lemming landet.";
+"Waiting for download to start" = "Wartet, bis de Download startet";
 "Walker" = "Läufer";
 "Walks home with accompaniment." = "Gaht mit Begleitig hei.";
 "Was asked to judge a cucumber." = "Isch bätte worde, e Gurke z beurteile.";
@@ -3347,6 +3364,7 @@
 "Was thanked for noticing a draught." = "Hät es Dankeschön übercho, wills en Luftzug bemerkt hät.";
 "Watch and listen" = "Lueg und los";
 "Watch solution?" = "Lösig aaluege?";
+"Watch the intro while game files are checked on iPhone and iPad." = "Lueg s Intro, während d Spildateie uf em iPhone und iPad prüeft werded.";
 "Watch the worker's direction before assigning a skill." = "Lueg, i weli Richtig de Arbeiter lauft, bevor du em e Fähigkeit zuewiisisch.";
 "We built a Snow Lemming." = "Mir händ en Schnee-Lemming baut.";
 "We got snowed in for a day." = "Mir sind en Tag lang iigschneit gsi.";
@@ -3408,6 +3426,8 @@
 "Your rescue story" = "Dini Rettigsgschicht";
 "Your rescues add to the worldwide total." = "Dini Rettige zelled zur wältwiite Summe.";
 "Your shared campaign stays saved for later." = "Dini gmeinsami Kampagne bliibt für spöter gspeicheret.";
+"Your tip could not be completed." = "Dini Trinkgeldzahlig hät nöd chönne abgschlosse werde.";
+"Your tip could not be confirmed." = "Dini Trinkgeldzahlig hät nöd chönne bestätigt werde.";
 "Z / Shift+Z: Zoom" = "Z / Shift+Z: Vergrösserig";
 "ZOOM" = "VERGRÖSSERE";
 "Zero avoidable losses" = "Null vermiidbari Verlüscht";

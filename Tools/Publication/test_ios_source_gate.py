@@ -36,7 +36,15 @@ class IOSSourceGateTests(unittest.TestCase):
             fixture.mkdir()
             gate.prepare_fixture(fixture)
             manifest = json.loads((fixture / "ultimate-lemmix-mobile-resources.json").read_text())
-            self.assertTrue(all(row["path"].startswith(("Ports/ultimate_lemmix_starter/", "Localization.bundle/")) for row in manifest["files"]))
+            self.assertTrue(all(row["path"].startswith(("Ports/ultimate_lemmix_starter/", "Localization.bundle/", "About/")) for row in manifest["files"]))
+            about_files = {"About/Heritage.md", "About/Contributors.md", "About/VersionHistory.md"}
+            self.assertEqual({row["path"] for row in manifest["files"] if row["path"].startswith("About/")}, about_files)
+            self.assertEqual((fixture / "About/Heritage.md").read_bytes(), (gate.ROOT / "Resources/About/Heritage.md").read_bytes())
+            self.assertEqual((fixture / "About/Contributors.md").read_bytes(), (gate.ROOT / "Tools/Telemetry/contributors.md").read_bytes())
+            publication = json.loads((gate.ROOT / "Resources/Publishing/ultimate-lemmix.json").read_text())
+            history = (fixture / "About/VersionHistory.md").read_text()
+            self.assertTrue(history.startswith("# Ultimate Lemmix " + publication["version"]))
+            self.assertNotIn("\nPlatform builds:", history)
             allowed = {**os.environ, "IOS_SOURCE_GATE_ONLY": "1", "CODE_SIGNING_ALLOWED": "NO", "ULTIMATE_LEMMIX_RELEASE_CHECKS": "0"}
             def copy(bundle, scope, **env):
                 return subprocess.run([sys.executable, str(copier), "--source", str(fixture), "--destination", str(root / bundle),
@@ -50,5 +58,13 @@ class IOSSourceGateTests(unittest.TestCase):
                 self.assertTrue((root / bundle / "ultimate-lemmix-resource-receipt.json").exists())
             level = "Ports/ultimate_lemmix_starter/LEVEL000.DAT"
             self.assertEqual((fixture / level).read_bytes(), (root / "UltimateLemmixIOS.app" / level).read_bytes())
+            for name in about_files:
+                self.assertEqual((fixture / name).read_bytes(), (root / "UltimateLemmixIOS.app" / name).read_bytes())
+            self.assertFalse((root / "DeskClockWidget.appex/About").exists())
+            contributors = fixture / "About/Contributors.md"
+            original = contributors.read_bytes()
+            contributors.write_bytes(b"changed")
+            self.assertNotEqual(copy("UltimateLemmixIOS.app", "app").returncode, 0)
+            contributors.write_bytes(original)
             (fixture / level).write_bytes(b"changed")
             self.assertNotEqual(copy("UltimateLemmixIOS.app", "app").returncode, 0)

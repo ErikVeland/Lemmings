@@ -20,6 +20,12 @@ class ReleasePublicationTests(unittest.TestCase):
         for relative in ["Scripts", "Tools/Publication", "Tools/ReleaseReadiness", "Resources/Publishing"]:
             shutil.copytree(ROOT / relative, self.repository / relative,
                             ignore=shutil.ignore_patterns("__pycache__"))
+        # The release command also invokes the localisation gate. Test the invocation
+        # here without copying the production application and its translation catalogue.
+        localisation = self.repository / "Tools/Localisation/catalogue.py"
+        localisation.parent.mkdir()
+        localisation.write_text("import sys\nassert sys.argv[1:] == ['--release']\n"
+                                "print('Fixture localisation gate ran')\n")
         subprocess.run(["git", "init", "-q", "-b", "release/ultimate-lemmings"], cwd=self.repository, check=True)
         # Prevent detached maintenance from writing during fixture cleanup.
         subprocess.run(["git", "config", "maintenance.auto", "false"], cwd=self.repository, check=True)
@@ -154,6 +160,7 @@ class ReleasePublicationTests(unittest.TestCase):
         result = self.run_publication(RELEASE_APPROVED="1", GH_TEST_LOG=str(log),
                                       PATH=f"{binary}:{os.environ['PATH']}")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Fixture localisation gate ran", result.stdout)
         self.assertIn(str(patch.resolve()), log.read_text().splitlines())
 
 

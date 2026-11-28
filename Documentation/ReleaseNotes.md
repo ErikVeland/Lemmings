@@ -2,21 +2,23 @@
 
 ## Current source and delivery queue
 
-The current source version is **2.7.5** (Mac build 114, iOS build 48, tvOS build 23).
-Read the [2.7.5 release notes](ReleaseNotes-2.7.5-build114.md).
+The current source version is **2.7.6** (Mac build 115, iOS build 48, tvOS build 23).
+Read the [2.7.6 release notes](ReleaseNotes-2.7.6-build115.md).
+Version 2.7.6 is a release candidate; publication is recorded separately.
 The mobile build numbers record the last Ultimate Lemmings mobile candidates.
 
 ## Latest published Mac release
 
-[Mac 2.7.1 build 113](https://github.com/ErikVeland/Lemmings/releases/tag/v2.7.1)
+[Mac 2.7.5 build 114](https://github.com/ErikVeland/Lemmings/releases/tag/v2.7.5)
 has full and slim notarised downloads for Intel and Apple silicon.
-See the [2.7.1 release record](ReleaseReadiness/2.7.1-build113/README.md).
+Read the [2.7.5 release notes](ReleaseNotes-2.7.5-build114.md).
 
 ## Earlier notes
 
 These links preserve the exact notes in Git history. The working tree keeps
 only the current release notes. Packaged notes remain with their release evidence.
 
+- [2.7.1 build 113](https://github.com/ErikVeland/Lemmings/releases/tag/v2.7.1)
 - [2.7 build 112](https://github.com/ErikVeland/Lemmings/releases/tag/v2.7)
 - [2.6 build 111](https://github.com/ErikVeland/Lemmings/releases/tag/v2.6)
 - [2.5 build 110](https://github.com/ErikVeland/Lemmings/releases/tag/v2.5)

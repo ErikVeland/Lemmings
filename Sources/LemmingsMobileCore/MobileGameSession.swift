@@ -240,6 +240,8 @@ public protocol MobileGameSession: AnyObject {
     var minimapActorPoints: [MobilePoint] { get }
     var lostLemmingCount: Int { get }
     var nukeRemainingTicks: Int? { get }
+    /// Earliest active fuse for tactile presentation; does not change music or effects.
+    var hapticFuseRemainingTicks: Int? { get }
     var allNukeExplosionsPlayed: Bool { get }
     var explosions: [MobileExplosion] { get }
     var bombCountdowns: [MobileBombCountdown] { get }
@@ -354,6 +356,7 @@ public extension MobileGameSession {
     var spriteActorIDs: [Int] { [] }
     var activeLemmingCount: Int { max(0, snapshot.released - snapshot.saved) }
     var nukeRemainingTicks: Int? { nil }
+    var hapticFuseRemainingTicks: Int? { nukeRemainingTicks }
     var allNukeExplosionsPlayed: Bool { snapshot.isComplete }
     var explosions: [MobileExplosion] { [] }
     var bombCountdowns: [MobileBombCountdown] { [] }

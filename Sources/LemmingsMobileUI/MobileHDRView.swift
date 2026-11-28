@@ -123,7 +123,7 @@ import UIKit
             return
         }
         let budget = MobileDevicePerformance.presentation
-        let effectHz = MobileDevicePerformance.constrained ? min(20, budget.effectHz) : budget.effectHz
+        let effectHz = MobileDevicePerformance.visualEffectsConstrained ? min(20, budget.effectHz) : budget.effectHz
         // A moved glint skips the frame limit so it stays on the panned terrain.
         let glintMoved = showsGlints && glintRect != paintedGlintRect
         if !glintMoved, let lastPaint, now - lastPaint < 1.0 / effectHz { return }
@@ -132,7 +132,7 @@ import UIKit
         lastPaint = now
         let scale = CGFloat(budget.overlayRenderScale(width: Double(bounds.width), height: Double(bounds.height),
                                                      nativeScale: Double(min(2, window?.screen.scale ?? 1))))
-        let pixelLimit: CGFloat = MobileDevicePerformance.constrained ? 180_000 : 720_000
+        let pixelLimit: CGFloat = MobileDevicePerformance.visualEffectsConstrained ? 180_000 : 720_000
         let renderScale = min(scale, sqrt(pixelLimit / max(1, bounds.width * bounds.height)))
         let size = CGSize(width: max(1, floor(bounds.width * renderScale)), height: max(1, floor(bounds.height * renderScale)))
         if drawableSize != size { drawableSize = size }

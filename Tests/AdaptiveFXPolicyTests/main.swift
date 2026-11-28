@@ -20,6 +20,42 @@ private func require(_ value: @autoclosure () -> Bool, _ message: String) throws
         let modern = FXDeviceProfile(hasMetal: true, modernGPU: true, enhancedEffectsSupported: true,
                                      processorCount: 8, recommendedWorkingSet: 1_073_741_824)
         let gib: UInt64 = 1_073_741_824
+        // Duo reports its display form independently of the GPU family and RAM tier.
+        for (modernGPU, foldable) in [(true, false), (false, true)] {
+            let mobile = FXDeviceProfile(hasMetal: true, modernGPU: modernGPU, enhancedEffectsSupported: modernGPU,
+                processorCount: 6, recommendedWorkingSet: gib, physicalMemory: 4 * gib,
+                mobile: true, foldable: foldable)
+            var effects = AdaptiveFXPerformance(profile: mobile)
+            let resources = DeviceEffectResources(physicalMemory: 4 * gib, processorCount: 6)
+            for tick in 0..<600 {
+                effects.recordCPU(0.030, now: Double(tick) / 60)
+                effects.recordGPU(0.030, source: "nuke", now: Double(tick) / 60)
+            }
+            let ordinaryPressure = resources.underPressure(thermalLevel: 2, lowPower: true, memoryPressure: false)
+            effects.setPressure(ceiling: .minimal, framesPerSecond: 60, now: 11, resources: ordinaryPressure)
+            let budget = effects.presentation
+            try require(mobile.prefersFixedMobileEffects && budget.quality == .full && budget.enhancedEffectsAllowed
+                        && budget.explosionLimit == 8 && budget.effectHz == 60,
+                        "Duo or newer iOS lost the cinematic nuke due to RAM tier, frame cost or routine pressure")
+            for (thermalLevel, memoryPressure) in [(3, false), (0, true)] {
+                effects.setPressure(ceiling: .minimal, framesPerSecond: 60, now: 12,
+                    resources: resources.underPressure(thermalLevel: thermalLevel, lowPower: false,
+                                                       memoryPressure: memoryPressure))
+                try require(!effects.presentation.enhancedEffectsAllowed && effects.presentation.maximumOverlayPixels <= 262_144,
+                            "A capable mobile device ignored critical heat or a memory warning")
+                effects.setPressure(ceiling: .full, framesPerSecond: 60, now: 13, resources: resources)
+                try require(effects.presentation.enhancedEffectsAllowed && effects.presentation.quality == .full,
+                            "Full effects did not return as soon as emergency pressure cleared")
+            }
+        }
+        let olderPhone = FXDeviceProfile(hasMetal: true, modernGPU: false, enhancedEffectsSupported: true,
+            processorCount: 6, recommendedWorkingSet: gib, physicalMemory: 4 * gib, mobile: true)
+        let noMetalDuo = FXDeviceProfile(hasMetal: false, modernGPU: false, enhancedEffectsSupported: false,
+            processorCount: 6, recommendedWorkingSet: 0, mobile: true, foldable: true)
+        try require(!olderPhone.prefersFixedMobileEffects && olderPhone.maximumQuality == .balanced
+                    && !noMetalDuo.supportsEnhancedEffects,
+                    "An old iOS device skipped adaptation or a device without Metal enabled shaders")
+        print("PASS Duo and newer iOS full effects, older iOS budget and emergency-only visual protection")
         let desktop = FXDeviceProfile(hasMetal: true, modernGPU: true, enhancedEffectsSupported: true,
             processorCount: 12, recommendedWorkingSet: 18 * gib, physicalMemory: 24 * gib, desktop: true)
         var mac = AdaptiveFXPerformance(profile: desktop)
@@ -223,12 +259,13 @@ private func require(_ value: @autoclosure () -> Bool, _ message: String) throws
         print("PASS 2/4/8/16 GiB memory ceilings, audio budgets, pressure release and conservative FX recovery")
 
         let television = FXDeviceProfile(hasMetal: true, modernGPU: true, enhancedEffectsSupported: true,
-                                         processorCount: 6, recommendedWorkingSet: 1_073_741_824, television: true)
+                                         processorCount: 6, recommendedWorkingSet: 1_073_741_824, television: true, mobile: true)
         let olderTV = FXDeviceProfile(hasMetal: true, modernGPU: false, enhancedEffectsSupported: true,
                                      processorCount: 2, recommendedWorkingSet: 33_554_432, television: true)
         try require(television.initialQuality == .balanced && olderTV.initialQuality == .minimal,
                     "TV must reserve capacity before effects have device measurements")
-        try require(!television.supportsEnhancedEffects && !olderTV.supportsEnhancedEffects && modern.supportsEnhancedEffects,
+        try require(!television.prefersFixedMobileEffects && !television.supportsEnhancedEffects
+                    && !olderTV.supportsEnhancedEffects && modern.supportsEnhancedEffects,
                     "TV full-screen effects policy changed another platform or enabled the costly surface")
         try require(television.maximumOverlayPixels <= 720_000, "TV allowed a desktop-sized soft overlay")
         for quality in FXQuality.allCases {
