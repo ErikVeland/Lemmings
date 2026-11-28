@@ -24,11 +24,13 @@ public enum GameSupport {
         return 1
     }
 
-    public static let qrCode: CGImage? = {
+    public static let qrCode: CGImage? = qrCode(for: coffeeURL)
+
+    public static func qrCode(for url: URL) -> CGImage? {
         guard let filter = CIFilter(name: "CIQRCodeGenerator", parameters: [
-            "inputMessage": Data(coffeeURL.absoluteString.utf8), "inputCorrectionLevel": "M"]),
+            "inputMessage": Data(url.absoluteString.utf8), "inputCorrectionLevel": "M"]),
               let output = filter.outputImage,
-              let image = CIContext(options: [.useSoftwareRenderer: true]).createCGImage(output, from: output.extent),
+              let image = output.cgImage ?? CIContext(options: [.useSoftwareRenderer: true]).createCGImage(output, from: output.extent),
               let context = CGContext(data: nil, width: image.width + 8, height: image.height + 8,
                 bitsPerComponent: 8, bytesPerRow: (image.width + 8) * 4, space: CGColorSpaceCreateDeviceRGB(),
                 bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
@@ -37,5 +39,5 @@ public enum GameSupport {
         context.interpolationQuality = .none
         context.draw(image, in: CGRect(x: 4, y: 4, width: image.width, height: image.height))
         return context.makeImage()
-    }()
+    }
 }

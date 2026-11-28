@@ -2,18 +2,15 @@
 """Export genuine product captures and licensed artwork for the website."""
 from pathlib import Path
 import hashlib
-import io
-import os
 import json
 import shutil
-from PIL import Image, ImageCms, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFont
 from fontTools.ttLib import TTFont
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 ASSETS = ROOT / 'assets'
-CAPTURES = Path(os.environ.get('LEMMIX_WEBSITE_CAPTURES',
-                               '/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected'))
+CAPTURES = Path('/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118')
 DJ = Path('/Users/veland/GenErik DJ/website/assets')
 ASSETS.mkdir(parents=True, exist_ok=True)
 records = []
@@ -22,43 +19,22 @@ def record(source, outputs, treatment):
     records.append({'source': str(source), 'sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
                     'outputs': outputs, 'treatment': treatment})
 
-def checked_capture(spec):
-    source = CAPTURES / spec['file']
-    if hashlib.sha256(source.read_bytes()).hexdigest() != spec['sha256']:
-        raise ValueError(f'Capture differs from its source record: {source.name}')
-    return source
-
-
-for capture in json.loads((ROOT / 'content/screenshots.json').read_text())['captures']:
-    name = capture['key']
-    source = checked_capture(capture)
-    with Image.open(source) as raster:
-        original = raster.convert('RGB')
-        profile = raster.info.get('icc_profile')
-        if profile:
-            original = ImageCms.profileToProfile(original, io.BytesIO(profile), ImageCms.createProfile('sRGB'))
-    if original.size != (capture['width'], capture['height']):
-        raise ValueError(f'Capture dimensions differ for {name}.')
-
-    full = ASSETS / f'{name}-full.webp'
-    original.save(full, lossless=True, method=5)
-    outputs = [full.name]
-    for width in capture['widths']:
+def responsive(source, name, widths):
+    original = Image.open(source).convert('RGB')
+    outputs = []
+    for width in widths:
         size = (width, round(original.height * width / original.width))
-        preview = original.resize(size, Image.Resampling.LANCZOS)
-        for extension in ('webp', 'jpg'):
-            target = ASSETS / f'{name}-{width}.{extension}'
-            options = {'method': 5} if extension == 'webp' else {'optimize': True, 'subsampling': 0}
-            preview.save(target, quality=94, **options)
+        im = original.resize(size, Image.Resampling.LANCZOS)
+        for suffix in ('webp', 'jpg'):
+            target = ASSETS / f'{name}-{width}.{suffix}'
+            im.save(target, quality=90, **({'method': 6} if suffix == 'webp' else {'optimize': True}))
             outputs.append(target.name)
-    record(source, outputs, 'Full sRGB capture in lossless WebP, plus proportional SDR previews.')
-    records[-1]['caption'] = capture['caption']
-    if 'hdr' in capture:
-        hdr = capture['hdr']
-        source = checked_capture(hdr)
-        shutil.copyfile(source, ASSETS / hdr['output'])
-        record(source, [hdr['output']], hdr['method'])
+    record(source, outputs, 'Full actual capture; proportional resize and format conversion only.')
 
+responsive(CAPTURES / 'presentation/submission/Starter.png', 'starter', [800, 1600, 2560])
+responsive(CAPTURES / 'presentation/submission/Home.png', 'home', [800, 1600])
+responsive(CAPTURES / 'simulator-captures/submission/iPhone-Home.png', 'phone', [402, 804])
+responsive(CAPTURES / 'simulator-captures/submission/AppleTV-Home.png', 'tv', [960, 1920])
 logo = REPO / 'Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png'
 shutil.copy2(logo, ASSETS / 'logo.png')
 record(logo, ['logo.png'], 'Unmodified current product logo.')
@@ -70,16 +46,13 @@ for width in (480, 960):
                          Image.Resampling.LANCZOS).save(target, quality=90, method=6)
     logo_outputs.append(target.name)
 record(logo, logo_outputs, 'Proportional responsive conversion of the current logo. No redrawing.')
-icon = REPO / 'Resources/UltimateLemmix/AppIcon/UltimateLemmix.png'
-app_icon = Image.open(icon).convert('RGB')
-icon_sizes = {'favicon.png': 96, 'apple-touch-icon.png': 180, 'app-icon.png': 512}
-for name, size in icon_sizes.items():
-    app_icon.resize((size, size), Image.Resampling.LANCZOS).save(ASSETS / name, optimize=True)
-record(icon, list(icon_sizes), 'Resized from the approved Ultimate Lemmix app icon.')
+icon = REPO / 'Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png'
+Image.open(icon).resize((96, 96), Image.Resampling.NEAREST).save(ASSETS / 'favicon.png')
+record(icon, ['favicon.png'], 'Nearest-neighbour resize of clean Store icon.')
 for name in ['archivo-latin.woff2', 'archivo-OFL.txt']:
     shutil.copy2(DJ / name, ASSETS / name)
 
-lix = Path('/Users/veland/UltimateLemmix/.build/approved-alternative-resources/AlternativeAssets/Lix')
+lix = REPO / '.build/approved-alternative-resources/AlternativeAssets/Lix'
 metadata = json.loads((lix / 'sprite-metadata.json').read_text())
 sheet_path = lix / 'assets' / metadata['sourcePath']
 sheet = Image.open(sheet_path).convert('RGBA')
@@ -98,36 +71,23 @@ strip.save(ASSETS / 'walk-strip.png')
 record(sheet_path, ['walker.png', 'walk-strip.png'], 'Extracted published walker frames using pinned metadata and the existing black/grid transparency keys. No redrawing.')
 shutil.copy2(lix / 'licences/copying.txt', ASSETS / 'Lix-copying.txt')
 shutil.copy2(REPO / 'THIRD_PARTY_NOTICES.md', ASSETS / 'application-notices.txt')
-notices = Path('/Volumes/Games/CodexBuilds/UltimateLemmix-Icon110-20261120/MacSigned/Ultimate Lemmix.app/Contents/Resources/Licences')
-for notice in ('Lix-font-LICENSE.txt', 'Lix-music-credits.txt'):
-    shutil.copy2(notices / notice, ASSETS / notice)
 
-# Use the woodland illustration for link previews and keep the square app icon visible.
-woodland = ASSETS / 'moss-bridge.webp'
-social = ImageOps.fit(Image.open(woodland).convert('RGB'), (1200, 630), centering=(0.53, 0.5))
+# The social preview combines the genuine logo and capture without altering either.
+social = Image.new('RGB', (1200, 630), '#c6e9ed')
 draw = ImageDraw.Draw(social)
-brand = original_logo.copy()
-brand.thumbnail((435, 160), Image.Resampling.LANCZOS)
-social.paste(brand, (52, 162), brand)
-social.paste(app_icon.resize((100, 100), Image.Resampling.LANCZOS), (57, 48))
-font = TTFont(ASSETS / 'archivo-latin.woff2')
-font.flavor = None
-font_path = ROOT / '.social-font.ttf'
-font.save(font_path)
-title_font = ImageFont.truetype(str(font_path), 42)
-draw.text((56, 324), 'Thousands of ways home.', font=title_font, fill='#fff5da', stroke_width=1, stroke_fill='#162b30')
+font = TTFont(ASSETS / 'archivo-latin.woff2'); font.flavor = None
+font_path = ROOT / '.social-font.ttf'; font.save(font_path)
+large = ImageFont.truetype(str(font_path), 67)
+small = ImageFont.truetype(str(font_path), 24)
+brand = Image.open(logo).convert('RGBA'); brand.thumbnail((540, 170), Image.Resampling.LANCZOS)
+social.paste(brand, (60, 48), brand)
+draw.text((60, 245), 'Everybody counts.', font=large, fill='#143e35')
+draw.text((65, 340), 'A little crowd. A route home. Your call.', font=small, fill='#143e35')
+draw.text((65, 545), 'Ultimate Lemmix · Mac, iPhone, iPad & Apple TV', font=small, fill='#143e35')
+capture = Image.open(CAPTURES / 'presentation/submission/Starter.png').convert('RGB')
+capture.thumbnail((490, 307), Image.Resampling.LANCZOS)
+social.paste(capture, (670, 165))
+social.save(ASSETS / 'social.jpg', quality=93, optimize=True)
 font_path.unlink()
-social.save(ASSETS / 'social.jpg', quality=91, optimize=True)
-(ROOT / 'image-provenance.json').write_text(json.dumps({
-    'captures': records,
-    'duoScenes': {'renderer': 'Website/render_duo.py', 'artwork': 'Illustrated graphite foldable in three poses. The interior screens use native build 110 Duo simulator captures at a 100° hinge, with the app’s reserved division and active display verified. The tent poster uses the native Duo cover screenshot at 52° and the film projects the game clock demonstration onto that outer display.', 'outputs': ['duo-book-scene.webp', 'duo-tabletop-scene.webp', 'duo-tent-scene.webp', 'duo-tent-scene.mp4']},
-    'ravine': {'output': 'forest-ravine.webp', 'direction': 'A broken bridge above a dark pool. Four walkers approach the cliff while one Lix bobs in the current. Illustrated woodland scenery.'},
-    'music': {'output': 'forest-music.webp', 'tool': 'Built-in image generation', 'direction': 'Keep the carved ocarina and its acorn bell on the mossy stump. On the far bank, a Blocker holds out both arms, a Bomber has a white 2 overhead, and a Builder lays a brick step.'},
-    'miner': {'output': 'forest-miner.webp', 'tool': 'Built-in image generation', 'direction': 'Replace the satchel with a blond Lix miner striking the mossy ledge with a pickaxe. Keep the miner in focus. Three distant Floaters descend under softly blurred yellow umbrellas.'},
-    'detonator': {'output': 'forest-detonator.webp', 'tool': 'Built-in image generation', 'direction': 'One cheerful blond Lix considers an oversized red plunger. Two others follow a sign towards a missing bridge. Cold spruce-blue shadows, a dusky plum sky, and a copper rim light in the mossy forest.'},
-    'illustration': 'Project artwork generated for this site from the approved Lix icon and woodland illustration. The creek, burrow, woodland objects, four material textures and two moss-covered button sprites are illustrations. Gameplay images use the captures listed above.',
-    'clock': {'outputs': ['duo-desk-clock.mp4', 'duo-desk-clock.webp'], 'source': 'Build 110 GameDeskClockArt.drawFullScreen and DeskClockSimulation, signed Mac app resources. Simulated 14:59 to 15:00 with a fictional Tea break event. 1008 by 692, 27 seconds, 15 frames per second.'},
-    'social': 'The woodland illustration with the approved app icon and wordmark.',
-    'font': 'Archivo, SIL Open Font License; reused from the existing GenErik DJ website.'
-}, indent=2) + '\n')
+(ROOT / 'image-provenance.json').write_text(json.dumps({'captures': records, 'social': 'Authored composition using the unchanged product logo and full Mac starter capture.', 'font': 'Archivo, SIL Open Font License; reused from the existing GenErik DJ website.'}, indent=2) + '\n')
 print('Prepared genuine product imagery and local fonts.')

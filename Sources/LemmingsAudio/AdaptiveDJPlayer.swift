@@ -52,6 +52,7 @@ import NxlvKit
   }
   func setEnhancements(_ value: ProTrackerEnhancements) { module?.setEnhancements(value) }
   func setNukeAmount(_ amount: Float) { recording?.setNukeAmount(amount); module?.setNukeAmount(amount) }
+  func setResultFilter(_ amount: Float) { recording?.setResultFilter(amount); module?.setResultFilter(amount) }
   func setMixBass(_ gain: Float) { recording?.setMixBass(gain); module?.setMixBass(gain) }
   @discardableResult
   func play() -> Bool {
@@ -141,6 +142,7 @@ import NxlvKit
   private var catalogueRoot: URL?
   private var availablePaths: Set<String> = []
   private var availableURLs: [String: URL] = [:]
+  private var recentShuffleTrackIDs: [String] = []
 
   public private(set) var masterVolume: Float = 0.8
   public private(set) var isMuted = false
@@ -202,13 +204,23 @@ import NxlvKit
     catalogueRoot.flatMap { SoundtrackPlayer.cataloguePath(url, root: $0) }
   }
 
-  /// Resolve a composition once per level. The caller's score position, never
-  /// elapsed time or a random seed, owns progression through its versions.
   @discardableResult
   public func startJourney(trackID: String, cycle: Int, identity: String, fallback: URL? = nil,
-                    includeAlternates: Bool = true) -> Bool {
+                           includeAlternates: Bool = true) -> Bool {
+    startJourney(trackID: trackID, cycle: cycle, identity: identity, fallback: fallback,
+                 includeAlternates: includeAlternates, showcaseIndex: nil)
+  }
+
+  /// Resolve a composition once per level from the caller's score position.
+  @discardableResult
+  public func startJourney(trackID: String, cycle: Int, identity: String, fallback: URL? = nil,
+                           includeAlternates: Bool, showcaseIndex: Int?) -> Bool {
     journeyCycle = cycle
     allowCelebrationAlternates = includeAlternates
+    if includeAlternates, let showcaseIndex,
+       let pick = catalogue?.showcase(trackID: trackID, index: showcaseIndex, availablePaths: availablePaths),
+       let url = availableURLs[pick.path], FileManager.default.isReadableFile(atPath: url.path),
+       startLevel(url: url, identity: identity) { return true }
     let selected = catalogue?.select(trackID: trackID, cycle: cycle,
       availablePaths: availablePaths, includeAlternates: includeAlternates)
     guard let url = selected.flatMap({ availableURLs[$0.path] }) ?? fallback,
@@ -499,6 +511,7 @@ import NxlvKit
     nukeAmount = amount
     allDecks.forEach { $0.setNukeAmount(amount) }
   }
+  var resultFilter: Float = 0 { didSet { allDecks.forEach { $0.setResultFilter(resultFilter) } } }
 
   private func makeDeck(_ url: URL) -> DJDeck? {
     let role = relativePath(url).flatMap { catalogue?.entry(path: $0)?.track.role }
@@ -517,6 +530,7 @@ import NxlvKit
     deck?.playbackRate = playbackRate
     deck?.setSpeedPitch(speedPitch)
     deck?.setNukeAmount(nukeAmount)
+    deck?.setResultFilter(resultFilter)
     return deck
   }
 
@@ -566,12 +580,15 @@ import NxlvKit
   public func shuffle(scope: SoundtrackCatalogue.ShuffleScope, fallbackTrackID: String? = nil) -> Bool {
     guard !isMuted, !outputSuspended, !vinylHeld, !vinylStopping, activeDeck != nil,
           let currentURL, let catalogue else { return false }
-    let candidates = catalogue.shuffleCandidates(currentPath: relativePath(currentURL) ?? "",
-      scope: scope, availablePaths: availablePaths, fallbackTrackID: fallbackTrackID)
-    for variant in candidates.shuffled() {
+    let candidates = catalogue.shuffledVariants(currentPath: relativePath(currentURL) ?? "",
+      scope: scope, availablePaths: availablePaths, fallbackTrackID: fallbackTrackID, recentTrackIDs: recentShuffleTrackIDs)
+    for variant in candidates {
       guard let destination = availableURLs[variant.path], destination.standardizedFileURL != currentURL.standardizedFileURL,
             FileManager.default.isReadableFile(atPath: destination.path) else { continue }
-      if crossfade(seconds: Fade.phrase, destination: destination) { return true }
+      if crossfade(seconds: Fade.phrase, destination: destination) {
+        rememberShuffle(variant, scope: scope, catalogue: catalogue)
+        return true
+      }
     }
     return false
   }
@@ -582,13 +599,24 @@ import NxlvKit
                       fallbackTrackID: String? = nil) -> Bool {
     guard !isMuted, !outputSuspended, !vinylHeld, !vinylStopping, let catalogue else { return false }
     if activeDeck != nil { return shuffle(scope: scope, fallbackTrackID: fallbackTrackID) }
-    let candidates = catalogue.shuffleCandidates(currentPath: relativePath(source) ?? "",
-      scope: scope, availablePaths: availablePaths, fallbackTrackID: fallbackTrackID)
-    for variant in candidates.shuffled() {
+    let candidates = catalogue.shuffledVariants(currentPath: relativePath(source) ?? "",
+      scope: scope, availablePaths: availablePaths, fallbackTrackID: fallbackTrackID, recentTrackIDs: recentShuffleTrackIDs)
+    for variant in candidates {
       guard let url = availableURLs[variant.path], url.resolvingSymlinksInPath() != source.resolvingSymlinksInPath() else { continue }
-      if startLevel(url: url, identity: identity + ":shuffle:" + UUID().uuidString) { return true }
+      if startLevel(url: url, identity: identity + ":shuffle:" + UUID().uuidString) {
+        rememberShuffle(variant, scope: scope, catalogue: catalogue)
+        return true
+      }
     }
     return false
+  }
+
+  private func rememberShuffle(_ variant: SoundtrackCatalogue.Variant, scope: SoundtrackCatalogue.ShuffleScope,
+                               catalogue: SoundtrackCatalogue) {
+    guard scope == .allTracks, let trackID = catalogue.entry(path: variant.path)?.track.id else { return }
+    recentShuffleTrackIDs.removeAll { $0 == trackID }
+    recentShuffleTrackIDs.append(trackID)
+    if recentShuffleTrackIDs.count > 8 { recentShuffleTrackIDs.removeFirst() }
   }
 
   /// Brings the next track up as the current one goes down.

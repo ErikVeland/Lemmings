@@ -4,20 +4,22 @@ import NxlvKit
 import LemmingsAppCore
 import LemmingsGameArt
 
-struct ReplaySkillStock {
+struct ReplaySkillStock: Equatable {
     let name: String
     let count: String
 }
-struct ReplaySkillUse {
+struct ReplaySkillUse: Equatable {
     let tick: Int
     let name: String
 }
 
 /// Read-only replay information leaves camera input on the playfield.
 @MainActor final class ReplaySkillPanel: NSView {
+    var fitsContents = false
     private var stocks: [ReplaySkillStock] = []
     private var uses: [ReplaySkillUse] = []
     private var tick = 0
+    private var rate = 0.0
     private var stockTitle = L10n.text("LEFT")
     override var isFlipped: Bool { true }
     override func hitTest(_ point: NSPoint) -> NSView? { nil }
@@ -27,9 +29,9 @@ struct ReplaySkillUse {
             ?? CGFloat(GamePixelTypography.width(of: plain) + 1)
     }
     private var rowHeight: CGFloat {
-        let captions = [stockTitle, L10n.text("NONE"), L10n.text("USED @ TICK")]
+        let captions = [stockTitle, L10n.text("NONE"), L10n.text("Skills used").uppercased()]
             + stocks.flatMap { [SkillVocabulary.title($0.name), $0.count] }
-            + uses.flatMap { [SkillVocabulary.title($0.name), String($0.tick)] }
+            + uses.flatMap { [SkillVocabulary.title($0.name), ReplayGameTime.clock(tick: $0.tick, rate: rate)] }
         let renderer = GameMenuArtwork.renderer()
         return captions.reduce(CGFloat(18)) { current, text in
             let plain = MacInterfaceRenderer.menuText(text)
@@ -40,23 +42,40 @@ struct ReplaySkillUse {
         }
     }
     private var countWidth: CGFloat { max(24, stocks.map { textWidth($0.count) + 6 }.max() ?? 24) }
-    private var tickWidth: CGFloat { max(48, uses.map { textWidth(String($0.tick)) }.max() ?? 48) }
+    private var timeWidth: CGFloat {
+        max(textWidth("88:88.88"), uses.map { textWidth(ReplayGameTime.clock(tick: $0.tick, rate: rate)) }.max() ?? 0)
+    }
     private var columns: Int {
+        if fitsContents, stocks.count < 2 { return 1 }
         let columnWidth = (stocks.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + countWidth + 18
         return stocks.count > 8 && columnWidth * 3 + 16 <= 420 ? 3 : 2
     }
     var logicalSize: CGSize {
         let rows = max(1, (stocks.count + columns - 1) / columns)
         let stockWidth = CGFloat(columns) * ((stocks.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + countWidth + 18) + 16
-        let historyWidth = (uses.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + tickWidth + 42
+        let historyWidth = (uses.map { textWidth(SkillVocabulary.title($0.name)) }.max() ?? 0) + timeWidth + 42
+        if fitsContents {
+            let headingWidth = max(textWidth(stockTitle), textWidth(L10n.text("Skills used").uppercased())) + 16
+            return CGSize(width: max(headingWidth, stockWidth, uses.isEmpty ? 0 : historyWidth),
+                height: 22 + CGFloat(rows + (uses.isEmpty ? 1 : uses.count + 2)) * rowHeight)
+        }
         return CGSize(width: max(300, stockWidth, historyWidth), height: 22 + CGFloat(rows + 5) * rowHeight)
     }
-    func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, title: String = L10n.text("LEFT")) {
-        self.stocks = stocks; self.uses = Array(uses.suffix(3)); self.tick = tick; stockTitle = title
-        setAccessibilityElement(true)
-        setAccessibilityRole(.group)
-        setAccessibilityLabel(L10n.text("Tick \(tick). \(title): \(stocks.map { "\(SkillVocabulary.title($0.name)) \($0.count)" }.joined(separator: ", ")). Skills used: \(self.uses.map { L10n.text("\(SkillVocabulary.title($0.name)) at tick \($0.tick)") }.joined(separator: ", "))"))
-        needsDisplay = true
+    func update(stocks: [ReplaySkillStock], uses: [ReplaySkillUse], tick: Int, rate: Double, title: String = L10n.text("LEFT")) {
+        let recent = Array(uses.suffix(3))
+        let historyChanged = self.stocks != stocks || self.uses != recent || self.rate != rate || stockTitle != title
+        let highlightChanged = self.tick != tick && recent.contains { $0.tick == self.tick || $0.tick == tick }
+        self.tick = tick
+        if historyChanged {
+            self.stocks = stocks; self.uses = recent; self.rate = rate; stockTitle = title
+            let stock = stocks.map { "\(SkillVocabulary.title($0.name)) \($0.count)" }.joined(separator: ", ")
+            let history = recent.map { ReplayGameTime.skillUse($0.name, tick: $0.tick, rate: rate) }.joined(separator: ", ")
+            setAccessibilityElement(true)
+            setAccessibilityRole(.group)
+            setAccessibilityLabel(L10n.text("\(title): \(stock.isEmpty ? L10n.text("None") : stock).")
+                + (history.isEmpty ? "" : " " + L10n.text("Skills used: \(history)")))
+        }
+        if historyChanged || highlightChanged { needsDisplay = true }
     }
     override func draw(_ dirtyRect: NSRect) {
         GameDisplayPanel.draw(bounds)
@@ -74,14 +93,16 @@ struct ReplaySkillUse {
             GameControlText.draw(SkillVocabulary.title(stock.name), in: CGRect(x: row.minX, y: row.minY, width: row.width - countWidth - 6, height: height), enabled: stock.count != "0")
             GameControlText.draw(stock.count, in: CGRect(x: row.maxX - countWidth, y: row.minY, width: countWidth, height: height), alignment: .right, enabled: stock.count != "0")
         }
+        guard !fitsContents || !uses.isEmpty else { return }
         let historyY = inner.minY + height + 6 + CGFloat(rows) * height
-        GameControlText.draw(L10n.text("USED @ TICK"), in: CGRect(x: inner.minX, y: historyY, width: inner.width, height: height), role: .heading)
+        GameControlText.draw(L10n.text("Skills used").uppercased(), in: CGRect(x: inner.minX, y: historyY, width: inner.width, height: height), role: .heading)
+        let timeWidth = timeWidth
         for (index, use) in uses.enumerated() {
             let row = CGRect(x: inner.minX, y: historyY + height + CGFloat(index) * height, width: inner.width, height: height)
             let current = use.tick == tick
             GameControlText.draw(current ? ">" : "", in: CGRect(x: row.minX, y: row.minY, width: 12, height: height), role: .heading)
-            GameControlText.draw(String(use.tick), in: CGRect(x: row.minX + 14, y: row.minY, width: tickWidth, height: height), role: current ? .heading : .body)
-            GameControlText.draw(SkillVocabulary.title(use.name), in: CGRect(x: row.minX + tickWidth + 26, y: row.minY, width: row.width - tickWidth - 26, height: height), role: current ? .heading : .body)
+            GameControlText.draw(ReplayGameTime.clock(tick: use.tick, rate: rate), in: CGRect(x: row.minX + 14, y: row.minY, width: timeWidth, height: height), role: current ? .heading : .body)
+            GameControlText.draw(SkillVocabulary.title(use.name), in: CGRect(x: row.minX + timeWidth + 26, y: row.minY, width: row.width - timeWidth - 26, height: height), role: current ? .heading : .body)
         }
     }
 }

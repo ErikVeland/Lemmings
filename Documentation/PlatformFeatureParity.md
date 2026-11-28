@@ -1,14 +1,104 @@
 # Cross-platform feature parity
 
+## Gameplay haptics
+
+Classic, supported NeoLemmix levels and Lemmings 2 use a rising cue when the
+nuke is committed, a final fuse cue when countdown timing is available, a heavy
+first impact, and lighter, spaced follow-up impacts. Lemmings 3 has no global
+nuke; its tool explosions use the smaller bomber cue. The building cue is a
+short double tap at the existing bridge-finishing warning. A steel hit gives
+a single sharp tap. Ordinary brick placement and other routine events are quiet.
+
+A fatal landing gives a short, rounded thud; falling out of the level or
+drowning does not. Positioned cues follow the visible playfield, favouring
+the closest visible impact when several arrive together. A split-handle
+controller steers left and right; single-actuator hardware plays a centred
+version at the same distance. Offscreen events soften; very distant landings
+stay silent, and the main nuke impact retains a minimum strength. The nuke
+arm and fuse deliberately stay centred.
+
+On supported iOS hardware, the built-in actuator also plays. Its strength
+drops only after a controller actuator accepts the cue. A queued startup or
+failed controller leaves the device cue at its normal strength. Hardware without built-in haptics
+can still use a supported controller (DualSense first), including on Mac or TV. The gameplay
+toggle is in Accessibility on Mac and mobile, and Audio on Apple TV. It is
+local to each device and independent of sound volume and HD effects.
+
+The cues are local presentation only. Game rules, saved inputs and replay
+exports are unchanged. Rewind, pause, interruption and undo cancel an active
+effect. Playback is muted during automated tests. Physical actuator feel and
+controller hand-off need a device check; simulator builds do not establish feel.
+
+## Lemmix without imported game data · 28 November 2026
+
+On iPhone, iPad, Duo and Apple TV, bundled Journey names do not establish that
+their original levels are installed. Home checks the current lesson's source
+before offering it as Continue. Play keeps the Journey reachable with a No data
+state; missing original sources open the existing Game Data import flow.
+The authored Open Starter remains playable without original game data.
+
+Starting or opening a Journey prepares and renders only its current entry on
+the existing background worker before changing the library or preview page.
+A new Journey is saved after that succeeds. Missing or damaged content leaves
+the previous library and saved queue in place. Compact and wide level pages
+require a successful preview before enabling Play, including cover activation.
+Changing selection clears the previous preview before checking the next source.
+Mac already rejects unavailable Journey entries before starting their sessions.
+
+Fixture-free regressions cover absent and incomplete Classic sources, preserved
+Journey and Hot Seat state, unsupported engines, and the authored-only starter.
+Source review and whitespace checks pass. Native Swift tests, iOS/tvOS builds,
+rendered unavailable states and physical-device acceptance require the Apple
+build environment; they have not been run in this Linux workspace.
+
+## iOS level loading · 27 November 2026
+
+iPhone, iPad and Duo show Home as early as possible on a cold launch.
+While files and the catalogue are checked, the cracktro scenery plays behind
+the checking Home screen. It never delays the handoff to interactive Home.
+Reduce Motion, Reduce Flashes or Static Home Screen keeps this backdrop still.
+When preparing a level takes more than 550 ms, a pixel-art intro replaces the
+brief loading view. The level opens as soon as it is ready. Cancel returns to
+browsing without starting a new level. Reduce Motion or
+Reduce Flashes holds the artwork still. This iOS intro adds no music, original
+game assets, or third-party audio. It does not change Apple TV startup.
+
+
+## Settings navigation · 25 November 2026
+
+Classic, supported NeoLemmix levels, Lemmings 2 and Lemmings 3 share
+the category order. Mac keeps the active pane beside the category
+buttons and places Back and Main menu below them. The pane scrolls
+through its last setting. iPhone, iPad and Duo use grouped rows in portrait
+and grouped tabs in landscape. Apple TV uses the same tab order
+and keeps Previous and Next in place on paged lists.
+
+Settings and short shared menus omit the decorative brick trim.
+Short shared menus keep their navigation near the action rows.
+The iPad and Duo backdrop follows the compact panel. Controls continue
+to use the same frames for bitmap rendering and input. The offscreen
+checks cover Mac mouse and keyboard targets, grouped rows, TV paging
+and 720 navigation renders. The iOS and tvOS SDK checks pass. Physical
+touch, Duo pose changes, VoiceOver and Siri Remote acceptance remain open.
+
 ## Preview, catalogue and save recovery · 25 November 2026
 
 | Player task | Implemented behaviour | Verification boundary |
 | --- | --- | --- |
-| Browse then play | Campaign and collection previews inspect neighbouring levels without changing the active level. An eligible saved attempt can resume from its cover. The preview and its forward button use the same action. | Mac result footers, shared preview actions and Apple TV input geometry run headlessly. Physical touch and VoiceOver remain open. |
+| Browse then play | Campaign and collection previews inspect neighbouring levels without changing the active level. An eligible saved attempt can resume from its cover. The preview and its forward button use the same action. | Mac result footers, shared preview actions and Apple TV input geometry run headlessly. VoiceOver has owner sign-off. Physical touch has a separate check. |
+| Recognise the sequel logos | The Play menu renders the original Lemmings 2 lettering at 2× resolution with a transparent background, a continuous copper stroke around the subtitle and coloured edge pixels with partial opacity. | Offscreen Play renders check both sequel targets at Mac, iPhone, iPad, Duo and Apple TV sizes. Physical-device checks remain open. |
 | Find a fan level or a personal record | Fan and NeoLemmix catalogues offer search and completion filters. Profile → Statistics counts recorded attempts, distinct clears, stars and three-star levels. | Native Mac controls and shared phone, iPad, Duo and TV renderers. Legacy records contribute the information they retained. |
 | Resume a multiplayer Journey | Manual Apple TV transfer preserves an archived roster, turn, house rule, completions and a compatible mid-level checkpoint. Automatic cloud sync covers Journey progress. | Two isolated roots restored an exact Classic checkpoint. Offline and reconnect used a mock service. Physical transfers and production sync remain open. |
 | Navigate while data arrives | A late preview or community total preserves the selected action. Cancelling a load prevents a delayed result reopening it. | Headless AppKit, shared bitmap geometry and portable load tests. UIKit routes compile against both SDKs. |
-| Keep focus through layout changes | The mobile HUD reuses controls by action. A closed speed chooser returns focus to the visible control after a width change. A temporary fold size preserves Ready and chooser state. | Narrow Mac pointer and accessibility actions, TV binding tests and shared HUD renders. Physical folds, VoiceOver and Siri Remote remain open. |
+| Keep a focused menu action in view | VoiceOver focus on an enabled menu action is saved for the existing Back restoration. Scrollable menus anchor a width change to the visible focused row. Disabled actions can still be read. | The UIKit regression checks focus, its scroll position, the resized hit target and a late page refresh. Physical VoiceOver has owner sign-off. The Duo fold has a separate hardware check. |
+| Keep focus through layout changes | The mobile HUD reuses controls by action. A closed speed chooser returns focus to the visible control after a width change. A temporary fold size preserves Ready and chooser state. | Narrow Mac pointer and accessibility actions, TV binding tests and shared HUD renders. VoiceOver and Siri Remote have owner sign-off. The physical fold has a separate check. |
+| Step or rewind from Apple TV Game controls | The controls retain focus on the activated timeline action and let a pending rewind finish. Further Rewind presses can queue behind the current reconstruction while the level stays paused. Speed restores focus before the menu requests a native focus update. | A tvOS UIKit regression covers a deferred seek, queued rewind, and forward step through the shared controller. Siri Remote navigation has owner sign-off. |
+| Resume after a fast rewind | On iPhone, iPad and Duo, Play resets to 1× and resumes on the same press. The first Pause press while running fast returns to 1×. The first rewind tip leaves the live rewind cue visible. | The iPhone simulator acceptance pass observed the corrected Play action and tip. The shared UIKit regression covers the Play and running Pause actions with four engine identifiers. Native Mac rewind-tip placement still needs visual acceptance. |
+| Recognise Undo after ending a run | The shared pixel arrow fits inside the existing control on Mac and the shared touch and TV HUD. Native Mac L2 uses the same arrow and accessible action name over its Nuke target while its pre-nuke state can be restored. | The rounded HUD audit renders and checks hit targets during Undo. Check the visual state and input on physical devices. |
+| Open or reposition the Duo | iOS scene geometry and reserved-region updates invalidate the current layout. Home forgets the two cached book panes when the hinge is flat, a different hinge divides the display, or the safe area or cutouts make the cached panes invalid. | The windowless regression covers same-size book-to-flat, missing hinge data, tabletop and new cutouts. The sideways simulator repro remains open for hardware acceptance. |
+| Hear the Mac result and find its actions | The result announcement reports the attempt. Details opens and announces the level leaderboard. The rendered, accessible actions expose Replay when available across Classic, L2, L3 and supported fan content. | The offscreen result test checks the summary and Replay availability and activation across the three original games. Live VoiceOver has owner sign-off. |
+| Read or hear a replay's recorded moves | Replay skill history uses each engine’s elapsed game time. A single backward step shows hundredths of a second when needed. On Mac the playfield reports the rewind distance. Touch and Apple TV also report their current rewind speed. Mac solution replay buttons expose their current action names separately from keyboard help. Touch and TV update the spoken skill history when it changes. | Checks cover clock conversion, the Mac bitmap panel and the shared UIKit history when seeking. Physical VoiceOver and Siri Remote navigation have owner sign-off. |
+| Navigate a solution replay | Mac places play, move jumps, speed and a marked timeline under the Classic solution playfield. Options provides precise stepping and camera controls. iPhone, iPad, Duo and Apple TV use their existing replay controls for playback, speed, rewind and move jumps. | Offscreen Mac checks cover four window sizes, seek, restart, focus and return to the paused attempt. The continuous timeline is available on Mac. NeoLemmix and the sequels use action or movie replay viewers where available. |
 
 The [UX checklist](UXRedesign.md) lists the repeatable checks and the remaining device observations.
 
@@ -16,12 +106,29 @@ The [UX checklist](UXRedesign.md) lists the repeatable checks and the remaining 
 
 | Player task | Shared behaviour | Verification |
 | --- | --- | --- |
-| Start or resume | Home presents one session-specific primary action and Play, Hot Seat, Profile and Community. Play contains the game families and collections. Profile contains personal records and cloud saves. Community shows the worldwide rescue count. | Mac bitmap controls, mouse and keyboard selection, mobile menu renders and the selected-session resolver. |
+| Start or resume | Home presents one session-specific primary action and Play, Hot Seat, Profile and Community. Mac Home gives the default action a full-width row and scales the menu to 2× when space allows. Mac Play groups saved routes and game families. Play contains collections. Profile contains personal records and cloud saves. Community shows the worldwide rescue count. | Mac offscreen bitmap renders, mouse and keyboard selection, mobile menu renders and the selected-session resolver. |
 | First play | Save the local initials and portrait, then offer participation if the service is configured and the player has no saved choice. Either answer continues. The original game or open starter depends on the product and available assets. | An isolated Mac profile and consent page accepted initials and declined sharing with an offline transport. Reopening the stores retained both choices. Mobile profile controls were rendered at phone, iPad, Duo and TV sizes. |
 | Inspect a moving level | Status fields occupy measured slots. The release-rate controls govern emergence. The transport displays the current simulation multiplier. | Classic, L2 and L3 engine-backed before/after renders. Four count snapshots per engine had identical after-rectangles. A one-skill NeoLemmix Redux level ran to tick 100 with unchanged control targets at three sizes. |
-| Finish an attempt | The outgoing music fades for 0.6 seconds. A new attempt waits for live play. Results effects have their own output. | Muted fade ownership and cancellation checks. See [Audio coverage](AudioCoverage.md). |
+| Read the Mac gameplay counters | The flat Classic and NeoLemmix decks give the bitmap counters more height. The row doubles in size when all fields fit. | Offscreen renders check the Classic strip at 900 and 2120 points. Pointer checks cover the pause, rate and speed targets. |
+| Finish an attempt | The outgoing music moves into a muffled result room over 0.6 seconds and holds until the player leaves. A new attempt waits for live play. Results effects have their own output. | Muted ownership, hold and cancellation checks. Device listening is open. See [Audio coverage](AudioCoverage.md). |
 
 The shipping Apple TV entry point uses the shared mobile frontend. TV controller bindings, focus layout and handover tests run without a physical remote. The optional controller that accepts custom TV source folders has its own menus. Mobile hardware, VoiceOver, full app launches and audible quality need separate acceptance. See [the redesign evidence](UXRedesign.md#implementation-and-verification--24-november-2026).
+
+## Gameplay text size
+
+Phone, iPad, Duo and Apple TV use larger bitmap captions and quantities in the
+skill deck. Caption size follows the slot width. Long captions use an ellipsis
+and keep their full accessible names. The Menu icon keeps the same input target.
+The shared rewind and cursor counts use a 14-point bitmap at their base scale.
+Replay history shows fewer rows when space is limited and keeps its text size.
+
+Lemmings 3 on Mac draws its status fields in window coordinates. The fields
+wrap to two lines in a narrow window. The cursor badge uses the 14-point base
+size across the native Mac engines. The player can still select the larger badge.
+
+Offscreen checks exercise phone, iPad, Duo and TV layouts, including narrow and
+wide controls, rewind and replay states. Physical viewing distance, each language
+and composited CRT remain open checks.
 
 ## First-use control tips and level maps
 
@@ -34,13 +141,14 @@ input, pause and speed under player control. Replays omit first-use tips.
 
 | Platform | Map input and layout |
 | --- | --- |
-| Mac | Click or drag the level image. Classic and NeoLemmix keep their panel maps. The native sequel canvases show the current terrain and camera rectangle beside the timeline, leaving the original skill panel and transport targets in place. |
+| Mac | Click or drag the level image. The flat Classic and NeoLemmix controls span the window with an eight-point inset. The L2 and L3 skill banks use the width beside their original transport artwork, which sits at the right edge at its native scale. The sequel map and timeline span the footer. Classic CRT uses its fixed source dimensions. |
 | iPhone, iPad and Duo | Tap or drag a point on the map to centre both axes. Starting in a letterbox margin leaves the camera still. |
 | Apple TV | Aim at a point on the map and press Select. The camera menu retains its entrance, exit and movement actions. |
 
 The offscreen checks in `GameplayControlTipTests` verify dismissal, reopening
-the preference, focus and speed. They render the shared sequel footer at 640,
-700, 850 and 1024 points and exercise pointer and accessibility input.
+the preference, focus and speed. They render the shared sequel footer from
+640 to 3440 points and exercise pointer and accessibility input. Native L2 and
+L3 captures at 2558 points verify both edge targets and the transport size.
 `MobileControlTipMapTests` verifies two-axis seeking, vertical adjustment and
 camera bounds under square and non-square pixel aspect ratios. First-time
 player observation, VoiceOver, touch and Siri Remote use still need hardware
@@ -76,6 +184,22 @@ effects require full CPU and GPU quality. Late game updates count towards CPU
 pressure, including delays between timer callbacks. Minimum quality disables
 bloom and enhanced overlays. Classic and NeoLemmix also stop testing nearby
 actors once the targeting rules identify the preferred eligible lemming.
+
+During fast-forward, native Mac game loops draw one replay image per update.
+Each image holds until the next one. Every logical tick keeps its audio and
+time on the recording timeline. The replay draws the final state separately.
+On the shared iPhone, iPad, Duo and Apple TV frontend, simulation continues on
+callbacks that skip a visual update. Mac gameplay and solution replays use
+elapsed time and the authored engine tick rate. The 25× setting applies to
+the Mac solution replay controls.
+
+Live speed controls measure delivered simulation ticks against wall time.
+When a selected tier falls short over a one-second sample at steady speed,
+the controls switch to the highest lower tier supported by that sample and
+hide faster choices for the rest of the attempt. Starting a new attempt
+allows the game to measure again. Returning to 1× clears deferred fast-forward
+ticks. The shared clock and speed policy checks cover steady 25×, a limited
+device and returning to 1×.
 
 The policy check simulates sustained 25 Hz delivery on an Intel-class profile.
 Actual fast-forward speed and click-to-action latency on a 2018 Mac still need
@@ -137,6 +261,21 @@ history. An accepted edit or explicit resume starts a new timeline and releases
 held pointer input. Mobile and Apple TV retain their existing rewind behaviour.
 Device layout and physical input acceptance remain open.
 
+## HD effects on iPhone, iPad and Duo — 27 November 2026
+
+Duo and Apple GPU family 7 or newer keep full visual quality with HD effects
+enabled. Low Power Mode, RAM tier, routine heat and frame timings no longer
+remove the enhanced overlay on these devices. A memory warning or critical heat
+can still suspend the extra Metal surface temporarily. Older iOS devices retain
+adaptive effects, and Apple TV retains its existing limits. Audio pressure
+management stays independent of the visual policy.
+
+The shared iOS playfield applies the policy to Classic, supported NeoLemmix,
+Tribes and Chronicles. Cinematic explosions respect the app's Reduce Flashes
+and both the app and system Reduce Motion settings. HDR brightness still requires
+an HDR display; the cinematic explosion can render without HDR headroom.
+Policy tests cover the foldable override, overload and pressure recovery. Folded and unfolded Duo playback still requires a physical check.
+
 ## Lemmix stone controls, icons and effects — 18 November 2026
 
 Shared stone sockets now remain active with Lix characters. Home rows, gameplay
@@ -156,6 +295,13 @@ an explicit Lix choice still selects Lix music. A stale Amiga music choice switc
 to Adaptive DJ when its tracks are absent. Shared mobile playback supports the
 same catalogue when installed. This local option does not change hosted packs or
 public release approval. See [music source evidence](MusicSourceAudit.md).
+
+Adaptive DJ plays the opening score before it rotates through installed
+gameplay compositions on Mac and the shared iPhone, iPad, Duo and Apple TV
+frontend. Classic and Oh No! complete the opening theme rotation. Lemmings 2
+and Lemmings 3 use each tribe's opening score. NeoLemmix and Golden Path keep
+their assigned music routing. Track selection uses the level position across
+retries and saved runs. See [Soundtrack journey](SoundtrackJourney.md).
 
 The arm64 Mac build and strict signature check pass. Silent offscreen captures
 verify the full Home screen and compact footer targets. A focused native check
@@ -990,10 +1136,21 @@ also Classic-only across platforms.
 | --- | --- |
 | Sparkle on Mac; App Store/TestFlight on mobile and TV | Platform distribution model |
 | Mac menu bar; touch pages and keyboard discovery; TV focus/remote controls | Native input and window model. Home/End/F1 are handled by the mobile hardware-keyboard adapter despite their omission from command discovery. |
+| Owner tools in Play Insights: Option or a saved token on Mac; a long press on iPhone, iPad and Apple TV | Mac has a modifier key and saves the owner token. Touch and TV have neither. Players on every platform see only this device's counts. See [UX redesign](UXRedesign.md#mac-menus-and-owner-tools). |
 | iOS share sheets; TV token-protected LAN transfer | TV has no equivalent document/share picker. Capability still needs physical transfer acceptance. |
 | TV omits completion glow, extra cinematic/HDR surfaces and explosion cores | Explicit owner performance instruction. Keep selection and assignment feedback. |
 | Manual familiar-name entry on TV | Native contact-picker difference. Do not silently request broader contact access. |
 | Duo hinge-triggered clock versus ordinary clock routes elsewhere | Device-specific hardware trigger. The shared clock remains available through platform-appropriate entry points. |
+
+### Easy puzzles and Journey breaks
+
+Mac, iPhone, iPad, Duo and Apple TV use the same Classic pool and level identities.
+Start from Short games or take a break from the Journey pause or failure screen.
+Both queues retain independent local checkpoints. Wins enter shared source
+progress and follow the usual sync path. Break queues and set-aside choices are
+local to the device. Native L2 and L3 Journey actions on Mac share the break
+entry point for legacy queues. The Easy puzzles pool uses Classic mechanics
+and needs separate source evidence for L2, L3 and NeoLemmix puzzles.
 
 ### Progress and Leaderboards — 26 October 2026
 
@@ -1009,11 +1166,10 @@ who: World, Game Center (Mac, when available) or This device (This Mac on Mac).
 The second row picks the category: Career stars, Levels cleared or Three-star
 levels. The active player's row is highlighted. On iPhone, iPad, Duo and Apple
 TV, Game Center opens Apple's own leaderboard screen. Share my records is a
-single toggle on World. Per-level lists stay on each result screen and in Mac
-level records. They rank players by Fastest 100% first, then Fastest clear,
+single toggle on World. Per-level lists open from result Details and Mac level records. They rank players by Fastest 100% first, then Fastest clear,
 Least skills and Most saved, from direct runs only.
 
-| Platform | Progress | Leaderboards | Level list on result | Source check |
+| Platform | Progress | Leaderboards | Level list in result Details | Source check |
 | --- | --- | --- | --- | --- |
 | Mac | Records window | World, Game Center, This Mac | Yes, Classic, L2, L3 | `swift build` |
 | iPhone, iPad, Duo | Shared page | World, This device, Apple Game Center | Yes | `LevelLeaderboardResultTests`; iOS SDK compile |
@@ -1021,8 +1177,7 @@ Least skills and Most saved, from direct runs only.
 
 The current server source returns stars, cleared levels and three-star levels
 for each World career entry. Older server responses return only rank, name and
-the selected score. The clients show the other columns when the response has
-them. Live service deployment is not confirmed. Game Center is enabled in the
+the selected score. The clients show the selected score and retain the category controls. Live service deployment is not confirmed. Game Center is enabled in the
 bundled catalogue for every TestFlight and
 development-signed build. Developer ID and ad-hoc Mac builds still switch it
 off, because Apple allows Game Center only with App Store, TestFlight or
@@ -1448,36 +1603,3 @@ save recovery remain separate from these source and packaging checks.
 See the [Store submission evidence](ReleaseReadiness/ultimate-lemmix-2.4.2-build108/store-submission/README.md)
 for the final package and service state. Public redistribution of the full
 restoration collection remains uncleared.
-
-### Ultimate Lemmix on the Mac App Store
-
-The Desk Clock widget can show the next timed calendar event after the player grants Calendar access in the Mac app menu. Build 113 shows the time only. Home and About omit external donation actions.
-
-### Owned game-data downloads
-
-Ultimate Lemmix iPhone and iPad (including Duo) use an OS-managed download after
-the existing licence confirmation. The explicit 253 MB transfer allows cellular,
-expensive, and constrained connections when iOS and the carrier allow them.
-The OS can continue transferring while suspended; reopen Game Data after a
-relaunch to collect a completed transfer or reattach to an active one, before
-the existing size, SHA-256 and archive checks and foreground import. A missing
-OS task (including manual force quit) reports the interruption without silently
-starting another full transfer. Mac and any TV front-end using this downloader
-retain foreground transport; phone background lifecycle does not change TV's
-separate local-browser import. A primary timeout tries the existing alternate
-mirror once, with distinct waiting, retry, and final error states. Cellular use,
-suspension/lock and relaunch are separate physical iOS acceptance checks.
-
-For physical acceptance, use a separately authorised development-only HTTPS
-fixture: have the primary accept the connection without sending any response
-body, and the alternate serve a known checksum-verified test archive. Disable
-Wi-Fi on an opted-in phone, leave 5G enabled, and confirm that at about 20 seconds
-of foreground online waiting the **Try another server** action appears without
-automatically cancelling the primary. Check server request logs before and after
-a double tap: exactly one primary is cancelled and exactly one alternate starts.
-Run again with offline connectivity, a primary that trickles even one byte, and
-screen lock during the wait; none may trigger the action prematurely. Reopen
-Game Data after locking mid-alternate to check background completion and verified
-import. Use an isolated test build/fixture, not the production mirror or any
-uncleared assets. Apple can retry idle timeouts within the background resource
-budget; the foreground action does not change those OS retries unless pressed.

@@ -63,8 +63,8 @@ jobs:
       - name: Run iOS layout and lifecycle tests
         run: |
           result_bundle="$RUNNER_TEMP/ios-${{ matrix.device }}.xcresult"
-          zsh Scripts/check-1.3-mobile.sh --ui-test \
-            "platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}" "$result_bundle"
+          python3 Tools/Publication/ios_source_gate.py ui \
+            --device "${{ steps.simulator.outputs.id }}" --result-bundle "$result_bundle"
 
       - name: Retain iOS test diagnostics
         if: always()

@@ -154,7 +154,7 @@ import NxlvKit
                   ("whats-new", MobileInformationArt.whatsNew(version: "2.0")),
                   ("telemetry-consent", MobileInformationArt.telemetryConsent()),
                   ("insights-local", MobileInformationArt.insights(counts: insightCounts, shared: false, days: 30, sharingAvailable: false)),
-                  ("insights-shared", MobileInformationArt.insights(counts: insightCounts, shared: true, days: 7, sharingAvailable: true)),
+                  ("insights-shared", MobileInformationArt.insights(counts: insightCounts, shared: true, days: 7, sharingAvailable: true, ownerTools: true)),
                   ("insights-token", MobileInformationArt.insightsToken(length: 12)),
                   ("insights-clear", MobileInformationArt.insightsClear())]
         for index in pages.indices where ["win", "loss"].contains(pages[index].0) { pages[index].1.result = true }
@@ -358,6 +358,9 @@ import NxlvKit
             ("records-levels", MobileCareerArt.recordsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("records-direct", MobileCareerArt.recordLevelPage("direct|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", replayAvailable: false)),
             ("records-assisted", MobileCareerArt.recordLevelPage("assisted|" + level.boardID, records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", replayAvailable: false)),
+            ("profile-statistics", MobileCareerArt.profileStatisticsPage(records: records, profileID: profiles.activeID, name: "AB")),
+            ("career-awards", MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", section: .career)),
+            ("campaign-awards", MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", campaign: campaign, section: .campaign)),
             ("achievements-empty", MobileCareerArt.achievementsPage(records: empty, profileID: profiles.activeID, profileName: "AB", subtitle: "")),
             ("achievements-earned", MobileCareerArt.achievementsPage(records: records, profileID: profiles.activeID, profileName: "AB", subtitle: "", campaign: campaign)),
             ("leaderboards-loading", MobileCareerArt.leaderboards(world: true, category: .stars, rows: [], busy: true, status: "", sharing: true, gameCenter: true)),

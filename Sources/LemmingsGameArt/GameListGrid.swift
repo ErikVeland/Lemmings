@@ -16,27 +16,38 @@ public struct GameListGrid {
                 maximumColumns: Int = 3, minimumColumnWidth: CGFloat = 260,
                 gap: CGFloat = 12, rowGap: CGFloat = 8, minimumHeight: CGFloat = 52,
                 captionInset: CGFloat = 48, rowHeadings: [String: String] = [:],
+                groupStarts: Set<String> = [], alignColumns: Bool = false,
                 font: ClassicMacUserInterface.Font? = nil) {
         var targets: [GameFrontEnd.Target] = [], headings: [(String, CGRect)] = [], rows: [Row] = []
-        let starts = actions.indices.filter { $0 == 0 || rowHeadings[actions[$0].id] != nil }
+        func textInset(_ action: GameFrontEnd.Action) -> CGFloat {
+            captionInset + (action.toggleValue == nil ? 0 : 28) + (action.portrait == nil ? 0 : 36)
+        }
+        func minimumWidth(_ actions: ArraySlice<GameFrontEnd.Action>) -> CGFloat {
+            let longestWord = actions.map { action in
+                (action.visibleTitle.split(whereSeparator: \.isWhitespace).map {
+                    GameTextLayout.width(of: String($0), font: font)
+                }.max() ?? 0) + textInset(action)
+            }.max() ?? 0
+            return max(minimumColumnWidth, longestWord)
+        }
+        let sharedMinimum = alignColumns ? minimumWidth(actions[...]) : nil
+        let starts = actions.indices.filter { $0 == 0 || rowHeadings[actions[$0].id] != nil || groupStarts.contains(actions[$0].id) }
         var y: CGFloat = 0
         var maximumUsedColumns = 1
         for (sectionIndex, sectionStart) in starts.enumerated() {
             let sectionEnd = sectionIndex + 1 < starts.count ? starts[sectionIndex + 1] : actions.count
-            let longestWord = actions[sectionStart..<sectionEnd].map { action in
-                (action.visibleTitle.split(whereSeparator: \.isWhitespace).map {
-                    GameTextLayout.width(of: String($0), font: font)
-                }.max() ?? 0) + captionInset + (action.toggleValue == nil ? 0 : 28)
-            }.max() ?? 0
-            let minimum = max(minimumColumnWidth, longestWord)
+            let minimum = sharedMinimum ?? minimumWidth(actions[sectionStart..<sectionEnd])
             let fitting = max(1, Int((max(0, width) + gap) / (minimum + gap)))
-            let columns = columnsEnabled ? max(1, min(maximumColumns, sectionEnd - sectionStart, fitting)) : 1
+            let tracks = columnsEnabled ? max(1, min(maximumColumns, fitting)) : 1
+            let columns = min(tracks, sectionEnd - sectionStart)
             maximumUsedColumns = max(maximumUsedColumns, columns)
             if let title = rowHeadings[actions[sectionStart].id] {
                 y += 12
                 let height = GameTextLayout.height(title, width: width, font: font)
                 headings.append((title, CGRect(x: 0, y: y, width: width, height: height)))
                 y += height + 8
+            } else if sectionIndex > 0 {
+                y += 12
             }
             var start = sectionStart
             while start < sectionEnd {
@@ -44,9 +55,10 @@ public struct GameListGrid {
                 let remainingRows = (remaining + columns - 1) / columns
                 let count = (remaining + remainingRows - 1) / remainingRows
                 let end = start + count
-                let cell = (width - CGFloat(count - 1) * gap) / CGFloat(count)
+                let usedTracks = alignColumns ? tracks : count
+                let cell = (width - CGFloat(usedTracks - 1) * gap) / CGFloat(usedTracks)
                 let height = max(minimumHeight, actions[start..<end].map {
-                    GameTextLayout.height($0.visibleTitle, width: max(1, cell - captionInset - ($0.toggleValue == nil ? 0 : 28)), font: font) + 12
+                    GameTextLayout.height($0.visibleTitle, width: max(1, cell - textInset($0)), font: font) + 12
                 }.max() ?? minimumHeight)
                 for index in start..<end {
                     targets.append(.init(action: actions[index], frame: CGRect(x: CGFloat(index - start) * (cell + gap),

@@ -75,6 +75,7 @@ public struct ClassicMacUserInterface: Sendable {
                scalar >= Font.firstCharacter, scalar <= Font.lastCharacter {
                 return glyphs[Int(scalar.value) - Int(Font.firstCharacter.value)]
             }
+            if let flag = BitmapLatinGlyphs.flag(character) { return extendedGlyphs[flag.character] }
             return extendedGlyphs[character]
                 ?? BitmapTamilGlyphs.frame(for: String(character), cellHeight: cellHeight, baseline: baseline)
         }
@@ -85,7 +86,7 @@ public struct ClassicMacUserInterface: Sendable {
         }
 
         public func advance(forSequence sequence: String) -> Int {
-            BitmapTamilGlyphs.advance(for: sequence, cellHeight: cellHeight) ?? cellWidth
+            BitmapTamilGlyphs.advance(for: sequence, cellHeight: cellHeight) ?? cellWidth * BitmapLatinGlyphs.cells(for: sequence)
         }
 
         /**

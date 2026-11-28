@@ -22,6 +22,7 @@ public enum ReplayStorage {
 public struct ReplayEncodingProfile: Sendable {
   public var submittedFrames: Int64 = 0
   public var encodedFrames: Int64 = 0
+  public var videoSamples: Int64 = 0
   public var admissionSeconds: Double = 0
   public var encodingSeconds: Double = 0
   public var writerWaitSeconds: Double = 0
@@ -40,6 +41,9 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
   private var videoURL: URL { url.deletingPathExtension().appendingPathExtension("video.mp4") }
   private var audioURL: URL { url.deletingPathExtension().appendingPathExtension("audio.m4a") }
   private var adaptor: AVAssetWriterInputPixelBufferAdaptor?
+  private var lastVideoFrame: (image: CGImage, buffer: CVPixelBuffer)?
+  private var lastVideoTick: Int64 = -1
+  private var videoSampleCount: Int64 = 0
   private var frameCount: Int64 = 0
   private var audioFrames: Int64 = 0
   private var storedFailure: String?
@@ -64,6 +68,8 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
     return !discarded && !submissionClosed && storedFailure == nil
   }
   private let admission = DispatchSemaphore(value: 12)
+  // One high-speed catch-up batch can contain more than a hundred audio ticks.
+  private let repeatedFrameAdmission = DispatchSemaphore(value: 160)
   private let profileLock = NSLock()
   private var storedProfile = ReplayEncodingProfile()
   public var encodingProfile: ReplayEncodingProfile {
@@ -115,10 +121,13 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
   }
 
   /// Stop a stalled recording instead of blocking game input or dropping movie frames.
-  public func append(_ image: CGImage) {
+  public func append(_ image: CGImage) { append(image, reusesImage: false) }
+
+  public func append(_ image: CGImage, reusesImage: Bool) {
     guard isAcceptingFrames else { return }
+    let frameAdmission = reusesImage ? repeatedFrameAdmission : admission
     let waitingSince = ProcessInfo.processInfo.systemUptime
-    let admitted = admission.wait(timeout: .now() + admissionTimeout) == .success
+    let admitted = frameAdmission.wait(timeout: .now() + admissionTimeout) == .success
     #if PERFORMANCE_TESTS
     metricLock.lock(); admissionWait += ProcessInfo.processInfo.systemUptime - waitingSince; metricLock.unlock()
     #endif
@@ -135,7 +144,7 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
       return
     }
     queue.async { [self] in
-      defer { admission.signal() }
+      defer { frameAdmission.signal() }
       guard !finished, failure == nil else { return }
       autoreleasepool {
         let started = ProcessInfo.processInfo.systemUptime
@@ -143,11 +152,13 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
           profileLock.lock()
           storedProfile.encodingSeconds += ProcessInfo.processInfo.systemUptime - started
           storedProfile.encodedFrames = frameCount
+          storedProfile.videoSamples = videoSampleCount
           profileLock.unlock()
         }
         do {
           if writer == nil { try begin(image) }
-          try write(image)
+          if !reusesImage || lastVideoFrame?.image !== image { try writeVideo(image, at: frameCount) }
+          try writeAudioTick()
         } catch { failure = error.localizedDescription; writer?.cancelWriting() }
       }
     }
@@ -177,6 +188,17 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
         let error = ReplayMovieError.message(failure ?? L10n.text("This run has no replay frames yet."))
         Task { @MainActor in completion(.failure(error)) }
         return
+      }
+      // Anchor the last held image one tick before the end of the movie.
+      if lastVideoTick < frameCount - 1, let image = lastVideoFrame?.image {
+        do {
+          try writeVideo(image, at: frameCount - 1)
+          profileLock.lock(); storedProfile.videoSamples = videoSampleCount; profileLock.unlock()
+        } catch {
+          failure = error.localizedDescription; writer.cancelWriting()
+          Task { @MainActor in completion(.failure(.message(error.localizedDescription))) }
+          return
+        }
       }
       writer.endSession(atSourceTime: CMTime(value: frameCount * 1000, timescale: ticksPerSecond))
       video?.markAsFinished(); audioFile = nil
@@ -249,27 +271,20 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
     if let failure { throw ReplayMovieError.message(failure) }
   }
 
-  private func write(_ image: CGImage) throws {
-    guard let video, let audioFile, let adaptor, let pool = adaptor.pixelBufferPool else {
+  private func writeVideo(_ image: CGImage, at tick: Int64) throws {
+    guard let video, let adaptor, let pool = adaptor.pixelBufferPool else {
       throw ReplayMovieError.message(L10n.text("The movie encoder has no frame buffer."))
     }
     try ready(video)
-    var pixelBuffer: CVPixelBuffer?
-    guard CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pool, &pixelBuffer) == kCVReturnSuccess,
-      let pixelBuffer else { throw ReplayMovieError.message(L10n.text("The replay frame could not be allocated.")) }
-    CVPixelBufferLockBaseAddress(pixelBuffer, [])
-    guard let context = CGContext(data: CVPixelBufferGetBaseAddress(pixelBuffer), width: Int(size.width),
-      height: Int(size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer),
-      space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue) else {
-      CVPixelBufferUnlockBaseAddress(pixelBuffer, [])
-      throw ReplayMovieError.message(L10n.text("The replay frame could not be drawn."))
-    }
-    context.interpolationQuality = .none
-    context.draw(image, in: CGRect(origin: .zero, size: size))
-    CVPixelBufferUnlockBaseAddress(pixelBuffer, [])
-    guard adaptor.append(pixelBuffer, withPresentationTime: CMTime(value: frameCount * 1000, timescale: ticksPerSecond)) else {
+    let pixelBuffer = try videoBuffer(for: image, pool: pool)
+    guard adaptor.append(pixelBuffer, withPresentationTime: CMTime(value: tick * 1000, timescale: ticksPerSecond)) else {
       throw ReplayMovieError.message(writer?.error?.localizedDescription ?? L10n.text("A replay frame could not be encoded."))
     }
+    lastVideoTick = tick; videoSampleCount += 1
+  }
+
+  private func writeAudioTick() throws {
+    guard let audioFile else { throw ReplayMovieError.message(L10n.text("Replay audio could not be buffered.")) }
     let end = (frameCount + 1) * 44100 * 1000 / Int64(ticksPerSecond)
     let count = Int(end - audioFrames)
     guard let buffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(count)),
@@ -306,6 +321,24 @@ public final class ReplayMovieRecorder: @unchecked Sendable {
     }
     try audioFile.write(from: buffer)
     audioFrames = end; frameCount += 1
+  }
+
+  private func videoBuffer(for image: CGImage, pool: CVPixelBufferPool) throws -> CVPixelBuffer {
+    if let lastVideoFrame, lastVideoFrame.image === image { return lastVideoFrame.buffer }
+    var buffer: CVPixelBuffer?
+    guard CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, pool, &buffer) == kCVReturnSuccess,
+      let buffer else { throw ReplayMovieError.message(L10n.text("The replay frame could not be allocated.")) }
+    CVPixelBufferLockBaseAddress(buffer, [])
+    defer { CVPixelBufferUnlockBaseAddress(buffer, []) }
+    guard let context = CGContext(data: CVPixelBufferGetBaseAddress(buffer), width: Int(size.width),
+      height: Int(size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(buffer),
+      space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue) else {
+      throw ReplayMovieError.message(L10n.text("The replay frame could not be drawn."))
+    }
+    context.interpolationQuality = .none
+    context.draw(image, in: CGRect(origin: .zero, size: size))
+    lastVideoFrame = (image, buffer)
+    return buffer
   }
   @MainActor private static func mux(video: URL, audio: URL, destination: URL) async throws {
     let picture = AVURLAsset(url: video), sound = AVURLAsset(url: audio)

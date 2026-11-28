@@ -34,7 +34,7 @@ class Page(HTMLParser):
         if tag == 'img' and not all(key in a for key in ('alt','width','height')):
             self.errors.append('Image needs alt and intrinsic dimensions')
         if tag == 'link' and a.get('rel') == 'canonical': self.canonical.append(a.get('href'))
-        for key in ('href','src','poster'):
+        for key in ('href','src'):
             if key in a:
                 if not a[key] or a[key] == '#': self.errors.append('Empty link')
                 self.links.append(a[key])

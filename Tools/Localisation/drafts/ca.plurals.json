@@ -1,0 +1,34 @@
+{
+  "count.commands": {
+    "one": "%ld ordre • Les dreceres s’apliquen en el context indicat. Prem Esc per tancar aquesta guia.",
+    "other": "%ld ordres • Les dreceres s’apliquen en el context indicat. Prem Esc per tancar aquesta guia."
+  },
+  "count.lemmings": {
+    "one": "%ld lemming",
+    "other": "%ld lemmings"
+  },
+  "count.levels": {
+    "one": "%ld nivell",
+    "other": "%ld nivells"
+  },
+  "count.packs": {
+    "one": "%ld paquet",
+    "other": "%ld paquets"
+  },
+  "count.rescueGoal": {
+    "one": "Rescata %ld lemming i supera el nivell.",
+    "other": "Rescata %ld lemmings i supera el nivell."
+  },
+  "count.savedLemmings": {
+    "one": "Has rescatat %ld lemming",
+    "other": "Has rescatat %ld lemmings"
+  },
+  "count.secondStarGoal": {
+    "one": "Rescata %ld lemming i supera el nivell per guanyar la segona estrella.",
+    "other": "Rescata %ld lemmings i supera el nivell per guanyar la segona estrella."
+  },
+  "count.thirdStarGoal": {
+    "one": "Rescata %ld lemming i supera el nivell per guanyar la tercera estrella.",
+    "other": "Rescata %ld lemmings i supera el nivell per guanyar la tercera estrella."
+  }
+}

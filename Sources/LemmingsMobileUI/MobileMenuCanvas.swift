@@ -138,6 +138,8 @@ import LemmingsAppCore
     var previewSource: CGRect? { didSet { setNeedsDisplay() } }
     var onAction: ((String) -> Void)?
     var onHoldAction: ((String) -> Void)?
+    /// A long press here reveals owner tools. It stays unannounced, so players never meet it.
+    static let ownerToolsHoldID = "playInsights"
     var actionHelp: [String: String] = [:] {
         didSet {
             for button in targets {
@@ -154,7 +156,7 @@ import LemmingsAppCore
     private lazy var previewButton: UIButton = {
         let button = MobileFocusButton(type: .custom)
         button.accessibilityIdentifier = "menu.preview.play"
-        button.onAccessibilityFocus = { [weak self] in self?.revealAction($0) }
+        button.onAccessibilityFocus = { [weak self] in self?.focusMenuButton($0) }
         #if os(tvOS)
         button.onSelectBegan = { [weak self] in self?.tvActivation.observeSelectBegan() }
         #endif
@@ -261,13 +263,7 @@ import LemmingsAppCore
 
     override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
         super.didUpdateFocus(in: context, with: coordinator)
-        guard let button = context.nextFocusedView as? UIButton,
-              targets.contains(button) || button === previewButton else { return }
-        focusedID = button === previewButton ? displayedPage.previewAction?.id
-            : button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
-        highlighted = focusedID
-        revealAction(button)
-        setNeedsDisplay()
+        if let button = context.nextFocusedView as? UIButton { focusMenuButton(button) }
     }
     #endif
 
@@ -322,7 +318,11 @@ import LemmingsAppCore
                !page.home, page.pause == nil, !page.rows.isEmpty,
                let scroll = superview as? UIScrollView {
                 let visible = convert(CGRect(origin: scroll.contentOffset, size: measuredViewport), from: scroll)
-                if let anchor = targets.first(where: { $0.frame.width > 0 && $0.frame.intersects(visible) }) {
+                let focusedIdentifier = focusedID.map { "menu." + $0 }
+                let focused = targets.first {
+                    $0.accessibilityIdentifier == focusedIdentifier && $0.frame.intersects(visible)
+                }
+                if let anchor = focused ?? targets.first(where: { $0.frame.width > 0 && $0.frame.intersects(visible) }) {
                     pendingReflowAnchor = (anchor.accessibilityIdentifier ?? "", anchor.frame.minY - visible.minY)
                 }
             }
@@ -412,6 +412,9 @@ import LemmingsAppCore
                 scroll.setContentOffset(CGPoint(x: 0, y: min(maximum, max(0, target.frame.minY + frame.minY - anchor.offset))), animated: false)
             }
         }
+        setNeedsDisplay()
+        // A status-only canvas is represented by its own accessibility label.
+        guard !isAccessibilityElement else { return }
         var elements: [Any] = []
         let headingText = showsStaticHeading ? "" : page.title
         for (text, frame) in [(headingText, layout.heading), (page.subtitle, layout.subtitle)] + Array(zip(page.details, layout.details)) where !text.isEmpty {
@@ -473,12 +476,20 @@ import LemmingsAppCore
         } else {
             accessibilityElements = elements + (previewButton.isHidden ? [] : [previewButton]) + targets
         }
-        setNeedsDisplay()
     }
     private func rebuild() {
         pageLayout = nil
         tvActivation.reset()
         onPageChanged?()
+        if isAccessibilityElement {
+            // Keep painted controls, but do not create UIKit buttons behind the checking status.
+            targets.forEach { $0.removeFromSuperview() }
+            targets.removeAll()
+            accessibilityElements = nil
+            setNeedsLayout()
+            setNeedsDisplay()
+            return
+        }
         let page = displayedPage
         if page.televisionGrid { televisionPageIndex = page.televisionPageIndex }
         let actions = page.rows + page.orderedFooter
@@ -503,15 +514,15 @@ import LemmingsAppCore
             button.accessibilityValue = action.toggleValue.map { $0 ? L10n.text("On") : L10n.text("Off") }
             button.accessibilityTraits = action.selected ? [.button, .selected] : .button
             button.isEnabled = action.enabled
-            (button as? MobileAccessibleFocusButton)?.onAccessibilityFocus = { [weak self] in self?.revealAction($0) }
+            (button as? MobileAccessibleFocusButton)?.onAccessibilityFocus = { [weak self] in self?.focusMenuButton($0) }
             #if os(tvOS)
             if let focusButton = button as? MobileFocusButton {
                 focusButton.onSelectBegan = { [weak self] in self?.tvActivation.observeSelectBegan() }
-                focusButton.onHold = action.id.hasPrefix("player.") ? { [weak self] in
+                focusButton.onHold = action.id.hasPrefix("player.") || action.id == Self.ownerToolsHoldID ? { [weak self] in
                     guard let self, !self.requiresNeutralActivation || self.tvActivation.consume() else { return }
-                    self.onHoldAction?(action.id)
+                    if let onHoldAction = self.onHoldAction { onHoldAction(action.id) } else { self.dispatch(action.id) }
                 } : nil
-                if focusButton.onHold != nil {
+                if action.id.hasPrefix("player.") {
                     button.accessibilityHint = L10n.text("Hold to edit player")
                     button.accessibilityCustomActions = [UIAccessibilityCustomAction(name: L10n.text("Edit player")) { [weak self] _ in
                         self?.onHoldAction?(action.id); return true
@@ -533,6 +544,12 @@ import LemmingsAppCore
             button.addAction(UIAction { [weak self] _ in
                 self?.highlighted = nil; self?.setNeedsDisplay()
             }, for: [.touchUpInside, .touchCancel, .touchUpOutside])
+            #if os(iOS)
+            if action.id == Self.ownerToolsHoldID {
+                // Recognising the hold cancels the button's touch, so the tap action does not also run.
+                button.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(ownerToolsHeld(_:))))
+            }
+            #endif
             addSubview(button)
             return button
         }
@@ -542,10 +559,27 @@ import LemmingsAppCore
         setNeedsFocusUpdate()
         #endif
     }
+    #if os(iOS)
+    @objc private func ownerToolsHeld(_ recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .began, (recognizer.view as? UIControl)?.isEnabled == true else { return }
+        highlighted = nil; setNeedsDisplay()
+        // A canvas without a hold handler treats the hold as an ordinary activation.
+        if let onHoldAction { onHoldAction(Self.ownerToolsHoldID) } else { dispatch(Self.ownerToolsHoldID) }
+    }
+    #endif
     private func textElement(_ frame: CGRect) -> MobileMenuTextElement {
         let element = MobileMenuTextElement(accessibilityContainer: self)
         element.onFocus = { [weak self] in self?.revealContent(frame) }
         return element
+    }
+    private func focusMenuButton(_ button: UIButton) {
+        guard !button.isHidden, targets.contains(button) || button === previewButton else { return }
+        revealAction(button)
+        guard button.isEnabled else { return }
+        focusedID = button === previewButton ? displayedPage.previewAction?.id
+            : button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")
+        highlighted = focusedID
+        setNeedsDisplay()
     }
     private func revealAction(_ button: UIButton) {
         let id = button.accessibilityIdentifier?.replacingOccurrences(of: "menu.", with: "")

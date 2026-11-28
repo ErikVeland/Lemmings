@@ -44,5 +44,10 @@ Original versions, composer recordings and remixes retain separate soundtrack
 credits. Community format research, replay archives and fan levels continue the
 work of preserving these games.
 
-Ultimate Lemmings is an unofficial native port by Erik Veland. The original games,
-artwork and music retain their creators' ownership.
+Erik Veland 🏳️‍⚧️🇵🇸 made this unofficial native port. The creators retain ownership
+of the original games, artwork and music.
+
+## Lemmings Forums
+
+Thank you to the [Lemmings Forums](https://www.lemmingsforums.net/) community for
+the fan levels, tools, research and feedback, and for keeping these games alive.

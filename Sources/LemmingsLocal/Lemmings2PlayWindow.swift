@@ -94,7 +94,9 @@ import NxlvKit
     private var lastTime = ProcessInfo.processInfo.systemUptime
     private var accumulator = 0.0
     private var frontTicks = 0
-    private var paused = false
+    private var paused = false {
+      didSet { if paused && !oldValue { haptics.pause() } }
+    }
     private var userPausedMusic = false
     private var assignmentFocus = AssignmentFocus()
     private var gameplayKeyboard: GameplayKeyboard?
@@ -105,6 +107,7 @@ import NxlvKit
         set { speedControl.setFast(newValue) }
     }
     private var countdownWarning = LastSecondsWarning()
+    private let haptics = GameplayHaptics()
     private let dj = AdaptiveDJPlayer()
     private lazy var resultMusic = ResultMusicFade(module: music, dj: dj)
     private var needsAttemptMusic = true
@@ -447,7 +450,10 @@ import NxlvKit
         keyboard.cyclesSharedSkillLetters = false
         keyboard.overlayControls = { [weak self] in self?.canvas.accessibilityChildren() ?? [] }
         keyboard.skillNames = { [weak self] in self?.game?.configuration.skills.map(\.name) ?? [] }
-        keyboard.engineCommands = { GameplayKeyboard.playCommands(pauseKey: "Space / P", retry: true, nuke: false) }
+        keyboard.engineCommands = { [weak self] in
+            GameplayKeyboard.playCommands(pauseKey: "Space / P", retry: true, nuke: false,
+                scrollWheelZoom: self?.audioSettings.scrollWheelZoomEnabled ?? true)
+        }
         keyboard.inspectionAvailable = { [weak self] in
             guard let self else { return false }
             return self.audioSettings.inspectWhilePaused && self.screen == .playing && self.paused && !self.canvas.startCountdown.isActive
@@ -596,6 +602,15 @@ import NxlvKit
         })
         try checkGameplayQuickControl(try L2RunRecovery.stateHash(game!) == before && selected == selectedBefore && paused,
             "Lemmings 2 quick controls changed the run")
+    }
+    func testWideGameplayPanel() throws {
+        timer?.invalidate(); timer = nil
+        startLevel(); paused = true; canvas.startCountdown.cancel(); refreshGame()
+        var pressedSlots: [Int] = []
+        let previous = canvas.onPanel
+        canvas.onPanel = { slot, _, _ in pressedSlots.append(slot) }
+        defer { canvas.onPanel = previous }
+        try validateWideSequelPanel(canvas, owner: window!, name: "lemmings2", endSlot: 9, pressedSlots: { pressedSlots })
     }
     func testExtraSkillGrant() throws {
         func require(_ value: Bool, _ message: String) throws {
@@ -854,6 +869,7 @@ import NxlvKit
     @objc private func characterArtworkChanged() { canvas.refreshCharacterArtwork() }
     func stop() {
         resultMusic.retire()
+        haptics.reset()
         manualDJHandoff.cancel()
         gameplayKeyboard?.removeNavigationControl()
         saveCheckpoint(immediately: true)
@@ -865,7 +881,7 @@ import NxlvKit
         runMovie.discard(); music.stop(); dj.stop(); sounds.stop(); persist()
     }
     func setMuted(_ muted: Bool) { setAudioSettings(audioSettings, muted: muted) }
-    func suspendAudioOutput() { saveCheckpoint(immediately: true); music.suspendOutput(); dj.suspendOutput(); sounds.suspendOutput() }
+    func suspendAudioOutput() { haptics.pause(); saveCheckpoint(immediately: true); music.suspendOutput(); dj.suspendOutput(); sounds.suspendOutput() }
     func resumeAudioOutput() throws {
         try sounds.resumeOutput()
         if paused && !canvas.startCountdown.isActive && screen == .playing && game?.isComplete == false {
@@ -890,6 +906,7 @@ import NxlvKit
         speedControl.variableEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
         speedControl.ridiculousEnabled = settings.ridiculousSpeedEnabled
         canvas.reduceMotion = settings.reduceMotion
+        canvas.scrollWheelZoomEnabled = settings.scrollWheelZoomEnabled
         canvas.reduceFlashes = settings.reduceFlashes
         canvas.hdEffectsEnabled = settings.hdEffectsEnabled
         canvas.gameplayCursorStyle = settings.gameplayCursorStyle
@@ -924,7 +941,8 @@ import NxlvKit
     }
     nonisolated private static let completionCampaignCache = GameAssetCache<Lemmings2Campaign>(capacity: 2)
 
-    static func savedCompletion(root: URL, journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
+    nonisolated static func savedCompletion(root: URL, progressData: Data?,
+        journeyWins: Set<LevelCatalogueIdentity> = []) -> Int {
         let cacheKey = GameAssetCache<Lemmings2Campaign>.bundledKey(root)
         var campaign: Lemmings2Campaign
         if let cacheKey, let cached = completionCampaignCache.value(for: cacheKey) {
@@ -934,9 +952,8 @@ import NxlvKit
             campaign = decoded
             if let cacheKey { completionCampaignCache.insert(decoded, for: cacheKey) }
         }
-        let key = campaignProgressKey(root: root)
-        if let data = UserDefaults.standard.data(forKey: key),
-           let saved = try? JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: data) {
+        if let progressData,
+           let saved = try? JSONDecoder().decode(Lemmings2Campaign.Progress.self, from: progressData) {
             try? campaign.restore(saved)
         }
         return campaign.levels.indices.filter { index in
@@ -1075,11 +1092,14 @@ import NxlvKit
             let musicRoot = GameResources.directory("Music")
                 ?? root.deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("Music")
             dj.load(soundtracks: SoundtrackPlayer.djSoundtracks(at: musicRoot), catalogueRoot: musicRoot)
-            music.stop()
-            dj.startJourney(trackID: "lemmings2." + name.lowercased(), cycle: campaign.level,
+            let showcaseIndex = screen == .playing && practiceLevel == nil && learningResultActions == nil
+                ? LevelMusicSelection.lemmings2ShowcaseIndex(tribe: campaign.tribe, level: campaign.level) : nil
+            if dj.startJourney(trackID: "lemmings2." + name.lowercased(), cycle: campaign.level,
                 identity: arcadeRunID.uuidString + ":" + name.lowercased(), fallback: url,
-                includeAlternates: audioSettings.djIncludesOtherSoundtracks)
-            return
+                includeAlternates: audioSettings.djIncludesOtherSoundtracks, showcaseIndex: showcaseIndex) {
+                music.stop()
+                return
+            }
         }
         dj.stop()
         try? music.start()
@@ -1111,6 +1131,8 @@ import NxlvKit
             catch { message = L10n.text("Could not show the talisman: \(error)"); previousScreen = .map; show(.message); return }
         }
         if screen == .practice { practiceLevel = nil; game = nil; initial = nil }
+        // Results and the talisman keep the muffled track. Later screens bring their own music.
+        if [.menu, .intro, .practice, .map, .briefing, .load, .ending].contains(screen) { resultMusic.retire() }
         nukeGesture.reset()
         if screen != .playing {
             if screen != .results { nukeMood.reset() }
@@ -1317,11 +1339,12 @@ import NxlvKit
     }
 
     private func captureReplayFrame() {
-        runMovie.recorder?.setMusic(url: dj.isPlaying ? dj.currentURL : music.currentURL,
+        runMovie.setMusic(url: dj.isPlaying ? dj.currentURL : music.currentURL,
             gain: globallyMuted || audioSettings.music == .silent || music.muted ? 0 : Float(audioSettings.musicVolume))
         runMovie.capture(ReplayFrameCapture.image(size: replaySize) {
+            refreshGame()
             ReplayFrameCapture.draw(canvas, in: CGRect(origin: .zero, size: replaySize))
-        })
+        }, finalTick: game?.isComplete == true)
     }
     func suspendForReplay() -> () -> Void {
         let interruption = gameplayKeyboard?.interruptionCount
@@ -1337,9 +1360,7 @@ import NxlvKit
     private func playTribeMusic() {
         guard audioConfigured, !paused, screen == .playing, game?.isComplete == false else { return }
         needsAttemptMusic = false
-        let names = ["classic", "beach", "cavelem", "circus", "egyptian", "highland",
-                     "medieval", "outdoor", "polar", "shadow", "space", "sports"]
-        playMusic(names[level.style])
+        playMusic(LevelMusicSelection.lemmings2[level.style])
     }
     private func playFromMenu() {
         if let game, !game.isComplete,
@@ -1353,6 +1374,7 @@ import NxlvKit
         usedRewind = true; undoCount += 1
         lastFanInput = nil; lastAimInput = nil
         recoveryInputs = Array(recoveryInputs.prefix(beforeNukeInputCount))
+        haptics.seek(nuking: false, tick: beforeNuke.tick)
         game = beforeNuke; assignmentFocus.rewind(to: beforeNuke.tick); canvas.assignmentHighlight.clear(); self.beforeNuke = nil; sounds.silence(); accumulator = 0
     }
     private func activateNuke() {
@@ -1360,6 +1382,7 @@ import NxlvKit
         beforeNuke = game; nukeCount += 1
         canvas.startCountdown.cancel()
         performRecoveryInput(.nuke); paused = false; updateUserMusicPause(); fanSelected = false; accumulator = 0
+        if let game { haptics.update(nuking: game.isNuking, tick: game.tick, cues: []) }
     }
     /// N is a deliberate key press, so it needs no double-click like the panel button.
     private func toggleNukeFromKeyboard() {
@@ -1532,6 +1555,7 @@ import NxlvKit
             unreleased: game.configuration.total - game.released, required: 1, total: game.configuration.total,
             isComplete: game.isComplete, didWin: game.didWin)
         canvas.deathCountdownText = screen == .playing ? deathCounter.visible : ""
+        canvas.canUndoNuke = screen == .playing && beforeNuke != nil && !game.isComplete && !canvas.readOnlyReplay
         canvas.update(game)
         let palette = Lemmings2Panel.palette(over: game.configuration.palette, phase: frontTicks / 4)
         let skillFrame: Lemmings2SpriteFrame? = {
@@ -1559,7 +1583,9 @@ import NxlvKit
             canvas.setPanel(rendered)
         }
         canvas.toolTip = nil
-        let transport = rewindOriginState.map { L10n.text("Rewind active, \($0.tick - game.tick) ticks back. Hold full stop scrubs forward. Escape cancels.") } ?? ""
+        // Game seconds, as on the visible cue. Ticks stay out of player text.
+        let transport = rewindOriginState.flatMap { RewindCue(currentTick: game.tick, originTick: $0.tick, ticksPerSecond: Lemmings2Runtime.ticksPerSecond) }
+            .map { $0.accessibilityLabel + ". " + L10n.text("Hold full stop scrubs forward. Escape cancels.") } ?? ""
         let deathCounterAccessibility = screen == .playing ? deathCounter.accessibility : ""
         canvas.setAccessibilityLabel(L10n.text("Lemmings 2. \(SkillVocabulary.title(game.configuration.skills[selected].name)) selected. \(label). \(paused ? L10n.text("Paused.") : L10n.text("Running.")) \(game.isNuking ? L10n.text("Nuke active.") : "") \(game.released) released, \(game.saved) saved. \(deathCounterAccessibility). \(canvas.precisionStatus.accessibility). \(transport)"))
     }
@@ -1575,7 +1601,8 @@ import NxlvKit
         let now = ProcessInfo.processInfo.systemUptime
         completionGlow.advance(at: now)
         nukeMood.advanceReturn(at: now)
-        let elapsed = min(0.25, now - lastTime); lastTime = now
+        let wallElapsed = now - lastTime; lastTime = now
+        let elapsed = min(0.25, wallElapsed)
         let playing = screen == .playing && !paused && game?.isComplete == false && !GameScreen.shared.isPresented
         speedControl.update(at: now, active: screen == .playing && game?.isComplete == false && !GameScreen.shared.isPresented)
         canvas.advanceSelectionFade(at: now)
@@ -1645,23 +1672,33 @@ import NxlvKit
         let previousTick = game.tick
         // Original fast-forward performs three physics updates per displayed frame.
         accumulator += elapsed * speedControl.multiplier
-        let inputDeadline = ProcessInfo.processInfo.systemUptime + 0.012
+        runMovie.beginCaptureBatch(reuseFrames: speedControl.multiplier > 1)
+        defer { runMovie.endCaptureBatch() }
+        let inputDeadline = ProcessInfo.processInfo.systemUptime + speedControl.simulationBudget
         while accumulator >= 1 / Lemmings2Runtime.ticksPerSecond && !game.isComplete {
             accumulator -= 1 / Lemmings2Runtime.ticksPerSecond
             countdownWarning.reset(seconds: game.remainingSeconds)
             game.step()
             if countdownWarning.update(seconds: game.remainingSeconds) { sounds.play([.init(supplemental: .timerWarning)]) }
-            sounds.play(game.drainSoundEvents())
+            let requests = game.drainSoundEvents()
+            let fuse = game.isNuking ? game.lemmings.lazy.compactMap(\.bombTicks).min() : nil
+            haptics.update(nuking: game.isNuking, tick: game.tick, cues: [], sequel: requests,
+                viewport: canvas.soundViewport, secondsToBlast: fuse.map { Double($0) / Lemmings2Runtime.ticksPerSecond })
+            sounds.play(requests)
             canvas.flashExplosions(game)
-            self.game = game; refreshGame(); captureReplayFrame()
-            dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, isNuking: game.isNuking))
-            if ProcessInfo.processInfo.systemUptime >= inputDeadline { break }
+            self.game = game; captureReplayFrame()
+            if ProcessInfo.processInfo.systemUptime >= inputDeadline + runMovie.batchCompositionSeconds { break }
+        }
+        if !game.isComplete {
+            speedControl.observeThroughput(elapsed: wallElapsed, ticks: game.tick - previousTick,
+                ticksPerSecond: Lemmings2Runtime.ticksPerSecond)
         }
         guard game.tick != previousTick else {
             if frontTicks.isMultiple(of: 4) { refreshGame() }
             return
         }
         sounds.play(game.drainSoundEvents())
+        dj.updateTelemetry(.init(totalCount: game.configuration.total, savedCount: game.saved, requiredCount: 1, isNuking: game.isNuking))
         self.game = game; refreshGame(); saveCheckpoint()
         finishIfComplete(game)
     }
@@ -1830,6 +1867,7 @@ import NxlvKit
             if case .nuke = input.action { count += 1 }
         }
         usedRewind = true; paused = true; accumulator = 0; updateUserMusicPause()
+        haptics.seek(nuking: game?.isNuking == true, tick: target)
         assignmentFocus.rewind(to: target); canvas.assignmentHighlight.clear(); sounds.silence(); sounds.playRewindScrub(); playRewindMusic()
         refreshGame(); saveCheckpoint(immediately: true)
         gameplayKeyboard?.showControlTip(.rewind)
@@ -2019,6 +2057,7 @@ import NxlvKit
                 ? learningResultActions?.skip : canSkipLevel ? { [weak self] in self?.skipLevel() } : nil,
             prepareSkip: learningResultActions?.prepareSkip,
             later: learningResultActions?.later, hints: learningResultActions?.hints,
+            sideAction: learningResultActions?.takeBreak.map { (L10n.text("Take a break"), $0) },
             menu: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
     }
     private func presentPauseMenu() {
@@ -2041,6 +2080,7 @@ import NxlvKit
                 self.updateUserMusicPause(); self.refreshGame()
             }, retry: { [weak self] in self?.retryLevel() },
             hints: { [weak self] in self?.showLevelHints() }, later: learning?.later, skip: skip,
+            sideAction: learning?.takeBreak.map { (L10n.text("Take a break"), $0) },
             leave: { [weak self] in self?.gameplayKeyboard?.mainMenu?() })
         GameScreen.shared.present(page, owner: window)
     }
@@ -2264,7 +2304,7 @@ import NxlvKit
                 }
             }
             text(Lemmings2Campaign.tribeNames[Lemmings2Practice.tribes[practiceChoice]],160,168,"PRACTICE",centered:true)
-            text(practiceSkills.count == 8 ? L10n.text("Click or Return to practise") : L10n.text("Choose eight different skills"),160,186,"PRACTICE",centered:true)
+            if practiceSkills.count == 8 { text(L10n.text("Click or Return to practise"),160,186,"PRACTICE",centered:true) }
         case .map:
             picture("MAP", palette("MAP"))
             for (id, x, y) in [(2,232,59),(4,117,144),(3,288,141),(5,44,151),(6,47,104)] {
@@ -2315,7 +2355,7 @@ import NxlvKit
                 }
                 text(L10n.plural("count.savedLemmings", count: game.saved, one: "You saved %ld lemming", other: "You saved %ld lemmings"), 160, 8, "MEDALS", centered: true)
                 text(medal == .none ? L10n.text("Oh dear!") : L10n.text("\(medal.name) medal"), 220, 42, "MEDALS", centered: true)
-                front.wrappedText(game.didWin ? L10n.text("Click to continue. Your survivors will go on to the next level.")
+                front.wrappedText(game.didWin ? L10n.text("Click to continue")
                     : L10n.originalL2Text(bank("MEDALS").strings[4]), font: assets.font, palette: palette("MEDALS"), x: 135, y: 70, width: 170)
                 text(L10n.text("V Replay  S Save movie"), 160, 153, "MEDALS", centered: true)
                 text(L10n.text("Retry"), 35, 182, "MEDALS", centered: true)
@@ -2479,6 +2519,7 @@ import NxlvKit
     var hotSeatGhosts: HotSeatGhostPlayback?
     private let hotSeatGhostSprites = ReplayGhostSprites()
     var readOnlyReplay = false
+    var canUndoNuke = false { didSet { if oldValue != canUndoNuke { needsDisplay = true } } }
     let timeline = TimelinePanelControls()
     private func layoutTimeline() {
         timeline.layoutSequelFooter(in: bounds)
@@ -2512,14 +2553,16 @@ import NxlvKit
     override func accessibilityChildren() -> [Any]? {
         guard !readOnlyReplay else { return [] }
         guard let game else { return [] }
-        let names = game.configuration.skills.map { SkillVocabulary.title($0.name) } + [L10n.text("Pause"), L10n.text("End run"), L10n.text("Fan"), L10n.text("Game speed \(speedLabel)")]
+        let names = game.configuration.skills.map { SkillVocabulary.title($0.name) } + [L10n.text("Pause"),
+            canUndoNuke ? L10n.text("Undo end run") : L10n.text("End run"), L10n.text("Fan"), L10n.text("Game speed \(speedLabel)")]
         var children: [Any] = turnBadge.isHidden ? [] : [turnBadge]
         for slot in 0..<12 {
             let x = slot < 8 ? slot * 32 : 256 + (slot % 2) * 32
             let y = slot < 10 ? 160 : 180
             let height = slot < 8 ? 40 : 20
-            let frame = slot < 8 ? skillFrame(slot) : CGRect(x: panelX + CGFloat(x) * zoom,
-                y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
+            let frame = slot < 8 ? skillFrame(slot) : slot == Lemmings2Control.nuke.rawValue ? nukeRect
+                : CGRect(x: panelX + CGFloat(x) * zoom,
+                    y: origin.y + CGFloat(y) * zoom * 1.2, width: 32 * zoom, height: CGFloat(height) * zoom * 1.2)
             let label = game.supplies.indices.contains(slot)
                 ? L10n.text("\(names[slot]), \(game.supplies[slot]) remaining\((slot == selectedSkillSlot ? L10n.text(", selected") : ""))")
                 : names[slot]
@@ -2552,6 +2595,7 @@ import NxlvKit
     }
     private var precisionLens = AnimatedPrecisionZoomLens()
     private var precisionScroll = PrecisionZoomScrollGesture()
+    var scrollWheelZoomEnabled = true
     private let precisionZoomAnimation = PrecisionZoomAnimation()
     var precisionStatus = PrecisionZoomStatus() { didSet { needsDisplay = true } }
     var rewardBadgeRect: CGRect {
@@ -2594,7 +2638,9 @@ import NxlvKit
     }
     var skillGroupFrame: CGRect {
         let height = GameHUDControlGroup.desktopHeight(forWidth: bounds.width)
-        return CGRect(x: panelX, y: origin.y + 240 * zoom - height, width: 256 * zoom, height: height)
+        let left = readOnlyReplay ? panelX : bounds.minX
+        return CGRect(x: left, y: origin.y + 240 * zoom - height,
+            width: panelX + 256 * zoom - left, height: height)
     }
     private func skillFrame(_ index: Int) -> CGRect {
         let group = skillGroupFrame
@@ -2617,7 +2663,7 @@ import NxlvKit
     private var zoom: CGFloat { CGFloat(viewport.scale) }
     private var visibleWidth: CGFloat { CGFloat(viewport.width) }
     private var origin: NSPoint { NSPoint(x: 0, y: viewport.originY) }
-    private var panelX: CGFloat { CGFloat(viewport.panelX) * zoom }
+    private var panelX: CGFloat { readOnlyReplay ? CGFloat(viewport.panelX) * zoom : bounds.maxX - 320 * zoom }
 
     override func setFrameSize(_ newSize: NSSize) {
         let center = cameraX + visibleWidth / 2
@@ -3418,22 +3464,48 @@ import NxlvKit
         if let panel {
             panelBackground.setFill()
             NSRect(x: bounds.minX, y: origin.y + 192 * zoom, width: bounds.width, height: 48 * zoom).fill()
-            panel.draw(in: NSRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom),
+            let artworkFrame = CGRect(x: panelX, y: origin.y + 192 * zoom, width: 320 * zoom, height: 48 * zoom)
+            NSGraphicsContext.saveGraphicsState()
+            if !readOnlyReplay {
+                let transportX = artworkFrame.minX + 256 * zoom
+                CGRect(x: transportX, y: artworkFrame.minY, width: 64 * zoom, height: artworkFrame.height).clip()
+            }
+            panel.draw(in: artworkFrame,
                        from: .zero, operation: .sourceOver, fraction: readOnlyReplay ? 0.45 : 1, respectFlipped: true,
                        hints: [.interpolation: NSImageInterpolation.none.rawValue])
+            NSGraphicsContext.restoreGraphicsState()
             drawSkillGroup()
+            drawUndoNuke()
             SpeedPanelControls.draw(in: speedRect, label: speedLabel, active: isFastForward, arrows: variableSpeedEnabled)
         }
+    }
+    private func drawUndoNuke() {
+        guard canUndoNuke, let context = NSGraphicsContext.current?.cgContext else { return }
+        let frame = nukeRect
+        let glyph = PanelGlyph.undo
+        let fitting = glyph.fittingSize(in: frame.size)
+        guard let image = SequelArtworkPreference.enabled
+            ? glyph.macImage(fitting: fitting) : glyph.image(fitting: fitting) else { return }
+        context.saveGState()
+        defer { context.restoreGState() }
+        context.clip(to: frame)
+        GameStoneButton.draw(frame, selected: true, pixel: max(1, zoom / 2), playFace: .endRun)
+        image.draw(in: CGRect(x: floor(frame.midX - image.size.width / 2),
+            y: floor(frame.midY - image.size.height / 2), width: image.size.width, height: image.size.height),
+            from: .zero, operation: .sourceOver, fraction: 1, respectFlipped: true,
+            hints: [.interpolation: NSImageInterpolation.none.rawValue])
     }
     private func drawSkillGroup() {
         guard let context = NSGraphicsContext.current?.cgContext, let game else { return }
         NSColor.black.setFill()
-        CGRect(x: panelX, y: origin.y + 202.8 * zoom, width: 256 * zoom, height: 37.2 * zoom).fill()
+        if readOnlyReplay {
+            CGRect(x: panelX, y: origin.y + 202.8 * zoom, width: 256 * zoom, height: 37.2 * zoom).fill()
+        }
         for index in 0..<8 {
             let frame = skillFrame(index)
             GameControlGroupArt.draw(in: context, frame: frame, group: skillGroupFrame,
                 selected: index == selectedSkillSlot, face: .skill(index))
-            let count = CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 12)
+            let count = CGRect(x: frame.minX + 4, y: frame.minY + 4, width: frame.width - 8, height: 18)
             GamePixelText.draw(String(game.supplies[index]), in: count, maxScale: 2)
             if let icon = skillIcons[safe: index] ?? nil {
                 let box = CGRect(x: frame.minX + 4, y: count.maxY + 2,
@@ -3452,6 +3524,7 @@ import NxlvKit
             }
         }
     }
+    private var nukeRect: CGRect { CGRect(x: panelX + 288 * zoom, y: origin.y + 192 * zoom, width: 32 * zoom, height: 24 * zoom) }
     private var speedRect: CGRect { CGRect(x: panelX + 288 * zoom, y: origin.y + 216 * zoom, width: 32 * zoom, height: 24 * zoom) }
     private func drawBackgroundImage(_ image: NSImage, x: CGFloat, y: CGFloat) {
         drawImage(image, x: x, y: y)
@@ -3575,7 +3648,7 @@ import NxlvKit
             let slot = min(7, Int((p.x - skillGroupFrame.minX) / (skillGroupFrame.width / 8)))
             onPanel?(slot, event.clickCount, event.timestamp)
         }
-        else if let slot = Lemmings2Control.slot(x: Int(floor(x - CGFloat(viewport.panelX))), y: Int(y)), slot >= 8 {
+        else if let slot = Lemmings2Control.slot(x: Int(floor((p.x - panelX) / zoom)), y: Int(y)), slot >= 8 {
             onPanel?(slot, event.clickCount, event.timestamp)
         }
     }
@@ -3746,7 +3819,7 @@ import NxlvKit
     override func scrollWheel(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
         if gameplayRect.contains(point), game?.isComplete == false {
-            switch precisionScroll.handle(event) {
+            switch precisionScroll.handle(event, zoomEnabled: scrollWheelZoomEnabled) {
             case .zoom(let action): onPrecisionScroll?(action, point); return
             case .consumed: return
             case .pan: break

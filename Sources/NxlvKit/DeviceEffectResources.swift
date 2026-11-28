@@ -8,6 +8,7 @@ import os
 public struct DeviceEffectResources: Sendable {
     public let qualityCeiling: Int
     public let enhancedEffectsAllowed: Bool
+    public let requiresVisualEmergencyBudget: Bool
     public let maximumOverlayPixels: Int
     public let audioVoiceLimit: Int
     public let rescueVoiceLimit: Int
@@ -17,6 +18,7 @@ public struct DeviceEffectResources: Sendable {
         let tier = physicalMemory <= 2 * gib ? 0 : physicalMemory <= 4 * gib ? 1 : physicalMemory <= 8 * gib ? 2 : 3
         qualityCeiling = tier == 0 ? 0 : tier == 1 ? 1 : 2
         enhancedEffectsAllowed = tier >= 2 && processorCount > 2
+        requiresVisualEmergencyBudget = false
         // This allows for multiple buffered FP16 surfaces, masks and bloom.
         maximumOverlayPixels = [262_144, 720_000, 2_097_152, 8_388_608][tier]
         audioVoiceLimit = min(processorCount <= 2 ? 8 : 32, [8, 12, 24, 32][tier])
@@ -24,8 +26,10 @@ public struct DeviceEffectResources: Sendable {
     }
 
     private init(qualityCeiling: Int, enhancedEffectsAllowed: Bool, maximumOverlayPixels: Int,
+                 requiresVisualEmergencyBudget: Bool,
                  audioVoiceLimit: Int, rescueVoiceLimit: Int) {
         self.qualityCeiling = qualityCeiling; self.enhancedEffectsAllowed = enhancedEffectsAllowed
+        self.requiresVisualEmergencyBudget = requiresVisualEmergencyBudget
         self.maximumOverlayPixels = maximumOverlayPixels
         self.audioVoiceLimit = audioVoiceLimit; self.rescueVoiceLimit = rescueVoiceLimit
     }
@@ -36,6 +40,7 @@ public struct DeviceEffectResources: Sendable {
         return Self(qualityCeiling: min(qualityCeiling, ceiling),
                     enhancedEffectsAllowed: enhancedEffectsAllowed && !lowPower && !memoryPressure && thermal < 2,
                     maximumOverlayPixels: memoryPressure ? min(maximumOverlayPixels, 262_144) : maximumOverlayPixels,
+                    requiresVisualEmergencyBudget: memoryPressure || thermal == 3,
                     audioVoiceLimit: min(audioVoiceLimit, memoryPressure ? 6 : 32, lowPower ? 12 : 32, [32, 16, 10, 6][thermal]),
                     rescueVoiceLimit: min(rescueVoiceLimit, memoryPressure ? 2 : 64, lowPower ? 4 : 64, [64, 8, 4, 2][thermal]))
     }
@@ -44,6 +49,7 @@ public struct DeviceEffectResources: Sendable {
         let quality = max(0, min(2, quality))
         return Self(qualityCeiling: qualityCeiling, enhancedEffectsAllowed: enhancedEffectsAllowed,
                     maximumOverlayPixels: maximumOverlayPixels,
+                    requiresVisualEmergencyBudget: requiresVisualEmergencyBudget,
                     audioVoiceLimit: min(audioVoiceLimit, [6, 12, 32][quality]),
                     rescueVoiceLimit: min(rescueVoiceLimit, [2, 8, 64][quality]))
     }

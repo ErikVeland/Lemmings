@@ -5,6 +5,38 @@ import NxlvKit
 @testable import LemmingsMobileCore
 
 @MainActor struct MobileCollectionsMigrationTests {
+    @Test func starterPlaylistsKeepOneSourceAndPreserveOtherSessions() throws {
+        let storage = try AppStorage.temporary(named: "starter-playlists")
+        defer { storage.removeTemporaryFiles() }
+        let mobile = MobileStorage(directory: storage.applicationSupport.appendingPathComponent("Mobile/eri"))
+        let bridge = try MobileCollectionsBridge(profileID: "eri", appStorage: storage, mobileStorage: mobile)
+        let route = try #require(StarterPlaylistCatalogue.routes.first)
+        let entries = (1...3).map { MobileFavourites.Entry(pack: "release/lemmings", level: "Fun/\($0)", sourceFingerprint: "content") }
+        let list = MobilePlaylist(id: route.id, name: route.title, entries: entries)
+        var solo = bridge.playlists(hotSeatID: nil)
+        let created = solo.create(name: "My levels", entries: entries)
+        let personalID = try #require(created)
+        let startedPersonal = solo.startRun(personalID, shuffle: true, seed: 53)
+        let personal = try #require(startedPersonal)
+        try bridge.save(favourites: .init(), recents: .init(), playlists: solo)
+        var shared = bridge.playlists(hotSeatID: "family")
+        let startedFirst = shared.startStarterRun(list)
+        let first = try #require(startedFirst)
+        try bridge.save(favourites: .init(), recents: .init(), playlists: shared, hotSeatID: "family")
+        let startedSecond = shared.startStarterRun(list)
+        let second = try #require(startedSecond)
+        shared.advance(to: 1)
+        try bridge.save(favourites: .init(), recents: .init(), playlists: shared, hotSeatID: "family")
+        let reopened = try MobileCollectionsBridge(profileID: "eri", appStorage: storage, mobileStorage: mobile)
+        let resumed = try #require(reopened.playlists(hotSeatID: "family").run)
+        #expect(resumed.id == second.id && resumed.id != first.id)
+        #expect(resumed.entries == entries && resumed.position == 1)
+        #expect(resumed.entries.map(\.sourceFingerprint) == entries.map(\.sourceFingerprint))
+        #expect(reopened.playlists(hotSeatID: nil).run?.id == personal.id)
+        #expect(reopened.store.resumableRun(id: resumed.id)?.run.pool.id == route.poolID)
+        #expect(reopened.playlists.playlists.map(\.id) == [personalID, route.id])
+    }
+
     @Test func restartingTheSamePlaylistKeepsAnOlderCheckpointSeparate() throws {
         let storage = try AppStorage.temporary(named: "playlist-checkpoint-identity")
         defer { storage.removeTemporaryFiles() }

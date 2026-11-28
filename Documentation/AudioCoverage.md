@@ -6,10 +6,13 @@ the player's action audible and keep the game's humour. Musical settling must
 preserve the joke. Mechanical checks stay muted; listening needs a separate
 explicit request.
 
-The level owns its assigned composition. The Adaptive DJ selects its version
-from the campaign position. Reaching the rescue target permits one lift to a
-documented remix or composer recording of that same tune. At the result screen
-the outgoing track fades over 0.6 seconds and stops on both wins and losses.
+Adaptive DJ plays the assigned themes through the opening score, then rotates
+through installed gameplay compositions as the campaign advances. Reaching the
+rescue target permits one lift to a remix or composer recording of the current
+tune. At the result screen
+the outgoing track moves into the next room over 0.6 seconds on both wins and
+losses. It plays on at about −9 dB through the nuke low-pass and stops when the
+player leaves the result.
 With alternate soundtracks disabled or no suitable version installed, the
 current theme continues during play. Danger, release rate, nuking and elapsed time do not
 replace it. See [Soundtrack journey](SoundtrackJourney.md) for the selection and
@@ -261,9 +264,9 @@ No audible playback test was run.
 | Preview, fresh countdown and Hot Seat Ready | No new level track. The incoming attempt waits for live play. |
 | Live attempt | The level assignment for this attempt, including its selected soundtrack. |
 | Pause and resume | The same attempt retains its existing pause transport. |
-| Win or loss | The outgoing music decks fade once over 0.6 seconds, then stop. Result notes and rescue effects keep their own gain. |
+| Win or loss | The outgoing music decks move once over 0.6 seconds to 0.35 gain and a 0.7 nuke-filter amount, then hold. The stronger of the nuke and result filters applies. Result notes and rescue effects keep their own gain and are not filtered. |
 | Retry or next level | Retire any result fade before handing the decks to the next attempt. |
-| Back during a fade | Retire the outgoing music before selecting the destination theme. |
+| Leaving the result | Stop the muffled track and restore gain and filter before the destination selects its music. Native L2 does this on the map, briefing and menu screens and keeps the track through the talisman. |
 
 iOS and tvOS rebuild the fade with the playback engines after a media-services reset. The next completed attempt fades the replacement engines.
 

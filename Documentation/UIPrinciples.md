@@ -57,6 +57,38 @@ normally takes priority over orange. When Build targeting favours a current buil
 keep that builder selected until it finishes. Show its actual eligibility and do
 not queue an early click. Honour the reduced-flash setting.
 
+Undo nuke uses a continuous left-facing arrow from `PanelGlyphArt`. Fit it
+at whole-pixel scale inside 70% of the control’s shorter side, after allowing
+for Duo corner clearance. Keep the full input target and state outline.
+Native Mac Lemmings 2 shows the arrow while its pre-nuke snapshot is available.
+
+## Menu layout
+
+Keep related actions together and order them by the task they serve. Use
+consistent button widths across peer groups. Leave a larger gap between
+groups and keep Back close to the actions it leaves. Size short action
+panels to their content. Leave room for long labels and scroll long lists.
+Leave brick trim off Settings and short action panels.
+
+Keep button labels on one line across the UI. Shorten the wording or move
+supporting information to the surrounding view before adding a line. Omit
+optional details that do not fit. If two lines are necessary, group the action
+and its supporting text with two colours. Keep the full accessible name.
+
+Mac Home gives the default action a full-width stone button above two equal rows
+of destinations. Play shows the default route, the games, other routes and
+navigation in that order. Make the default action taller than peer text buttons.
+Use a green caption and an arrow for the default, an underline for selection
+and a white outline for focus.
+Use 2× bitmap lettering and stone controls when the window has room. Keep Home
+in view and let longer Play listings scroll.
+
+Settings puts Gameplay, Controls and Accessibility together. Display,
+Artwork and Audio form a second group. Privacy sits with the available
+app tools. On Mac, these groups sit beside the active pane, with Back
+below them. On touch and TV, the category index and tab strip use the
+same order.
+
 ## Typography
 
 Ultimate Lemmix uses its own Ultimate Lemmix logo, based on the existing project
@@ -254,12 +286,16 @@ turns. Present the next Hot Seat player’s Ready handover only after loading.
 
 ## Solution replays and curated lessons
 
-Solution replays fill the current game window, with a compact stone control bar.
-Use the shared 1×, 2×, 3×, 5× and 10× speed model, including held F and Shift.
-Keep pause, single-step and rewind separate from the live attempt. Home and Goal,
-unassigned-lemming cycling, last-assignment tracking, drag/scroll panning and
-2×/4× zoom affect only the replay camera. Manual camera movement cancels automatic
-following. Zoom has no gameplay charge or saved-profile cost.
+Mac solution replays use one compact stone bar for Play, Pause, Replay, move
+jumps, the timeline and speed. Gold diamonds mark successful skill uses below
+the timeline track. The scrubber thumb leaves them visible.
+Seeking holds the selected frame. Use the shared 1×, 2×, 3×, 5× and 10× speed
+model, including held F and Shift. Options contains camera controls, a one-second
+rewind and single-step. Home and Goal, unassigned-lemming cycling, last-assignment
+tracking, drag/scroll panning and 2×/4× zoom affect only the replay camera. Manual
+camera movement cancels automatic following. Zoom has no gameplay charge or
+saved-profile cost. Your Game returns to the paused attempt. Main Menu remains
+available from Options. Size the skill panel to its current entries.
 These controls apply to simulated Classic solution replays. Recorded movies from
 Classic, L2 and L3 contain their original camera view and cannot track individual
 lemmings. A simulation replay format for the sequels remains separate work.

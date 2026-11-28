@@ -8,13 +8,10 @@ import os
 from pathlib import Path, PurePosixPath
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "Tools/AlternativeAssets"))
-import fan_catalogue
-
 MANIFEST = "ultimate-lemmix-mobile-resources.json"
 RECEIPT = "ultimate-lemmix-resource-receipt.json"
 FOLDERS = {"AlternativeAssets", "Fonts", "Music", "Licences", "Provenance", "Integration",
-           "Localization.bundle", "About", "GameCenter", "Hints", "Progression", "Trolley", "Ports", "MenuArtwork"} | fan_catalogue.FOLDERS
+           "Localization.bundle", "About", "GameCenter", "Hints", "Progression", "Trolley", "Ports", "MenuArtwork"}
 WIDGET_FOLDERS = {"AlternativeAssets", "Fonts", "Licences", "Provenance"}
 
 
@@ -58,11 +55,14 @@ def main():
     if args.destination.name not in {"UltimateLemmixIOS.app", "UltimateLemmixTVOS.app", "DeskClockWidget.appex"}:
         raise ValueError("Copy resources only into the separate Ultimate Lemmix mobile products.")
     manifest = json.loads((args.source / MANIFEST).read_bytes())
-    if manifest.get("kind") != "ultimate-lemmix-full-game-mobile-resources" or manifest.get("schemaVersion") != 1:
+    fixture = manifest.get("kind") == "ultimate-lemmix-ios-source-fixture"
+    if fixture and (os.environ.get("IOS_SOURCE_GATE_ONLY") != "1" or os.environ.get("CODE_SIGNING_ALLOWED") != "NO"
+                    or os.environ.get("ULTIMATE_LEMMIX_RELEASE_CHECKS") == "1"
+                    or args.destination.name == "UltimateLemmixTVOS.app"):
+        raise ValueError("The iOS source fixture requires an unsigned iOS source check.")
+    if (not fixture and manifest.get("kind") != "ultimate-lemmix-full-game-mobile-resources") or manifest.get("schemaVersion") != 1:
         raise ValueError("The full-game mobile resource manifest is invalid.")
     rows = manifest["files"]
-    if os.environ.get("ULTIMATE_LEMMIX_RELEASE_CHECKS") == "1" or any(row["path"].split("/", 1)[0] in fan_catalogue.FOLDERS for row in rows):
-        fan_catalogue.verify_manifest(rows)
     expected = {row["path"] for row in rows}
     actual = set()
     for path in args.source.rglob("*"):
@@ -89,7 +89,7 @@ def main():
     old = {row["path"]: row for row in previous}
     for row in previous:
         read_checked(args.destination, row)
-    for prohibited in ("MacArtwork", "AmigaArtwork", "BetaGameData"):
+    for prohibited in ("MacArtwork", "AmigaArtwork", "NeoLemmix", "LevelPacks", "BetaGameData"):
         if (args.destination / prohibited).exists():
             raise ValueError("The product contains resources outside the clean profile.")
     for family in FOLDERS:
@@ -109,7 +109,8 @@ def main():
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(verified[row["path"]])
     receipt.write_text(json.dumps({"schemaVersion": 1, "scope": args.scope, "files": selected}, indent=2, sort_keys=True) + "\n")
-    print(f"Copied {len(selected)} verified full-game {args.scope} resources.")
+    profile = "source fixture" if fixture else "full-game"
+    print(f"Copied {len(selected)} verified {profile} {args.scope} resources.")
 
 
 if __name__ == "__main__":

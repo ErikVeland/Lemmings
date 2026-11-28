@@ -1,172 +1,50 @@
 {
   "captures": [
     {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/journey.png",
-      "sha256": "240c396c197c882877176e973ac45af0e971d31ebe62cc6d81fe5b0f4f17bd51",
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/submission/Starter.png",
+      "sha256": "94a1ea6f5dd0b23df747010c4dc2685a8d9662a222c7f68e9e4afa36d5edc9de",
       "outputs": [
-        "journey-full.webp",
-        "journey-800.webp",
-        "journey-800.jpg",
-        "journey-1600.webp",
-        "journey-1600.jpg"
+        "starter-800.webp",
+        "starter-800.jpg",
+        "starter-1600.webp",
+        "starter-1600.jpg",
+        "starter-2560.webp",
+        "starter-2560.jpg"
       ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Resume Journey on Mac. Your route is waiting on Home."
+      "treatment": "Full actual capture; proportional resize and format conversion only."
     },
     {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/community.png",
-      "sha256": "590081abc27359c332deb324bf153870750d3da7150c55c8828fffb185963d33",
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/presentation/submission/Home.png",
+      "sha256": "4b7c36b924947838b2d1ab270486e0f676b7ed428088df8856fbad790f252ba3",
       "outputs": [
-        "community-full.webp",
-        "community-800.webp",
-        "community-800.jpg",
-        "community-1600.webp",
-        "community-1600.jpg"
+        "home-800.webp",
+        "home-800.jpg",
+        "home-1600.webp",
+        "home-1600.jpg"
       ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Tower Of Training by IchoTolot. Basic Training 1 in the NeoLemmix Introduction Pack, on Mac."
+      "treatment": "Full actual capture; proportional resize and format conversion only."
     },
     {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/mac.webp",
-      "sha256": "790e0c41705dd67808fa42c232b33eeeb1405cc35fae4dcb1cc750d88f181f80",
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/iPhone-Home.png",
+      "sha256": "2cd99d62ae8f11bb5411b67ac859be45ff99452eca2c24c8ff9a1eb8115e78e7",
       "outputs": [
-        "mac-full.webp",
-        "mac-800.webp",
-        "mac-800.jpg",
-        "mac-1600.webp",
-        "mac-1600.jpg"
-      ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Down the cliff, level four of geooPk0. A detonation in the Mac game, rendered in HDR and standard range."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/mac-hdr.avif",
-      "sha256": "2829226dd4c97875ca1b91c7b3bd0ae10f5b354daa8d5039b87dfb85a3dc056e",
-      "outputs": [
-        "mac-hdr.avif"
-      ],
-      "treatment": "Build 110 Metal gameplay effect rendered at 4\u00d7 headroom over its matching native HUD capture. Rec.2020/PQ AVIF. Corresponding SDR render at 1\u00d7. Decoded peak 405 nits at 203-nit reference white."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/nuke.webp",
-      "sha256": "83b9d113989962c272d3fc2acdf92a909911ad6b0a262148c7b0186cfb174dd0",
-      "outputs": [
-        "nuke-full.webp",
-        "nuke-800.webp",
-        "nuke-800.jpg",
-        "nuke-1600.webp",
-        "nuke-1600.jpg"
-      ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "First Steps on Mac. Five walkers, five detonations, one press of Nuke."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/nuke-hdr.avif",
-      "sha256": "0b024dd7aa7dd41c68b8a1d614347bf8545b0edab391ac66a20b2d38c33290d6",
-      "outputs": [
-        "nuke-hdr.avif"
-      ],
-      "treatment": "Build 110 Metal gameplay effect rendered at 4\u00d7 headroom over its matching native HUD capture. Rec.2020/PQ AVIF. Corresponding SDR render at 1\u00d7. Decoded peak 698 nits at 203-nit reference white."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/tabletop.png",
-      "sha256": "2133727375ceccaa85b7bfee9ef1e256a0d489bdc98bbcf7e9e245438b2312f3",
-      "outputs": [
-        "tabletop-full.webp",
-        "tabletop-480.webp",
-        "tabletop-480.jpg",
-        "tabletop-834.webp",
-        "tabletop-834.jpg"
-      ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Tabletop \u00b7 First Steps. Four walkers are still on the bricks. The lower pane holds the controls."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/book.png",
-      "sha256": "09154bbfc6f72f2f3f4b6f8f3b9bf6a24475c6271d5d3043dc266ec93c4d3369",
-      "outputs": [
-        "book-full.webp",
-        "book-640.webp",
-        "book-640.jpg",
-        "book-1194.webp",
-        "book-1194.jpg"
-      ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Book \u00b7 All six made it home. Read the First Steps result on one side of the fold and the achievements on the other."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/cliff.png",
-      "sha256": "1aafea892b40989b8f17955bdf36762571d938cc287c7b2ef27b667fca37d609",
-      "outputs": [
-        "cliff-full.webp",
-        "cliff-640.webp",
-        "cliff-640.jpg",
-        "cliff-1280.webp",
-        "cliff-1280.jpg"
-      ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Palace o/t once-hacked Lemmix \u00b7 geooPk1. A walker falls between the fortress towers. Mac, with imported Classic artwork."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/water.png",
-      "sha256": "b021bf7f27eb8ccc3455a79442f2cc1cc7443b9cec67c018ca209741dc6cc6fc",
-      "outputs": [
-        "water-full.webp",
-        "water-640.webp",
-        "water-640.jpg",
-        "water-1280.webp",
-        "water-1280.jpg"
-      ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Follow Me \u00b7 geooPk1. The lead walker is drowning. The others are still following. Mac, with Lix artwork."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/duo-cover.png",
-      "sha256": "375b5c79c845c6eb2b0a217767568ea199c22c95b3c1c830b95ba81cc95f8817",
-      "outputs": [
-        "duo-cover-full.webp"
-      ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Build 110 in Tent Pose on the Duo simulator, cover display, 52-degree hinge."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/phone.png",
-      "sha256": "a098d2f7fb2e63c9ec6bdfda32856a951a661852210c96724759a7f90f336d08",
-      "outputs": [
-        "phone-full.webp",
         "phone-402.webp",
         "phone-402.jpg",
         "phone-804.webp",
         "phone-804.jpg"
       ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "First Steps on iPhone. The entrance countdown, overview and touch controls in the iPhone 17 Pro simulator."
+      "treatment": "Full actual capture; proportional resize and format conversion only."
     },
     {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/tablet.png",
-      "sha256": "a6eea6957308f11820e209ca9d6e791e4c7eaf7992ae90909e85cced3edc2e8a",
+      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-Store-20261118/simulator-captures/submission/AppleTV-Home.png",
+      "sha256": "8354cd368edbb72f556be058721cc79c12c99096167c40e0d770bd4764bdf29d",
       "outputs": [
-        "tablet-full.webp",
-        "tablet-800.webp",
-        "tablet-800.jpg",
-        "tablet-1600.webp",
-        "tablet-1600.jpg"
-      ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "In the cavern... \u00b7 Mikepak00. The build 110 game renderer draws the 11-inch iPad layout with imported DOS artwork."
-    },
-    {
-      "source": "/Volumes/Games/CodexBuilds/UltimateLemmix-WebCapture-110/Selected/tv.png",
-      "sha256": "9642b4745ac8c2350655f2f41300a1fd0394c9334f664ad92bdc07436f289765",
-      "outputs": [
-        "tv-full.webp",
         "tv-960.webp",
         "tv-960.jpg",
         "tv-1920.webp",
         "tv-1920.jpg"
       ],
-      "treatment": "Full sRGB capture in lossless WebP, plus proportional SDR previews.",
-      "caption": "Apple TV Home in build 110. The 4K simulator shows Start Journey, the campaign library and the import controls."
+      "treatment": "Full actual capture; proportional resize and format conversion only."
     },
     {
       "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/MenuArtwork/ultimate-lemmix.png",
@@ -186,14 +64,12 @@
       "treatment": "Proportional responsive conversion of the current logo. No redrawing."
     },
     {
-      "source": "/Users/veland/UltimateLemmix/Resources/UltimateLemmix/AppIcon/UltimateLemmix.png",
-      "sha256": "34fd8da3c4b1d2707134d88301b556a50046dd9136de35959ad234865d78e8ea",
+      "source": "/Users/veland/UltimateLemmix/Apps/UltimateLemmixIOS/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "sha256": "f852c3d872d85822107f89b2db3b10770132c6fa0800261b909f9946f77af1df",
       "outputs": [
-        "favicon.png",
-        "apple-touch-icon.png",
-        "app-icon.png"
+        "favicon.png"
       ],
-      "treatment": "Resized from the approved Ultimate Lemmix app icon."
+      "treatment": "Nearest-neighbour resize of clean Store icon."
     },
     {
       "source": "/Users/veland/UltimateLemmix/.build/approved-alternative-resources/AlternativeAssets/Lix/assets/data/images/lixsprites.png",
@@ -205,43 +81,6 @@
       "treatment": "Extracted published walker frames using pinned metadata and the existing black/grid transparency keys. No redrawing."
     }
   ],
-  "duoScenes": {
-    "renderer": "Website/render_duo.py",
-    "artwork": "Illustrated graphite foldable in three poses. The interior screens use native build 110 Duo simulator captures at a 100\u00b0 hinge, with the app\u2019s reserved division and active display verified. The tent poster uses the native Duo cover screenshot at 52\u00b0 and the film projects the game clock demonstration onto that outer display.",
-    "outputs": [
-      "duo-book-scene.webp",
-      "duo-tabletop-scene.webp",
-      "duo-tent-scene.webp",
-      "duo-tent-scene.mp4"
-    ]
-  },
-  "ravine": {
-    "output": "forest-ravine.webp",
-    "direction": "A broken bridge above a dark pool. Four walkers approach the cliff while one Lix bobs in the current. Illustrated woodland scenery."
-  },
-  "music": {
-    "output": "forest-music.webp",
-    "tool": "Built-in image generation",
-    "direction": "Keep the carved ocarina and its acorn bell on the mossy stump. On the far bank, a Blocker holds out both arms, a Bomber has a white 2 overhead, and a Builder lays a brick step."
-  },
-  "miner": {
-    "output": "forest-miner.webp",
-    "tool": "Built-in image generation",
-    "direction": "Replace the satchel with a blond Lix miner striking the mossy ledge with a pickaxe. Keep the miner in focus. Three distant Floaters descend under softly blurred yellow umbrellas."
-  },
-  "detonator": {
-    "output": "forest-detonator.webp",
-    "tool": "Built-in image generation",
-    "direction": "One cheerful blond Lix considers an oversized red plunger. Two others follow a sign towards a missing bridge. Cold spruce-blue shadows, a dusky plum sky, and a copper rim light in the mossy forest."
-  },
-  "illustration": "Project artwork generated for this site from the approved Lix icon and woodland illustration. The creek, burrow, woodland objects, four material textures and two moss-covered button sprites are illustrations. Gameplay images use the captures listed above.",
-  "clock": {
-    "outputs": [
-      "duo-desk-clock.mp4",
-      "duo-desk-clock.webp"
-    ],
-    "source": "Build 110 GameDeskClockArt.drawFullScreen and DeskClockSimulation, signed Mac app resources. Simulated 14:59 to 15:00 with a fictional Tea break event. 1008 by 692, 27 seconds, 15 frames per second."
-  },
-  "social": "The woodland illustration with the approved app icon and wordmark.",
+  "social": "Authored composition using the unchanged product logo and full Mac starter capture.",
   "font": "Archivo, SIL Open Font License; reused from the existing GenErik DJ website."
 }

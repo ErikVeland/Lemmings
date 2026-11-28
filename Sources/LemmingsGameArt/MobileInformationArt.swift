@@ -14,7 +14,7 @@ public enum MobileInformationArt {
     public static func whatsNew(version: String) -> GameFrontEnd.Page {
         var page = GameFrontEnd.Page(title: L10n.text("What's new in \(version)"),
               subtitle: GameReleaseCopy.invitation,
-              details: GameReleaseCopy.sections.map { $0.1 } + [GameReleaseCopy.compatibility],
+              details: GameReleaseCopy.sections.map { $0.1 },
               footer: [.init("welcomeContinue", L10n.text("Continue"), primary: true)])
         page.backActionID = "welcomeContinue"
         page.reading = true
@@ -45,16 +45,24 @@ public enum MobileInformationArt {
     }
     public static func insights(counts: [String: Int], shared: Bool, days: Int,
                                 sharingAvailable: Bool, loading: Bool = false, notice: String = "",
-                                backID: String = "settingsGroup.privacy") -> GameFrontEnd.Page {
+                                backID: String = "settingsGroup.privacy", ownerTools: Bool = false) -> GameFrontEnd.Page {
         let names = [("starts", L10n.text("Level starts")), ("wins", L10n.text("Wins")), ("fails", L10n.text("Fails")),
                      ("abandoned", L10n.text("Unfinished")), ("saved", L10n.text("Lemmings saved")),
                      ("solo", L10n.text("Solo starts")), ("hotSeat", L10n.text("Hot Seat starts")),
                      ("music", L10n.text("All music chosen")), ("downloads", L10n.text("Music downloaded"))]
         let installs = shared ? counts["installs"].map(String.init) ?? "N/A" : "N/A"
-        let rows: [GameFrontEnd.Action] = [.init("count.installs", L10n.text("Opted-in installs (all-time): \(installs)"), enabled: false)]
-            + names.map { key, title in .init("count." + key, "\(title): \(counts[key, default: 0])", enabled: false) }
-        return .init(title: L10n.text("Play Insights"), subtitle: !notice.isEmpty ? notice : loading ? L10n.text("Loading...") :
-            shared ? L10n.text("Shared: \(days) days") : L10n.text("This device"), rows: rows,
+        let counts: [GameFrontEnd.Action] = names.map { key, title in
+            .init("count." + key, "\(title): \(counts[key, default: 0])", enabled: false) }
+        let subtitle = !notice.isEmpty ? notice : loading ? L10n.text("Loading...") :
+            shared ? L10n.text("Shared: \(days) days") : L10n.text("This device")
+        // Shared counts and the access token are owner tools. Players see this device's counts only.
+        guard ownerTools else {
+            return .init(title: L10n.text("Play Insights"), subtitle: subtitle, rows: counts,
+                footer: [.init("insightsClear", L10n.text("Clear local counts")), .init(backID, L10n.text("Back"))])
+        }
+        let rows = [GameFrontEnd.Action("count.installs", L10n.text("Opted-in installs (all-time): \(installs)"), enabled: false)]
+            + counts
+        return .init(title: L10n.text("Play Insights"), subtitle: subtitle, rows: rows,
             footer: [.init("insightsLocal", L10n.text("This device"), selected: !shared),
                      .init("insightsDays", L10n.text("Last \(days) days"), enabled: sharingAvailable),
                      .init("insightsShared", L10n.text("Load shared"), enabled: sharingAvailable && !loading),

@@ -30,7 +30,7 @@ import NxlvKit
     }
 
     private static func glyphScale(_ size: SkillCursorIconSize) -> CGFloat {
-        CGFloat((size == .none ? SkillCursorIconSize.one : size).multiplier)
+        CGFloat((size == .none ? SkillCursorIconSize.one : size).multiplier) * 2
     }
     private static var displayPixel: CGFloat {
         let deviceScale = abs(NSGraphicsContext.current?.cgContext.convertToDeviceSpace(

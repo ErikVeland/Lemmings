@@ -171,26 +171,42 @@ extension AppDelegate {
                 menu.items.flatMap { item in [item] + (item.submenu.map(allItems) ?? []) }
             }
             let nativeItems = allItems(menu)
-            for title in ["Settings…", "Player Profiles…", "Hot Seat…", "Level Records…", "Play Insights…",
-                          "Replay Last Game", "Game Library", "Add Game…", "Level Select…", "Fan Levels…",
-                          "Add Fan Level Folder…", "Add NeoLemmix Packs…", "Open Level File…"] {
+            for title in ["Settings…", "Profile…", "Players", "Records…", "Achievements…", "Statistics",
+                          "Cloud Saves…", "Play Insights…", "Hot Seat…", "Community", "Replay Last Game",
+                          "Main menu", "Resume Saved Run…", "Add Game…", "Level Select…", "Fan Levels…",
+                          "Add Fan Level Folder…", "Add NeoLemmix Packs…", "Open Level File…", "Open Replay Movie…"] {
                 guard let item = nativeItems.first(where: { $0.title == title }), let action = item.action else {
                     throw PersonalPreviewFailure(message: "The native menu lost " + title)
                 }
                 try previewCheck(item.target === self && responds(to: action),
                                  "The native menu action is disconnected: " + title)
             }
-            try previewCheck(["File", "View", "Audio", "Help"].allSatisfy { title in
+            try previewCheck(["File", "Play", "Profile", "View", "Audio", "Help"].allSatisfy { title in
                 menu.items.contains { $0.submenu?.title == title }
             }, "The native menu hierarchy is incomplete")
+            // The app menu keeps app-level commands only. Destinations live in Play and Profile.
+            let appTitles = (menu.items.first?.submenu?.items ?? []).filter { !$0.isSeparatorItem }.map(\.title)
+            try previewCheck(appTitles.count == 4 && appTitles.contains("Settings…") && appTitles.contains("Check for Updates…"),
+                             "The app menu holds destinations: \(appTitles)")
+            // No two visible items may share a chord. AppKit sends a shared chord to the first item only.
+            var chords: [String: String] = [:]
+            for item in nativeItems where !item.keyEquivalent.isEmpty && !item.isAlternate {
+                let mask = item.keyEquivalentModifierMask.intersection([.command, .shift, .option, .control])
+                let shifted = item.keyEquivalent != item.keyEquivalent.lowercased()
+                let chord = "\(mask.union(shifted ? .shift : []).rawValue)-\(item.keyEquivalent.lowercased())"
+                if let other = chords[chord] {
+                    throw PersonalPreviewFailure(message: "\(item.title) shares its shortcut with \(other)")
+                }
+                chords[chord] = item.title
+            }
             let families = homeMenuItems().compactMap { item -> HomeContentFamily? in
                 if case let .browse(family) = item.action { return family }; return nil
             }
             try previewCheck(families == HomeContentFamily.allCases,
                              "The clean-content home lost an existing game family")
-            try previewCheck(homeContentRow(.classic).contains("/3"),
+            try previewCheck(homeContentStatus(.classic)?.contains("/3") == true,
                              "The Classic home family does not count the three generated starter levels")
-            try previewCheck(isClean || homeContentRow(.fan).contains(String(expectedCount)),
+            try previewCheck(isClean || fanHomeStatus().contains(String(expectedCount)),
                              "The fan home family does not count the selected community corpus")
             _ = try previewCapture(window.contentView!, name: "personal-restored-home-window")
             func event(_ key: String, code: UInt16, modifiers: NSEvent.ModifierFlags,
@@ -241,7 +257,13 @@ extension AppDelegate {
                              "Settings init/update discarded the Original cursor choice")
             _ = try previewCapture(window.contentView!, name: "personal-native-menu-settings-window")
             GameScreen.shared.dismissAll()
-            for (key, code, expected) in [("p", UInt16(35), ArcadeView.Mode.profiles), ("b", UInt16(11), .records)] {
+            try previewCheck(menu.performKeyEquivalent(with: event("p", code: 35, modifiers: [.command, .shift], in: window)),
+                             "Shift-Command-P was not handled")
+            try previewCheck(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Profile",
+                             "Shift-Command-P did not open the Profile hub")
+            _ = try previewCapture(window.contentView!, name: "personal-native-menu-p-window")
+            GameScreen.shared.dismissAll()
+            for (key, code, expected) in [("b", UInt16(11), ArcadeView.Mode.records)] {
                 try previewCheck(menu.performKeyEquivalent(with: event(key, code: code, modifiers: [.command, .shift], in: window)),
                                  "A native player/history shortcut was not handled")
                 try previewCheck(GameScreen.shared.contains(ArcadeWindow.shared.arcadeView)
@@ -249,12 +271,12 @@ extension AppDelegate {
                 _ = try previewCapture(window.contentView!, name: "personal-native-menu-" + key + "-window")
                 GameScreen.shared.dismissAll()
             }
-            for (title, expected) in [("Hot Seat…", ArcadeView.Mode.hotSeat)] {
+            for (title, expected) in [("Hot Seat…", ArcadeView.Mode.hotSeat), ("Players", .profiles)] {
                 let item = nativeItems.first { $0.title == title }!
-                try previewCheck(NSApp.sendAction(item.action!, to: item.target, from: item), "The native Hot Seat action was not delivered")
+                try previewCheck(NSApp.sendAction(item.action!, to: item.target, from: item), "The native \(title) action was not delivered")
                 try previewCheck(GameScreen.shared.contains(ArcadeWindow.shared.arcadeView)
-                    && ArcadeWindow.shared.arcadeView.mode == expected, "The native Hot Seat action opened the wrong page")
-                _ = try previewCapture(window.contentView!, name: "personal-native-menu-hot-seat-window")
+                    && ArcadeWindow.shared.arcadeView.mode == expected, "The native \(title) action opened the wrong page")
+                _ = try previewCapture(window.contentView!, name: "personal-native-menu-\(expected)-window")
                 GameScreen.shared.dismissAll()
             }
             let insights = nativeItems.first { $0.title == "Play Insights…" }!
@@ -263,7 +285,7 @@ extension AppDelegate {
             try previewCheck(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == "Play insights",
                              "The native insights action opened the wrong page")
             _ = try previewCapture(window.contentView!, name: "personal-native-menu-insights-window")
-            print("PASS native full menu hierarchy; real Cmd-comma, Cmd-Shift-P/B, Hot Seat and insights routes; restored home families; Classic/shared sequel shortcut pass-through")
+            print("PASS native full menu hierarchy; one destination per menu, unique chords, real Cmd-comma, Cmd-Shift-P/B, Hot Seat, Players and insights routes; restored home families; Classic/shared sequel shortcut pass-through")
         case "hud", "hud-paused", "hud-undo", "hud-small":
             try previewCheck(LixInterfaceRenderer.shared.isAvailable && LixInterfaceRenderer.shared.isEnabled,
                              "The pinned Lix interface artwork is unavailable")

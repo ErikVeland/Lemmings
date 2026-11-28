@@ -24,7 +24,9 @@ extension MobileLibraryViewController {
         let sequenceAttempt = savedLevel.flatMap { checkpointResumesLearningRun($0) ? $0.savedAt : nil }
         if let saved = savedLevel, sequenceAttempt == nil, journeyAttempt == nil {
             let owner = saved.owner ?? profiles.activeID
-            resume.append(.init("resume", L10n.text("Resume level - \(playerName(owner))")))
+            // Name the owner only when it is not obvious: Hot Seat, or another profile's save.
+            let showsOwner = hotSeat != nil || owner != profiles.activeID
+            resume.append(.init("resume", showsOwner ? L10n.text("Resume level - \(playerName(owner))") : L10n.text("Resume")))
             candidates.append(.savedLevel(savedAt: saved.savedAt, owner: owner))
         }
         if catalogue != nil, let saved = resumableLearningRun, let run = saved.state.run,
@@ -40,12 +42,13 @@ extension MobileLibraryViewController {
             candidates.append(.playlist(name: run.name, position: run.position + 1, total: run.entries.count))
         }
         let journeyRun = resumableLearningJourney?.state.run
-        if bundledJourney != nil, let run = journeyRun {
+        let journeyAvailable = bundledJourney != nil && (journeyRun.map { hasJourneySource($0.currentEntry) } ?? canStartJourney)
+        if journeyAvailable, let run = journeyRun {
             candidates.append(.journey(position: run.currentIndex + 1, total: run.entries.count,
                                        attemptSavedAt: journeyAttempt))
         }
-        let journeyAvailable = catalogue != nil && bundledJourney != nil
-        let journey = MobileHomeArt.journeyAction(run: journeyRun, enabled: journeyAvailable)
+        var journey = MobileHomeArt.journeyAction(run: journeyRun, enabled: catalogue != nil && bundledJourney != nil && !loading)
+        if !journeyAvailable { journey.title += L10n.text(" - No data") }
         let continueAction: GameFrontEnd.Action? = switch ContinueResolver.resolve(candidates, journeyAvailable: journeyAvailable) {
         case let .resume(candidate):
             candidate.actionID == "journey" ? journey : resume.first { $0.id == candidate.actionID }

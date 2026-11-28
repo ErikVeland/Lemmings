@@ -1,8 +1,7 @@
 # Ultimate Lemmix for iOS and tvOS
 
 Ultimate Lemmix has separate iPhone/iPad and Apple TV application targets.
-Both use the authored starter campaign, CC0 Lix artwork and the full licensed
-Lix soundtrack. Six tracks use CC0 and two use CC BY 4.0.
+Both use the authored starter campaign, CC0 Lix artwork and six CC0 music tracks.
 Starter play needs no game folder, account or download.
 
 | Platform | Project | Bundle identifier | Minimum OS |
@@ -15,8 +14,8 @@ build 108. The 0.1 records below are historical. The existing
 Ultimate Lemmings iOS target remains separate. The
 [macOS edition](UltimateLemmix.md) shares the Lemmix App Store app identity.
 Each platform retains its own target and signed package.
-The Mac, iPhone, iPad and Apple TV editions use the pointing Lix icon.
-Apple TV uses a layered version for the Home screen and the App Store.
+The requested project icon is shared across these editions. Its character
+rights review remains open.
 
 ## Content and controls
 

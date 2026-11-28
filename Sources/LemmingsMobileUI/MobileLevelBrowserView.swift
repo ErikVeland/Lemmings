@@ -23,10 +23,10 @@ import UIKit
     var playerName: String? { didSet { if oldValue != playerName { updateSubtitle() } } }
     var statusText = "" { didSet { if oldValue != statusText { updateSubtitle(); setNeedsLayout() } } }
     var isLoading = false {
-        didSet {
-            play.isEnabled = !isLoading
-            flow.actionTitle = isLoading ? nil : play.title
-        }
+        didSet { updatePlayAvailability() }
+    }
+    var canPlay = false {
+        didSet { updatePlayAvailability() }
     }
     private let backdrop = MobileMenuBackdrop()
     private let titleLabel = MobilePixelLabel()
@@ -69,6 +69,7 @@ import UIKit
         playlist.title = L10n.text("PLAYLIST")
         play.title = L10n.text("PLAY")
         play.isPrimary = true
+        updatePlayAvailability()
         back.onPress = { [weak self] in self?.onBack?() }
         rankPrevious.onPress = { [weak self] in self?.moveRank(-1) }
         rankNext.onPress = { [weak self] in self?.moveRank(1) }
@@ -81,7 +82,7 @@ import UIKit
             self.onPlaylist?(self.levels[self.flow.selectedIndex].index)
         }
         play.onPress = { [weak self] in
-            guard let self, !self.isLoading, self.levels.indices.contains(self.flow.selectedIndex) else { return }
+            guard let self, self.canPlay, !self.isLoading, self.levels.indices.contains(self.flow.selectedIndex) else { return }
             self.onPlay?(self.levels[self.flow.selectedIndex].index)
         }
         flow.artworkLoader = { [weak self] position in
@@ -90,7 +91,7 @@ import UIKit
         }
         flow.onSelectionChanged = { [weak self] index in self?.selectionChanged(index) }
         flow.onActivate = { [weak self] index in
-            guard let self, !self.isLoading, self.levels.indices.contains(index) else { return }
+            guard let self, self.canPlay, !self.isLoading, self.levels.indices.contains(index) else { return }
             self.onPlay?(self.levels[index].index)
         }
         [backdrop, titleLabel, subtitleLabel, flow, back, rankPrevious, rankNext, details, favourite, playlist, play].forEach(addSubview)
@@ -111,10 +112,16 @@ import UIKit
     }
 
     func setPlayTitle(_ title: String) {
-        flow.actionTitle = isLoading ? nil : title
+        flow.actionTitle = canPlay && !isLoading ? title : nil
         guard play.title != title else { return }
         play.title = title
         setNeedsLayout()
+    }
+
+    private func updatePlayAvailability() {
+        let enabled = canPlay && !isLoading
+        play.isEnabled = enabled
+        flow.actionTitle = enabled ? play.title : nil
     }
 
     /// Marks the current level as starred or not.

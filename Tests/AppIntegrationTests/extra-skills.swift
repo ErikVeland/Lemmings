@@ -133,7 +133,8 @@
     let extra = buttons.first { $0.title == "Bonus skill" }!
     try check(!buttons.contains { $0.title == "Inspect" } && badge.opacity == 0,
       "Paused Inspect pinned reward badges on screen")
-    try check(root.bounds.contains(extra.frame) && extra.frame.height >= 44 && extra.artworkOpacity == 0,
+    let menu = buttons.first { $0.title == "Menu" }!
+    try check(root.bounds.contains(extra.frame) && extra.frame.size == menu.frame.size && extra.artworkOpacity == 0,
       "Extra-skill action did not fit or fade with the menu")
     try extraSkillShot(root, "faded-\(width)")
     host.pointer = CGPoint(x: badge.frame.midX, y: badge.frame.midY)
@@ -150,7 +151,7 @@
     extra.mouseEntered(with: hover); keyboard.refreshNavigationControl(at: 109.2)
     try check(buttons.allSatisfy { $0.artworkOpacity == 1 } && badge.opacity == 1,
       "Bonus-skill hover did not reveal the whole menu group and reward balances")
-    try check(root.hitTest(CGPoint(x: extra.frame.midX, y: extra.frame.midY)) === extra,
+    try check(root.hitTest(root.convert(CGPoint(x: extra.frame.midX, y: extra.frame.midY), to: root.superview)) === extra,
       "Faded extra-skill button lost its input target")
     let before = uses
     try check(extra.accessibilityPerformPress() && uses == before + 1 && badge.opacity == 1,

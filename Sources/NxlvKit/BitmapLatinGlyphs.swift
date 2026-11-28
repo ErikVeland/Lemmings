@@ -1,18 +1,25 @@
 import Foundation
 
-/// Western Latin additions made from the current font's own pixels and colour ramp.
+/// Western Latin and currency additions made from the current font's own pixels and colour ramp.
 public enum BitmapLatinGlyphs {
     public enum Style: Sendable { case macintosh, sequelFrontEnd, sequelPanel }
     private typealias Frame = ClassicMacArtwork.Frame
     private struct Point: Hashable { let x: Int, y: Int }
     private static let accents: Set<UInt32> = [0x300, 0x301, 0x302, 0x303, 0x304, 0x306, 0x307, 0x308, 0x30A, 0x30B, 0x30C, 0x327, 0x328, 0x326]
     private static let special = Set(Array("ÆæŒœØøÐðÞþŁłĐđĦħŦŧŊŋıĸſßẞĲĳŉ¡¿"))
+    private static let currencyRows: [Character: [String]] = [
+        "$": ["..#..", ".###.", "#.#..", ".###.", "..#.#", ".###.", "..#.."],
+        "£": ["..##.", ".#..#", ".#...", "###..", ".#...", ".#...", "#####"],
+        "€": ["..###", ".#...", "####.", ".#...", "####.", ".#...", "..###"],
+        "¥": ["#...#", ".#.#.", "..#..", "#####", "..#..", "#####", "..#.."],
+        "₹": ["#####", "...#.", "#####", "..#..", "##...", "..#..", "...#."]
+    ]
 
-    /// Latin-1, Latin Extended-A, Romanian comma-below letters and capital sharp S.
+    /// Western Latin letters and currency symbols used by the menu faces and emergency font.
     public static let characters: [Character] = {
-        let scalars = Array(0xC0...0x17F) + Array(0x218...0x21B) + [0x1E9E, 0xA1, 0xBF]
+        let scalars = Array(0xC0...0x17F) + Array(0x218...0x21B) + [0x1E9E, 0xA1, 0xBF, 0x24, 0xA3, 0xA5, 0x20AC, 0x20B9]
         return scalars.compactMap { Unicode.Scalar($0).map { Character(String($0)) } }.filter {
-            special.contains($0) || decomposition($0) != nil
+            special.contains($0) || currencyRows[$0] != nil || decomposition($0) != nil
         }
     }()
     private static let covered = Set(characters)
@@ -20,6 +27,49 @@ public enum BitmapLatinGlyphs {
     public static func supports(_ character: Character) -> Bool {
         character.isASCII || covered.contains(character)
     }
+
+    /// Flags keep their own colours and span two cells.
+    public enum Flag: CaseIterable, Sendable {
+        case transgender, palestine
+
+        /// The fully qualified emoji. Glyph tables store each flag under this key.
+        public var character: Character { self == .transgender ? "🏳️‍⚧️" : "🇵🇸" }
+
+        /// Colour at a pixel of a flag that is `width` by `height`.
+        func colour(x: Int, y: Int, width: Int, height: Int) -> (UInt8, UInt8, UInt8) {
+            let rowCentre = 2 * y + 1
+            switch self {
+            case .transgender:
+                let blue: (UInt8, UInt8, UInt8) = (91, 206, 250), pink: (UInt8, UInt8, UInt8) = (245, 169, 184)
+                return [blue, pink, (255, 255, 255), pink, blue][rowCentre * 5 / (2 * height)]
+            case .palestine:
+                // Sample the triangle symmetrically around the middle of the flag.
+                let reach = width * (height - abs(height - rowCentre))
+                if 3 * height * x < reach { return (206, 17, 38) }
+                return [(18, 18, 20), (255, 255, 255), (0, 122, 61)][rowCentre * 3 / (2 * height)]
+            }
+        }
+    }
+
+    /// The flag a character shows, with or without emoji variation selectors.
+    public static func flag(_ character: Character) -> Flag? {
+        guard !character.isASCII else { return nil }
+        return switch character.unicodeScalars.map(\.value).filter({ $0 != 0xFE0F }) {
+        case [0x1F3F3, 0x200D, 0x26A7]: .transgender
+        case [0x1F1F5, 0x1F1F8]: .palestine
+        default: nil
+        }
+    }
+
+    public static func flag(inSequence sequence: String) -> Flag? {
+        sequence.count == 1 ? sequence.first.flatMap(flag) : nil
+    }
+
+    /// Cells a sequence advances: two for a flag, one for anything else.
+    public static func cells(for sequence: String) -> Int { flag(inSequence: sequence) == nil ? 1 : 2 }
+
+    /// Pictographs drawn from their own artwork instead of a question mark.
+    public static func isPictograph(_ character: Character) -> Bool { character == "💀" || flag(character) != nil }
 
     /// Keep one cell for sharp S and canonical equivalents for combining accents.
     public static func uppercase(_ text: String, locale: Locale = Locale(identifier: "en")) -> String {
@@ -74,6 +124,9 @@ public enum BitmapLatinGlyphs {
             result[character] = glyph
         }
         if result["💀"] == nil, let skull = builder.skull() { result["💀"] = skull }
+        for flag in Flag.allCases where result[flag.character] == nil {
+            if let glyph = builder.flag(flag) { result[flag.character] = glyph }
+        }
         return result
     }
 
@@ -248,6 +301,7 @@ public enum BitmapLatinGlyphs {
             return Frame(x: 0, y: top, width: width, height: bottom - top, rgba: Data(bytes))
         }
         func specialGlyph(_ character: Character) -> Frame? {
+            if let rows = BitmapLatinGlyphs.currencyRows[character] { return currencyGlyph(rows) }
             switch character {
             case "Æ": return ligature("A", "E")
             case "æ": return ligature("a", "e")
@@ -312,6 +366,20 @@ public enum BitmapLatinGlyphs {
             default: return nil
             }
         }
+        func currencyGlyph(_ rows: [String]) -> Frame {
+            let capital = base("H") ?? base("O")
+            let top = compact ? 0 : capital?.y ?? 0
+            let w = compact ? 5 : max(5, width - outline - shadow)
+            let h = compact ? 7 : max(7, (capital?.height ?? height) - outline - shadow)
+            let pattern = rows.map(Array.init)
+            var shape = Set<Point>()
+            for y in 0..<h { for x in 0..<w where pattern[y * 7 / h][x * 5 / w] == "#" {
+                shape.insert(Point(x: x + outline, y: y + top))
+            }}
+            let blank = Frame(x: 0, y: top, width: width, height: h,
+                              rgba: Data(repeating: 0, count: width * h * 4))
+            return render(blank, adding: shape)
+        }
         /// The death counter's skull, drawn in the font's own ramp at capital height.
         func skull() -> Frame? {
             if compact {
@@ -333,6 +401,32 @@ public enum BitmapLatinGlyphs {
             }}
             let blank = Frame(x: 0, y: top, width: width, height: h, rgba: Data(repeating: 0, count: width * h * 4))
             return render(blank, adding: shape)
+        }
+        /// A full-colour flag at capital height across two cells. Palette fonts cannot hold
+        /// the colours, so only the Macintosh menu faces get one.
+        func flag(_ flag: Flag) -> Frame? {
+            guard style == .macintosh, let capital = base("H") else { return nil }
+            let w = 2 * width - 2 * outline - 2
+            let capitalHeight = capital.height - outline - shadow
+            let h = min(capitalHeight, max(7, (w * 3 + 4) / 5))
+            guard w >= 10, h >= 7 else { return nil }
+            var bytes: [UInt8] = []
+            bytes.reserveCapacity(w * h * 4)
+            for y in 0..<h {
+                for x in 0..<w {
+                    let horizontalEdge = y == 0 || y == h - 1
+                    let verticalEdge = x == 0 || x == w - 1
+                    if horizontalEdge && verticalEdge {
+                        bytes += [0, 0, 0, 0]
+                    } else if horizontalEdge || verticalEdge {
+                        bytes += (y == 0 || x == 0) ? [129, 137, 155, 255] : [62, 68, 85, 255]
+                    } else {
+                        let (red, green, blue) = flag.colour(x: x - 1, y: y - 1, width: w - 2, height: h - 2)
+                        bytes += [red, green, blue, 255]
+                    }
+                }
+            }
+            return Frame(x: 1, y: capital.y + (capitalHeight - h) / 2, width: w, height: h, rgba: Data(bytes))
         }
         func sharpS(lowercase: Bool) -> Frame? {
             guard let b = base(lowercase ? "b" : "B") else { return nil }

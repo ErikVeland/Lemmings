@@ -6,6 +6,11 @@ Use this order for each release. Ship each platform as soon as its package is
 ready. Later platforms and stores can follow the Mac release with their own
 delivery receipts. Do not wait for every platform before publishing Mac.
 
+Ultimate Lemmings is Mac-only from 2.5 onward. Publish App Store updates for
+Ultimate Lemmix only. Historical Lemmings mobile build counters do not authorize
+new mobile builds or submissions. Keep each product's Mac and store release
+records separate.
+
 | Priority | Release | Scheduling rule |
 | --- | --- | --- |
 | 1 | Mac | Get the release out quickly. Skip tests unless the candidate changes an engine. |
@@ -16,6 +21,18 @@ delivery receipts. Do not wait for every platform before publishing Mac.
 External processing or review can overlap later work. A pending Apple review or
 store response must not hold the queue idle. Return to higher-priority work when
 it becomes actionable. Lower-priority work must not delay an earlier release.
+
+## 2.5 — UX overhaul
+
+The owner set 2.5 as the target for the UX overhaul on 25 November 2026.
+The overhaul covers the work in [UX redesign](UXRedesign.md). It ships as 2.5
+for both products, with Ultimate Lemmings releases limited to Mac and App Store
+updates limited to Ultimate Lemmix. Do not ship it as a 2.4.x patch.
+
+On 25 November 2026 `main`, including the overhaul, was merged into both
+product branches. Since then the next release from either branch includes
+the overhaul. Version that release as 2.5. To ship a 2.4.x patch without the
+overhaul, cut it from that product's last published release, with owner approval.
 
 ## Mac release path
 
@@ -72,6 +89,12 @@ remaining blockers. A submission alone does not establish store availability.
 This schedule supersedes older delivery orders and routine Mac test requirements.
 Historical release receipts remain unchanged. Product acceptance and feature
 work retain their recorded limits without becoming new non-engine Mac test gates.
+
+## Public update copy
+
+Keep GitHub release notes, Sparkle descriptions, App Store update text and the
+in-app What's New page focused on the app's features. Omit third-party names,
+asset references and licensing details from these notes.
 
 ## Version-history build gate
 

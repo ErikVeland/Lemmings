@@ -7,6 +7,15 @@ final class InterfaceLocalisationTests: XCTestCase {
         URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("Sources/NxlvKit/Resources/Localization.bundle")
     }
+    func testCatalanAndSwissGermanOnlyAppearWhenTheirResourcesAreAvailable() {
+        let available = InterfaceLanguagePreference.options(availableLanguages: ["en", "nl", "ca", "gsw"])
+        XCTAssertEqual(Set(available.map(\.rawValue)), Set(["system", "en", "nl", "ca", "gsw"]))
+        XCTAssertEqual(available.first { $0.rawValue == "ca" }?.title, "Català")
+        XCTAssertEqual(available.first { $0.rawValue == "gsw" }?.title, "Schwizerdütsch")
+        let withoutDrafts = InterfaceLanguagePreference.options(availableLanguages: ["en", "nl"])
+        XCTAssertEqual(Set(withoutDrafts.map(\.rawValue)), Set(["system", "en", "nl"]))
+    }
+
     func testEnglishFallbackPreservesCompleteMessagesAndPlayerValues() {
         let language = InterfaceLocalisation(bundle: nil)
         let name = "Zoë {1} %@"
@@ -51,8 +60,10 @@ final class InterfaceLocalisationTests: XCTestCase {
         let bundle = try XCTUnwrap(Bundle(url: resources))
         let source = try XCTUnwrap(NSDictionary(contentsOf: resources.appendingPathComponent("en.lproj/Interface.strings")) as? [String: String])
         let expected = [
+            "ca": ("A punt", "1 nivell", "2 nivells"),
             "es-419": ("Listo", "1 nivel", "2 niveles"),
             "de": ("Bereit", "1 Level", "2 Level"),
+            "gsw": ("Parat", "1 Level", "2 Level"),
             "fr": ("Prêt", "1 niveau", "2 niveaux"),
             "pt-BR": ("Pronto", "1 fase", "2 fases"),
             "it": ("Pronto", "1 livello", "2 livelli"),

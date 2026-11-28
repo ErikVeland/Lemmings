@@ -70,7 +70,11 @@ public enum Lemmings3SoundCue {
             let point = GameplaySoundPoint(x: Double(lem.x), y: Double(lem.y))
             if lem.state == .saved && previous?.state != .saved { result.append(.init(.exitLevel, at: point)) }
             if lem.state == .dead && previous?.state != .dead && !after.acknowledgedDeathSounds.contains(lem.id) {
-                result.append(.init(after.bottomDeaths.contains(lem.id) ? .fallOut : .splat, at: point))
+                let bottom = after.bottomDeaths.contains(lem.id)
+                // Only a lethal ground landing resets a long fall to zero. The
+                // soundtrack still plays the original death sample in either case.
+                let landed = !bottom && previous?.state == .falling && (previous?.fall ?? 0) > 92 && lem.fall == 0
+                result.append(.init(bottom ? .fallOut : .splat, at: point, isFatalLanding: landed))
             }
         }
         return result

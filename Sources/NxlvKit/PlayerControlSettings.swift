@@ -12,6 +12,7 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
     public var reduceFlashes: Bool
     public var showSongInfo: Bool
     public var inspectWhilePaused: Bool
+    public var scrollWheelZoomEnabled: Bool
     public var fadeMenuButton: Bool
 
     public init(_ settings: ClassicSettings) {
@@ -25,12 +26,14 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
         reduceFlashes = settings.reduceFlashes
         showSongInfo = settings.showSongInfo
         inspectWhilePaused = settings.inspectWhilePaused
+        scrollWheelZoomEnabled = settings.scrollWheelZoomEnabled
         fadeMenuButton = settings.fadeMenuButton
     }
 
     private enum CodingKeys: String, CodingKey {
         case controllerEnabled, controllerTapSpeed, controllerSwapSticks, controllerMappings
         case inspectWhilePaused, interfaceSize, reduceMotion, staticHomeScreen, reduceFlashes, showSongInfo, fadeMenuButton
+        case scrollWheelZoomEnabled
     }
 
     public init(from decoder: Decoder) throws {
@@ -45,6 +48,7 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
         reduceFlashes = try values.decode(Bool.self, forKey: .reduceFlashes)
         showSongInfo = try values.decode(Bool.self, forKey: .showSongInfo)
         inspectWhilePaused = try values.decodeIfPresent(Bool.self, forKey: .inspectWhilePaused) ?? true
+        scrollWheelZoomEnabled = try values.decodeIfPresent(Bool.self, forKey: .scrollWheelZoomEnabled) ?? true
         fadeMenuButton = try values.decode(Bool.self, forKey: .fadeMenuButton)
     }
 
@@ -60,6 +64,7 @@ public struct PlayerControlSettings: Codable, Equatable, Sendable {
         value.reduceFlashes = reduceFlashes
         value.showSongInfo = showSongInfo
         value.inspectWhilePaused = inspectWhilePaused
+        value.scrollWheelZoomEnabled = scrollWheelZoomEnabled
         value.fadeMenuButton = fadeMenuButton
         return value
     }

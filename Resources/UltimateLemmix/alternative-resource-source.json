@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "kind": "permitted-alternative-art-and-font",
+  "kind": "permitted-alternative-media-only",
   "sourceResourceManifestSHA256": "2cf091a49fe1485a7bec6cc7def9f0ea77d008d1be64a4fc24493dcaa390ccf0",
   "mediaLicences": [
     "CC0-1.0",
@@ -7069,6 +7069,46 @@
       "sha256": "6b07a2a6b192d39baeca18f3491d7c25a1999ba11384588e0ed0f063a856bfb8"
     },
     {
+      "path": "Licences/Lix-music-credits.txt",
+      "bytes": 1347,
+      "sha256": "5325dad3a1ea03d6cffd7300e7caaee0ff821822d48060ec8754a953a769a625"
+    },
+    {
+      "path": "Music/Lix/menulix.mp3",
+      "bytes": 3041325,
+      "sha256": "f76ad06e92dac6f0ee88b792ea3423fe41b3b169e44f55472aa8ecd77d013fe0"
+    },
+    {
+      "path": "Music/Lix/minim-mobius/assembly-line.mp3",
+      "bytes": 1769374,
+      "sha256": "9660f55260e5b1b7984973a8edb12665471c5739831e524a46c4f344cdf735b2"
+    },
+    {
+      "path": "Music/Lix/minim-mobius/beach-and-sailboats.mp3",
+      "bytes": 1664693,
+      "sha256": "3f933472ac7dba160c82888c30aa2c6caee268a6cf0ef076bb1f2df6532dc9c6"
+    },
+    {
+      "path": "Music/Lix/minim-mobius/driving.mp3",
+      "bytes": 1488188,
+      "sha256": "89a5c117426b84507694c78aec6efb8523d368c1baac721378a40c6f480ca7c1"
+    },
+    {
+      "path": "Music/Lix/minim-mobius/foggy-streets-at-night.mp3",
+      "bytes": 2146085,
+      "sha256": "f13408524a01acfad6d4e9a60a5b5eff692fa261a675d5c85261440eef7bebfa"
+    },
+    {
+      "path": "Music/Lix/minim-mobius/meadow-sunrise.mp3",
+      "bytes": 1483161,
+      "sha256": "02665bccc6b721d1d100093414dc765e53a96430c4bf3ceca85cafa34a5f4723"
+    },
+    {
+      "path": "Music/catalogue.json",
+      "bytes": 4013,
+      "sha256": "5bb63eea8906225ced2bb62a43eff60616086a04ac7e3d5d9d67e12dba0e9b78"
+    },
+    {
       "path": "Provenance/lix-font-source.json",
       "bytes": 2071,
       "sha256": "fcb76cf61f2bfe0eb15c0d1f0e58f49c19a03dd0dc1e818e627260b0ec2b8f5d"
@@ -7082,6 +7122,16 @@
       "path": "Provenance/lix-source.json",
       "bytes": 1546,
       "sha256": "8e72df7ed9881a4b6ceeb26b43bb2a749b1780445a01ed64bfdcbc5f5d12cfb7"
+    },
+    {
+      "path": "Provenance/music-preparation-manifest.json",
+      "bytes": 7748,
+      "sha256": "f5816a83e75124df0de1a5a547bb0144ee41e6b1a5b632c1e4295373daffd6ad"
+    },
+    {
+      "path": "Provenance/music-sources.json",
+      "bytes": 3108,
+      "sha256": "a6a566cd35f332ad87793b6c4afc0ff9adf5fb84c781c51c58a84aea9fbf5d74"
     }
   ]
 }

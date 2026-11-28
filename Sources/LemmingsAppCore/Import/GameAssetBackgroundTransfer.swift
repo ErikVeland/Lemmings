@@ -48,6 +48,24 @@ final class GameAssetBackgroundTransfer: NSObject, URLSessionDownloadDelegate, @
 
     @MainActor func tryAlternateServer() { switchPrimary?() }
 
+    @MainActor func cancelPendingDownload() {
+        let token: String? = lock.withLock {
+            guard let record = defaults.stringArray(forKey: key), record.count == 2 else { return nil }
+            defaults.removeObject(forKey: key)
+            outcome = nil
+            if let file = try? Self.archive(record[0]) {
+                try? FileManager.default.removeItem(at: file)
+            }
+            return record[0]
+        }
+        guard let token else { return }
+        let session = self.session
+        Task {
+            let tasks = await session.allTasks
+            for task in tasks where task.taskDescription == token { task.cancel() }
+        }
+    }
+
     @MainActor func transfer(
         from source: URL,
         offerAlternate: Bool,
@@ -55,7 +73,6 @@ final class GameAssetBackgroundTransfer: NSObject, URLSessionDownloadDelegate, @
         progress: @escaping @MainActor @Sendable (GameAssetPack.Progress) -> Void
     ) async throws -> URL {
         let tasks = await session.allTasks
-        try Task.checkCancellation()
         let (token, reattaching): (String, Bool) = lock.withLock {
             if let previous = defaults.stringArray(forKey: key), previous.count == 2,
                previous[1] == source.absoluteString { return (previous[0], true) }
@@ -64,7 +81,6 @@ final class GameAssetBackgroundTransfer: NSObject, URLSessionDownloadDelegate, @
             outcome = nil
             return (token, false)
         }
-        let file = try Self.archive(token)
         defer {
             lock.withLock {
                 if defaults.stringArray(forKey: key)?.first == token {
@@ -72,6 +88,12 @@ final class GameAssetBackgroundTransfer: NSObject, URLSessionDownloadDelegate, @
                     outcome = nil
                 }
             }
+        }
+        let file: URL
+        do { file = try Self.archive(token) }
+        catch {
+            tasks.first(where: { $0.taskDescription == token })?.cancel()
+            throw error
         }
         // Reattach by the persisted token, not merely by URL or session task count.
         if FileManager.default.fileExists(atPath: file.path) { return file }
@@ -91,6 +113,7 @@ final class GameAssetBackgroundTransfer: NSObject, URLSessionDownloadDelegate, @
             // transfer merely because the player opened Game Data.
             throw GameAssetPack.Failure.resumeUnavailable
         } else {
+            try Task.checkCancellation()
             task = session.downloadTask(with: source)
             task.taskDescription = token
             task.resume()

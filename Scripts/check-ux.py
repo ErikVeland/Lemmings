@@ -28,6 +28,7 @@ CHECKS = {
         "MobilePortraitHUDTests/delayedPauseAndResumeNeverOpenTheMenu",
         "MobilePortraitHUDTests/choosingSpeedCancelsHeldInputAndHonoursTheMode",
         "RewindCueTests/cueUsesGameSecondsForEachEngineRate",
+        "RewindAccessibilityTests/testPlayfieldReportsOneStepAtItsExistingStatusTarget",
         "RewindCueTests/rapidPressesRaiseTheShownSpeed",
         "NeoLemmixMobileDataTests/fanPanelPreservesTargetsAcrossSpeedAndTimeChanges",
     ],
@@ -46,6 +47,7 @@ CHECKS = {
         "GameplayControlTipTests/testGameplayTipsDismissWithoutChangingFocusOrSpeedAndStayDismissed",
         "GameplayControlTipTests/testSequelMapRendersAndSeeksWithoutActivatingTransport",
         "MobileControlTipMapTests/testMapCoordinatesMoveBothCameraAxesAndClampAtEveryEdge",
+        "TamilBitmapRenderTests/testTamilReplayRowsReserveTheWholeFontHeight",
     ],
     "preview": [
         "MobileCheckpointIndexTests/previewResumeRequiresTheSameLevelQueueAndPosition",
@@ -63,6 +65,7 @@ CHECKS = {
         "DestinationLocalisationTests/testTranslatedDestinationsKeepNamesBackRolesAndTargets",
         "GlobalNavigationTests/testMainMenuStaysOutsideNestedScrollingPagesAndControllerCanReachIt",
         "GlobalNavigationArtTests/fanEntriesNeverContainListToolsAndNavigationFitsEveryViewport",
+        "MobileAdaptiveLayoutTests/bookHomeReleasesCachedPanesWhenTheHingeOpensWithoutResizing",
     ],
     "recovery": [
         "ArchivedJourneyBackupTests/portableBackupReopensArchivedJourneyAndOwnedCheckpoint",
@@ -85,7 +88,7 @@ CHECKS = {
     ],
 }
 AUDITS = ("first-player", "rounded-hud", "grid-hud", "hot-seat-flow", "preview-fill",
-          "table-result", "cloud-sync", "level-loading", "navigation")
+          "table-result", "cloud-sync", "level-loading", "navigation", "replay-controls")
 
 
 def source_stamp():
@@ -158,6 +161,10 @@ def main():
             record(not missing, group + (" — no passing result for " + ", ".join(missing) if missing else ""))
         if not ok:
             record(False, "Swift test process")
+
+    if args.group in ("all", "catalogue"):
+        ok, _ = run("replay-proofs", [sys.executable, "Tools/TrolleyVerification/catalogue.py", "check"])
+        record(ok, "replay-proofs")
 
     if args.group in ("all", "navigation"):
         ok, _ = run("localisation", ["zsh", "Scripts/run-localisation-tests.sh"])

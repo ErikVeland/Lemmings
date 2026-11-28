@@ -3,6 +3,33 @@ import LemmingsMobileCore
 import LemmingsGameArt
 import UIKit
 
+#if os(iOS)
+@available(iOS 27.1, *)
+@MainActor final class MobileRegionTrackingView: UIView {
+    private var regions: [MobileReservedRegion] = []
+    private var flatHingeReported = false
+
+    override class var requiresConstraintBasedLayout: Bool { true }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil { setNeedsUpdateConstraints() }
+    }
+
+    override func updateConstraints() {
+        // UIKit observes reserved region queries made during this pass.
+        let current = MobileSystemRegions.read(in: self)
+        let flat = MobileSystemRegions.flatHingeReported(in: self, regions: current)
+        if regions != current || flatHingeReported != flat {
+            regions = current
+            flatHingeReported = flat
+            setNeedsLayout()
+        }
+        super.updateConstraints()
+    }
+}
+#endif
+
 @MainActor enum MobileSystemRegions {
     private static let hingedWindows = NSHashTable<UIWindow>.weakObjects()
 
@@ -15,6 +42,7 @@ import UIKit
         guard let window = (view as? UIWindow) ?? view.window, !hingedWindows.contains(window) else { return }
         hingedWindows.add(window)
         if let key = deviceHingeKey { UserDefaults.standard.set(true, forKey: key) }
+        MobileDevicePerformance.configureVisuals(in: window)
         window.rootViewController?.view.setNeedsLayout()
     }
 
@@ -85,6 +113,14 @@ import UIKit
         }
     }
 
+    /// A flat inner screen still reports its inactive division, even with a zero-sized frame.
+    static func flatHingeReported(in view: UIView, regions: [MobileReservedRegion]) -> Bool {
+        guard !regions.contains(where: { $0.kind == .division }),
+              let kind = MobileReservedRegionRuntime.kind("divisionRegionKind") else { return false }
+        return MobileReservedRegionRuntime.hasRegions(in: view, kind: kind, includeInactive: true)
+            && !MobileReservedRegionRuntime.hasRegions(in: view, kind: kind, includeInactive: false)
+    }
+
     /// Extra horizontal clearance for the header, relative to the ordinary safe area.
     static func topBarInsets(in view: UIView) -> MobileInsets {
         #if os(iOS)
@@ -125,9 +161,6 @@ import UIKit
         let rect = menuFrame(
             in: MobileRect(x: available.minX, y: available.minY, width: available.width, height: available.height),
             avoiding: regions)
-        #if DEBUG && os(iOS)
-        recordMenuGeometry(in: view, regions: regions, frame: rect, fullDisplay: fullDisplay)
-        #endif
         return CGRect(x: rect.x, y: rect.y, width: rect.width, height: rect.height)
     }
 
@@ -210,8 +243,14 @@ import UIKit
 
     #if DEBUG && os(iOS)
     /// Keep the latest scene geometry available when comparing a device report with UIKit's regions.
-    private static func recordMenuGeometry(in view: UIView, regions: [MobileReservedRegion], frame: MobileRect, fullDisplay: Bool) {
-        let snapshot = "bounds=\(view.bounds) safe=\(view.safeAreaInsets) fullDisplay=\(fullDisplay) regions=\(regions) menu=\(frame)"
+    static func recordMenuGeometry(in view: UIView, regions: [MobileReservedRegion], frame: CGRect, book: Bool, flatHinge: Bool) {
+        let orientation: UIInterfaceOrientation?
+        if #available(iOS 26.0, *) {
+            orientation = view.window?.windowScene?.effectiveGeometry.interfaceOrientation
+        } else {
+            orientation = view.window?.windowScene?.interfaceOrientation
+        }
+        let snapshot = "orientation=\(orientation?.rawValue ?? 0) window=\(view.window?.bounds ?? .zero) bounds=\(view.bounds) safe=\(view.safeAreaInsets) book=\(book) flatHinge=\(flatHinge) regions=\(regions) menu=\(frame)"
         guard UserDefaults.standard.string(forKey: "DuoMenuDebugGeometry") != snapshot else { return }
         UserDefaults.standard.set(snapshot, forKey: "DuoMenuDebugGeometry")
         UserDefaults.standard.set(ProcessInfo.processInfo.operatingSystemVersionString, forKey: "DuoMenuDebugOS")

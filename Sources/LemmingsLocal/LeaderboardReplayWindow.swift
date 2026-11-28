@@ -36,7 +36,8 @@ import LemmingsGameArt
         self.cursor = replayCursor; self.field = field; self.render = render; self.title = title
         status.isEditable = false; status.isSelectable = false; status.isBordered = false; status.drawsBackground = false
         page.addSubview(field); page.addSubview(status); page.addSubview(skillPanel)
-        page.setAccessibilityLabel(L10n.text("\(title). Action replay. Space or P plays or pauses. Left and right seek one second."))
+        page.setAccessibilityLabel(L10n.text("Action replay: \(title)"))
+        page.setAccessibilityHelp(L10n.text("Space or P plays or pauses. Left and right seek one second."))
         func button(_ text: String, primary: Bool = false, action: @escaping () -> Void) -> GameActionButton {
             let b = GameActionButton(title: text, primary: primary, onPress: action)
             buttons.append(b); page.addSubview(b); return b
@@ -117,15 +118,20 @@ import LemmingsGameArt
         skillPanel.bounds.size = size
     }
     private func refresh() {
+        let rate = cursor.state.ticksPerSecond
         skillPanel.update(stocks: ReplaySkillPresentation.stocks(cursor.state),
             uses: cursor.skillUses.suffix(3).map { .init(tick: $0.tick, name: $0.name) },
-            tick: cursor.state.tick, title: cursor.state.engine == "lemmings3" ? L10n.text("TOOLS HELD") : L10n.text("LEFT"))
+            tick: cursor.state.tick, rate: rate,
+            title: cursor.state.engine == "lemmings3" ? L10n.text("TOOLS HELD") : L10n.text("LEFT"))
         layoutSkillPanel()
         render(cursor.state); field.needsDisplay = true
-        field.setAccessibilityLabel(L10n.text("Action replay. \(cursor.state.saved) of \(cursor.state.population) saved. Tick \(cursor.state.tick) of \(cursor.replay.ticks)."))
-        status.stringValue = title + "   " + "\(ArcadeView.time(Double(cursor.state.tick) / cursor.state.ticksPerSecond)) / \(ArcadeView.time(Double(cursor.replay.ticks) / cursor.state.ticksPerSecond))"
+        field.setAccessibilityLabel(L10n.text("\(cursor.state.saved) of \(cursor.state.population) saved"))
+        let elapsed = ReplayGameTime.clock(tick: cursor.state.tick, rate: rate)
+        let duration = ReplayGameTime.clock(tick: cursor.replay.ticks, rate: rate)
+        status.stringValue = "\(title)   \(elapsed) / \(duration)"
+        status.setAccessibilityLabel(L10n.text("Replay position"))
+        status.setAccessibilityValue(L10n.text("\(elapsed) of \(duration)"))
         play?.title = paused ? L10n.text("Play") : L10n.text("Pause")
-        play?.setAccessibilityLabel(paused ? L10n.text("Play action replay") : L10n.text("Pause action replay"))
     }
     func close() { GameScreen.shared.dismiss(page) }
     private func stop() {

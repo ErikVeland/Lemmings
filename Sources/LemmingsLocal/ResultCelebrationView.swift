@@ -101,6 +101,19 @@ import NxlvKit
             }
         }
         if let resultStatus { text(resultStatus, 80, 253 + resultSummaryOffset, 960, alignment: .center, height: 26) }
+        let improvement = report.newRescueBest || report.newSkillBest ? c.recordMessage : ""
+        if !improvement.isEmpty {
+            text(improvement, 96, resultActionsY - 100, 928, alignment: .center)
+        }
+        resultActions(y: resultActionsY)
+        let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
+        setAccessibilityLabel(L10n.text("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. \(improvement)").trimmingCharacters(in: .whitespaces))
+    }
+
+    func drawResultReview() {
+        guard let report, let c = celebration else { return }
+        let run = report.run
+        header(L10n.text("Details"), subtitle: run.level.title)
         drawResultLevelCard(c)
         drawResultCareerCard(c)
         if let entry = LevelCollections.entry(attemptID: run.id) {
@@ -110,15 +123,21 @@ import NxlvKit
                 self?.needsDisplay = true
             }
         }
-        resultActions(y: resultActionsY)
+        resultActionRow([
+            ResultAction(title: L10n.text("Records")) { [weak self] in self?.page(.records) },
+            ResultAction(title: L10n.text("Run details")) { [weak self] in self?.page(.details) },
+            ResultAction(title: L10n.text("Hot Seat")) { [weak self] in self?.openSession() },
+            ResultAction(title: L10n.text("Worldwide")) { [weak self] in self?.openWorldwideBoard() }
+        ], y: 334)
         let board = drawResultLevelLeaderboard(run)
-        let maximum = run.level.conditions.map { ArcadeStore.shared.records.trolley.maximum(conditions: $0, assisted: run.assisted) } ?? TrolleyMaximum()
-        setAccessibilityLabel(L10n.text("\(player.initials)'s attempt. \(outcome). \(run.level.title). \(rescueSummary(run, maximum: maximum)) \(resultStatus.map { $0 + " " } ?? "")\(c.goals.stars) of 3 stars this run. \(board)Enter: \(primaryResultTitle). R retries. V opens replay. B opens records. C opens career progress. D opens details. Escape returns."))
+        pageFooter()
+        setAccessibilityLabel([L10n.text("Details"), run.level.title, board].filter { !$0.isEmpty }.joined(separator: ". "))
     }
+    private var resultCardsY: CGFloat { 154 }
     /// One worldwide ranking for this level, with every tied leader named. Returns its spoken summary.
     private func drawResultLevelLeaderboard(_ run: ArcadeRun) -> String {
         guard let conditions = run.level.conditions else { return "" }
-        let service = HostedRankings.shared, y = resultLeaderboardY
+        let service = HostedRankings.shared, y: CGFloat = 416
         if service.levelConditions != conditions {
             service.onLevelChange = { [weak self] in self?.needsDisplay = true }
             service.refreshLevel(conditions: conditions)
@@ -322,8 +341,9 @@ import NxlvKit
         let rows = TrolleyCareerScore.rank(attempts: attempts, assisted: false).sorted {
             value($0) != value($1) ? value($0) > value($1) : $0.stars > $1.stars
         }
-        text(L10n.text("RANK"), 80, 214, 90); text(L10n.text("PLAYER"), 174, 214, 300); text(L10n.text("STARS"), 524, 214, 140)
-        text(L10n.text("CLEARED"), 724, 214, 160); text(L10n.text("3-STAR"), 924, 214, 120)
+        text(L10n.text("RANK"), 80, 214, 90)
+        text(L10n.text("PLAYER"), 174, 214, 500)
+        text(hostedCategory.title, 690, 214, 350, alignment: .right)
         var rank = 0, previous: Int?
         for (index, score) in rows.prefix(7).enumerated() {
             if value(score) != previous { rank = index + 1; previous = value(score) }
@@ -334,8 +354,7 @@ import NxlvKit
             rowText("\(rank)", x: 96, width: 60, row: row)
             drawPortrait(owner?.portrait ?? 0, in: CGRect(x: 174, y: y - 2, width: 32, height: 39))
             rowText(owner?.initials ?? L10n.text("LEM"), x: 222, width: 252, row: row, palette: .green)
-            rowText("\(score.stars)", x: 524, width: 140, row: row); rowText("\(score.clearedLevels)", x: 724, width: 160, row: row)
-            rowText("\(score.threeStarLevels)", x: 924, width: 120, row: row)
+            rowText("\(value(score))", x: 690, width: 350, row: row, alignment: .right)
         }
         if rows.isEmpty { text(L10n.text("No scores"), 80, 300, 960, alignment: .center) }
         pageFooter()

@@ -39,6 +39,29 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
         preserveCurrentRun()
         run = next
     }
+    public mutating func startEasyPuzzles(_ entries: [LevelPlaylistEntry]) throws {
+        let next = try EasyPuzzleCatalogue.run(entries: entries)
+        refreshJourneySession()
+        preserveCurrentRun()
+        run = next
+    }
+
+    @discardableResult public mutating func resumeEasyPuzzles() -> Bool {
+        if run?.source == .easyPuzzles { return true }
+        guard let saved = savedRuns.first(where: { $0.source == .easyPuzzles }) else { return false }
+        refreshJourneySession()
+        preserveCurrentRun()
+        savedRuns.removeAll { $0.id == saved.id }
+        run = saved
+        return true
+    }
+
+    public mutating func endEasyPuzzles() {
+        guard run?.source == .easyPuzzles else { return }
+        run = nil
+        resumeJourney()
+    }
+
     private mutating func preserveCurrentRun() {
         guard let run else { return }
         savedRuns.removeAll { $0.id == run.id }
@@ -63,11 +86,29 @@ public struct MobileLearningState: Codable, Equatable, Sendable {
 
     public mutating func record(won: Bool) {
         guard let run else { return }
-        if run.pool.id.hasPrefix("learning-") { progress.record(run.currentEntry.identity, won: won) }
+        if run.pool.id.hasPrefix("learning-") || (run.source == .easyPuzzles && won) {
+            progress.record(run.currentEntry.identity, won: won)
+        }
     }
+    /// Persist a won result's next position when leaving without pressing Next.
+    /// A retry of the same exit, or an old result from another run, is a no-op.
+    @discardableResult public mutating func advanceAfterWonResult(runID: UUID, position: Int) -> Bool {
+        guard let run, run.id == runID, run.currentIndex == position else { return false }
+        if run.source == .easyPuzzles && !EasyPuzzleCatalogue.canContinue(run, wins: progress.completed) {
+            endEasyPuzzles()
+        } else {
+            advance()
+        }
+        return true
+    }
+
     @discardableResult public mutating func advance() -> Bool {
         guard var current = run else { return false }
-        guard current.advance() else {
+        var advanced = current.advance()
+        if current.source == .playlist(LearningJourney.playlistID) {
+            while advanced && progress.completed.contains(current.currentEntry.identity) { advanced = current.advance() }
+        }
+        guard advanced else {
             if current.source == .playlist(LearningJourney.playlistID) {
                 journeySession = .init(run: nil)
             }
@@ -136,17 +177,19 @@ public final class MobileJourneyLibrary: MobileGameLibrary {
         guard entries.indices.contains(index) else { return "" }
         return entries[index].identity.packID + "|" + entries[index].identity.levelID
     }
+    public static func sourcePack(for identity: LevelCatalogueIdentity, in catalogue: MobileCatalogue) -> MobileContentPack? {
+        guard identity.engine == .classic else { return nil }
+        if identity.packID.hasPrefix("fan:") {
+            return catalogue.pack(id: String(identity.packID.dropFirst(4)))
+        }
+        let release = identity.packID.split(separator: "-").first.map(String.init) ?? ""
+        return catalogue.pack(id: "release/" + release)
+    }
     public func origin(of index: Int) throws -> (pack: String, index: Int, library: any MobileGameLibrary) {
         guard entries.indices.contains(index) else { throw MobileSessionError.changedLevel }
         let entry = entries[index], identity = entry.identity
         guard identity.engine == .classic else { throw MobileSessionError.journeyEngineUnavailable }
-        let pack: MobileContentPack?
-        if identity.packID.hasPrefix("fan:") { pack = catalogue.pack(id: String(identity.packID.dropFirst(4))) }
-        else {
-            let release = identity.packID.split(separator: "-").first.map(String.init) ?? ""
-            pack = catalogue.pack(id: "release/" + release)
-        }
-        guard let pack else { throw MobileSessionError.changedLevel }
+        guard let pack = Self.sourcePack(for: identity, in: catalogue) else { throw MobileSessionError.changedLevel }
         if opened[pack.id] == nil {
             let current = try catalogue.library(for: pack)
             opened = [pack.id: current]

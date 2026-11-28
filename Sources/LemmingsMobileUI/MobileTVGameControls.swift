@@ -50,7 +50,7 @@ extension MobileGameViewController {
             (L10n.text("NEXT LEMMING"), { [weak self] in self?.tvCommand(.focusUnassigned(1), stayInPlay: true) }),
             (L10n.text("PREVIOUS LEMMING"), { [weak self] in self?.tvCommand(.focusUnassigned(-1), stayInPlay: true) }),
             (L10n.text("LAST ASSIGNMENT"), { [weak self] in self?.tvCommand(.focusLast, stayInPlay: true) }),
-            (L10n.text("STEP FORWARD"), { [weak self] in self?.tvCommand(.step(1)) }),
+            (L10n.text("STEP FORWARD"), { [weak self] in self?.tvTimelineCommand(.step(1)) }),
         ]
         if session is Lemmings2MobileSession, !session.isReadOnly {
             commands.insert((fanMode ? L10n.text("SKILL MODE") : L10n.text("FAN"), { [weak self] in
@@ -61,8 +61,8 @@ extension MobileGameViewController {
         }
         if session.supportsRewind {
             commands += [
-                (L10n.text("STEP BACK"), { [weak self] in self?.tvCommand(.step(-1)) }),
-                (L10n.text("REWIND"), { [weak self] in self?.tvCommand(.rewind) }),
+                (L10n.text("STEP BACK"), { [weak self] in self?.tvTimelineCommand(.step(-1)) }),
+                (L10n.text("REWIND"), { [weak self] in self?.tvTimelineCommand(.rewind) }),
             ]
         }
         let speedID = String(commands.count)
@@ -84,8 +84,7 @@ extension MobileGameViewController {
                 (snapshot.isEndingRun ? L10n.text("UNDO END RUN") : L10n.text("END RUN"), { [weak self] in self?.showTVEndRun() }),
             ]
         }
-        tvPage(title: L10n.text("Game controls"), actions: commands)
-        if focusSpeed { overlayCanvas.focusAction(speedID) }
+        tvPage(title: L10n.text("Game controls"), actions: commands, focusedAction: focusSpeed ? speedID : nil)
     }
 
     private func showTVSkills() {
@@ -123,11 +122,12 @@ extension MobileGameViewController {
                 _ = self.session.beginEndRun()
                 self.renderCurrentFrame(force: true)
                 self.pausePlay(showControls: true)
+                self.effects.nukeChanged(self.session)
             }),
         ])
     }
 
-    private func tvPage(title: String, actions: [(String, () -> Void)]) {
+    private func tvPage(title: String, actions: [(String, () -> Void)], focusedAction: String? = nil) {
         showCustomOverlay(title: title, details: [], actions: actions)
         // Shared pages scroll their rows; the primary forward action remains in the footer.
         let resume = overlayCanvas.page.footer.first { $0.title == L10n.text("RESUME") }
@@ -138,6 +138,7 @@ extension MobileGameViewController {
         if var resume { resume.primary = true; overlayCanvas.page.footer.append(resume) }
         view.setNeedsLayout()
         view.layoutIfNeeded()
+        if let focusedAction { overlayCanvas.focusAction(focusedAction) }
         setNeedsFocusUpdate()
         updateFocusIfNeeded()
     }
@@ -161,6 +162,17 @@ extension MobileGameViewController {
         guard tvPlanning() else { return }
         performCommand(command)
         if !stayInPlay && !session.snapshot.isComplete { showTVControls() }
+    }
+
+    private func tvTimelineCommand(_ command: GameplayCommand) {
+        let returnToControls = overlayReturnAction()
+        guard tvPlanning() else { return }
+        performCommand(command)
+        guard !session.snapshot.isComplete else { return }
+        // Keep the caller's focus and let queued rewind reconstruction finish.
+        // Reopening Game controls through pausePlay cancels the pending seek.
+        playState.suspend()
+        returnToControls()
     }
 }
 #endif

@@ -16,7 +16,7 @@ class FingerprintTests(unittest.TestCase):
                 engine = sources / 'ClassicDOSSimulation.swift'
                 engine.write_text('engine version one')
                 baseline = catalogue.fingerprint()
-                for name in sorted(catalogue.PRESENTATION_FILES):
+                for name in sorted(catalogue.PRESENTATION_FILES | catalogue.LEGACY_PRESENTATION_HASHES.keys()):
                     (sources / name).write_text('new presentation preference or input binding')
                     self.assertEqual(catalogue.fingerprint(), baseline)
                 engine.write_text('changed simulation')

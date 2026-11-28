@@ -12,7 +12,9 @@ public enum GameMenuBackdropArt {
     /// Match the lower contour to the last row of buttons in output coordinates.
     public static func geometry(in bounds: CGRect, layout: GameFrontEnd.Layout, scale: CGFloat,
                                 shape: GameControlShape) -> (frame: CGRect, radius: CGFloat) {
-        var surface = frame(in: bounds)
+        var surface = layout.compactActionPanel
+            ? layout.board.applying(CGAffineTransform(scaleX: scale, y: scale))
+            : frame(in: bounds)
         let targets = layout.targets.map { $0.frame.applying(CGAffineTransform(scaleX: scale, y: scale)) }
         guard let bottom = targets.map(\.maxY).max(),
               let button = targets.filter({ abs($0.maxY - bottom) < 0.5 }).max(by: { $0.maxX < $1.maxX }) else {

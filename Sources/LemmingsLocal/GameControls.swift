@@ -17,7 +17,7 @@ import NxlvKit
             NSGraphicsContext.saveGraphicsState()
             defer { NSGraphicsContext.restoreGraphicsState() }
             NSGraphicsContext.current?.cgContext.setAlpha(enabled ? 1 : 0.45)
-            GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect, maxScale: role == .title ? 3 : 1,
+            GamePixelText.draw(MacInterfaceRenderer.menuText(text), in: rect, maxScale: role == .title ? 3 : 2,
                                palette: role.palette, alignment: alignment)
         }
     }
@@ -49,7 +49,7 @@ import NxlvKit
     override var intrinsicContentSize: NSSize {
         let plain = MacInterfaceRenderer.menuText(title)
         let width = GameMenuArtwork.renderer()?.width(of: plain, face: .small, scale: 1)
-            ?? ceil(CGFloat(GamePixelTypography.width(of: plain) + 1) * 4 / 3)
+            ?? CGFloat(GamePixelTypography.width(of: plain) + 1) * 2
         let bounds = GamePixelTypography.verticalBounds(of: plain)
         let height = GameMenuArtwork.renderer()?.height(of: title, face: .small, scale: 1) ?? CGFloat(max(18, bounds.bottom - bounds.top + 4))
         return NSSize(width: width + (isCheck ? 32 : 24), height: max(28, height + 4, super.intrinsicContentSize.height))
@@ -57,16 +57,31 @@ import NxlvKit
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
         let selected = state == .on || state == .mixed || isHighlighted
-        let socket = isCheck ? CGRect(x: 0, y: bounds.midY - 10, width: 20, height: 20) : bounds
+        let socket = isCheck ? CGRect(x: 2, y: floor(bounds.midY) - 8, width: 16, height: 16) : bounds
         let lixCheck = isCheck && GameArtworkSkin.usesLixInterface && NSGraphicsContext.current.map {
             GameLixInterfaceArt.drawCheckbox(checked: state != .off, in: socket, context: $0.cgContext,
                 selected: isHighlighted, enabled: isEnabled)
         } == true
-        if !lixCheck {
-            GameStoneButton.draw(socket, selected: selected, pixel: 1)
-            if isCheck && selected {
-                GamePixelText.draw(state == .mixed ? "-" : "X", in: socket.insetBy(dx: 5, dy: 5))
+        if isCheck, !lixCheck, let context = NSGraphicsContext.current?.cgContext {
+            context.saveGState()
+            context.setAlpha(isEnabled ? 1 : 0.45)
+            context.setFillColor(CGColor(gray: 0.08, alpha: 1))
+            context.fill(socket)
+            context.setStrokeColor(CGColor(gray: isHighlighted ? 0.95 : 0.60, alpha: 1))
+            context.setLineWidth(1)
+            context.stroke(socket.insetBy(dx: 0.5, dy: 0.5))
+            context.setFillColor(CGColor(srgbRed: 0.72, green: 0.86, blue: 0.45, alpha: 1))
+            if state == .mixed {
+                context.fill(CGRect(x: socket.minX + 4, y: socket.midY - 1, width: 8, height: 2))
+            } else if state == .on {
+                for step in 0..<9 {
+                    let y = step < 3 ? 7 + step : 12 - step
+                    context.fill(CGRect(x: socket.minX + 4 + CGFloat(step), y: socket.minY + CGFloat(y), width: 1, height: 2))
+                }
             }
+            context.restoreGState()
+        } else if !isCheck {
+            GameStoneButton.draw(socket, selected: selected, pixel: 1)
         }
         let caption = isCheck ? CGRect(x: 28, y: 0, width: bounds.width - 28, height: bounds.height) : bounds.insetBy(dx: 8, dy: 2)
         GameControlText.draw(title, in: caption, alignment: isCheck ? .left : .center, enabled: isEnabled, role: .body)
@@ -101,6 +116,7 @@ import NxlvKit
         super.init(frame: .zero)
         self.title = title; self.target = target; self.action = action
         setButtonType(.switch)
+        focusRingType = .none
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
 }
@@ -217,11 +233,31 @@ import NxlvKit
 }
 
 @MainActor final class GameSliderCell: NSSliderCell {
+    var trackMarks: [Double]?
     override func drawBar(inside rect: NSRect, flipped: Bool) {
         NSGraphicsContext.saveGraphicsState()
         defer { NSGraphicsContext.restoreGraphicsState() }
         if !isEnabled { NSGraphicsContext.current?.cgContext.setAlpha(0.45) }
         GameStoneButton.draw(CGRect(x: rect.minX, y: rect.midY - 3, width: rect.width, height: 6), selected: true, pixel: 1)
+        if let trackMarks, let context = NSGraphicsContext.current?.cgContext, maxValue > minValue {
+            let progress = (doubleValue - minValue) / (maxValue - minValue)
+            context.setFillColor(CGColor(srgbRed: 0.48, green: 0.80, blue: 0.24, alpha: 1))
+            context.fill(CGRect(x: rect.minX + 1, y: floor(rect.midY) - 1,
+                width: floor(max(0, rect.width - 2) * progress), height: 2))
+            let knob = knobRect(flipped: flipped)
+            let travel = rect.insetBy(dx: knob.width / 2, dy: 0)
+            let direction: CGFloat = flipped ? 1 : -1
+            let tip = floor(flipped ? knob.maxY : knob.minY) + 3 * direction
+            context.setFillColor(CGColor(srgbRed: 1, green: 0.76, blue: 0.28, alpha: 1))
+            for mark in trackMarks {
+                let center = floor(travel.minX + travel.width * mark)
+                for row in 0..<9 {
+                    let halfWidth = 4 - abs(4 - row)
+                    let y = tip + CGFloat(flipped ? row : -row - 1)
+                    context.fill(CGRect(x: center - CGFloat(halfWidth), y: y, width: CGFloat(2 * halfWidth + 1), height: 1))
+                }
+            }
+        }
     }
     override func drawKnob(_ knobRect: NSRect) {
         NSGraphicsContext.saveGraphicsState()
@@ -256,8 +292,20 @@ import NxlvKit
     override var isFlipped: Bool { true }
     override func draw(_ dirtyRect: NSRect) {
         GameStoneButton.draw(bounds, selected: false, pixel: 1)
-        GameControlText.draw(titleOfSelectedItem ?? "", in: bounds.insetBy(dx: 12, dy: 2).offsetBy(dx: -4, dy: 0), enabled: isEnabled)
-        GamePixelText.draw(">", in: CGRect(x: bounds.maxX - 18, y: bounds.midY - 6, width: 10, height: 12))
+        GameControlText.draw(titleOfSelectedItem ?? "", in: CGRect(x: 10, y: 2,
+            width: max(1, bounds.width - 36), height: bounds.height - 4), enabled: isEnabled)
+        if let context = NSGraphicsContext.current?.cgContext {
+            context.saveGState()
+            context.setFillColor(CGColor(gray: 0.80, alpha: isEnabled ? 1 : 0.45))
+            let x = floor(bounds.maxX - 13), y = floor(bounds.midY - 3)
+            for step in 0..<5 {
+                let offset = CGFloat(4 - step)
+                let row = y + CGFloat(step)
+                context.fill([CGRect(x: x - offset, y: row, width: 1, height: 2),
+                    CGRect(x: x + offset, y: row, width: 1, height: 2)])
+            }
+            context.restoreGState()
+        }
         GameControlText.focus(self)
     }
     override func mouseDown(with event: NSEvent) { showChoices() }
@@ -294,13 +342,27 @@ import NxlvKit
     }
 }
 
-@MainActor final class GameTabButton: GameButton {}
+@MainActor final class GameTabButton: GameButton {
+    var inSidebar = false
+    override func draw(_ dirtyRect: NSRect) {
+        guard inSidebar else { super.draw(dirtyRect); return }
+        GameStoneButton.draw(bounds, selected: state == .on || isHighlighted, pixel: 1)
+        GameControlText.draw(title, in: bounds.insetBy(dx: 12, dy: 4), enabled: isEnabled,
+            role: state == .on ? .heading : .body)
+        if state == .on {
+            GameStyle.fill(CGRect(x: 12, y: bounds.maxY - 7, width: bounds.width - 24, height: 2), GameStyle.accent)
+        }
+        GameControlText.focus(self)
+    }
+}
 
 @MainActor final class GameTabs: NSView, NSTabViewDelegate {
     var onSelectionChanged: (() -> Void)?
     private let tabs = NSTabView()
     private var buttons: [GameButton] = []
     var font: NSFont?
+    var sidebarBreaks: Set<Int>?
+    private(set) var sidebarFooterFrame: CGRect = .zero
     override init(frame: NSRect) {
         super.init(frame: frame)
         setAccessibilityElement(true)
@@ -311,15 +373,17 @@ import NxlvKit
         addSubview(tabs)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) is unavailable") }
-    func addTabViewItem(_ item: NSTabViewItem) {
+    @discardableResult func addTabViewItem(_ item: NSTabViewItem) -> GameTabButton {
         tabs.addTabViewItem(item)
         let button = GameTabButton(title: item.label, target: self, action: #selector(selectTab))
+        button.inSidebar = sidebarBreaks != nil
         button.tag = buttons.count
         button.setButtonType(.pushOnPushOff)
         button.setAccessibilityLabel(item.label)
         button.setAccessibilityRole(.radioButton)
         addSubview(button); buttons.append(button)
         updateSelection()
+        return button
     }
     @objc private func selectTab(_ sender: NSButton) {
         tabs.selectTabViewItem(at: sender.tag); updateSelection()
@@ -335,8 +399,21 @@ import NxlvKit
     }
     override func layout() {
         super.layout()
-        tabs.frame = CGRect(x: 0, y: 0, width: bounds.width, height: max(0, bounds.height - 42))
         let widths = buttons.map { $0.intrinsicContentSize.width }
+        if let sidebarBreaks {
+            let width = min(floor(bounds.width / 3), max(220, widths.max() ?? 0))
+            let detailsX = width + 24
+            tabs.frame = CGRect(x: detailsX, y: 0, width: max(0, bounds.width - detailsX), height: bounds.height)
+            var y = bounds.height
+            for (index, button) in buttons.enumerated() {
+                if sidebarBreaks.contains(index) { y -= 12 }
+                button.frame = CGRect(x: 0, y: y - 38, width: width, height: 38)
+                y -= 44
+            }
+            sidebarFooterFrame = CGRect(x: 0, y: y - 14, width: width, height: 0)
+            return
+        }
+        tabs.frame = CGRect(x: 0, y: 0, width: bounds.width, height: max(0, bounds.height - 42))
         let extra = max(0, (bounds.width - widths.reduce(0, +)) / CGFloat(max(1, buttons.count)))
         var x: CGFloat = 0
         for (index, button) in buttons.enumerated() {

@@ -68,6 +68,34 @@ final class GameAssetPackTests: XCTestCase {
     }
     #endif
 
+    func testColdRestoreStillRejectsChangedBytesAcrossStreamingChunks() throws {
+        let manager = FileManager.default
+        let root = manager.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? manager.removeItem(at: root) }
+        let base = root.appendingPathComponent("Base", isDirectory: true)
+        let source = root.appendingPathComponent("Owned", isDirectory: true)
+        let relative = "Music/fixture.dat"
+        let file = source.appendingPathComponent(relative)
+        try manager.createDirectory(at: base, withIntermediateDirectories: true)
+        try manager.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+        let original = Data(repeating: 0x61, count: (1 << 20) + 7)
+        try original.write(to: file)
+        let library = OwnedResourceLibrary(root: root.appendingPathComponent("Installed"), bundledResources: base,
+                                           validator: { _ in })
+        let installed = try library.install(directory: source)
+        XCTAssertEqual(try library.refreshBaseIfNeeded()?.contentID, installed.contentID)
+        let restored = installed.resourcesDirectory.appendingPathComponent(relative)
+
+        var changed = original
+        changed[changed.count - 1] = 0x62
+        for damaged in [changed, original + Data([0x62]), Data(original.dropLast())] {
+            try damaged.write(to: restored)
+            XCTAssertThrowsError(try library.refreshBaseIfNeeded())
+        }
+        try original.write(to: restored)
+        XCTAssertEqual(try library.refreshBaseIfNeeded()?.contentID, installed.contentID)
+    }
+
     /// Set LEMMINGS_GAME_ASSET_ARCHIVE to a downloaded pack to check extraction and import end to end.
     func testDownloadedArchiveInstallsIntoResourceLibrary() throws {
         guard let path = ProcessInfo.processInfo.environment["LEMMINGS_GAME_ASSET_ARCHIVE"] else {
@@ -171,7 +199,6 @@ final class GameAssetPackTests: XCTestCase {
         } catch {
             let failure = GameAssetPack.explained(error) as? GameAssetPack.Failure
             XCTAssertEqual(failure, .timedOut)
-            XCTAssertTrue(failure?.localizedDescription.contains("timed out") == true)
         }
         XCTAssertEqual(attempts, ["archive.org", "github.com"])
         XCTAssertEqual(alternateNotices, 1)

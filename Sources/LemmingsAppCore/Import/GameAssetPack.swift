@@ -136,6 +136,10 @@ public actor GameAssetPack {
         GameAssetBackgroundTransfer.shared.tryAlternateServer()
     }
 
+    @MainActor public static func cancelPendingDownload() {
+        GameAssetBackgroundTransfer.shared.cancelPendingDownload()
+    }
+
     @MainActor public static var hasPendingDownload: Bool {
         GameAssetBackgroundTransfer.shared.pendingSource != nil
     }

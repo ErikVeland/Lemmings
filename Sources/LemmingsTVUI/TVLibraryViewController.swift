@@ -1,6 +1,7 @@
 #if os(tvOS)
 import AVFoundation
 import GameController
+import LemmingsAppCore
 import LemmingsGameArt
 import LemmingsMobileCore
 import LemmingsMobileUI
@@ -151,7 +152,7 @@ import UIKit
         switch destination {
         case .home:
             page.home = true
-            page.subtitle = local.profiles.active.name
+            page.subtitle = local.profiles.players.count > 1 ? local.profiles.active.name : ""
             page.rows = [.init("hotseat", L10n.text("Hot Seat")), .init("players", L10n.text("Players")), .init("settings", L10n.text("Settings"))]
             if let checkpoint {
                 page.rows.append(.init("games", L10n.text("Play")))
@@ -173,7 +174,7 @@ import UIKit
         case .ranks:
             page.title = source?.title ?? L10n.text("Levels")
             page.rows = ranks.enumerated().dropFirst(pageOffset).prefix(4).map { .init("rank.\($0.offset)", $0.element) }
-            page.footer = [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < ranks.count)]
+            page.footer = ranks.count > 4 ? [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < ranks.count)] : [back]
         case .levels:
             page.title = selectedRank
             let browse = levels.filter { $0.rank == selectedRank }
@@ -181,8 +182,8 @@ import UIKit
             page.rows = browse.dropFirst(pageOffset).prefix(4).map {
                 .init("level.\($0.index)", "\($0.number) - \($0.title)", selected: progress.contains($0.index))
             }
-            page.subtitle = "\(pageOffset + 1)-\(min(pageOffset + 4, browse.count)) / \(browse.count)"
-            page.footer = [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < browse.count)]
+            page.subtitle = browse.isEmpty ? L10n.text("No matching levels") : "\(pageOffset + 1)-\(min(pageOffset + 4, browse.count)) / \(browse.count)"
+            page.footer = browse.count > 4 ? [back, .init("previous", "<", enabled: pageOffset > 0), .init("more", ">", enabled: pageOffset + 4 < browse.count)] : [back]
         case .briefing:
             guard let game = browsingPreview ?? game else { return }
             page.title = game.content.summary.title
@@ -193,7 +194,7 @@ import UIKit
             page.rows = [.init("ready", game.awaitsFirstStart ? (seat == nil ? L10n.text("Play") : L10n.text("Ready")) : L10n.text("Resume"), primary: true, portrait: player(game.owner).portrait)]
             page.footer = [back, .init("levelDetails", L10n.text("Details"))]
         case .deck:
-            page.title = L10n.text("Paused"); page.subtitle = name
+            page.title = L10n.text("Paused"); page.subtitle = seat == nil ? game?.content.summary.title ?? "" : name
             page.rows = [.init("skills", L10n.text("Skills")), .init("targets", L10n.text("Lemmings")), .init("camera", L10n.text("Camera")), .init("transport", L10n.text("Time and actions")), .init("help", L10n.text("Controls"))]
             page.footer = [.init("library", L10n.text("Library")), .init("retryConfirm", L10n.text("Retry")), .init("resume", L10n.text("Resume"), primary: true)]
         case .skills:
@@ -228,7 +229,8 @@ import UIKit
             page.footer = [back]
         case .audio:
             page.title = L10n.text("Audio")
-            page.rows = [.init("music", L10n.text("Music"), selected: local.preferences.musicEnabled), .init("effects", L10n.text("Sound effects"), selected: local.preferences.effectsEnabled)]
+            page.rows = [.init("music", L10n.text("Music"), selected: local.preferences.musicEnabled), .init("effects", L10n.text("Sound effects"), selected: local.preferences.effectsEnabled),
+                         .init("gameplayHaptics", L10n.text("Haptics"), selected: GameplayHapticsPreference.enabled)]
             page.footer = [back]
         case .players:
             page.title = L10n.text("Players")
@@ -250,7 +252,7 @@ import UIKit
         case .results:
             guard let game else { return }
             page.title = game.session.snapshot.didWin ? L10n.text("Level complete") : L10n.text("Try again")
-            page.subtitle = name
+            page.subtitle = seat == nil ? game.content.summary.title : name
             page.preview = true
             page.details = ["\(game.session.snapshot.saved) / \(game.session.snapshot.total) RESCUED"]
             if let seat {
@@ -325,6 +327,7 @@ import UIKit
         case "audio": show(.audio)
         case "music": local.preferences.musicEnabled.toggle(); audio.apply(local.preferences); persist(); show(.audio)
         case "effects": local.preferences.effectsEnabled.toggle(); audio.apply(local.preferences); persist(); show(.audio)
+        case "gameplayHaptics": GameplayHapticsPreference.enabled.toggle(); if !GameplayHapticsPreference.enabled { audio.pause() }; show(.audio)
         case "planning": local.preferences.planningOnSkillChange.toggle(); settingsChanged()
         case "sensitivity": local.preferences.aimSensitivity = local.preferences.aimSensitivity >= 2 ? 0.5 : local.preferences.aimSensitivity + 0.5; settingsChanged()
         case "text": local.preferences.textScale = local.preferences.textScale == 1 ? 1.25 : 1; settingsChanged()
@@ -364,9 +367,10 @@ import UIKit
         case "retry": prepare(selectedLevel)
         case "next": prepare(selectedLevel + 1)
         case "endConfirm":
-            if game?.session.snapshot.isEndingRun == true { game?.endRun(); show(.transport) }
+            if let game, game.session.snapshot.isEndingRun { game.endRun(); audio.nukeChanged(game); show(.transport) }
             else { show(.confirmEnd) }
-        case "end": game?.endRun(); if game?.resume() == true { if let game { audio.start(game) }; showPlay() }
+        case "end":
+            if let game { game.endRun(); audio.nukeChanged(game); if game.resume() { audio.start(game); showPlay() } }
         case "library": saveAndLeave()
         default: show(route)
         }
@@ -400,7 +404,7 @@ import UIKit
         case .settings: game.pause(); audio.pause(); show(.settings)
         case .retry: game.pause(); audio.pause(); show(.confirmRetry)
         case .endRun:
-            if game.session.snapshot.isEndingRun { game.endRun() }
+            if game.session.snapshot.isEndingRun { game.endRun(); audio.nukeChanged(game) }
             else { game.pause(); audio.pause(); show(.confirmEnd) }
         }
         if game.play.phase == .completed { completed() }

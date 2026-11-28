@@ -17,8 +17,8 @@ public enum MobileHomeArt {
         if let resume {
             footer.append(.init("learningResume", L10n.text("Resume  \(resume.position)/\(resume.count)"), primary: true))
         }
-        if canContinue {
-            footer.append(.init("learningStart", solved == 0 && resume == nil ? L10n.text("Start journey") : L10n.text("Continue journey"), primary: resume == nil))
+        if canContinue && resume == nil {
+            footer.append(.init("learningStart", solved == 0 && resume == nil ? L10n.text("Start journey") : L10n.text("Continue journey"), primary: true))
         } else if resume == nil {
             footer[0].primary = true
         }
@@ -31,7 +31,7 @@ public enum MobileHomeArt {
     }
 
     /// Home destinations after Continue. Settings stays in the footer.
-    public static let destinationIDs = ["play", "hotSeat", "profile", "worldwide"]
+    public static let destinationIDs = ["hotSeat", "play", "profile", "worldwide"]
 
     /// Home answers "what next?": one Continue action, then four destinations.
     /// Games, saved routes and collections live on Play.
@@ -44,17 +44,29 @@ public enum MobileHomeArt {
             action.titleRuns = GameSemanticText.resume(action.title)
             rows.append(action)
         }
-        rows += [.init("play", L10n.text("Play")),
-                 .init("hotSeat", hotSeatTurn.map { L10n.text("Hot Seat: \($0)") } ?? L10n.text("Hot Seat")),
+        rows += [.init("hotSeat", hotSeatTurn.map { L10n.text("Hot Seat: \($0)") } ?? L10n.text("Hot Seat")),
+                 .init("play", L10n.text("Play")),
                  .init("profile", L10n.text("Profile")),
                  .init("worldwide", L10n.text("Community"))]
-        if let primary = rows.firstIndex(where: \.enabled) {
+        let primaryID = continueAction.flatMap { $0.enabled ? $0.id : nil } ?? "play"
+        if let primary = rows.firstIndex(where: { $0.id == primaryID && $0.enabled }) {
             for row in rows.indices { rows[row].primary = row == primary }
         }
         var page = GameFrontEnd.Page(title: L10n.text("Lemmings"), subtitle: subtitle, home: true, rows: rows,
             footer: [.init("settings", L10n.text("Settings"))], homeInitials: initials)
         page.homeNextPlayerIndex = nextPlayerIndex
         return page
+    }
+
+    /// Shows Home without resolving imports, saved routes or player data before validation.
+    public static func checkingGameFilesPage() -> GameFrontEnd.Page {
+        var home = page(continueAction: nil, initials: "", subtitle: L10n.text("Checking game files"))
+        for i in home.rows.indices {
+            home.rows[i].enabled = false
+            home.rows[i].primary = false
+        }
+        for i in home.footer.indices { home.footer[i].enabled = false }
+        return home
     }
 
     /// Builds the current Home from route rows, as render audits and tests describe a session.

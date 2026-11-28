@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 
@@ -26,14 +27,16 @@ public enum MobileSettingsArt {
     public static func groups(inGame: Bool = false, television: Bool = false,
                               deskClockAvailable: Bool = true) -> GameFrontEnd.Page {
         // The Desk Clock is an iPhone and iPad menu feature, so a level and the TV leave it out.
-        let groups = MobileSettingsGroup.allCases.filter {
+        let groups = MobileSettingsGroup.sections.flatMap { $0 }.filter {
             $0 != .deskClock || (!television && !inGame && deskClockAvailable)
         }
         var page = GameFrontEnd.Page(title: L10n.text("Settings"), rows: groups.map {
             .init("settingsGroup." + $0.rawValue, $0.title)
         } + (inGame ? [] : [.init("data", L10n.text("Game Data"))]), footer: [.init("home", L10n.text("Back"))])
         page.televisionGrid = television
-        page.pairsRows = true
+        page.rowGroupStarts = Set(MobileSettingsGroup.sections.dropFirst().compactMap {
+            $0.first.map { "settingsGroup." + $0.rawValue }
+        })
         page.settingsTabs = MobileSettingsTabsArt.actions(selected: .gameplay, inGame: inGame, television: television)
         page.settingsIndex = true
         return page
@@ -113,7 +116,8 @@ public enum MobileSettingsArt {
                     toggle("songInfo", L10n.text("Show song info"), c.showSongInfo),
                     toggle("staticHome", L10n.text("Static home screen"), c.staticHomeScreen),
                     toggle("motion", L10n.text("Reduce motion"), c.reduceMotion),
-                    toggle("flashes", L10n.text("Reduce flashes"), c.reduceFlashes)]
+                    toggle("flashes", L10n.text("Reduce flashes"), c.reduceFlashes),
+                    toggle("gameplayHaptics", L10n.text("Haptics"), GameplayHapticsPreference.enabled)]
         case .deskClock:
             let clock = settings.deskClock
             rows = foldable ? [toggle("deskClockStacked", L10n.text("Open in Stacked pose when idle"), clock.openWhenStacked),

@@ -52,7 +52,8 @@ Home
 ├─ Hot Seat  [hotSeat] ─ roster, Saved Hot Seats ³
 ├─ Profile  [profile]
 │   ├─ Records ─ record card ─ Hints, Replay, Play (Classic)
-│   ├─ Achievements ─ award detail
+│   ├─ Achievements ─ Level goals, Career progress, Progression ─ award detail
+│   ├─ Statistics ─ player and level breakdowns
 │   ├─ Players ─ player rows, Edit, New player, Hot Seat, Saved Hot Seats ³
 │   ├─ Cloud saves ⁴
 │   └─ Play Insights
@@ -81,6 +82,24 @@ keep action replays. Artwork, Hints, Solution and Play load for Classic and fan
 catalogue levels. Lemmings 2 and Lemmings 3 records show statistics and stars
 only. Worldwide community replays follow the same Classic limit.
 
+## Screen review register
+
+**Green by owner sign-off, 25 November 2026.** Erik accepted physical VoiceOver and Siri Remote navigation, native system sheets, signed-in Game Center, hosted replay delivery and the engine-specific campaign and movie screens reviewed in #91. The automated evidence for each area is recorded below.
+
+| Player task | Screens and states covered by the source review | Verification |
+| --- | --- | --- |
+| Get started | First player, portrait and name, effects, sharing consent, What's New and recovery | First-player and navigation bitmap/target checks cover first use, choices and error states. |
+| Choose a game | Home, Play, family, fan folder and search, level catalogue, carousel and list, level cover, briefing, loading and Details | Navigation, hierarchy, preview and loading checks exercise the shared controls. The SDK route fixture also builds the library pages. |
+| Follow a route | Journey, Revisit, Progression playlists, Techniques, Collections, Short games, Shuffle, Favourites, Recents, playlists, individual playlist and Add to playlist | Journey and Short games have rendered cases. Playlist editing, missing content and alternative entry paths have source coverage. |
+| Play and hand over | Classic, L2, L3 and supported fan HUDs, Pause, hints and solutions, Hot Seat roster, saved sessions, Ready, retry and handover | Pause, replay and Hot Seat audits use muted offscreen input. Duo panels have separate geometry checks. |
+| Finish a level | Win, fail, retry, next turn, earned rewards, result Details, goals, career, level leaderboard, Records, replay and share | Native Mac result tests exercise Classic, L2 and L3 through the metric control. Mobile fixtures cover tied and offline comparisons and split result panes. |
+| Review progress | Profile, Players, Statistics, player and level breakdowns, Records, record card, hints, Achievements and award detail | Navigation renders show empty and populated records, each achievement category, and disabled or available replay actions. |
+| Compare scores | Community, World, This device, Game Center, level and career metrics, tied rows, replay availability and sharing | Shared rendering and Mac tests cover offline, loading and populated lists. Signed-in Game Center and hosted replay delivery have owner acceptance. |
+| Configure and recover | Settings hub and each settings group, language, controller mappings, Soundtrack, Game Data, asset licence, import, cloud saves, Play Insights, token, clearing and Familiar names, About and Donate | Group, sync and support audits exercise shared layouts. Native pickers and system prompts have owner acceptance. Download reliability and physical controller remapping have separate checks. |
+| Use platform and game extras | L2 practice, original movies and campaign presentations, L3 mission and tribe screens, iOS Desk Clock, Mac application menus and panels, and the Apple TV source-folder browser | These have distinct entry points. The shared navigation capture count excludes the native windows, system sheets and engine-owned scenes. The campaign and movie screens have owner acceptance. |
+
+The mobile route regression builds every case of the library controller with an isolated record store, including every family and settings group. Rendered navigation fixtures check the list toolbar as well as the scrolling page. Each category tab retains its selection marker when keyboard or remote focus moves.
+
 ## Validation
 
 - The iOS UI target compiles for arm64 iOS 16.
@@ -94,15 +113,14 @@ only. Worldwide community replays follow the same Classic limit.
   modes, with native hit targets and primary actions.
 - Model tests cover old summary decoding, retained origin, official sequel
   identities, fan archive identities, curated journey sources and mixed/lazy lists.
-- Physical UIKit acceptance and live sequel briefing screens remain manual checks.
+- The owner accepted VoiceOver, Siri Remote and the sequel campaign screens.
   Automated checks use the offscreen runner with all audio muted.
 
 Footer regression checks cover changing action counts and columns, return labels,
 disabled controls, results, home pages and pinned pause shelves. Native Mac checks
 verify fixed message footers, mouse targets, keyboard order and replay/movie return
 actions. The shared menu/result flows serve Classic, Lemmings 2 and Lemmings 3.
-iOS/tvOS source compilation passes. Physical touch/controller acceptance and live
-sequel result/Ready screens remain manual validation gaps.
+iOS/tvOS source compilation passes. The owner accepted the Siri Remote and sequel campaign flows.
 The latest offscreen AppKit composite capture omitted some stone controls even
 though native geometry and activation checks passed. Shared bitmap footer captures
 verify the column layouts. Full shipping-app message compositing still needs a
@@ -111,7 +129,7 @@ manual check; no foreground test was launched.
 The menu audit checks the Home captions, the Progress rows and their Back
 targets, the record card and hint card footers, stars, and Saved Hot Seats on
 Players. The default and `--navigation` audits pass with 495 pages and 87
-navigation states. Live replay playback on a device remains a manual check.
+navigation states. The owner accepted hosted replay delivery.
 
 Reproduce captures with the `LemmingsMobileMenuAudit` executable using `--hierarchy`
 and `--pause`. Run native checks through `Tools/UITestRunner/run.py`, including

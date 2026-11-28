@@ -81,7 +81,7 @@ public final class MobileListLibrary: MobileCampaignPreviewLibrary {
         var fanScanned = false
         func pack(_ id: String) -> MobileContentPack? {
             if let known = packs[id] { return known }
-            if !id.hasPrefix("release/") {
+            if !id.hasPrefix("release/") && !id.hasPrefix("authored/") {
                 // One folder scan covers every fan pack in the list.
                 if !fanScanned {
                     fanScanned = true

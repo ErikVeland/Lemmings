@@ -12,7 +12,7 @@ SPEC.loader.exec_module(MODULE)
 
 
 class AboutBundleTests(unittest.TestCase):
-    def test_current_notes_precede_feed_and_are_not_duplicated(self):
+    def test_installed_notes_use_only_the_current_release_draft(self):
         for published in (False, True):
             with self.subTest(published=published), tempfile.TemporaryDirectory() as temp:
                 root = Path(temp)
@@ -21,7 +21,7 @@ class AboutBundleTests(unittest.TestCase):
                 (root / "Resources/Info.plist").write_bytes(plistlib.dumps({
                     "CFBundleShortVersionString": "2.0.7", "CFBundleVersion": "91"}))
                 (root / "Documentation/ReleaseNotes-2.0.7-build91.md").write_text(
-                    "# Ultimate Lemmings 2.0.7\n\nBuild: 91\nRelease base: v2.0.6\n\n"
+                    "# Ultimate Lemmings 2.0.7\n\nBuild: 91\nRelease base: v2.0.6\nPlatform builds: Mac 91\n\n"
                     "## Changes\n\n- First improvement\n- Second improvement\n")
                 (root / "Tools/Telemetry/contributors.md").write_text("# Supporters\n\nA supporter\n")
                 (root / "Resources/About/Heritage.md").write_text("# Original creators\n\nOffline heritage credits\n")
@@ -40,10 +40,10 @@ class AboutBundleTests(unittest.TestCase):
                 self.assertEqual(history.count("# 2.0.7 · Build 91"), 1)
                 self.assertNotIn("Release base:", history)
                 self.assertNotIn("\nBuild:", history)
+                self.assertNotIn("Platform builds:", history)
                 self.assertIn("## Changes\n\n- First improvement\n- Second improvement", history)
-                self.assertIn("# 2.0.6 · Build 90", history)
-                self.assertIn("- One\n- Two", history)
-                self.assertIn("iOS build 16\n\ntvOS build 6", history)
+                self.assertNotIn("2.0.6", history)
+                self.assertNotIn("Earlier changes", history)
                 self.assertEqual((destination / "Contributors.md").read_text(), "# Supporters\n\nA supporter\n")
                 self.assertEqual((destination / "Heritage.md").read_text(), "# Original creators\n\nOffline heritage credits\n")
 

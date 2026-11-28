@@ -1,7 +1,7 @@
 // Appended to main.swift by the runner to exercise private app wiring directly.
 import ImageIO
 import Sparkle
-private struct IntegrationFailure: Error { let message: String }
+struct IntegrationFailure: Error { let message: String }
 private func check(_ value: @autoclosure () throws -> Bool, _ message: String) throws {
   if try value() == false { throw IntegrationFailure(message: message) }
 }
@@ -1275,7 +1275,7 @@ extension AppDelegate {
       let report = store.record(run)!
       ArcadeWindow.shared.showResult(report, owner: window, retry: {}, next: {}, replay: { _ in })
       try render(game + "-result")
-      try press("Worldwide")
+      try press("Details"); try press("Worldwide")
       try check(!view.usesGameCenter && view.boardScope == .worldwide && service.busy, "Worldwide did not open community boards")
       try render(game + "-loading"); try await waitBoard()
       try check(service.board?.entries.first?.name == "PAL" && transport.requests.last?.url?.query?.contains(conditions.fingerprint) == true,
@@ -1283,12 +1283,12 @@ extension AppDelegate {
       try check(transport.requests.allSatisfy { $0.httpMethod == "GET" && $0.value(forHTTPHeaderField: "Authorization") == nil }
         && !service.sharing(host), "Browsing shared records or required an account")
       try render(game + "-worldwide")
-      try press("Back to result")
+      try press("Back"); try press("Back to result")
       try check(view.mode == .result && view.report?.run.id == run.id && store.hotSeatID == sharedID, "Returning from Worldwide changed the turn")
     }
     let lastReport = view.report!
     transport.board = .init(entries: [], page: 0, hasMore: false, verification: "community")
-    try press("Worldwide"); try await waitBoard(); try render("worldwide-empty")
+    try press("Details"); try press("Worldwide"); try await waitBoard(); try render("worldwide-empty")
     try check(service.board?.entries.isEmpty == true, "Empty community board was hidden")
     transport.code = 503
     try press("Worldwide *"); try await waitBoard(); try render("worldwide-offline")
@@ -1806,7 +1806,7 @@ extension AppDelegate {
       "Modern did not restore backpacks in Settings and the playfield")
     try check(preferences.current.gameplayCursorStyle == .modern && playfield.gameplayCursorStyle == .modern
       && cursorStyle.titleOfSelectedItem == "Modern", "Modern preset did not restore the modern cursor")
-    for title in ["Favor lemmings still approaching", "Favor blockers for bombs", "Favour active skilled lemmings", "Show skill backpacks"] {
+    for title in ["Favour lemmings still approaching", "Favour blockers for bombs", "Favour active skilled lemmings", "Show skill backpacks"] {
       guard let control = descendants(root).compactMap({ $0 as? NSButton }).first(where: { $0.title == title }) else {
         try check(false, "Targeting control is missing: \(title)"); return
       }
@@ -1902,10 +1902,10 @@ extension AppDelegate {
       throw IntegrationFailure(message: "Screen setting lacks its accessible name")
     }
     let tubeControls = descendants(root).compactMap { $0 as? GameSlider }.filter {
-      ["Tube Strength", "Pixel Width"].contains($0.accessibilityLabel() ?? "")
+      ["Tube strength", "Pixel width"].contains($0.accessibilityLabel() ?? "")
     }
     let tubeLabels = descendants(root).compactMap { $0 as? GameLabel }.filter {
-      ["Tube Strength", "Pixel Width"].contains($0.stringValue)
+      ["Tube strength", "Pixel width"].contains($0.stringValue)
     }
     try check(tubeControls.count == 2 && tubeLabels.count == 2, "Tube options are missing")
     let tubeValues = tubeControls.map(\.doubleValue)
@@ -2097,8 +2097,12 @@ extension AppDelegate {
       try check(reader.startReading(), "Benchmark movie did not start reading")
       var encodedFrames = 0
       while let sample = videoOutput.copyNextSampleBuffer() { encodedFrames += CMSampleBufferGetNumSamples(sample) }
-      try check(reader.status == .completed && encodedFrames == runMovie.capturedFrames,
-        "Benchmark movie lost frames: \(encodedFrames)/\(runMovie.capturedFrames)")
+      let encoding = benchmarkRecorder?.encodingProfile
+      let movieDuration = try await movieAsset.load(.duration).seconds
+      try check(reader.status == .completed && Int64(encodedFrames) == encoding?.videoSamples
+        && encoding?.encodedFrames == Int64(runMovie.capturedFrames)
+        && abs(movieDuration - Double(runMovie.capturedFrames) / 17) <= 1 / 17.0,
+        "Benchmark movie lost video samples or changed its tick duration")
       func distribution(_ values: [Double]) -> [String: Double] {
         let sorted = values.sorted()
         guard !sorted.isEmpty else { return [:] }
@@ -2767,7 +2771,9 @@ extension AppDelegate {
     var cues: [ClassicSoundEffect] = []
     var dispatches = 0
     ghost.onSoundCues = { sounds in dispatches += 1; cues += sounds.map(\.effect) }
-    for _ in 0..<proof.replay.expected!.ticks { ghost.advance() }
+    let replayStart = ProcessInfo.processInfo.systemUptime
+    let step = 1 / Double(ClassicDOSRules.ticksPerSecond)
+    for index in 0...proof.replay.expected!.ticks { ghost.advance(at: replayStart + Double(index) * step) }
     try check(cues.contains(.doorOpen) && cues.contains(.assignSkill) && cues.contains(.exitLevel),
       "Solution replay omitted entrance, assignment or exit sounds")
     try check(ghost.playback.session.simulation.didWin && live.currentTick == 0,
@@ -2777,16 +2783,22 @@ extension AppDelegate {
     defer { fast.stop() }
     var fastCues: [ClassicSoundEffect] = []
     fast.onSoundCues = { fastCues += $0.map(\.effect) }
-    fast.speedControl.tap()
-    for _ in 0..<proof.replay.expected!.ticks where !fast.playback.session.isComplete { fast.advance() }
+    fast.speedControl.ridiculousEnabled = true
+    fast.speedControl.select(25, at: replayStart - 1)
+    for index in 0...proof.replay.expected!.ticks where !fast.playback.session.isComplete {
+      fast.advance(at: replayStart + Double(index) * step)
+    }
     try check(fastCues == cues, "Fast solution replay dropped or duplicated sound events")
     let beforeSeek = dispatches
-    let back = ghost.page.subviews.compactMap { $0 as? NSButton }.first { $0.title == "Back 1s" }!
-    back.performClick(nil)
+    let timeline = ghost.page.subviews.compactMap { $0 as? NSSlider }.first!
+    timeline.doubleValue -= Double(ClassicDOSRules.ticksPerSecond)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
     try check(dispatches == beforeSeek, "Rewind replayed historical sounds")
     ghost.advance()
     try check(dispatches == beforeSeek, "Paused replay emitted sounds")
-    ghost.page.subviews.compactMap { $0 as? NSButton }.first { $0.title == "Step +1" }!.performClick(nil)
+    let stepKey = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 0, windowNumber: 0,
+      context: nil, characters: ".", charactersIgnoringModifiers: ".", isARepeat: false, keyCode: 47)!
+    try check(ghost.handleKey(stepKey), "Replay did not handle the single-step shortcut")
     try check(dispatches == beforeSeek + 1, "Single-step omitted its sound cues")
     try check(!bank.isRunning && !ghost.effects!.isRunning && bank.muted,
       "Mechanical audio regression started audible output")
@@ -2879,11 +2891,47 @@ extension AppDelegate {
     replay.seekMove(1)
     let first = replay.playback.session.currentTick
     try check(first == replay.moveNavigation.ticks.first && replay.paused, "Next move did not reach the first successful use while paused")
-    button("Zoom 1×", in: replay.page)!.performClick(nil)
-    button("Goal", in: replay.page)!.performClick(nil)
+    guard let timeline = replay.page.subviews.compactMap({ $0 as? NSSlider }).first else {
+      throw IntegrationFailure(message: "Solution replay has no timeline")
+    }
+    let end = replay.playback.solution.replay.expected!.ticks
+    try check(timeline.intValue == Int32(first) && timeline.maxValue == Double(end),
+      "Timeline position or duration disagrees with the replay")
+    try check((timeline.cell as? GameSliderCell)?.trackMarks == replay.moveNavigation.ticks.map { Double($0) / Double(end) },
+      "Timeline marks disagree with the recorded skill uses")
+    timeline.doubleValue = Double(end)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
+    try check(replay.paused && replay.playback.session.currentTick == end && button("Replay", in: replay.page) != nil,
+      "Seeking to the end did not hold the final frame")
+    button("Replay", in: replay.page)!.performClick(nil)
+    try check(!replay.paused && replay.playback.session.currentTick == 0, "Replay did not restart from the beginning")
+    timeline.doubleValue = Double(first)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
+    for (currentSpeed, chosenSpeed) in [("1×", "3×"), ("3×", "1×")] {
+      let speed = button(currentSpeed, in: replay.page)!
+      speed.performClick(nil)
+      button(chosenSpeed, in: GameScreen.shared.controllerPage(in: window)!)!.performClick(nil)
+      try check(speed.title == chosenSpeed && replay.paused, "Selecting replay speed changed the play state or missed the tier")
+    }
+    guard let options = button("Options", in: replay.page) else {
+      throw IntegrationFailure(message: "Solution replay has no Options control")
+    }
+    func chooseOption(_ title: String) throws {
+      options.performClick(nil)
+      let optionsPage = GameScreen.shared.controllerPage(in: window)!
+      try check(optionsPage !== replay.page, "Options did not open a separate page")
+      guard let option = button(title, in: optionsPage) else {
+        throw IntegrationFailure(message: "Missing replay option \(title)")
+      }
+      option.performClick(nil)
+    }
+    try chooseOption("Zoom 1×")
+    try chooseOption("Goal")
     let camera = replay.field.viewport
     button("Play", in: replay.page)!.performClick(nil)
-    replay.advance()
+    let replayStart = ProcessInfo.processInfo.systemUptime
+    replay.advance(at: replayStart)
+    replay.advance(at: replayStart + 1 / Double(ClassicDOSRules.ticksPerSecond))
     let retainedTick = replay.playback.session.currentTick
     replay.page.cancelOperation(nil)
     try check(isPaused && !GameScreen.shared.isPresented && replay.paused,
@@ -2909,10 +2957,23 @@ extension AppDelegate {
     LevelHintWindow.shared.selectSolutionMode(.solution)
     replay.seekMove(-1)
     try check(replay.playback.session.currentTick == first && replay.paused, "Previous move did not retain a paused solution")
+    try chooseOption("Zoom 2×")
+    try chooseOption("Zoom 4×")
+    try chooseOption("Turn on auto-follow")
     let output = URL(fileURLWithPath: ".build/solution-switch-mac-renders")
     try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+    func capture(_ name: String) throws {
+      func invalidate(_ view: NSView) { view.needsDisplay = true; view.subviews.forEach(invalidate) }
+      invalidate(replay.page)
+      let bitmap = replay.page.bitmapImageRepForCachingDisplay(in: replay.page.bounds)!
+      replay.page.cacheDisplay(in: replay.page.bounds, to: bitmap)
+      try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent(name + ".png"))
+    }
     for size in [CGSize(width: 640, height: 480), .init(width: 800, height: 600), .init(width: 1120, height: 720), .init(width: 1600, height: 900)] {
       replay.page.frame.size = size; replay.page.needsLayout = true; replay.page.layoutSubtreeIfNeeded()
+      try check(replay.field.frame.height >= size.height * 0.7, "Replay controls crowd out the playfield")
+      try check(replay.page.hitTest(CGPoint(x: timeline.frame.midX, y: timeline.frame.midY)) === timeline,
+        "Timeline has no input target")
       func checkTargets(_ view: NSView) throws {
         for child in view.subviews {
           if child.isHidden { continue }
@@ -2929,11 +2990,30 @@ extension AppDelegate {
         }
       }
       try checkTargets(replay.page)
-      replay.page.needsDisplay = true
-      let bitmap = replay.page.bitmapImageRepForCachingDisplay(in: replay.page.bounds)!
-      replay.page.cacheDisplay(in: replay.page.bounds, to: bitmap)
-      try bitmap.representation(using: .png, properties: [:])!.write(to: output.appendingPathComponent("solution-\(Int(size.width)).png"))
+      window.makeFirstResponder(replay.page)
+      let cell = timeline.cell as! GameSliderCell
+      let sliderBitmap = timeline.bitmapImageRepForCachingDisplay(in: timeline.bounds)!
+      timeline.displayIgnoringOpacity(timeline.bounds, in: NSGraphicsContext(bitmapImageRep: sliderBitmap)!)
+      let knob = cell.knobRect(flipped: timeline.isFlipped)
+      let center = Int(knob.midX * CGFloat(sliderBitmap.pixelsWide) / timeline.bounds.width)
+      let markerPixels = (0..<sliderBitmap.pixelsHigh).filter { row in
+        guard let color = sliderBitmap.colorAt(x: center, y: row)?.usingColorSpace(.sRGB) else { return false }
+        return color.redComponent > 0.85 && color.greenComponent > 0.55 && color.blueComponent < 0.5
+      }
+      try check(markerPixels.count >= 7, "The timeline thumb hides the current move marker")
+      try capture("solution-\(Int(size.width))")
     }
+    button("Play", in: replay.page)!.performClick(nil)
+    let captureStart = ProcessInfo.processInfo.systemUptime
+    for tick in 0...ClassicDOSRules.ticksPerSecond {
+      replay.advance(at: captureStart + Double(tick) / Double(ClassicDOSRules.ticksPerSecond))
+    }
+    try capture("solution-playing")
+    timeline.doubleValue = Double(end)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
+    try capture("solution-complete")
+    timeline.doubleValue = Double(first)
+    _ = timeline.sendAction(timeline.action, to: timeline.target)
     for width: CGFloat in [320, 640, 900, 1120, 1600] {
       for showsBack in [false, true] {
         let bar = ReplayBar()
@@ -3247,28 +3327,41 @@ extension AppDelegate {
         "Replay did not fill the viewport below fixed navigation")
       try check(ghost.field.frame.width == ghost.page.bounds.width && ghost.field.frame.height > ghost.page.bounds.height * 0.5,
         "Replay retained its small menu canvas")
-      for target in [2.0, 3, 5, 10] {
-        button("Speed +", in: ghost.page)!.performClick(nil)
-        try check(ghost.speedControl.target == target, "Replay skipped a shared speed tier")
+      func choose(_ title: String, from control: String) throws {
+        guard let opener = button(control, in: ghost.page) else {
+          throw IntegrationFailure(message: "Missing replay control \(control)")
+        }
+        opener.performClick(nil)
+        guard let menu = GameScreen.shared.controllerPage(in: window), menu !== ghost.page,
+              let choice = button(title, in: menu) else {
+          throw IntegrationFailure(message: "Missing replay choice \(title)")
+        }
+        choice.performClick(nil)
       }
-      button("10×", in: ghost.page)!.performClick(nil)
-      try check(ghost.speedControl.target == 1, "Replay speed toggle did not return to normal")
+      var currentSpeed = "1×"
+      for target in [2.0, 3, 5, 10] {
+        let label = "\(Int(target))×"
+        try choose(label, from: currentSpeed)
+        try check(ghost.speedControl.target == target, "Replay skipped a shared speed tier")
+        currentSpeed = label
+      }
+      try choose("1×", from: currentSpeed)
+      try check(ghost.speedControl.target == 1, "Replay speed did not return to normal")
       let baseZoom = ghost.field.viewport.zoom
-      button("Zoom 1×", in: ghost.page)!.performClick(nil)
+      try choose("Zoom 1×", from: "Options")
       try check(ghost.field.viewport.zoom == baseZoom * 2, "Replay 2× zoom failed")
       try capture(ghost.page, name: "solution-zoom-\(mode)")
-      button("Zoom 2×", in: ghost.page)!.performClick(nil)
+      try choose("Zoom 2×", from: "Options")
       try check(ghost.field.viewport.zoom == baseZoom * 4, "Replay 4× zoom failed")
-      button("Zoom 4×", in: ghost.page)!.performClick(nil)
-      button("Goal", in: ghost.page)!.performClick(nil)
+      try choose("Zoom 4×", from: "Options")
+      try choose("Goal", from: "Options")
       let freeX = ghost.field.viewport.scrollX
       button("Play", in: ghost.page)!.performClick(nil)
       ghost.advance()
       try check(ghost.field.viewport.scrollX == freeX, "Automatic tracking overrode the free camera")
       button("Pause", in: ghost.page)!.performClick(nil)
-      button("Home", in: ghost.page)!.performClick(nil)
-      button("Next", in: ghost.page)!.performClick(nil)
-      try check(button("Tracking", in: ghost.page) != nil, "Replay did not track an unassigned lemming")
+      try choose("Entrance", from: "Options")
+      try choose("Next lemming", from: "Options")
       func replayTargets(_ view: NSView) throws {
         for child in view.subviews {
           if child.isHidden { continue }
@@ -3299,7 +3392,10 @@ extension AppDelegate {
       try check(ghost.speedControl.target > 1, "Replay F did not use shared speed control")
       ghost.speedControl.reset()
       _ = ghost.handleKey(replayKey("h", code: 4))
-      try check(button("Free view", in: ghost.page) != nil, "Replay H did not cancel tracking")
+      button("Options", in: ghost.page)!.performClick(nil)
+      let options = GameScreen.shared.controllerPage(in: window)!
+      try check(button("Turn on auto-follow", in: options) != nil, "Replay H did not cancel automatic tracking")
+      GameScreen.shared.dismiss(options)
       try check(!ghost.handleKey(replayKey("h", code: 4, flags: .command)), "Replay swallowed an app shortcut")
       let fullFrame = ghost.page.frame
       ghost.page.frame.size = CGSize(width: 800, height: 600)
@@ -3307,7 +3403,7 @@ extension AppDelegate {
       try replayTargets(ghost.page)
       try capture(ghost.page, name: "solution-small-\(mode)")
       ghost.page.frame = fullFrame; ghost.page.needsLayout = true; ghost.page.layoutSubtreeIfNeeded()
-      button("Back 1s", in: ghost.page)!.performClick(nil)
+      try choose("Back 1s", from: "Options")
       try check(ghost.field.session === ghost.playback.session,
         "Seeking solution replay left the canvas on a stale session")
       let stoppedTick = ghost.playback.session.currentTick
@@ -4904,10 +5000,9 @@ extension AppDelegate {
     try check(library.entries.first(where: { $0.title == .lemmings2TheTribes })?.detail == "COMPLETE"
       && library.entries.first(where: { $0.title == .lemmings3TheChronicles })?.detail == "BETA",
       "The library has the wrong sequel release status")
-    try check(homeContentRow(.lemmings2)?.contains("BETA") == false
-      && homeContentRow(.lemmings2)?.contains("PREVIEW") == false
-      && homeContentRow(.lemmings3)?.hasSuffix(" — BETA") == true,
-      "The home rows have the wrong sequel release status")
+    let actions = playMenuItems().map(\.action)
+    try check(actions.contains(.browse(.lemmings2)) && actions.contains(.browse(.lemmings3)),
+      "The Play menu lost a sequel destination")
     returnToLibrary()
     window.setContentSize(CGSize(width: 900, height: 620))
     window.contentView?.layoutSubtreeIfNeeded()
@@ -4983,7 +5078,7 @@ extension AppDelegate {
     FanLevelLibrary.Progress.setCount(1, for: installedFanPack)
     fanPacks = [installedFanPack]
     dataSets = []
-    try check(fanHomeRow() == "FAN LEMMINGS  1/1",
+    try check(fanHomeStatus() == "1/1",
       "The Fan Lemmings home row included progress from a removed pack")
     library = UnifiedGameLibrary(entries: [
       .init(title: .lemmings, total: 1),
@@ -5754,7 +5849,7 @@ extension AppDelegate {
     stylesDirectory = nil
     neoLevelsDirectory = nil
     let bundled = try BundledGameResources.neoLemmix()
-    try check(neoLemmixSources == [bundled] && homeContentRow(.neolemmix)?.contains("NO PACKS") == false,
+    try check(neoLemmixSources == [bundled] && homeContentStatus(.neolemmix) != L10n.text("No packs"),
       "Bundled NeoLemmix packs still need a folder choice")
     let library = NeoLemmixLibrary.discover(neoLemmixSources)
     rebuildLevelCatalogue(LevelBrowserDiscovery(
@@ -6445,6 +6540,64 @@ extension AppDelegate {
     }
   }
 
+  /// The menu bar mirrors Home: app commands, then File, Play and Profile.
+  /// Every shortcut keeps its key and no two visible items share a chord.
+  fileprivate func testDestinationMenus() throws {
+    if window == nil { buildInterface() }
+    GameScreen.shared.dismissAll()
+    buildMenu()
+    guard let menu = NSApp.mainMenu else { throw IntegrationFailure(message: "The menu bar is absent") }
+    func allItems(_ menu: NSMenu) -> [NSMenuItem] {
+      menu.items.flatMap { item in [item] + (item.submenu.map(allItems) ?? []) }
+    }
+    func titles(_ menu: NSMenu?) -> [String] { (menu?.items ?? []).filter { !$0.isSeparatorItem }.map(\.title) }
+    let top = menu.items.compactMap { $0.submenu?.title }
+    try check(["File", "Play", "Profile", "Edit", "View", "Audio", "Help"].allSatisfy(top.contains),
+      "The menu bar lacks a destination menu: \(top)")
+    let app = titles(menu.items.first?.submenu)
+    try check(app == [L10n.text("About \(AppDistribution.name)"), L10n.text("Check for Updates…"),
+                      L10n.text("Settings…"), L10n.text("Quit \(AppDistribution.name)")],
+      "The app menu holds more than app commands: \(app)")
+    let play = titles(menu.items.first { $0.submenu?.title == "Play" }?.submenu)
+    let profile = titles(menu.items.first { $0.submenu?.title == "Profile" }?.submenu)
+    try check(["Main menu", "Resume Saved Run…", "Level Select…", "Fan Levels…", "Replay Last Game",
+               "Hot Seat…", "Community"].allSatisfy(play.contains), "Play is incomplete: \(play)")
+    try check(profile == ["Profile…", "Players", "Records…", "Achievements…", "Statistics", "Cloud Saves…",
+                          "Play Insights…"], "Profile is incomplete: \(profile)")
+    let items = allItems(menu)
+    let expected: [(String, String, NSEvent.ModifierFlags)] = [
+      ("Settings…", ",", [.command]), ("Add Game…", "o", [.command]), ("Open Level File…", "O", [.command, .shift]),
+      ("Main menu", "l", [.command, .shift]), ("Resume Saved Run…", "r", [.command, .shift]),
+      ("Fan Levels…", "f", [.command, .shift]), ("Replay Last Game", "v", [.command, .shift]),
+      ("Show Recorded Routes", "v", [.command, .shift, .option]), ("Play Lemmings 2…", "2", [.command, .shift]),
+      ("Profile…", "p", [.command, .shift]), ("Records…", "b", [.command, .shift]),
+      ("Achievements…", "a", [.command, .shift])]
+    for (title, key, modifiers) in expected {
+      guard let item = items.first(where: { $0.title == title }) else { throw IntegrationFailure(message: "Missing menu item \(title)") }
+      try check(item.keyEquivalent == key && item.keyEquivalentModifierMask == modifiers && item.action != nil
+        && responds(to: item.action!), "\(title) lost its shortcut or action")
+    }
+    try check(items.first { $0.title == "Show Recorded Routes" }?.isAlternate == true,
+      "Show Recorded Routes is visible without Option")
+    var chords: [String: String] = [:]
+    for item in items where !item.keyEquivalent.isEmpty && !item.isAlternate {
+      let shifted = item.keyEquivalent != item.keyEquivalent.lowercased()
+      let mask = item.keyEquivalentModifierMask.intersection([.command, .shift, .option, .control])
+        .union(shifted ? .shift : [])
+      let chord = "\(mask.rawValue)-\(item.keyEquivalent.lowercased())"
+      try check(chords[chord] == nil, "\(item.title) shares its shortcut with \(chords[chord] ?? "")")
+      chords[chord] = item.title
+    }
+    // Shift-Command-P opens the Profile hub. Players still opens player selection.
+    try check(menu.performKeyEquivalent(with: NSEvent.keyEvent(with: .keyDown, location: .zero,
+      modifierFlags: [.command, .shift], timestamp: 1, windowNumber: window.windowNumber, context: nil,
+      characters: "P", charactersIgnoringModifiers: "p", isARepeat: false, keyCode: 35)!), "Shift-Command-P was not handled")
+    try check(GameScreen.shared.controllerPage(in: window)?.accessibilityLabel() == L10n.text("Profile"),
+      "Shift-Command-P did not open the Profile hub")
+    GameScreen.shared.dismissAll()
+    print("PASS destination menus: app commands only, Play and Profile items, kept shortcuts, unique chords and the Profile hub")
+  }
+
   fileprivate func testSequenceNavigationGuards() throws {
     GameScreen.shared.dismissAll()
     if resumeSavedRunItem == nil { buildMenu() }
@@ -6650,7 +6803,8 @@ extension AppDelegate {
     GameScreen.shared.dismissAll()
 
     let markdownFixture = AboutMarkdownView(markdown: "# Release\n\n## Changes\n\n- First item\n  continued\n- Second item\n\nSeparate paragraph.\nNext source line.")
-    markdownFixture.frame = CGRect(x: 0, y: 0, width: 240, height: 400)
+    // Narrow enough that the bullet wraps in the game font and in the compact fallback font.
+    markdownFixture.frame = CGRect(x: 0, y: 0, width: 120, height: 400)
     markdownFixture.layoutSubtreeIfNeeded()
     let fixtureLabels = descendants(markdownFixture).compactMap { $0 as? GameLabel }.map(\.stringValue)
     try check(fixtureLabels.contains("First item continued") && fixtureLabels.contains("Second item")
@@ -6669,11 +6823,22 @@ extension AppDelegate {
     let aboutFolder = aboutResources.appendingPathComponent("About")
     try FileManager.default.createDirectory(at: aboutFolder, withIntermediateDirectories: true)
     try Data(contentsOf: heritageSource).write(to: aboutFolder.appendingPathComponent("Heritage.md"))
-    try Data(contentsOf: Bundle.main.resourceURL!.appendingPathComponent("About/VersionHistory.md"))
-      .write(to: aboutFolder.appendingPathComponent("VersionHistory.md"))
+    let currentNotes = try String(contentsOf: Bundle.main.resourceURL!.appendingPathComponent("About/VersionHistory.md"),
+      encoding: .utf8).components(separatedBy: "\n# ").first!
+    let archive = (0..<19).reversed().map { "# 2.5.\($0) · Build \(80 + $0)\n\nHistorical test entry." }
+      + ["# 1.7.9\n\nOldest test entry."]
+    try ([currentNotes] + archive).joined(separator: "\n\n")
+      .write(to: aboutFolder.appendingPathComponent("VersionHistory.md"), atomically: true, encoding: .utf8)
     let about = AboutWindow(resources: aboutResources, defaults: defaults,
-      loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter" })
+      loadContributors: { "# Supporters\n\nFirst supporter\n\nSecond supporter\n\nFlags 🏳️‍⚧️🇵🇸" })
     let page = about.show(owner: window)
+    let flags = "🏳️‍⚧️🇵🇸"
+    try check(GameMenuTypography.menuText(flags) == flags, "Contributor flags became question marks")
+    // Without original artwork the page uses the compact font, which shows no flags.
+    if let renderer = GameMenuArtwork.renderer() {
+      try check(renderer.font(.small)?.covers(flags) == true && renderer.font(.large)?.covers(flags) == true,
+        "Contributor flags lost their glyphs")
+    }
     try check(window.firstResponder === page.controllerBackButton, "About did not retain safe Back focus")
     for _ in 0..<100 where defaults.string(forKey: "ContributorsMarkdownV1") == nil {
       try await Task.sleep(nanoseconds: 10_000_000)
@@ -6719,11 +6884,13 @@ extension AppDelegate {
           try check(history.releases.first?.title == "\(installedVersion) · Build \(installedBuild)", "Current release is missing or out of order")
           try check(history.releases.count >= 20, "Published releases are missing from the index")
           let document = history.detail.scroll.documentView!
-          try check(document.bounds.height > history.detail.scroll.contentSize.height, "Current notes cannot scroll")
+          // Short patch notes fit without scrolling. Longer notes must scroll rather than clip.
+          let textBottom = document.subviews.map(\.frame.maxY).max() ?? 0
+          try check(textBottom <= history.detail.scroll.contentSize.height
+            || document.bounds.height > history.detail.scroll.contentSize.height, "Current notes cannot scroll")
           try check(document.subviews.allSatisfy { document.bounds.contains($0.frame) && $0.frame.width <= 680 },
             "History text left its bounded reading column")
-          let previousVersion = history.releases[1].title.components(separatedBy: " · ").first!
-          let older = try button(previousVersion, in: history)
+          let older = try button(history.indexTitle(1), in: history)
           try check(older.bounds.height >= 44, "Release index target is too small")
           try check(older.accessibilityPerformPress() && history.selectedIndex == 1 && older.state == .on,
             "Release selection is unavailable to accessibility")
@@ -6749,7 +6916,7 @@ extension AppDelegate {
           try check(history.selectedIndex == history.releases.count - 1, "Oldest release cannot be selected")
           try capture(page, "\(Int(size.width))-history-oldest")
           history.indexScroll.contentView.scroll(to: CGPoint(x: 0, y: index.bounds.height - history.indexScroll.contentSize.height))
-          let current = try button(installedVersion, in: history)
+          let current = try button(history.indexTitle(0), in: history)
           window.makeFirstResponder(current)
           let space = NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,
             windowNumber: window.windowNumber, context: nil, characters: " ", charactersIgnoringModifiers: " ",
@@ -6779,6 +6946,36 @@ extension AppDelegate {
       "Contributor refresh replaced the local heritage credits")
     offlinePage.controllerBackButton.performClick(nil)
     try check(!GameScreen.shared.contains(offlinePage), "Heritage credits blocked Back")
+    if flow == nil { loadContent() }
+    flow?.acknowledgeGameComplete()
+    phase = .briefing
+    homeShowsPlay = false
+    startedMusicIdentity = "current-home-theme"
+    _ = offline.show(owner: window)
+    let navigation = GameScreen.shared.controllerNavigationRoot(in: window)!
+    let mainMenu = try button("Main menu", in: navigation)
+    mainMenu.performClick(nil)
+    try check(!GameScreen.shared.isPresented && startedMusicIdentity == "current-home-theme",
+      "About restarted the home audio instead of closing its page")
+    showHomePlay(true)
+    let playTheme = startedMusicIdentity
+    _ = offline.show(owner: window)
+    let playNavigation = GameScreen.shared.controllerNavigationRoot(in: window)!
+    try button("Main menu", in: playNavigation).performClick(nil)
+    try check(!GameScreen.shared.isPresented && !homeShowsPlay && startedMusicIdentity == playTheme,
+      "Main menu did not return from About over Play to Home")
+    print("PASS About returns from Home and Play without restarting the menu theme")
+    showProfileHub()
+    let profile = GameScreen.shared.controllerPage(in: window)!
+    let statistics = try button("Statistics", in: profile)
+    let personal = statistics.convert(statistics.bounds, to: profile)
+    let players = try button("Players", in: profile)
+    let shared = players.convert(players.bounds, to: profile)
+    try check(shared.minY - personal.maxY >= 20, "Profile mixed personal and shared actions")
+    try capture(profile, "profile-groups")
+    statistics.performClick(nil)
+    try capture(GameScreen.shared.controllerPage(in: window)!, "statistics-aligned")
+    GameScreen.shared.dismissAll()
     try check(AboutWindow.coffeeURL.absoluteString == "https://coff.ee/generik", "Incorrect coffee destination")
     try check(AboutWindow.coffeeURL == GameSupport.coffeeURL, "Home and About donation destinations differ")
     GameScreen.shared.dismissAll()
@@ -6789,7 +6986,7 @@ extension AppDelegate {
     home.phase = .briefing
     home.overlayTitle = L10n.text("LEMMINGS")
     home.overlayProfileInitials = "PLA"
-    home.overlayLines = ["RESUME JOURNEY (4/120)", "PLAY", "HOT SEAT", "PROFILE", "COMMUNITY"]
+    home.overlayLines = ["RESUME JOURNEY (4/120)", "HOT SEAT", "PLAY", "PROFILE", "COMMUNITY"]
     home.overlayHomeLeadingCount = home.overlayLines.count
     home.overlayShowsSettingsButton = true
     for size in [CGSize(width: 640, height: 420), CGSize(width: 1120, height: 720), CGSize(width: 1600, height: 1000)] {
@@ -6798,9 +6995,11 @@ extension AppDelegate {
       try capture(home, "home-destinations-\(Int(size.width))")
       let labels = home.accessibleControls(owner: home).compactMap { ($0 as? GameAccessibleElement)?.accessibilityLabel() }
       try check(!labels.contains(L10n.text("Donate")), "Home still shows Donate")
-      try check(home.homeActionCount == home.overlayLines.count + 1, "Home lost a destination or Settings")
+      try check(home.homeActionCount == home.overlayLines.count + 1,
+        "Home lost a destination or Settings at \(Int(size.width))x\(Int(size.height)): \(home.homeActionCount) of \(home.overlayLines.count + 1)")
     }
-    try check(NSApplication.shared.helpMenu?.items.contains { $0.title == L10n.text("Donate…") } == true,
+    buildMenu()
+    try check(NSApplication.shared.helpMenu?.items.contains { $0.action == #selector(openDonation) } == true,
       "The Help menu has no Donate item")
     print("PASS Home shows Continue, four destinations and Settings at three sizes; Donate is in the Help menu")
     print("PASS About tabs, contributor cache/offline state, pixel renders and input targets; confirmed reset and recovery retain new rescues")
@@ -8114,29 +8313,29 @@ extension AppDelegate {
     }
     for pass in 1...2 {
       if let root = try? BundledGameResources.lemmings2() {
-        measure("L2 saved completion \(pass)") { _ = Lemmings2PlayWindow.savedCompletion(root: root) }
+        measure("L2 saved completion \(pass)") { _ = Lemmings2PlayWindow.savedCompletion(root: root, progressData: Lemmings2PlayWindow.browserProgressData(root: root)) }
         let campaign = try Lemmings2Campaign(root: root)
         let won = LevelCatalogueIdentity(engine: .lemmings2, packID: "tribes-0", levelID: "0:\(campaign.levels[0].fingerprint)")
-        let before = Lemmings2PlayWindow.savedCompletion(root: root)
-        try check(Lemmings2PlayWindow.savedCompletion(root: root, journeyWins: [won]) == before + 1,
+        let before = Lemmings2PlayWindow.savedCompletion(root: root, progressData: Lemmings2PlayWindow.browserProgressData(root: root))
+        try check(Lemmings2PlayWindow.savedCompletion(root: root, progressData: Lemmings2PlayWindow.browserProgressData(root: root), journeyWins: [won]) == before + 1,
           "Cached bundled content hid a new Journey win")
-        try check(Lemmings2PlayWindow.savedCompletion(root: root) == before,
+        try check(Lemmings2PlayWindow.savedCompletion(root: root, progressData: Lemmings2PlayWindow.browserProgressData(root: root)) == before,
           "Cached bundled content retained another session's progress")
         if pass == 1 {
           let imported = FileManager.default.temporaryDirectory.appendingPathComponent("completion-import-\(UUID().uuidString)")
           try FileManager.default.createDirectory(at: imported, withIntermediateDirectories: true)
           defer { try? FileManager.default.removeItem(at: imported) }
           try FileManager.default.copyItem(at: root.appendingPathComponent("LEVELS"), to: imported.appendingPathComponent("LEVELS"))
-          try check(Lemmings2PlayWindow.savedCompletion(root: imported, journeyWins: [won]) == 1,
+          try check(Lemmings2PlayWindow.savedCompletion(root: imported, progressData: Lemmings2PlayWindow.browserProgressData(root: imported), journeyWins: [won]) == 1,
             "Imported completion fixture did not match its content")
           try Data([0]).write(to: imported.appendingPathComponent("LEVELS/LEVEL000.DAT"), options: .atomic)
-          try check(Lemmings2PlayWindow.savedCompletion(root: imported, journeyWins: [won]) == 0,
+          try check(Lemmings2PlayWindow.savedCompletion(root: imported, progressData: Lemmings2PlayWindow.browserProgressData(root: imported), journeyWins: [won]) == 0,
             "Changed imported content reused stale completion data")
         }
         try measure("L2 catalogue \(pass)") { _ = try Lemmings2PlayWindow.browserLevels(root: root, progressData: nil) }
       }
       if let root = try? BundledGameResources.lemmings3() {
-        measure("L3 saved completion \(pass)") { _ = Lemmings3PlayWindow.savedCompletion(root: root) }
+        measure("L3 saved completion \(pass)") { _ = Lemmings3PlayWindow.savedCompletion(root: root, progressData: Lemmings3PlayWindow.browserProgressData(root: root)) }
         try measure("L3 catalogue \(pass)") { _ = try Lemmings3PlayWindow.browserLevels(root: root, progressData: [:]) }
       }
     }
@@ -8362,7 +8561,7 @@ Task { @MainActor in
     // Match normal startup: use the packaged index before opening the home screen.
     FanLevelLibrary.Progress.seedBundledCounts()
     #if !FRAME_PERFORMANCE_TESTS
-    #if !PLAYFIELD_TESTS && !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !FIRST_PROFILE_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS
+    #if !PLAYFIELD_TESTS && !EXTRA_SKILL_TESTS && !FOUNDATION_TESTS && !EARNED_REWARD_TESTS && !LEVEL_SKIP_TESTS && !SOLUTION_SWITCH_TESTS && !QUICK_CONTROLS_TESTS && !TYPOGRAPHY_TESTS && !HOME_BACKDROP_TESTS && !FIRST_PROFILE_TESTS && !NUKE_TESTS && !MAC_FIDELITY_TESTS && !EXIT_PROGRESS_TESTS && !UPDATE_TESTS && !COLLECTION_TESTS && !RELEASE_NOTES_TESTS && !SOLUTION_AUDIO_TESTS && !AUDIO_JOY_TESTS && !PACK_NAVIGATION_TESTS && !CONSOLIDATION_TESTS && !PROFILE_SESSION_TESTS && !SELECTION_HDR_TESTS && !CURSOR_INPUT_TESTS && !RELEASE_UI_TESTS && !LOADING_LATENCY_TESTS && !TRANSPORT_TESTS && !DIALOG_TESTS && !L3_STORY_TESTS && !NEO_RECOVERY_TESTS && !NEO_PACK_TESTS && !LEARNING_TESTS && !RESULT_NAVIGATION_TESTS && !ACTION_REPLAY_TESTS && !CELEBRATION_TESTS && !MENU_RECORDS_TRACK_TESTS && !SEQUENCE_RECOVERY_TESTS && !HINT_TESTS && !JOURNEY_PROGRESS_TESTS && !FAN_LIBRARY_TESTS && !MENU_TESTS
     try subject.testFailureMoodDecision()
     try subject.testSteppedCompletion()
     try subject.testFirstLaunchEffects()
@@ -8467,6 +8666,7 @@ Task { @MainActor in
     print("Remaining release integration tests passed.")
     #elseif SOLUTION_SWITCH_TESTS
     try await subject.testRetainedSolutionSwitching()
+    try subject.testSolutionReplaySounds()
     #elseif SOLUTION_AUDIO_TESTS
     try subject.testSolutionReplaySounds()
     #elseif AUDIO_JOY_TESTS
@@ -8704,6 +8904,8 @@ Task { @MainActor in
     try subject.testMenuDisplayTransition()
     try await subject.testCRTInput()
     print("Variable speed integration tests passed.")
+    #elseif MENU_TESTS
+    try subject.testDestinationMenus()
     #elseif RELEASE_UI_TESTS
     try subject.testPauseKeyRelease()
     let pauseL2 = try Lemmings2PlayWindow(root: BundledGameResources.lemmings2(), recordsCampaignProgress: false)
@@ -10539,7 +10741,7 @@ extension AppDelegate {
       }
       try check(view.mode == .result && next == 0 && retries == 0 && store.playingProfileID == owner, "Acknowledging awards advanced the game or changed the attempt owner")
       _ = try capture("\(engine)-\(mode)-result")
-      let receiptLabel = view.achievementHints.first { $0.title == "Rewards earned" }?.label
+      let receiptLabel = L10n.text("Rewards earned (\(view.savedEarnedRewards.count)) >")
       let link = (view.accessibilityChildren() ?? []).compactMap { $0 as? GameAccessibleElement }.first { $0.accessibilityRole() == .button && $0.accessibilityLabel() == receiptLabel }
       try check(link?.accessibilityPerformPress() == true && view.mode == .earnedRewards, "Result cannot reopen the reward reasons")
       view.keyDown(with: NSEvent.keyEvent(with: .keyDown, location: .zero, modifierFlags: [], timestamp: 1,

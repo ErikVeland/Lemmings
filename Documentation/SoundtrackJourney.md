@@ -10,8 +10,9 @@ The hierarchy is **game → role → track → port → source quality → origi
 
 Audio settings offer Same track (the default) and All tracks on Mac, iOS and TV.
 Same track selects another available version of the current composition. All
-tracks selects documented gameplay themes across installed games and seasonal
-libraries. Neither mode changes the saved soundtrack, campaign position or turn
+tracks picks a composition across installed games and seasonal libraries, then
+picks a version. It puts the eight most recent All tracks picks behind fresh
+choices. Neither mode changes the saved soundtrack, campaign position or turn
 owner. Menu/result cues, unverified identities, unavailable files and the current
 recording stay outside the candidate set. An unidentified or exclusive recording
 continues unchanged when it has no confirmed same-track alternate.
@@ -44,12 +45,10 @@ these personal preferences.
 
 ## Default DJ journey
 
-- The first occurrence of each tune uses its Amiga module, when installed. The shared Modern/Faithful setting applies to DJ modules and direct playback. This is not a claim of bit-perfect hardware output.
-- Later occurrences introduce another original port, a composer recording and a remix when available, then visit the remaining versions. This lets remixes appear within a campaign instead of waiting behind every hardware port. Each chapter uses the fixed port and source-fidelity order; unavailable chapters are skipped.
-- Classic counts previous occurrences of the assigned tune in the campaign score, including special-level overrides. A first special level therefore uses its original even when it occurs late in the campaign.
-- Lemmings 2 advances the tribe's version with its level index. Lemmings 3 advances each tribe tune after its local tune rotation repeats. These are score cycles within a campaign, not a counter of completed playthroughs.
+- The opening score uses the original arrangements when available. Classic and Oh No! complete their regular theme rotation first. A special level that replaces an opening theme delays the wider rotation until the missing theme has its turn. Lemmings 2 opens each tribe with its own theme. Lemmings 3 plays each theme in that tribe's rotation once.
+- After the opening score, each new ordinary level takes one composition from the installed catalogue. The selection alternates among games while they have unplayed choices and leads with port-exclusive themes. A composition with many arrangements takes one slot. Each later pass can use another arrangement. Tribes start at different points in the wider rotation.
 - Selection depends on the campaign position and installed catalogue. Retries, direct level selection, saved-level reopening and Hot Seat handovers choose the same version. Attempts and wall-clock time do not advance the journey. Adding or removing versions can change future selections.
-- Turning off other soundtracks retains the first version of the assigned tune in all three engines. Missing variants fall back within the same identity; missing catalogue data uses the assigned module.
+- Special themes, seasonal levels, NeoLemmix and Golden Path keep their assigned music routing. Turning off other soundtracks keeps the original arrangement of the assigned tune. An empty or unavailable wider selection falls back to the assigned tune.
 - Ordinary gameplay, danger and nuking do not replace a tune. Meeting the rescue target permits one lift to an available version of the same composition. The theme fades out over 0.6 seconds when the attempt finishes. Paused handovers keep pending selections silent until playback resumes. A new selection after silence starts directly, without resuming the outgoing track for a crossfade. Resuming the same selection keeps its playback position.
 
 The existing Amiga composition rotation remains the Classic score policy. Artwork selection does not imply a new platform's historical tune order. Exact native port sequencing remains a separate audit.

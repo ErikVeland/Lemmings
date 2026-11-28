@@ -103,7 +103,7 @@ import NxlvKit
 
     func show(_ deck: LevelHintDeck, image: CGImage? = nil, owner: NSWindow,
               solutionSession: ClassicSession? = nil, solutionSource: PlayfieldView? = nil,
-              solutionEffects: SoundEffectPlayer? = nil,
+              solutionEffects: SoundEffectPlayer? = nil, allows25x: Bool = false,
               runID: UUID? = nil, ownerKey: String = "", pauseForSolution: @escaping () -> Void = {},
               onDismiss: @escaping () -> Void = {}) {
         guard page == nil, !deck.stages.isEmpty else { return }
@@ -143,7 +143,7 @@ import NxlvKit
             } else if let solution, let solutionSource, let solutionSession {
                 if self.solutionWindow != nil { self.selectSolutionMode(.solution); return }
                 let warning = GameMenuPage(title: L10n.text("Reveal full solution?"))
-                warning.setDetail(L10n.text("Want to see one way through? This reveals a full winning route. Your game stays paused."))
+                warning.setDetail(L10n.text("Shows a full winning route."))
                 warning.backTitle = L10n.text("Keep trying")
                 warning.onBack = { [weak warning] in if let warning { GameScreen.shared.dismiss(warning) } }
                 let confirm = warning.addPrimaryAction(L10n.text("Show full solution")) { [weak self, weak warning] in
@@ -153,6 +153,7 @@ import NxlvKit
                     GameScreen.shared.dismiss(warning)
                     let replay = SolutionReplayWindow(solution: solution, source: solutionSource,
                         width: solutionSession.levelWidth, height: solutionSession.levelHeight, effects: solutionEffects)
+                    replay.speedControl.ridiculousEnabled = allows25x
                     self.retain(replay, source: solutionSource, owner: owner, runID: runID, ownerKey: ownerKey, pause: pauseForSolution)
                     self.selectSolutionMode(.solution)
                 }
@@ -254,9 +255,7 @@ import NxlvKit
         progress.stringValue = presentation.progress
         heading.stringValue = presentation.section
         prose.stringValue = presentation.body
-        note.stringValue = deck.checked
-            ? (tier == 2 ? L10n.text("Try this as an opening idea. Direction, crowd spacing, timing and changed terrain can affect the result.") : L10n.text("Take your time. Reveal more when you want another nudge. The moves are still yours."))
-            : ""
+        note.stringValue = ""
         setAccessibilityElement(true)
         setAccessibilityRole(.group)
         setAccessibilityLabel(GamePresentationText.display(presentation.title))

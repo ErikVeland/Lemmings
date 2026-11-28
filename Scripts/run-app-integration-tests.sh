@@ -105,6 +105,7 @@ if [[ "${TEST_SCOPE:-all}" == journey-progress ]]; then test_flags+=(-D JOURNEY_
 if [[ "${TEST_SCOPE:-all}" == learning ]]; then test_flags+=(-D LEARNING_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == celebration ]]; then test_flags+=(-D CELEBRATION_TESTS); fi
 if [[ "${TEST_SCOPE:-all}" == menu-records-track ]]; then test_flags+=(-D MENU_RECORDS_TRACK_TESTS); fi
+if [[ "${TEST_SCOPE:-all}" == menus ]]; then test_flags+=(-D MENU_TESTS); fi
 swiftc -swift-version 6 "${compatibility[@]}" "${optimization_flags[@]}" -target "$test_arch-apple-macos12.3" -D APP_INTEGRATION_TESTS "${test_flags[@]}" \
   -I "$build_dir/modules" -L "$build_dir" -lNxlvKit -lLemmingsGameArt -lLemmingsAppCore -lLemmingsAudio -lLemmingsMobileCore \
   -F "$sparkle_framework_dir" -framework Sparkle \

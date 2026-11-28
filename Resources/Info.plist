@@ -19,6 +19,8 @@
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
+		<string>ca</string>
+		<string>gsw</string>
 		<string>es-419</string>
 		<string>de</string>
 		<string>fr</string>
@@ -33,9 +35,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.4.3</string>
+	<string>2.7.6</string>
 	<key>CFBundleVersion</key>
-	<string>107</string>
+	<string>115</string>
 	<key>CloudLibraryCloudKitEnabled</key>
 	<false/>
 	<key>CloudLibraryURL</key>

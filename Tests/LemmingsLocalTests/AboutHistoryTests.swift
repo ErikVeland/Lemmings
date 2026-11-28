@@ -4,6 +4,17 @@ import XCTest
 @testable import LemmingsLocal
 
 final class AboutHistoryTests: XCTestCase {
+    @MainActor func testReleaseIndexKeepsDistinctBuildsAndFullAccessibleNames() throws {
+        let history = AboutHistoryView(markdown: "# 2.7.5 · Build 128\n\nCurrent notes\n\n# 2.7.5 · Build 127\n\nPrevious notes")
+        let document = try XCTUnwrap(history.indexScroll.documentView)
+        let buttons = document.subviews.compactMap { $0 as? NSButton }
+        XCTAssertEqual(buttons.map(\.title), ["2.7.5 (128)", "2.7.5 (127)"])
+        XCTAssertEqual(buttons.map { $0.accessibilityLabel() }, ["2.7.5 · Build 128", "2.7.5 · Build 127"])
+        XCTAssertEqual(buttons.map(\.state), [.on, .off])
+        XCTAssertTrue(history.detail.markdown.contains("Current notes"))
+        XCTAssertFalse(history.detail.markdown.contains("Previous notes"))
+    }
+
     @MainActor func testHeritageCreditsKeepTheirBitmapReadingColumnAndScroll() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
@@ -16,18 +27,39 @@ final class AboutHistoryTests: XCTestCase {
         window.contentView = credits
         let output = root.appendingPathComponent(".build/heritage-about-renders")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-        for width: CGFloat in [772, 992, 1472] {
+        for width: CGFloat in [512, 772, 992, 1472] {
             window.setContentSize(CGSize(width: width, height: 460))
             credits.layoutSubtreeIfNeeded()
             let document = try XCTUnwrap(credits.scroll.documentView)
             XCTAssertGreaterThan(document.bounds.height, credits.scroll.contentSize.height)
             XCTAssertTrue(document.subviews.allSatisfy { document.bounds.contains($0.frame) && $0.frame.width <= 680 })
-            let labels = document.subviews.compactMap { $0 as? GameLabel }.map(\.stringValue)
+            let textFields = document.subviews.compactMap { $0 as? GameLabel }
+            let labels = textFields.map(\.stringValue)
             XCTAssertTrue(labels.contains("Programming: Dave Jones"))
             XCTAssertTrue(labels.contains("Animation: Gary Timmons"))
             XCTAssertTrue(labels.contains("Graphics: Scott Johnston"))
             XCTAssertTrue(labels.contains("Music: Brian Johnston and Tim Wright"))
+            XCTAssertTrue(labels.contains("Lemmings Forums"))
+            XCTAssertTrue(labels.contains { $0.contains("Thank you to the Lemmings Forums community") })
             XCTAssertTrue(labels.contains { $0.contains("reconstruction made for Ultimate Lemmings") })
+            let credit = try XCTUnwrap(textFields.first { $0.stringValue.contains("Erik Veland") })
+            XCTAssertTrue(credit.stringValue.contains("Erik Veland 🏳️‍⚧️🇵🇸"))
+            let creditBitmap = try XCTUnwrap(credit.bitmapImageRepForCachingDisplay(in: credit.bounds))
+            credit.cacheDisplay(in: credit.bounds, to: creditBitmap)
+            var hasPink = false, hasRed = false, hasGreen = false
+            for y in 0..<creditBitmap.pixelsHigh {
+                for x in 0..<creditBitmap.pixelsWide {
+                    guard let pixel = creditBitmap.colorAt(x: x, y: y)?.usingColorSpace(.sRGB),
+                          pixel.alphaComponent > 0.9 else { continue }
+                    let red = pixel.redComponent, green = pixel.greenComponent, blue = pixel.blueComponent
+                    hasPink = hasPink || (red > 0.8 && green > 0.5 && blue > 0.6 && red - green > 0.15)
+                    hasRed = hasRed || (red > 0.5 && red - green > 0.24 && red - blue > 0.24)
+                    hasGreen = hasGreen || (green > 0.3 && green - red > 0.16 && green - blue > 0.12)
+                }
+            }
+            XCTAssertTrue(hasPink, "The transgender flag lost its pink stripes")
+            XCTAssertTrue(hasRed, "The Palestinian flag lost its red triangle")
+            XCTAssertTrue(hasGreen, "The Palestinian flag lost its green stripe")
             for (position, y) in [("top", document.bounds.height - credits.scroll.contentSize.height), ("bottom", CGFloat.zero)] {
                 credits.scroll.contentView.scroll(to: CGPoint(x: 0, y: y))
                 credits.scroll.reflectScrolledClipView(credits.scroll.contentView)

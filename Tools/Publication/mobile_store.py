@@ -22,7 +22,7 @@ GROUP = "group.academy.glasscode.lemmings"
 CONTAINER = "iCloud.academy.glasscode.lemmings"
 SIGNATURE_FILES = {"CodeResources", "CodeDirectory", "CodeSignature", "CodeRequirements"}
 WIDGET_FOLDERS = {"AlternativeAssets", "Fonts", "Licences", "Provenance"}
-FORBIDDEN = {"MacArtwork", "AmigaArtwork", "BetaGameData"}
+FORBIDDEN = {"MacArtwork", "AmigaArtwork", "NeoLemmix", "LevelPacks", "BetaGameData"}
 
 
 def require(condition, message):
@@ -93,8 +93,6 @@ def verify_resources(app, resources, platform, signatures_required=False):
         require(source.stat().st_size == row["bytes"] and digest(source) == row["sha256"],
                 f"Source resource changed: {relative}")
     sys.path.insert(0, str(ROOT / "Tools/AlternativeAssets"))
-    import fan_catalogue
-    fan_catalogue.verify_manifest(rows)
     from prepare_project_pixel import FONT_PREFIX, verify_packaged_font
     verify_packaged_font({row["path"]: (resources / row["path"]).read_bytes()
                           for row in rows if row["path"].startswith(FONT_PREFIX)})
@@ -102,8 +100,7 @@ def verify_resources(app, resources, platform, signatures_required=False):
     result = []
     for bundle in [app, *app.glob("PlugIns/*.appex")]:
         selected = rows if bundle == app else [r for r in rows if Path(r["path"]).parts[0] in WIDGET_FOLDERS] if platform == "ios" else []
-        prohibited = FORBIDDEN if bundle == app else FORBIDDEN | fan_catalogue.FOLDERS
-        for name in prohibited:
+        for name in FORBIDDEN:
             require(not (bundle / name).exists(), f"Excluded resource folder: {name}")
         if selected:
             receipt = json.loads((bundle / "ultimate-lemmix-resource-receipt.json").read_text())
@@ -252,6 +249,8 @@ def main():
             sub.add_argument("--developer", type=Path, default=Path("/Applications/Xcode.app/Contents/Developer"))
     args = parser.parse_args()
     try:
+        if args.command in {"prepare-archive", "export"}:
+            subprocess.run([sys.executable, str(ROOT / "Tools/Localisation/catalogue.py"), "--release"], check=True)
         {"prepare-archive": prepare_archive, "export": export_archive, "verify": validate_export}[args.command](args)
     except (ValueError, subprocess.CalledProcessError, OSError, KeyError, StopIteration) as error:
         print(f"Mobile Store packaging failed: {error}", file=sys.stderr)

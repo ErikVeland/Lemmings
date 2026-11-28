@@ -263,13 +263,15 @@ enum PanelButton: Equatable {
 
   private let inset = 8.0
   private var usesWideDeck: Bool { !isCRTSource && !isMenuMode }
+  private let inlineTransportWidth: CGFloat = 544
+
+  private func wideDeckWidth(for width: CGFloat) -> CGFloat { max(1, width - inset * 2) }
 
   private func wideDeckMetrics(for width: CGFloat) -> (rows: Int, inline: Bool, height: CGFloat) {
-    let available = min(1920, max(1, width - inset * 2))
+    let available = wideDeckWidth(for: width)
     let skillCount = session?.skills.count ?? 8
-    let transportWidth: CGFloat = 104 + 24 + 44 + 32 + 44 + 100 + 132 + 64
     let inline = skillCount > 0 && skillCount <= 8
-      && available - transportWidth >= CGFloat(skillCount) * 58
+      && available - inlineTransportWidth >= CGFloat(skillCount) * 58
     let columns = max(1, Int(available / 64))
     let rows = inline ? 1 : max(1, (skillCount + columns - 1) / columns)
     return (rows, inline, 60 + CGFloat(rows) * 104 + (inline ? 0 : 64) + statusStripHeight)
@@ -295,8 +297,8 @@ enum PanelButton: Equatable {
   }
 
   private func layoutWideButtons() {
-    let available = min(1920, max(1, bounds.width - inset * 2))
-    let deckX = floor((bounds.width - available) / 2)
+    let available = wideDeckWidth(for: bounds.width)
+    let deckX = bounds.minX + inset
     let metrics = wideDeckMetrics(for: bounds.width)
     let skillCount = session?.skills.count ?? 0
     panelScale = 2
@@ -304,13 +306,14 @@ enum PanelButton: Equatable {
     let timelineInRow = available >= 504
     let tierWidth = bounds.width >= 700 ? timeline.tierWidth : 0
     let tierSpace = tierWidth > 0 ? tierWidth + 8 : 0
-    let mapWidth = min(800, max(0, available - tierSpace - (timelineInRow ? 0 : 140)))
+    let mapWidth = max(0, available - tierSpace - (timelineInRow ? 0 : 140))
     timeline.tierFrame = tierWidth > 0
       ? CGRect(x: deckX + mapWidth + 8, y: 4, width: tierWidth, height: 44) : .zero
     minimapFrame = CGRect(x: deckX, y: 4, width: mapWidth, height: 44)
     let skillY: CGFloat = 60
     let nukeWidth: CGFloat = metrics.inline ? 104 : 64
-    let transportWidth: CGFloat = nukeWidth + 24 + 44 + 32 + 44 + 100 + (timelineInRow ? 132 : 0) + 64
+    let extraWideSpace = max(0, available - 1920)
+    let transportWidth = metrics.inline ? inlineTransportWidth + floor(extraWideSpace / 2) : available
     let skillBankWidth = metrics.inline ? available - transportWidth : available
     let columns = metrics.inline ? max(1, skillCount) : max(1, Int(available / 64))
     buttonFrames = (0..<skillCount).map { index in
@@ -324,9 +327,9 @@ enum PanelButton: Equatable {
     }
     let transportY = metrics.inline ? skillY : skillY + CGFloat(metrics.rows) * 104
     let transportHeight: CGFloat = metrics.inline ? 104 : 64
-    let factor = min(1, max(0, (available - nukeWidth - 24) / (transportWidth - nukeWidth - 24)))
-    let usedWidth = nukeWidth + 24 + (transportWidth - nukeWidth - 24) * factor
-    let transportX = metrics.inline ? deckX + skillBankWidth : deckX + max(0, (available - usedWidth) / 2)
+    let controlWidth: CGFloat = 44 + 32 + 44 + 100 + (timelineInRow ? 132 : 0) + 64
+    let factor = max(0, (transportWidth - nukeWidth - 24) / controlWidth)
+    let transportX = metrics.inline ? deckX + skillBankWidth : deckX
     let nuke = CGRect(x: transportX + 12, y: transportY, width: nukeWidth, height: transportHeight)
     let down = CGRect(x: nuke.maxX + 12, y: transportY, width: 44 * factor, height: transportHeight)
     rateValueFrame = CGRect(x: down.maxX, y: transportY, width: 32 * factor, height: transportHeight)
@@ -646,7 +649,8 @@ enum PanelButton: Equatable {
       drawStoneButton(frame, selected: active, button: button)
       if glyph.isOriginalTile, let image = glyph.image(fitting: controlIconBox(frame).size, transparentRock: true) {
         drawSingleControlGlyph(image, in: frame)
-      } else if let image = glyph.image(fitting: frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
+      } else if let image = glyph.image(fitting: glyph == .undo ? glyph.fittingSize(in: frame.size)
+        : frame.insetBy(dx: 2 * panelScale, dy: 2 * panelScale).size) {
         image.draw(in: CGRect(x: frame.midX - image.size.width / 2, y: frame.midY - image.size.height / 2,
           width: image.size.width, height: image.size.height), from: .zero, operation: .sourceOver,
           fraction: 1, respectFlipped: true, hints: nil)
@@ -724,8 +728,8 @@ enum PanelButton: Equatable {
       } else if let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
         // Rasterise the control glyph to fit the recessed well.
         let image = controlImage(glyph,
-          fitting: frame.insetBy(
-            dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
+          fitting: glyph == .undo ? glyph.fittingSize(in: frame.size)
+            : frame.insetBy(dx: 4 * max(1, panelScale / 2), dy: 4 * max(1, panelScale / 2)).size) {
         image.draw(
           in: CGRect(x: frame.midX - image.size.width / 2,
             y: frame.midY - image.size.height / 2,
@@ -940,10 +944,12 @@ enum PanelButton: Equatable {
     case .fastForward where variableSpeedEnabled:
       break
     default:
-      guard let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true),
-            let image = usesMacStyleControls
-              ? glyph.macImage(fitting: glyph.isOriginalTile ? controlIconBox(frame).size : well.size, transparentRock: true)
-              : glyph.image(fitting: glyph.isOriginalTile ? controlIconBox(frame).size : well.size, transparentRock: true) else { return }
+      guard let glyph = PanelGlyph.forButton(button, isPaused: isPaused, canUndoNuke: session?.canUndoNuke == true) else { return }
+      let iconSize = glyph == .undo ? glyph.fittingSize(in: frame.size)
+        : glyph.isOriginalTile ? controlIconBox(frame).size : well.size
+      guard let image = usesMacStyleControls
+        ? glyph.macImage(fitting: iconSize, transparentRock: true)
+        : glyph.image(fitting: iconSize, transparentRock: true) else { return }
       if glyph.isOriginalTile {
         drawSingleControlGlyph(image, in: frame)
       } else {
@@ -1074,17 +1080,24 @@ enum PanelButton: Equatable {
 
   private func drawStatus() {
     let y = isMenuMode ? inset : panelFrame.maxY + 4
-    let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: 20)
+    let box = CGRect(x: inset, y: y, width: bounds.width - inset * 2, height: statusStripHeight - 8)
     if !isMenuMode, let (snapshot, details) = gameplayStatus {
       if measuredInterface !== macInterface {
         measuredInterface = macInterface
         statusTypography = measuredInterface.map { GameMenuTypography(interface: $0.interface) }
       }
-      let locationWidth = box.width >= 900 ? min(320, floor(box.width / 4)) : 0
+      let locationWidth: CGFloat
+      if box.width >= 900, !progressText.isEmpty {
+        let location = gameText(progressText)
+        let width = macInterface?.width(of: location, face: .small, scale: 1)
+          ?? CGFloat(GamePixelTypography.width(of: location))
+        locationWidth = min(320, floor(box.width / 4), width + 16)
+      } else { locationWidth = 0 }
       let stats = CGRect(x: box.minX, y: box.minY, width: box.width - locationWidth, height: box.height)
       let fields = MobileHUDRenderer.statusFields(in: stats, snapshot: snapshot, details: details,
         engineIdentifier: details.engineIdentifier, paused: isPaused,
-        speed: Double(speedLabel.replacingOccurrences(of: "×", with: "")) ?? 1, typography: statusTypography)
+        speed: Double(speedLabel.replacingOccurrences(of: "×", with: "")) ?? 1,
+        typography: statusTypography, enlargesText: usesWideDeck)
       for field in fields {
         drawStatusField(field.text, in: field.frame, scale: field.scale, face: field.face)
       }
@@ -1112,8 +1125,10 @@ enum PanelButton: Equatable {
     defer { NSGraphicsContext.restoreGraphicsState() }
     NSBezierPath(rect: box).addClip()
     let text = gameText(text)
-    if let macInterface, let font = macInterface.font(face), font.covers(text), font.height(of: text) <= Int(box.height) {
-      macInterface.menuLine(text, in: box, face: face, alignment: .left, palette: panelPalette)
+    if let macInterface, let font = macInterface.font(face), font.covers(text),
+      case let height = CGFloat(font.height(of: text, scale: Int(scale))), height <= box.height {
+      let row = CGRect(x: box.minX, y: floor(box.midY - height / 2), width: box.width, height: height)
+      macInterface.menuLine(text, in: row, face: face, scale: Int(scale), alignment: .left, palette: panelPalette)
     } else {
       GamePixelText.draw(text, in: box, maxScale: scale, palette: panelPalette, alignment: .left)
     }
@@ -1160,7 +1175,7 @@ enum PanelButton: Equatable {
     wideDeckMetrics(for: 900).height
   }
 
-  private let statusStripHeight: CGFloat = 28
+  private var statusStripHeight: CGFloat { usesWideDeck ? 48 : 28 }
 }
 
 

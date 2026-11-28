@@ -23,6 +23,24 @@ import UniformTypeIdentifiers
     var maximumCompositionSeconds = 0.0
   }
   private(set) var captureProfile = CaptureProfile()
+  private var batchImage: CGImage?
+  private var batchStartedAt: TimeInterval?
+  private var recordedMusic: (url: URL?, gain: Float)?
+  // Reserve the tick budget for simulation when a fast batch also draws a movie frame.
+  var batchCompositionSeconds: TimeInterval {
+    guard let batchStartedAt else { return 0 }
+    return captureProfile.compositionSeconds - batchStartedAt
+  }
+
+  func beginCaptureBatch(reuseFrames: Bool) {
+    batchStartedAt = reuseFrames ? captureProfile.compositionSeconds : nil
+    batchImage = nil
+  }
+
+  func endCaptureBatch() {
+    batchStartedAt = nil
+    batchImage = nil
+  }
   #if PERFORMANCE_TESTS
   private(set) var capturedFrames = 0
   func performanceFile() async throws -> URL {
@@ -40,6 +58,7 @@ import UniformTypeIdentifiers
 
   func begin(ticksPerSecond: Double, title: String) {
     captureProfile = CaptureProfile()
+    recordedMusic = nil
     #if PERFORMANCE_TESTS
     capturedFrames = 0
     #endif
@@ -49,18 +68,28 @@ import UniformTypeIdentifiers
     ready = nil; finishing = false; waiting.removeAll(); hasFrames = false
     self.title = title
   }
-  func capture(_ image: @autoclosure () -> CGImage?) {
+  func setMusic(url: URL?, gain: Float) {
+    guard let recorder, recorder.isAcceptingFrames,
+          recordedMusic?.url != url || recordedMusic?.gain != gain else { return }
+    recordedMusic = (url, gain)
+    recorder.setMusic(url: url, gain: gain)
+  }
+  func capture(_ image: @autoclosure () -> CGImage?, finalTick: Bool = false) {
     guard let recorder, !finishing, recorder.isAcceptingFrames else { return }
     let started = ProcessInfo.processInfo.systemUptime
-    guard let image = image() else { return }
+    let savedImage = finalTick ? nil : batchImage
+    guard let image = savedImage ?? image() else { return }
     let composed = ProcessInfo.processInfo.systemUptime
     captureProfile.frames += 1
-    captureProfile.compositionSeconds += composed - started
-    captureProfile.maximumCompositionSeconds = max(captureProfile.maximumCompositionSeconds, composed - started)
+    if savedImage == nil {
+      captureProfile.compositionSeconds += composed - started
+      captureProfile.maximumCompositionSeconds = max(captureProfile.maximumCompositionSeconds, composed - started)
+      if batchStartedAt != nil { batchImage = image }
+    }
     #if PERFORMANCE_TESTS
     capturedFrames += 1
     #endif
-    hasFrames = true; recorder.append(image)
+    hasFrames = true; recorder.append(image, reusesImage: savedImage != nil)
     captureProfile.submissionSeconds += ProcessInfo.processInfo.systemUptime - composed
   }
   func finish() {

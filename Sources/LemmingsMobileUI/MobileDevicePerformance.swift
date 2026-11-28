@@ -3,32 +3,58 @@ import Foundation
 import Metal
 import LemmingsGameArt
 import NxlvKit
+import UIKit
 
 /// Older GPUs and two-core devices reserve more time for simulation and audio.
 @MainActor enum MobileDevicePerformance {
+    private static let device = MTLCreateSystemDefaultDevice()
     #if os(tvOS)
-    static let profile = FXDeviceProfile.detect(device: MTLCreateSystemDefaultDevice(), mobile: true, television: true)
+    private static let baseProfile = FXDeviceProfile.detect(device: device, mobile: true, television: true)
     #else
-    static let profile = FXDeviceProfile.detect(device: MTLCreateSystemDefaultDevice(), mobile: true)
+    private static let baseProfile = FXDeviceProfile.detect(device: device, mobile: true, allowFixedMobileEffects: false)
     #endif
-    private static var adaptive = AdaptiveFXPerformance(profile: profile)
+    // Retain audio-pressure tracking even when the visual quality is fixed.
+    private static var adaptive = AdaptiveFXPerformance(profile: baseProfile)
+    private static var fixedVisuals: AdaptiveFXPerformance? = {
+        #if os(iOS)
+        let profile = FXDeviceProfile.detect(device: device, mobile: true)
+        if profile.prefersFixedMobileEffects { return AdaptiveFXPerformance(profile: profile) }
+        #endif
+        return nil
+    }()
     private static var framesPerSecond: Double = constrained ? 30 : 60
     private static var lastPoll = -Double.infinity
     static var presentation: FXPresentationBudget {
         refreshPressure()
-        return adaptive.presentation
+        return fixedVisuals?.presentation ?? adaptive.presentation
     }
     static var enhancedEffectsAllowed: Bool {
-        presentation.enhancedEffectsAllowed && !ProcessInfo.processInfo.isLowPowerModeEnabled
+        let allowed = presentation.enhancedEffectsAllowed
+        if fixedVisuals != nil { return allowed }
+        return allowed && !ProcessInfo.processInfo.isLowPowerModeEnabled
             && ProcessInfo.processInfo.thermalState != .serious && ProcessInfo.processInfo.thermalState != .critical
     }
-    // A12 iPads support the shaders, but cannot afford desktop-sized effects.
+
+    // Runtime hinge detection also covers a Duo running on its outer display.
+    // Once recognised, keep the same visual policy through fold/unfold.
+    static func configureVisuals(in view: UIView) {
+        #if os(iOS)
+        guard fixedVisuals == nil, view.window != nil,
+              MobileSystemRegions.isFoldable(in: view) else { return }
+        let profile = FXDeviceProfile.detect(device: device, mobile: true, foldable: true)
+        if profile.prefersFixedMobileEffects {
+            fixedVisuals = AdaptiveFXPerformance(profile: profile)
+            refreshPressure(force: true)
+        }
+        #endif
+    }
+    static var visualEffectsConstrained: Bool { fixedVisuals == nil && constrained }
+
+    // An older GPU can support the shaders without affording desktop-sized effects.
     #if targetEnvironment(simulator)
-    // Simulator's GPU family does not describe the host's performance. Keep the
-    // bounded overlay budget and measured pressure checks instead of omitting FX.
     static let constrained = false
     #else
-    static let constrained = MTLCreateSystemDefaultDevice()?.supportsFamily(.apple7) != true
+    static let constrained = device?.supportsFamily(.apple7) != true
     #endif
     static var cpuFrameCost: Double { adaptive.cpu.smoothedCost }
     static var gpuFrameCost: Double { adaptive.gpu.smoothedCost }
@@ -49,8 +75,9 @@ import NxlvKit
         case .nominal: ceiling = process.isLowPowerModeEnabled ? .balanced : .full
         @unknown default: ceiling = .minimal
         }
-        adaptive.setPressure(ceiling: ceiling, framesPerSecond: framesPerSecond, now: now,
-                             resources: DeviceEffectPressure.shared.snapshot())
+        let resources = DeviceEffectPressure.shared.snapshot()
+        adaptive.setPressure(ceiling: ceiling, framesPerSecond: framesPerSecond, now: now, resources: resources)
+        fixedVisuals?.setPressure(ceiling: ceiling, framesPerSecond: framesPerSecond, now: now, resources: resources)
     }
     static func memoryWarning() {
         DeviceEffectPressure.shared.noteMemoryPressure()

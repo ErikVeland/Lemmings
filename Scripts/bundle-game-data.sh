@@ -33,6 +33,7 @@ cp "$project_dir/Resources/Hints/solutions.json" "$resources_dir/Hints/solutions
 mkdir -p "$resources_dir/Progression"
 cp "$project_dir/Resources/Progression/exclusions.json" "$resources_dir/Progression/exclusions.json"
 cp "$project_dir/Resources/Progression/learning.json" "$resources_dir/Progression/learning.json"
+cp "$project_dir/Resources/Progression/easy-puzzles.json" "$resources_dir/Progression/easy-puzzles.json"
 cp "$project_dir/Resources/Progression/solutions.json" "$resources_dir/Progression/solutions.json"
 cp "$project_dir/Resources/Progression/bundled-playable-exclusions.json" \
   "$resources_dir/Progression/bundled-playable-exclusions.json"
@@ -85,7 +86,10 @@ NEOSOUNDS
     python3 "$project_dir/Tools/MacMusic/prepare.py" --output "$resources_dir/MacMusic" --tools "$mac_music_tools"
     python3 "$project_dir/Tools/AmigaArtwork/prepare.py" "$resources_dir/AmigaArtwork"
     mkdir -p "$project_dir/.build/asset-packager"
-    swiftc -swift-version 6 -warnings-as-errors "$project_dir/Tools/BundleGameAssets/main.swift" \
+    sdk_path="$(xcrun --sdk macosx --show-sdk-path)"
+    swiftc -swift-version 6 -warnings-as-errors -sdk "$sdk_path" \
+      -target "$(uname -m)-apple-macosx12.3" \
+      "$project_dir/Tools/BundleGameAssets/main.swift" \
       -o "$project_dir/.build/asset-packager/CopyResourceForks"
     "$project_dir/.build/asset-packager/CopyResourceForks" "$project_dir/Sources/Ports" "$resources_dir/Ports"
     ;;

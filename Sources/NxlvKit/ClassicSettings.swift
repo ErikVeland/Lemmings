@@ -211,6 +211,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var pixelAspect: Double
     public var integerScaling: Bool
     public var modernControlsEnabled: Bool
+    public var scrollWheelZoomEnabled: Bool
     public var variableSpeedEnabled: Bool
     public var ridiculousSpeedEnabled: Bool
     public var inspectWhilePaused: Bool
@@ -241,7 +242,11 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
     public var hdEffectsEnabled: Bool
     public var confinePointer: Bool
     public var fullScreenHDRFlashes: Bool
-    public var djIncludesOtherSoundtracks: Bool
+    private var djSoundtrackVariety: Bool
+    public var djIncludesOtherSoundtracks: Bool {
+        get { djSoundtrackVariety }
+        set { djSoundtrackVariety = newValue }
+    }
     public var djShuffleScope: SoundtrackCatalogue.ShuffleScope
 
     // Audio
@@ -275,6 +280,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         pixelAspect: Double = 1.0,
         integerScaling: Bool = true,
         modernControlsEnabled: Bool = true,
+        scrollWheelZoomEnabled: Bool = true,
         variableSpeedEnabled: Bool = true,
         ridiculousSpeedEnabled: Bool = false,
         inspectWhilePaused: Bool = true,
@@ -301,7 +307,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         hdEffectsEnabled: Bool = true,
         confinePointer: Bool = true,
         fullScreenHDRFlashes: Bool = false,
-        djIncludesOtherSoundtracks: Bool = false,
+        djIncludesOtherSoundtracks: Bool = true,
         music: ClassicMusicSource = .amigaModules,
         musicStyle: ClassicMusicStyle = .modern,
         musicVolume: Double = 0.8,
@@ -323,6 +329,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.pixelAspect = pixelAspect
         self.integerScaling = integerScaling
         self.modernControlsEnabled = modernControlsEnabled
+        self.scrollWheelZoomEnabled = scrollWheelZoomEnabled
         self.variableSpeedEnabled = variableSpeedEnabled
         self.ridiculousSpeedEnabled = ridiculousSpeedEnabled
         self.inspectWhilePaused = inspectWhilePaused
@@ -349,7 +356,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         self.hdEffectsEnabled = hdEffectsEnabled
         self.confinePointer = confinePointer
         self.fullScreenHDRFlashes = fullScreenHDRFlashes
-        self.djIncludesOtherSoundtracks = djIncludesOtherSoundtracks
+        self.djSoundtrackVariety = djIncludesOtherSoundtracks
         self.djShuffleScope = djShuffleScope
         self.music = music
         self.musicStyle = musicStyle
@@ -402,6 +409,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         integerScaling = try values.decodeIfPresent(
             Bool.self, forKey: .integerScaling) ?? fallback.integerScaling
         modernControlsEnabled = try values.decodeIfPresent(Bool.self, forKey: .modernControlsEnabled) ?? fallback.modernControlsEnabled
+        scrollWheelZoomEnabled = source(.scrollWheelZoomEnabled, fallback.scrollWheelZoomEnabled)
         variableSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .variableSpeedEnabled) ?? fallback.variableSpeedEnabled
         ridiculousSpeedEnabled = try values.decodeIfPresent(Bool.self, forKey: .ridiculousSpeedEnabled) ?? false
         inspectWhilePaused = try values.decodeIfPresent(Bool.self, forKey: .inspectWhilePaused) ?? true
@@ -430,7 +438,7 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         hdEffectsEnabled = try values.decodeIfPresent(Bool.self, forKey: .hdEffectsEnabled) ?? fallback.hdEffectsEnabled
         confinePointer = try values.decodeIfPresent(Bool.self, forKey: .confinePointer) ?? fallback.confinePointer
         fullScreenHDRFlashes = try values.decodeIfPresent(Bool.self, forKey: .fullScreenHDRFlashes) ?? fallback.fullScreenHDRFlashes
-        djIncludesOtherSoundtracks = try values.decodeIfPresent(Bool.self, forKey: .djIncludesOtherSoundtracks) ?? fallback.djIncludesOtherSoundtracks
+        djSoundtrackVariety = try values.decodeIfPresent(Bool.self, forKey: .djSoundtrackVariety) ?? fallback.djSoundtrackVariety
         djShuffleScope = try values.decodeIfPresent(SoundtrackCatalogue.ShuffleScope.self, forKey: .djShuffleScope) ?? .sameTrack
         music = source(.music, fallback.music)
         musicStyle = try values.decodeIfPresent(
@@ -473,7 +481,6 @@ public struct ClassicSettings: Equatable, Codable, Sendable {
         showReticleCount = false
         hdEffectsEnabled = modern
         fullScreenHDRFlashes = false
-        djIncludesOtherSoundtracks = false
         musicStyle = modern ? .modern : .faithful
     }
 

@@ -154,7 +154,7 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
         }
         let learning = Self.learning(profileID: profileID, sessionID: sessionID, defaults: defaults)
         try? result.merge(JourneySourceCompletion.progress(learning,
-            entries: LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []))
+            entries: (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []) + EasyPuzzleCatalogue.puzzles.map(\.entry)))
         return result
     }
 
@@ -243,7 +243,7 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
             defaults.set(try JSONEncoder().encode(merged), forKey: key)
         }
         var credits = JourneySourceCompletion.progress(merged,
-            entries: entries + (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []))
+            entries: entries + (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []) + EasyPuzzleCatalogue.puzzles.map(\.entry))
         for (key, value) in credits.values {
             switch value {
             case .completed(let wins):
@@ -286,7 +286,7 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
         let key = sessionID.map { "HotSeat.\($0).FanLevelsPassed" } ?? ArcadeStore.progressKey("FanLevelsPassed", profileID: profileID)
         var levels = Set(defaults.stringArray(forKey: key) ?? [])
         let credits = JourneySourceCompletion.progress(learning(profileID: profileID, sessionID: sessionID, defaults: defaults),
-            entries: LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? [])
+            entries: (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []) + EasyPuzzleCatalogue.puzzles.map(\.entry))
         if case let .fanLevels(wins) = credits.values["FanLevelsPassed"] { levels.formUnion(wins) }
         return levels
     }
@@ -302,7 +302,7 @@ public struct GameProgressPreferences: Codable, Equatable, Sendable {
         var indices = Set(defaults.array(forKey: completedKey(pack: pack, profileID: profileID)) as? [Int] ?? [])
         let sessionID = profileID.hasPrefix("hotseat.") ? String(profileID.dropFirst(8)) : nil
         let credits = JourneySourceCompletion.progress(learning(profileID: profileID, sessionID: sessionID, defaults: defaults),
-            entries: LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? [])
+            entries: (LearningJourneyLibrary.journey?.lessons.map(\.entry) ?? []) + EasyPuzzleCatalogue.puzzles.map(\.entry))
         if case let .completed(wins) = credits.values["cleared/" + pack] { indices.formUnion(wins) }
         return indices
     }

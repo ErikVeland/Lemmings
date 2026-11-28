@@ -66,13 +66,16 @@ final class GameplayControlTipTests: XCTestCase {
         var positions: [CGPoint] = []
         timeline.onMap = { positions.append($0) }
         let owner = NSView(frame: .zero)
-        for width in [640, 700, 850, 1024] {
+        for width in [640, 700, 850, 1024, 2558, 3440] {
             let bounds = CGRect(x: 0, y: 0, width: width, height: 540)
             timeline.layoutSequelFooter(in: bounds)
             XCTAssertFalse(timeline.mapFrame.isEmpty)
             XCTAssertTrue(bounds.contains(timeline.mapFrame))
             XCTAssertFalse(timeline.mapFrame.intersects(timeline.frame))
             XCTAssertFalse(timeline.mapFrame.intersects(timeline.tierFrame))
+            XCTAssertEqual(timeline.mapFrame.minX, 8)
+            let lastControl = timeline.tierFrame.isEmpty ? timeline.frame : timeline.tierFrame
+            XCTAssertEqual(lastControl.maxX, bounds.maxX - 8)
             let map = timeline.mapFrame
             XCTAssertTrue(timeline.beginMapDrag(at: CGPoint(x: map.minX + 1, y: map.midY)))
             XCTAssertFalse(timeline.draggingMap)
@@ -85,24 +88,17 @@ final class GameplayControlTipTests: XCTestCase {
             let element = try XCTUnwrap(controls.first { $0.accessibilityLabel() == "Level map" })
             XCTAssertTrue(element.accessibilityPerformIncrement())
             XCTAssertEqual(positions.last, CGPoint(x: 120, y: 210))
-            let image = NSImage(size: bounds.size, flipped: true) { _ in
-                let terrain = NSImage(size: CGSize(width: 20, height: 40), flipped: true) { rect in
-                    NSColor.black.setFill()
-                    rect.fill()
-                    NSColor.green.setFill()
-                    CGRect(x: 0, y: 24, width: 20, height: 16).fill()
-                    return true
-                }
+            let terrain = ReplayFrameCapture.image(size: CGSize(width: 20, height: 40)) {
+                NSColor.green.setFill()
+                CGRect(x: 0, y: 0, width: 20, height: 40).fill()
+            }
+            let render = try XCTUnwrap(ReplayFrameCapture.image(size: bounds.size) {
                 timeline.draw()
-                timeline.drawMap(image: terrain.cgImage(forProposedRect: nil, context: nil, hints: nil))
-                return true
-            }
-            let render = try XCTUnwrap(image.cgImage(forProposedRect: nil, context: nil, hints: nil))
+                timeline.drawMap(image: terrain)
+            })
             let pixels = NSBitmapImageRep(cgImage: render)
-            let painted = [Int(map.midY), Int(bounds.height - map.midY)].contains { y in
-                (pixels.colorAt(x: Int(map.midX), y: y)?.alphaComponent ?? 0) > 0
-            }
-            XCTAssertTrue(painted)
+            let centre = try XCTUnwrap(pixels.colorAt(x: Int(map.midX), y: Int(map.midY))?.usingColorSpace(.sRGB))
+            XCTAssertGreaterThan(centre.greenComponent, centre.redComponent)
             XCTAssertEqual(speed.target, 1)
             try saveCapture(pixels, name: "map-" + String(width))
         }

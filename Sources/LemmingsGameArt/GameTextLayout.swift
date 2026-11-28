@@ -12,8 +12,8 @@ public enum GameTextLayout {
         let cellHeight = face == .large ? 20 : 18
         var pen = 0, left = 0, right = 0
         for sequence in BitmapTamilGlyphs.sequences(in: plain) {
-            if sequence.count == 1 && sequence.allSatisfy({ BitmapLatinGlyphs.supports($0) || $0 == "💀" }) {
-                pen += cellWidth
+            if sequence.count == 1 && sequence.allSatisfy({ BitmapLatinGlyphs.supports($0) || BitmapLatinGlyphs.isPictograph($0) }) {
+                pen += cellWidth * BitmapLatinGlyphs.cells(for: sequence)
             } else if let advance = BitmapTamilGlyphs.advance(for: sequence, cellHeight: cellHeight) {
                 if let glyph = BitmapTamilGlyphs.metrics(for: sequence, cellHeight: cellHeight, baseline: cellHeight) {
                     left = min(left, pen + glyph.x)

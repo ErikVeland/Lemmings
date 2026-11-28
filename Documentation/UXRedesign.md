@@ -1,8 +1,12 @@
 # UX redesign
 
+[Screen review register](InterfaceHierarchy.md#screen-review-register) tracks the newer progression, reward and ranking screens alongside the original menu tree. It distinguishes bitmap and target checks from device and service acceptance.
+
 ## Checkpoint 2 · 25 November 2026
 
-This checkpoint builds on shared main at `66fce92f`. The repeatable checks below exercise the implementation in this checkout. Use the boxes here for current progress. Sections A–K below preserve the design brief and the later phase notes describe earlier revisions. For example, the proposal explored a welcome screen and several result themes. The implemented flow starts at profile creation and fades the level track on results.
+This checkpoint builds on shared main at `66fce92f`. The repeatable checks below exercise the implementation in this checkout. Use the boxes here for current progress. Sections A–K below preserve the design brief and the later phase notes describe earlier revisions. For example, the proposal explored a welcome screen and several result themes. The implemented flow starts at profile creation and muffles the level track on results.
+
+The overhaul ships as version 2.5 for both products. See [Release schedule](ReleaseSchedule.md#25--ux-overhaul).
 
 ### Verified behaviour
 
@@ -12,29 +16,69 @@ Tick a row when its stated check passes. Keep its ID when updating the requireme
 - [x] **UX-02 · Stable counters and input.** The counter rectangles stay fixed across 9, 10, 99 and 100. Mac rate, pause and speed targets stay put. A supported NeoLemmix level with a nonstandard skill count keeps its targets after the simulation advances. Check group `hud`.
 - [x] **UX-03 · Speed and rewind.** Mac direct speed selection survives Shift release. The touch control distinguishes taps and holds. Rewind reports elapsed game seconds and repeated presses increase the cue. The rounded HUD and TV grid checks exercise the visible targets. Check groups `hud` and `renders`.
 - [x] **UX-04 · Saved Hot Seat.** Previously synced rosters have distinct resume targets, the selected session identifies the next player, and the turn and house rule survive a local save and reopen. Check group `hot-seat`.
-- [x] **UX-05 · Result music.** Completing an attempt twice fades and stops the track once. Starting the next track retires the old fade before it can change the replacement track. Check group `music`.
+- [x] **UX-05 · Result music.** Completing an attempt twice moves the track into the muffled result room once and holds it there. Leaving the result stops the track once and restores the bus. Starting the next track retires the old treatment before it can change the replacement track. Check group `music`.
 
 ### Preview, navigation and recovery
 
 - [x] **UX-06 · Previews and results.** Inspecting a neighbouring cover leaves the campaign selection alone. A matching level, queue and position can resume its checkpoint. The preview activates its enabled forward action. On the native Mac the loss footer offers Retry across the game families, including fan levels. Records, replay availability and source details follow the selected level. The sequel restore check replays a 2,000-tick L2 attempt with and without a cached preview. Check group `preview`.
-- [x] **UX-07 · Catalogue and personal statistics.** Fan and NeoLemmix retain pack order and show incomplete levels first within a pack. Search and All, Incomplete or Cleared filters can be reset from an empty result. Returning from a level restores the catalogue context. Profile → Statistics counts recorded attempts, distinct clears, rated career stars and three-star levels for the selected player. An assisted win counts as a clear. Check group `catalogue`.
+- [x] **UX-07 · Catalogue and personal statistics.** Fan and NeoLemmix retain pack order and show incomplete levels first within a pack. Search and All, Incomplete or Cleared filters can be reset from an empty result. Returning from a level restores the catalogue context. Profile → Statistics counts recorded attempts, distinct clears, rated career stars and three-star levels for the selected player. An assisted win counts as a clear. Catalogue filtering, translated provenance labels and control tips preserve the published fixed-input replay fingerprint. The check validates the bundled Trolley catalogue and witness hashes. Check group `catalogue`.
 - [x] **UX-08 · Navigation and terminology.** Home, Play, Profile, Community, Hot Seat and Settings share translated destination names and Back roles. The navigation checks exercise rendered targets, accessible names and returning to the originating destination. The language check verifies the source catalogue, eight translation packs, placeholders and language picker. Native-speaker review and physical VoiceOver are separate from those checks. Check group `navigation`.
 - [x] **UX-09 · First-use controls and minimap.** Optional tips cover assignment, normal speed, rewind and map seeking. The choice is saved per profile, and returning players and replay viewers start quietly. The native sequels have a terrain map beside the transport. Touch and TV use both axes to seek on the shared map. Check group `teaching`.
 - [x] **UX-10 · Late data and recovery.** Delayed artwork, a worldwide count and a cancelled load preserve the current selection and input targets. Retry starts fresh. A manual Apple TV backup restored an archived Hot Seat Journey to a second isolated save root with the original roster, next player, house rule, completion record and exact 45-tick Classic checkpoint despite a newer solo save. A separate mocked cloud round trip covers offline, reopen and reconnect. Automatic sync carries Journey progress. Exact mid-level state travels in the explicit TV backup. Live service and two-device acceptance remain open. Check group `recovery`. See [Save recovery](SaveRecovery.md).
 
 ### Device acceptance
 
-- [ ] **UX-11 · Mac.** Use keyboard, pointer and VoiceOver through first launch, preview, gameplay, results and return. Check focus restoration and the narrow-window speed pedal.
-- [ ] **UX-12 · iPhone and iPad.** Check touch targets and VoiceOver at narrow and wide sizes. On the 2017 A10X iPad Pro, record input response, frame cadence and audio continuity while changing speed, pausing and rewinding.
-- [ ] **UX-13 · Duo.** Fold and unfold in Home, a level and the speed chooser. Record whether the route, focus, pause state and selected skill survive each transition.
-- [ ] **UX-14 · Apple TV.** Use a Siri Remote through Ready, speed selection, repeated rewind and results. Check viewing-distance legibility, focus return and long labels.
-- [ ] **UX-15 · Audio.** Listen through preview, gameplay, pause, success, failure, rapid retry and background/foreground transitions on speakers and headphones. Record any click, overlap or crackle with the music source and device.
+**Screen and menu review, 25 November 2026 — green by owner sign-off.** The acceptance covers physical VoiceOver, Siri Remote, native system sheets, signed-in Game Center, hosted replay delivery, and engine-specific campaign and movie screens. See the [screen review register](InterfaceHierarchy.md#screen-review-register).
+
+The owner reported all five device checks green on 25 November 2026. Each row below keeps the scope of that check.
+
+- [x] **UX-11 · Mac.** Use keyboard, pointer and VoiceOver through first launch, preview, gameplay, results and return. Check focus restoration and the narrow-window speed pedal.
+- [x] **UX-12 · iPhone and iPad.** Check touch targets and VoiceOver at narrow and wide sizes. On the 2017 A10X iPad Pro, record input response, frame cadence and audio continuity while changing speed, pausing and rewinding.
+- [x] **UX-13 · Duo.** The simulator acceptance pass saw Home stay sideways after unfolding until another rotation. A fresh launch while open laid out correctly. Home now drops cached book panes when UIKit confirms the hinge is flat, even when the window stays the same size. Scene geometry and reserved-region changes invalidate the current layout. A debug build records the effective orientation, window and view bounds, active regions, and committed Home frame in both layouts. On 25 November 2026 the Duo simulator reran the repro on the merged source. Home filled the open screen as soon as the hinge opened, and folding again restored the single-column Home, with no extra rotation. Check Home, a level and the speed chooser on hardware for preserved route, focus, pause state and selected skill.
+- [x] **UX-14 · Apple TV.** Use a Siri Remote through Ready, speed selection, repeated rewind and results. Check viewing-distance legibility, focus return and long labels.
+- [ ] **UX-15 · Audio.** Reopened on 25 November 2026 for the muffled result room, which replaced the result fade after the owner's device pass. Listen through preview, gameplay, pause, success, failure, rapid retry and background/foreground transitions on speakers and headphones. Record any click, overlap or crackle with the music source and device.
+
+### Acceptance follow-up
+
+- Apple TV Game controls retain Step and Rewind focus while pending timeline work finishes. The speed chooser returns to Speed.
+- Scrollable mobile menus keep the visible focused action in view across size changes and remember VoiceOver focus for return navigation.
+- The iPhone simulator showed that Play needed two presses after a fast rewind. Play now resumes at 1× in a single press. Pressing Pause while already running fast still returns to 1× first. The rewind tip leaves the live rewind readout visible. Check the native Mac tip placement in the device pass.
+- Solo menus use concise action names and reserve turn captions for Hot Seat or another player's save. Settings sliders use their existing labels and values. The Mac L2 practice screen gives one instruction while choosing skills, then shows how to start. Home names the profile only when more than one exists. Two copy passes include the bundled translations. The second removed Settings sentences that repeat a setting's scope or availability. It also made the native L2 and L3 rewind announcement use game seconds and gave the Step controls one translated name. Labels now use sentence case. Narrative, teaching, release and privacy text kept its sentences. Native-speaker review of the trimmed translations remains open.
+- The shared Undo icon has a continuous arrow and more clearance. Native Mac L2 shows the arrow and the accessible action name when Undo is available.
+- The Mac result announcement reads the outcome, rescue count and stars. Opening Details reads the level leaderboard. Screen readers reach Replay through its own enabled button when an attempt has a replay.
+- Replay skill history uses elapsed game time across Mac, touch and Apple TV. The Mac solution replay exposes action names and keeps the keyboard shortcuts in accessibility help. The owner accepted physical VoiceOver and Siri Remote navigation.
+
+### Mac menus and owner tools
+
+The owner chose destination menus and a hidden owner reveal on 25 November 2026.
+
+| Menu | Items |
+| --- | --- |
+| App | About, Check for Updates, Settings (⌘,), Quit |
+| File | Add Game (⌘O), Add Fan Level Folder, Add NeoLemmix Packs, Open Level File (⇧⌘O), Open Replay Movie |
+| Play | Main menu (⇧⌘L), Resume Saved Run (⇧⌘R), Level Select, Fan Levels (⇧⌘F), Game ▸, Level ▸, Lemmings 2 (⇧⌘2), Lemmings 3 (⇧⌘3), Replay Last Game (⇧⌘V), Hot Seat, Community |
+| Profile | Profile (⇧⌘P), Players, Records (⇧⌘B), Achievements (⇧⌘A), Statistics, Cloud Saves, Play Insights |
+| View | Zoom, Desk Clock calendar event |
+
+- Every earlier shortcut keeps its key, with one exception. Open Replay Movie and Open Level File both used ⇧⌘O, and AppKit sent the chord to the first item. Open Level File keeps ⇧⌘O. Open Replay Movie has no shortcut.
+- ⇧⌘P opens the Profile hub. Players opens player selection.
+- The Mac Profile hub uses the mobile order: Records, Achievements, Statistics, Players, Cloud saves and Play Insights.
+- Home and the Play menu share one Hot Seat entry. With saved sessions and none active, both open the session list.
+- Community has a menu item for the first time. It opens the same page as Home.
+- Show Recorded Routes stays an Option alternate of Replay Last Game. No Debug menu was added.
+
+Play Insights shows players only this device's counts and Clear local counts. Shared counts, the install total, the day range and token entry are owner tools:
+
+- **Mac:** the owner tools appear when this Mac has a saved owner token, or when Option is held while Play Insights opens.
+- **iPhone, iPad and Apple TV:** a long press on Play Insights reveals them. On Apple TV, hold Select on the row. The reveal ends when the owner leaves Play Insights. It has no visible hint and no accessibility hint.
+
+`TEST_SCOPE=menus zsh Scripts/run-app-integration-tests.sh` checks the Ultimate Lemmings menu bar. It checks the four app-menu items, the Play and Profile items, each kept shortcut, unique shortcuts and the ⇧⌘P Profile hub. The Ultimate Lemmix menu check in `PersonalPreviewAppTests` was updated to match, but it was not run, because it needs the Lemmix universal core build. `AnonymousTelemetryTests` covers the player and owner pages on Mac and mobile. A real long press on iPhone, iPad and Apple TV is not yet checked on a device.
 
 ### Repeat the checkpoint
 
 Run `python3 Scripts/check-ux.py` from the repository root on macOS. To repeat one area, append `home`, `hud`, `hot-seat`, `preview`, `catalogue`, `navigation`, `teaching`, `recovery`, `input`, `music`, `renders` or `sdk`. Each run prints its own evidence directory in `.build`. A source edit during the run invalidates the checkpoint. Its summary records the Git revision, working-tree status, each result and whether the run finished. Missing or skipped named regressions fail their group.
 
-The render checks need the original bitmap export at `.build/mac-artwork/export/lemmings` and the installed game's resources, including NeoLemmix and the Classic, L2 and L3 Ports directories. Pass `--resources` to select another game resource root. Native tests run offscreen and muted. The SDK checks compile both mobile frontends and application entry points and typecheck the UIKit regression sources. CoreSimulator refused the runtime connection on this host. Only the Mac appeared in the connected-device inventory.
+The render checks need the original bitmap export at `.build/mac-artwork/export/lemmings` and the installed game's resources, including NeoLemmix and the Classic, L2 and L3 Ports directories. Pass `--resources` to select another game resource root. Native tests run offscreen and muted. The SDK checks read the checkout’s product marker, compile both mobile frontends and application entry points, and typecheck the UIKit regression sources. Lemmix compiles the Store variant and its clean-artwork guard on iOS and tvOS. CoreSimulator refused the runtime connection on this host. Only the Mac appeared in the connected-device inventory. GitHub run 45431292173 subsequently passed the Ultimate Lemmings iOS source gate and both iPhone and iPad simulator layout and lifecycle jobs. The Lemmix integration exposed a hard-coded Lemmings project in the iOS gate. The gate now resolves its build, test target and scheme from the checked-out product. Unsigned Lemmix source checks use the project-authored starter and translated interface fixture.
 
 The muted audio-session checks exercise interruptions and rapid fold transitions. A separate live-clock probe could not create its AVFAudio environment node on this host. Listening on speakers and headphones and measuring the A10X under gameplay load remain device checks.
 
@@ -98,7 +142,7 @@ The Apple TV HUD already draws its visible counters through
 | Rewind | The shared cue expresses distance in game seconds. Touch and TV indicate changes in rewind speed. | Check visibility on real playfields and repeated Siri Remote presses. |
 | Skills | Stocked and unlimited skills retain their artwork brightness. Exhausted skills dim on the shared mobile HUD. Native L3 panel artwork uses its own original control states. | Check physical-device contrast, selected outlines and remote focus. |
 | Navigation | Home, Play, Profile, Community, first launch and the saved-route resolver are implemented. | Settings and saved Hot Seat navigation landed in #45. Preview details, remaining terminology and fan catalogue filters need review against their actual routes. |
-| Polish | Results fade the outgoing level track. | First-use teaching for transport and assignments, minimap/tracking grouping, Duo fold transitions, audible playback and older-device input timing remain open. |
+| Polish | Results muffle the outgoing level track. | First-use teaching for transport and assignments, minimap/tracking grouping, Duo fold transitions, audible playback and older-device input timing remain open. |
 
 The muted follow-up ran 25 targeted tests and 209 offscreen HUD and speed-page
 renders. On the wide iPad fixture, changing one stocked skill to unlimited changed
@@ -273,7 +317,7 @@ Home
 ├─ Community (leaderboards, worldwide total, community replays)
 └─ Settings  (icon)
     └─ About (What's New, credits, legal, Donate, version)
-Owner tools: Mac Debug menu and a hidden settings gesture only.
+Owner tools: hidden reveal only (see Mac menus and owner tools).
 ```
 
 Home goes from 19 controls to 6: Continue plus five destinations. Game rows
@@ -500,14 +544,14 @@ in non-store builds or with the Option key.
 Every phase must keep saved runs, session IDs, rosters, next turns and
 checkpoints readable. No phase may change the engine fingerprint.
 
-## Open decisions for the owner
+## Owner decisions
 
-1. Profile names stay as arcade initials, or gain a separate display name.
-   A display name changes saved profile data and needs a migration.
-2. The speed strip includes 3×, or uses 1×/2×/5×/10× as the brief suggests.
-   The engines support 3× today.
-3. Result music: a dedicated short result loop, or a fade to the menu theme.
-4. Mac back/home: a toolbar row above the playfield, or the bottom row as today.
+The owner confirmed the shipped choices on 25 November 2026:
+
+1. Profile names stay as arcade initials. No separate display name or profile migration.
+2. The speed strip keeps 3×: 1×, 2×, 3×, 5× and 10×, plus 25× when enabled.
+3. Results keep the level track playing in the next room: about −9 dB through the nuke low-pass near 1.4 kHz, held until the player leaves the result. No dedicated result loop. The owner changed this from a fade to silence on 25 November 2026.
+4. Mac Back and Home stay in the bottom row.
 
 ## Validation plan
 

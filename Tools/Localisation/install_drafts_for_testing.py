@@ -5,7 +5,7 @@ import plistlib
 from pathlib import Path
 import sys
 
-from validate import LANGUAGES, read_json, validate_plurals, validate_texts
+from validate import LANGUAGES, PARTIAL_DRAFTS, read_json, validate_plurals, validate_texts
 
 ROOT = Path(__file__).resolve().parents[2]
 DRAFTS = ROOT / 'Tools/Localisation/drafts'
@@ -55,7 +55,7 @@ def main():
         plurals = read_json(plural_path)
         text_errors, missing_text = validate_texts(text_keys, texts, unchanged.get(locale, {}))
         plural_errors, missing_plurals = validate_plurals(plural_keys, plurals)
-        if text_errors or missing_text or plural_errors or missing_plurals:
+        if text_errors or not texts or (missing_text and locale not in PARTIAL_DRAFTS) or plural_errors or missing_plurals:
             errors.append(f'{locale}: {len(text_errors)} text errors, {len(missing_text)} missing texts, '
                           f'{len(plural_errors)} plural errors, {len(missing_plurals)} missing plurals')
         else:

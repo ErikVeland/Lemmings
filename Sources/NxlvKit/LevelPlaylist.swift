@@ -332,6 +332,7 @@ public enum LevelSequenceSource: Codable, Equatable, Sendable {
     case playlist(UUID)
     case randomTen
     case shuffleAll
+    case easyPuzzles
 }
 
 /// A fixed run order. Later playlist edits do not change this snapshot.
@@ -376,6 +377,10 @@ public struct LevelSequenceRun: Codable, Equatable, Sendable, Identifiable {
             }
         case .shuffleAll:
             guard seed != nil, algorithm != nil else {
+                throw LevelPlaylistError.invalidSequence
+            }
+        case .easyPuzzles:
+            guard seed == nil, entries.allSatisfy({ $0.identity.engine == .classic }) else {
                 throw LevelPlaylistError.invalidSequence
             }
         case .playlist:

@@ -6,6 +6,7 @@ import base64
 from pathlib import Path
 import plistlib
 import re
+import subprocess
 from urllib.parse import urlparse
 from xml.etree import ElementTree
 
@@ -19,6 +20,7 @@ REQUIRED_SCRIPTS = (
     "Scripts/generate-appcast.sh",
     "Scripts/publish-github-release.sh",
     "Scripts/check-release-inputs.sh",
+    "Scripts/verify-developer-id-signature.py",
 )
 
 
@@ -154,7 +156,24 @@ def validate_appcast(path, allow_empty=False, expected_release=None, allow_stale
     return len(items)
 
 
-def validate_repository(root, allow_empty=False, allow_stale_release=False):
+def published_release_for_checkout(root, candidate):
+    items = ElementTree.parse(root / "appcast.xml").findall("./channel/item")
+    if not items:
+        return candidate
+    newest = max(items, key=item_build)
+    if item_build(newest) <= int(candidate[1]):
+        return candidate
+    match = re.search(r"<!-- Release commit: ([0-9a-f]{40}) -->", newest.findtext("description", ""))
+    if not match:
+        raise ValueError("A feed ahead of this checkout needs its published release commit.")
+    result = subprocess.run(["git", "show", match[1] + ":Resources/Info.plist"], cwd=root, capture_output=True)
+    if result.returncode:
+        raise ValueError("The published release commit is unavailable. Fetch the release history for this source check.")
+    published = plistlib.loads(result.stdout)
+    return published["CFBundleShortVersionString"], published["CFBundleVersion"]
+
+
+def validate_repository(root, allow_empty=False, allow_stale_release=False, verify_published_source=False):
     root = Path(root)
     version, build = validate_info_plist(root / "Resources/Info.plist")
     package = (root / "Package.swift").read_text()
@@ -167,9 +186,11 @@ def validate_repository(root, allow_empty=False, allow_stale_release=False):
         path = root / relative
         if not path.is_file() or not path.stat().st_mode & 0o111:
             raise ValueError(f"Required release script is not executable: {relative}")
+    candidate = (version, build)
+    expected = published_release_for_checkout(root, candidate) if verify_published_source else candidate
     items = validate_appcast(root / "appcast.xml", allow_empty=allow_empty,
-                             expected_release=(version, build),
-                             allow_stale_release=allow_stale_release,
+                             expected_release=expected,
+                             allow_stale_release=allow_stale_release and expected == candidate,
                              require_delta_coverage=True)
     return version, build, items
 

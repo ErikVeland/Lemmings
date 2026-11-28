@@ -1,12 +1,129 @@
 #if os(macOS)
 import AppKit
 import ImageIO
+import LemmingsAppCore
 import LemmingsGameArt
 import NxlvKit
 import XCTest
 @testable import LemmingsLocal
 
 final class DeviceMenuLayoutTests: XCTestCase {
+    @MainActor func testMobileAboutCreditsKeepRolesLicencesAndBackNavigation() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let heritage = try String(contentsOf: root.appendingPathComponent("Resources/About/Heritage.md"), encoding: .utf8)
+        let content = AboutContent(heritage: heritage,
+            versionHistory: "# 2.7.5 · Build 128\n\n- Current release.\n\n# 2.6 · Build 115\n\n- Earlier release.",
+            contributors: "# Contributors\n\n## Supporters\n\nBundled supporter")
+        let page = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.6", build: "115",
+            showsLixCredits: true, content: content)
+        XCTAssertEqual(page.title, "About Ultimate Lemmix")
+        XCTAssertEqual(page.subtitle, "Version 2.6 - Build 115")
+        let credits = page.details.joined(separator: "\n")
+        for name in ["Erik Veland", "DMA Design", "Psygnosis", "Dave Jones", "Gary Timmons", "Scott Johnston",
+                     "Brian Johnston", "Tim Wright", "Presage, Inc.", "Tony Williams", "Simon Naarmann", "IchoTolot", "WillLem"] {
+            XCTAssertTrue(credits.contains(name), name)
+        }
+        XCTAssertTrue(credits.contains("Menu Lix · Mike Spanner (Rubix) · CC0 1.0"))
+        XCTAssertTrue(credits.contains("Meadow Sunrise · Minim and mobius · CC0 1.0"))
+        XCTAssertTrue(credits.contains("Earthen Energy, Winter · Mike Spanner (Rubix) · CC BY 4.0"))
+        XCTAssertFalse(page.detailHeadings.isEmpty)
+        XCTAssertEqual(MobileAboutArt.action.id, "about")
+        XCTAssertTrue(page.rows.isEmpty)
+        XCTAssertEqual(page.settingsTabs?.map(\.id),
+            ["aboutSection.overview", "aboutSection.history", "aboutSection.contributors"])
+        XCTAssertEqual(page.settingsTabs?.filter(\.selected).map(\.id), ["aboutSection.overview"])
+        for size in [CGSize(width: 320, height: 568), CGSize(width: 495, height: 720),
+                     CGSize(width: 844, height: 390), CGSize(width: 810, height: 1080)] {
+            let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
+            XCTAssertEqual(layout.details.count, page.details.count)
+            let back = try XCTUnwrap(layout.targets.first)
+            XCTAssertEqual(back.action.id, "aboutBack")
+            XCTAssertEqual(layout.action(at: CGPoint(x: back.frame.midX, y: back.frame.midY)), "aboutBack")
+            XCTAssertEqual(Set(layout.targets.map(\.action.id)), ["aboutBack", "aboutForums"])
+            let tabs = MobileSettingsTabsArt.layout(width: size.width, actions: try XCTUnwrap(page.settingsTabs))
+            for target in tabs.targets {
+                XCTAssertGreaterThanOrEqual(target.frame.width, 44)
+                XCTAssertGreaterThanOrEqual(target.frame.height, 44)
+                XCTAssertEqual(tabs.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
+            }
+        }
+        let history = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.7.5", build: "128",
+            showsLixCredits: true, content: content, section: .history)
+        XCTAssertEqual(history.rows.map(\.id), ["aboutRelease.0", "aboutRelease.1"])
+        XCTAssertEqual(history.rows.map(\.title), ["2.7.5", "2.6"])
+        let release = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.7.5", build: "128",
+            showsLixCredits: true, content: content, section: .history, selectedRelease: 1)
+        XCTAssertTrue(release.details.joined().contains("Earlier release."))
+        XCTAssertFalse(release.details.joined().contains("Current release."))
+        XCTAssertEqual(release.backAction?.id, "aboutHistoryBack")
+        let contributors = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.7.5", build: "128",
+            showsLixCredits: true, content: content, section: .contributors,
+            contributorStatus: "Saved list · Offline", allowsContributorRetry: true)
+        XCTAssertTrue(contributors.details.contains("Bundled supporter"))
+        XCTAssertTrue(contributors.details.contains("Supporters"))
+        XCTAssertEqual(contributors.rows.map(\.id), ["aboutRetry"])
+        XCTAssertTrue(contributors.subtitle.contains("Saved list · Offline"))
+        let classic = MobileAboutArt.page(productName: "Ultimate Lemmings", version: nil, build: nil, showsLixCredits: false)
+        XCTAssertEqual(classic.subtitle, "Version Unknown - Build Unknown")
+        XCTAssertFalse(classic.details.joined().contains("CC BY 4.0"))
+        XCTAssertTrue(classic.details.joined().contains("IchoTolot"))
+    }
+
+    @MainActor func testLevelCracktroRendersMotionAndHonoursStaticArtwork() throws {
+        XCTAssertEqual(GameLoadingIntroArt.visualDelay, 550_000_000)
+        func pixels(elapsed: TimeInterval, reduceMotion: Bool = false, reduceFlashes: Bool = false) throws -> Data {
+            let width = 320, height = 200, stride = width * 4
+            let context = try XCTUnwrap(CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+                bytesPerRow: stride, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+            GameLoadingIntroArt.draw(in: CGRect(x: 0, y: 0, width: width, height: height), title: "Ultimate Lemmix",
+                message: "Loading...", elapsed: GameLoadingIntroArt.frameElapsed(elapsed,
+                    reduceMotion: reduceMotion, reduceFlashes: reduceFlashes), context: context)
+            return Data(bytes: try XCTUnwrap(context.data), count: stride * height)
+        }
+        let initial = try pixels(elapsed: 0)
+        XCTAssertNotEqual(initial, try pixels(elapsed: 1.4))
+        XCTAssertEqual(initial, try pixels(elapsed: 1.4, reduceMotion: true))
+        XCTAssertEqual(initial, try pixels(elapsed: 1.4, reduceFlashes: true))
+    }
+
+    @MainActor func testStartupCracktroBackdropFillsPortraitAndLandscapeAndHonoursReducedEffects() throws {
+        for (width, height) in [(320, 568), (720, 495), (810, 1080)] {
+            let stride = width * 4
+            func frame(elapsed: TimeInterval, reduceMotion: Bool = false, reduceFlashes: Bool = false) throws -> Data {
+                let context = try XCTUnwrap(CGContext(data: nil, width: width, height: height, bitsPerComponent: 8,
+                    bytesPerRow: stride, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+                GameLoadingIntroArt.drawBackdrop(in: CGRect(x: 0, y: 0, width: width, height: height),
+                    elapsed: GameLoadingIntroArt.frameElapsed(elapsed, reduceMotion: reduceMotion,
+                        reduceFlashes: reduceFlashes), context: context)
+                return Data(bytes: try XCTUnwrap(context.data), count: stride * height)
+            }
+            let still = try frame(elapsed: 0)
+            // Both edges contain scenery, not the solid letterbox used for the level intro.
+            let x = width / 2 * 4
+            XCTAssertNotEqual(still[x..<x + 3], still[(height - 1) * stride + x..<(height - 1) * stride + x + 3])
+            XCTAssertNotEqual(still, try frame(elapsed: 1.4))
+            XCTAssertEqual(still, try frame(elapsed: 1.4, reduceMotion: true))
+            XCTAssertEqual(still, try frame(elapsed: 1.4, reduceFlashes: true))
+        }
+    }
+
+    @MainActor func testStartupHomeDisplaysStatusWithoutActionableTargets() {
+        let checking = MobileHomeArt.checkingGameFilesPage()
+        XCTAssertTrue(checking.home)
+        XCTAssertEqual(checking.subtitle, NxlvKit.L10n.text("Checking game files"))
+        XCTAssertEqual(checking.rows.map(\.id), MobileHomeArt.destinationIDs)
+        XCTAssertFalse((checking.rows + checking.footer).contains { $0.enabled || $0.primary })
+        for size in [CGSize(width: 320, height: 568), CGSize(width: 495, height: 720),
+                     CGSize(width: 720, height: 495), CGSize(width: 810, height: 1080)] {
+            let layout = GameFrontEnd.layout(checking, width: size.width, minimumHeight: size.height)
+            for target in layout.targets {
+                XCTAssertNil(layout.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)))
+            }
+        }
+        XCTAssertTrue(MobileHomeArt.page(continueAction: nil, initials: "").rows.allSatisfy(\.enabled))
+    }
+
     @MainActor func testAmigaVersusWarningFitsBriefingAndLevelSelection() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let art = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))
@@ -192,7 +309,7 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 journey: .init("journey", "Journey map 1/227 solved"), families: families, initials: "ALICE v BOB")
             let layout = GameFrontEnd.layout(page, width: width, minimumHeight: 834, bookHomePanes: panes)
             XCTAssertNotNil(layout.secondaryBoard)
-            XCTAssertNotNil(layout.libraryHeading)
+            XCTAssertNil(layout.libraryHeading)
             XCTAssertEqual(Set(layout.targets.map { $0.action.id }), Set((page.rows + page.footer).map(\.id)))
             XCTAssertEqual(layout.targets.filter { $0.action.primary }.count, 1)
             for pane in panes {
@@ -313,17 +430,19 @@ final class DeviceMenuLayoutTests: XCTestCase {
         let art = try ClassicMacArtwork(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings"))
         let output = root.appendingPathComponent(".build/device-layout-native")
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-        let families = ["CLASSIC LEMMINGS  93/120", "OH NO! MORE LEMMINGS  45/100", "HOLIDAY LEMMINGS  17/72",
-            "OH YES! MORE LEMMINGS  20/60", "FAN LEMMINGS  12/15000", "NEOLEMMIX  4/500", "LEMMINGS 2  0/120", "LEMMINGS 3  0/90 - BETA"]
-        let destinations = ["PLAY", "HOT SEAT", "PROFILE", "COMMUNITY"]
-        for size in [CGSize(width: 640, height: 480), .init(width: 900, height: 600), .init(width: 1120, height: 720),
+        let families = ["CLASSIC LEMMINGS  93/120", "OH NO! MORE LEMMINGS!  45/100", "HOLIDAY LEMMINGS  17/72",
+            "OH YES! MORE LEMMINGS  20/60", "FAN LEMMINGS  12/15000", "NEOLEMMIX  4/500", "LEMMINGS 2", "LEMMINGS 3"]
+        let destinations = ["HOT SEAT", "PLAY", "PROFILE", "COMMUNITY"]
+        for size in [CGSize(width: 640, height: 480), .init(width: 900, height: 600), .init(width: 1000, height: 620), .init(width: 1120, height: 720),
                      .init(width: 1600, height: 900), .init(width: 2560, height: 1600)] {
             for saved in 0...2 {
                 let field = PlayfieldView(frame: CGRect(origin: .zero, size: size))
                 field.interfaceArtwork = art; field.macArtwork = art; field.phase = .briefing
                 field.overlayTitle = "LEMMINGS"; field.overlayShowsLemmings = true
                 let routes = Array(["CONTINUE JOURNEY - ALICE v BOB", "RESUME LEVEL - ALICE"].prefix(saved)) + ["JOURNEY  29/295 SOLVED"]
+                let routeTitles = Array(["Continue journey", "Resume level"].prefix(saved)) + ["Journey"]
                 field.overlayProfileInitials = saved == 0 ? "LEM" : "ALICE v BOB"
+                field.overlayNextPlayerIndex = saved == 0 ? nil : 0
                 field.overlayShowsSettingsButton = true; field.overlayAvailableUpdate = "Version 2.0"
                 var selected: Int?, settings = false, update = false, back = false, collections = false
                 field.onSelectOverlayLine = { selected = $0 }; field.onSettings = { settings = true }
@@ -343,9 +462,22 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 field.overlayHomePlay = false
                 field.overlayHomeLeadingCount = 5
                 field.overlayLines = [routes[0]] + destinations
+                field.overlayHomeTitles = [routeTitles[0]] + destinations
                 field.overlayHighlight = 0
                 var elements = try capture("home")
                 XCTAssertEqual(field.homeActionCount, 7)
+                let primary = try XCTUnwrap(elements.first { $0.accessibilityLabel() == routes[0] })
+                let play = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "PLAY" })
+                let hotSeat = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "HOT SEAT" })
+                XCTAssertLessThan(primary.localFrame.maxY, play.localFrame.minY)
+                XCTAssertEqual(primary.localFrame.minX, hotSeat.localFrame.minX, accuracy: 1)
+                XCTAssertEqual(primary.localFrame.maxX, play.localFrame.maxX, accuracy: 1)
+                XCTAssertEqual(field.homeSelection(from: 0, direction: "down"), 1)
+                XCTAssertEqual(field.homeSelection(from: 1, direction: "right"), 2)
+                if size.width >= 900 {
+                    XCTAssertGreaterThanOrEqual(primary.localFrame.height, 104)
+                    XCTAssertGreaterThanOrEqual(play.localFrame.height, 80)
+                }
                 for label in ["Settings", "Version 2.0. Show update and release notes", field.overlayLines[0]] {
                     let element = try XCTUnwrap(elements.first { $0.accessibilityLabel() == label })
                     XCTAssertTrue(field.bounds.contains(element.localFrame)); click(element)
@@ -361,20 +493,105 @@ final class DeviceMenuLayoutTests: XCTestCase {
                 XCTAssertFalse(elements.contains { $0.accessibilityLabel()?.contains("LEMMINGS SAVED") == true })
                 XCTAssertFalse(community.localFrame.isEmpty)
 
-                // Play: saved routes, then the game grid, with Back and Collections below.
                 field.overlayHomePlay = true
+                field.overlayShowsLemmings = false
                 field.overlayHomeLeadingCount = routes.count
                 field.overlayLines = routes + families
+                let gameTitles = ["Classic Lemmings", "Oh No! More Lemmings!", "Holiday Lemmings",
+                    "Oh Yes! More Lemmings", "Fan Lemmings", "NeoLemmix", "Lemmings 2", "Lemmings 3"]
+                field.overlayHomeTitles = routeTitles + gameTitles
+                let firstGame = routes.count
+                field.overlayHomeGameCaptions = Dictionary(uniqueKeysWithValues:
+                    zip(gameTitles,
+                        ["93/120", "45/100", "17/72", "20/60", "12/15000", "4/500"]).enumerated().map { index, item in
+                            (firstGame + index, [.init(item.0, .green), .init("  " + item.1, .blue)])
+                        })
+                field.overlayHomeLogos = [firstGame + 6: .lemmings2, firstGame + 7: .lemmings3]
                 field.overlayHighlight = 0
                 elements = try capture("play")
-                let firstGame = routes.count
+                let gamesHeading = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "Games" })
+                let firstCategory = try XCTUnwrap(elements.first { $0.accessibilityLabel() == families[0] })
+                let expansion = try XCTUnwrap(elements.first { $0.accessibilityLabel() == families[1] })
+                let primaryRoute = try XCTUnwrap(elements.first { $0.accessibilityLabel() == routes[0] })
+                XCTAssertGreaterThanOrEqual(expansion.localFrame.height, 44)
+                XCTAssertLessThan(expansion.localFrame.height, primaryRoute.localFrame.height)
+                XCTAssertLessThan(gamesHeading.localFrame.maxY, firstCategory.localFrame.minY)
+                click(firstCategory)
+                XCTAssertEqual(selected, firstGame)
                 XCTAssertEqual(field.homeSelection(from: firstGame, direction: "right"), firstGame + 1)
                 XCTAssertEqual(field.homeSelection(from: firstGame + 1, direction: "left"), firstGame)
                 XCTAssertFalse(elements.contains { $0.accessibilityLabel() == "PLAY" })
+                field.overlayHighlight = field.overlayLines.count + 1
+                elements = try capture("play-footer")
+                if size.width >= 900 {
+                    for title in families.suffix(2) {
+                        let game = try XCTUnwrap(elements.first { $0.accessibilityLabel() == title })
+                        XCTAssertEqual(game.localFrame.height, 128, accuracy: 0.5)
+                    }
+                }
+                let collectionsControl = try XCTUnwrap(elements.first { $0.accessibilityLabel() == "Collections" })
+                click(collectionsControl)
+                XCTAssertTrue(collections)
+                collections = false
                 XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count)); XCTAssertTrue(back)
                 XCTAssertTrue(field.activateHomeSelection(field.overlayLines.count + 1)); XCTAssertTrue(collections)
             }
         }
+    }
+
+    @MainActor func testMacPlayFitsFullExpansionTitleAndProgressInCompactButton() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let typography = try XCTUnwrap(GameMenuTypography(directory: root.appendingPathComponent(".build/mac-artwork/export/lemmings")))
+        let font = try XCTUnwrap(typography.font(.small))
+        var classic = GameFrontEnd.Action("family.0", "Classic")
+        classic.titleRuns = [.init(classic.title, .green), .init("  93/120", .blue)]
+        var level = GameFrontEnd.Action("family.1", "Oh No! More Lemmings!")
+        level.titleRuns = [.init(level.title, .green), .init("  45/100", .blue)]
+        var page = GameFrontEnd.Page(title: "Play", rows: [
+            .init("journey", "Journey", primary: true), classic, level
+        ])
+        page.macTitleMenu = true
+        page.gameLibrary = true
+        page.macPlayCaptionScale = 0.5
+        let layout = GameFrontEnd.layout(page, width: 450, minimumHeight: 300, macPlayFont: font)
+        let target = try XCTUnwrap(layout.targets.first { $0.action.id == level.id })
+        let captionWidth = GameTextLayout.width(of: level.titleRuns.map(\.text).joined(), font: font)
+        XCTAssertGreaterThan(captionWidth, target.frame.width - 12)
+        XCTAssertLessThanOrEqual(captionWidth / 2, target.frame.width - 12)
+        XCTAssertEqual(target.frame.height * 2, 44)
+        XCTAssertEqual(target.action.titleRuns.last?.text, "  45/100")
+
+        let narrow = GameFrontEnd.layout(page, width: 300, minimumHeight: 300, macPlayFont: font)
+        let narrowTarget = try XCTUnwrap(narrow.targets.first { $0.action.id == level.id })
+        let narrowCaptionWidth = (narrowTarget.frame.width - 12) * 2
+        let narrowClassic = try XCTUnwrap(narrow.targets.first { $0.action.id == classic.id })
+        XCTAssertLessThanOrEqual(GameTextLayout.width(of: classic.title + "  93/120", font: font), narrowCaptionWidth)
+        XCTAssertEqual(narrowClassic.action.titleRuns.last?.text, "\n93/120")
+        XCTAssertEqual(narrowTarget.action.titleRuns.last?.text, "\n45/100")
+        let wrappedCaption = level.title + "\n45/100"
+        let lines = GameTextLayout.lines(wrappedCaption, width: narrowCaptionWidth, font: font)
+        XCTAssertEqual(lines.last, "45/100")
+        XCTAssertGreaterThan(lines.count, GameTextLayout.lines(level.title + "  45/100",
+            width: narrowCaptionWidth, font: font).count)
+        let height = CGFloat(lines.count * font.height(of: GameMenuTypography.menuText(wrappedCaption)))
+        XCTAssertEqual(narrowTarget.frame.height, ceil(height / 2) + 4)
+
+        func render(_ count: String) throws -> Data {
+            var page = page
+            page.rows[2].titleRuns[1].text = count
+            let layout = GameFrontEnd.layout(page, width: 450, minimumHeight: 300, macPlayFont: font)
+            let size = layout.size
+            let bitmap = try XCTUnwrap(NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: Int(size.width * 2),
+                pixelsHigh: Int(size.height * 2), bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true, isPlanar: false,
+                colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0))
+            let graphics = try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap))
+            graphics.cgContext.translateBy(x: 0, y: size.height * 2)
+            graphics.cgContext.scaleBy(x: 2, y: -2)
+            GameFrontEnd.draw(page, layout: layout, typography: typography, in: graphics.cgContext)
+            return try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
+        }
+        XCTAssertNotEqual(try render("  45/100"), try render("  55/100"))
     }
 }
 #endif

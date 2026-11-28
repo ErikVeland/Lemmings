@@ -175,10 +175,8 @@ def inputs():
                   "Tools/ReleaseReadiness/version_history.py", "Tools/AlternativeAssets/prepare_lemmix_base.py",
                   "Tools/AlternativeAssets/prepare_project_pixel.py", "Tools/AlternativeAssets/prepare_original_font.py",
                   "Tools/AlternativeAssets/store_resources.py", "Tools/AlternativeAssets/feature_resources.py",
-                  "Tools/AlternativeAssets/prepare_music.py", "Resources/AlternativeAssets/music-sources.json",
-                  "Resources/UltimateLemmix/alternative-resource-source.json",
-                  "Resources/UltimateLemmix/AppIcon/UltimateLemmix.png", "Resources/UltimateLemmix/AppIcon/README.md",
                   "Tools/TrolleyVerification/catalogue.py", "Tools/TrolleyVerification/presentation-files.json",
+                  "Tools/TrolleyVerification/legacy-presentation-hashes.json",
                   "Apps/DeskClockWidget/DeskClockWidget.swift", "Apps/DeskClockWidget/Mac/Info.plist",
                   "Resources/UltimateLemmix/Info.plist", "Resources/UltimateLemmix/AppStore.entitlements",
                   "Resources/UltimateLemmix/DeskClockMacWidget.entitlements", "Resources/Publishing/ultimate-lemmix.json"))
@@ -424,12 +422,6 @@ def automatic_export(args, archive_path, result):
     command = ["xcodebuild", "-exportArchive", "-archivePath", str(archive_path),
                "-exportOptionsPlist", str(options_path), "-exportPath", str(export_path),
                "-allowProvisioningUpdates"]
-    key_path, key_id, issuer_id = (os.environ.get(name) for name in ("ASC_KEY_PATH", "ASC_KEY_ID", "ASC_ISSUER_ID"))
-    if any((key_path, key_id, issuer_id)):
-        if not all((key_path, key_id, issuer_id)):
-            raise ValueError("Set ASC_KEY_PATH, ASC_KEY_ID and ASC_ISSUER_ID together.")
-        command.extend(["-authenticationKeyPath", key_path, "-authenticationKeyID", key_id,
-                        "-authenticationKeyIssuerID", issuer_id])
     environment = dict(os.environ, PATH="/usr/bin:/bin:/usr/sbin:/sbin",
                        TMPDIR=str(args.build_dir / "Temporary") + "/")
     (args.build_dir / "Temporary").mkdir(exist_ok=True)
@@ -506,6 +498,7 @@ def main():
         if args.action == "snapshot":
             save(args.build_dir / "source-inputs.json", inputs())
         elif args.action == "export":
+            subprocess.run([sys.executable, str(ROOT / "Tools/Localisation/catalogue.py"), "--release"], check=True)
             if not args.automatic_export:
                 raise ValueError("Use --automatic-export to retry authenticated Store export.")
             automatic_export(args, args.build_dir / "Ultimate Lemmix.xcarchive",

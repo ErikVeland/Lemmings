@@ -2,6 +2,7 @@
 import AppKit
 import LemmingsAppCore
 import LemmingsGameArt
+import LemmingsMobileCore
 import NxlvKit
 
 /// Settings stay inside the game. Language choices preview without changing the active game.
@@ -38,6 +39,7 @@ import NxlvKit
   private var sequelArtworkCheck: NSButton?
   private var pointerCaptureCheck: NSButton?
   private var modernControlsCheck: NSButton?
+  private var scrollWheelZoomCheck: NSButton?
   private var variableSpeedCheck: NSButton?
   private var ridiculousSpeedCheck: NSButton?
   private var interruptionCheck: NSButton?
@@ -117,13 +119,28 @@ import NxlvKit
     }
     let tabs = GameTabs()
     tabs.onSelectionChanged = { [weak self] in self?.help.dismiss() }
-    tabs.addTabViewItem(tab(L10n.text("Gameplay"), gameplayPane()))
-    tabs.addTabViewItem(tab(L10n.text("Controls"), controllerPane()))
-    tabs.addTabViewItem(tab(L10n.text("Artwork"), graphicsPane()))
-    tabs.addTabViewItem(tab(L10n.text("Display"), videoPane()))
-    tabs.addTabViewItem(tab(L10n.text("Audio"), audioPane()))
-    tabs.addTabViewItem(tab(L10n.text("Accessibility"), accessibilityPane()))
-    tabs.addTabViewItem(tab(L10n.text("Privacy"), privacyPane()))
+    let sections = MobileSettingsGroup.sections.map { $0.filter { $0 != .deskClock } }
+    var sectionEnd = 0
+    tabs.sidebarBreaks = Set(sections.dropLast().map {
+      sectionEnd += $0.count
+      return sectionEnd
+    })
+    for group in sections.flatMap({ $0 }) {
+      let pane: NSView
+      switch group {
+      case .gameplay: pane = gameplayPane()
+      case .controller: pane = controllerPane()
+      case .accessibility: pane = accessibilityPane()
+      case .display: pane = videoPane()
+      case .graphics: pane = graphicsPane()
+      case .audio: pane = audioPane()
+      case .privacy: pane = privacyPane()
+      case .deskClock: continue
+      }
+      let button = tabs.addTabViewItem(tab(group.title, pane))
+      if group == .gameplay { page.preferControllerControl(button) }
+    }
+    page.sidebarTabs = tabs
     tabs.translatesAutoresizingMaskIntoConstraints = false
     page.body.addSubview(tabs)
     NSLayoutConstraint.activate([
@@ -195,7 +212,7 @@ import NxlvKit
       ])
       previous = control
     }
-    previous?.bottomAnchor.constraint(lessThanOrEqualTo: container.bottomAnchor, constant: -8).isActive = true
+    container.lastControl = previous
     return scroll
   }
 
@@ -214,17 +231,17 @@ import NxlvKit
     "experienceChanged:": L10n.text("Original restores the original controls and presentation. Modern enables gameplay aids. Individual changes select Custom."),
     "modernControlsChanged:": L10n.text("Use modern keyboard shortcuts for skills, pause, speed, camera movement and hints in all three games."),
     "variableSpeedChanged:": SpeedPanelControls.help,
-    "interruptionChanged:": L10n.text("Pause when you switch apps or disconnect a controller. Resume when you are ready."),
+    "interruptionChanged:": L10n.text("Pause when you switch apps or disconnect a controller."),
     "pointerCaptureChanged:": L10n.text("Keep the pointer inside the game window, including paused screens and menus. Hold Option or switch apps to release it."),
     "favorApproachingChanged:": L10n.text("When lemmings overlap, favour an eligible lemming still approaching rather than one that has turned away."),
     "favorBombBlockersChanged:": L10n.text("Prefer eligible blockers for bomb skills. L2 Exploder supports blockers, but Bomber does not. L3 uses carried bombs."),
-    "favorBuildersChanged:": L10n.text("Prefer lemmings using a skill, and retain their priority until they fall. Native skill rules still apply."),
-    "cursorStyleChanged:": L10n.text("Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility. Applies to all three games."),
+    "favorBuildersChanged:": L10n.text("Prefer lemmings using a skill, and retain their priority until they fall."),
+    "cursorStyleChanged:": L10n.text("Original uses the Amiga crosshair. Modern uses thin corner brackets that show skill eligibility."),
     "selectionStyleChanged:": L10n.text("None hides selection effects. Obvious adds a green diamond and halo. Modern adds the diamond, white outline and green glow in all three games."),
-    "skillBackpacksChanged:": L10n.text("Show Climber and Floater backpacks on Classic lemmings. L2 and L3 keep their own skill artwork."),
+    "skillBackpacksChanged:": L10n.text("Show Climber and Floater backpacks on Classic lemmings."),
     "skillCursorSizeChanged:": L10n.text("Show the selected skill beside the pointer at 1× or 2×, or hide it with None. L3 Use shows carried tool uses."),
-    "reticleCountChanged:": L10n.text("Show the number of live lemmings inside the reticule. This also works when the skill icon is hidden."),
-    "levelSelectionChanged:": L10n.text("Choose unlocked levels or all levels for direct Classic selection. L2 and L3 keep their campaign selection rules."),
+    "reticleCountChanged:": L10n.text("Show the number of live lemmings inside the reticule."),
+    "levelSelectionChanged:": L10n.text("Choose unlocked levels or all levels for direct Classic selection."),
     "controllerChanged:": L10n.text("Enable gamepad gameplay and menu controls in Classic, L2 and L3."),
     "controllerTapChanged:": L10n.text("Tap the right trigger to toggle fast-forward. Hold it for a temporary speed boost."),
     "controllerSwapChanged:": L10n.text("Use the right stick to aim and the left stick to move the camera."),
@@ -233,32 +250,30 @@ import NxlvKit
     "remapRoleChanged:": L10n.text("Choose its gameplay action. If another button uses that action, their bindings swap."),
     "resetControllerMapping": L10n.text("Restore the default gameplay actions for every controller button."),
     "presetChanged:": L10n.text("Apply a machine's artwork, music and sound choices together. Further changes select Custom."),
-    "graphicsChanged:": L10n.text("Choose the Classic artwork source. Available sources depend on installed game data."),
+    "graphicsChanged:": L10n.text("Choose the Classic artwork source."),
     "depthChanged:": L10n.text("Choose the colour palette for Classic artwork."),
     "graphicsShuffleChanged:": L10n.text("Choose a different available Classic artwork source for each level."),
     "counterStyleChanged:": L10n.text("Choose the style of Classic skill counters, including the original Macintosh bitmap digits."),
     "sequelArtworkChanged:": L10n.text("Use recreated Macintosh-style artwork in Lemmings 2 and Lemmings 3."),
-    "displayChanged:": L10n.text("Choose Flat Panel, Monitor or Television. Classic uses the tube simulation. L2 and L3 keep their bitmap renderers."),
-    "intensityChanged:": L10n.text("Adjust the Classic tube effect. Available with Monitor or Television. Flat Panel keeps the saved value."),
-    "aspectChanged:": L10n.text("Adjust Classic pixel width with Monitor or Television. Flat Panel keeps the saved value."),
+    "displayChanged:": L10n.text("Choose Flat Panel, Monitor or Television. Classic uses the tube simulation."),
+    "intensityChanged:": L10n.text("Adjust the Classic tube effect. Available with Monitor or Television."),
+    "aspectChanged:": L10n.text("Adjust Classic pixel width with Monitor or Television."),
     "integerChanged:": L10n.text("Scale the playfield in whole pixel steps to keep pixel edges crisp."),
     "hdEffectsChanged:": L10n.text("Enable added explosions, flashes, speed streaks and ghost trails. Motion and flash reductions still apply."),
     "hdrFlashesChanged:": L10n.text("Add a fireball, shockwave, smoke and flash to nuclear explosions. HDR displays add brightness. Requires HD effects."),
-    "interfaceSizeChanged:": L10n.text("Enlarge menu pages and controls help. Scroll to reach controls when the enlarged page exceeds the window."),
+    "interfaceSizeChanged:": L10n.text("Enlarge menu pages and controls help."),
     "reduceMotionChanged:": L10n.text("Disable speed trails and cinematic explosions. Keep gameplay speed and controls."),
     "showSongInfoChanged:": L10n.text("Show the song title and soundtrack briefly when the music changes."),
-    "fadeMenuButtonChanged:": L10n.text("Fade Menu, Settings and Graphics during play. Turn this off to keep the buttons visible."),
-    "reduceFlashesChanged:": L10n.text("Disable added bright explosion cores, HDR flashes and cinematic explosions. Original game sprites remain."),
-    "musicChanged:": L10n.text("Choose a soundtrack or Adaptive DJ Mix. Available soundtracks depend on installed music libraries."),
+    "fadeMenuButtonChanged:": L10n.text("Fade Menu, Settings and Graphics during play."),
+    "reduceFlashesChanged:": L10n.text("Disable added bright explosion cores, HDR flashes and cinematic explosions."),
+    "musicChanged:": L10n.text("Choose a soundtrack or Adaptive DJ Mix."),
     "styleChanged:": L10n.text("Faithful keeps the source's original sound. Modern applies the enhanced music treatment."),
-    "musicVolumeChanged:": L10n.text("Adjust music volume independently of sound effects."),
-    "soundChanged:": L10n.text("Choose the sound-effects source. Available choices depend on installed game data."),
-    "soundVolumeChanged:": L10n.text("Adjust sound-effects volume independently of music."),
+    "soundChanged:": L10n.text("Choose the sound-effects source."),
     "musicShuffleChanged:": L10n.text("Change the soundtrack source each level. Adaptive DJ Mix selects tracks during play."),
     "djSoundtracksChanged:": L10n.text("Let Adaptive DJ Mix include music from L2, L3 and other ports, when installed."),
-    "pauseBeatChanged:": L10n.text("On pause, play only isolated percussion. Tracks without a rhythm part stop. Applies to all three games."),
+    "pauseBeatChanged:": L10n.text("On pause, play only isolated percussion. Tracks without a rhythm part stop."),
     "bottomFallSoundsChanged:": L10n.text("Play a death sound when a lemming falls out of the bottom of the level in any of the three games."),
-    "openMusicLibraries": L10n.text("Download or remove optional soundtrack libraries. Installed libraries become available in the music choices."),
+    "openMusicLibraries": L10n.text("Download or remove optional soundtrack libraries."),
     "telemetryChanged:": privacyHelp,
     "showPrivacyInfo:": privacyHelp,
     "openPlayInsights": L10n.text("View play counts and music use for this Mac, and shared totals when the service is available."),
@@ -318,6 +333,9 @@ import NxlvKit
     selectionStylePopUp = selection
     let modern = GameCheckButton(title: L10n.text("Modern keyboard controls"), target: self, action: #selector(modernControlsChanged))
     modernControlsCheck = modern
+    let scrollWheelZoom = GameCheckButton(title: L10n.text("Scroll wheel zoom"), target: self, action: #selector(scrollWheelZoomChanged))
+    scrollWheelZoom.state = settings.scrollWheelZoomEnabled ? .on : .off
+    scrollWheelZoomCheck = scrollWheelZoom
     let variable = GameCheckButton(title: L10n.text("Variable speed: 2×, 3×, 5×, 10×"), target: self, action: #selector(variableSpeedChanged))
     variableSpeedCheck = variable
     let ridiculous = GameCheckButton(title: L10n.text("Ridiculous speed (25×)"), target: self, action: #selector(ridiculousSpeedChanged))
@@ -330,10 +348,10 @@ import NxlvKit
     let interruption = GameCheckButton(title: L10n.text("Pause on interruption"), target: self, action: #selector(interruptionChanged))
     interruption.state = settings.pauseOnInterruption ? .on : .off
     interruptionCheck = interruption
-    let favorApproaching = GameCheckButton(title: L10n.text("Favor lemmings still approaching"), target: self, action: #selector(favorApproachingChanged))
+    let favorApproaching = GameCheckButton(title: L10n.text("Favour lemmings still approaching"), target: self, action: #selector(favorApproachingChanged))
     favorApproaching.state = settings.favorApproachingLemmings ? .on : .off
     favorApproachingCheck = favorApproaching
-    let bombBlockers = GameCheckButton(title: L10n.text("Favor blockers for bombs"), target: self, action: #selector(favorBombBlockersChanged))
+    let bombBlockers = GameCheckButton(title: L10n.text("Favour blockers for bombs"), target: self, action: #selector(favorBombBlockersChanged))
     bombBlockers.state = settings.favorBombBlockers ? .on : .off
     favorBombBlockersCheck = bombBlockers
     let builders = GameCheckButton(title: L10n.text("Favour active skilled lemmings"), target: self, action: #selector(favorBuildersChanged))
@@ -353,7 +371,11 @@ import NxlvKit
     pointerCaptureCheck = pointer
     return groupedPane([
       (L10n.text("Presentation"), [(L10n.text("Language"), language), (L10n.text("Style"), experience)]),
-      (L10n.text("Controls and assistance"), [(L10n.text("Controls"), modern), (L10n.text("Speed"), GameControlGroup(controls: [variable, ridiculous], label: L10n.text("Speed"))), (L10n.text("Pause"), GameControlGroup(controls: [interruption, inspect], label: L10n.text("Pause"))), (L10n.text("Pointer"), pointer)]),
+      (L10n.text("Controls and assistance"), [(L10n.text("Controls"), modern),
+        (L10n.text("Zoom"), scrollWheelZoom),
+        (L10n.text("Speed"), GameControlGroup(controls: [variable, ridiculous], label: L10n.text("Speed"))),
+        (L10n.text("Pause"), GameControlGroup(controls: [interruption, inspect], label: L10n.text("Pause"))),
+        (L10n.text("Pointer"), pointer)]),
       (L10n.text("Skill targeting"), [("", targeting)]),
       (L10n.text("Pointer and selection"), [(L10n.text("Cursor"), cursor), (L10n.text("Skill icon"), iconSize), (L10n.text("Reticule"), count), (L10n.text("Selection"), selection), (L10n.text("Classic"), backpacks)]),
       (L10n.text("Level access"), [(L10n.text("Level Select"), levelSelection)]),
@@ -389,6 +411,7 @@ import NxlvKit
     changed()
   }
   @objc private func interruptionChanged(_ sender: NSButton) { settings.pauseOnInterruption = sender.state == .on; changed() }
+  @objc private func scrollWheelZoomChanged(_ sender: NSButton) { settings.scrollWheelZoomEnabled = sender.state == .on; changed() }
   @objc private func variableSpeedChanged(_ sender: NSButton) {
     settings.variableSpeedEnabled = sender.state == .on
     ridiculousSpeedCheck?.isEnabled = settings.modernControlsEnabled && settings.variableSpeedEnabled
@@ -461,7 +484,7 @@ import NxlvKit
     source.setAccessibilityLabel(L10n.text("Controller button"))
     role.setAccessibilityLabel(L10n.text("Gameplay action"))
     let reset = GameButton(title: L10n.text("Reset button mappings"), target: self, action: #selector(resetControllerMapping))
-    let note = GameLabel(wrappingLabelWithString: L10n.text("If another button has that action, the two bindings swap. Modifier combinations follow the new buttons. Menu navigation always uses the standard controls. Sticks can be swapped in Controls."))
+    let note = GameLabel(wrappingLabelWithString: L10n.text("If another button has that action, the two bindings swap."))
     let content = pane([(L10n.text("Button"), source), (L10n.text("Action"), role), (L10n.text("Defaults"), reset), (L10n.text("How it works"), note)])
     content.frame = page.body.bounds; content.autoresizingMask = [.width, .height]
     page.body.addSubview(content)
@@ -543,7 +566,7 @@ import NxlvKit
     return groupedPane([
       (L10n.text("Presentation"), [(L10n.text("Artwork"), artwork)]),
       (L10n.text("Machine preset"), [(L10n.text("Machine"), preset)]),
-      (L10n.text("Classic artwork"), [(L10n.text("Artwork"), graphics), (L10n.text("Colour Depth"), depth), (L10n.text("Shuffle"), shuffle), (L10n.text("Counters"), counters)]),
+      (L10n.text("Classic artwork"), [(L10n.text("Artwork"), graphics), (L10n.text("Colour depth"), depth), (L10n.text("Shuffle"), shuffle), (L10n.text("Counters"), counters)]),
       (L10n.text("Sequel artwork"), [(L10n.text("Lemmings 2 + 3"), sequel)]),
     ])
   }
@@ -591,10 +614,10 @@ import NxlvKit
     for option in ClassicDisplayMode.allCases { display.addItem(withTitle: option.displayName) }
     display.setAccessibilityLabel(L10n.text("Screen"))
     let intensity = slider(#selector(intensityChanged), value: settings.displayIntensity)
-    intensity.setAccessibilityLabel(L10n.text("Tube Strength"))
+    intensity.setAccessibilityLabel(L10n.text("Tube strength"))
     let aspect = slider(
       #selector(aspectChanged), value: settings.pixelAspect, min: 0.8, max: 1.5)
-    aspect.setAccessibilityLabel(L10n.text("Pixel Width"))
+    aspect.setAccessibilityLabel(L10n.text("Pixel width"))
     let integer = GameCheckButton(
       title: L10n.text("Whole pixels only"), target: self,
       action: #selector(integerChanged))
@@ -618,7 +641,7 @@ import NxlvKit
     hdrFlashCheck = flashes
     tubeCaptions.removeAll()
     var sections: [(String, [(String, NSView)])] = [
-      (L10n.text("Display"), [(L10n.text("Screen"), display), (L10n.text("Tube Strength"), intensity), (L10n.text("Pixel Width"), aspect), (L10n.text("Scaling"), integer)]),
+      (L10n.text("Display"), [(L10n.text("Screen"), display), (L10n.text("Tube strength"), intensity), (L10n.text("Pixel width"), aspect), (L10n.text("Scaling"), integer)]),
       (L10n.text("Added effects"), [(L10n.text("Effects"), hdEffects), (L10n.text("Explosions"), flashes)]),
     ]
     if !videoIsConnected { sections.append((L10n.text("Availability"), [("", note)])) }
@@ -660,13 +683,15 @@ import NxlvKit
     let reducedFlashes = GameCheckButton(title: L10n.text("Reduce added flashes"), target: self, action: #selector(reduceFlashesChanged))
     reducedFlashes.state = settings.reduceFlashes ? .on : .off
     reduceFlashesCheck = reducedFlashes
+    let haptics = GameCheckButton(title: L10n.text("Haptics"), target: self, action: #selector(gameplayHapticsChanged))
+    haptics.state = GameplayHapticsPreference.enabled ? .on : .off
     let size = popUp(#selector(interfaceSizeChanged))
     size.addItems(withTitles: ClassicInterfaceSize.allCases.map(\.title))
     size.selectItem(at: ClassicInterfaceSize.allCases.firstIndex(of: settings.interfaceSize) ?? 0)
     interfaceSizePopUp = size
     return groupedPane([
       (L10n.text("Interface"), [(L10n.text("UI size"), size), ("", songInfo), ("", fadeMenu), ("", staticHome)]),
-      (L10n.text("Added effects"), [(L10n.text("Motion"), motion), (L10n.text("Flashes"), reducedFlashes)]),
+      (L10n.text("Added effects"), [(L10n.text("Motion"), motion), (L10n.text("Flashes"), reducedFlashes), ("", haptics)]),
     ])
   }
 
@@ -812,6 +837,7 @@ import NxlvKit
     menuMusicCheck?.state = settings.menuMusic ? .on : .off
     pointerCaptureCheck?.state = settings.confinePointer ? .on : .off
     modernControlsCheck?.state = settings.modernControlsEnabled ? .on : .off
+    scrollWheelZoomCheck?.state = settings.scrollWheelZoomEnabled ? .on : .off
     variableSpeedCheck?.state = settings.variableSpeedEnabled ? .on : .off
     ridiculousSpeedCheck?.state = settings.ridiculousSpeedEnabled ? .on : .off
     variableSpeedCheck?.isEnabled = settings.modernControlsEnabled
@@ -885,26 +911,20 @@ import NxlvKit
     let picker = GameMenuPage(title: L10n.text("Language"))
     picker.onBack = { [weak self] in self?.finishLanguageSelection(apply: false) }
     picker.addPrimaryAction(L10n.text("Apply")) { [weak self] in self?.finishLanguageSelection(apply: true) }
-    let scroll = NSScrollView(frame: picker.body.bounds)
-    scroll.autoresizingMask = [.width, .height]
-    scroll.hasVerticalScroller = true
-    scroll.drawsBackground = false
-    let list = NSView(frame: CGRect(x: 0, y: 0, width: 940, height: max(440, L10n.languageOptions.count * 44)))
+    picker.listColumnsEnabled = false
+    picker.listMinimumHeight = 38
     for (index, option) in L10n.languageOptions.enumerated() {
       let button = GameButton(title: option.title, target: self, action: #selector(previewLanguage))
+      button.focusRingType = .none
       button.tag = index
       button.setButtonType(.momentaryPushIn) // Track the full stone face. Keep radio semantics below.
       let selected = option == L10n.currentLanguagePreference
       button.state = selected ? .on : .off
       button.setAccessibilityRole(.radioButton)
       button.setAccessibilityValue(selected ? 1 : 0)
-      button.frame = CGRect(x: 6, y: list.bounds.height - CGFloat(index + 1) * 44, width: 920, height: 38)
-      list.addSubview(button)
+      picker.addListAction(button, at: index)
       if selected { picker.preferControllerControl(button) }
     }
-    scroll.documentView = list
-    picker.body.addSubview(scroll)
-    scroll.contentView.scroll(to: CGPoint(x: 0, y: max(0, list.bounds.height - scroll.contentSize.height)))
     return picker
   }
 
@@ -938,7 +958,7 @@ import NxlvKit
     experiencePopUp?.selectItem(at: ClassicExperiencePreset.allCases.firstIndex(of: settings.experiencePreset) ?? 2)
     experiencePopUp?.needsDisplay = true
     GameAccessibility.interfaceSize = settings.interfaceSize
-    GameScreen.shared.reattach()
+    GameScreen.shared.reattach(relayout: true)
     onChange?(settings)
   }
   @objc private func interfaceSizeChanged(_ sender: NSPopUpButton) {
@@ -963,6 +983,7 @@ import NxlvKit
     applied.shuffleGraphics = settings.shuffleGraphics
     applied.shuffleMusic = settings.shuffleMusic
     applied.modernControlsEnabled = settings.modernControlsEnabled
+    applied.scrollWheelZoomEnabled = settings.scrollWheelZoomEnabled
     applied.counterStyle = settings.counterStyle
     applied.variableSpeedEnabled = settings.variableSpeedEnabled
     applied.ridiculousSpeedEnabled = settings.ridiculousSpeedEnabled
@@ -1117,6 +1138,10 @@ import NxlvKit
   @objc private func fadeMenuButtonChanged(_ sender: NSButton) {
     settings.fadeMenuButton = sender.state == .on
     changed()
+  }
+
+  @objc private func gameplayHapticsChanged(_ sender: NSButton) {
+    GameplayHapticsPreference.enabled = sender.state == .on
   }
 
   @objc private func reduceFlashesChanged(_ sender: NSButton) {

@@ -6,7 +6,7 @@ import NxlvKit
 @testable import LemmingsLocal
 
 final class NavigationJourneyTests: XCTestCase {
-    @MainActor func testTimelineContainsOnlyTransportAndConsumesDisabledTargetsAndGaps() throws {
+    @MainActor func testTimelineIncludesLevelHintsAndConsumesDisabledTargetsAndGaps() throws {
         let controls = TimelinePanelControls()
         let owner = NSView(frame: CGRect(x: 0, y: 0, width: 260, height: 38))
         controls.frame = CGRect(x: 4, y: 4, width: 252, height: 30)
@@ -14,8 +14,7 @@ final class NavigationJourneyTests: XCTestCase {
         controls.perform = { performed.append($0) }
         controls.enabled = { $0 == .forward }
         let elements = controls.accessibleControls(owner: owner).compactMap { $0 as? GameAccessibleElement }
-        XCTAssertEqual(elements.count, 3)
-        XCTAssertFalse(elements.contains { ($0.accessibilityLabel() ?? "").localizedCaseInsensitiveContains("hint") })
+        XCTAssertEqual(elements.compactMap { $0.accessibilityLabel() }, TimelinePanelControls.Action.allCases.map(\.label))
         for action in TimelinePanelControls.Action.allCases {
             let frame = controls.rect(for: action)
             XCTAssertTrue(controls.frame.contains(frame))
@@ -62,6 +61,41 @@ final class NavigationJourneyTests: XCTestCase {
         XCTAssertEqual(retries, 0)
         result.onRetry?()
         XCTAssertEqual(retries, 1)
+    }
+
+    @MainActor func testFailedJourneyRendersAnAccessibleBreakAction() throws {
+        _ = NSApplication.shared
+        let originalStore = ArcadeStore.shared
+        let storage = try AppStorage.temporary(named: "journey-break-action")
+        let store = ArcadeStore(storage: storage, bundledProofs: nil)
+        ArcadeStore.shared = store
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 900, height: 620),
+            styleMask: [.titled], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        defer {
+            GameScreen.shared.dismissAll()
+            window.close()
+            ArcadeStore.shared = originalStore
+            storage.removeTemporaryFiles()
+        }
+        let level = ArcadeLevel(id: "break", title: "Hard puzzle", game: "Classic", rules: "test", total: 10, required: 5)
+        let report = try XCTUnwrap(store.previewReport(for: .init(profileID: store.playingProfileID,
+            level: level, saved: 0, didWin: false, skills: [:], seconds: 20)))
+        var opened = false
+        let title = "Take a break"
+        ArcadeWindow.shared.showResult(report, owner: window, retry: {}, next: {}, replay: nil,
+            later: {}, sideAction: (title, { opened = true }))
+        let result = ArcadeWindow.shared.arcadeView
+        result.layoutSubtreeIfNeeded()
+        let bitmap = try XCTUnwrap(result.bitmapImageRepForCachingDisplay(in: result.bounds))
+        let context = try XCTUnwrap(NSGraphicsContext(bitmapImageRep: bitmap))
+        result.displayIgnoringOpacity(result.bounds, in: context)
+        let target = try XCTUnwrap(result.accessibilityChildren()?.compactMap { $0 as? GameAccessibleElement }
+            .first { $0.accessibilityLabel() == title && $0.accessibilityRole() == .button })
+        XCTAssertTrue(result.bounds.contains(target.localFrame))
+        XCTAssertFalse(target.localFrame.isEmpty)
+        XCTAssertTrue(target.accessibilityPerformPress())
+        XCTAssertTrue(opened)
     }
 
     @MainActor func testPlayingReturnsToTheSameNestedBrowserAndBackRetracesItsParents() throws {

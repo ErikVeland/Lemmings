@@ -31,6 +31,7 @@ import NxlvKit
         PrecisionZoomLedger.effectiveSpeed(normal: state.multiplier,
             active: bulletTimeActive ? .superzoom : nil)
     }
+    var simulationBudget: TimeInterval { multiplier > 1 ? 0.022 : 0.012 }
     var label: String { bulletTimeActive ? "0.5×" : state.label }
     var target: Double { state.target }
     var panelLabel: String { label }
@@ -52,6 +53,11 @@ import NxlvKit
     func select(_ tier: Double, at now: TimeInterval) {
         state.select(tier, at: now)
         onChange()
+    }
+    func observeThroughput(elapsed: TimeInterval, ticks: Int, ticksPerSecond: Double) {
+        if !bulletTimeActive, state.observeThroughput(elapsed: elapsed, ticks: ticks, ticksPerSecond: ticksPerSecond) {
+            onChange()
+        }
     }
     func handleTierShortcut(_ event: NSEvent) -> Bool {
         guard variableEnabled, !bulletTimeActive, event.type == .keyDown,
@@ -168,7 +174,10 @@ import NxlvKit
         guard tips.needs(tip) else { return }
         let area = (musicDisplayArea() ?? root.bounds).intersection(root.bounds)
         guard area.width >= 240, area.height >= 100 else { return }
-        let anchor = CGRect(x: area.minX + 12, y: root.isFlipped ? area.minY + 4 : area.maxY - 4,
+        // The rewind cue (and the precision badge above it) sits in the top-left corner.
+        // Start the rewind tip below them so it does not hide the cue it explains.
+        let inset: CGFloat = tip == .rewind ? 64 : 4
+        let anchor = CGRect(x: area.minX + 12, y: root.isFlipped ? area.minY + inset : area.maxY - inset,
                             width: min(350, area.width - 24), height: 0)
         tipHelp.update(.init(id: String(tip.rawValue), title: L10n.text("Controls"),
             text: tip.text(for: .mouse), anchor: anchor), in: root, at: ProcessInfo.processInfo.systemUptime, focused: true)
@@ -688,7 +697,7 @@ import NxlvKit
         case .boost: break
         }
     }
-    static func playCommands(pauseKey: String, retry: Bool, nuke: Bool) -> [KeyboardCommand] {
+    static func playCommands(pauseKey: String, retry: Bool, nuke: Bool, scrollWheelZoom: Bool) -> [KeyboardCommand] {
         let gameplay = L10n.text("Gameplay"), camera = L10n.text("Camera")
         var rows = [
             KeyboardCommand(keys: L10n.text("Level map"), action: GameplayControlTip.map.text(for: .mouse), group: camera),
@@ -697,7 +706,8 @@ import NxlvKit
             KeyboardCommand(keys: "Hold . / >", action: L10n.text("Scrub forward after rewind"), group: gameplay),
             KeyboardCommand(keys: ", / .", action: L10n.text("Step one tick; hold to scrub; release to pause"), group: gameplay),
             KeyboardCommand(keys: "Z", action: L10n.text("2× Zoom at cursor"), group: camera),
-            KeyboardCommand(keys: L10n.text("Scroll up / down"), action: L10n.text("Zoom on / off at cursor"), group: camera),
+            KeyboardCommand(keys: L10n.text("Scroll up / down"),
+                action: scrollWheelZoom ? L10n.text("Zoom on / off at cursor") : L10n.text("Pan"), group: camera),
             KeyboardCommand(keys: "Shift-Z", action: L10n.text("2× Superzoom at cursor, 0.5× time"), group: camera),
             KeyboardCommand(keys: "Z / Shift-Z", action: L10n.text("Press again to switch off"), group: camera),
             KeyboardCommand(keys: "Shift-Z", action: L10n.text("Each start spends one Superzoom use"), group: camera),
@@ -832,7 +842,7 @@ import NxlvKit
         let resume = pauseForHelp()
         let alert = NSAlert()
         alert.messageText = L10n.text("Keyboard commands")
-        alert.informativeText = L10n.text("Find a command by key, action or category. Your game pauses while this guide is open.")
+        alert.informativeText = L10n.text("Find a command by key, action or category.")
         let guide = KeyboardCommandsView(commands: commandRows, modern: modern())
         alert.accessoryView = guide
         alert.addButton(withTitle: L10n.text("Close")).keyEquivalent = "\u{1b}"

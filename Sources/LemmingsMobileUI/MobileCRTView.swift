@@ -76,7 +76,7 @@ import UIKit
         updateDrawableBudget()
     }
     private func updateDrawableBudget() {
-        var scale = MobileDevicePerformance.constrained ? CGFloat(1) : (window?.screen.scale ?? contentScaleFactor)
+        var scale = MobileDevicePerformance.visualEffectsConstrained ? CGFloat(1) : (window?.screen.scale ?? contentScaleFactor)
         if !MobileDevicePerformance.presentation.enhancedEffectsAllowed { scale = min(1, scale) }
         #if os(tvOS)
         scale = MobileDevicePerformance.presentation.televisionPlayfieldScale(nativeScale: Double(scale))
@@ -194,7 +194,7 @@ import UIKit
         uniform.vignette = tubeSettings.vignette
         uniform.pixelAspect = tubeSettings.pixelAspect
         uniform.colorLevels = tubeSettings.colorLevels
-        uniform.hdrHeadroom = settings.hdEffectsEnabled && !MobileDevicePerformance.constrained
+        uniform.hdrHeadroom = settings.hdEffectsEnabled && !MobileDevicePerformance.visualEffectsConstrained
             ? Float(max(1, min(8, window?.screen.currentEDRHeadroom ?? 1))) : 1
 #if os(iOS)
         (layer as? CAMetalLayer)?.wantsExtendedDynamicRangeContent = settings.hdEffectsEnabled && uniform.hdrHeadroom > 1

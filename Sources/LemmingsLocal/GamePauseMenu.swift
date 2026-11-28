@@ -47,7 +47,7 @@ import NxlvKit
 @MainActor enum GamePauseMenu {
     static func page(title: String, resume: @escaping () -> Void, retry: @escaping () -> Void,
                      hints: @escaping () -> Void, later: (() -> Void)? = nil,
-                     skip: PauseLevelSkip? = nil, leave: @escaping () -> Void) -> GameMenuPage {
+                     skip: PauseLevelSkip? = nil, sideAction: (String, () -> Void)? = nil, leave: @escaping () -> Void) -> GameMenuPage {
         let page = GameMenuPage(title: L10n.text("Paused"), subtitle: title)
         let close = { [weak page] in if let page { GameScreen.shared.dismiss(page) } }
         page.addListAction(L10n.text("Retry level"), at: 0, section: L10n.text("Level")) { close(); retry() }
@@ -61,6 +61,7 @@ import NxlvKit
             }
             button.isEnabled = skip.enabled
         }
+        if let (title, action) = sideAction { page.addListAction(title, at: skip != nil ? 4 : (later != nil ? 3 : 2)) { close(); action() } }
         page.backTitle = L10n.text("Back to library")
         let resumeAction = { close(); resume() }
         page.addPrimaryAction(L10n.text("Resume"), action: resumeAction)

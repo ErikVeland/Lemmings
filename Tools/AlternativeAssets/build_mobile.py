@@ -144,7 +144,7 @@ def main():
     if not args.audit and (args.resources_only or not mobile_resources.OUTPUT.exists()):
         mobile_resources.prepare(resource_files)
     mobile_resources.verify(mobile_resources.OUTPUT, resource_files)
-    mobile_resources.icons(write=not args.audit)
+    mobile_resources.icons(resource_files, write=not args.audit)
     if args.resources_only:
         print('PASS mobile resources and platform icon catalogues. No application was compiled.')
         return

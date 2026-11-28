@@ -131,6 +131,8 @@ import CoreImage.CIFilterBuiltins
         get { rewindCueView.cue }
         set { rewindCueView.cue = newValue }
     }
+    /// The cue's frame in this view, or nil while hidden. Notices avoid it.
+    var rewindCueFrame: CGRect? { rewindCueView.isHidden ? nil : rewindCueView.frame }
     private let failureMood = FailureMoodTransition()
     private var failureAmount: CGFloat = 0
     #if os(iOS)
@@ -314,11 +316,11 @@ import CoreImage.CIFilterBuiltins
     #endif
     func captureSpriteTrails(session: any MobileGameSession) {
         let enabled = displaySettings.hdEffectsEnabled && !motionReduced && !displaySettings.reduceFlashes
-            && !MobileDevicePerformance.constrained
+            && !MobileDevicePerformance.visualEffectsConstrained
         guard enabled else { spriteTrails.reset(); return }
         let visible = gameViewport.visibleLevelRect
         var current: [Int: MobileSpriteHighlight] = [:]
-        let limit = MobileDevicePerformance.constrained ? 24 : 48
+        let limit = MobileDevicePerformance.visualEffectsConstrained ? 24 : 48
         for actor in session.spriteActorIDs {
             guard let sprite = session.spriteHighlight(for: actor),
                   sprite.rect.x + sprite.rect.width >= visible.x, sprite.rect.x <= visible.x + visible.width,
@@ -367,12 +369,12 @@ import CoreImage.CIFilterBuiltins
         }
         guard enhancedEffects else { releaseHDR(); return }
         let content = gameViewport.contentFrame
-        let glints = displaySettings.hdEffectsEnabled && !MobileDevicePerformance.constrained ? arrowGlints : nil
+        let glints = displaySettings.hdEffectsEnabled && !MobileDevicePerformance.visualEffectsConstrained ? arrowGlints : nil
         if glints != nil { prepareHDR() }
         let glintPlacement = glints.flatMap(arrowGlintRect)
         hdr?.setArrowGlints(glintPlacement == nil ? nil : glints, in: glintPlacement ?? .null,
             clip: CGRect(x: content.x, y: content.y, width: content.width, height: content.height))
-        hdr?.advance(at: now, multiplier: speedMultiplier, enabled: speedEffectsActive && !motionReduced && !MobileDevicePerformance.constrained,
+        hdr?.advance(at: now, multiplier: speedMultiplier, enabled: speedEffectsActive && !motionReduced && !MobileDevicePerformance.visualEffectsConstrained,
             field: CGRect(x: content.x, y: content.y, width: content.width, height: content.height), project: { [weak self] centre in
                 guard let self else { return .zero }
                 let point = self.gameViewport.viewPoint(fromLevel: .init(x: Double(centre.x), y: Double(centre.y)))
@@ -386,14 +388,19 @@ import CoreImage.CIFilterBuiltins
     }
     func setSpeedEffects(multiplier: Double, active: Bool) {
         speedMultiplier = multiplier; speedEffectsActive = active
-        if active && multiplier > 1.01 && !motionReduced && enhancedEffects && !MobileDevicePerformance.constrained { prepareHDR() }
+        if active && multiplier > 1.01 && !motionReduced && enhancedEffects && !MobileDevicePerformance.visualEffectsConstrained { prepareHDR() }
     }
     private func prepareHDR() {
         guard hdr == nil, !attemptedHDR, enhancedEffects else { return }
         attemptedHDR = true
         hdrPreparation.request({ MobileHDRView.preparePipelines() }) { [weak self] pipelines in
             guard let self else { return }
-            guard self.enhancedEffects, let pipelines else { self.pendingHDRBursts.removeAll(); return }
+            guard let pipelines else { self.pendingHDRBursts.removeAll(); return }
+            guard self.enhancedEffects else {
+                self.pendingHDRBursts.removeAll()
+                self.attemptedHDR = false
+                return
+            }
             let view = MobileHDRView(pipelines: pipelines)
             view.frame = self.bounds
             self.insertSubview(view, belowSubview: self.bombCountdownView)
@@ -484,7 +491,7 @@ import CoreImage.CIFilterBuiltins
             }
             if !fresh.isEmpty, enhancedEffects {
                 prepareHDR()
-                let cinematic = displaySettings.cinematicExplosionsEnabled
+                let cinematic = displaySettings.cinematicExplosionsEnabled && !motionReduced
                 if let hdr { hdr.trigger(rects: fresh, cinematic: cinematic, at: now) }
                 else if attemptedHDR {
                     pendingHDRBursts.append(.init(rects: fresh, cinematic: cinematic, time: now))
@@ -661,16 +668,13 @@ import CoreImage.CIFilterBuiltins
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        MobileDevicePerformance.configureVisuals(in: self)
         decoration.frame = bounds
         overlay.frame = bounds
-        #if os(tvOS)
-        rewindCueView.pixelScale = 2
-        #else
-        rewindCueView.pixelScale = bounds.width >= 900 ? 2 : 1
-        #endif
         let inset = safeAreaInsets
+        let cueSize = rewindCueView.intrinsicContentSize
         rewindCueView.frame = CGRect(origin: CGPoint(x: inset.left + 12, y: inset.top + 12),
-                                     size: rewindCueView.intrinsicContentSize)
+            size: CGSize(width: min(cueSize.width, max(0, bounds.width - inset.left - inset.right - 24)), height: cueSize.height))
         hdr?.frame = bounds
         guard bounds.width > 1, bounds.height > 1 else { return }
         let size = MobileSize(width: bounds.width, height: bounds.height)
@@ -786,9 +790,10 @@ import CoreImage.CIFilterBuiltins
                 scale: scale, context: context)
         }
         if displaySettings.showReticleCount, let cursorCount {
-            let countWidth = Double(String(cursorCount).count * 6) * scale
-            GamePixelTypography.draw(String(cursorCount), in: CGRect(x: max(0, point.x - gap - countWidth), y: rect.minY, width: countWidth, height: height),
-                context: context, typography: nil, maximumScale: scale, bitmapOnly: true)
+            let text = String(cursorCount)
+            let countWidth = CGFloat(GamePixelTypography.width(of: text)) * 2 * scale
+            GamePixelTypography.draw(text, in: CGRect(x: max(0, point.x - gap - countWidth), y: rect.minY, width: countWidth, height: height),
+                context: context, typography: nil, maximumScale: 2 * scale, bitmapOnly: true)
         }
     }
 
