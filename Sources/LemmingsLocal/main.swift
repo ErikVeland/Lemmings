@@ -852,6 +852,7 @@ let achievementProgressKey = "ClassicAchievementProgress"
   }
 
   func applicationDidFinishLaunching(_ notification: Notification) {
+    if AppDistribution.isStore { _ = DeveloperTipService.shared }
     preparingLaunch = true
     migrateStandaloneSaves()
     let needsFirstProfile = Self.needsFirstProfile(in: .current())

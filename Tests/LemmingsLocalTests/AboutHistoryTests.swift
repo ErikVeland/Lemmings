@@ -4,6 +4,17 @@ import XCTest
 @testable import LemmingsLocal
 
 final class AboutHistoryTests: XCTestCase {
+    @MainActor func testReleaseIndexKeepsDistinctBuildsAndFullAccessibleNames() throws {
+        let history = AboutHistoryView(markdown: "# 2.7.5 · Build 128\n\nCurrent notes\n\n# 2.7.5 · Build 127\n\nPrevious notes")
+        let document = try XCTUnwrap(history.indexScroll.documentView)
+        let buttons = document.subviews.compactMap { $0 as? NSButton }
+        XCTAssertEqual(buttons.map(\.title), ["2.7.5 (128)", "2.7.5 (127)"])
+        XCTAssertEqual(buttons.map { $0.accessibilityLabel() }, ["2.7.5 · Build 128", "2.7.5 · Build 127"])
+        XCTAssertEqual(buttons.map(\.state), [.on, .off])
+        XCTAssertTrue(history.detail.markdown.contains("Current notes"))
+        XCTAssertFalse(history.detail.markdown.contains("Previous notes"))
+    }
+
     @MainActor func testHeritageCreditsKeepTheirBitmapReadingColumnAndScroll() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
@@ -28,6 +39,8 @@ final class AboutHistoryTests: XCTestCase {
             XCTAssertTrue(labels.contains("Animation: Gary Timmons"))
             XCTAssertTrue(labels.contains("Graphics: Scott Johnston"))
             XCTAssertTrue(labels.contains("Music: Brian Johnston and Tim Wright"))
+            XCTAssertTrue(labels.contains("Lemmings Forums"))
+            XCTAssertTrue(labels.contains { $0.contains("Thank you to the Lemmings Forums community") })
             XCTAssertTrue(labels.contains { $0.contains("reconstruction made for Ultimate Lemmings") })
             let credit = try XCTUnwrap(textFields.first { $0.stringValue.contains("Erik Veland") })
             XCTAssertTrue(credit.stringValue.contains("Erik Veland 🏳️‍⚧️🇵🇸"))

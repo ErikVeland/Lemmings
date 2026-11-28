@@ -6,6 +6,8 @@ import json
 import os
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 
 REQUIRED = frozenset(
     ["MAIN.DAT", "ODDTABLE.DAT"]
@@ -99,7 +101,9 @@ def copy_into_app(source, destination, development_source=None):
         raise ValueError("Beta content can only be copied into an app bundle.")
     if destination.is_symlink():
         raise ValueError("App content destination must not be a link.")
-    copy_parity_resources(Path(__file__).resolve().parents[2] / "Resources", destination.parent)
+    root = Path(__file__).resolve().parents[2]
+    copy_parity_resources(root / "Resources", destination.parent)
+    subprocess.run([sys.executable, root / "Scripts/bundle-about.py", destination.parent / "About"], check=True)
     if not source:
         if destination.exists():
             shutil.rmtree(destination)

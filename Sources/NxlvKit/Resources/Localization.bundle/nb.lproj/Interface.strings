@@ -227,6 +227,7 @@
 "An iCloud save could not be read. Existing saves were kept." = "Kunne ikke lese en iCloud-lagring. Eksisterende lagringer ble beholdt.";
 "An improbable resolution" = "En usannsynlig oppløsning";
 "An object animation has no FRAMES field." = "En objektanimasjon mangler FRAMES-feltet.";
+"An optional tip to support development." = "Frivillig driks for å støtte utviklingen.";
 "An unfinished argument" = "Et ufullført argument";
 "An unpacked classic LVL file must contain exactly {0} bytes; found {1}." = "En utpakket Classic-LVL-fil må være nøyaktig {0} byte; fant {1}.";
 "Analysing available levels" = "Analyserer tilgjengelige brett";
@@ -277,6 +278,7 @@
 "Audio unavailable: {0}" = "Lyden er utilgjengelig: {0}";
 "Availability" = "Tilgjengelighet";
 "Available" = "Tilgjengelig";
+"Awaiting approval" = "Venter på godkjenning";
 "Award Me!" = "Gi meg en utmerkelse!";
 "Award: {0} - {1}  >" = "Utmerkelse: {0} – {1}  >";
 "Awards ({0})" = "Utmerkelser ({0})";
@@ -368,6 +370,7 @@
 "Bricks cannot build straight down." = "Du kan ikke bygge rett ned med murstein.";
 "Bring {0} more home to match your best." = "Få {0} flere hjem for å tangere rekorden din.";
 "Bronze" = "Bronse";
+"Browse credits, contributors and version history on every platform." = "Se krediteringer, bidragsytere og versjonshistorikk på alle plattformer.";
 "Browse levels" = "Bla gjennom brett";
 "Builder" = "Bygger";
 "Built {0}" = "Bygde {0}";
@@ -464,7 +467,6 @@
 "Checking solution..." = "Kontrollerer løsningen…";
 "Choose" = "Velg";
 "Choose 1× in Game controls to reset speed." = "Velg 1× i spillkontrollene for å tilbakestille hastigheten.";
-"Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details." = "Velg katalansk eller sveitsertysk. Åpne Om på iPhone og iPad for å se bidragsytere og versjonsinformasjon.";
 "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "Velg Flatt panel, Skjerm eller TV. Classic bruker rørskjermsimulering.";
 "Choose Lemmings 3 tool direction" = "Velg retning for Lemmings 3-verktøy";
 "Choose Music Folder…" = "Velg musikkmappe…";
@@ -779,6 +781,7 @@
 "Down-right" = "Ned til høyre";
 "Download" = "Last ned";
 "Download game assets" = "Last ned spilldata";
+"Download hasn’t started" = "Nedlastingen har ikke startet";
 "Download or remove optional soundtrack libraries." = "Last ned eller fjern valgfrie lydsporbiblioteker.";
 "Download soundtracks" = "Last ned lydspor";
 "Downloading" = "Laster ned";
@@ -889,7 +892,6 @@
 "Expected the FLIC marker 0xAF11, but found {0}." = "Forventet FLIC-markøren 0xAF11, men fant {0}.";
 "Expert" = "Ekspert";
 "Exploder" = "Eksploderer";
-"Explore starter playlists and resume saved routes." = "Utforsk spillelister for nybegynnere og fortsett på lagrede ruter.";
 "Explosions" = "Eksplosjoner";
 "Export file" = "Eksporter fil";
 "Extended gamepad" = "Utvidet håndkontroll";
@@ -949,6 +951,7 @@
 "Features 5 exclusive Sunsoft Special levels and custom Hiroyuki Masuno SPC soundtrack." = "Inneholder 5 eksklusive Sunsoft Special-brett og et eget SPC-lydspor av Hiroyuki Masuno.";
 "Features 60 exclusive levels (Presenter rating 1–30 + bonus levels) and Matt Furniss FM tracks." = "Inneholder 60 eksklusive brett (Presenter-vurdering 1–30 + bonusbrett) og FM-musikk av Matt Furniss.";
 "Features arcade single-player stages, 2-Player Co-Op mode, countdown timers, and high-score screens." = "Inneholder arkadebrett for én spiller, samarbeidsspill for 2 spillere, nedtelling og poengtavler.";
+"Feel nukes, bridge warnings and selected impacts on supported devices and controllers." = "Kjenn sprenginger, varsler under brobygging og enkelte sammenstøt på støttede enheter og kontrollere.";
 "Feels less temporary." = "Føles mindre midlertidig.";
 "Feels suitably equipped." = "Føler seg godt nok utstyrt.";
 "Felt briefly famous." = "Følte seg berømt et lite øyeblikk.";
@@ -1073,6 +1076,7 @@
 "Hadoken" = "Hadoken";
 "Hands off" = "Ikke grip inn";
 "Hang Glider" = "Hangglider";
+"Haptics" = "Vibrasjon";
 "Hard" = "Vanskelig";
 "Has a coat for special occasions." = "Har en kåpe til spesielle anledninger.";
 "Has a drawer for useful things." = "Har en skuff til nyttige ting.";
@@ -1166,6 +1170,7 @@
 "Import Lemmings 2 data" = "Importer Lemmings 2-data";
 "Import NeoLemmix data" = "Importer NeoLemmix-data";
 "Import files" = "Importer filer";
+"Import missing game data before opening a level. Downloads can continue in the background on iPhone and iPad." = "Importer manglende spilldata før du åpner et brett. Nedlastinger kan fortsette i bakgrunnen på iPhone og iPad.";
 "Import owned games" = "Importer spill du eier";
 "Import the resource folder again." = "Importer ressursmappen på nytt.";
 "Import your own Classic files to use original artwork." = "Importer dine egne Classic-filer for å bruke originalgrafikken.";
@@ -1454,6 +1459,7 @@
 "Learning" = "Læring";
 "Least skills" = "Færrest ferdigheter";
 "Leave Hot Seat?" = "Avslutte Hot Seat?";
+"Leave a tip" = "Gi driks";
 "Left" = "Venstre";
 "Left and right arrows change hints. Up and down arrows scroll the text." = "Venstre- og høyrepil bytter tips. Opp- og nedpil ruller teksten.";
 "Left stick click" = "Klikk på venstre styrespak";
@@ -1656,6 +1662,7 @@
 "Missing or ambiguous Chronicles construction tile." = "Byggeflisen i Chronicles mangler eller er tvetydig.";
 "Missing style data: {0}" = "Mangler stildata: {0}";
 "Missing {0} dependency '{1}'." = "Mangler {0}-avhengigheten '{1}'.";
+"Mobile data is unavailable. Check cellular access for this app or try Wi-Fi." = "Mobildata er utilgjengelig. Sjekk om appen har tilgang til mobildata, eller prøv Wi-Fi.";
 "Moderate" = "Moderat";
 "Modern" = "Moderne";
 "Modern Sound" = "Moderne lyd";
@@ -1787,6 +1794,7 @@
 "No fan level packs are available." = "Ingen fan-brettpakker er tilgjengelige.";
 "No favourites yet" = "Ingen favoritter ennå";
 "No hands-off clear this run. This goal may not be possible here." = "Du fullførte ikke brettet uten å gripe inn denne gangen. Målet er kanskje ikke mulig her.";
+"No internet connection. Reconnect and try again." = "Ingen internettforbindelse. Koble til igjen og prøv på nytt.";
 "No lemming is selected." = "Ingen lemming er valgt.";
 "No lemmings released yet" = "Ingen lemminger har kommet ut ennå";
 "No level files were found for {0}." = "Fant ingen brettfiler for {0}.";
@@ -1827,6 +1835,7 @@
 "None hides selection effects. Obvious adds a green diamond and halo. Modern adds the diamond, white outline and green glow in all three games." = "Ingen skjuler markeringseffektene. Tydelig viser en grønn rute og glorie. Moderne viser ruten, et hvitt omriss og grønn glød i alle tre spillene.";
 "Not bad, but not good either." = "Ikke dårlig, men heller ikke bra.";
 "Not earned" = "Ikke opptjent";
+"Not enough free storage for game assets. Free up space and try again." = "Ikke nok ledig lagringsplass til spilldata. Frigjør plass og prøv igjen.";
 "Not met. " = "Ikke nådd. ";
 "Not now" = "Ikke nå";
 "Not rescued" = "Ikke reddet";
@@ -1911,7 +1920,6 @@
 "Open Replay Movie…" = "Åpne reprisevideo…";
 "Open Starter" = "Åpne startsamlingen";
 "Open in Stacked pose when idle" = "Åpne i stablet stilling ved inaktivitet";
-"Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads." = "Åpne hovedmenyen raskere på iPhone og iPad. Se en intro når et brett tar lengre tid å laste.";
 "Open this address on another device:" = "Åpne denne adressen på en annen enhet:";
 "Open this level with its original game data to watch the action replay." = "Åpne dette brettet med de opprinnelige spilldataene for å se reprisen.";
 "Open when closed and charging" = "Åpne under lading når enheten er lukket";
@@ -2134,7 +2142,6 @@
 "Profile" = "Profil";
 "Profile…" = "Profil…";
 "Programmers" = "Programmerere";
-"Progress" = "Fremdrift";
 "Progress is saved." = "Framdriften lagres.";
 "Progression" = "Framdrift";
 "Progression not created" = "Framdriften ble ikke opprettet";
@@ -2142,6 +2149,7 @@
 "Project supervisor" = "Prosjektleder";
 "Psygnosis  presents" = "Psygnosis presenterer";
 "Pull up a chair. We've got a level to finish." = "Finn en stol. Vi har et brett å fullføre.";
+"Purchasing..." = "Kjøper...";
 "Q / Escape" = "Q / Escape";
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "Q IGJEN FOR Å AVSLUTTE  *  ESC FOR Å BLI";
 "Queued" = "Lagt i kø";
@@ -2350,7 +2358,6 @@
 "Return to the library to change players. The current attempt keeps its owner and is saved for later." = "Gå tilbake til biblioteket for å bytte spiller. Dette forsøket beholder spilleren og lagres til senere.";
 "Return to the library to change players. Your saved run keeps its progress and next turn." = "Gå tilbake til biblioteket for å bytte spiller. Det lagrede forsøket beholder framdriften og neste tur.";
 "Return to the library to restore a recovery key." = "Gå tilbake til biblioteket for å gjenopprette en gjenopprettingsnøkkel.";
-"Return to the main menu after a win without losing your place." = "Gå tilbake til hovedmenyen etter en seier uten å miste plassen din.";
 "Return: Repeat assignment" = "Enter: Gjenta tildeling";
 "Returned with a cake." = "Kom tilbake med en kake.";
 "Reveal full solution?" = "Vis hele løsningen?";
@@ -2800,6 +2807,7 @@
 "Terrain group '{0}' is used before it is defined." = "Terrenggruppen '{0}' brukes før den er definert.";
 "Terrain group '{0}' mixes steel and non-steel pieces." = "Terrenggruppen '{0}' blander ståldeler og deler som ikke er av stål.";
 "Terrain metadata '{0}:{1}' is ambiguous." = "Terrengmetadataene '{0}:{1}' er tvetydige.";
+"Thank you for your support!" = "Takk for støtten!";
 "Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research." = "Takk til fellesskapet for fanbrett, stiler, repriser, musikkarbeid og forskning på spillbevaring.";
 "That Hot Seat is no longer saved." = "Dette Hot Seat-spillet er ikke lenger lagret.";
 "That is the plan" = "Det er planen";
@@ -2877,6 +2885,7 @@
 "The archive has no member named {0}." = "Arkivet har ikke noe element med navnet {0}.";
 "The archive member {0} is too large." = "Arkivelementet {0} er for stort.";
 "The attempt was not saved." = "Forsøket ble ikke lagret.";
+"The background download stopped. Try the download again." = "Nedlastingen i bakgrunnen stoppet. Prøv å laste ned på nytt.";
 "The cat understands the arrangement." = "Katten skjønner ordningen.";
 "The cloud player is invalid." = "Skyspilleren er ugyldig.";
 "The cloud progress format does not match." = "Formatet på skyframdriften samsvarer ikke.";
@@ -2884,11 +2893,13 @@
 "The cloud response is too large." = "Skysvaret er for stort.";
 "The cloud save is too large." = "Skylagringen er for stor.";
 "The company suits." = "Selskapet passer godt.";
+"The connection dropped. Try the download again." = "Forbindelsen ble brutt. Prøv å laste ned på nytt.";
 "The danger is the fall after the entrance. Think about protecting the lemmings before they land." = "Faren er fallet etter inngangen. Tenk på hvordan du kan beskytte lemmingene før de lander.";
 "The decision remains respected." = "Beslutningen respekteres fortsatt.";
 "The decompression limit must not be negative." = "Dekomprimeringsgrensen kan ikke være negativ.";
 "The document contains an unmatched $END." = "Dokumentet inneholder en $END uten samsvarende start.";
 "The download did not finish." = "Nedlastingen ble ikke fullført.";
+"The download timed out. Check your connection and try again." = "Tidsavbrudd ved nedlasting. Kontroller tilkoblingen og prøv igjen.";
 "The entrance limits cannot release all non-preplaced lemmings." = "Inngangsgrensene kan ikke slippe ut alle lemmingene som ikke er forhåndsplassert.";
 "The entrance timing cannot be negative." = "Inngangstiden kan ikke være negativ.";
 "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path." = "Utgangen er under plattformen der flokken går. Se etter et sted å lage en åpning i gulvet over stien under.";
@@ -3168,6 +3179,9 @@
 "Timing probes: {0}. Untested alternatives remain unknown." = "Tidsmålinger: {0}. Utestede alternativer er fortsatt ukjente.";
 "Tiny journey" = "Kort reise";
 "Tiny journeys" = "Korte reiser";
+"Tip again {0}" = "Gi driks igjen: {0}";
+"Tip {0}" = "Driks: {0}";
+"Tips are unavailable right now." = "Driks er ikke tilgjengelig akkurat nå.";
 "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "For å laste ned disse filene må du ha en gyldig lisens for originalspillet «Lemmings» på minst én plattform. Når du velger «{0}», bekrefter du at du har en slik lisens.";
 "Toggle enhanced artwork" = "Slå forbedret grafikk av/på";
 "Toggle fast-forward" = "Slå hurtigspoling av/på";
@@ -3200,9 +3214,11 @@
 "Truncated Mac graphics frame." = "Avkortet Mac-grafikkframe.";
 "Truncated sequel data at byte {0}." = "Avkortede oppfølgerdata ved byte {0}.";
 "Try again" = "Prøv igjen";
+"Try another server" = "Prøv en annen server";
 "Try later" = "Prøv senere";
 "Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns." = "Prøv én ferdighet i normal hastighet. Sett på pause og se hvor arbeideren lander og snur.";
 "Try these skills!" = "Prøv disse ferdighetene!";
+"Trying another download server" = "Prøver en annen nedlastingsserver";
 "Tube strength" = "Rørstyrke";
 "Turn off" = "Slå av";
 "Turn off auto-follow" = "Slå av automatisk følging";
@@ -3337,6 +3353,7 @@
 "WHEN THE TRIBES SETTLED IN THESE LANDS" = "DA STAMMENE BOSATTE SEG I DISSE LANDENE";
 "WINS / FAILS" = "SEIERE / TAP";
 "Wait for this lemming to land." = "Vent til denne lemmingen lander.";
+"Waiting for download to start" = "Venter på at nedlastingen skal starte";
 "Walker" = "Vandrer";
 "Walks home with accompaniment." = "Går hjem sammen med noen.";
 "Was asked to judge a cucumber." = "Ble bedt om å bedømme en agurk.";
@@ -3347,6 +3364,7 @@
 "Was thanked for noticing a draught." = "Ble takket for å ha merket trekken.";
 "Watch and listen" = "Se og lytt";
 "Watch solution?" = "Se løsningen?";
+"Watch the intro while game files are checked on iPhone and iPad." = "Se introen mens spillfilene sjekkes på iPhone og iPad.";
 "Watch the worker's direction before assigning a skill." = "Se hvilken retning arbeideren går før du tildeler en ferdighet.";
 "We built a Snow Lemming." = "Vi bygde en snølemming.";
 "We got snowed in for a day." = "Vi ble snødd inne en dag.";
@@ -3408,6 +3426,8 @@
 "Your rescue story" = "Redningshistorien din";
 "Your rescues add to the worldwide total." = "De du redder, legges til i verdenstotalen.";
 "Your shared campaign stays saved for later." = "Den delte kampanjen lagres til senere.";
+"Your tip could not be completed." = "Driksbetalingen kunne ikke fullføres.";
+"Your tip could not be confirmed." = "Driksbetalingen kunne ikke bekreftes.";
 "Z / Shift+Z: Zoom" = "Z / Shift+Z: Zoom";
 "ZOOM" = "ZOOM";
 "Zero avoidable losses" = "Ingen tap som kunne vært unngått";
@@ -3609,5 +3629,3 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0} T {1} MIN";
 "{0}{1} more to rescue for three stars." = "{0}{1} flere å redde for tre stjerner.";
-
-"Haptics" = "Vibrasjon";

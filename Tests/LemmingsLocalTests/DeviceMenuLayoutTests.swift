@@ -1,6 +1,7 @@
 #if os(macOS)
 import AppKit
 import ImageIO
+import LemmingsAppCore
 import LemmingsGameArt
 import NxlvKit
 import XCTest
@@ -8,12 +9,19 @@ import XCTest
 
 final class DeviceMenuLayoutTests: XCTestCase {
     @MainActor func testMobileAboutCreditsKeepRolesLicencesAndBackNavigation() throws {
-        let page = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.6", build: "115", showsLixCredits: true)
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let heritage = try String(contentsOf: root.appendingPathComponent("Resources/About/Heritage.md"), encoding: .utf8)
+        let content = AboutContent(heritage: heritage,
+            versionHistory: "# 2.7.5 · Build 128\n\n- Current release.\n\n# 2.6 · Build 115\n\n- Earlier release.",
+            contributors: "# Contributors\n\n## Supporters\n\nBundled supporter")
+        let page = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.6", build: "115",
+            showsLixCredits: true, content: content)
         XCTAssertEqual(page.title, "About Ultimate Lemmix")
         XCTAssertEqual(page.subtitle, "Version 2.6 - Build 115")
         let credits = page.details.joined(separator: "\n")
         for name in ["Erik Veland", "DMA Design", "Psygnosis", "Dave Jones", "Gary Timmons", "Scott Johnston",
-                     "Brian Johnston", "Tim Wright", "Presage, Inc.", "Tony Williams", "Simon Naarmann", "IchoTolot"] {
+                     "Brian Johnston", "Tim Wright", "Presage, Inc.", "Tony Williams", "Simon Naarmann", "IchoTolot", "WillLem"] {
             XCTAssertTrue(credits.contains(name), name)
         }
         XCTAssertTrue(credits.contains("Menu Lix · Mike Spanner (Rubix) · CC0 1.0"))
@@ -22,15 +30,40 @@ final class DeviceMenuLayoutTests: XCTestCase {
         XCTAssertFalse(page.detailHeadings.isEmpty)
         XCTAssertEqual(MobileAboutArt.action.id, "about")
         XCTAssertTrue(page.rows.isEmpty)
+        XCTAssertEqual(page.settingsTabs?.map(\.id),
+            ["aboutSection.overview", "aboutSection.history", "aboutSection.contributors"])
+        XCTAssertEqual(page.settingsTabs?.filter(\.selected).map(\.id), ["aboutSection.overview"])
         for size in [CGSize(width: 320, height: 568), CGSize(width: 495, height: 720),
-                     CGSize(width: 810, height: 1080)] {
+                     CGSize(width: 844, height: 390), CGSize(width: 810, height: 1080)] {
             let layout = GameFrontEnd.layout(page, width: size.width, minimumHeight: size.height)
             XCTAssertEqual(layout.details.count, page.details.count)
             let back = try XCTUnwrap(layout.targets.first)
             XCTAssertEqual(back.action.id, "aboutBack")
             XCTAssertEqual(layout.action(at: CGPoint(x: back.frame.midX, y: back.frame.midY)), "aboutBack")
-            XCTAssertEqual(layout.targets.count, 1)
+            XCTAssertEqual(Set(layout.targets.map(\.action.id)), ["aboutBack", "aboutForums"])
+            let tabs = MobileSettingsTabsArt.layout(width: size.width, actions: try XCTUnwrap(page.settingsTabs))
+            for target in tabs.targets {
+                XCTAssertGreaterThanOrEqual(target.frame.width, 44)
+                XCTAssertGreaterThanOrEqual(target.frame.height, 44)
+                XCTAssertEqual(tabs.action(at: CGPoint(x: target.frame.midX, y: target.frame.midY)), target.action.id)
+            }
         }
+        let history = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.7.5", build: "128",
+            showsLixCredits: true, content: content, section: .history)
+        XCTAssertEqual(history.rows.map(\.id), ["aboutRelease.0", "aboutRelease.1"])
+        XCTAssertEqual(history.rows.map(\.title), ["2.7.5", "2.6"])
+        let release = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.7.5", build: "128",
+            showsLixCredits: true, content: content, section: .history, selectedRelease: 1)
+        XCTAssertTrue(release.details.joined().contains("Earlier release."))
+        XCTAssertFalse(release.details.joined().contains("Current release."))
+        XCTAssertEqual(release.backAction?.id, "aboutHistoryBack")
+        let contributors = MobileAboutArt.page(productName: "Ultimate Lemmix", version: "2.7.5", build: "128",
+            showsLixCredits: true, content: content, section: .contributors,
+            contributorStatus: "Saved list · Offline", allowsContributorRetry: true)
+        XCTAssertTrue(contributors.details.contains("Bundled supporter"))
+        XCTAssertTrue(contributors.details.contains("Supporters"))
+        XCTAssertEqual(contributors.rows.map(\.id), ["aboutRetry"])
+        XCTAssertTrue(contributors.subtitle.contains("Saved list · Offline"))
         let classic = MobileAboutArt.page(productName: "Ultimate Lemmings", version: nil, build: nil, showsLixCredits: false)
         XCTAssertEqual(classic.subtitle, "Version Unknown - Build Unknown")
         XCTAssertFalse(classic.details.joined().contains("CC BY 4.0"))

@@ -6,7 +6,21 @@ import LemmingsMobileUI
 import UIKit
 
 @main
-final class AppDelegate: UIResponder, UIApplicationDelegate {}
+final class AppDelegate: UIResponder, UIApplicationDelegate {
+    #if os(iOS)
+    func application(
+        _ application: UIApplication,
+        handleEventsForBackgroundURLSession identifier: String,
+        completionHandler: @escaping @Sendable () -> Void
+    ) {
+        guard LemmingsMobileConfiguration.current == .ultimateLemmix else {
+            completionHandler()
+            return
+        }
+        LemmingsMobileApplication.handleGameAssetBackgroundEvents(identifier: identifier, completion: completionHandler)
+    }
+    #endif
+}
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?

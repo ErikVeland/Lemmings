@@ -227,6 +227,7 @@
 "An iCloud save could not be read. Existing saves were kept." = "iCloud சேமிப்பைப் படிக்க முடியவில்லை. ஏற்கெனவே உள்ள சேமிப்புகள் பாதுகாக்கப்பட்டன.";
 "An improbable resolution" = "நம்பமுடியாத தீர்மானம்";
 "An object animation has no FRAMES field." = "பொருளின் அசைவூட்டத்தில் FRAMES புலம் இல்லை.";
+"An optional tip to support development." = "உருவாக்கப் பணிக்கு ஆதரவளிக்க விருப்ப அன்பளிப்பு.";
 "An unfinished argument" = "முடிக்கப்படாத வாதம்";
 "An unpacked classic LVL file must contain exactly {0} bytes; found {1}." = "ஒரு திறந்த கிளாசிக் LVL கோப்பில் சரியாக {0} பைட்டுகள் இருக்க வேண்டும்; {1} கிடைத்தது.";
 "Analysing available levels" = "கிடைக்கும் நிலைகள் பகுப்பாய்வு செய்யப்படுகின்றன";
@@ -277,6 +278,7 @@
 "Audio unavailable: {0}" = "ஒலி கிடைக்கவில்லை: {0}";
 "Availability" = "கிடைக்கும் நிலை";
 "Available" = "கிடைக்கிறது";
+"Awaiting approval" = "ஒப்புதலுக்காகக் காத்திருக்கிறது";
 "Award Me!" = "எனக்கு விருது கொடு!";
 "Award: {0} - {1}  >" = "விருது: {0} - {1}  >";
 "Awards ({0})" = "விருதுகள் ({0})";
@@ -368,6 +370,7 @@
 "Bricks cannot build straight down." = "செங்கற்களைக் கொண்டு நேராகக் கீழ்நோக்கிக் கட்ட முடியாது.";
 "Bring {0} more home to match your best." = "உங்கள் சிறந்த பொருத்தமாக {0} மேலும் வீட்டிற்கு கொண்டு.";
 "Bronze" = "வெண்கலம்";
+"Browse credits, contributors and version history on every platform." = "அனைத்து தளங்களிலும் நன்றிக் குறிப்புகள், பங்களிப்பாளர்கள் மற்றும் பதிப்பு வரலாற்றைப் பாருங்கள்.";
 "Browse levels" = "நிலைகளை உலவு";
 "Builder" = "படிக்கட்டு அமைப்பவர்";
 "Built {0}" = "அமைத்தது {0}";
@@ -464,7 +467,6 @@
 "Checking solution..." = "தீர்வு சரிபார்க்கப்படுகிறது...";
 "Choose" = "தேர்ந்தெடு";
 "Choose 1× in Game controls to reset speed." = "வேகத்தை மீட்டமைக்க ஆட்டக் கட்டுப்பாடுகளில் 1× தேர்ந்தெடு.";
-"Choose Catalan or Swiss German. On iPhone and iPad, open About for credits and version details." = "கத்தலான் அல்லது சுவிஸ் ஜெர்மன் மொழியைத் தேர்ந்தெடுங்கள். iPhone மற்றும் iPad இல் பங்களிப்பாளர்களையும் பதிப்பையும் காண அறிமுகப் பக்கத்தைத் திறக்கவும்.";
 "Choose Flat Panel, Monitor or Television. Classic uses the tube simulation." = "பிளாட் பேனல், மானிட்டர் அல்லது தொலைக்காட்சி என்பதைத் தேர்ந்தெடுக்கவும். Classic குழாய் உருவகப்படுத்துதலைப் பயன்படுத்துகிறது.";
 "Choose Lemmings 3 tool direction" = "Lemmings 3 கருவித் திசையைத் தேர்ந்தெடு";
 "Choose Music Folder…" = "இசைக் கோப்புறையைத் தேர்ந்தெடு…";
@@ -779,6 +781,7 @@
 "Down-right" = "கீழ் வலது";
 "Download" = "பதிவிறக்கு";
 "Download game assets" = "விளையாட்டுத் தரவைப் பதிவிறக்கு";
+"Download hasn’t started" = "பதிவிறக்கம் இன்னும் தொடங்கவில்லை";
 "Download or remove optional soundtrack libraries." = "விருப்பமான ஒலிப்பதிவு நூலகங்களை பதிவிறக்கவும் அல்லது அகற்றவும்.";
 "Download soundtracks" = "இசைத்தொகுப்புகளைப் பதிவிறக்கு";
 "Downloading" = "பதிவிறக்கப்படுகிறது";
@@ -889,7 +892,6 @@
 "Expected the FLIC marker 0xAF11, but found {0}." = "FLIC மார்க்கர் 0xAF11 என்று எதிர்பார்த்தேன், ஆனால் {0} கிடைத்தது.";
 "Expert" = "வல்லுநர்";
 "Exploder" = "வெடிகுண்டு";
-"Explore starter playlists and resume saved routes." = "தொடக்கப் பட்டியல்களைப் பாருங்கள்; சேமித்த வழிகளைத் தொடருங்கள்.";
 "Explosions" = "வெடிப்புகள்";
 "Export file" = "ஏற்றுமதி கோப்பு";
 "Extended gamepad" = "நீட்டிக்கப்பட்ட gamepad";
@@ -949,6 +951,7 @@
 "Features 5 exclusive Sunsoft Special levels and custom Hiroyuki Masuno SPC soundtrack." = "5 பிரத்தியேக Sunsoft சிறப்பு நிலைகள் மற்றும் தனிப்பயன் Hiroyuki Masuno SPC ஒலிப்பதிவு அம்சங்கள்.";
 "Features 60 exclusive levels (Presenter rating 1–30 + bonus levels) and Matt Furniss FM tracks." = "60 பிரத்தியேக நிலைகள் (நிகழ்ச்சியாளர் மதிப்பீடு 130 + போனஸ் நிலைகள்) மற்றும் மாட் ஃபர்னிஸ் எஃப்எம் தடங்கள்.";
 "Features arcade single-player stages, 2-Player Co-Op mode, countdown timers, and high-score screens." = "ஆர்கேட் ஒற்றை வீரர் நிலைகள், 2-பளையர் கூட்டுறவு முறை, பின்னணி காலக்கெடு மற்றும் அதிக மதிப்பெண் கொண்ட திரைகள் ஆகியவை இதில் உள்ளன.";
+"Feel nukes, bridge warnings and selected impacts on supported devices and controllers." = "ஆதரிக்கப்படும் சாதனங்களிலும் கட்டுப்படுத்திகளிலும் அணுவெடிப்புகள், பாலம் கட்டும்போதான எச்சரிக்கைகள் மற்றும் சில மோதல்களை அதிர்வுகளாக உணருங்கள்.";
 "Feels less temporary." = "இது இன்னும் கொஞ்சம் நிரந்தரமானதாகத் தோன்றுகிறது.";
 "Feels suitably equipped." = "தேவையானவை கையில் இருப்பதாக உணர்கிறார்.";
 "Felt briefly famous." = "சிறிது நேரம் பிரபலமாக உணர்ந்தார்.";
@@ -1073,6 +1076,7 @@
 "Hadoken" = "ஹடோக்கன்";
 "Hands off" = "கைகளை விலக்கி";
 "Hang Glider" = "தொங்கு இறக்கையில் பறப்பவர்";
+"Haptics" = "அதிர்வு";
 "Hard" = "கடினம்";
 "Has a coat for special occasions." = "விசேஷங்களுக்கென்று ஒரு மேலங்கி வைத்திருக்கிறார்.";
 "Has a drawer for useful things." = "பயனுள்ள பொருட்களுக்கென ஓர் இழுப்பறை வைத்திருக்கிறார்.";
@@ -1166,6 +1170,7 @@
 "Import Lemmings 2 data" = "Lemmings 2 தரவை இறக்குமதி செய்";
 "Import NeoLemmix data" = "NeoLemmix தரவு இறக்குமதி";
 "Import files" = "இறக்குமதி கோப்புகள்";
+"Import missing game data before opening a level. Downloads can continue in the background on iPhone and iPad." = "ஒரு நிலையைத் திறக்கும் முன், இல்லாத விளையாட்டுத் தரவை இறக்குமதி செய்யுங்கள். iPhone மற்றும் iPad இல் பதிவிறக்கங்கள் பின்னணியில் தொடரலாம்.";
 "Import owned games" = "சொந்த ஆட்டங்களை இறக்குமதி செய்";
 "Import the resource folder again." = "வளக் கோப்புறையை மீண்டும் இறக்குமதி செய்.";
 "Import your own Classic files to use original artwork." = "அசல் ஓவியங்களைப் பயன்படுத்த உன் Classic கோப்புகளை இறக்குமதி செய்.";
@@ -1454,6 +1459,7 @@
 "Learning" = "கற்றல்";
 "Least skills" = "குறைந்த திறன்கள்";
 "Leave Hot Seat?" = "மாறிமுறையிலிருந்து வெளியேறவா?";
+"Leave a tip" = "அன்பளிப்பு வழங்கு";
 "Left" = "இடது";
 "Left and right arrows change hints. Up and down arrows scroll the text." = "இடது மற்றும் வலது அம்புகள் குறிப்புகளை மாற்றுகின்றன. மேலே மற்றும் கீழே அம்புகள் உரையை சுழற்றுகின்றன.";
 "Left stick click" = "இடது குச்சியை அழுத்து";
@@ -1656,6 +1662,7 @@
 "Missing or ambiguous Chronicles construction tile." = "காணாமல்போன அல்லது தெளிவற்ற Chronicles கட்டுமானத் தட்டு.";
 "Missing style data: {0}" = "காணாமல் போன பாணி தரவு: {0}";
 "Missing {0} dependency '{1}'." = "{0} சார்பு '{1}' காணவில்லை.";
+"Mobile data is unavailable. Check cellular access for this app or try Wi-Fi." = "மொபைல் தரவு கிடைக்கவில்லை. இந்தச் செயலிக்கு மொபைல் தரவைப் பயன்படுத்த அனுமதி உள்ளதா எனச் சரிபார்க்கவும் அல்லது Wi-Fi மூலம் முயலவும்.";
 "Moderate" = "மிதம்";
 "Modern" = "நவீன பாணி";
 "Modern Sound" = "நவீன ஒலி";
@@ -1787,6 +1794,7 @@
 "No fan level packs are available." = "எந்த ரசிகர் நிலை தொகுப்புகளும் கிடைக்கவில்லை.";
 "No favourites yet" = "இன்னும் விருப்பமானவை இல்லை";
 "No hands-off clear this run. This goal may not be possible here." = "இந்த ஆட்டத்தில் திறன் ஒதுக்காத வெற்றி இல்லை. இங்கு இந்த இலக்கு சாத்தியமில்லாமல் இருக்கலாம்.";
+"No internet connection. Reconnect and try again." = "இணைய இணைப்பு இல்லை. இணையத்துடன் மீண்டும் இணைந்து முயலவும்.";
 "No lemming is selected." = "எந்த லெம்மிங்கும் தேர்ந்தெடுக்கப்படவில்லை.";
 "No lemmings released yet" = "இன்னும் எந்த லெம்மிங்கும் வெளியே வரவில்லை";
 "No level files were found for {0}." = "{0} க்கான நிலைக் கோப்புகள் கிடைக்கவில்லை.";
@@ -1827,6 +1835,7 @@
 "None hides selection effects. Obvious adds a green diamond and halo. Modern adds the diamond, white outline and green glow in all three games." = "இல்லை என்றால் தேர்வு விளைவுகள் மறையும். தெளிவு என்றால் பச்சைச் சாய்சதுரமும் ஒளிவட்டமும் தெரியும். நவீன முறையில் மூன்று ஆட்டங்களிலும் சாய்சதுரம், வெள்ளை விளிம்பு, பச்சை ஒளி தெரியும்.";
 "Not bad, but not good either." = "மோசமாக இல்லை, ஆனால் நல்ல இல்லை.";
 "Not earned" = "பெறப்படவில்லை";
+"Not enough free storage for game assets. Free up space and try again." = "விளையாட்டுத் தரவுக்குப் போதுமான காலி சேமிப்பிடம் இல்லை. இடத்தை விடுவித்து மீண்டும் முயலவும்.";
 "Not met. " = "நிறைவேறவில்லை. ";
 "Not now" = "இப்போது வேண்டாம்";
 "Not rescued" = "மீட்கப்படவில்லை";
@@ -1911,7 +1920,6 @@
 "Open Replay Movie…" = "திறந்த ரீப்ளே திரைப்படம்...";
 "Open Starter" = "தொடக்கத் தொகுப்பைத் திற";
 "Open in Stacked pose when idle" = "செயலின்றி அடுக்கிய நிலையில் இருக்கும்போது திற";
-"Open the main menu sooner on iPhone and iPad, and see an intro on longer level loads." = "iPhone மற்றும் iPad இல் முதன்மைப் பட்டியலை விரைவில் திறக்கலாம். ஒரு நிலை ஏற நேரமானால் அறிமுகத்தைக் காணலாம்.";
 "Open this address on another device:" = "இந்த முகவரியை வேறு சாதனத்தில் திறக்கவும்ஃ";
 "Open this level with its original game data to watch the action replay." = "இந்த நிலை திறக்க அதன் அசல் விளையாட்டு தரவு நடவடிக்கை மீண்டும் பார்க்க.";
 "Open when closed and charging" = "மூடிய நிலையில் மின்னேற்றம் செய்யும்போது திற";
@@ -2134,7 +2142,6 @@
 "Profile" = "சுயவிவரம்";
 "Profile…" = "சுயவிவரம்…";
 "Programmers" = "திட்டமிடுபவர்கள்";
-"Progress" = "முன்னேற்றம்";
 "Progress is saved." = "முன்னேற்றம் சேமிக்கப்பட்டுள்ளது.";
 "Progression" = "முன்னேற்றம்";
 "Progression not created" = "உருவாக்கப்படாத முன்னேற்றம்";
@@ -2142,6 +2149,7 @@
 "Project supervisor" = "திட்ட மேற்பார்வையாளர்";
 "Psygnosis  presents" = "Psygnosis பரிசுகள்";
 "Pull up a chair. We've got a level to finish." = "ஒரு நாற்காலியை இழுத்து உட்கார். ஒரு நிலையை முடிக்க வேண்டும்.";
+"Purchasing..." = "வாங்கப்படுகிறது...";
 "Q / Escape" = "Q / Escape";
 "Q AGAIN TO QUIT  *  ESCAPE TO STAY" = "வெளியேற Q-ஐ மீண்டும் அழுத்தவும்  *  தொடர Esc-ஐ அழுத்தவும்";
 "Queued" = "வரிசையில் உள்ளது";
@@ -2350,7 +2358,6 @@
 "Return to the library to change players. The current attempt keeps its owner and is saved for later." = "Return நூலகத்திற்கு வீரர்களை மாற்ற. தற்போதைய முயற்சி அதன் உரிமையாளரை வைத்திருக்கிறது மற்றும் பின்னர் சேமிக்கப்படுகிறது.";
 "Return to the library to change players. Your saved run keeps its progress and next turn." = "வீரர்களை மாற்ற நூலகத்திற்குத் திரும்பவும். சேமித்த ஆட்டத்தின் முன்னேற்றமும் அடுத்த முறையும் அப்படியே இருக்கும்.";
 "Return to the library to restore a recovery key." = "Return நூலகம் மீட்பு விசை மீட்டெடுக்க.";
-"Return to the main menu after a win without losing your place." = "வென்ற பிறகு உங்கள் இடத்தை இழக்காமல் முதன்மைப் பட்டியலுக்குத் திரும்பலாம்.";
 "Return: Repeat assignment" = "Return: மீண்டும் பணி நியமனம்";
 "Returned with a cake." = "ஒரு கேக்குடன் திரும்பி வந்தார்.";
 "Reveal full solution?" = "முழு தீர்வு வெளிப்படுத்த?";
@@ -2800,6 +2807,7 @@
 "Terrain group '{0}' is used before it is defined." = "நிலப்பரப்பு குழு '{0}' வரையறுக்கப்படுவதற்கு முன்பு பயன்படுத்தப்படுகிறது.";
 "Terrain group '{0}' mixes steel and non-steel pieces." = "நிலப்பரப்பு குழு '{0}' எஃகு மற்றும் எஃகு அல்லாத துண்டுகளை கலக்கிறது.";
 "Terrain metadata '{0}:{1}' is ambiguous." = "நிலப்பரப்பு மெட்டாடேட்டா '{0}:{1}' தெளிவற்றது.";
+"Thank you for your support!" = "உங்கள் ஆதரவுக்கு நன்றி!";
 "Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research." = "ரசிகர் நிலைகள், பாணிகள், மீள்பதிவுகள், இசைப் பணிகள் மற்றும் ஆட்டப் பாதுகாப்பு ஆய்வுகளை வழங்கிய சமூகத்துக்கு நன்றி.";
 "That Hot Seat is no longer saved." = "அந்த மாறிமுறை ஆட்டம் இனி சேமிப்பில் இல்லை.";
 "That is the plan" = "அது தான் திட்டம்";
@@ -2877,6 +2885,7 @@
 "The archive has no member named {0}." = "காப்பகத்தில் {0} என்று பெயரிடப்பட்ட உறுப்பினர் இல்லை.";
 "The archive member {0} is too large." = "காப்பக உறுப்பினர் {0} மிகப்பெரியது.";
 "The attempt was not saved." = "முயற்சி சேமிக்கப்படவில்லை.";
+"The background download stopped. Try the download again." = "பின்னணிப் பதிவிறக்கம் நின்றுவிட்டது. பதிவிறக்கத்தை மீண்டும் முயலவும்.";
 "The cat understands the arrangement." = "இந்த ஏற்பாடு பூனைக்குப் புரிகிறது.";
 "The cloud player is invalid." = "மேகச் சேமிப்பு வீரர் செல்லாது.";
 "The cloud progress format does not match." = "மேகத்தின் முன்னேற்ற வடிவம் பொருந்தாது.";
@@ -2884,11 +2893,13 @@
 "The cloud response is too large." = "மேகத்தின் எதிர்வினை மிகப்பெரியது.";
 "The cloud save is too large." = "மேகம் சேமிப்பு மிகப் பெரியது.";
 "The company suits." = "இந்தத் துணை இவருக்குப் பொருந்துகிறது.";
+"The connection dropped. Try the download again." = "இணைப்பு துண்டிக்கப்பட்டது. பதிவிறக்கத்தை மீண்டும் முயலவும்.";
 "The danger is the fall after the entrance. Think about protecting the lemmings before they land." = "நுழைவாயிலுக்குப் பிறகு இருக்கும் வீழ்ச்சிதான் ஆபத்து. தரையிறங்குவதற்கு முன் லெம்மிங்குகளை எப்படிப் பாதுகாப்பது என்று யோசியுங்கள்.";
 "The decision remains respected." = "அந்த முடிவை இன்னும் மதிக்கிறார்கள்.";
 "The decompression limit must not be negative." = "குறைப்பு வரம்பு எதிர்மறையானதாக இருக்கக்கூடாது.";
 "The document contains an unmatched $END." = "ஆவணத்தில் ஒரு பொருத்தமற்ற $END உள்ளது.";
 "The download did not finish." = "பதிவிறக்கம் முடிவடையவில்லை.";
+"The download timed out. Check your connection and try again." = "பதிவிறக்கத்திற்கான நேர வரம்பு முடிந்துவிட்டது. உங்கள் இணைப்பைச் சரிபார்த்து மீண்டும் முயலவும்.";
 "The entrance limits cannot release all non-preplaced lemmings." = "நுழைவு வரம்புகள் அனைத்து இடமாற்றப்படாத லெம்மிங்களையும் விடுவிக்க முடியாது.";
 "The entrance timing cannot be negative." = "நுழைவாயில் நேரம் எதிர்மறையாக இருக்கக்கூடாது.";
 "The exit is below the platform carrying the crowd. Look for a place to open the floor above the lower path." = "கூட்டம் நிற்கும் தளத்துக்குக் கீழே வெளியேறும் வாயில் உள்ளது. கீழ்ப் பாதைக்கு மேலே தரையைத் திறக்க ஏற்ற இடத்தைத் தேடுங்கள்.";
@@ -3168,6 +3179,9 @@
 "Timing probes: {0}. Untested alternatives remain unknown." = "நேரச் சோதனைகள்: {0}. சோதிக்கப்படாத மாற்றுவழிகளின் முடிவுகள் இன்னும் தெரியவில்லை.";
 "Tiny journey" = "சிறு பயணம்";
 "Tiny journeys" = "சிறு பயணங்கள்";
+"Tip again {0}" = "மீண்டும் அன்பளிப்பு: {0}";
+"Tip {0}" = "அன்பளிப்பு: {0}";
+"Tips are unavailable right now." = "தற்போது அன்பளிப்பு வழங்க இயலவில்லை.";
 "To download these assets, you must hold a valid licence for the original game “Lemmings” on at least one platform. By selecting “{0}”, you confirm that you hold that licence." = "இந்தக் கோப்புகளைப் பதிவிறக்க, அசல் “Lemmings” விளையாட்டுக்கு ஏதேனும் ஒரு தளத்திலாவது செல்லுபடியாகும் உரிமம் உங்களிடம் இருக்க வேண்டும். “{0}” என்பதைத் தேர்ந்தெடுப்பதன் மூலம் அந்த உரிமம் உங்களிடம் இருப்பதை உறுதிப்படுத்துகிறீர்கள்.";
 "Toggle enhanced artwork" = "மேம்பட்ட ஓவியத்தை இயக்கு / முடக்கு";
 "Toggle fast-forward" = "வேகமான முன்னேற்றத்தை மாற்று";
@@ -3200,9 +3214,11 @@
 "Truncated Mac graphics frame." = "முறிக்கப்பட்ட மேக் கிராபிக்ஸ் சட்டகம்.";
 "Truncated sequel data at byte {0}." = "{0} பைட்டில் குறுகிய தொடர்ச்சியான தரவு.";
 "Try again" = "மீண்டும் முயல்";
+"Try another server" = "வேறொரு சேவையகத்தை முயல்";
 "Try later" = "பின்னர் முயல்";
 "Try one skill at normal speed, then pause and inspect the result. Watch where the worker lands and turns." = "இயல்பான வேகத்தில் ஒரு திறனை முயலவும். பின்னர் இடைநிறுத்தி முடிவைப் பார்க்கவும். பணியாளர் தரையிறங்கும் இடத்தையும் திரும்பும் இடத்தையும் கவனிக்கவும்.";
 "Try these skills!" = "இந்தத் திறன்களை முயலுங்கள்!";
+"Trying another download server" = "வேறொரு சேவையகத்திலிருந்து பதிவிறக்க முயல்கிறது";
 "Tube strength" = "திரைக்குழாய் விளைவு";
 "Turn off" = "முடக்கு";
 "Turn off auto-follow" = "தானாகப் பின்தொடர்வதை நிறுத்து";
@@ -3337,6 +3353,7 @@
 "WHEN THE TRIBES SETTLED IN THESE LANDS" = "இந்த நாடுகளில் பழங்குடிகள் அமைந்தபோது";
 "WINS / FAILS" = "வெற்றிகள் / தோல்விகள்";
 "Wait for this lemming to land." = "இந்த லெம்மிங் தரையை அடையும்வரை காத்திருங்கள்.";
+"Waiting for download to start" = "பதிவிறக்கம் தொடங்கக் காத்திருக்கிறது";
 "Walker" = "நடப்பவர்";
 "Walks home with accompaniment." = "துணையோடு வீட்டுக்கு நடந்து செல்கிறார்.";
 "Was asked to judge a cucumber." = "ஒரு வெள்ளரிக்காயை மதிப்பிடச் சொன்னார்கள்.";
@@ -3347,6 +3364,7 @@
 "Was thanked for noticing a draught." = "காற்று புகுவதைக் கவனித்ததற்கு நன்றி தெரிவித்தார்கள்.";
 "Watch and listen" = "கவனித்து கேளுங்கள்";
 "Watch solution?" = "தீர்வைப் பார்க்கவா?";
+"Watch the intro while game files are checked on iPhone and iPad." = "iPhone மற்றும் iPad இல் விளையாட்டுக் கோப்புகள் சரிபார்க்கப்படும்போது அறிமுகத்தைப் பாருங்கள்.";
 "Watch the worker's direction before assigning a skill." = "திறனை ஒதுக்கும் முன் பணியாளரின் திசையைக் கவனிக்கவும்.";
 "We built a Snow Lemming." = "நாம் ஒரு பனி லெம்மிங் கட்டப்பட்டது.";
 "We got snowed in for a day." = "நாங்கள் ஒரு நாள் பனிப்பொழிவு பெற்றோம்.";
@@ -3408,6 +3426,8 @@
 "Your rescue story" = "உங்கள் மீட்புக் கதை";
 "Your rescues add to the worldwide total." = "நீ மீட்ட லெம்மிங்குகள் உலக மொத்தத்தில் சேர்க்கப்படும்.";
 "Your shared campaign stays saved for later." = "உங்கள் பகிரப்பட்ட பிரச்சாரம் பின்னர் சேமிக்கப்படும்.";
+"Your tip could not be completed." = "உங்கள் அன்பளிப்பைச் செலுத்தி முடிக்க முடியவில்லை.";
+"Your tip could not be confirmed." = "உங்கள் அன்பளிப்பை உறுதிப்படுத்த முடியவில்லை.";
 "Z / Shift+Z: Zoom" = "Z / Shift+Z: பெரிதாக்கம்";
 "ZOOM" = "பெரிதாக்கம்";
 "Zero avoidable losses" = "தவிர்க்கக்கூடிய இழப்புகள் இல்லை";
@@ -3609,5 +3629,3 @@
 "{0}: {1}." = "{0}: {1}.";
 "{0}H {1}M" = "{0} மணி {1} நிமி";
 "{0}{1} more to rescue for three stars." = "மூன்று நட்சத்திரங்களைப் பெற இன்னும் {0}{1} பேரை மீட்க வேண்டும்.";
-
-"Haptics" = "அதிர்வு";

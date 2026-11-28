@@ -103,6 +103,16 @@ def prepare_branding(output, store):
         'Imports and this helper do not grant redistribution rights.\n').encode())
 
 
+def prepare_about(output):
+    subprocess.run(['python3', ROOT / 'Scripts/bundle-about.py', output / 'About'], check=True)
+    publication = json.loads((ROOT / 'Resources/Publishing/ultimate-lemmix.json').read_bytes())
+    notes = ROOT / ('Documentation/ReleaseNotes-UltimateLemmix-' + publication['version']
+                    + '-build' + str(publication['platforms']['macos']['build']) + '.md')
+    history = '\n'.join(line for line in notes.read_text().splitlines()
+                        if not line.startswith(('Build:', 'Release base:', 'Platform builds:')))
+    write(output / 'About/VersionHistory.md', (history.strip() + '\n').encode())
+
+
 def prepare(output, alternatives, store=False):
     output.mkdir(parents=True, exist_ok=True)
     if any(output.iterdir()):
@@ -124,13 +134,7 @@ def prepare(output, alternatives, store=False):
         copy_tree(ROOT / 'Resources' / name, output / name, '.json')
     prepare_game_center(output / 'GameCenter')
     subprocess.run(['python3', ROOT / 'Tools/TrolleyVerification/catalogue.py', 'bundle', output / 'Trolley'], check=True)
-    subprocess.run(['python3', ROOT / 'Scripts/bundle-about.py', output / 'About'], check=True)
-    publication = json.loads((ROOT / 'Resources/Publishing/ultimate-lemmix.json').read_bytes())
-    notes = ROOT / ('Documentation/ReleaseNotes-UltimateLemmix-' + publication['version']
-                    + '-build' + str(publication['platforms']['macos']['build']) + '.md')
-    history = '\n'.join(line for line in notes.read_text().splitlines()
-                        if not line.startswith(('Build:', 'Release base:', 'Platform builds:')))
-    write(output / 'About/VersionHistory.md', (history.strip() + '\n').encode())
+    prepare_about(output)
     for name, data in starter_resources().items():
         write(output / 'Ports/ultimate_lemmix_starter' / name, data)
     copy_tree(ROOT / 'Resources/UltimateLemmix/MenuArtwork', output / 'MenuArtwork')

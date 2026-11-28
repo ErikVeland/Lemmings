@@ -1,5 +1,6 @@
 #if os(iOS) || os(tvOS)
 import Foundation
+import LemmingsAppCore
 import LemmingsMobileCore
 import NxlvKit
 import UIKit
@@ -18,6 +19,12 @@ public enum LemmingsMobileConfiguration: Equatable, Sendable {
 }
 
 public enum LemmingsMobileApplication {
+    #if os(iOS)
+    @MainActor public static func handleGameAssetBackgroundEvents(identifier: String, completion: @escaping @MainActor () -> Void) {
+        GameAssetPack.handleBackgroundEvents(identifier: identifier, completion: completion)
+    }
+    #endif
+
     #if os(iOS)
     @MainActor public static func openDeskClock(in root: UIViewController?) {
         if let startup = root as? MobileStartupViewController {

@@ -113,5 +113,10 @@
     "file": "Sources/NxlvKit/OpenStarterContent.swift",
     "source": "Over the Rise",
     "reason": "Authored level title"
+  },
+  {
+    "file": "Sources/LemmingsGameArt/MobileAboutArt.swift",
+    "source": "Lemmings Forums",
+    "reason": "Proper name of the linked community website; kept unchanged in every language"
   }
 ]

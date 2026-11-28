@@ -95,6 +95,12 @@ class IOSBetaContentTests(unittest.TestCase):
         content.verify(bundled)
         content.copy_into_app("", bundled)
         self.assertFalse(bundled.exists())
+        project_root = MODULE_PATH.parents[2]
+        self.assertEqual((app / "About/Heritage.md").read_bytes(),
+                         (project_root / "Resources/About/Heritage.md").read_bytes())
+        self.assertEqual((app / "About/Contributors.md").read_bytes(),
+                         (project_root / "Tools/Telemetry/contributors.md").read_bytes())
+        self.assertTrue((app / "About/VersionHistory.md").read_text().startswith("# "))
         with self.assertRaises(ValueError):
             content.copy_into_app("", self.root / "BetaGameData")
 

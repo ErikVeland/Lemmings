@@ -14,8 +14,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
 
 @MainActor final class MobileLibraryViewController: UIViewController {
     let configuration: LemmingsMobileConfiguration
+    let developerTip: MobileDeveloperTipState?
     init(configuration: LemmingsMobileConfiguration = .current) {
         self.configuration = configuration
+        developerTip = MobileSupportPolicy.usesTipPage(storeBuild: MobileResourceAccess.isStore, configuration: configuration)
+            ? MobileDeveloperTipState(service: .shared) : nil
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) { nil }
@@ -23,9 +26,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     enum Route: Equatable {
         case home, play, support, family(MobileFamily), fanGroup([String]), levelCatalogue, levels, settings, settingsGroup(MobileSettingsGroup), language, controllerMappings, playInsights, soundtrack, data
         case firstPlayer, whatsNew, effectsWelcome, telemetryConsent, insightsToken, insightsClear, familiarNames
-        #if os(iOS)
-        case about
-        #endif
+        case about, aboutForums, developerTip
         case levelDetails
         case journey, progression, techniques, rankings
         case collections, shortGames, l2Practice, playlists, playlist(UUID), addToPlaylist, players, cloudSaves, shuffleAll, hotSeat, hotSeats, progress, profileStatistics, progressPlayer(String), progressLevel(String, String?), records, achievements, recordLevel(String), recordHint(String)
@@ -115,6 +116,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     let tvBuildInfo = MobileBuildInfo.current()
     #endif
     var mobileInsights = MobileInsightsState()
+    var mobileAbout = MobileAboutState()
     var progressMetric = "stars"
     var progressProfileID: String?
     var progressLevelMetric = "full"
@@ -633,6 +635,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewIsVisible = true
+        if route == .about, mobileAbout.task == nil { refreshAboutContributors() }
+        if isDeveloperTipRoute { activateDeveloperTip() }
         #if os(iOS)
         updateRestoredAppIcon()
         #endif
@@ -650,6 +654,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewIsVisible = false
+        cancelAboutContributors()
+        developerTip?.end()
         #if os(iOS)
         loadingIntro.stop()
         #endif
@@ -790,9 +796,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         globalNavigation.isHidden = game != nil || route == .home || route == .firstPlayer || deskClockShown || confirmingGameAssetLicence
         browser.showsBack = globalNavigation.isHidden
         switch route {
-        #if os(iOS)
-        case .about: globalNavigation.secondaryTitle = nil
-        #endif
+        case .about, .aboutForums, .developerTip: globalNavigation.secondaryTitle = nil
+        case .support where developerTip != nil: globalNavigation.secondaryTitle = nil
         case .settings, .settingsGroup, .language, .controllerMappings, .soundtrack:
             globalNavigation.secondaryTitle = nil
         default: globalNavigation.secondaryTitle = L10n.text("Settings")
@@ -843,7 +848,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             browser.frame = CGRect(x: 0, y: menuRegion.minY, width: view.bounds.width, height: menuRegion.height)
             view.bringSubviewToFront(globalNavigation)
         }
-        settingsTabs.isHidden = !bottomSettingsNavigation || canvas.page.settingsTabs == nil
+        settingsTabs.isHidden = globalNavigation.isHidden || canvas.page.settingsTabs == nil
+            || (!bottomSettingsNavigation && route != .about)
+        settingsTabs.accessibilityLabel = route == .about ? L10n.text("About sections") : L10n.text("Settings")
         settingsTabs.tabs = canvas.page.settingsTabs ?? []
         if !settingsTabs.isHidden {
             var height = settingsTabs.height(for: menuRegion.width)
@@ -856,7 +863,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             view.bringSubviewToFront(settingsTabs)
         }
         view.accessibilityElements = bottomSettingsNavigation
-            ? (settingsTabs.isHidden ? [] : [settingsTabs]) + [scrollView, globalNavigation] : nil
+            ? (settingsTabs.isHidden ? [] : [settingsTabs]) + [scrollView, globalNavigation]
+            : (route == .about ? [globalNavigation, settingsTabs, scrollView] : nil)
         listTools.actions = canvas.page.listTools
         listTools.searchQuery = route == .levelCatalogue ? catalogueQuery : searchQuery
         listTools.isHidden = globalNavigation.isHidden || listTools.actions.isEmpty
@@ -1024,12 +1032,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 scrollView.setContentOffset(CGPoint(x: keptOffset.x, y: min(keptOffset.y, maximum)), animated: false)
             }
         }
-        canvas.fitsSupportPage = route == .support
-        canvas.sessionName = hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
+        canvas.fitsSupportPage = (route == .support && developerTip == nil) || route == .aboutForums
+        canvas.sessionName = isDeveloperTipRoute ? nil : hotSeat.map { $0.players.map(playerName).joined(separator: " v ") }
         canvas.playerRole = .next
         // Game Data downloads, restores and imports belong to the whole app, not to a player.
         // Solo play names nobody: the caption only tells Hot Seat players whose turn it is.
-        let hidePlayerName = hotSeat == nil || route == .firstPlayer || route == .data || (route == .players && renamingPlayer)
+        let hidePlayerName = hotSeat == nil || route == .firstPlayer || route == .data || isDeveloperTipRoute || (route == .players && renamingPlayer)
         canvas.playerName = hidePlayerName ? nil : playerName(hotSeat?.turn ?? profiles.activeID)
         unfold.stop()
         let subtitle = loading ? L10n.text("Loading...") : notice
@@ -1050,8 +1058,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 families: gameFamilyActions(), collectionsAvailable: catalogue != nil, subtitle: subtitle)
             canvas.preview = nil
         case .support:
-            canvas.page = GameSupport.page
-            canvas.preview = GameSupport.qrCode
+            let support = MobileSupportPage(tipPage: developerTip?.page, returningToAbout: previousRoute == .about)
+            canvas.page = support.page
+            canvas.preview = support.preview
+            canvas.previewSource = nil
+        case .developerTip:
+            canvas.page = developerTip?.page ?? DeveloperTipArt.page(state: .unavailable, product: nil, canPurchase: false)
+            canvas.preview = nil
             canvas.previewSource = nil
         case .family(.fan):
             canvas.page = fanLibraryPage(path: [], subtitle: subtitle); canvas.preview = nil
@@ -1145,10 +1158,11 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = insightsTokenPage(); canvas.preview = nil
         case .insightsClear:
             canvas.page = insightsClearPage(); canvas.preview = nil
-        #if os(iOS)
         case .about:
             canvas.page = aboutPage(); canvas.preview = nil
-        #endif
+        case .aboutForums:
+            canvas.page = MobileAboutArt.forumsPage
+            canvas.preview = MobileAboutArt.forumsQRCode
         case .settings:
             canvas.page = settingsGroupsPage(); canvas.preview = nil
         case let .settingsGroup(group):
@@ -1208,10 +1222,13 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             canvas.page = agreement
             canvas.preview = nil
         case .data:
-            let download: [GameFrontEnd.Action] = MobileResourceAccess.isStore
+            var download: [GameFrontEnd.Action] = MobileResourceAccess.isStore
                 ? [.init("download.gameAssets", GameAssetPack.actionTitle, enabled: !loading, primary: true)] : []
+            if gameAssetProgress == .stalledPrimary {
+                download = [.init("gameAssets.alternate", L10n.text("Try another server"), primary: true)]
+            }
             let back: GameFrontEnd.Action
-            if case .downloading = gameAssetProgress {
+            if gameAssetProgress?.canCancel == true {
                 back = .init("dataBack", L10n.text("Cancel"), backNavigation: true)
             } else {
                 back = .init("dataBack", L10n.text("Back"), enabled: !restoringResources)
@@ -1282,8 +1299,9 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         navigate(.settings)
     }
 
-    func navigate(_ next: Route) {
+    func navigate(_ requested: Route) {
         guard !restoringResources, !confirmingGameAssetLicence else { return }
+        let next: Route = requested == .support && developerTip != nil ? .developerTip : requested
         let position = NavigationPosition(route: route, offset: scrollView.contentOffset, focus: canvas.focusedID)
         let returning = navigationHistory.lastIndex { $0.route == next }
         let restore: NavigationPosition?
@@ -1306,6 +1324,8 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if next == .data, route != .data { dataBackRoute = route }
         if next != .familiarNames { familiarNames.clear() }
         if route == .language && next != .language { finishLanguageSelection(apply: false) }
+        if next != .about { cancelAboutContributors() }
+        if next != .developerTip { developerTip?.end() }
         confirmingRecordsReset = false
         // The launch notice must not cancel the library and saved-run load beneath it.
         let welcomeRoutes: [Route] = [.firstPlayer, .home, .support, .whatsNew, .effectsWelcome, .telemetryConsent]
@@ -1349,6 +1369,12 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if game == nil { becomeFirstResponder() }
         scrollView.setContentOffset(.zero, animated: false)
         rebuild()
+        #if os(iOS)
+        // An existing transfer already has licence approval from the player's original tap.
+        if next == .data, MobileResourceAccess.isStore, GameAssetPack.hasPendingDownload {
+            beginGameAssetDownload()
+        }
+        #endif
         if let restore {
             view.layoutIfNeeded()
             let maximum = max(0, scrollView.contentSize.height - scrollView.bounds.height)
@@ -1374,18 +1400,22 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
                 return
             }
             rebuild()
-            if id == "gameAssets.agree" {
-                restoreResources { [self] library in
-                    try await GameAssetPack.shared.downloadAndInstall(progress: { [weak self] phase in
-                        guard let self, self.restoringResources else { return }
-                        self.gameAssetProgress = phase
-                        self.rebuild()
-                    }) { try library.install(directory: $0) }
-                }
-            }
+            if id == "gameAssets.agree" { beginGameAssetDownload() }
             return
         }
-        if id == "dataBack", case .downloading = gameAssetProgress { resourceTask?.cancel(); return }
+        #if os(iOS)
+        if id == "gameAssets.alternate", gameAssetProgress == .stalledPrimary {
+            GameAssetPack.tryAlternateServer()
+            return
+        }
+        #endif
+        if id == "dataBack", gameAssetProgress?.canCancel == true {
+            resourceTask?.cancel()
+            #if os(iOS)
+            GameAssetPack.cancelPendingDownload()
+            #endif
+            return
+        }
         guard !restoringResources else { return }
         if route == .firstPlayer {
             guard !loading else { return }
@@ -1401,6 +1431,7 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         if handleCloudSync(id) { return }
         if handleWelcome(id) || handleInsights(id) { return }
         if handleHome(id) || handleLearning(id) || handleRankings(id) { return }
+        if handleAbout(id) { return }
         if handleSettings(id) { return }
         switch id {
         case "classic":
@@ -1437,15 +1468,6 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             rebuild()
         case "profileStatistics": navigate(.profileStatistics)
         case "settings": navigate(.settings)
-        #if os(iOS)
-        case "about":
-            guard game == nil else { return }
-            if route == .settings { navigate(.about) }
-            else if case .settingsGroup = route { navigate(.about) }
-        case "aboutBack":
-            guard route == .about else { return }
-            navigate(previousRoute ?? .settings)
-        #endif
         case "settingsBack":
             let source = settingsReturn
             settingsReturn = nil
@@ -1461,13 +1483,20 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
         case "deskClock": presentDeskClock(reason: .menu)
         #endif
         case "donate":
+            guard game == nil, route == .home || route == .about else { return }
+            if developerTip != nil {
+                showDeveloperTip()
+                return
+            }
             #if os(tvOS)
             navigate(.support)
+            view.layoutIfNeeded()
+            canvas.focusAction("navigation.back")
             #else
             UIApplication.shared.open(GameSupport.coffeeURL, options: [:]) { [weak self] opened in
                 guard !opened else { return }
                 Task { @MainActor [weak self] in
-                    if self?.route == .home { self?.navigate(.support) }
+                    if self?.route == .home || self?.route == .about { self?.navigate(.support) }
                 }
             }
             #endif
@@ -1961,6 +1990,20 @@ extension MobileLibraryViewController: UIDocumentPickerDelegate {}
             return try await Task.detached(priority: .userInitiated) {
                 try library.install(directory: source)
             }.value
+        }
+    }
+
+    private func beginGameAssetDownload() {
+        guard !restoringResources, game == nil, MobileResourceAccess.library != nil else { return }
+        gameAssetProgress = .connecting
+        restoreResources { [weak self] library in
+            try await GameAssetPack.shared.downloadAndInstall(isForeground: {
+                UIApplication.shared.applicationState == .active
+            }, progress: { [weak self] phase in
+                guard let self, self.restoringResources, self.gameAssetProgress != phase else { return }
+                self.gameAssetProgress = phase
+                self.rebuild()
+            }) { try library.install(directory: $0) }
         }
     }
 
