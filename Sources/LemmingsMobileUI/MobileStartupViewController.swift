@@ -39,13 +39,13 @@ import UIKit
         #if os(iOS)
         checkingCracktro.frame = view.bounds
         view.addSubview(checkingCracktro)
-        checkingHome.page = MobileHomeArt.checkingGameFilesPage()
         checkingHome.backgroundColor = .clear
         checkingHome.isOpaque = false
         checkingHome.usesMenuBackdrop = true
         checkingHome.isUserInteractionEnabled = false
         // Expose one status, not duplicate disabled live menu buttons.
         checkingHome.isAccessibilityElement = true
+        checkingHome.page = MobileHomeArt.checkingGameFilesPage()
         checkingHome.accessibilityLabel = checkingHome.page.title + ". " + checkingHome.page.subtitle
         checkingHome.accessibilityIdentifier = "startup.checkingGameFiles"
         checkingHome.accessibilityTraits = .staticText
