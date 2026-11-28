@@ -71,8 +71,15 @@ public final class GameHomeLogoArt: @unchecked Sendable {
         guard decoded.count == 64000, bank.palettes.count > 1 else { return nil }
         let left = 74, width = 215, height = 107
         let planeStride = 320 / 4, planeSize = decoded.count / 4
-        let pixels = (0..<height).flatMap { y in
-            (left..<(left + width)).map { x in decoded[x % 4 * planeSize + y * planeStride + x / 4] }
+        var pixels: [UInt8] = []
+        pixels.reserveCapacity(width * height)
+        for y in 0..<height {
+            let rowOffset = y * planeStride
+            for x in left..<(left + width) {
+                let planeOffset = (x % 4) * planeSize
+                let columnOffset = x / 4
+                pixels.append(decoded[planeOffset + rowOffset + columnOffset])
+            }
         }
         let isolated = lemmings2LogoPixels(pixels, width: width, height: height)
         return bitmap(width: width, height: height, pixels: isolated, palette: lemmings2LogoPalette(bank.palettes[1]),
