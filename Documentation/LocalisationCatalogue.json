@@ -822,8 +822,8 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/GameReleaseCopy.swift:9",
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:11",
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:18",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:12",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:19",
       "Sources/LemmingsLocal/AboutWindow.swift:41"
     ]
   },
@@ -837,7 +837,7 @@
   "About {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:26",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:27",
       "Sources/LemmingsLocal/main.swift:1067"
     ]
   },
@@ -1986,9 +1986,9 @@
       "Sources/LemmingsGameArt/GameFrontEnd.swift:49",
       "Sources/LemmingsGameArt/GameNavigationArt.swift:7",
       "Sources/LemmingsGameArt/GameSupport.swift:12",
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:28",
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:63",
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:92",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:29",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:64",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:93",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:113",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:168",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:195",
@@ -2534,7 +2534,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsGameArt/GameSupport.swift:11",
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:85",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:86",
       "Sources/LemmingsLocal/AboutWindow.swift:50"
     ]
   },
@@ -4075,7 +4075,7 @@
   "Community": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:53",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:54",
       "Sources/LemmingsGameArt/MobileCareerArt.swift:110",
       "Sources/LemmingsGameArt/MobileHomeArt.swift:50",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:305",
@@ -4284,7 +4284,7 @@
   "Contributors": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:13",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:14",
       "Sources/LemmingsLocal/AboutWindow.swift:42"
     ]
   },
@@ -4768,7 +4768,7 @@
   "DMA Design created “Lemmings”. Psygnosis published it.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:122"
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:123"
     ]
   },
   "DOS (VGA)": {
@@ -4823,7 +4823,7 @@
   "Dave Jones programmed the original Amiga game. Gary Timmons animated it, Scott Johnston drew the graphics, and Brian Johnston and Tim Wright wrote the music.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:123"
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:124"
     ]
   },
   "Decoded graphics exceed the {0}-pixel aggregate limit.": {
@@ -4961,7 +4961,7 @@
   "Developed by Erik Veland.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:114"
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:115"
     ]
   },
   "Device linked": {
@@ -10011,7 +10011,7 @@
   "Lix artwork": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:43",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:44",
       "Sources/LemmingsMobileUI/MobileLemmixOptions.swift:127"
     ]
   },
@@ -11266,7 +11266,7 @@
   "NeoLemmix Introduction Pack: {0}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:54"
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:55"
     ]
   },
   "NeoLemmix Preview": {
@@ -11663,7 +11663,7 @@
   "No contributors listed yet.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:73",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:74",
       "Sources/LemmingsLocal/AboutWindow.swift:40"
     ]
   },
@@ -12604,7 +12604,7 @@
   "Original game heritage": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:121"
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:122"
     ]
   },
   "Original lead platform. Includes iconic digitised voice samples and 2-Player split-screen.": {
@@ -13816,7 +13816,7 @@
   "Presage, Inc. made the Macintosh port. Tony Williams arranged the DOS music.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:124"
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:125"
     ]
   },
   "Presentation": {
@@ -15287,7 +15287,7 @@
     "references": [
       "Sources/LemmingsGameArt/DeveloperTipArt.swift:54",
       "Sources/LemmingsGameArt/GameRecoveryArt.swift:15",
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:78",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:79",
       "Sources/LemmingsLocal/AboutWindow.swift:172",
       "Sources/LemmingsLocal/ControllerDevicePresentation.swift:78",
       "Sources/LemmingsLocal/GameplayKeyboard.swift:716",
@@ -16536,7 +16536,7 @@
   "Selected Lix artwork and music use the CC0 dedication.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:44"
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:45"
     ]
   },
   "Selection": {
@@ -17260,7 +17260,7 @@
   "Soundtrack": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:47",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:48",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:107",
       "Sources/LemmingsGameArt/MobileSettingsArt.swift:154",
       "Sources/LemmingsLocal/SettingsWindow.swift:737",
@@ -18366,7 +18366,7 @@
   "Thanks to the community for fan levels, styles, replays, soundtrack work and preservation research.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:55"
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:56"
     ]
   },
   "That Hot Seat is no longer saved.": {
@@ -20323,7 +20323,7 @@
   "This is an unofficial project. Original games, artwork and music remain with their respective rights holders.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:56"
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:57"
     ]
   },
   "This journey level is unavailable on this device. The saved session has been kept.": {
@@ -21152,7 +21152,7 @@
   "Unknown": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:25",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:26",
       "Sources/LemmingsLocal/AboutWindow.swift:29",
       "Sources/LemmingsLocal/AboutWindow.swift:30",
       "Sources/LemmingsLocal/ArcadeWindow.swift:1016",
@@ -21592,7 +21592,7 @@
   "Version history": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:12",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:13",
       "Sources/LemmingsLocal/AboutWindow.swift:111",
       "Sources/LemmingsLocal/AboutWindow.swift:41"
     ]
@@ -21600,14 +21600,14 @@
   "Version history unavailable.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:59",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:60",
       "Sources/LemmingsLocal/AboutWindow.swift:38"
     ]
   },
   "Version {0} - Build {1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsGameArt/MobileAboutArt.swift:27",
+      "Sources/LemmingsGameArt/MobileAboutArt.swift:28",
       "Sources/LemmingsMobileCore/MobileBuildInfo.swift:27"
     ]
   },
