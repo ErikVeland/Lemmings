@@ -29,6 +29,28 @@ exports are unchanged. Rewind, pause, interruption and undo cancel an active
 effect. Playback is muted during automated tests. Physical actuator feel and
 controller hand-off need a device check; simulator builds do not establish feel.
 
+## Lemmix without imported game data · 28 November 2026
+
+On iPhone, iPad, Duo and Apple TV, bundled Journey names do not establish that
+their original levels are installed. Home checks the current lesson's source
+before offering it as Continue. Play keeps the Journey reachable with a No data
+state; missing original sources open the existing Game Data import flow.
+The authored Open Starter remains playable without original game data.
+
+Starting or opening a Journey prepares and renders only its current entry on
+the existing background worker before changing the library or preview page.
+A new Journey is saved after that succeeds. Missing or damaged content leaves
+the previous library and saved queue in place. Compact and wide level pages
+require a successful preview before enabling Play, including cover activation.
+Changing selection clears the previous preview before checking the next source.
+Mac already rejects unavailable Journey entries before starting their sessions.
+
+Fixture-free regressions cover absent and incomplete Classic sources, preserved
+Journey and Hot Seat state, unsupported engines, and the authored-only starter.
+Source review and whitespace checks pass. Native Swift tests, iOS/tvOS builds,
+rendered unavailable states and physical-device acceptance require the Apple
+build environment; they have not been run in this Linux workspace.
+
 ## iOS level loading · 27 November 2026
 
 iPhone, iPad and Duo show Home as early as possible on a cold launch.

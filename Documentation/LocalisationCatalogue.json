@@ -50,7 +50,8 @@
   " - No data": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:70"
+      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:51",
+      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:71"
     ]
   },
   " - Rewinds used": {
@@ -595,7 +596,7 @@
   "A saved player is unavailable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:165"
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:189"
     ]
   },
   "A section marker has no keyword.": {
@@ -1047,7 +1048,7 @@
       "Sources/LemmingsLocal/GameControls.swift:185",
       "Sources/LemmingsLocal/GameControls.swift:202",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:121",
-      "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:123",
+      "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:130",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1098"
     ]
   },
@@ -2024,9 +2025,9 @@
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:393",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:50",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:93",
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:106",
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:119",
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:124",
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:129",
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:142",
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:147",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1066",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1102",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1217",
@@ -3558,7 +3559,7 @@
   "Classic Lemmings  {0}/{1}": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:66"
+      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:67"
     ]
   },
   "Classic artwork": {
@@ -7600,13 +7601,13 @@
   "Import Lemmings 2 data": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:74"
+      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:75"
     ]
   },
   "Import NeoLemmix data": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:73"
+      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:74"
     ]
   },
   "Import files": {
@@ -7643,7 +7644,7 @@
   "Import {0} data": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:75"
+      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:76"
     ]
   },
   "Imported": {
@@ -8508,7 +8509,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:203",
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:106"
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:129"
     ]
   },
   "Journey explored": {
@@ -8520,7 +8521,7 @@
   "Journey is unavailable": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:106"
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:129"
     ]
   },
   "Journey not advanced": {
@@ -9520,7 +9521,7 @@
       "Sources/LemmingsMobileCore/Lemmings2MobileLibrary.swift:11",
       "Sources/LemmingsMobileCore/Lemmings2MobileLibrary.swift:69",
       "Sources/LemmingsMobileCore/MobileContentStore.swift:28",
-      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:74",
+      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:75",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:168",
       "Sources/NxlvKit/LevelCatalogue.swift:14"
     ]
@@ -10060,7 +10061,7 @@
       "Sources/LemmingsLocal/GameScreen.swift:146",
       "Sources/LemmingsLocal/GameScreen.swift:18",
       "Sources/LemmingsMobileUI/MobileGameHints.swift:30",
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:281",
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:331",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1035",
       "Sources/LemmingsMobileUI/MobileLoadingIntro.swift:93",
       "Sources/LemmingsMobileUI/MobileRecordsPages.swift:112",
@@ -11222,7 +11223,7 @@
   "NeoLemmix Preview": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:73"
+      "Sources/LemmingsMobileUI/MobileLibraryHome.swift:74"
     ]
   },
   "NeoLemmix difficulty analysis is not yet available.": {
@@ -11731,7 +11732,7 @@
     "kind": "text",
     "references": [
       "Sources/LemmingsLocal/main.swift:5301",
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:247"
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:298"
     ]
   },
   "No packs": {
@@ -11780,7 +11781,7 @@
   "No reviewed downloads": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1561"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1566"
     ]
   },
   "No saved run": {
@@ -13259,7 +13260,7 @@
       "Sources/LemmingsLocal/main.swift:5243",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:103",
       "Sources/LemmingsMobileUI/MobileLibraryCollections.swift:80",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2098",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2108",
       "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift:18",
       "Sources/LemmingsMobileUI/MobileSequelMenuArt.swift:30",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:158",
@@ -13965,7 +13966,7 @@
       "Sources/LemmingsGameArt/MobileCareerArt.swift:435",
       "Sources/LemmingsLocal/ProgressionMenu.swift:7",
       "Sources/LemmingsLocal/main.swift:4685",
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:117"
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:140"
     ]
   },
   "Progression not created": {
@@ -14515,7 +14516,7 @@
   "Records are not available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2343"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2353"
     ]
   },
   "Records cannot be read": {
@@ -14715,7 +14716,7 @@
     "references": [
       "Sources/LemmingsLocal/GameControls.swift:202",
       "Sources/LemmingsLocal/ResultCelebrationView.swift:121",
-      "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:123",
+      "Sources/LemmingsMobileUI/MobileLevelBrowserView.swift:130",
       "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1098"
     ]
   },
@@ -15097,7 +15098,7 @@
       "Sources/LemmingsMobileCore/MobileLearning.swift:129",
       "Sources/LemmingsMobileUI/MobileGameViewController.swift:354",
       "Sources/LemmingsMobileUI/MobileLibraryHome.swift:29",
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2098",
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2108",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:194",
       "Sources/LemmingsTVUI/TVLibraryViewController.swift:199"
     ]
@@ -18204,7 +18205,7 @@
   "Techniques": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:122"
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:145"
     ]
   },
   "Teleporters": {
@@ -18767,7 +18768,7 @@
   "The attempt was not saved.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2319"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:2329"
     ]
   },
   "The cat understands the arrangement.": {
@@ -19195,7 +19196,8 @@
   "The player or saved session changed. Choose the playlist again.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsLocal/main.swift:5624"
+      "Sources/LemmingsLocal/main.swift:5624",
+      "Sources/LemmingsMobileUI/MobileLibraryLearning.swift:241"
     ]
   },
   "The player, Hot Seat session or saved run changed before the level loaded.": {
@@ -19370,7 +19372,7 @@
   "The saved NeoLemmix level is no longer available.": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1858"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1868"
     ]
   },
   "The saved collections could not be read.": {
@@ -22536,7 +22538,7 @@
   "owned resource folder": {
     "kind": "text",
     "references": [
-      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1901"
+      "Sources/LemmingsMobileUI/MobileLibraryViewController.swift:1911"
     ]
   },
   "pattern data needs {0} bytes, file has {1}": {
